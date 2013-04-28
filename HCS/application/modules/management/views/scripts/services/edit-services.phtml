@@ -1,0 +1,80 @@
+<script language=javascript>
+
+function checkform()
+{
+	 if(document.getElementById("servicesName").value.length<2)
+     {
+    	document.getElementById("servicesName").focus();
+		alert( "please input services name！ ");
+     	return false;   
+	}
+}
+
+function back()
+{
+	var page="<?php echo $this->curPage;?>";
+	if(page=="")
+		page=1;
+	window.location ="/management/services/index/p/"+page;
+}
+</script>
+
+<h2><?php echo $this->translate('Edit Services');?></h2>
+
+<form action="/management/services/edit-services" onSubmit="return checkform();" method="post" id="editServices" enctype="multipart/form-data">
+<table>
+	<tr>
+		<th><?php echo $this->translate('Name');?></th>
+		<th><?php echo $this->translate('Key Words');?></th>
+		<th><?php echo $this->translate('Price');?>($)</th>
+		<th><label for="isSale"><?php echo $this->translate('Is Sale');?></label></th>
+		<th><label for="isDeleted"><?php echo $this->translate('Is Delete');?></label></th>
+		<th><?php echo $this->translate('Provider');?></th>
+	</tr>
+	<tr>
+		<td align="center"><input id="servicesName" name="servicesName" type="text" value="<?php echo $this->data->getName();?>"/></td>
+		<td align="center"><input id="otherName" name="otherName" type="text" value="<?php echo $this->data->getKey_words();?>" placeholder="<?php echo $this->translate("Keywords separated by ','");?>"/></td>
+		<td align="center"><input id="price" name="price" type="text" value="<?php echo $this->data->getPrice();?>"/></td>
+		<td align="center"><select name="isSale" id="isSale" data-role="slider">
+	      	<option <?php echo $this->data->getIs_sale()?'':"selected='selected'"?> value="0">off</option>
+			<option <?php echo $this->data->getIs_sale()?"selected='selected'":''?> value="1">on</option>
+        	</select>
+      	</td>
+		<td align="center"><select name="isDeleted" id="isDeleted" data-role="slider">
+	      	<option <?php echo $this->data->getIs_deleted()?'':"selected='selected'"?> value="0">off</option>
+	      	<option <?php echo $this->data->getIs_deleted()?"selected='selected'":''?> value="1">on</option>	
+        	</select>
+      	</td>
+      	<td align="center">
+      		<select name="providerid" id="providerid">
+				<?php foreach($this->providerData as $r): ?>
+				<option value="<?php echo $r->getId();?>"
+			  		<?php if ($this->data->getProvider()->getId ()==$r->getId()) :?> 
+         			 		selected="selected"
+         					<?php endif;?>
+         		>
+         		<?php echo $r->getName();?></option>
+			<?php endforeach;?>
+			</select>
+      	</td>
+	</tr>
+</table>
+<br/>
+
+<p>
+<img style="width: 100px; height: 100px;" src="<?php echo $this->data->getOrg_picture();?>">&nbsp;&nbsp;<?php echo $this->translate('Please upload org picture');?><input id='orgPicture' name='orgPicture' type='file'/>
+<img style="width: 100px; height: 100px;" src="<?php echo $this->data->getIcon();?>">&nbsp;&nbsp;<?php echo $this->translate('Please upload Icon');?><input id='icon' name='icon' type='file' />
+</p>
+
+<p><?php echo $this->translate('Remark');?>:<br/><textarea cols="70" rows="5" id="remark" name="remark"><?php echo $this->data->getRemark();?></textarea></p>
+<p><?php echo $this->translate('Introduction');?>:<br/><textarea cols="70" rows="5" id="introduction" name="introduction" ><?php echo $this->data->getIntroduction();?></textarea></p>
+
+
+<input name="Servicesid" type="hidden" value="<?php echo $this->data->getId();?>" /> 	
+
+<p>	
+	<input type="submit" name="submitButton" id="submitButton" value="<?php echo $this->translate('submit');?>" />
+	&nbsp;&nbsp;
+	<input type="button" name="cancelCutton" id="cancelCutton" value="<?php echo $this->translate('cancel');?>" onClick="back() " />
+</p>
+</form>

@@ -1,0 +1,74 @@
+<script language=javascript>
+
+function checkform()
+{
+
+}
+function langChange()
+{
+	var id=<?php echo $this->data->getId();?>;
+	var page=<?php echo $this->curPage;?>;
+	
+	var changeLang=document.getElementById("langid").value;
+
+	window.location ="/management/services/translate/page/"+page+"/servicesid/"+id+"/lang/"+changeLang;
+	
+}
+function back()
+{
+	var page=<?php echo $this->curPage;?>;
+	window.location ="/management/services/index/page/"+page;
+}
+</script>
+
+<h2><?php echo $this->translate('Translate');?></h2>
+
+<form onSubmit="return checkform();" method="post" id="translate" enctype="multipart/form-data">
+<p><?php echo $this->translate('Language');?>
+<select name="langid" id="langid" onchange=langChange()>
+			<?php foreach($this->langData as $r): ?>
+			<option value="<?php echo $r->getLocale();?>"
+			        <?php if ($r->getLocale()==$this->curLanguage) :?> 
+         			 selected="selected"
+         			<?php endif;?>
+         	><?php echo $this->translate($r->getName());?></option>
+         	<?php endforeach;?>
+			</select>
+</p>
+<p><?php echo $this->translate('Name');?>
+   <input placeholder="<?php echo $this->data->getName();?>" id="translateName" name="translateName" type="text" 
+          value="<?php if($this->curTranslateData<>NULL)
+                          echo $this->curTranslateData->getName();   
+                ?>"
+    />
+</p>
+<p><?php echo $this->translate('Org picture');?>
+   <img style="width: 100px; height: 100px;" 
+        src="<?php if($this->curTranslateData<>NULL)
+                       echo $this->curTranslateData->getOrg_picture();
+            ?>"
+    >
+    <input id='orgPicture' name='orgPicture' type='file'/>
+</p>
+<p><?php echo $this->translate('Icon');?>
+   <img style="width: 100px; height: 100px;" 
+        src="<?php if($this->curTranslateData<>NULL)
+                       echo $this->curTranslateData->getIcon();
+            ?>"
+    >
+    <input id='icon' name='icon' type='file' />
+</p>
+<p><?php echo $this->translate('Introduction');?><br/>
+   <textarea cols="70" rows="5" id="introduction" name="introduction" placeholder="<?php echo $this->data->getIntroduction();?>"><?php 
+   if($this->curTranslateData<>NULL)
+       echo $this->curTranslateData->getIntroduction();?></textarea>
+</p>
+
+<input name="servicesid" type="hidden" value="<?php echo $this->data->getId();?>" /> 
+<input name="page" type="hidden" value="<?php echo $this->curPage;?>" />
+<input id="lang" name="lang" type="hidden" value="<?php echo $this->curLanguage;?>" />
+
+<input type="submit" name="submitButton" id="submitButton" value="<?php echo $this->translate('submit');?>" />
+&nbsp;&nbsp;
+<input type="button" name="cancelButton" id="cancelButton" value="<?php echo $this->translate('cancel');?>" onClick="back() "/>
+</form>

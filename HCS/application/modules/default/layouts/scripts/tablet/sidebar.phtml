@@ -1,0 +1,64 @@
+<?php
+    $homeicon = "/tablet/images/icons/icon-home.png";
+    $helpicon = "/tablet/images/icons/icon-help.png";
+?>
+<div id="logoPanel">
+	<img src="<?=$settings->General->Logo->Value?>" class="fillParent"/>
+</div>	
+<div id="languagePanel">
+	<?php echo $languageOutput;?>	
+</div>
+<div id="quickAccessPanel">
+    <div id="homeIconPanel" >
+    	<ul data-role="listview" class="listItemNoIcon">
+	    <li>
+	    <a href="/" ><img src="<?php echo $homeicon?>" class="quickAccessIcon"/></a>
+	    </li>
+	</ul>
+    </div>
+    <div id="helpIconPanel">
+    	<ul data-role="listview" class="listItemNoIcon">	
+	    <li>
+	    <a href="#helpPanel" data-rel="popup" data-position-to="window"><img src="<?php echo $helpicon;?>" class="quickAccessIcon"/></a>
+	    </li>
+	</ul>
+    </div>
+</div>
+<div id="menuPanelOuter">
+    <div id="menuPanel">
+	<div id="set" data-role="collapsible-set" 
+	     data-theme="a" data-content-theme="b" 
+	     data-inset="false"
+	     style="margin-top: 0px; margin-left:10px; margin-right:15px">
+	    <?php include('menu.phtml');?>
+	</div>
+    </div>
+</div>
+<div id="notificationPanel">
+	<?=$notificationPanelOutput?>
+</div>
+<?php
+/*
+ * Just put help here. later the help content should be dynamic
+ */ 
+?>
+<div id="helpPanel" data-role="popup" data-theme="none" data-tolerance="0,0" data-transition="none">
+<a href="#" data-rel="back" data-role="button" data-theme="b" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+<h2><?php echo $this->translate("Welcome");?></h2>
+<p>
+Welcome to the Synrgic Virtual Hotel. Established 2010, The Synrgic Virtual
+hotel hosts the latest state of the art technology, remote control lights,
+curtains and TV, in room Gambling and a host of other services. 
+</p>
+
+<p>
+You are using currently using one of the hotel's room controlling tablets. This
+tablet allows you to manipulate your room to your desired settings whilst also
+providing you with notifications of services you have booked. Additionally if
+you feel the need to order room services, simply click on the services button on
+the left.
+</p>
+
+<p>
+We hope you enjoy your stay
+</p></div>

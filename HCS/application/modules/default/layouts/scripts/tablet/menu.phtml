@@ -1,0 +1,59 @@
+<?php
+
+	$nav = Zend_Registry::get('navigation-guest');
+	$navhelper = $this->navigation();
+	$pageDetails =  $navhelper->findActive($nav);
+
+	$nav->rewind();
+
+	foreach($nav->getChildren() as $page):
+		$id = ltrim($page->Uri);
+
+	if(!$acl->isAllowed($user->role,$page->getResource(),$page->getPrivilege())){
+		continue;
+	}
+
+	if( isset($pageDetails["page"]) && $page->hasPage($pageDetails["page"])){
+		$active = true;
+	} else {
+		$active = false;
+	}
+?>
+	<? if($active): ?>
+    	<div id="<?php echo $id;?>" class="listItemNoIcon ui-btn-active" data-role="collapsible" data-collapsed="false" data-theme="a">
+	<? else: ?>
+    	<div id="<?php echo $id;?>" class="listItemNoIcon" data-role="collapsible" data-collapsed="true" data-theme="a" class="fillParent">
+	<? endif ?>
+	<h2>
+	<?php if(!empty($page->icon)):?>
+	<img src="<?php echo $page->icon?>"/>
+	<?php endif?>
+	<div class="menutext"><?php echo $this->translate($page->Label);?></div></h2>
+
+	<ul data-role="listview">
+	<?php foreach($page->getPages() as $p):
+		/*
+		 * Enable the below for ACL Debugging 
+		 * - benjsc 20130213
+
+		if($p->getResource()){
+		    $show = $acl->isAllowed($user->role,$p->getResource(),$p->getPrivilege()) ? "Y" : "N";
+		} else {
+		    $show = 'U';
+		}
+		 */
+		
+		if($acl->isAllowed($user->role,$p->getResource(),$p->getPrivilege()) || isset($show)) : ?>
+	    <li data-icon="false">
+	    <a href="<?php echo $p->href;?>" <?if($p->isActive()):?>class="ui-btn-down-b ui-state-persist"<?endif?>>
+	    	<?php if(!empty($p->icon)):?>
+	        <img src="<?php echo $p->icon;?>" class="ui-li-icon"/>
+		<?endif;?>
+	        <?php echo $this->translate($p->Label) . (isset($show) ? $show : "");?>
+	    </a>
+	    </li>
+	    <? endif ?>
+	<?php endforeach;?>
+	</ul>
+	</div>
+<?php endforeach;?>

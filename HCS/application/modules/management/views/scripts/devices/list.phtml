@@ -1,0 +1,19 @@
+<h1>Device List</h1>
+
+
+<?echo $this->grid("Devices", true)
+              ->field('name','Name')
+              ->field('deviceType', 'Device Type')
+              ->field('description', 'Description')
+              ->field('room', 'Paired Room')
+	      ->field('groups','Groups')
+              ->actionField(':actions', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+              ->helper(new GridHelper_Device())
+              ->data($this->data)
+              ->emptyMessage('No Devices Exist')
+              ->action(':actions', 'Edit', array( 'url'=>array('action'=>'edit')))
+              ->action(':actions', 'Delete', array( 'url'=>array('action'=>'delete')))
+              ->action(':actions', 'Reset', array( 'url'=>array('action'=>'reset')))
+	      ?>

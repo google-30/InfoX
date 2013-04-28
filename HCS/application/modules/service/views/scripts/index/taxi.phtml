@@ -1,0 +1,147 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<style type="text/css">
+#taxi_introduction{
+	text-indent:0;
+}
+#taxi_detail {
+	position: relative;
+	left: 149px;
+	top: 200px;
+	width: 462px;
+	height: 200px;
+	z-index: 1;
+	visibility: hidden;
+	background-color: #CCC;
+	padding: 40px;
+}
+#taxi_confirm{
+	float: right;
+	padding-right: 10px;
+}
+#taxi_edit{
+	float: right;
+	padding-right: 6px;
+}
+.content {
+	vertical-align: top;
+}
+</style>
+<script type="text/javascript">
+
+$(document).ready(function(e) {
+    $("#taxi_booking").click(function(){
+		$("#taxi_detail").css("visibility","visible");		
+		$("#confirm_location").html($("#taxi_location").val());
+		$("#confirm_destination").html($("#taxi_destination").val());
+		$("#confirm_addtional").html($("#taxi_additionalNotes").val());
+		$("#confirm_scheduled_time").html($("#taxi_scheduled_time").val());
+	});
+	$("#taxi_confirm").click(function(){
+		var location=$("#taxi_location").val();		
+		var destination=$("#taxi_destination").val();
+		var addtionalNotes=$("#taxi_additionalNotes").val();
+		var scheduled_time=$("#taxi_scheduled_time").val();
+		var url="/service/index/taxi/booking/taxi/location/"+location+"/destination/"+destination+"/addtionalNotes/"+addtionalNotes+"/scheduledTime/"+scheduled_time;
+		$.get(url,function(result){
+			alert(result);
+			$("#taxi_location").empty();
+			$("#taxi_destination").empty();
+			$("#taxi_additionalNotes").empty();
+			$("#taxi_scheduled_time").val(currentTime());
+			$("#book_tax_msg").html(result);
+			$("#taxi_detail").css("visibility","hidden");			
+		});
+	});
+	$("#taxi_edit").click(function(){		
+		$("#taxi_detail").css("visibility","hidden");
+	});	
+	$("#taxi_scheduled_time").val(currentTime());
+});
+function currentTime(){		
+		var now=new Date();
+		var year=now.getFullYear();
+		var month=now.getMonth();
+		var day=now.getDate();
+		var hh=now.getHours();
+		var mm=now.getMinutes();		
+		
+		var clock=year+"-";
+		if(month<10){
+			clock+="0";}
+		clock+=month+"-";
+		if(day<10){
+			clock+="0";}
+		clock+=day+" ";
+		if(hh<10){
+			clock+="0";}
+		clock+=hh+":";
+		if(mm<10){
+			clock+="0";}
+		clock+=mm;		
+		return(clock);
+	}
+</script>
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+<div class="wrap">
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+    <td><h1><?php echo $this->translate('Book a Taxi');?></h1></td>
+  </tr>
+  <tr>
+    <td><p id="taxi_introduction"><?php echo $this->translate('There are nine franchise taxi operators in the City of Los Angeles who operate more than 2300 taxis. Be sure before boarding any taxi in the city of Los Angeles that you look for the official City of Los Angeles Taxicab Seal. Taxicabs bearing this seal are insured, have trained drivers and are regularly inspected by the City of Los Angeles. Any cab without the seal is a bandit cab with no legal authorization to operate in the City. Click above for more information about the City of Los Angeles authorized taxi companies, their telephone numbers, and service areas');?></p></td>
+  </tr>
+</table>
+
+       <table width="100%" border="0">
+            <tr>
+                <td width="20%"><div class="name" ><b><?php echo $this->translate('Pick Up Location');?></b></div></td>
+                <td width="80%"><div class="name" ><input type="text" id="taxi_location"></input></div></td>
+            </tr>
+            <tr>
+                <td><div class="name" ><b><?php echo $this->translate('Destination');?></b></div></td>
+                <td width="80%"><div class="name" ><input type="text" id="taxi_destination"></input></div></td>
+            </tr>
+            <tr>
+                <td  ><div class="name"><b><?php echo $this->translate('Additional Notes');?></b></div></td>
+                <td width="80%"><div class="name" ><input type="text" id="taxi_additionalNotes"></input></div></td>
+            </tr>
+            <tr>
+                <td><div class="name"><b ><?php echo $this->translate('Estimated time of arrival');?></b></div></td>
+                <td width="80%"><div class="name" ><input type="text" id="taxi_scheduled_time"></input></div></td>
+            </tr>
+            <tr>
+                <td><button id="taxi_booking" ><?php echo $this->translate('Continue');?></button></td>
+            </tr>
+        </table>
+        	<div id="taxi_detail" style="position:relative; top:20px; left:20px;">
+    <div id="service_notetitle" ><b><?php echo $this->translate('Booking Details');?></b></div>
+    	<div id="detailed_information">
+        	<p>
+            	<b><?php echo $this->translate('Pick Up Location');?>:</b><span id="confirm_location"></span><br />
+           		<b><?php echo $this->translate('Destination');?>:</b><span id="confirm_destination"></span><br />
+            	<b><?php echo $this->translate('Additional Notes');?>:</b><span id="confirm_addtional"></span><br />
+                <b><?php echo $this->translate('Estimated time of arrival');?>:</b><span id="confirm_scheduled_time"></span><br />
+            </p>
+        </div>
+		<div id="parting_line"><hr /></div>
+		<div>
+			<div id="taxi_confirm"><input type="button" value="<?php echo $this->translate('Confirm');?>"></input></div>
+    		<div id="taxi_edit"><input type="button" value="<?php echo $this->translate('Edit');?>"></input></div>
+		</div>
+	</div>
+        <p><div id="book_tax_msg"></div></p>
+</div>
+
+</body>
+</html>

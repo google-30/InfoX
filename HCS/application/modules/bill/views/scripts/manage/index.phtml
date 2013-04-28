@@ -1,0 +1,19 @@
+<?
+   echo $this->grid("Users", true)
+              ->field('room','Room')
+              ->field('guestname','Guest')
+              ->field('description', 'Description')
+              ->field('roomtype', 'Room Type')
+              ->field('checkin', 'Check In')
+              ->actionField(':action', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+              ->helper(new GridHelper_Advertiser())
+              ->data($this->roomlist)
+              ->emptyMessage('No Accounts Exist <a href="'.$this->url(array('action'=>'add')).'">here</a> to register one.')
+              ->action(':action', 'Edit', array( 'url'=>array('action'=>'room')))
+              ->action(':action', 'Print', array( 'url'=>array('action'=>'billspreview')))
+?>
+
+
+

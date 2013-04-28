@@ -1,0 +1,62 @@
+<script language=javascript>
+function checkform()
+{
+	if(document.getElementById("servicesName").value.length<1)
+	{
+		document.getElementById("servicesName").focus();
+		alert("Please input services name");
+		return false;   
+	}	
+}
+
+function back()
+{
+	window.location ="/management/services/index";
+}
+</script>
+
+<h2><?php echo $this->translate('Add Other Services');?></h2>
+
+<form action="/management/services/add-other/serviceid/<?=$this->serviceId?>" onSubmit="return checkform();" method="post" id="addOtherServices" enctype="multipart/form-data">
+
+<table>
+	<tr>
+		<th><?php echo $this->translate('Name');?></th>
+		<th><?php echo $this->translate('Key Words');?></th>
+		<th><?php echo $this->translate('Price');?>($)</th>
+		<th><?php echo $this->translate('Is Sale');?></th>
+		<th><?php echo $this->translate('Provider');?></th>
+	</tr>
+	<tr>
+		<td align="center"><input id="servicesName" name="servicesName" type="text" /></td>
+		<td align="center"><input id="otherName" name="otherName" type="text" placeholder="<?php echo $this->translate("Keywords separated by ','");?>"/></td>
+		<td align="center"><input id="price" name="price" value="0.00" type="text" /></td>
+		<td align="center"><select name="isSale" id="isSale" data-role="slider">
+	      	<option value="0">off</option>
+	      	<option selected='selected' value="1">on</option>
+        	</select>
+      	</td>
+      	<td align="center"><select name="providerid" id="providerid">
+	<?php foreach($this->providerData as $r): ?>
+		<option value="<?php echo $r->getId();?>"><?php echo $r->getName();?></option>
+	<?php endforeach;?>
+</select></td>
+	</tr>
+</table>
+
+<p>
+<?php echo $this->translate('Please upload org picture');?><input id="orgPicture" name="orgPicture" type="file" /><br/>
+<br/>
+<?php echo $this->translate('Please upload Icon');?><input id="icon" name="icon" type="file"/><br/>
+<br/>
+</p>
+
+<p><?php echo $this->translate('Remark');?>:<br/><textarea cols="70" rows="5" id="remark" name="remark"></textarea></p>
+<p><?php echo $this->translate('Introduction');?>:<br/><textarea cols="70" rows="5" id="introduction" name="introduction"></textarea></p>
+	
+<p>	
+	<input type="submit" name="submitButton" id="submitButton" value="<?php echo $this->translate('submit');?>" />
+	&nbsp;&nbsp;
+	<input type="button" name="cancelCutton" id="cancelCutton" value="<?php echo $this->translate('cancel');?>" onClick="back() " />
+</p>
+</form>

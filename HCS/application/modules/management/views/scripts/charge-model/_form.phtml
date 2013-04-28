@@ -1,0 +1,12 @@
+<form id="<?php echo $this->element->getFormId();?>" 
+     enctype="application/x-www-form-urlencoded" method="post" 
+     action="<?php echo $this->element->getAction();?>">
+    <label for="name" class="required">Name:</label>
+    <?php echo $this->element->name; ?>
+    <label for="algorithm">Computing Method:</label>
+    <?php echo $this->element->algorithm; ?>
+    <label>&nbsp;</label>
+    <?php echo $this->element->save; ?>
+    <?php echo $this->element->cancel; ?>
+</form>
+

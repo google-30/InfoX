@@ -1,0 +1,113 @@
+
+
+/*
+ * Custom Classes
+ */
+.listItemNoIcon .ui-icon
+{
+	display: none;
+}
+
+.wrap {
+	 width:97%;
+	 height:100%;
+	 padding:10px;
+}
+
+body, #content
+{
+    background-color: #e4e4e4;
+}
+
+#helpIconPanel
+{
+    background-color: #adadad;
+}
+#homeIconPanel
+{
+    background-color: #858585;
+}
+
+#logoPanel 
+{
+    text-align:center;
+	height: 125px !important;
+}
+#languagePanel
+{
+	height: 63px;
+	padding-top:12px;}
+
+/*
+ * Help
+ */
+ 
+#helpPanel {
+	width:400px;
+	height:auto;
+	border: 0px solid #000;
+	color: white;
+    background: rgba(56, 56, 56, 0.9);
+	padding:30px;	
+}
+
+#helpPanel h2 {
+	font-size: 26px;
+	font-weight: normal;
+}
+
+#helpPanel p {
+	font-size: 16px;
+	font-weight: normal;
+}
+
+#helpPanel-popup {
+	right:auto !important;
+	left:440px !important;  /* = (1280-400)/2 */
+}
+
+/********************************************************************************** 
+ * JQueryMobile Overrides
+ */
+
+/**
+ * Site Wide
+ */
+
+.ui-collapsible-heading-toggle { height: 119px; }
+.ui-collapsible-heading-toggle img { margin-top: 30px; margin-left: -20px; padding-right: 10px; }
+.ui-collapsible-heading-toggle .ui-btn-text { }
+
+/**
+ * Sidebar menu
+ */
+
+#menuPanel .ui-btn-text { font-size: 16pt;}
+/*#menuPanel .ui-btn-text img { margin-top: 30px; }*/
+
+
+/**
+ * Noticeboard
+ */
+
+#noticeboard {
+        background-color: #bbbbbb;
+        -moz-opacity: 0.97;
+        opacity: 0.97;
+        filter: alpha(opacity=90);
+	color:white;
+	box-shadow: 1px 4px 5px rgba(108, 113, 123, 0.9);
+	-moz-box-shadow: 1px 4px 5px rgba(108, 113, 123, 0.9);
+-webkit-box-shadow: 1px 4px 5px rgba(108, 113, 123, 0.9);
+}
+
+/**
+ * Icons
+ */
+.ui-icon-trash {
+    background-image:url('/common/images/icons/trash.png');
+    background-repeat:no-repeat;
+}
+
+.ui-btn-text img {
+}

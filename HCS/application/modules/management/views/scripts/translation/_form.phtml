@@ -1,0 +1,17 @@
+<?php $url = $this->url(array('action'=>'upload'));?>
+<form id="<?php echo $this->element->getFormId();?>"
+    enctype="multipart/form-data" method="post"
+    action="<?php echo $this->element->getAction();?>">
+    <table border="0">
+        <tr>
+            <td><?php echo $this->element->path;?></td>
+            <td align="left"><a href='javascript:__submitForm("<?php echo $this->element->getFormId();?>", "<?php echo $url;?>", "post")'><?php echo $this->translate("Upload")?></a></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <i><?php echo $this->translate('Translation resource format:&lt;name&gt;_&lt;language&gt;.csv, ie, system_zh_CN.csv');?></i>
+            </td>
+        </tr>
+    </table>
+</form>
+

@@ -1,0 +1,24 @@
+<h1>DeviceGroup List</h1>
+
+<p><a href="<?php echo $this->url(array('action'=>'add'));?>">Add A User</a>
+
+<?php if(empty($this->data)):?> <h2>No Device Group found, please click <a href="<?php echo
+$this->url(array('action'=>'add'));?>">here</a> to add a User</h2>
+<?php else:?>
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>&nbsp;</th>
+    </tr>
+<?php foreach($this->data as $r): ?>
+    <tr><td><?php echo $r->getName();?>
+        <td><?php echo $r->getDescription();?></td>
+        <td>
+		<a href="<?php echo $this->url(array('action'=>'edit', 'id'=>$r->getId()));?>">Edit</a>
+		&nbsp;|&nbsp;
+		<a href="<?php echo $this->url(array('action'=>'delete', 'id'=>$r->getId()));?>">Delete</a>
+	</td>
+    </tr>
+<?php endforeach;?>
+</table>
+<?php endif;?>

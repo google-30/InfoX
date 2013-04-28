@@ -1,0 +1,231 @@
+<?
+global $roomradio;
+$roomradio="ui-btn-active";
+include ('header.phtml');
+?>
+<script>
+var oldfrq=0;
+var _BF = 89;
+var _FRNG = 20; // MAXF = 120
+var stationsName=new Array("CBC","NASH","92.9","Liberty Rock","Jazz Nation");
+var stationsFq=new Array(89.8,94.7,92.9,97.2,108.5);
+var stations=new Array();
+for(var i=0;i<stationsName.length;i++)
+{
+	stations[stationsFq[i]]=stationsName[i];
+}
+
+function setStations(channel) {
+	var f=stationsFq[channel];
+    var position=(f-_BF)*100/_FRNG;
+    $('#slider-1').val(position).slider("refresh");
+}
+
+function setFrequency(pertange) {
+    // 0-100
+    var f = _FRNG * pertange/100; 
+    f = _BF + Math.round(f*100)/100;
+
+	for(var n in stationsFq)
+	{
+		if(Math.abs(stationsFq[n]-f)<=0.1)
+			f=stationsFq[n];
+	}
+	      
+    $('#osd').text('FM '+f+' MHz');
+    if(stations[f])
+    	$('#station').text(stations[f]+" <?php echo $this->translate('radio');?>");
+    else
+    	$('#station').text('');
+
+	if(oldfrq!=f)
+	{
+    	oldfrq=f;
+		var url ="/room/index/setstate/roomid/<?php echo $this->roomid ?>/deviceId/radio/Item/channel/value/"+f;
+		$.get(url, function(result){});
+	}
+}
+
+$(document).bind('change', function() {
+    setFrequency($('#slider-1').val());
+});
+
+var updown=0;
+
+function upChannel()
+{
+	updown--;
+	if(updown<=0)
+		updown=0;
+	setStations(updown);
+}
+function downChannel()
+{
+	var len=stationsFq.length-1;
+    updown++;
+	if(updown>=len)
+		updown=len;
+	setStations(updown);
+}
+
+function volumeChange(Item){
+	var volume=$('#volumeValue').text();
+	if(Item=='up')
+	{
+		volume=(volume>=20)?20:(++volume);	
+	}
+	else
+	{
+		volume=(volume<=0)?0:(--volume);			
+	}
+		
+	var url ="/room/index/setstate/roomid/<?php echo $this->roomid ?>/deviceId/radio/Item/volume/value/"+volume;
+	$.get(url, function(result){});	
+}
+
+</script>
+
+
+
+
+
+<style type="text/css">
+table {    
+    width: 67%;        
+    float:left;
+}
+
+td {
+    /*
+    border-left: 0px solid #c1dad7;
+	border-right: 0px solid #c1dad7;
+	border-bottom: 0px solid #c1dad7;
+    */    
+    text-align: center;
+    background-repeat:no-repeat;
+}
+
+/* remove the input(value field) */
+input.ui-slider-input {
+    display:none !important;
+}
+
+#osd
+{ 
+word-spacing:30px;
+font-size:250%;
+color:#ffffff;
+}
+
+#station
+{ 
+word-spacing:20px;
+font-size:150%;
+color:#f6f6f6;
+}
+
+.ui-slider {
+    border: 0px;
+    background : url(/images/room/Radio-Mid.png);
+    background-size: 120%;
+    background-repeat:no-repeat;
+}
+
+div.ui-slider {
+    width: 70%;
+    height:50px;
+}
+
+
+a.ui-btn.ui-slider-handle .ui-btn-inner {
+    background : url(/images/room/Button-Normal-Hover-Pressed-Radio-slider.png);
+}
+
+</style>
+
+<table style="padding: 30px;">
+    <tr>
+        <td  style="background: linear-gradient(#525252, #3b3b3b) repeat scroll 0 0 #525252;" width="456" height="288">  
+            <p id="station"></p>    
+            <p id="osd">FM 95.0 MHz</p>
+        </td>
+    </tr>
+    <tr>
+    	<td colspan="4">
+    	<img style="height:40px;" src="/images/room/Radio-Left.png"
+        onmousedown="this.src='/images/room/Radio-Left.png';" 
+        onmouseup="this.src='/images/room/Radio-Left.png';upChannel();"/>
+        <input type="range" name="slider-1" id="slider-1" value="30" min="0" max="100" class="radioclass"/>
+        <img style="height:40px; padding: 0px 0px 0px 10px;" src="/images/room/Radio-Right.png"
+        onmousedown="this.src='/images/room/Radio-Right.png';" 
+        onmouseup="this.src='/images/room/Radio-Right.png';downChannel();"/>
+        </td>
+    </tr>
+</table>
+<style> 
+#radiovolume
+{
+float:right;
+width: 30%;
+height: 330px;
+}
+</style>
+<div id="radiovolume">
+<table id="ctltable" style="padding: 110px 0 0 30px;">
+
+<tr>
+    <td>
+        <p style="margin-bottom: -10px;"><img src="/images/room/Button-Normal-Channel-Volume-Up.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Channel-Volume-Up.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Channel-Volume-Up.png';volumeChange('up');"/>
+      </p></td>
+
+</tr>
+<tr>
+
+    <td>
+        <h2 style="font-size: 25px;"><?php echo $this->translate("Volume");?></h2>
+    </td>    
+</tr>
+<tr>
+    <td>
+        <p style="margin-top: -10px;"><img src="/images/room/Button-Normal-Channel-Volume-Down.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Channel-Volume-Down.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Channel-Volume-Down.png';volumeChange('down');"/></p>
+    </td>
+
+</tr>
+<tr>
+    <td>
+        <h2 id="volumeValue" style="font-size: 25px;"><?php echo $this->state['volume'];?></h2>
+    </td>    
+</tr>
+</table>
+</div> 
+
+<style> 
+#recommendations
+{
+border:0px solid #a1a1a1;
+float:left;
+width: 92%;
+margin: 0 30px;
+height: 280px;
+}
+</style>
+  
+<div id="recommendations">
+<h2 style="font-size: 22px;"><span><?php echo $this->translate("Recommendations");?>:</span></h2>
+	<div class="ui-grid-d">
+		<div class="ui-block-a"><a href="javascript:setStations(0);"><img src="/images/room/radiostation01.png" alt="class95fm"></a></div>
+		<div class="ui-block-b"><a href="javascript:setStations(1);"><img src="/images/room/radiostation02.png" alt="class95fm"></a></div>
+		<div class="ui-block-c"><a href="javascript:setStations(2);"><img src="/images/room/radiostation03.png" alt="class95fm"></a></div>
+		<div class="ui-block-d"><a href="javascript:setStations(3);"><img src="/images/room/radiostation04.png" alt="class95fm"></a></div>			
+        <div class="ui-block-e"><a href="javascript:setStations(4);"><img src="/images/room/radiostation05.png" alt="class95fm"></a></div>
+	</div>
+</div>    
+
+
+
+
+ 

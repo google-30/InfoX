@@ -1,0 +1,43 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<style>
+#categories {
+    margin: 4px;
+}
+#categories.ul li.selected {
+    background-color: #858585;
+}
+</style>
+<div style="background:lightgreen">
+    <?php echo $this->msg ?>
+</div>
+<?php if(empty($this->categorys)):?>
+<h2><?php echo $this->translate("No categorys found, please check!");?></h2>
+<?php else:?>
+<div data-role="navbar" id="categories">
+    <ul>
+    <?php if($this->selected == 0): ?>
+        <li class="selected">
+            <a href="<?php echo  '/service/index/catalog/';?>" class="ui-btn-active"><?php echo $this->translate("All");?></a>
+        </li>
+    <?php else:?>
+        <li>
+            <a href="<?php echo  '/service/index/catalog/';?>"><?php echo $this->translate("All");?></a>
+        </li>
+    <?php endif;?>
+    <?php foreach($this->categorys as $c): ?>
+    <?php if($this->selected == $c['id']):?>
+        <li class="selected">
+            <a href="<?php echo  '/service/index/catalog/cid/'.$c['id'];?>" class="ui-btn-active"><?php echo $this->translate($c['name']);?></a>
+        </li>
+    <?php else: ?>    
+        <li>
+            <a href="<?php echo  '/service/index/catalog/cid/'.$c['id'];?>"><?php echo $this->translate($c['name']);?></a>
+        </li>
+    <?php endif;?>
+    <?php endforeach;?>
+    </ul>
+</div>
+<?php endif;?>

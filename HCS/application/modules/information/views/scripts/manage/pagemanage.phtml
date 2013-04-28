@@ -1,0 +1,47 @@
+<script>
+
+function redirect(url) {
+	window.location = url;
+}
+
+function reload()
+{
+    //alert("reload!");
+    var url = "/information/manage/pagemanage?language=" + $('#select-language').val();
+    url += "&state=" + $('#pagestate').val();
+    redirect(url);
+}
+
+$(document).ready(function() {
+    $('#select-language').change(reload);
+    $('#pagestate').change(reload);
+});
+
+</script>
+
+<h3>Information Page Management</h3>
+
+<a data-role="button" data-inline="true" href="<?=$this->url(array('action'=>'addpage'))?>">Add New Page</a>
+
+<form name="dataform" id="dataform" method="post" >
+Language:<select id="select-language" name="select-language" data-inline="true"><?php echo $this->langSels; ?></select>
+State:
+<select id="pagestate" name="pagestate" data-inline="true"><?php echo $this->stateSels; ?></select>
+</form> <!-- dataform -->
+
+<?
+   echo $this->grid("Page", true)
+              ->field('created','Created')
+              ->field('state', 'Name')
+              ->field('content', 'Email')
+              ->actionField(':action', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+              ->helper(new GridHelper_Information())
+              ->data($this->pages)
+              ->emptyMessage('No Pages exist click <a href="'.$this->url(array('action'=>'addpage')).'">here</a> to create a one.')
+              ->action(':action', 'Edit', array( 'url'=>array('action'=>'pageedit')))
+              ->action(':action', 'Preview', array( 'url'=>array('action'=>'preview')))
+              ->action(':action', 'Publish', array( 'url'=>array('action'=>'publishpage')))
+	      ->action(':action', 'Delete', array('url'=>array('action'=>'deletepage')));
+?>

@@ -1,0 +1,94 @@
+<script>
+function checkemail()
+{
+    document.getElementById("email").disabled = document.getElementById("softcopy").checked ? "" : "disabled"; 
+}
+
+function agree()
+{
+    var frm = $('#copyprintform');
+    var toServer = {};
+
+    toServer["softcopy"] = $("#checkbox-agree").is(':checked');
+    toServer["email"] = $("#email").val();
+
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: toServer,
+            success: function (data) {
+                alert(data);
+                window.location = "/welcome/";    
+            }
+        });
+
+        return false;
+    });
+
+    frm.submit();    
+}
+
+$(document).ready(function () {
+    $('#checkbox-agree').change(function() {
+        $('#email').textinput('enable');	
+    });    
+});
+</script>
+
+<style> 
+#terms
+{
+border:2px solid #a1a1a1;
+/*padding:10px 40px; */
+padding:10px;
+background:#dddddd;
+border-radius:25px;
+-moz-border-radius:25px; /* Firefox 3.6 and earlier */
+}
+</style>
+<div class="wrap">
+<div id="terms" >
+<h3>Terms and Conditions</h3>
+<p>
+The charges show are indicitive and do not include any charges which may have
+been incurred but not yet recorded by the hotel. By agreeing below you confirm
+that you authorise the hotel to charge any additional charges to your credit
+card at a later date. 
+</p>
+<p>
+Please note, when performing a quick checkout the reversal of any deposits
+taken will not take place until all charges are finalised.
+</p>
+
+</div>
+
+<style> 
+#copyprint
+{
+border:2px solid #a1a1a1;
+padding:10px; 
+background:#dddddd;
+border-radius:25px;
+-moz-border-radius:25px; /* Firefox 3.6 and earlier */
+}
+</style>
+
+<form id="copyprintform" action="/bill/index/checkout" method="post">
+<div data-role="fieldcontain" class="ui-hide-label">
+ 	<fieldset data-role="controlgroup">
+		<input type="checkbox" name="checkbox-agree" id="checkbox-agree" class="custom"  />
+		<label for="checkbox-agree"><?=$this->translate('Please send bill copy to my email address')?>:</label>
+    </fieldset>
+</div>
+<div data-role="fieldcontain" class="ui-hide-label">
+ <!--<label for="foo">Text Input:</label>-->
+ <input type="text" name="email" id="email" value="youremail@yourdomain.com" disabled />
+</div>
+</form>
+<fieldset class="ui-grid-a">
+	<div class="ui-block-a"><button type="submit" data-theme="c" onclick="agree()"><?=$this->translate('Agree');?></button></div>
+	<div class="ui-block-b"><a type="button" data-theme="b" href="/bill/index/"><?=$this->translate('Discard');?></a></div>	   
+</fieldset>
+
+</div>

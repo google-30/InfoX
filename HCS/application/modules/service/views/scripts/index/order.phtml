@@ -1,0 +1,38 @@
+<div class="wrap">
+<?php if(empty($this->details)):?>
+<h2>No Order found</h2>
+<?php else:?>
+<h2>Order Num:<?php echo $this->id;?></h2>
+<style type="text/css">
+table {
+	background: none;
+}
+
+th {
+	background: linear-gradient(#c4c4c4, #a4a4a4) repeat scroll 0 0 #309EAD;
+	background-color: #a4a4a4;
+}
+</style>
+
+
+<table cellpadding="20">
+	<tr>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Price</th>
+        <th>Quantity</th>
+		<th>State</th>
+	</tr>
+<?php foreach($this->details as $d): ?>
+        <tr>
+            <td><?php echo $d->getId();?></td>
+            <td><?php echo $d->getService_name();?></td>
+            <td><?php echo $d->getService_price();?></td>
+            <td><?php echo $d->getQuantity();?></td>
+            <td><?php echo $d->getState();?></td>
+        </tr>
+<?php endforeach;?>
+</table>
+<?php endif;?>
+
+</div>

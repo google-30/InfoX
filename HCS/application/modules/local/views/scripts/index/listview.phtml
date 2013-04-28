@@ -1,0 +1,67 @@
+<script>
+$(document).ready(function() {
+    $('#distances').change(reload);
+    $('#categories').change(reload);
+});
+
+function redirect(url) 
+{
+	window.location = url;
+}
+
+function reload()
+{
+    //alert("reload!");
+    var url = "/local/index/listview?distance=" + $('#distances').val() + "&category=" + $('#categories').val();
+    redirect(url);
+}
+
+</script>
+
+<div data-role="navbar">
+	<ul>
+		<li><a href="#" class="ui-btn-active">List View</a></li>
+		<li><a href="/local/index/mapview" >Map View</a></li>
+	</ul>
+</div><!-- /navbar -->
+
+<div class="ui-grid-a">
+	<div class="ui-block-a">
+        <select name="categories" id="categories">
+            <?php
+            foreach($this->categories as $key => $value)
+            {
+                if($key == $this->selCate)
+                {
+                    echo '<option value="' . $key .  '" selected>' . $value . "</option>";
+                }
+                else
+                {
+                    echo '<option value="' . $key .  '">' . $value . "</option>";
+                }   
+            }
+            ?>
+        </select>
+    </div>
+	<div class="ui-block-b">
+        <select name="distances" id="distances">
+            <?php
+            foreach($this->distances as $key => $value)
+            {
+                if($key == $this->selDist)
+                {
+                    echo '<option value="' . $key .  '" selected>' . $value . "</option>";
+                }
+                else
+                {
+                    echo '<option value="' . $key .  '">' . $value . "</option>";
+                }   
+            }
+            ?>
+        </select>
+    </div>
+</div> <!--ui-grid-a -->
+
+<div data-role="collapsible-set" class="attractions-collapse">
+<?php echo $this->attractions;?>
+</div>

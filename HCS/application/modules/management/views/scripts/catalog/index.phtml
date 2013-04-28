@@ -1,0 +1,16 @@
+<h1><?php echo $this->translate('Services');?></h1>
+
+<p>
+<a data-role="button" data-inline="true" href="<?php echo $this->url(array('action'=>'add'));?>"><?php echo $this->translate('Add Catalog');?></a>
+<?
+   echo $this->grid("Grid", true)
+              ->field('name','Name')
+              ->field('is_display', 'Active')
+              ->actionField(':actions', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+              ->data($this->data)
+              ->action(':actions', 'Edit', array( 'url'=>array('action'=>'edit')))
+              ->action(':actions', 'Delete', array( 'url'=>array('action'=>'delete')))
+?>
+

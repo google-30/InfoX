@@ -1,0 +1,242 @@
+<script language=javascript>
+function checkform()
+{
+	
+	if(document.getElementById("foodName").value.length<1)
+	{
+		document.getElementById("foodName").focus();
+		alert("Please input food name");
+		return false;   
+	}
+	/*
+	if(document.getElementById("price").value==0.00)
+	{
+		document.getElementById("price").focus();
+		alert("Please input price");
+		return false;   
+	}
+*/	
+	
+}
+function preImg() {
+	if (typeof FileReader === 'undefined') {
+		alert('Your browser does not support HTML5');
+		return;
+	}
+    var files = document.getElementById("orgPicture").files;
+
+    for (var i = 0, f; f = files[i]; i++) {
+
+        if (!f.type.match('image.*')) {
+            
+        	alert('file is not image');
+            continue;
+
+        }
+
+        var reader = new FileReader();
+
+        reader.onload = (function(theFile) {
+
+            return function(e) {
+
+                document.getElementById('viewimg').src = e.target.result;
+
+            };
+
+        })(f);
+
+        reader.readAsDataURL(f);
+
+    }
+}
+function back()
+{
+	var page="<?php echo $this->curPage;?>";
+	if(page=="")
+		page=1;
+	window.location ="/management/services/index/p/"+page;
+}
+</script>
+<style type="text/css">
+.pos_left
+{
+  position: relative;
+  top: 40px;
+}
+.pos_right
+{
+	position: relative;
+	left:200px;
+	width:500px;
+}
+.pos_rightdate
+{
+	position: relative;
+	left:200px;
+	width:100px;
+}
+.pos_righticon
+{
+	position: relative;
+	left:300px;
+	width:150px;
+}
+.pos_rightall
+{
+	position: relative;
+	left:200px;
+	width:1000px;
+}
+.pos_floatleft
+{
+	float:left;
+}
+.pos_time
+{
+  	position: relative;
+  	top: 62px;
+	left:-20px;
+}
+.pos_timeleft
+{
+  	position: relative;
+  	top: 55px;	
+	left:20px;
+}
+.pos_timeright1
+{
+  	position: relative;
+  	top: 35px;	
+	left:200px;
+	width:100px;
+}
+.pos_timeright2
+{
+  	position: relative;
+	left:300px;
+	width:300px;
+}
+
+</style>
+
+<h2><?php echo $this->translate('Edit Room Service');?></h2>
+
+<form onSubmit="return checkform();" method="post" id="editFoods" enctype="multipart/form-data">
+
+
+<div>
+	<div class="pos_left"><?php echo $this->translate('Name');?></div>
+	<div class="pos_right"><input id="foodName" name="foodName" type="text" value="<?php echo $this->data->getName();?>" /></div>
+</div>
+<div>
+	<div class="pos_left"><?php echo $this->translate('Type of Service');?></div>
+	<div class="pos_right">
+		<select name="type" id="type">
+			<?php foreach($this->TopCatalogs as $r): ?>
+			<option value="<?php echo $r->getId();?>"
+			        <?php if ($this->data->getType()==$r->getId()) :?> 
+         			 selected="selected"
+         			<?php endif;?>
+         	><?php echo $r->getTranslateName($this->lang);?></option>
+			<?php endforeach;?>
+		</select>
+	</div>
+</div>
+<div>
+	<div class="pos_left"><?php echo $this->translate('Key Words');?></div>
+	<div class="pos_right"><input size="30" value="<?php echo $this->data->getKey_words();?>" placeholder="<?php echo $this->translate("Keywords separated by ','");?>" id="otherName" name="otherName" type="text" /></div>
+</div>
+<div>
+	<div class="pos_left"><?php echo $this->translate('Price');?>($)</div>
+	<div class="pos_right"><input size="30" id="price" name="price" value="0.00" type="text" value="<?php echo $this->data->getPrice();?>"/></div>
+</div>
+<div>
+	<div class="pos_left"><?php echo $this->translate('Provider');?></div>
+	<div class="pos_right">
+		<select name="providerid" id="providerid">
+			<?php foreach($this->providerData as $r): ?>
+			<option value="<?php echo $r->getId();?>"
+			        <?php if ($this->data->getProvider()->getId ()==$r->getId()) :?> 
+         			 selected="selected"
+         			<?php endif;?>
+         	><?php echo $r->getName();?></option>
+			<?php endforeach;?>
+		</select>
+	</div>
+</div>
+<div >
+<div class="pos_left"><?php echo $this->translate('Description');?></div>
+<div class="pos_rightall"><textarea cols="70" rows="5" id="introduction" name="introduction" ><?php echo $this->data->getIntroduction();?></textarea></div>
+</div>
+<?php if ($this->data->getType()=='1') :?>  			
+<div>
+	<div class="pos_left"><?php echo $this->translate('Category');?></div>
+	<div class="pos_right">
+		<select name="categoryid" id="categoryid">
+			<?php foreach($this->catalogData as $r): ?>
+			<option value="<?php echo $r->getId();?>"
+			        <?php if ($this->data->getCategory()->getId ()==$r->getId()) :?> 
+         			 selected="selected"
+         			<?php endif;?>
+         	><?php echo $r->getTranslateName($this->lang);?></option>
+			<?php endforeach;?>
+		</select>
+	</div>
+</div>
+<?php else:?>
+<div class="pos_time"><input type="checkbox" name="has_quantity" id="has_quantity" value="1" 
+	<?php if($this->data->gethas_quantity()=='1'):
+		echo "checked='checked'";
+	endif;?>"/>
+</div>
+<div class="pos_timeleft"><?php echo $this->translate('Quantity');?></div>
+<div class="pos_time"><input type="checkbox" name="has_remark" id="has_remark" value="1" 
+	<?php if($this->data->gethas_remark()=='1'):
+		echo "checked='checked'";
+	endif;?>"/>
+</div>
+<div class="pos_timeleft"><?php echo $this->translate('Free Text');?></div>
+
+<div>
+	<div class="pos_time"><input type="checkbox" name="has_starttime" id="has_starttime" value="1" 
+	<?php if($this->data->gethas_starttime()=='1'):
+		echo "checked='checked'";
+	endif;?>"
+	/></div>
+	<div class="pos_timeleft"><?php echo $this->translate('Start Date/Time');?></div>
+	<div class="pos_timeright1"><?php echo $this->translate('Show From');?></div>
+	<div class="pos_timeright2"><input id="starttime" name="starttime" type="text" value="
+	<?php if($this->data->getStarttime() <>NULL):
+         			 echo $this->data->getStarttime()->format('Y-m-d H:i:s');
+         			endif;?>"/></div>
+</div>
+<div>
+	<div class="pos_time"><input type="checkbox" name="has_stoptime" id="has_stoptime" value="1"
+	<?php if($this->data->gethas_stoptime()=='1'):
+		echo "checked='checked'";
+	endif;?>"	
+	/></div>
+	<div class="pos_timeleft"><?php echo $this->translate('Stop Date/Time');?></div>
+	<div class="pos_timeright1"><?php echo $this->translate('Show To');?></div>
+	<div class="pos_timeright2"><input id="stoptime" name="stoptime" type="text" value="
+	<?php if($this->data->getStoptime() <>NULL):
+         echo $this->data->getStoptime()->format('Y-m-d H:i:s');
+		endif;?>"/></div>
+</div>
+<?php endif;?>
+<div>
+	<div class="pos_left"><?php echo $this->translate('Image');?></div>
+	<div class="pos_right"><img id="viewimg" style="width: 450px; height: 450px;" src="<?php echo $this->data->getOrg_picture();?>"></div>
+	<div class="pos_right">
+	<div class="pos_left"><input id="orgPicture" name="orgPicture" type="file"/></div>
+	<div class="pos_righticon"><button type="button" id="upload" name="upload" onClick="preImg()">upload</button></div>
+	</div>
+</div>
+<div class="ui-grid-b">	
+	<div class="ui-block-a" style="width:250px"><input type="submit" name="submitButton" id="submitButton" value="<?php echo $this->translate('Publish');?>"/></div>
+	<div class="ui-block-b" style="width:250px"><input type="submit" name="submitButton" id="draft" value="<?php echo $this->translate('Save as draft');?>"/></div>	
+	<div class="ui-block-c" style="width:250px"><input type="button" name="cancelCutton" id="cancelCutton" value="<?php echo $this->translate('cancel');?>" onClick="back()"/></div>
+</div>
+<input name="Servicesid" type="hidden" value="<?php echo $this->data->getId();?>" />
+</form>

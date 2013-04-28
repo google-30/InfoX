@@ -1,0 +1,120 @@
+<?php $this->headScript()->captureStart();?>
+var _savesetting = "<?php echo $this->url(array('action'=>'savesetting'));?>";
+function editColumn(id, name, size) {
+    col = $('#'+name+'-'+id);
+    val = col.text();
+    inp = $("<input>").attr({
+            'type': 'text',
+            'id': name+'-'+id,
+            'name': name,
+            'value': val,
+          }).width(col.parent().width());
+    col.replaceWith(inp);
+}
+function displayColumn(id, name) {
+    col = $('#'+name+'-'+id);
+    col.replaceWith($('<div></div>').attr('id', name+'-'+id).text(col.val()));
+    return val;
+}
+function getColumn(id, name) {
+    col = $('#'+name+'-'+id);
+    return col.val();
+}
+function enableButtons(enabled) {
+    if(enabled) {
+        $("#section a").show();
+    }
+    else {
+        $("#section a").hide();
+    }
+}
+function saveSetting(setting) {
+    $.ajax({
+        url: _savesetting,
+        dataType: 'json',
+        data: setting,
+        success: function(rid) {  
+            $('#op').val('edit');
+            $('#button-'+rid).text('Edit');
+            displayColumn(rid, 'description');
+            displayColumn(rid, 'value');
+            setTimeout(function() {
+                location.reload(true);
+            }, 500);
+        },
+        error: function(ctx, err) {
+        },
+    });
+}
+function _op(rid, cancel) {
+    if(cancel === 1) {
+        $('#cancel-'+rid).hide();
+        location.reload(true);
+    }
+    else {
+        op = $('#op').val();
+        if(op == 'edit') {
+            $('#op').val('save');
+            enableButtons(false);
+            $('#button-'+rid).show().text('Save');
+            $('#cancel-'+rid).show();
+            editColumn(rid, 'description', 50);
+            editColumn(rid, 'value', 20);
+        }
+        else {
+            desc = getColumn(rid, 'description');
+            val = getColumn(rid, 'value');
+            enableButtons(true);
+            $('#cancel-'+rid).hide();
+            saveSetting({
+                'id': rid,
+                'description':desc,
+                'value':val,
+            });
+        }
+    }
+}
+<?php $this->headScript()->captureEnd();?>
+<?php $this->headStyle()->captureStart();?>
+.head {
+    background-color: black;
+    color: white;
+}
+.text {
+    padding: 2px 8px 2px 8px;
+}
+.cancel {
+    display:none;
+    padding: 2px 0px 2px 4px;
+}
+<?php $this->headStyle()->captureEnd();?>
+<h1><?php echo $this->translate('Settings')?>: <?php echo $this->translate($this->section);?></h1>
+
+<form>
+<table border="1" id="section">
+<?
+if(count($this->data)){
+	foreach($this->data as $k=>$v){ ?>
+		<tr>
+			<td class="head text"><?=str_replace('_', '-', $k)?></td>
+			<td class="text"><div id="description-<?=$v->id?>" width="100%"><?=$v->description?></div></td>
+			<td class="text"><div id="value-<?=$v->id?>" width="100%"><?=$v->value?$v->value:'&nbsp;'?></div></td>
+			
+			<td class="text" align="center">
+			  <?php /* jqm cause regression*/
+			        /* echo $this->formButton('button-'.$v->id, 'Edit', array('onclick'=>'javascript:_op("'.$v->id.'");'));*/ ?>
+			  <a href="<?php echo 'javascript:_op('.$v->id.',0)';?>" id="<?php echo 'button-'.$v->id;?>"><?php echo $this->translate("Edit");?></a> 
+			  <a href="<?php echo 'javascript:_op('.$v->id.',1)';?>" id="<?php echo 'cancel-'.$v->id;?>" class="cancel"><?php echo $this->translate("Cancel");?></a> 
+			  </td>
+		</tr>
+<? 
+	}
+} else { 
+?>
+No Settings Exist
+<?
+}
+?>
+</table>
+<?php echo $this->formHidden('op', 'edit');?>
+</form>

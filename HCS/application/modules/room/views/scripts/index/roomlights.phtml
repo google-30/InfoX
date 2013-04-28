@@ -1,0 +1,12 @@
+
+<?
+global $roomlights;
+$roomlights="ui-btn-active";
+include('header.phtml'); 
+
+if( isset( $this->file)){
+    include($this->file);
+} else {
+    echo $this->content;
+}
+?>

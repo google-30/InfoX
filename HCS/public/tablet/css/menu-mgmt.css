@@ -1,0 +1,84 @@
+@CHARSET "UTF-8";
+#menu * {
+	margin:0px;
+	padding:0px;
+	width: 160px;
+}
+
+#menu li {
+    background: linear-gradient(#4EB7C1, #309EAD) repeat scroll 0 0 #309EAD;
+	background-color:#309EAD;
+    list-style: none outside none;
+	}
+#menu ul.navigation {background: linear-gradient(#C4C4C4, #A4A4A4) repeat scroll 0 0 #C4C4C4; padding: 0px; background-color: #A4A4A4;}
+#menu ul a.topmenu {display:none;}
+
+#menu a {
+	color:#fff;
+	cursor:pointer;
+	display:block;
+	text-decoration:none;
+}
+
+#menu a.topmenu + ul > li > a {
+    border-bottom:#3d8d95 solid;
+    border-width:1px;
+    height:40px;
+    font-size: 16px;
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+	padding: 10px 0;
+
+}
+
+#menu a.topmenu + ul > li > a.dashboard {
+    height: 70px;
+    font-size:1.2em;
+	background: linear-gradient(#797979, #868686) repeat scroll 0 0 #868686; background-color: #868686;
+}
+
+#menu a:hover {
+	text-decoration:underline;
+}
+
+#menu a.topmenu + ul li:hover {
+	background: #fad636;
+	position: relative;
+}
+
+#menu a.popup + ul {
+	display:none;
+	width: 200px;
+}
+
+#menu a.popup + ul li {
+	background: linear-gradient(#c4c4c4, #a4a4a4) repeat scroll 0 0 #a4a4a4;
+	background-color: #a4a4a4;
+}
+
+#menu li:hover > a.popup + ul {
+	padding:0px;
+	background: #999;
+	border:#c4c4c4 solid;
+	border-width:1px;
+	overflow:visible;
+    display:block;
+	position: absolute;
+	left: 100px;
+	top: 10px;
+	z-index:10001;
+	width: 160px;
+	
+}
+
+#menu a.topmenu + ul > li:hover > a.popup + ul {
+	left:160px;
+}
+
+#menu li:hover > a.popup + ul a {
+    padding:10px;
+	border-bottom: 1px #c4c4c4 solid;
+	width: 140px;
+}
+

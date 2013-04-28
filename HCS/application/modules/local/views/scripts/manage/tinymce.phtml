@@ -1,0 +1,235 @@
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
+<link href="/common/css/mobiscroll.custom-2.4.3.min.css" rel="stylesheet" type="text/css" />
+<script src="/common/js/mobiscroll.custom-2.4.3.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function () {
+    //alert("scroller");
+    $("#startdate").mobiscroll().datetime({ theme: 'android-ics', display: 'bottom'});
+    $("#enddate").mobiscroll().datetime({ theme: 'android-ics', display: 'bottom'});
+});
+</script>
+<script type="text/javascript">
+	tinyMCE.init({
+		// General options
+		mode : "textareas",
+		theme : "advanced",
+        // remove autosave to disable page load warning
+		plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,visualblocks",
+
+		// Theme options
+		theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+		theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+		theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+		theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+
+		// Example content CSS (should be your site CSS)
+		/*content_css : "css/content.css",*/
+
+		// Drop lists for link/image/media/template dialogs
+		template_external_list_url : "lists/template_list.js",
+		external_link_list_url : "lists/link_list.js",
+		external_image_list_url : "lists/image_list.js",
+		media_external_list_url : "lists/media_list.js",
+
+		// Style formats
+		style_formats : [
+			{title : 'Bold text', inline : 'b'},
+			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
+			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
+			{title : 'Example 1', inline : 'span', classes : 'example1'},
+			{title : 'Example 2', inline : 'span', classes : 'example2'},
+			{title : 'Table styles'},
+			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
+		],
+
+		// Replace values for the template plugin
+		template_replace_values : {
+			username : "Some User",
+			staffid : "991234"
+		}
+	});
+</script>
+
+<script type="text/javascript">
+function redirect(url) 
+{
+	window.location = url;
+}
+
+function httpGet(theUrl){
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", theUrl, false);
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+}
+
+function submitform()
+{
+    var url = "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + $('#address').val();   
+    //alert(url);
+    var result = httpGet(url);    
+    //console.log(result);
+    var obj = $.parseJSON(result);
+    if(obj.status == "ZERO_RESULTS")
+    {
+        alert("Address Err.");
+        return;
+    }    
+
+    var lat = obj.results[0].geometry.location.lat;
+    var lng = obj.results[0].geometry.location.lng;
+    $('#latitude').val(lat);
+    $('#longitude').val(lng);
+    var dest = new google.maps.LatLng(lat, lng);
+
+    // TODO: read hotel addresss
+    var hotellati = 1.32588;
+    var hotellong = 103.89650;
+    var hotelhome = new google.maps.LatLng(hotellati, hotellong);
+
+    var distance = google.maps.geometry.spherical.computeDistanceBetween(hotelhome, dest);   
+    console.log(distance);
+    $('#distance').val(distance);    
+
+    tinyMCE.triggerSave();
+    $('#data').val(tinyMCE.activeEditor.getContent());
+
+    var frm = $('#tinymceform');
+    var mode = $('#modehidden').val();
+    var lang = $('#language').val();
+    var cate = $('#category').val();
+
+    $.ajax({
+        type: frm.attr('method'),
+        url: frm.attr('action'),
+        data: frm.serialize(),
+        success: function (data) {
+            alert(data);
+            //console.log(data); return;
+            if(mode == "Create")
+            {
+                var url = "/local/manage?language=" + $('#language').val() + "&category=" + $('#category').val();
+                redirect(url);
+            }
+        }
+    });
+    
+    return false;
+}
+</script>
+
+<style>
+	table { width:100%; }
+    td { width:50%; }
+</style>
+<h3><?php echo $this->translate("Local Events/Attractions"); ?><?php echo " " . $this->mode; ?></h3>
+<form id="tinymceform" method="post" action="/local/manage/tinymcesubmit">
+<input type="hidden" name="modehidden" id="modehidden" value="<?php echo $this->mode; ?>">
+<input type="hidden" name="id" id="id" value="<?php echo $this->id; ?>">
+<input type="hidden" id="data" name="data">
+<input type="hidden" id="distance" name="distance">
+<input type="hidden" id="latitude" name="latitude">
+<input type="hidden" id="longitude" name="longitude">
+<table>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="category">Category:</label>
+    <select name="category" id="category"><?php echo $this->cateSels; ?></select>
+    </div>
+</td>
+<td>
+Category for this attraction/event;
+</td>
+</tr>
+<tr>
+<td><div data-role="fieldcontain">
+	<label for="language" class="select">Language:</label>
+    <select name="language" id="language"><?php echo $this->langSels; ?></select>
+    </div>
+</td>
+<td>
+this attraction/event displaying depends on user perfer language; 
+</td>
+</tr>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="title1">Title:</label>
+    <input type="text" name="title" id="title1" value="<?php echo $this->title; ?>" />
+    </div>
+</td>
+<td>
+Title of marker displaying on map UI of local attraction;
+</td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+     <label for="startdate">Start Date:</label>
+     <input type="text" name="startdate" id="startdate" value="<?php echo $this->startdate; ?>" />
+    </div>
+</td>
+<td>
+Start date for this attraction/event;
+</td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+     <label for="enddate">End Date:</label>
+     <input type="text" name="enddate" id="enddate" value="<?php echo $this->enddate; ?>" data-clear-btn="true" />
+    </div>
+</td>
+<td>
+End date for this attraction/event;
+</td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="address">Address:</label>
+    <input type="text" name="address" id="address" value="<?php echo $this->address; ?>" />
+    </div>
+</td>
+<td>
+Position/point of marker displaying on map UI of local attraction; Make sure it's accurate enough;
+</td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="sponsor">Sponsor:</label>
+    <input type="text" name="sponsor" id="sponsor" value="<?php echo $this->sponsor; ?>" />
+    </div>
+</td>
+<td>
+If there is no sponsor for this attraction/event, leave it blank;
+</td>
+</tr>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="advertiser">Advertiser:</label>
+    <select name="advertiser" id="advertiser"><?php echo $this->advertisers; ?></select>
+    </div>
+</td>
+<td>
+If there is no advertiser for this attraction/event, choose "none"; 
+if the advertiser you want to choose is not in this list, you can add it in advertiser page; 
+</td>
+</tr>
+</table>
+
+<div data-role="fieldcontain">
+    <label for="elm1">Content:</label>
+    <textarea id="elm1" name="elm1" rows="15" cols="60" style="width: 100%" data-role="none">
+    <?php echo $this->content; ?>  
+    </textarea>
+</div>
+
+<button type="button" id="submitbutton" name="submitbutton" onclick="submitform()">Submit</button>
+</form> <!--/tinymceform-->
+

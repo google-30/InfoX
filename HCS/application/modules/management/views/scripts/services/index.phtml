@@ -1,0 +1,19 @@
+<a href="<?echo $this->url(array('action'=>$this->addAction))?>" data-role="button" data-inline="true">Add New item</a>
+<?
+
+
+   echo $this->grid("grid", true)
+              ->field('name', 'Name')
+              ->field('introduction', 'Description')
+              ->field('category', 'Category')
+              ->field('price', 'Price')
+              ->field('is_sale', 'Status')
+              ->actionField(':action', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(true) // disable internal paginator, use dataTable's
+              ->data($this->data)
+              ->emptyMessage('No Items Exist for this Service')
+              ->action(':action', 'Edit', array( 'url'=>array('action'=>$this->editAction)))
+              ->action(':action', 'Delete', array( 'url'=>array('action'=>'delete')))
+              ->helper(new GridHelper_Services());
+?>

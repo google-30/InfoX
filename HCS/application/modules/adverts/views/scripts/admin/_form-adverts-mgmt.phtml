@@ -1,0 +1,115 @@
+<?php $this->headScript()->captureStart();?>
+$(document).ready(function() {
+    mlist = $.parseJSON($('#mediaList').val());
+    $('#media_img').data('mlist', mlist);
+    $('#media_id').bind('change', function() {
+        var id = $(this).val();
+        if(id!=0) {
+            var img = $('#media_img');
+            var mlist = img.data('mlist');
+            img.attr('src', mlist[id])
+               .show();
+        }
+        else {
+            $('#media_img').hide();
+        }
+    }).trigger('change');  
+});
+<?php $this->headScript()->captureEnd();?>
+
+<?php $this->headStyle()->captureStart();?>
+.media_id_box {
+    display:inline-block;
+    margin-bottom: 4px;
+}
+#media_id {
+    display:inline-block;
+    vertical-align:middle;
+    width:224px;
+}
+#media_img {
+    display:inline-block;
+    vertical-align:middle;
+    height:28px;
+    width:64px;
+    border:1px;
+    margin-top:1px;   
+}
+<?php $this->headStyle()->captureEnd();?>
+
+<form id="<?php echo $this->element->getFormId();?>"
+    enctype="multipart/form-data" method="post"
+    action="<?php echo $this->element->getAction();?>">
+
+    <fieldset data-role="controlgroup" data-type="vertical">
+        <legend class="select"><?php echo $this->translate('Media');?>:</legend>
+        <div>
+            <span class="media_id_box">
+                <span class="wrap"><?php echo $this->element->media_id;?></span>
+                <span class="wrap"><img id="media_img"/></span>
+            </span>
+            <div><?php echo $this->element->path;?></div>
+        </div>
+    </fieldset>
+    
+    <div data-role="fieldcontain">
+        <label for="clickUrl" class="required"><?php echo $this->translate('Click Url');?>:</label>
+        <?php echo $this->element->clickUrl;?>
+    </div>
+    
+    <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup" data-type="horizontal" > 
+            <legend><?php echo $this->translate('Permanent');?>:</legend>
+            <?php echo $this->element->permanent; ?>
+        </fieldset>
+    </div>
+    
+    <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup" data-type="horizontal" >
+            <legend><?php echo $this->translate('Play Mode');?>:</legend>
+            <?php echo $this->element->playMode; ?>
+        </fieldset>
+     </div>
+    
+    <div data-role="fieldcontain">
+        <label for="startDate" class="required"><?php echo $this->translate('Start Date');?>:</label>
+        <input type="date" name="startDate" id="startDate" value="<?php echo $this->element->startDate->getValue();?>" data-mini="1" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="startTime" class="required"><?php echo $this->translate('Start Time');?>:</label>
+        <input type="text" name="startTime" id="startTime" value="<?php echo $this->element->startTime->getValue();?>" data-mini="1" />
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="endDate" class="required"><?php echo $this->translate('End Date');?>:</label>
+        <input type="date" name="endDate" id="endDate" value="<?php echo $this->element->endDate->getValue();?>" data-mini="1" />
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="endTime" class="required"><?php echo $this->translate('End Time');?>:</label>
+        <input type="text" name="endTime" id="endTime" value="<?php echo $this->element->endTime->getValue();?>" data-mini="1" />
+    </div>
+    
+    <div data-role="fieldcontain">
+        <label for="duration"><?php echo $this->translate('Duration')?>:</label>
+        <input type="range" name="duration" id="duration" value="<?php echo $this->element->duration->getValue();?>" min="1" max="20" />            
+    </div>
+    
+    <div data-role="fieldcontain">
+        <label for="size"><?php echo $this->translate('Size')?>:</label>
+        <input type="range" name="size" id="size" value="<?php echo $this->element->size->getValue();?>" min="1" max="4" />            
+    </div>
+    
+    <div data-role="fieldcontain">
+        <label for="keywords">Keywords:</label>
+        <?php echo $this->element->keywords?>
+	</div>
+	
+	<?php echo $this->element->mediaList; ?>
+
+	<div>
+	    <br/>
+        <?php echo $this->element->cancelAdverts;?>&nbsp;&nbsp;<?php echo $this->element->save; ?>
+    </div>
+</form>
+

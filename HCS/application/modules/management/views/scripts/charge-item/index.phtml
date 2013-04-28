@@ -1,0 +1,29 @@
+<h1><?php echo $this->translate('Charge Item List');?></h1>
+<p>
+  <a href="<?php echo $this->url(array('action'=>'add'));?>"><?php echo $this->translate('Add Charge Item');?></a>  
+  &nbsp;&nbsp;&nbsp;<a href="<?php echo $this->url(array('action'=>'index', 'controller'=>'charge-model', 'id'=>null));?>"><?php echo $this->translate('Show Charge Models');?></a>
+</p>
+<?php if(!empty($this->message)):?>
+<p><div class="info"><?php echo $this->message;?></div></p>
+<?php endif;?>
+<table border="0">
+  <tr>
+    <td><?php echo $this->translate('Charge Model');?>:</td>
+    <td><u><b><?php echo $this->model->name;?></b></u></td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><?php echo $this->translate('Computing Method')?>:</td>
+    <td><u><b><?php echo $this->model->algorithm;?></b></u></td>
+  </tr>
+</table>
+<?php
+    echo $this->grid('charge-item-list', true)
+              ->field('name', 'Charge Item')
+              ->field('units', 'Units', array('align'=>'center'))
+              ->field('price', 'Price', array('align'=>'center'))
+              ->actionField(':actions', null, '&nbsp;|&nbsp;')
+              ->action(':actions', 'Edit', array('url'=>array('action'=>'edit')))
+              ->action(':actions', 'Delete', array('url'=>array('action'=>'delete')))
+              ->itemCountPerPage(5)
+              ->data($this->data)
+              ->emptyMessage('No charge items found, please click <a href="'.$this->url(array('action'=>'add')).'">here</a> to add one.');
+?>

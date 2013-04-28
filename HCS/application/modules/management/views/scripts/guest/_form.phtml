@@ -1,0 +1,22 @@
+<form id="<?php echo $this->element->getFormId();?>" 
+     enctype="application/x-www-form-urlencoded" method="post" 
+     action="<?php echo $this->element->getAction();?>">
+    <p>
+        <label for="name" class="required"><?=$this->translate("Name:");?></label>
+	    <?php echo $this->element->name; ?>
+    </p>
+	
+    <p>
+        <label for="preferredLanguage" class="required"><?=$this->translate("Preferred Language:");?></label>
+	    <?php echo $this->element->preferredLanguage; ?>
+    </p>
+		
+    <p>
+        <label for="pin" class="required"><?=$this->translate("Pin:");?></label>
+	    <?php echo $this->element->pin; ?>
+    </p>
+    <p>
+       	<label>&nbsp;</label>
+        <?php echo $this->element->save; ?>&nbsp;&nbsp;<?php echo $this->element->cancel; ?>
+    </p>
+</form>

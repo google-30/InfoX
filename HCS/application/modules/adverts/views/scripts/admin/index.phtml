@@ -1,0 +1,26 @@
+<h1><?php echo $this->translate($this->title);?></h1>
+<p/><a href="<?php echo $this->url(array('action'=>'add'));?>"><?php echo $this->translate('Register Advertiser');?></a>
+<p/><div class="msg"><?php echo $this->message;?></div>
+<?php
+    echo $this->grid("advertiser", true)
+              ->field('name', 'Advertiser')
+              ->field('contact', 'Contact')
+              ->field('createdTime', 'Created')
+              ->field(':cost', 'Cost', array('align'=>'right'))
+              ->actionField(':edit_delete', null, '&nbsp;|&nbsp;')
+              ->action(':edit_delete', 'Edit', 
+                        array(
+                            'url'=>array('action'=>'edit'),
+                        )
+                      )
+              ->action(':edit_delete', 'Delete',
+                        array(
+                            'url'=>array('action'=>'delete')
+                        )
+                      )
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(true)
+              ->helper(new GridHelper_Advertiser())
+              ->data($this->data)
+              ->emptyMessage('No advertiser found, please click <a href="'.$this->url(array('action'=>'add')).'">here</a> to register one.');
+?>

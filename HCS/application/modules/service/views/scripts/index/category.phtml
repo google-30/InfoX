@@ -1,0 +1,79 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<style type="text/css">
+.food {
+	width: 112px;
+	height: 98px;
+	background: url(/images/room/Bitmap_id139.png) no-repeat;
+}
+</style>
+<?include('topmenu.phtml'); ?>
+<?php if(empty($this->item)):?>
+<?php else:?>
+<div style="background: lightblue">
+<?php $r = $this->item?>
+	<div align="center">
+		<tr align="center">
+			<td style="background-image: url(/images/room/Bitmap_id139.png)"><?php echo $r->getName();?></td>
+		</tr>
+	</div>
+	<div align="center">
+		<td><a
+			href="<?php echo $this->url(array('action'=>'category', 'id'=>$i));?>"><image
+					width="224px" height="196px" style="cursor:pointer;"
+					src='<?php echo $r->getOrg_picture() ?>' /></a></td>
+	</div>
+
+	<div align="center">
+		<tr>
+			<td><?php echo $r->getPrice();?></td>
+		</tr>
+	</div>
+</div>
+<?php endif;?>
+
+<?php if(empty($this->list)):?>
+<h2>No Goods Found, please check</h2>
+<?php else:?>
+<div style="background: lightpink">
+	<table border="0">
+<?php foreach($this->list as $r): ?>
+		<td><img class="food" id="food1" src="/images/room/Bitmap_id139.png">
+		</td>
+<?php endforeach;?>
+</table>
+	<table width="100%" border="0">
+		<tr align="center">
+<?php foreach($this->list as $r): ?>
+	<div align="center" style="position: absolute">
+				<td><?php echo $r->getName();?></td>
+			</div>	
+<?php endforeach;?>
+</tr>
+
+		<tr align="center">
+<?php $i=1?>
+<?php foreach($this->list as $r): ?>	
+	<div style="position: top:70pt; left: 170pt;">
+				<td><a
+					href="<?php echo $this->url(array('action'=>'category', 'id'=>$i));?>"><image
+							width="112px" height="98px" style="cursor:pointer;"
+							src='<?php echo $r->getOrg_picture() ?>' /></a></td>
+			</div>
+			<br>
+        <?php $i++?>
+<?php endforeach;?>
+</tr>
+
+		<tr align="center">
+<?php foreach($this->list as $r): ?>
+	<div align="center" style="position: absolute">
+				<td><?php echo $r->getPrice();?></td>
+			</div>
+<?php endforeach;?>
+</tr>
+	</table>
+</div>
+<?php endif;?>

@@ -1,0 +1,30 @@
+<h1><?php echo $this->translate('Charge Model');?></h1>
+<p/><a href="<?php echo $this->url(array('action'=>'add'));?>"><?php echo $this->translate('Add Charge Model');?></a>
+<?php if(!empty($this->message)):?>
+<p><div class="info"><?php echo $this->message;?></div></p>
+<?php endif;?>
+<?php
+    echo $this->grid("charge-model", true)
+              ->field('name', 'Charge Model')
+              ->field('algorithm', 'Computing Method')
+              ->actionField(':actions', null, '&nbsp;|&nbsp;')
+              ->actionField(':items', null, '&nbsp;|&nbsp;')
+              ->action(':actions', 'Edit', array('url'=>array('action'=>'edit')))
+              ->action(':actions', 'Delete', array('url'=>array('action'=>'delete')))
+              ->action(':items', 'Add Charge Items',
+                        array(
+                            'url'=>array('action'=>'add','controller'=>'charge-item','id'=>null),
+                            'params'=>array('mid'=>'id'), // map mid to 'id' such that mid has the value of 'id'
+                        )
+                      )
+              ->action(':items', 'List Charge Items',
+                        array(
+                            'url'=>array('action'=>'index','controller'=>'charge-item','id'=>null),
+                            'params'=>array('mid'=>'id'),
+                        )
+                      )
+              ->itemCountPerPage(5)
+              //->helper(new GridHelper_Advertiser())
+              ->data($this->data)
+              ->emptyMessage('No charge model found, please click <a href="'.$this->url(array('action'=>'add')).'">here</a> to add one.');
+?>

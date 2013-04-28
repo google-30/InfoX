@@ -1,0 +1,33 @@
+<?php
+/*-
+ * Copyright (c) 2012 Synrgic Research Pte Ltd
+ * All rights reserved
+ *
+ * Redistribution of this file in source code, or binary form is
+ * expressly not permitted without prior written approval of
+ * Synrgic Research Pte Ltd
+ */
+
+/*-
+ * Adverts board (/common/js/synrgic/adverts/adverts.js)
+ *
+ * author: Liu detang, liu.detang@synrgicresearch.com
+ * date: 25/10/2012
+ * 
+ * history:
+ *   02/11/2012 Liu.detang@synrgicresearch.com
+ *       add the popup functionalities
+ *   05/11/2012 Liu.Detang@synrgicresearch.com
+ *       refactory the code for popup & bugfix
+ *   15/11/2012 Liu.Detang@synrgicresearch.com
+ *       refactory the code for the new effects to adverts bar
+ */
+?>
+<?php $this->headScript()->captureStart();?>
+$(document).ready(function() {
+    synrgic.adverts.init(<?php echo $this->settings;?>);
+    synrgic.adverts.play($('#advertboard'));
+});
+<?php $this->headScript()->captureEnd(); ?>
+<div id='advertboard'>
+</div>

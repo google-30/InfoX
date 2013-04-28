@@ -1,0 +1,18 @@
+<? $settings = Zend_Registry::get('settings'); ?>
+<div class="wrap">
+<h2>Pin Number Required</h2>
+
+<p>
+In order to enter this section, you must first enter the pin number that you
+registered with reception. If you cannot remember your pin number please contact
+the front desk on: <?=$settings->Contact->Reception->Value?>
+</p>
+
+<?php if($this->errorMessage != ""): ?>  
+<p class="error"><?= $this->errorMessage; ?></p>  
+<?php endif; ?>  
+
+<?php 
+echo $this->form; 
+?>
+</div>

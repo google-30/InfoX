@@ -1,0 +1,149 @@
+<style>
+table { width:100%; }
+#datatable caption { text-align:left;  }
+#datatable thead th { text-align:left; border-bottom-width:1px; border-top-width:1px; }
+#datatable th, td { text-align:left; padding:6px;} 
+</style>
+<script>
+$(document).ready(function() {
+    //alert("dataTable");
+    $('#datatable').dataTable( {
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bSort": true,
+        "bInfo": false,
+        "bAutoWidth": false,
+        "bRetrieve": true, /* to fix warning: "Cannot reinitialise DataTable." */
+    } );
+} );
+
+function addfunc()
+{
+    alert("addfunc");
+    var url="/material/manage/add";
+    redirect(url);
+}
+
+function editfunc()
+{
+    var elmNo = 0; 
+    var chkCount=0;
+    var form = document.dataform;
+    for (var i = 0; i < form.elements.length; i++) { 
+        var element = form.elements[i];   
+        if(element.type == 'checkbox' && element.id != 'toggleall' && element.checked)
+        {
+            chkCount++; 
+            elmNo = i;    
+        }    
+    }
+    
+    if(chkCount != 1)
+    {
+        alert("Choose one to edit!");
+        return;
+    }   
+
+    var url = "/material/manage/edit?id=" + $(form.elements[elmNo]).val();
+    //alert(url);
+    redirect(url);
+}
+
+function deletefunc()
+{
+    var r=confirm("Confirm to delete?");
+    if (r==false) { return false; }          
+
+    var formname = "dataform";
+
+    var action = "/material/manage/delete";     
+    var method = "post";
+
+    var frm = $('#dataform');    
+    var toServer = {};
+    $('#datatable tbody tr td input').each(function(key, value) {
+        toServer[$(this).val()] = $(this).is(':checked');
+    });
+    
+    frm.submit(function () {
+        $.ajax({
+            type: method,
+            url: action,
+            data: toServer,
+            success: function (data) {
+                //alert(data);
+                window.location.reload();
+            }
+        });
+
+        return false;
+    });
+    
+    frm.submit();
+}
+
+function redirect(url) {
+    window.location = url;
+}
+
+function checkall()
+{
+    //alert("checkall");
+    var checked = false;
+    var form = document.dataform;
+    
+    for (var i = 0; i < form.elements.length; i++) {
+        if(form.elements[i].id == 'toggleall')
+        {
+            checked = form.elements[i].checked;
+            break;    
+        }    
+    }
+
+    for (var i = 0; i < form.elements.length; i++) {    
+        if(form.elements[i].type == 'checkbox'){
+                form.elements[i].checked = checked;
+            }    
+    }
+}
+</script>
+
+<h3>工具列表</h3>
+<fieldset class="ui-grid-b">
+	<div class="ui-block-a"><button onclick="addfunc()" data-theme="a">Add work</button></div>
+	<div class="ui-block-b"><button onclick="editfunc()" data-theme="a">Edit work</button></div>	 
+	<div class="ui-block-c"><button onclick="deletefunc()" data-theme="a">Delete work</button></div>  
+</fieldset>
+<form name="dataform" id="dataform">
+<table id="datatable" border="5">
+<thead><tr>
+<th><input type="checkbox" name="toggleall" id="toggleall" onClick="checkall()" data-role="none"></th>
+<th>中文名</th>
+<th>英文名</th>
+<th>年龄</th>
+<th>身份号码</th>
+<th>技能</th>
+<th>头像</th>
+</tr></thead>
+<tbody> 
+<?php
+foreach($this->workers as $tmp)
+{
+    $namechs = $tmp->getNamechs();
+    $nameeng = $tmp->getNameeng();
+    $age = $tmp->getAge();
+    $fin = $tmp->getFinno();
+    $skills = $tmp->getSkills();
+    $pic = $tmp->getPic();
+    //$pic = "/example/images/ted_logo.jpg";
+    $checkbox = '<td><input type="checkbox" name="abc" id="abc" value="' . $tmp->getId() . '" data-role="none">';
+    $body = "";
+    $body .= "<tr>$checkbox<td>$namechs</td><td>$nameeng</td><td>$age</td><td>$fin</td><td>$skills</td>";
+    $body .= '<td><img src="' . $pic.  '" alt="Smiley face" height="66" width="55"></td></tr>';    
+    echo $body;
+}
+?>
+</tbody> 
+</table>
+</form><!-- dataform -->

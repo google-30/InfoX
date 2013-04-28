@@ -1,0 +1,36 @@
+<?
+global $roompreset;
+$roompreset="ui-btn-active";
+include ('header.phtml');
+?>
+
+<style>
+.roompresetsbuttons {
+ height: 165px; 
+ border: 1px solid #e5e5e5;
+ text-align: center;
+}
+.roompresetsbuttons a {
+ text-align: center;
+}
+</style>
+
+<div id="roompresets">
+    <div style="width:50%;float:left">
+    	<ul data-role="listview" class="listItemNoIcon">
+	    <li id="preset0" class="roompresetsbuttons" data-role="theme" data-theme="a"><a href="/room/index/roompreset/presetid/0"><?php echo $this->translate('Wake Up')?></a></li>
+	    <li id="preset1" class="roompresetsbuttons" data-role="theme" data-theme="a"><a href="/room/index/roompreset/presetid/1"><?php echo $this->translate('Reading')?></a></li>
+	    <li id="preset2" class="roompresetsbuttons" data-role="theme" data-theme="a"><a href="/room/index/roompreset/presetid/2"><?php echo $this->translate('Romantic')?></a></li>
+	    <li id="preset3" class="roompresetsbuttons" data-role="theme" data-theme="a"><a href="/room/index/roompreset/presetid/3"><?php echo $this->translate('Sleeping')?></a></li>
+	</ul>
+    </div>
+    <div style="width:50%;float:left">
+    	<ul data-role="listview" class="listItemNoIcon">
+	    <li id="preset4" class="roompresetsbuttons" data-role="theme" data-theme="a"><a href="/room/index/roompreset/presetid/4"><?php echo $this->translate('Getting Dressed')?></a></li>
+	    <li id="preset5" class="roompresetsbuttons" data-role="theme" data-theme="a"><a href="/room/index/roompreset/presetid/5"><?php echo $this->translate('Watching TV')?></a></li>
+	    <li id="preset6" class="roompresetsbuttons" data-role="theme" data-theme="a"><a href="/room/index/roompreset/presetid/6"><?php echo $this->translate('Night')?></a></li>
+	    <li id="preset7" class="roompresetsbuttons" data-role="theme" data-theme="a"><a href="/room/index/roompreset/presetid/7"><?php echo $this->translate('All Lights')?></a></li>
+	</ul>
+    </div>
+</div>
+

@@ -1,0 +1,9 @@
+<form id="<?php echo $this->element->getFormId();?>" 
+     enctype="application/x-www-form-urlencoded" method="post" 
+     action="<?php echo $this->element->getAction();?>">
+    <label for="name" class="required"><?php echo $this->translate('Language');?>:</label>
+    <?php echo $this->element->language; ?>
+    <?php echo $this->element->submit; ?>
+</form>
+
+

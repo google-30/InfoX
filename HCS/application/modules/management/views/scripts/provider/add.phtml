@@ -1,0 +1,33 @@
+<script language=javascript>
+function checkform()
+{
+	if(document.getElementById("providerName").value.length<1)
+	{
+		document.getElementById("providerName").focus();
+		alert("Please input provider name");
+		return false;   
+	}	
+}
+
+function back()
+{
+	window.location ="/management/provider/index";
+}
+</script>
+
+<h2><?php echo $this->translate('Add Provider');?></h2>
+
+<form onSubmit="return checkform();" method="post" id="addProvider">
+
+
+<p><?php echo $this->translate('Name');?>:<input id="providerName" name="providerName" type="text" /></p>	
+
+<p><?php echo $this->translate('Remark');?>:<br/><textarea cols="70" rows="5" id="remark" name="remark"></textarea></p>	
+
+<p>	
+	<input type="submit" name="submitButton" id="submitButton" value="<?php echo $this->translate('submit');?>" />
+	&nbsp;&nbsp;
+	<input type="button" name="cancelCutton" id="cancelCutton" value="<?php echo $this->translate('cancel');?>" onClick="back() " />
+</p>
+
+</form>

@@ -1,0 +1,19 @@
+<p><a href="<?php echo $this->url(array('action'=>'add'));?>"><? echo $this->translate('Add A Guest'); ?></a>
+
+	
+<?
+   echo $this->grid("Guest", true)
+              ->field('name','Name')
+              ->field('room', 'Rooms')
+              ->actionField(':modify', null, '&nbsp;|&nbsp;')
+	      ->actionField(':hotel',null)
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+              ->helper(new GridHelper_Guest())
+              ->data($this->data)
+              ->emptyMessage('No Guests Exist <a href="'.$this->url(array('action'=>'add')).'">here</a> to register one.')
+              ->action(':modify', 'Edit', array( 'url'=>array('action'=>'edit')))
+              ->action(':modify', 'Delete', array( 'url'=>array('action'=>'delete')))
+              ->action(':hotel', 'CheckIn', array( 'url'=>array('action'=>'checkin')))
+              ->action(':hotel', 'CheckOut', array( 'url'=>array('action'=>'checkout')));
+	      ?>

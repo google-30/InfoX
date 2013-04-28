@@ -1,0 +1,42 @@
+<script type="text/javascript">
+$(document).ready(function(){
+ 
+});
+document.onselectstart = function(){return false;}
+<? //include('orderOperate.js'); ?>
+</script>
+<style>
+#catalog {
+    padding-left:8px;
+    padding-right:8px;
+}
+
+</style>
+<? include('dragbox.phtml'); ?>
+<div id="topmenu">
+    <? include('topmenu.phtml'); ?>
+</div>
+
+<div id="catalog">
+	<div id="wrapper">
+		<?php if(false):?>
+		<div id="search">
+			<? include('serviceSearch.phtml'); ?>
+		</div>
+		<hr />
+		<?php endif;?>
+
+		<? include('introduction.phtml');?>
+		<div style="clear:both"></div>
+		<? include('serviceDetail.phtml'); ?>
+		<div style="clear:both"></div>
+		<br />
+    </div>
+    <div id="ordersystem">
+    	<? include('ordersystem.phtml'); ?>
+    </div>
+    <div style="clear:both"></div>
+    <div id="foodlist">	
+        <? include('serviceList.phtml'); ?>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<script language=javascript>
+
+function back()
+{
+	var page="<?php echo $this->curPage;?>";
+	if(page=="")
+		page=0;
+	window.location ="/management/orders/index/confid/<?php echo $this->orderId;?>/page/"+page;
+}
+</script>
+
+<h2><?php echo $this->translate('Edit detail orders');?></h2>
+
+<form method="post" id="editDetailOrder">
+
+<h3><?php echo $this->translate('Service name');?>: <?php echo $this->translate($this->serviceName[$this->data->getId()])?></h3>
+<p><?php echo $this->translate('Quantity');?>:&nbsp;<input id="quantity" name="quantity" type="text" value="<?php echo $this->data->getQuantity();?>"/></p>
+<p><?php echo $this->translate('State');?>:&nbsp;<select name="order_state" id="order_state">
+			<?php foreach($this->sts as $r): ?>
+			<option value="<?php echo $r;?>"
+				<?php if ($this->data->getState()==$r):?> selected="selected" <?php endif;?> 
+			>
+			<?php echo $this->translate($r);?>
+			</option>
+			<?php endforeach;?>
+		</select>
+</p>
+
+<p><?php echo $this->translate('Remark');?>:<br/><textarea cols="70" rows="5" id="remark" name="remark"><?php echo $this->data->getRemark();?></textarea></p>
+
+<p>	
+	<input type="submit" name="submitButton" id="submitButton" value="<?php echo $this->translate('submit');?>" />
+	&nbsp;&nbsp;
+	<input type="button" name="cancelCutton" id="cancelCutton" value="<?php echo $this->translate('cancel');?>" onClick="back() " />
+</p>
+
+<input name="page" type="hidden" value="<?php echo $this->curPage;?>" />
+<input name="confid" type="hidden" value="<?php echo $this->orderId;?>"/>
+
+</form>

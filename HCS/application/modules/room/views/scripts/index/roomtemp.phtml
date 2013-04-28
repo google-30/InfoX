@@ -1,0 +1,142 @@
+<?
+global $roomtemp;
+$roomtemp="ui-btn-active";
+include ('header.phtml');
+?>
+<script>
+
+function Change(item){
+	var value=0;
+	switch(item){
+	case "hours1":
+		value=$('#timer-1').val();
+		break;
+	case "hours2":
+		value=$('#timer-2').val();
+		break;
+	case "state":
+		value=$('#tmp-switch').val();
+		break;
+	case "fan":
+		value=$('#Fan-swtich').val();
+		break;		
+	}
+	var url ="/room/index/setstate/roomid/<?php echo $this->roomid ?>/deviceId/temp/Item/"+item+"/value/"+value;
+	$.get(url, function(result){});
+		
+}
+
+function tempChange(Item){
+	var text=$('#osd').text();
+	var value=text.match("^[0-9]*[0-9]");
+	
+	if(Item=='up')
+	{
+		value=(value>=35)?35:(++value);	
+	}
+	else
+	{
+		value=(value<=15)?15:(--value);			
+	}
+		
+	var url ="/room/index/setstate/roomid/<?php echo $this->roomid ?>/deviceId/temp/Item/T/value/"+value;
+	$.get(url, function(result){});	
+}
+
+</script>
+
+<style>
+p {
+    font-size: 16pt;
+}
+
+#osd
+{ 
+    text-align: center;
+word-spacing:30px;
+font-size:350%;
+color:#ffffff;
+}
+
+</style>
+
+<div style="width:90%;margin:auto;">
+	<table padding=30px>
+	    <tr>
+		<td width="170">
+			<h1 style="font-size:22px"><?php echo $this->translate('Airconditioner')?></h1>
+		</td>
+		<td width="282" height="70"  style="padding-bottom:30px !important;">
+			<select name="tmp-switch" id="tmp-switch" data-role="slider" onchange=Change('state')>
+			    <option value="on" ><?php echo $this->translate('On')?></option>
+			    <option value="off"><?php echo $this->translate('Off')?></option>                
+			</select> 
+		</td>
+	    </tr>
+	    <tr>
+		<td colspan=2 style="background: linear-gradient(#525252, #3b3b3b) repeat scroll 0 0 #525252;" height="288">            
+		<p id="osd"><?php echo $this->translate($this->state['T']);?>℃</p>
+	    </td>
+	    <td width="7">
+		<td width="250" style="text-align:center;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+        <p style="margin-bottom: -10px;"><img src="/images/room/Button-Normal-Channel-Volume-Up.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Channel-Volume-Up.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Channel-Volume-Up.png';tempChange('up');"/>
+      </p></td>
+
+</tr>
+<tr>
+
+    <td>
+        <h2 style="font-size: 25px;"><?php echo $this->translate('Temperature')?></h2>
+    </td>    
+</tr>
+<tr>
+    <td>
+        <p style="margin-top: -10px;"><img src="/images/room/Button-Normal-Channel-Volume-Down.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Channel-Volume-Down.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Channel-Volume-Down.png';tempChange('down');"/></p>
+    </td>
+  </tr>
+</table>
+</td>
+	    <td width="0"></td>
+	    </tr>
+	    <tr>
+		<td style="vertical-align:middle;">
+
+		</td>
+		<td colspan=2>&nbsp;
+		    
+		</td>
+	    </tr>
+	    <tr>
+	      <td style="vertical-align:middle;">		    <p>
+	        <?php echo $this->translate('Timer')?></p></td>
+	      <td colspan=2><input type="text" name="timer" id="timer-1" value="<?php echo $this->translate($this->state['hours1']);?>" style="display:inline" onchange=Change('hours1')></td>
+      </tr>
+	    <tr>
+		<td>
+		    <p>	        <?php echo $this->translate('Fan')?></p>
+		</td>
+		<td colspan=2>
+		<select id="Fan-swtich" onchange=Change('fan')>
+		    <option><?php echo $this->translate('Low')?></option>
+		    <option><?php echo $this->translate('Medium')?></option>                
+		    <option><?php echo $this->translate('High')?></option>                
+		</select>
+		</td>
+	    </tr>
+	    <tr>
+		<td>
+		    <p><?php echo $this->translate('Timer')?></p>
+		</td>
+		<td colspan=2>
+		    <input type="text" name="timer" id="timer-2" value="<?php echo $this->translate($this->state['hours2']);?>" style="display:inline" onchange=Change('hours2')>
+		</td>
+	    </tr>
+	</table>
+</div>
+

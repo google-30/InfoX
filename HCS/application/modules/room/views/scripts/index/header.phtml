@@ -1,0 +1,19 @@
+<div data-role="navbar">
+    <ul>
+	<li><a href="/room/index/roompreset" class="<?=$roompreset?>" ><?=$this->translate('Presets');?></a></li>
+    </ul>
+</div>
+<div data-role="navbar">
+    <ul>
+	<li><a href="/room/index/roomlights" class="<?=$roomlights?>"><?=$this->translate('Lights')?></a></li>
+	<li><a href="/room/index/roomcurtains" class="<?=$roomcurtains?>" ><?=$this->translate('Curtains')?></a></li>
+	<li><a href="/room/index/roomtv" class="<?=$roomtv?>"><?=$this->translate('TV');?></a></li>
+	<li><a href="/room/index/roomradio" class="<?=$roomradio?>" ><?=$this->translate('Radio');?></a></li>
+	<li><a href="/room/index/roomtemp" class="<?=$roomtemp?>" ><?=$this->translate('Temperature');?></a></li>
+    </ul>
+</div>
+<?php $this->headScript()->captureStart();?>
+<?php include("_state.js"); ?>
+
+<?php $this->headScript()->captureEnd(); ?>
+

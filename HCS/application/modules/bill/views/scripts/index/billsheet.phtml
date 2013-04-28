@@ -1,0 +1,76 @@
+<?
+	$currency = new Zend_Currency();
+?>
+<link rel="stylesheet" type="text/css" href="/DataTables-1.9.4/media/css/demo_page.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/DataTables-1.9.4/media/css/demo_table.css" media="screen" />
+<script type="text/javascript" language="javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    $('#BillTable').dataTable( {
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bSort": true,
+        "bInfo": false,
+        "bAutoWidth": false,
+    } );
+} );
+</script>
+<hr>
+<style>
+#BillTable { width:100%; }
+#BillTable thead th { text-align:left; border-bottom-width:1px; border-top-width:1px; }
+#BillTable td { text-align:left; padding:6px;} 
+#BillTable .amount { text-align:right; }
+</style>
+<table id="BillTable">
+<thead>
+<tr>
+<th><?=$this->translate('Date');?></th>
+<th><?=$this->translate('Name');?></th>
+<th><?=$this->translate('Price');?></th>
+<th><?=$this->translate('Quantity');?></th>
+<th><?=$this->translate('Amount');?></th>
+</tr>
+</thead>
+<tbody> 
+<?php foreach($this->billdata as $r): ?>
+<tr>
+<td><?php echo $r->getDate()->format('Y-m-d H:i:s'); ?></td>
+<td><?php echo $r->getName(); ?></td>
+<td><?php echo $r->getPrice(); ?></td>
+<td><?php echo $r->getQuantity(); ?></td>
+<td class="amount" ><?php echo $currency->setValue($r->getPrice()*$r->getQuantity()); ?></td>
+</tr>
+<?php endforeach;?>
+<?php 
+foreach($this->roomservices as $tmp)
+{
+    echo "<tr>";
+    echo "<td>" . $tmp->getConfirm_time()->format('Y-m-d H:i:s') . "</td>";
+    echo "<td>" . $tmp->getRemark() . "</td>";       
+    echo "<td></td>";    
+    echo "<td></td>";    
+    echo '<td class="amount">' . $currency->setValue($tmp->getTotal_price()) . "</td>";
+    echo "</tr>";
+}
+?>
+</tbody>
+</table>
+<hr>
+<style>
+#totaltable 
+{ 
+    width: 30%; 
+    float: right;    
+}
+#totaltable td { text-align:right; } 
+</style>
+<table id="totaltable">
+<tr><td><?=$this->translate('Subtotal');?>:</td><td><?php echo $currency->setValue($this->totalamount); ?> </td></tr>
+<tr><td><?=$this->translate('Service Taxes');?>(7%):</td><td><?php echo $currency->setValue($this->totalamount*0.07) ; ?> </td></tr>
+<tr><td><strong><?=$this->translate('Total')?>:</strong></td><td><strong><?php echo $currency->setValue($this->totalamount*1.07); ?></strong></td></tr>
+<tr></tr>
+<tr></tr>
+</table>
+

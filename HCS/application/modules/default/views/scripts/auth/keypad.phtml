@@ -1,0 +1,34 @@
+<script>
+function processButton(button)
+{
+	if(button.text=="<--"){
+		$text = $("#pin").val();
+		if( $text.length > 0)
+			$("#pin").val($text.substr(0,$text.length-1));
+	} else {
+		$("#pin").val($("#pin").val() + button.text);
+	}
+}
+</script>
+<center>
+<div data-role="controlgroup" data-type="horizontal">
+<a href="#" data-role="button" onclick="processButton(this);">1</a>
+<a href="#" data-role="button" onclick="processButton(this);">2</a>
+<a href="#" data-role="button" onclick="processButton(this);">3</a>
+</div>
+<div data-role="controlgroup" data-type="horizontal">
+<a href="#" data-role="button" onclick="processButton(this);">4</a>
+<a href="#" data-role="button" onclick="processButton(this);">5</a>
+<a href="#" data-role="button" onclick="processButton(this);">6</a>
+</div>
+<div data-role="controlgroup" data-type="horizontal">
+<a href="#" data-role="button" onclick="processButton(this);">7</a>
+<a href="#" data-role="button" onclick="processButton(this);">8</a>
+<a href="#" data-role="button" onclick="processButton(this);">9</a>
+</div>
+<div data-role="controlgroup" data-type="horizontal">
+<a href="#" data-role="button" onclick="processButton(this);">*</a>
+<a href="#" data-role="button" onclick="processButton(this);">0</a>
+<a href="#" data-role="button" onclick="processButton(this);">#</a>
+</div>
+<a href="#" data-role="button" onclick="processButton(this);">&lt;--</a>

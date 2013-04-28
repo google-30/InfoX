@@ -1,0 +1,349 @@
+<?
+	$currency = new Zend_Currency();
+?>
+<link href="/common/css/mobiscroll.custom-2.4.3.min.css" rel="stylesheet" type="text/css" />
+<script src="/common/js/mobiscroll.custom-2.4.3.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function () {
+    //alert("scroller");
+    $("#chargedate").mobiscroll().datetime({ theme: 'android-ics', display: 'bottom'});
+});
+</script>
+<script type="text/javascript" language="javascript" src="/common/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    //alert("dataTable");
+    $('#datatable').dataTable( {
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bSort": true,
+        "bInfo": false,
+        "bAutoWidth": false,
+        "bRetrieve": true, /* to fix warning: "Cannot reinitialise DataTable." */
+    } );
+} );
+</script>
+<script>
+$(document).ready(function () {
+    //alert("ready");
+    $('#expdiv').hide();
+});
+
+function CheckAllINBOX()
+{
+    //alert("CheckAllINBOX");
+    var checked = false;
+    var form = document.dataform;
+    
+    for (var i = 0; i < form.elements.length; i++) {
+        if(form.elements[i].id == 'toggleall')
+        {
+            checked = form.elements[i].checked;
+            break;    
+        }    
+    }
+
+    for (var i = 0; i < form.elements.length; i++) {    
+        if(form.elements[i].type == 'checkbox'){
+                form.elements[i].checked = checked;
+            }    
+    }
+}
+
+function addnewClick()
+{
+    $("#expdiv").show(500);
+    $("#billid").val(0);
+    $("#expformmode").val("create");
+
+    $("#amount").val("");    
+    $("#description").val("");
+    $("#date").val("");
+}
+
+function editClick()
+{
+    var elmNo = 0; 
+    var chkCount=0;
+    var form = document.dataform;
+    for (var i = 0; i < form.elements.length; i++) { 
+        var element = form.elements[i];   
+        if(element.type == 'checkbox' && element.id != 'toggleall' && element.checked)
+        {
+            chkCount++; 
+            elmNo = i;    
+        }    
+    }
+    
+    if(chkCount != 1)
+    {
+        alert("Choose one to edit!");
+        return;
+    }    
+
+    var chkrow = (elmNo+1)/2;
+    //alert("chkrow="+chkrow);
+    var date, description, amount;
+    $('#datatable tbody tr').each(function(key, value) {
+        var index = $(this).index();
+        if((index+1) == chkrow)
+        {
+            date = $(this).find("td").eq(1).html();            
+            description = $(this).find("td").eq(2).html();
+            amount = $(this).find("td").eq(3).html();
+        }        
+    });
+
+    var substrs = date.split(" ");
+    //alert("date="+ substrs[0]);
+
+    $("#chargedate").val(substrs[0]);
+    $("#description").val(description);
+    $("#amount").val(amount);
+
+    // set id from bill table
+    $("#billid").val($(form.elements[elmNo]).next("input").val());
+    $("#expformmode").val("edit");
+    
+    $("#expdiv").show(500);
+}
+
+function deleteClick()
+{
+    var r=confirm("Confirm to delete?");
+    if (r==false)
+    {
+        return false;
+    }          
+
+    var formname = "dataform";
+    var action = "/bill/manage/delete"; 
+    document.dataform.action = action;
+
+    var frm = $('#dataform');    
+    var toServer = {};
+
+    // post can only post several types(no input)
+    // manually insert some data
+    toServer['room'] = $('#room').val();
+    var data = $('#datatable tbody tr td input').each(function(key, value) {
+        var obj = $(this).find(':checkbox');
+        var checkedCount =  obj.filter(':checked').length;
+        //toServer[$(this).attr('id')] = $(this).is(':checked');
+        toServer[$(this).next("input").val()] = $(this).is(':checked');
+    });
+    
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            //data: frm.serialize(),
+            data: toServer,
+            success: function (data) {
+                //alert(data);
+                window.location.reload();
+            }
+        });
+
+        return false;
+    });
+    
+    frm.submit();
+}
+
+function expformSubmit()
+{
+    var frm = $('#expform');
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+                alert(data);
+                //console.log(data);
+                window.location.reload();
+            }
+        });
+
+        return false;
+    });
+    
+    frm.submit();
+}
+
+function redirectbill()
+{
+    window.location = "/bill/manage/room?no=" + $('#room').val();
+}
+
+function redirect(url) {
+	window.location = url;
+}
+
+function previewprint()
+{
+    //alert("preview and print this bill");
+    var url = "/bill/manage/preview?no=" + $('#room').val();
+    window.open (url);
+}
+
+</script>
+
+<h3><?php echo $this->translate("Add/Edit Billing"); ?></h3>
+
+<style> 
+#infodiv
+{
+border:2px solid #a1a1a1;
+padding:3px 10px; 
+background:#dddddd;
+border-radius:5px;
+-moz-border-radius:5px; /* Firefox 3.6 and earlier */
+}
+#guestinfo td { text-align:left; padding:6px;} 
+</style>
+<div id="infodiv">
+<table id="guestinfo" name="guestinfo">
+<tr>
+<td><strong><?php echo $this->translate("Guest Info"); ?></strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Name: <?php echo $this->guestname; ?></td>
+<td>Room: <?php echo $this->guestroom; ?></td>
+</tr>
+<tr>
+<td>Arrival: <?php echo $this->guestarrival; ?></td>
+<td>Room Type: <?php echo $this->guestroomtype; ?></td>
+</tr>
+<tr>
+<td>Departure: <?php echo $this->guestdeparture; ?></td>
+<td>Total Nights: <?php echo $this->guestnights; ?></td>
+</tr>
+</table>
+</div>
+<div class="ui-grid-c">
+	<div class="ui-block-a"><button type="button" id="addnew" name="addnew" onclick="addnewClick()">Add New</button></div>
+	<div class="ui-block-b"><button type="button" id="edit" name="edit" onclick="editClick()">Edit</button></div>	   
+	<div class="ui-block-c"><button type="button" id="delete" name="delete" onclick="deleteClick()">Delete</button></div>	   
+	<div class="ui-block-d"><button type="button" id="print" name="print" onclick="previewprint()">Preview and Print</button></div>	   
+</div>
+<style> 
+#expdiv
+{
+border:2px solid #a1a1a1;
+padding:3px 10px; 
+background:#dddddd;
+border-radius:5px;
+-moz-border-radius:5px; /* Firefox 3.6 and earlier */
+}
+</style>
+<form id="expform" method="post" action="/bill/manage/expsubmit">
+<div id="expdiv">
+<div data-role="fieldcontain">
+    <label for="chargedate"><?php echo $this->translate("Charging Date"); ?>:</label>
+    <input type="text" name="chargedate" id="chargedate" value="" />  
+</div>
+<div data-role="fieldcontain">
+    <label for="chargeitem" class="select">Charging Item:</label>
+    <select name="chargeitem" id="chargeitem">
+    <?php 
+    foreach($this->chargingitems as $tmp)
+    {
+        $name = $tmp->getName();
+        $price = $tmp->getPrice();
+        echo '<option value="' . $name . '">' . $name . " : " . $price . "</option>";
+    }
+    ?>
+    </select>  
+</div>
+<div data-role="fieldcontain">
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" id="quantity" value="" />
+</div>
+<div data-role="fieldcontain">
+    <label for="description">Description:</label>
+    <input type="text" name="description" id="description" data-mini="true"/> 
+</div>
+
+<input type="hidden" name="room" id="room" value="<?php echo $this->guestroom; ?>">
+<input type="hidden" name="billid" id="billid" value="0">
+<input type="hidden" name="expformmode" id="expformmode" value="">
+<button type="button" id="submit" name="submit" onclick="expformSubmit()">Submit</button>
+<!--<input type="submit" value="Submit">-->
+</div>
+</form> <!-- end of expform -->
+<br>
+<form name="dataform" id="dataform" method="post" >
+<div class="content-primary">
+<style>
+table { width:100%; }
+#datatable caption { text-align:center;  }
+#datatable thead th { text-align:center; border-bottom-width:1px; border-top-width:1px; }
+#datatable th, td { text-align:center; padding:6px;} 
+</style>
+<!-- TODO: sortable table -->
+<table id="datatable" border="5">
+<thead>
+<tr>
+<th><input type="checkbox" name="toggleall" id="toggleall" onClick="CheckAllINBOX()" data-role="none"></th>
+<th>Date</th>
+<th>Name</th>
+<th>Descripton</th>
+<th>Price</th>
+<th>Quantity</th>
+<th>Amount</th>
+</tr>
+</thead>
+<tbody> 
+<?php foreach($this->billdata as $r): ?>
+<tr>
+<td>
+<input type="checkbox" name="abc" id="abc" value="<?php echo $r->getId(); ?>" data-role="none">
+<input type="hidden" name="id" id="id" value="<?php echo $r->getId(); ?>">
+</td>
+<td><?php echo $r->getDate()->format('Y-m-d H:i:s')?></td>
+<td><?php echo $r->getName();?></td>
+<td><?php echo $r->getDescription();?></td>
+<td><?php echo $r->getPrice();?></td>
+<td><?php echo $r->getQuantity();?></td>
+<td><?php echo $r->getPrice() * $r->getQuantity() ;?></td>
+</tr>
+<?php endforeach;?>
+<?php 
+foreach($this->roomservices as $tmp)
+{
+    echo "<tr>";
+    echo '<td><input type="checkbox" name="abc" id="abc" value="" data-role="none"></td>';
+    echo "<td>" . $tmp->getConfirm_time()->format('Y-m-d H:i:s') . "</td>";
+    echo "<td>" . $tmp->getRemark() . "</td>";
+    echo "<td>" . $tmp->getRemark() . "</td>";         
+    echo "<td></td>";    
+    echo "<td></td>";    
+    echo "<td>" . $tmp->getTotal_price() . "</td>";
+    echo "</tr>";
+}
+?>
+</tbody>
+</table>
+<style>
+#totaltable 
+{ 
+    width: 30%; 
+    float: right;    
+}
+#totaltable td { text-align:right; } 
+</style>
+<table id="totaltable">
+<tr><td><?=$this->translate('Subtotal');?>:</td><td><?php echo $currency->setValue($this->totalamount); ?> </td></tr>
+<tr><td><?=$this->translate('Service Taxes');?>(7%):</td><td><?php echo $currency->setValue($this->totalamount*0.07) ; ?> </td></tr>
+<tr><td><strong><?=$this->translate('Total')?>:</strong></td><td><strong><?php echo $currency->setValue($this->totalamount*1.07); ?></strong></td></tr>
+<tr></tr>
+<tr></tr>
+</table>	
+</div><!--/content-primary -->
+<input type="hidden" name="room" id="room" value="<?php echo $this->guestroom; ?>">
+</form> <!--/dataform -->
+

@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+.gridContainer {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1920px;
+	height: 1080px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+#LayoutDiv1 {
+        position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 245px;
+	height: 100%;
+	display: block;
+	background: #FF0000;
+}
+#LayoutDiv2 {
+	clear: both;
+	float: left;
+	margin-left: 250px;
+	width: 790px;
+	display: block;
+	z-index: 1;
+}
+#LayoutDiv3 {
+        position:fixed;
+	margin-left: 1200px;
+	width: 300px;
+	display: block;
+}
+
+#notificationPanel {
+        position: fixed;
+	left: 250px;
+	top: 0px;
+	width: 200px;
+	height: 100%;
+	display: block;
+	z-index: 2;
+
+	background-color: black;
+	-moz-opacity: 0.6;
+	opacity: .60;
+	filter: alpha(opacity=60);
+}
+
+#quickaccess {
+    margin-left:auto;
+    margin-right:auto;
+    padding: 10px;
+    width: 75%;
+}
+

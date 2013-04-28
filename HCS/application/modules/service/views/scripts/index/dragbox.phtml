@@ -1,0 +1,187 @@
+<style type="text/css">
+#dragholder{
+background-color:black;
+font-size:9pt;
+padding-left:25px;
+padding-right:25px;
+padding-bottom:10px;
+color:white;
+width:200px;
+height:40px;
+position:fixed;
+opacity:0.8;
+z-index:9999;
+top:30px;
+left:720px;
+}
+#draggable{
+background-color:black;
+font-size:9pt;
+padding-left:25px;
+padding-right:25px;
+padding-bottom:10px;
+color:white;
+width:200px;
+min-height:180px;
+position:fixed;
+opacity:0.8;
+z-index:9999;
+top:80px;
+left:720px;
+}
+
+#dragbox{
+font-size:9pt;
+padding-left:10px;
+padding-top:10px;
+padding-bottom:10px;
+color:white;
+width:185px;
+min-height:90px;
+opacity:0.8;
+border:2px dashed #FFF;
+}
+#dragmessage{
+background-color:black;
+font-size:12pt;
+color:white;
+width:15%;
+height:30px;
+position:fixed;
+opacity:0.8;
+z-index:2000;
+top:80%;
+left:38%;
+text-align:center;
+padding-top:6px;
+display:none;
+}
+spanline {
+color:green;
+}
+</style>
+<script type="text/javascript">
+var rDrag = {
+	
+	holder:null,
+	draggable:null,
+
+	init:function(holder,draggable){
+		holder.onmousedown = this.start;
+	},
+	start:function(e){
+		var o;
+		e = rDrag.fixEvent(e);
+               e.preventDefault && e.preventDefault();
+               rDrag.holder = o = this;
+		o.x = e.clientX - rDrag.holder.offsetLeft;
+        o.y = e.clientY - rDrag.holder.offsetTop;
+		document.onmousemove = rDrag.move;
+		document.onmouseup = rDrag.end;
+	},
+	move:function(e){
+		e = rDrag.fixEvent(e);
+		var oLeft,oTop;
+		oLeft = e.clientX - rDrag.holder.x;
+		oTop = e.clientY - rDrag.holder.y;
+		rDrag.holder.style.left = oLeft + 'px';
+		rDrag.holder.style.top = oTop + 'px';
+		draggable.style.left = oLeft + 'px';
+		draggable.style.top = oTop+50 + 'px';
+	},
+	end:function(e){
+		e = rDrag.fixEvent(e);
+		rDrag.holder = document.onmousemove = document.onmouseup = null;
+	},
+    fixEvent: function(e){
+        if (!e) {
+            e = window.event;
+            e.target = e.srcElement;
+            e.layerX = e.offsetX;
+            e.layerY = e.offsetY;
+        }
+        return e;
+    }
+}
+window.onload = function(){
+    var holder = document.getElementById('dragholder');
+	var draggable = document.getElementById('draggable');
+	rDrag.init(holder,draggable);
+
+	getOrderlist();
+}
+
+//drop
+function allowDrop(ev)
+{
+ev.preventDefault();
+
+}
+function drag(ev)
+{
+ev.dataTransfer.setData("Id",ev.target.id);
+ev.dataTransfer.setData("data",ev.target.tag);
+}
+function drop(ev)
+{
+ev.preventDefault();
+var data=ev.dataTransfer.getData("Id");
+//
+additembyid(data,1);
+//
+}
+
+var timeout;
+function hidemsgdelay(msg){
+	clearTimeout(timeout);
+	$('#dragmessage').html(msg);
+	$('#dragmessage').hide();
+	$('#dragmessage').animate({opacity:'show'},{duration:300});
+	timeout=setTimeout('$("#dragmessage").fadeOut(300)',2000);
+}
+function msg(){
+	$('#dragmessage').hide();
+	$('#dragmessage').animate({opacity:'show'},{duration:300}).fadeOut(3000);
+}
+function additembyid(id,num){
+var url='/service/index/orderlist/cmd/add/id/'+id+'/num/'+num;			
+$.get(url,function(result){
+	hidemsgdelay("Item added!");
+	$("#itemcount").html("("+result.replace(/^\s/,"")+")");
+	getOrderlist();
+});	
+}
+function delitembyid(id){
+var url='/service/index/orderlist/cmd/del/id/'+id;			
+$.get(url,function(result){
+	$("#itemcount").html("("+result.replace(/^\s/,"")+")");
+	getOrderlist();
+});	
+}
+function getOrderlist(){
+var url='/service/index/orderlist/json/1';
+$.get(url,function(result){
+	$("#dragbox").html("Drag the food you wish to order in the box");
+	var json=$.parseJSON(result);
+	var string="";
+	for(var one in json){
+		string+='&nbsp;x'+json[one]['num']
+		string+='&nbsp;&nbsp;&nbsp;'+json[one]['name']
+		string+='&nbsp;&nbsp;<spanline onclick="delitembyid('+json[one]['id']+');">X</spanline><br>'
+	}
+	$("#dragbox").html(string);
+});	
+}
+</script>
+
+<div id="dragholder">
+<h3>Order List</h3>
+</div>
+<div id="draggable">
+	<div id="dragbox" ondrop="drop(event)" ondragover="allowDrop(event)">
+	</div>
+	<div>
+	<input type="button" value="Full Order List" onclick="popupOrders()">
+	</div>
+</div>
+<div id="dragmessage" ></div>

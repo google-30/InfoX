@@ -1,0 +1,73 @@
+<style type="text/css">
+#service_status{
+	width:100%;
+	clear:both;
+	margin-left:4px;
+}
+#service_picture{
+	width:55%;
+	height:240px;
+	float:left;
+	margin-right:2px;
+}
+#service_description{
+	width: 40%;
+	float: left;
+    height: 240px;
+    margin-right: 10px;
+	margin-left: 10px;
+}
+#service_writting{
+    height:190px;
+	overflow:hidden;
+}
+
+</style>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#service_Img").ready(function(e) {           
+        });
+		$(window).scroll(function(){
+			var offsetTop = $(window).scrollTop()+$(window).heigth()/2;
+			$("#itemcount").html(offsetTop);
+		});
+	});
+	
+</script>
+
+<?php if(empty($this->list)):?>
+	<h3>No foods select, please check</h3>
+<?php else:?>
+<!--ul-->
+    
+<div id="service_status">
+	
+	<div id="service_description">
+    	<div id="service_writting" >
+        	<h2><?php echo $this->translate( $this->item2['name']);?></h2> 
+        	<p><?php echo $this->translate($this->item2['introduction']); ?></p>
+
+		    <p><?php echo $this->translate('Price');?>:<?php echo "$".$this->item->getPrice();?></p>       
+     	</div>
+     	<div id="service_addbutton">
+     	<?php if(false):?>
+            <a href="#" onclick='newOrder("<?php echo $this->item->getId(); ?>");' style="text-decoration:none;"><center><?php echo $this->translate('Add to Order');?></center></a>
+        <?php endif;?>
+            <a href="#" onclick='readyAddService(
+			"<?php echo $this->item->getId();?>",
+			"<?php echo $this->translate($this->item->getName());?>",
+			"<?php echo $this->translate($this->item->getIntroduction());?>",
+			"<?php echo $this->item->getOrg_picture();?>",
+			"<?php echo $this->item->getPrice();?>"
+			);'
+			data-role="button"><?php echo $this->translate('Add to Order');?>
+			</a>
+        </div>
+	</div>
+	<div id="service_picture" ondragover="allowDrop(event)">
+   		<img id="<? echo $this->item->getId();?>" class="service_picture" src="<?php echo $this->item->getOrg_picture();?>"  alt="<?php echo $this->item2['introduction'];?>" value="123" draggable="true" ondragstart="drag(event)" id=""/>
+	</div>
+</div>
+
+<?php endif;?>

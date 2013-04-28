@@ -1,0 +1,40 @@
+<script>
+$(document).ready(function () {
+    $('#billsheet').load('/bill/index/billsheet');
+});
+
+function reload()
+{
+    window.location.reload();
+}
+
+</script>
+
+<strong>Current Bill at of: <?php echo date('m/d/Y h:i:s a', time()); ?> </strong>
+<button onclick="reload()">Refresh/Update</button>
+<style>
+#guestinfo { width:100%; }
+</style>
+<table id="guestinfo">
+<tr>
+<td>Name:</td><td><strong><?php echo $this->guest->getName(); ?></strong></td>
+<td>Room Type:</td><td><strong><?php echo $this->guestroomtype; ?></strong></td>
+</tr>
+<tr>
+<td>Arrival:</td><td><strong><?php echo $this->guestarrival; ?></strong></td>
+<td>Room Number:</td><td><strong><?php echo $this->guestroom; ?></strong></td>
+</tr>
+<tr>
+<td>Departure:</td><td><strong><?php echo $this->guestdeparture; ?></strong></td>
+<td>Total Nights:</td><td><strong><?php echo $this->guestnights; ?></strong></td>
+</tr>
+</table>
+<div id="billsheet"></div>
+<br><br><br>
+<p>Note: The total Bill is subjected to further additional charges after room inspection.</p>
+<fieldset class="ui-grid-a">
+    <div class="ui-block-a"><a href="/bill/index/terms" data-role="button"><?=$this->translate('Confirm Checkout');?></a></div>
+	<div class="ui-block-b"><button type="submit" data-theme="b"><?=$this->translate('Cancel');?></button></div>	   
+</fieldset>
+<?include('footer.phtml');?>
+

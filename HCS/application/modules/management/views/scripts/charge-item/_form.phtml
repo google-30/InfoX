@@ -1,0 +1,33 @@
+<?php $this->headStyle()->captureStart();?>
+td.label {
+  width:10%;
+  text-align:right;  
+}
+<?php $this->headStyle()->captureEnd();?>
+<form id="<?php echo $this->element->getFormId();?>" 
+     enctype="application/x-www-form-urlencoded" method="post" 
+     action="<?php echo $this->element->getAction();?>">
+    <table border="0" width="900" >
+        <tr>
+            <td class="label"><label for="name" class="required">Name:</label></td>
+            <td><?php echo $this->element->name; ?></td>
+        </tr>
+        <tr>
+            <td class="label"><label for="units" class="required">Units:</label></td>
+            <td><?php echo $this->element->units; ?></td>
+        </tr>
+        <tr>
+            <td class="label"><label for="price" class="required">Price:</label></td>
+            <td><?php echo $this->element->price; ?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->element->mid; ?><td>
+        </tr>
+        <tr>
+            <td class="label">&nbsp;</td>
+            <td><?php echo $this->element->save; ?>
+            <?php echo $this->element->cancel; ?></td>
+        </tr>
+    </table>
+</form>
+

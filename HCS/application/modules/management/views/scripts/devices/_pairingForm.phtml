@@ -1,0 +1,22 @@
+<form id="<?php echo $this->element->getFormId();?>" 
+     enctype="application/x-www-form-urlencoded" method="post" 
+     action="<?php echo $this->element->getAction();?>">
+    <p>
+    	<label for="name" class="required"><?=$this->translate("Name");?>:</label>
+        <?php echo $this->element->name; ?>
+    </p>
+    <p>
+        <label for="description"><?=$this->translate("Description");?>:</label>
+	    <?php echo $this->element->description; ?>
+    </p>
+    <p>
+        <label for="room"><?=$this->translate("Room");?>:</label>
+	    <?php echo $this->element->room; ?>
+    </p>
+    <p>
+        <?php echo $this->element->deviceType; ?>
+    	<?php echo $this->element->uniqueid; ?>
+        <?php echo $this->element->submit; ?>
+    </p>
+</form>
+

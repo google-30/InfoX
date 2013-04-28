@@ -1,0 +1,290 @@
+<script>
+function redirect(url) 
+{
+	window.location = url;
+}
+
+function reload()
+{
+    //alert("reload!");
+    var url = "/local/manage?language=" + $('#language').val() + "&category=" + $('#category').val();
+    redirect(url);
+}
+// must call ready, otherwise change won't work
+$(document).ready(function() {
+    $('#language').change(reload);
+    $('#category').change(reload);
+});
+
+function CheckAllINBOX()
+{
+    //alert("CheckAllINBOX");
+    var checked = false;
+    var form = document.laform;
+    
+    for (var i = 0; i < form.elements.length; i++) {
+        if(form.elements[i].id == 'toggleall')
+        {
+            checked = form.elements[i].checked;
+            break;    
+        }    
+    }
+
+    for (var i = 0; i < form.elements.length; i++) {    
+        if(form.elements[i].type == 'checkbox'){
+                form.elements[i].checked = checked;
+            }    
+    }
+}
+
+function deleteClick()
+{
+    var r=confirm("Confirm to delete?");
+    if (r==false) return false;
+
+    var formname = "laform";
+    var action = "/local/manage/delete"; 
+    document.laform.action = action;
+
+    var frm = $('#laform');    
+    var toServer = {};
+
+    // post can only post several types(no input)
+    // manually insert some data
+    toServer['language'] = $('#language').val();
+    $('#latable tbody tr td input').each(function(key, value) {      
+        toServer[$(this).val()] = $(this).is(':checked');
+    });
+    
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            //data: frm.serialize(),
+            data: toServer,
+            success: function (data) {
+                //alert(data);
+                //window.location.reload();
+                //$('#context-box').load("/local/manage/");
+                reload();
+            }
+        });
+
+        return false;
+    });    
+
+    frm.submit();
+}
+
+function editClick()
+{
+    var elmNo = 0; 
+    var chkCount=0;
+    var form = document.laform;
+    for (var i = 0; i < form.elements.length; i++) { 
+        var element = form.elements[i];   
+        if(element.type == 'checkbox' && element.id != 'toggleall' && element.checked)
+        {
+            chkCount++; 
+            elmNo = i;    
+        }    
+    }
+    
+    if(chkCount != 1)
+    {
+        alert("Choose one to edit!");
+        return;
+    }    
+
+    var url = "/local/manage/edit?language=" + $('#language').val();
+    //url += "&id=" + $(form.elements[elmNo]).next("input").val();
+    url += "&id=" + $(form.elements[elmNo]).val();
+    //alert(url);
+    redirect(url);
+}
+
+function addnewClick()
+{
+    var url = "/local/manage/addnew";
+    redirect(url);
+}
+
+function uptotop(id)
+{
+    //alert("uptotop, id=" + id);
+    var formname = "laform";
+    var action = "/local/manage/uptotop"; 
+    document.laform.action = action;
+
+    var frm = $('#laform');    
+    var toServer = {};
+    toServer['id'] = id;
+
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: toServer,
+            success: function (data) {
+                alert(data);
+                reload();
+            }
+        });
+
+        return false;
+    });
+    
+    frm.submit();      
+}
+
+function downtobottom(id)
+{
+    //alert("downtobottom,id="+id);
+    var formname = "laform";
+    var action = "/local/manage/downtobottom"; 
+    document.laform.action = action;
+
+    var frm = $('#laform');    
+    var toServer = {};
+    toServer['id'] = id;
+
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: toServer,
+            success: function (data) {
+                alert(data);
+                reload();
+            }
+        });
+
+        return false;
+    });
+    
+    frm.submit();  
+}
+
+function uponeposition(id)
+{
+    //alert("uponeposition, id="+id);
+    var formname = "laform";
+    var action = "/local/manage/uponeposition"; 
+    document.laform.action = action;
+
+    var frm = $('#laform');    
+    var toServer = {};
+    toServer['id'] = id;
+
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: toServer,
+            success: function (data) {
+                alert(data);
+                reload();
+            }
+        });
+
+        return false;
+    });
+    
+    frm.submit();      
+}
+
+function downoneposition(id)
+{
+    //alert("downoneposition");
+    var formname = "laform";
+    var action = "/local/manage/downoneposition"; 
+    document.laform.action = action;
+
+    var frm = $('#laform');    
+    var toServer = {};
+    toServer['id'] = id;
+
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: toServer,
+            success: function (data) {
+                alert(data);
+                reload();
+            }
+        });
+
+        return false;
+    });
+    
+    frm.submit(); 
+}
+
+</script> 
+
+<h3><?php echo $this->translate("Local Events/Attractions Management"); ?></h3>
+
+<form name="laform" id="laform" method="post" >
+<fieldset class="ui-grid-a">
+	<div class="ui-block-a">Category:</div>
+	<div class="ui-block-b">Language:</div>
+</fieldset>
+<fieldset class="ui-grid-a">
+	<div class="ui-block-a"><select id="category" name="category"><?php echo $this->cateSels; ?></select></div>	 
+	<div class="ui-block-b"><select id="language" name="language"><?php echo $this->langSels; ?></select></div>  
+</fieldset>
+
+<style>
+table { width:100%; }
+table caption { text-align:center;  }
+table thead th { text-align:center; border-bottom-width:1px; border-top-width:1px; }
+table th, td { text-align:center;padding:1px;} 
+.ui-checkbox input, .ui-radio input { position:relative; text-align:center; left:0px; } /* fix checkbox position */
+</style>
+<table id="latable" border="5">
+<thead>
+<tr>
+<th><input type="checkbox" name="toggleall" id="toggleall" onClick="CheckAllINBOX()"></th>
+<th>Position</th>
+<th>Time Period</th>
+<th>Title</th>
+<th>Sponsor</th>
+<th>Advertiser</th>
+</tr>
+</thead>
+<tbody>
+<?php if(!empty($this->attractions)): ?> 
+<?php foreach($this->attractions as $r): ?>
+<tr>
+<td>
+<input type="checkbox" name="<?php echo $r["title"]; ?>" id="<?php echo $r["title"]; ?>" value="<?php echo $r['id']; ?>" />
+<!--<input type="hidden" name="id" id="id" value="<?php echo $r['id']; ?>" />-->
+</td>
+<td>
+<div data-role="controlgroup"  data-type="horizontal">
+	<a href="#" data-role="button" data-icon="arrow-l" data-iconpos="notext" data-theme="a" data-inline="true" onclick="uptotop(<?php echo $r['id']; ?>)">Up to top</a>
+	<a href="#" data-role="button" data-icon="arrow-u" data-iconpos="notext" data-theme="a" data-inline="true" onclick="uponeposition(<?php echo $r['id']; ?>)">Up</a>
+	<a href="#" data-role="button" data-icon="arrow-d" data-iconpos="notext" data-theme="a" data-inline="true" onclick="downoneposition(<?php echo $r['id']; ?>)">Down</a>
+	<a href="#" data-role="button" data-icon="arrow-r" data-iconpos="notext" data-theme="a" data-inline="true" onclick="downtobottom(<?php echo $r['id']; ?>)">Down to bottom</a>
+</div>
+</td>
+<td><?php echo $r["start"]; ?> - 
+<?php echo $r['stop']; ?>
+</td>
+<td id="<?php echo $r["title"]; ?>" ><?php echo $r["title"]; ?></td>
+<td><?php echo $r["sponsor"]; ?></td>
+<td><?php echo $r["advertiser"]; ?></td>
+</tr>
+<?php endforeach;?>
+<?php endif; ?>
+
+
+</tbody>
+</table>
+<div class="ui-grid-b">
+	<div class="ui-block-a"><button type="button" id="addnew" name="addnew" onclick="addnewClick()">Add New</button></div>
+	<div class="ui-block-b"><button type="button" id="edit" name="edit"     onclick="editClick()">Edit</button></div>
+	<div class="ui-block-c"><button type="button" id="delete" name="delete" onclick="deleteClick()">Delete</button></div>
+</div><!-- /grid-b -->
+</form> <!-- /laform -->

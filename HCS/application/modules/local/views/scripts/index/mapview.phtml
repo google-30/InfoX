@@ -1,0 +1,370 @@
+<?
+$settings = Zend_Registry::get('settings');
+?>
+<style type="text/css">
+#map_canvas { width: 735px; height:695px; border: 0px solid red; float: left}
+#attractions { width: 132px; height:600px; border: 0px solid red; float: right}
+#add_attractions { width:300px; height:auto; padding:2px;}
+#coords {text-decoration:underline;}
+</style>
+
+<script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript">
+var map;
+var hotellati = 1.32588;
+var hotellong = 103.89650;
+var hotelhome = new google.maps.LatLng(hotellati, hotellong);
+var gAttrArray;
+var nearbyzoom=13;
+var nearbydistance=10;
+var centeraddress;
+var cityzoom=10;
+var centerLatLng;
+
+function HomeControl(controlDiv, map) {
+  controlDiv.style.padding = '5px';
+
+  // Set CSS for the control border.
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = 'white';
+  controlUI.style.borderStyle = 'solid';
+  controlUI.style.borderWidth = '2px';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click to set the map to Hotel';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior.
+  var controlText = document.createElement('div');
+  controlText.style.fontFamily = 'Arial,sans-serif';
+  controlText.style.fontSize = '12px';
+  controlText.style.paddingLeft = '4px';
+  controlText.style.paddingRight = '4px';
+  controlText.innerHTML = '<strong>Hotel</strong>';
+  controlUI.appendChild(controlText);
+
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+    map.setCenter(new google.maps.LatLng(hotellati, hotellong))
+  });
+}
+
+function initialize() 
+{
+    var hotelhome = new google.maps.LatLng(hotellati, hotellong);
+    var mapOptions = {
+      zoom: nearbyzoom,
+      center: hotelhome,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+    };
+    map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+
+    var homeControlDiv = document.createElement('div');
+    var homeControl = new HomeControl(homeControlDiv, map);
+
+    homeControlDiv.index = 1;
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(homeControlDiv);
+
+    var image = '/tablet/images/icons/icon-home.png';
+    var marker = new google.maps.Marker({
+      position: hotelhome,
+      map: map,
+      title:"<?=$settings->General->HotelName->Value?>",
+      icon: image,  
+    });
+
+    getAttractions();
+}
+
+function getSettings()
+{
+    var url = "/local/index/getsettings"; 
+	$.post(url, 
+        function(data){
+        //console.log("data="+data);        
+        var obj = jQuery.parseJSON(data);
+        nearbyzoom = Number(obj.nearbyzoom);
+        nearbydistance=Number(obj.nearbydistance);
+        centeraddress = obj.centeraddress;
+        cityzoom = Number(obj.cityzoom);
+
+        var url = "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + centeraddress;   
+        //alert(url);
+        var result = httpGet(url);   
+        //console.log(result);
+        var obj = $.parseJSON(result);
+        if(obj.status == "ZERO_RESULTS")
+        {//TODO: error handle
+            alert("Address Err.");
+            return;
+        }    
+
+        var lat = obj.results[0].geometry.location.lat;
+        var lng = obj.results[0].geometry.location.lng;
+        centerLatLng = new google.maps.LatLng(lat, lng);
+        console.log("centerLatLng:" + centerLatLng);    
+  
+        initialize();
+	    }
+    );
+}
+
+function goToAttraction(attraction)
+{
+    var lati = attraction["latitude"];
+    var long = attraction["longitude"];
+    var description = attraction["description"];
+    //alert(lati);
+
+    var infowin = new google.maps.InfoWindow ({
+        content: description
+    });
+
+    var myLatlng = new google.maps.LatLng(lati,long);
+    map.setCenter(myLatlng);
+
+    var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+    });
+
+    infowin.open(map, marker);
+    google.maps.event.addListener(marker, 'click', function() {
+        infowin.open(map, marker);
+    });
+}
+
+function getAttractions()
+{
+    var selCate = $("#categories").val();
+    
+    var url = "/local/index/getattractions";    
+    var data = {'category': selCate} ;   
+	$.post(url, data,
+	  function(data){
+        //console.log(data); return;
+        gAttrArray = data;
+		for (var i = 0; i < data.length; i++)
+		{
+            var latitude = data[i].latitude;
+            var longitude = data[i].longitude;
+            var title = data[i].title;
+            var contentString = data[i].description;
+
+            var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(latitude, longitude),
+              map: map,
+              title: title,
+            });
+
+            var infowin = new google.maps.InfoWindow({
+                content: contentString
+            });           
+          
+            bindInfoWin(marker, infowin);
+
+            data[i].infowin = infowin;
+            data[i].marker = marker;
+		}
+
+        if(selCate != "all")
+        {
+            drawAttractionlist(data);   
+        }
+
+        // set map center
+        setMapCenter(data);
+
+	  }
+	,'json');
+}
+
+function setMapCenter(data)
+{
+    var selcenter = $("#selcenter").val();
+    if(selcenter != "")
+    {
+        for (var i = 0; i < data.length; i++)
+        {
+            var latitude = data[i].latitude;
+            var longitude = data[i].longitude;
+            var title = data[i].title;
+            if(selcenter == title)
+            {
+                //console.log("center here.");
+                var myLatlng = new google.maps.LatLng(latitude,longitude);    
+                data[i].infowin.open(map, data[i].marker);
+                map.setCenter(myLatlng);
+            }            
+        }        
+    }            
+
+}
+
+function bindInfoW(marker, contentString, infowindow)
+{
+    infowindow.setContent(contentString);
+// http://stackoverflow.com/questions/4381355/multiple-google-maps-infowindow
+    google.maps.event.addListener(marker, 'click', function() {        
+        infowindow.open(map, marker);
+    });
+}
+
+function bindInfoWin(marker, infowindow)
+{
+// http://stackoverflow.com/questions/4381355/multiple-google-maps-infowindow
+    google.maps.event.addListener(marker, 'click', function() {            
+        infowindow.open(map, marker);
+    });
+}
+
+function drawAttractionlist(data)
+{
+    //alert("drawAttractionlist");
+    var listDiv = document.createElement('div');
+    var control = new listControl(listDiv, data);
+
+    listDiv.index = 1;
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(listDiv);
+}
+
+function listControl(controlDiv, data) 
+{   
+    //alert("listControl");
+	for (var i = 0; i < data.length; i++)
+	{
+        var latitude = data[i].latitude;
+        var longitude = data[i].longitude;
+        var title = data[i].title;
+
+        // Set CSS for the control border
+        var attrUI = document.createElement('div');
+        attrUI.style.backgroundColor = 'white';
+        attrUI.style.borderStyle = 'solid';
+        attrUI.style.borderWidth = '2px';
+        attrUI.style.cursor = 'pointer';
+        attrUI.style.textAlign = 'center';
+        attrUI.title = 'Click to set the map to Home';
+        controlDiv.appendChild(attrUI);
+
+        // Set CSS for the control interior
+        var goHomeText = document.createElement('div');
+        goHomeText.style.fontFamily = 'Arial,sans-serif';
+        goHomeText.style.fontSize = '12px';
+        goHomeText.style.paddingLeft = '4px';
+        goHomeText.style.paddingRight = '4px';
+        goHomeText.innerHTML = '<b>' + title + '</b>';
+        attrUI.appendChild(goHomeText);    
+
+        var myLatlng = new google.maps.LatLng(latitude,longitude);
+        bindControl(attrUI, myLatlng, data[i].infowin, data[i].marker);
+    }
+
+        //console.log(data);
+}
+
+function bindControl(attrUI, myLatlng, infowin, marker)
+{
+    google.maps.event.addDomListener(attrUI, 'click', function() {
+        infowin.open(map, marker);
+        map.setCenter(myLatlng);
+        
+    });
+}
+
+function httpGet(theUrl){
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", theUrl, false);
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+}
+
+//google.maps.event.addDomListener(window, 'load', initialize);
+google.maps.event.addDomListener(window, 'load', getSettings);
+
+function changedistance()
+{   // TODO: display range, not only zoom
+    var dist = $('#distances').val();
+
+    var zoom = (dist == "nearby") ? nearbyzoom: cityzoom; 
+    var center = (dist == "nearby") ? hotelhome: centerLatLng; 
+      
+    map.setCenter(center); 
+    map.setZoom(zoom);    
+}
+
+// other scripts
+$(document).ready(function() {
+    $('#distances').change(changedistance);
+    $('#categories').change(reload);
+});
+
+function redirect(url) 
+{
+	window.location = url;
+}
+
+function reload()
+{
+    //alert("reload!");
+    var url = "/local/index/mapview?distance=" + $('#distances').val() + "&category=" + $('#categories').val();
+    redirect(url);
+}
+</script>
+<input type="hidden" id="selcenter" value="<?php echo $this->selcenter;?>" >
+<div data-role="navbar">
+	<ul>
+		<li><a href="/local/index/listview">List View</a></li>
+		<li><a href="#" class="ui-btn-active">Map View</a></li>
+	</ul>
+</div><!-- /navbar -->
+<div class="ui-grid-a">
+	<div class="ui-block-a">
+        <select name="categories" id="categories">
+            <?php
+            foreach($this->categories as $key => $value)
+            {
+                if($key == $this->selCate)
+                {
+                    echo '<option value="' . $key .  '" selected>' . $value . "</option>";
+                }
+                else
+                {
+                    echo '<option value="' . $key .  '">' . $value . "</option>";
+                }   
+            }
+            ?>
+        </select>
+    </div>
+	<div class="ui-block-b">
+        <select name="distances" id="distances">
+            <?php
+            foreach($this->distances as $key => $value)
+            {
+                if($key == $this->selDist)
+                {
+                    echo '<option value="' . $key .  '" selected>' . $value . "</option>";
+                }
+                else
+                {
+                    echo '<option value="' . $key .  '">' . $value . "</option>";
+                }   
+            }
+            ?>
+        </select>
+    </div>
+</div> <!--ui-grid-a -->
+<style> 
+#map_canvas
+{
+border:2px solid #a1a1a1;
+/*padding:10px 40px; */
+padding:10px;
+background:#dddddd;
+border-radius:25px;
+-moz-border-radius:25px; /* Firefox 3.6 and earlier */
+}
+</style>
+
+<div id="map_canvas"></div>
+

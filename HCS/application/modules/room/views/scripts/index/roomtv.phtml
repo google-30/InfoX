@@ -1,0 +1,297 @@
+<?
+global $roomtv;
+$roomtv='ui-btn-active';
+
+include('header.phtml');
+?>
+
+<script>
+function pow()
+{
+	var State=($("#powState").text()=="off")?"on":"off";
+	var url ="/room/index/setstate/roomid/<?php echo $this->roomid ?>/deviceId/tv/Item/state/value/"+State;
+	$.get(url, function(result){});
+}
+function play()
+{
+	var State=($("#playState").text()=="off")?"on":"off";
+	var url ="/room/index/setstate/roomid/<?php echo $this->roomid ?>/deviceId/tv/Item/play/value/"+State;
+	$.get(url, function(result){});
+	
+}
+
+var Minus=fasle;
+function channelChange(Item){
+	var value=$('#channel').text();
+
+	if(Item=='Minus')
+	{
+		value='--';
+	}else{
+		if(value.match('-')){
+			if((Item != 'up')&&(Item != 'down'))
+			{
+				if(value.match('--'))
+				{
+					if(Item=='0')
+					{
+						value='0';
+					}
+					else
+					{					
+						value=Item+'-';
+					}
+				}
+				else{
+					var a=value.match("^[1-9]");
+					value=a+Item;
+				}
+			}
+		}else{
+			if(Item=='up')
+			{
+				value=(value>=99)?99:(++value);	
+			}
+			else if(Item=='down')
+			{
+				value=(value<=0)?0:(--value);		
+			}
+			else
+			{
+				value=Item;
+			}			
+		}
+		
+	}
+		
+	var url ="/room/index/setstate/roomid/<?php echo $this->roomid ?>/deviceId/tv/Item/channel/value/"+value;
+	$.get(url, function(result){});	
+}
+
+
+function volumeChange(Item){
+	var volume=$('#volumeValue').text();
+	if(Item=='up')
+	{
+		volume=(volume>=20)?20:(++volume);	
+	}
+	else
+	{
+		volume=(volume<=0)?0:(--volume);			
+	}
+		
+	var url ="/room/index/setstate/roomid/<?php echo $this->roomid ?>/deviceId/tv/Item/volume/value/"+volume;
+	$.get(url, function(result){});	
+}
+
+</script>
+
+<div class="wrap">
+<style type="text/css">
+table {
+    /*width: 100%;*/
+    float:left;
+}
+
+td {
+    text-align: center;
+    /* TODO: http://phrogz.net/css/vertical-align/index.html */ 
+    vertical-align:middle;   
+}
+
+/*
+#power1 {
+	background-image: url(/images/room/Button-Normal-On-Off.png);
+    
+}
+
+#power1:active {
+    background: url(/images/room/Button-Hover-Pressed-On-Off.png);
+}
+
+#power {
+content:url("/images/room/Button-Normal-On-Off.png");
+background-image: url("/images/room/Button-Normal-On-Off.png");
+background-repeat: no-repeat;
+width: auto;
+height: auto;
+margin: 0;
+padding: 0;
+}
+*/
+</style>
+<table class="tv" border="0" style="padding: 20px;">
+<tr>
+    <td style="background: linear-gradient(#525252, #3b3b3b) repeat scroll 0 0 #525252;" colspan="3" WIDTH="226" HEIGHT="74">
+    <h1 id="channel" style="color:#ffffff !important; font-weight: normal;"><?php echo $this->translate($this->state['channel']);?></h1>    
+    </td> 
+</tr>
+<tr>
+    <td width="100%" height="2" colspan="3">&nbsp;
+    
+    </td> 
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Button-Normal-Number-1.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-1.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-1.png';channelChange('1');"/>
+    </td>
+    <td>
+        <img src="/images/room/Button-Normal-Number-2.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-2.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-2.png';channelChange('2');"/>
+    </td>
+    <td>
+        <img src="/images/room/Button-Normal-Number-3.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-3.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-3.png';channelChange('3');"/>
+    </td>    
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Button-Normal-Number-4.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-4.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-4.png';channelChange('4');"/>
+    </td>
+    <td>
+        <img src="/images/room/Button-Normal-Number-5.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-5.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-5.png';channelChange('5');"/>
+    </td>
+    <td>
+        <img src="/images/room/Button-Normal-Number-6.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-6.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-6.png';channelChange('6');"/>
+    </td>    
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Button-Normal-Number-7.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-7.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-7.png';channelChange('7');"/>
+    </td>
+    <td>
+        <img src="/images/room/Button-Normal-Number-8.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-8.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-8.png';channelChange('8');"/>
+    </td>
+    <td>
+        <img src="/images/room/Button-Normal-Number-9.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-9.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-9.png';channelChange('9');"/>
+    </td>    
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Button-Normal-Number-0.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-0.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-0.png';channelChange('0');"/>
+    </td>
+    <td></td>
+    <td>
+        <img src="/images/room/Button-Normal-Number-Minus.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Number-Minus.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Number-Minus.png';channelChange('Minus');"/>
+    </td>    
+</tr>
+<tr>
+    <td></td>
+    <td>
+        <img src="/images/room/Button-Normal-On-Off.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-On-Off.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-On-Off.png';pow();"/>
+    </td>
+    <td></td>    
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Button-Normal-Channel-Volume-Up.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Channel-Volume-Up.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Channel-Volume-Up.png';channelChange('up');"/>
+    </td>
+    <td></td>
+    <td>
+        <img src="/images/room/Button-Normal-Channel-Volume-Up.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Channel-Volume-Up.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Channel-Volume-Up.png';volumeChange('up');"/>
+    </td>    
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Text-Channel.png" >
+    </td>
+    <td></td>
+    <td>
+        <img src="/images/room/Text-Volume.png" >
+    </td>    
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Button-Normal-Channel-Volume-Down.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Channel-Volume-Down.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Channel-Volume-Down.png';channelChange('down');"/>
+    </td>
+    <td></td>
+    <td>
+        <img src="/images/room/Button-Normal-Channel-Volume-Down.png"
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Channel-Volume-Down.png';" 
+        onmouseup="this.src='/images/room/Button-Normal-Channel-Volume-Down.png';volumeChange('down');"/>    
+    </td>    
+</tr>
+</table>
+
+<style> 
+#channelinfo
+{
+border:0px solid #a1a1a1;
+/*padding:10px 40px; */
+padding: 0;
+background:#dddddd;
+float:left;
+padding-top: 18px;
+padding-left: 20px;
+width: 57%;
+height: 555px;
+}
+</style>
+<div id="channelinfo">
+<h1><?php echo $this->translate('Channel Info');?></h1>
+<img src="/images/room/cnn.png" /><br><br>
+<strong id="channelInfo">CNN</strong><br>
+<p><?php echo $this->translate('Cable News Network (CNN) is a U.S. cable news channel founded in 1980 by American media mogul Ted Turner. Upon its launch, CNN was the first channel to provide 24-hour television news coverage, and the first all-news television channel in the United States.');?> </p><br>
+<div style="text-align:left; ">
+<img src="/images/room/Button-Play.png" 
+        onmousedown="this.src='/images/room/Button-Play.png';" 
+        onmouseup="this.src='/images/room/Button-Play.png';play();"/>
+</div>
+<br><br><br>
+ <table>
+<tr>
+<td><img src="/images/room/hbo.png" /></td>
+<td><img src="/images/room/natgeo.png" /></td>
+</tr>
+</table>
+
+<!--Demonstrate code -->
+<table>
+<tr>
+<td><?php echo $this->translate('TV remote control')?>:</td>
+<td><p id="powState"><?php echo $this->translate($this->state['state']);?></p></td>
+</tr>
+<tr>
+<td><?php echo $this->translate('channel state')?>:</td>
+<td><p id="playState"><?php echo $this->translate($this->state['play']);?></p></td>
+</tr>
+<tr>
+<td><?php echo $this->translate('volume')?>:</td>
+<td><p id="volumeValue"><?php echo $this->translate($this->state['volume']);?></p></td>
+</tr>	    
+</table>
+<!--Demonstrate code -->
+</div>      
+
+
+
+
+</div>

@@ -1,0 +1,32 @@
+<?
+/*-
+ * Copyright (c) 2013 Synrgic Research Pte Ltd
+ * All rights reserved
+ *
+ * Redistribution of this file in source code, or binary form is
+ * expressly not permitted without prior written approval of
+ * Synrgic Research Pte Ltd
+ */
+
+?>
+<?php $this->headScript()->captureStart();?>
+<?php include("_noticeboard.js"); ?>
+
+<?php $this->headScript()->captureEnd(); ?>
+
+<div id="noticeboard" style="display:none">
+    <div id="noticeContainer">
+		<ul id="noticeBoardList" data-role="listview" data-divider-theme=a></ul>
+    <div>
+    <div id="noticeboardallclear">
+	<input type="button" id="clear" data-role="button" value="<?=$this->translate('Clear All Messages')?>" onclick='synrgic.notices.deleteAll()'>
+    </div>
+</div>
+<div data-role="popup" id="noticePopUp" class="ui-content">
+	<div id="noticePopUpContent">
+	<ul data-role="listview" data-divider-theme=a>
+		<li id="noticePopUpTitle" data-role="list-divider"></li>
+		<li id="noticePopUpContent" ></li>
+	</div>
+</div>
+

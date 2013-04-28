@@ -1,0 +1,82 @@
+<h1><?php echo $this->translate('Orders Management');?></h1>
+
+<p>
+	<a href="<?php echo $this->url(array('action'=>'add'));?>">
+            <?php echo $this->translate('Add New Order');?></a>
+</p>
+
+
+<?
+ // Assemble Information
+ $items=array();
+ foreach($this->data as $order){
+    $data=array();
+    $data['id']=$order->getId();
+    $data['type'] = $this->categoryName[$order->getId()];
+    $data['room'] = $this->rooms[$order->getId()]['roomName'];
+    $data['guest'] = $this->rooms[$order->getId()]['guestName'];
+    $data['confirmed'] = $order->getConfirm_time()->format('Y-m-d H:i');
+    $data['scheduled'] = $order->getScheduled_time()->format('Y-m-d H:i');
+    $data['remark'] = $order->getRemark();
+    $data['total'] = $order->getTotal_price();
+    $data['state'] = $order->getState();
+    $items[]=$data;
+ }
+
+
+ echo $this->grid("grid", true)
+              ->field('id', 'Order #')
+              ->field('type', 'Type')
+              ->field('room', 'Room')
+              ->field('guest', 'Guest Name')
+              ->field('confirmed', 'Confirmed')
+              ->field('scheduled', 'Scheduled')
+              ->field('remark', 'remark')
+              ->field('total', 'total')
+              ->field('state', 'Status')
+              ->actionField(':action', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(true) // disable internal paginator, use dataTable's
+              ->data($items)
+              ->emptyMessage('No Orders currently exist')
+              ->action(':action', 'Details', array( 'url'=>array('action'=>'index'),'keys'=>array(''),'params'=>array('confid'=>'id')))
+              ->action(':action', 'Edit', array( 'url'=>array('action'=>'edit'),'keys'=>array(''),'params'=>array('confid'=>'id')))
+              ->action(':action', 'Delete', array( 'url'=>array('action'=>'delete'),'keys'=>array(''),'params'=>array('confid'=>'id')))
+
+?>
+
+<?php if($this->confirmOrder<>NULL):?>
+<h3>#<?php echo $this->confirmOrder->getId();?>&nbsp;<?php echo $this->translate('Order Detail Information');?>:</h3>
+<h4><?php echo $this->translate('The Order Total Price is');?>:&nbsp;<?php echo $this->confirmOrder->getTotal_price();?>$</h4>
+<?php if($this->confirmOrder->getType()==1):?>
+<p>
+	<a href="<?php echo $this->url(array('action'=>'add-detail'));?>"><?php echo $this->translate('Add Food/Drink');?></a>
+</p>
+<?php endif;?>
+
+
+<?
+
+$details =$this->confirmOrder->getDetail_orders();
+// Convert persistent collection to a php array
+$items=array();
+foreach($details as $detail) { 
+    $items[] = $detail;
+}
+
+echo $this->grid("grid", true)
+              ->field('quantity', 'Quantity')
+              ->field('service_name', 'Item')
+              ->field('remark', 'Remark')
+              ->field('provider_name', 'Provider')
+              ->field('state', 'State')
+              ->actionField(':action', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(true) // disable internal paginator, use dataTable's
+              ->data($items)
+              ->emptyMessage('No Items exist within this order')
+              ->action(':action', 'Edit', array( 'url'=>array('action'=>'edit-detail'),   ))
+              ->action(':action', 'Delete', array( 'url'=>array('action'=>'delete-detail')));
+?>
+
+<?php endif; ?>

@@ -1,0 +1,158 @@
+body 
+{
+    margin-left: 80px;
+  	margin-right: 80px;
+  	min-width:800px;
+  	min-height: 200px;
+	/*font: 70% georgia, sans-serif;*/
+	color: #555753; 
+	/*background: #fff url(blossoms.jpg) no-repeat bottom right; */
+}
+
+#header, #footer, #breadcrumbs, #container
+{
+	width: 100%;
+}
+
+#header 
+{
+	height: 90px;
+    background: linear-gradient(#c4c4c4, #a4a4a4) repeat scroll 0 0 #a4a4a4;
+	background-color: #a4a4a4;
+	color:#555252;
+	position:relative;
+    /*background: aqua url(images/logo.png) no-repeat top left;*/
+}
+
+#logo {
+    width: 160px;
+    height: 70px;
+    float:left;
+    
+}
+
+#logo a img {
+    left: 8px;
+    max-height: 80px;
+    position: relative;
+    top: 5px;
+}
+
+#title 
+{
+	float:left;
+	height:70px;
+	line-height:70px;
+    font-size:35px;
+    font-weight:normal;
+	position: relative;
+	top: 10px;
+}
+
+#logout
+{
+	float:right;
+	font-size:1.1em;
+	height:70px;
+	line-height:70px;
+	margin-right: 0.8em;
+	/*margin-top: 45px;*/
+}
+
+#header
+{
+    border-bottom: 0px solid #4f6b72;
+}
+
+#footer
+{
+	margin-top: 6px;
+	height: 30px;
+	display: inline;
+	text-align: center;
+	background-color: #f5fafa;
+	width: 100%;
+	float:center;
+}
+
+#breadcrumbs
+{
+	/*height: 30px;*/
+	font-size: 24px;
+    text-valign:middle;
+	font-weight: bold;
+	margin-left: 0;
+    /*border: 1px dashed red;*/
+    /*background-color:#e0ff84;*/   
+}
+
+#breadcrumbs2
+{
+	/*height: 30px;*/
+	font-size: 24px;
+    text-valign:middle;
+	font-weight: bold;
+	margin-left: 215px;
+    /*border: 1px dashed red;*/
+    /*background-color:#e0ff84;*/   
+}
+
+#container 
+{
+	position: relative;
+}
+
+#menu, #sidebar, #content, #dashboard
+{
+	overflow:hidden;
+	/*border: 1px solid gray;
+	border-style: dashed;
+	border-bottom-width: 1;*/
+	margin-top: 0;
+	padding: 0px 20px;
+}
+
+#menu
+{
+	float: left;
+	overflow:visible;
+	width: 160px;
+	margin-left:0px;
+	padding-left:0px;
+}
+
+#sidebar
+{
+	float: right;
+	width: 20%;
+	display:none;
+}
+
+#content
+{
+    margin-left: 180px;
+    padding-top: 30px;
+}
+
+#content-box {
+}
+
+#mgmtlogin-col1 {
+	width: 30%;
+}
+
+#mgmtlogin-col2 {
+	width: 70%;
+}
+
+#username-element {
+	margin-left: 0;
+}
+
+#password-element {
+	margin-left: 0;
+}
+
+.breadcrumbs-style01 {
+	margin-top: 50px;
+}

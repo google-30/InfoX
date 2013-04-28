@@ -1,0 +1,351 @@
+<style type="text/css">
+#service_listRadio1, #service_listRadio3 {
+	display:none;
+}
+#service_listRadio2 {
+	display:inline;
+	padding-top:20px;
+}
+
+.service_item_add_button {
+    bottom: 40px;
+    float: right;
+    height: 0;
+    left: -175px;
+    position: relative;
+    width: 0;
+}
+
+.service_item_add_button .ui-btn-inner {
+    font-size: 16px;
+    padding: 2px 73px;
+}
+
+.service_item_add_button .ui-btn-text {
+	font-size: 14px !important;
+}
+
+list_ul{  
+overflow:hidden;  
+padding:1em;  
+}
+list_ul,li{  
+list-style:none;  
+}
+list_ul li{  
+margin:15px;  
+float:left;  
+}  
+list_ul li h2  
+{  
+    font-size: 105%;
+    left: -7px;
+    position: relative;
+    top: -15px;
+/*font-weight: bold;*/  
+/*padding-bottom: 10px;  */
+}
+list_ul li img  
+{  
+    border: 10px solid #FFFFFF !important;
+    box-shadow: 0 2px 4px rgba(164, 164, 164, 0.5);
+    max-height: 312px;
+    max-width: 180px;
+    position: relative;
+    right: 15px;
+    top: -15px;
+} 
+list_ul li p  
+{  
+    bottom: 22px;
+    font-size: 90%;
+    position: relative;
+}  
+list_ul li item  
+{  
+    background: linear-gradient(#FFFFFF, #F4F8FA) repeat scroll 0 0 #FFFFFF;
+    box-shadow: 3px 3px 5px rgba(164, 164, 164, 0.4);
+    display: block;
+    height: 250px;
+    padding: 25px;
+    text-decoration: none;
+    width: 168px;
+	background-color:#fafafa;
+}  
+list_ul li item:hover,list_ul li a:focus {  
+-moz-box-shadow:3px 3px 5px rgba(164, 164, 164, 0.4);
+-webkit-box-shadow:3px 3px 5px rgba(164, 164, 164, 0.4);
+box-shadow:3px 3px 5px rgba(164, 164, 164, 0.4);
+-webkit-transform: scale(1.05);  
+-moz-transform: scale(1.05);  
+-o-transform: scale(1.05);  
+position:relative;  
+z-index:5;  
+}  
+
+.textlist{
+	height:30px;
+	line-height:30px;
+	width:100%;
+	clear:left;	
+	text-align:center;
+	vertical-align: middle;
+	padding:10px;
+}
+.textlist_thumbnail, .textlist_bigthumbnail{
+	height:27px;
+	width:48px;
+	float:left;
+}
+.textlist_bigthumbnail {
+    height:128px;
+    width:128px;
+}
+.textlist_name{
+	float: left;
+	height:26px;
+	line-height:26px;	
+	width: 100px;
+	overflow: hidden;
+	vertical-align: middle;
+	line-height: normal;
+	border:medium none;
+	text-align:center;
+}
+.textlist_fill{
+	overflow:hidden;
+	height:26px;
+	line-height:26px;
+	width:360px;
+	float:left;
+	text-align:center;
+}
+.textlist_price{
+	float:left;
+	height:26px;
+	line-height:26px;
+	margin-left:10px;
+	width:40px;
+	text-align:center;
+}
+.textlist_button {
+	margin-left:1em;
+	width:150px;
+	float:left; 
+}
+
+.textlist_intro {
+    display:block;
+    /*overflow-y:scroll;*/ /*? only one letter but scrollbar show? */
+}
+
+#service_append {
+	position:fixed;
+	left: 400px;
+	top: 180px;
+	width: 345px;
+	height: auto;
+	z-index: 1001;
+	padding:30px;
+	
+	display:none;
+	background-color: #f6f6f6;
+}
+
+#appendleft{
+	float: left;
+	padding-right: 10px;
+}
+#appendright{
+	float: right;
+	padding-right: 6px;
+}
+</style>
+<script type="text/javascript">
+	var id;
+	var num;
+	var price;
+	var listType = "<?php echo $this->listType;?>";
+	$(document).ready(function(e) {
+        $("#append_confirm").click(function(){
+			var note=$("#service_noteinput").val();			
+			var url='/service/index/orderlist/cmd/add/id/'+id+'/note/'+note+'/num/'+num;			
+			$.get(url,function(result){
+				hidemsgdelay("Item added!");
+				$("#itemcount").html("("+result.replace(/^\s/,"")+")");
+				$("#service_append").css("display","none");
+				getOrderlist();
+			});
+		});
+		$("#append_cancel").click(function(){
+			$("#service_append").css("display","none");
+		});
+
+		$(".service-view").hide();
+		if(listType>0) {
+		    $("#service_listRadio"+listType).show();
+		}
+		else {
+			$("#service_listRadio1").show();
+		}
+
+		$("#inc").click(function(){
+			var shownum= $("#num").text();
+			num=parseInt(shownum)+1;
+			$("#num").html(parseInt(shownum)+1);
+			$("#total").html((price*num).toFixed(2));
+		});
+
+		$("#redu").click(function(){
+			var shownum= $("#num").text();
+			if(parseInt(num)-1>0){
+			num=parseInt(shownum)-1;
+			$("#num").html(parseInt(shownum)-1);
+			$("#total").html((price*num).toFixed(2));
+			}
+			else
+			$("#service_append").css("display","none");
+		});
+    });
+	function readyAddService(serviceId,serviceName,serviceDescription,pic,itemprice){
+		id=serviceId;
+		num=1;
+		price=parseFloat(itemprice);
+		$("#service_append").css("display","block");		
+		$("#append_name").html("<b><?php echo $this->translate('Food Name');?>:</b> "+serviceName);
+		$("#num").html(1);
+		$("#total").html(itemprice);
+		$("#append_description").html("<b><?php echo $this->translate('Food Description');?>:</b>"+serviceDescription);	
+		$("#append_pic").html('<img src='+pic+' onmousedown="return false;" />');
+	}
+</script>
+
+
+<?php if(empty($this->list)):?>
+<h2>No foods found, please check</h2>
+<?php else:?>
+<div id="service_listRadio1" class="service-view">
+	<list_ul>
+	<?php $i=1?>
+	<?php foreach($this->list2 as $r): ?>
+    	<li><div ondragover="allowDrop(event)">
+			<div id="<?=$r['id'];?>" draggable="true" ondragstart="drag(event)">
+        	<item >
+        		<h2><?php echo $this->translate($r['name']);?></h2>
+       			<img id = "service<?php echo $i;?>" 
+					src="<?php echo $r['org_picture'];?>"  
+					alt="<?php echo $this->translate($r['introduction']);?>"  
+					onmousedown="return false;"  
+					onclick='
+					readyAddService("<?php echo $r['id'];?>",
+					"<?php echo $this->translate($r['name']);?>",
+					"<?php echo $this->translate($r['introduction']);?>",
+					"<?php echo $r['org_picture'];?>",
+					"<?php echo $r['price'];?>"
+					);'/>
+        	 	<a href="<?php echo $this->url(array('action'=>'catalog', 'id'=>$i))?>;">
+         		</a>
+       			<p><?php echo "$".$r['price'];?> </p>
+			<div class="service_item_add_button">
+			<a href="#".service_item_add_button
+			onclick='additembyid(<?php echo $r['id'];?>,1);'
+			data-role="button" data-inline="true"><?php echo $this->translate('add')?></a>
+			</div>
+        	</item>
+			</div>
+			</div>
+    	</li>
+    <?php $i++ ?>
+<?php endforeach;?>
+</list_ul>
+</div>
+<div id="service_listRadio2" class="service-view">
+<?php $i=1?>
+<?php foreach($this->list2 as $r): ?>
+    <div class="textlist"> 
+    	<div class="textlist_thumbnail" ondrop="drop(event)" ondragover="allowDrop(event)">
+        	<img  class="textlist_thumbnail" src="<?php echo $r['org_picture'];?>" alt="<?php echo $this->translate($r['introduction']);?>" draggable="true" ondragstart="drag(event)"/>
+        </div>       
+        <div class="textlist_name" >
+			<a href="<?php echo $this->url(array('action'=>'catalog', 'id'=>$i))?>;" style="text-decoration:none;"><?php echo $this->translate($r['name']);?> </a>
+        </div>        
+        <div class="textlist_fill">&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;</div>
+		<div class="textlist_price"><?php echo "$".$r['price'];?></div>        
+        <div class="textlist_button"> 
+		<a href="#<?php echo $r['name'];?>"
+		onclick="additembyid(<?php echo $r['id'];?>,1);"
+		data-role="button"><?php echo $this->translate('Add to Order');?></a>
+	</div>
+
+    </div>
+    <?php $i++ ?>
+<?php endforeach;?>
+</div>
+
+<div id="service_listRadio3" class="service-view">
+<?php $i=1?>
+<?php foreach($this->list2 as $r): ?>
+        <table border="0" width="100%">
+        <tr>
+            <td rowspan="2" width="140px">
+                <img class="textlist_bigthumbnail" src="<?php echo $r['org_picture'];?>" alt="" 
+				onclick='
+					readyAddService("<?php echo $r['id'];?>",
+					"<?php echo $this->translate($r['name']);?>",
+					"<?php echo $this->translate($r['introduction']);?>",
+					"<?php echo $r['org_picture'];?>",
+					"<?php echo $r['price'];?>"
+					);'
+				/>
+            </td>
+            <td valign="top" style="padding-left:0px">
+		        <h3><a href="<?php echo $this->url(array('action'=>'catalog', 'id'=>$i))?>;" style="text-decoration:none;"><?php echo $this->translate($r['name']);?></a></h3>
+			    <div class="textlist_intro"><?php echo $this->translate($r['introduction']);?></div>
+			</td>
+        </tr>
+        <tr>
+            <td valign="bottom">
+                <table border="0" width="100%"><tr>
+		            <td><div class="textlist_price"><?php echo "$".$r['price'];?></div></td>        
+                    <td width="*" align="right"><div class="textlist_button"> <a
+		    href="#<?php echo $r['name'];?>"
+		    onclick="additembyid(<?php echo $r['id'];?>,1);"
+		    data-role="button"> <?php echo $this->translate('Add to Order');?></a></div></td>
+                </tr></table>
+            </td>
+        </tr>
+        </table> 
+    <?php $i++ ?>
+<?php endforeach;?>
+</div>
+
+
+<?php endif;?>
+<div id="service_append">	
+	<div id="append_name"></div>
+	<div id="append_pic"></div>
+	<div id="append_description"></div>
+	
+	
+    <div id="append_comment" style="display:none">
+    	<b><?php echo $this->translate('Additional Notes');?>:</b>
+    	<textarea cols="40" rows="5" id="service_noteinput"></textarea>
+    </div>
+	<div>
+		<div id="appendleft">
+			<input id="append_cancel" type="button" value="<?php echo $this->translate('Cancel');?>"/>
+			<input id="append_confirm" type="button" value="<?php echo $this->translate('Confirm');?>"/>
+		</div>
+    	<div id="appendright">
+			<div id="append_num">
+				<b><?php echo $this->translate('Num');?>:</b>
+				<span id="redu"><b>-</b></span>
+				<span id="num">1</span>
+				<span id="inc"><b>+</b></span>
+			</div>
+			<div id="append_total">
+				<b><?php echo $this->translate('Total');?>:$</b><span id="total"></span>
+			</div>
+		</div>
+	</div>
+</div>

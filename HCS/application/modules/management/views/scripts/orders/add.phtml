@@ -1,0 +1,96 @@
+<script language=javascript>
+function checkform()
+{
+
+	<?php if($this->detailData ==NULL): ?>
+	alert("Please Add Detail Orders");
+	return false; 
+	<?php endif;?>	
+}
+
+function typeChange()
+{
+
+	var changeType=document.getElementById("type").value;
+	//alert(changeType);
+	window.location ="/management/orders/add/type/"+changeType;
+}
+
+function addDetailOrders()
+{
+	var serviceId=document.getElementById("service_id").value;
+	var quantity=document.getElementById("quantity").value;
+	var changeType=document.getElementById("type").value;
+
+	window.location ="/management/orders/add/type/"+changeType+"/addservice_id/"+serviceId+"/quantity/"+quantity;
+}
+
+function back()
+{
+	window.location ="/management/orders/index";
+}
+</script>
+
+<h2><?php echo $this->translate('Add confirm orders');?></h2>
+
+<form onSubmit="return checkform();" method="post" id="add_order">
+<table>
+    <tr>
+		<th><?php echo $this->translate('type');?>:</th>    
+    	<th><?php echo $this->translate('Service name');?>:</th>
+        <th><?php echo $this->translate('Quantity');?>:</th>
+	</tr>
+	<tr>
+		<td align="center"><select name="type" id="type" onchange=typeChange()>
+			<?php foreach($this->type as $r): ?>
+			<option value="<?php echo $r->getId();?>"
+			<?php if ($r->getId()==$this->curType) :?> 
+         			 selected="selected"
+         	    <?php endif;?>
+			><?php echo $this->translate($r->getName());?></option>
+			<?php endforeach;?>
+		</select></td>
+		<td align="center"><select name="service_id" id="service_id">
+			<?php foreach($this->services as $r): ?>
+			<option value="<?php echo $r->getId();?>"><?php echo $r->getTranslateName($this->lang);?></option>
+			<?php endforeach;?>
+		</select></td>
+        <td align="center"><input id="quantity" name="quantity" type="text" value="1"/></td>
+        <td align="center"><input type="button" name="button" id="button" value="<?php echo $this->translate('add');?>" onClick="addDetailOrders()"/></td>
+	</tr>
+</table>
+<br/>
+<?php if($this->detailData <>NULL): ?>
+
+<?php echo $this->translate('detail orders');?>:
+<table border="1">
+	<tr>
+		<th><?php echo $this->translate('Service name');?></th>
+		<th><?php echo $this->translate('Price');?></th>
+		<th><?php echo $this->translate('Quantity');?></th>
+	</tr>
+<?php foreach($this->detailData as $r): ?>
+    <tr>
+		<td><?php echo $r["translate_name"];?></td>
+		<td><?php echo $r["service_price"];?></td>
+		<td><?php echo $r["quantity"];?></td>
+	</tr>
+<?php endforeach;?>
+</table>
+
+<?php endif;?>
+<p><?php echo $this->translate('Scheduled time');?>:<input id="scheduled_time" name="scheduled_time" type="text" placeholder="<?php echo $this->curTime->format('Y-m-d H:i:s');?>"/></p>
+<p><?php echo $this->translate('Remark');?>:<br/><textarea cols="70" rows="5" id="remark" name="remark"></textarea></p>
+<p><?php echo $this->translate('Room ID');?>:&nbsp;&nbsp;
+<select name="room_id" id="room_id">
+			<?php foreach($this->rooms as $r): ?>
+			<option value="<?php echo $r->getId();?>"><?php echo $r->getName();?></option>
+			<?php endforeach;?>
+</select>
+</p>
+
+<input type="submit" name="button" id="button" value="<?php echo $this->translate('submit');?>" />
+<input type="button" name="button" id="button" value="<?php echo $this->translate('cancel');?>" onClick="back()"/>
+
+</form>
+

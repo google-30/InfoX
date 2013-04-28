@@ -1,0 +1,86 @@
+<script language="JavaScript">
+function incQuantity(id){
+	var url='/service/index/orderlist/cmd/add/id/'+id;
+	$.get(url,function(result){
+		popupOrders()
+		$("#itemcount").html("("+result.replace(/^\s/,"")+")");
+	});	
+}
+function reduQuantity(id){
+	var url='/service/index/orderlist/cmd/add/num/-1/id/'+id;
+	$.get(url,function(result){
+		popupOrders()
+		$("#itemcount").html("("+result.replace(/^\s/,"")+")");
+	});
+	
+}
+function delall(id){
+	var url='/service/index/orderlist/cmd/del/id/'+id;
+	$.get(url,function(result){
+		popupOrders()
+		$("#itemcount").html("("+result.replace(/^\s/,"")+")");
+	});
+	
+}
+function setQuantity(obj,id){	
+	var url='/service/index/orderlist/cmd/add/setnum/'+obj.value+'/id/'+id;
+	$.get(url,function(result){
+		popupOrders()
+		$("#itemcount").html("("+result.replace(/^\s/,"")+")");
+	});	
+}
+function editNote(obj,id){
+	var url='/service/index/orderlist/cmd/edit/note/'+obj.value+'/id/'+id;
+	$.get(url,function(result){
+		popupOrders()
+	});	
+}
+function changebg(obj,c,id){
+	var bgcolor;
+if(c=="0")
+{bgcolor="#F8FBFE";
+$('#idredu'+id).css("color","gray");
+$('#idinc'+id).css("color","gray");}
+else
+{bgcolor="#FFFFFF";
+$('#idredu'+id).css("color","white")
+$('#idinc'+id).css("color","white");}
+obj.style.backgroundColor=bgcolor;
+}
+</script>
+
+<div id="orderlist">
+	<? if(!empty($this->orders)):?>
+	<table id="orders" width="100%">
+        <?php foreach($this->orders as $r): ?>        
+			<tr onmousemove=changebg(this,0,"<?php echo $r['service_id'];?>") onmouseout=changebg(this,1,"<?php echo $r['service_id'];?>")  >
+				<td >
+					<span id=idredu<?php echo $r['service_id'];?> style="color:white;" onclick="reduQuantity(<?php echo $r['service_id'];?>)">-</span>
+				
+					<span><?php echo $r['num'];?></span>
+				
+					<span id=idinc<?php echo $r['service_id'];?> style="color:white;"  onclick="incQuantity(<?php echo $r['service_id'];?>)">+</span>
+                </td>
+				<td ><?php echo $this->translate($r['service_name']);?></td>
+				<td ><span><?php echo "$".$r['service_price'];?></span></td>
+				<td ><span onclick="delall(<?php echo $r['service_id'];?>)" data-role="button" style="background:gray;padding:3px;">X</span></td>
+			</tr>        
+		<?php endforeach;?>
+	</table>
+	<?php else: ?>
+		<h4>OrderList is Empty<h4>
+	<?endif;?>
+	<div style="white-space:nowrap;text-align:right;padding-right:50px;padding-left:210px">
+    	<hr />
+		<?php echo $this->translate('Subtotal')?>:  <span id="subtotal"><?php echo "$".$this->total?></span><br>
+		<?php echo $this->translate('Tax')?>:  <span id="tax">$0</span><br>
+		<?php echo $this->translate('Total')?>:  <span id="total"><?php echo "$".$this->total?></span>
+	</div>
+	<hr />
+<!-- div块service_note_edit暂且不用-->
+	<div id="service_note_edit" style="display:block">
+    	<p>Additional notes/comments</p>
+        <div id="service_Notes"><textarea style="width: 388px; height: 88px;" rows="5" id="service_note_editarea"></textarea></div>
+    </div>
+	<hr />
+</div>

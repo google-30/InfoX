@@ -1,0 +1,20 @@
+<h3>Edit Page</h3>
+
+<a data-role="button" data-inline="true" href="/information/manage/pagemanage">&lt; Return To List</a>
+
+<a data-role="button" data-inline="true" href="/information/manage/addnew?id=<?=$this->pageid?>">Add Category</a>
+
+<?
+   echo $this->grid("Information", true)
+              ->field('title','Title')
+              ->field('content', 'Content')
+              ->actionField(':action', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+              ->helper(new GridHelper_Information())
+              ->data($this->infos)
+              ->emptyMessage('No Sections exist click <a
+			     href="'.$this->url(array('action'=>'addnew')).'">here</a> to create a one.')
+              ->action(':action', 'Edit', array( 'url'=>array('action'=>'edit','pageid'=>$this->pageid)))
+	      ->action(':action', 'Delete', array('url'=>array('action'=>'delete','pageid'=>$this->pageid)));
+?>

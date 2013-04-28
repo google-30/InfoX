@@ -1,0 +1,63 @@
+<?php $this->headStyle()->captureStart();?>
+form table, form table tr, form table td {
+    border: none;
+    border-collapse: collapse;
+}
+form table {
+}
+td img {
+    width:100px;
+    height:48px;
+}
+.label {
+    width: 100px;
+}
+<?php $this->headStyle()->captureEnd();?>
+<form id="<?php echo $this->element->getFormId();?>" 
+     enctype="multipart/form-data" method="post" 
+     action="<?php echo $this->element->getAction();?>">
+     <table>
+         <tr>
+             <td colspan="2"><b><?php print $this->translate('Upload logo')?></b></td>
+         </tr>
+         <tr>
+             <td class="label" valign="top"><img src="<?php echo $this->logo;?>"></img></td>
+             <td valign="middle"><?php echo $this->element->logo_file?></td>
+         </tr>
+         <tr>
+             <td class="label" valign="top"><?php echo $this->translate('Hotel Name');?></td>
+             <td><?php echo $this->element->hotelName;?></td>
+         </tr>
+         <tr>
+             <td class="label" valign="top"><?php echo $this->translate('Hotel Address');?></td>
+             <td><?php echo $this->element->hoteladdress;?></td>
+         </tr>
+         <tr>
+             <td class="label" valign="top"><?php echo $this->translate('Local Currency');?></td>
+             <td><?php echo $this->element->currency;?></td>
+         </tr>
+         <tr>
+             <td class="label" valign="top"><?php echo $this->translate('Timezone');?></td>
+             <td><?php echo $this->element->timezone;?></td>
+         </tr>
+         <tr>
+             <td class="label" valign="top"><?php echo $this->translate('Language');?></td>
+             <td><?php echo $this->element->language;?></td>
+         </tr>
+         <tr>
+             <td class="label" valign="top"><?php echo $this->translate('Date Format');?></td>
+             <td><?php echo $this->element->dateFormat;?></td>
+         </tr>
+         <tr>
+             <td class="label" valign="top"><?php echo $this->translate('Time Format');?></td>
+             <td><?php echo $this->element->timeFormat;?></td>
+         </tr>
+         <tr>
+             <td colspan="2">
+                 <?php echo $this->element->save; ?>
+                 <?php echo $this->element->cancel; ?>
+             </td>
+         </tr>
+     </table>
+</form>
+

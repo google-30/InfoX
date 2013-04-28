@@ -1,0 +1,42 @@
+<h2><?php echo $this->translate($this->title);?></h2>
+
+<p><a href="<?php echo $this->url(array('action'=>'add-adverts'));?>">Add Advertisement</a>
+&nbsp;&nbsp;<a href="<?php echo $this->url(array('action'=>'index'));?>">Show Advertisers</a>
+
+<p><div class="message"><?php echo $this->message;?></div>
+
+<?php
+    echo $this->grid("adverts", true)
+              ->field(':img', 'Ads')
+              ->field('permanent', 'Permanent')
+              ->field('playMode', 'Play Mode')
+              ->field('startDate', 'Start Date')
+              ->field('startTime', 'Start Time')
+              ->field('endDate', 'End Date')
+              ->field('endTime', 'End Time')
+              ->field('size', 'Units')
+              ->field(':charge', 'Cost', array('align'=>'right'))
+              ->bulk('delete', 'Delete All', 
+                      array('url'=>array('action'=>'delete-adverts'),
+                            //'keys'=>array('endDate', 'size'),  // just for testing composite keys
+                            // 'icon'=>'/common/images/icons/trash.png',
+                            'message'=>$this->translate('All adverts will be deleted, please confirm?'),
+                           )
+                      )
+              ->actionField(':edit_delete', null, '&nbsp;|&nbsp;')
+              ->action(':edit_delete', 'Edit', 
+                        array(
+                            'url'=>array('action'=>'edit-adverts'),
+                        )
+                      )
+              ->action(':edit_delete', 'Delete',
+                        array(
+                            'url'=>array('action'=>'delete-adverts')
+                        )
+                      )
+              ->helper(new GridHelper_Adverts())
+              ->itemCountPerPage(5)
+              ->paginateAction(array('action'=>'search-adverts'))
+              ->data($this->data)
+              ->emptyMessage('No adverts found, please click <a href="'.$this->url(array('action'=>'add-adverts')).'">here</a> to add one.');
+?>

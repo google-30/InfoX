@@ -1,0 +1,280 @@
+<style type="text/css">
+    
+.entrance_light {
+	width: 112px;
+	height: 98px;
+	background: url(/images/room/Bitmap_id139.png) no-repeat;
+}
+
+.light_bg{
+    padding:20px 15px 10px 15px;
+    width: 700px;
+    height: 150px;
+    background:#EDEDED
+}
+
+.tv_bg{
+    padding:20px 15px 10px 15px;
+    width: 700px;
+    height: 150px;
+    background:#3b3b3b
+}
+
+.ch_bg{
+    padding :20px 15px 10px 15px;
+    width: 700px;
+    height: 200px;
+    background:#999999
+}
+
+.swich {
+	width: 73px;
+	height: 26px;
+	background-image: url(/images/room/off.png);
+}
+
+#power{
+        display:block;
+        width: 97px;
+	height: 95px;
+	background-image: url(/images/room/power.png);
+}
+#power:hover{background: url(/images/room/power.png) no-repeat -97px -0px }
+#vol_u{
+        display:block;
+        width: 58px;
+	height: 75px;
+	background-image: url(/images/room/vol.png);
+}
+#vol_u:hover{background: url(/images/room/vol.png) no-repeat -58px -0px;}
+#vol_d{
+        display:block;
+        width: 58px;
+	height: 75px;
+	background: url(/images/room/vol.png) no-repeat -0px -75px;
+}
+#vol_d:hover{background: url(/images/room/vol.png) no-repeat -58px -75px;}
+#ch_u{
+        display:block;
+        width: 58px;
+	height: 75px;
+	background-image: url(/images/room/ch.png);
+}
+#ch_u:hover{background: url(/images/room/ch.png) no-repeat -58px -0px;}
+#ch_d{
+        display:block;
+        width: 58px;
+	height: 75px;
+	background: url(/images/room/ch.png) no-repeat -0px -75px;
+}
+#ch_d:hover{background: url(/images/room/ch.png) no-repeat -58px -75px;}
+.ch {
+        display:block;
+	width: 94px;
+	height: 59px;
+	background-image: url(/images/room/ch1.png) ;
+}
+
+<?php foreach($this->channels as $r): ?>
+#<?php echo $r->getName();?>{
+    background-image:  url(<?php echo $r->getImage() ?>)
+}
+#<?php echo $r->getName();?>:hover
+{ background:url(<?php echo $r->getImage() ?>)no-repeat -94px -0px;}
+<?php endforeach;?>
+
+</style>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+ 	
+	
+	var light1=0;
+	var light2=0;
+	var light3=0;
+	var light4=0;
+ //for swich1
+  $(".swich").click(function(){
+	if (light1==0){
+		light1=1;
+		$(this).css("background-image","url(/images/room/on.png)");
+		//var name1=$(this).attr("target");
+		$("#"+$(this).attr("target")).css("background-image","url(/images/room/Bitmap_id138.png)");
+
+		
+	}
+	else
+	{
+		$(this).css("background-image","url(/images/room/off.png)");
+		$("#"+$(this).attr("target")).css("background-image","url(/images/room/Bitmap_id139.png)");
+		light1=0;
+	}});
+
+
+//for ir button
+
+//for ch button
+
+//    $(".ch").click(
+//        function()
+//        {
+//            alert($(this).attr("id")); 
+////            $(this).css("background","url(/images/room/"+$(this).attr("id")+".png) no-repeat -94px -0px");
+//        }
+//    );
+});
+
+</script>
+
+
+<script type="text/javascript">
+//和服务器通讯
+var ip2rf_url="/images/room/gw2.txt";
+var ip2rf_url2="192.168.0.118/cmd";
+function loadXMLDoc()
+{
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            var obj = JSON.parse(xmlhttp.responseText);
+            if(obj.gw.ok=="1"){
+               
+                swichLight(obj.target[0].status,"#s1","#light1");
+                swichLight(obj.target[1].status,"#s2","#light2");
+                swichLight(obj.target[2].status,"#s3","#light3");
+                swichLight(obj.target[3].status,"#s4","#light4");
+            }
+        }
+    }
+   
+    $url="/ip2rf.php?ip=<?php echo  $this->GW_ip; ?>/cmd=1";
+    xmlhttp.open("GET",ip2rf_url,true);
+    xmlhttp.send();
+    
+}
+ function swichLight(status,id_s,id_l){
+            if(status=="0")
+            {
+                $(id_s).css("background-image","url(/images/room/off.png)");
+                $(id_l).css("background-image","url(/images/room/Bitmap_id139.png)");
+            }
+            else
+            {
+                $(id_s).css("background-image","url(/images/room/on.png)");
+                $(id_l).css("background-image","url(/images/room/Bitmap_id138.png)");
+            }
+    }
+    loadXMLDoc();
+    setInterval(loadXMLDoc,2000);
+</script>
+
+<!--below is layout code-->
+
+<div class="wrap">
+<div id="room_ctrol">
+
+<!--<div id="mydiv"></div><button type="button" onclick="loadXMLDoc()">测试通讯</button>-->
+<div class="light_bg">
+<table width="100%" border="0" >
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr align="center" >
+    <td></td>
+    <td><div class="entrance_light" id="light1"></div></td>
+    <td><div class="entrance_light" id="light2"></div></td>
+    <td><div class="entrance_light" id="light3"></div></td>
+    <td><div class="entrance_light" id="light4"></div></td>
+  </tr>
+  <tr align="center" >
+    <td></td>
+    <td><div  class="swich" target="light1" id="s1"></div></td>
+    <td><div  class="swich" target="light2" id="s2"></div></td>
+    <td><div  class="swich" target="light3" id="s3"></div></td>
+    <td><div  class="swich" target="light4" id="s4"></div></td>
+  </tr>
+</table>
+</div>
+<div class="tv_bg">
+<table width="100%" border="0" >
+  <tr align="center"  >
+    <td> </td>
+    <td> </td>  
+    <td> </td>
+    <td>
+        <div class="tv" id="power"   position:relative   margin-bottom:-102px ></div>
+    </td>   
+    <td>
+        <div class="tv" id="ch_u" position:relative   top:-60px  left:80px></div>
+        <div class="tv" id="ch_d"></div>
+    </td>
+    <td>
+        <div class="tv" id="vol_u"></div>
+        <div class="tv" id="vol_d"></div>
+    </td>  
+  </tr>
+</table>
+</div>
+<div class="ch_bg">
+<table width="100%" border="0" >
+<!--  <tr>
+    <td><div class="ch" id="ch1"></div></td>
+    <td><div class="ch" id="ch2"></div></td>
+    <td><div class="ch" id="ch3"></div></td>
+    <td><div class="ch" id="ch4"></div></td>
+    <td><div class="ch" id="ch5"></div></td>
+    <td><div class="ch" id="ch6"></div></td>
+    <td><div class="ch" id="ch7"></div></td>
+  </tr>
+  <tr>
+    <td><div class="ch" id="ch8"></div></td>
+    <td><div class="ch" id="ch9"></div></td>
+    <td><div class="ch" id="ch10"></div></td>
+    <td><div class="ch" id="ch11"></div></td>
+    <td><div class="ch" id="ch12"></div></td>
+    <td><div class="ch" id="ch13"></div></td>
+    <td><div class="ch" id="ch14"></div></td>
+  </tr>
+  <tr>
+    <td><div class="ch" id="ch15"></div></td>
+    <td><div class="ch" id="ch16"></div></td>
+    <td><div class="ch" id="ch17"></div></td>
+    <td><div class="ch" id="ch18"></div></td>
+    <td><div class="ch" id="ch19"></div></td>
+    <td><div class="ch" id="ch20"></div></td>
+    <td><div class="ch" id="ch21"></div></td>
+  </tr>-->
+  <?php $i=0 ?>
+  <?php foreach($this->channels as $r): ?>
+    <?php $r->getImage() ?>
+    <?php $i =($i+1) ?>
+    <?php if($i%7==1):?>
+    <tr align="center"  > 
+    <?php endif;?>
+        <td><div class="ch" id="<?php echo $r->getName();?>">
+            </div></td>
+    <?php if($i%7==0):?>
+    </tr>
+    <?php endif;?>
+  <?php endforeach;?>
+</table>
+</div>
+</div>
+
+</div>
+

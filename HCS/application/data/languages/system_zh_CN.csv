@@ -1,0 +1,338 @@
+Accounts;账户
+Acknowledged;权限
+Add A User;添加用户
+Add Catalog;添加分类
+Add Food/Drink successfully;添加食物/饮品成功
+Add Food/Drink;添加食物/饮品
+Add Notification;新通知
+Add Other Services successfully;其他服务添加成功
+Add Other Services;添加其他服务
+Add Provider;添加部门
+Add a Service;添加服务项目
+Add catalog successfully;类别添加成功
+Add confirm orders;添加订单
+Add provider successfully;服务部门添加成功
+Add to Supported List;加入支持列表
+Added Time;上架时间
+Adverts;广告
+Agree;同意
+Amount;AmountCN
+Appearance;外观
+Application;应用
+Are you sure you want to delete this user?;您确定您要删除这个用户吗？
+Arrival:;到达:
+Arrival;到达
+Articles;文章
+Bill Preview;账单预览
+Bill Preview;账单预览
+Book Taxi;预订车子
+Book a Taxi;预订车子
+Cancel;取消
+Catalog;目录
+Catalogue;所属分类
+Categories;分类
+Category Name;分类名称
+Category;分类
+Change Language;更换语言
+Chinese;中文
+Clear All Messages;清空消息
+Confirm Checkout;确认结帐
+Confirm Delete User;确认删除用户
+Confirm ID;订单号
+Confirm orders added successfully;订单添加成功
+Confirm orders deleted successfully;订单删除成功
+Confirm orders updated successfully;订单修改成功
+Confirm time;下单时间
+Confirmed orders;订单管理
+Contact Service;联系服务
+Content;内容
+Created Date;创建日期
+Curtains;窗帘
+Dashboard;仪表盘
+Date;日期
+Default;默认
+Delete Pages;删除页面
+Delete catalog successfully;类别删除成功
+Delete provider successfully;服务部门删除成功
+Delete service successfully;服务项目删除成功
+Delete;删除
+Departure:;出发:
+Departure;出发
+Description;描述
+Detail orders delete successfully;详单删除成功
+Detail;订单明细
+Detail_orders added successfully;详单添加成功
+Detail_orders is exist;详单已存在
+Detail_orders updated successfully;详单更新成功
+Devices;设备
+Disabled;已禁用
+Edit Catalog;修改分类
+Edit Confirm Order Information;订单信息修改
+Edit Food/Drink;食物/饮品项内容修改
+Edit Page;Edit PageCN
+Edit Services Provider;修改服务部门信息
+Edit Services;其他服务项内容修改
+Edit Taxi;的士项内容修改
+Edit User;用户信息修改
+Edit catalog successfully;类别修改成功
+Edit detail orders;修改详单
+Edit provider successfully;服务部门修改成功
+Edit;修改
+Email;Email
+Emergency;紧急事件
+English;英语
+Entertainment;娱乐
+Event;事件
+Food/Drink;食物/饮品
+Gambling;GamblingCN
+Gambling;博彩竞技
+General;普通
+Guest Name;客户姓名
+Guests;宾客
+Help;信息帮助
+Hotel Suite Management Portal;酒店套房管理
+Hotel;酒店
+Housekeeping;家政
+Icon;图标
+If you have enquiries about your bill please contact reception;如果您有您的帐单查询，请联络酒店前台
+In Which;所属分类
+Information Page Mangement;信息页面管理
+Information;InformationCN
+Information;酒店信息
+Introduction;简介
+Is Delete;是否删除
+Is Display;是否显示
+Is New;新品
+Is Sale;在售
+Is Top;置顶
+Issued;IssuedCN
+Key Words;关键字
+Keywords separated by ',';关键字之间用','分隔
+Language;LanguageCN
+Language;语言
+Lights;灯
+Local Attractions;本地景点
+Local Events;本地事件
+Locale;本地
+Lock;锁定屏幕
+Logout;注销
+Manage Applications;应用程序管理
+Manage Services;服务管理
+Management;管理
+Media;多媒体
+Messages;消息
+Name:;名称:
+Name;名字
+New Index;新品显示位置
+Next;Next CN
+Next;下一页
+No detail orders found;没有详单数据
+No operation log data found;没有操作记录
+No orders found;没有订单数据
+Notification Dashboard;通知板
+Notifications;通知
+Operate Sucess;操作成功
+Operate time;修改时间
+Operator;操作员
+Order Detail Information;订单明细
+Order detail;订单明细
+Order type;订单类型
+Org picture;图片
+Other Service;其他服务
+Outside Calls;外线电话
+Phone;PhoneCN
+Phone;联系电话
+Picture;图片
+Please send bill copy to my email address;请发送帐单的副本到我的邮箱
+Please upload Icon;请上传图标
+Please upload org picture;请上传图片
+Preferred Language;喜欢的语言：
+Previous;Previous CN
+Previous;上一页
+Price;单价
+Provider is exist;已有此服务部门
+Provider;提供部门
+Quantity;数量
+Quick Access;快速访问
+Radio;收音机
+Remark;RemarkCN
+Remark;备注
+Request Service;申请服务
+Reserved;保留的
+Reset Paasword;ResetPasswordCN
+Reset Password;忘记密码
+Revoke;撤消
+Role;角色
+Room Control;Room ControlCN
+Room Control;房间控制
+Room ID;房间号
+Room Number;房间号
+Room Service;客房服务
+Room Services;客房服务
+Room Type;房间类型
+Room to Room;客房到另一个客房
+Rooms;客房
+Scheduled time;预订时间
+Service Provider management;服务部门管理
+Service Taxes;服务税
+Service name;服务项目名称
+Services management;管理服务项目
+Services;服务
+Settings;设置
+Show All confirm orders;显示所有订单
+State;订单状态
+Status;订单状态
+Subtotal;小计
+Supported Language Management;语言管理
+Supported Languages;语言
+TV;电视
+Table;桌子
+Tablet;平板
+Taxi;的士
+The Order Total Price is;订单总价
+This Provider has services,You can not delete it;此部门正在提供服务，不能删除
+This action cannot be undone;这个操作不能撤消
+This catalog has services,you could not delete it;此分类下有服务项，不能删除
+Time;时间
+Title;标题
+Top Catalog;顶层目录
+Top Index;置顶显示位置
+Total Nights:;Total NightsCN:
+Total Nights;Total NightsCN
+Total price;总价
+Total;总价
+Touch to Open Web Browser;点击打开Web浏览器
+Translate Catalog;翻译分类名称
+Translate catalog successfully;类别翻译成功
+Translate;多语言翻译
+Type:;类型:
+User List;用户列表
+User;用户
+Username;用户名
+View operation log;操作记录
+Weather;天气状况
+Web;WebCN
+Web;网际网络
+Welcome;欢迎
+add a catalog;添加一个订单
+add;添加
+cancel;取消
+catalog is exist;分类已存在
+finish;完成
+doing;正在进行
+name;名称
+new;未开始
+no;否
+part finish;正在进行
+submit;确定
+type;服务项目类型
+yes;是
+apple juice;苹果汁
+Orange juice;橙汁
+duck;鸭子
+rice;米饭
+Pearl milk tea;黑芝麻珍珠奶茶
+Vanilla milkshake;香草奶昔
+Strawberry milkshake;多果珍珠奶茶
+Fresh coffee;鲜煮咖啡
+Coke;可乐
+Sprite;雪碧
+Pure Milk;纯牛奶
+Black tea;红茶
+Korean roast pork;韩式烧肉
+Grilled steak;烤牛排
+Spiced volume;五香卷
+Salted duck liver;盐水鸭肝
+Sauce tofu;浇汁豆腐
+Braised pork ribs;红烧排骨
+Broth, tofu pot;肥肠豆腐煲
+Braised Prawns;红焖大虾
+Glutton Griddle chicken;馋嘴干锅鸡
+Spicy Hele;麻辣饸饹
+Beef noodles;牛肉面
+Sansho surface;山椒面
+Fine dry noodles;干拌面
+Add to Order;加入订单
+Food Name;食物名称
+Food Description;简介
+Additional Notes;备注
+Confirm;确认
+total price;总价
+Num;数量
+Operation;操作
+Order list;订单列表
+Add More;添加更多
+All;所有
+Favorites;收藏
+Orders View;订单浏览
+Breakfast;早餐
+Lunch;午餐
+Dinner;晚餐
+Pearl milk tea with black sesame;黑芝麻珍珠奶茶
+cocacola;可口可乐
+Promote growth and development to improve the iron deficiency anemia enhance memory;促进生长发育 改善缺铁性贫血 增强记忆力
+Promote gastrointestinal peristalsis down the blood pressure qingfei appetizer hepatoprotective anti-cancer;降血压 清肺 开胃护肝 防癌抗癌 促进胃肠蠕动
+Very delicate taste, duck liver after the bubble, boiled water, rinse, pepper saline the little wake taste after cooking also do not have a lot of complex spices, a touch of pepper aroma, slightly salty;口感非常细腻，鸭肝在经过泡、焯水、冲洗、花椒盐水煮制之后一点醒味也没有，没有很多复杂的香料，淡淡的花椒香，微微的咸
+Pork;五花肉
+Beef noodles;牛肉面
+Slightly acidic, salty taste, tofu plump and juicy, tender of coke. Favorably with a variety of side dishes, carrots, crisp green peppers, mushrooms, creamy, delicious ham. Rich soup appetizer;口味微酸，咸鲜，豆腐饱满多汁，外焦里嫩。各种配菜也毫不逊色，胡萝卜青椒爽脆，香菇软滑，火腿鲜香。汤汁浓郁开胃
+Dry fruity, the tempeh the flavor and the variety of vegetables, chicken fusion;干香浓郁，豆豉的香味和各种蔬菜，鸡肉融合
+Changfeng swallow in the desert, calendar bitterly cold in the wilderness, the beginning of the end of 365 days was declared perfect, in the appearance of fine grind generosity heart, talent dietary fiber and a variety of trace elements to any rubbing hammer steamed and independence into a grid,not help people lingering aftertaste.;吞长风于大漠，历酷寒于旷野，终三百六十五日始告功成，是以外表精砺而内心仁厚，天赋膳食纤维并多种微量元素，任揉捶蒸而独成一格，不由使人回味绵长。
+1 item added,;一项已添加,
+items of order:;订单项目总计:
+Pick Up Location;上车地点
+Destination;目的地
+Estimated time of arrival;预计抵达时间
+Continue;下一步
+book service taxi ok!;车子预订成功
+Booking Details;
+There are nine franchise taxi operators in the City of Los Angeles who operate more than 2300 taxis. Be sure before boarding any taxi in the city of Los Angeles that you look for the official City of Los Angeles Taxicab Seal. Taxicabs bearing this seal are insured, have trained drivers and are regularly inspected by the City of Los Angeles. Any cab without the seal is a bandit cab with no legal authorization to operate in the City. Click above for more information about the City of Los Angeles authorized taxi companies, their telephone numbers, and service areas;欢迎使用车辆预订服务
+cooking;正在烹调
+status;状态
+Published;上架
+Draft;草稿
+Add New Item;添加
+Change Status;修改状态
+Room Service Management;房间服务管理
+Wake Up;起床
+Main Door;大门
+Living Room;客厅
+Living Room a;客厅 a
+Living Room b;客厅 b
+Bedroom;卧室
+Toilet;卫生间
+Bedside;床头
+Bathe Room;沐浴室
+Table Lamp;台灯
+Temperature;温度
+Presets;情景设置
+Reading;阅读
+Sleeping;睡眠
+Romantic;浪漫
+Getting Dressed;穿衣服
+Watching TV;看电视
+Night;晚上
+All Lights;所有的灯
+Curtain in Bed Room;卧室窗帘
+Curtain in Living Room;客厅窗帘
+Curtain in Main Door;大门门帘
+Curtain in Toliet;洗手间窗帘
+Choose from Header Menu to Control This Room;请从头部菜单中选择这个房间的控制
+Airconditioner;空调
+On;开
+Off;关
+Timer;定时
+Low;低
+Medium;中
+High;高
+Fan;风速
+1 hour;1小时
+Recommendations;推荐
+Volume;音量
+radio;电台
+Channel;频道
+Channel Info;频道简介
+Cable News Network (CNN) is a U.S. cable news channel founded in 1980 by American media mogul Ted Turner. Upon its launch, CNN was the first channel to provide 24-hour television news coverage, and the first all-news television channel in the United States.;有线电视新闻网（CNN）是美国有线新闻频道，成立于1980年，由美国媒体巨头泰德•特纳（Ted Turner）创立。CNN是第一个提供24小时的电视新闻报道，也是美国第一个全新闻电视频道。
+Our fine dining restauruant also supports in room delivery of meals of exceptional quality.;Our fine dining restauruant also supports in room delivery of meals of exceptional quality.CN
+Start;开始
+

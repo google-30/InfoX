@@ -1,0 +1,66 @@
+<h2><?php echo $this->translate('Translate Catalog');?></h2>
+<script language=javascript>
+
+function langChange()
+{
+	var id=<?php echo $this->data->getId();?>;
+	var page=<?php echo $this->curPage;?>;
+	
+	var changeLang=document.getElementById("langid").value;
+
+	window.location ="/management/catalog/translate/catalogId/"+id+"/lang/"+changeLang+"/page/"+page;
+	
+}
+
+function back()
+{
+	var page="<?php echo $this->curPage;?>";
+	if(page=="")
+		page=0;
+	window.location ="/management/catalog/index/page/"+page;
+}
+</script>
+
+
+<form method="post" id="translateCatelog">
+<table>
+	<tr>
+		<th><?php echo $this->translate('Language');?></th>
+		<th><?php echo $this->translate('Category Name');?></th>
+	</tr>
+	<tr>
+		<td align="center"><?php echo $this->translate('Default');?></td>
+		<td align="center"><?php echo $this->data->getName();?></td>
+	</tr>
+	<tr>
+		<td align="center"><select name="langid" id="langid" onchange=langChange()>
+			<?php foreach($this->langData as $r): ?>
+			<option value="<?php echo $r->getLocale();?>"
+			        <?php if ($r->getLocale()==$this->curLanguage) :?> 
+         			 selected="selected"
+         			<?php endif;?>
+         	><?php echo $this->translate($r->getName());?></option>
+         	<?php endforeach;?>
+			</select>
+		</td>
+		<td align="center"><input size="100" id="translate" name="translate" type="text" 
+		value="<?php 
+		            foreach($this->data->getTranslate() as $r){
+		                if ($r->getLanguage()==$this->curLanguage) 
+                            echo $r->getName();
+                    }
+                ?>"/>
+        </td>
+	</tr>	
+
+</table>	
+	
+<input name="catalogId" type="hidden" value="<?php echo $this->data->getId();?>" /> 
+<input id="mpage" name="page" type="hidden" value="<?php echo $this->curPage;?>" />
+<input id="lang" name="lang" type="hidden" value="<?php echo $this->curLanguage;?>" />
+<p>	
+	<input type="submit" name="submitButton" id="submitButton" value="<?php echo $this->translate('submit');?>" />
+	&nbsp;&nbsp;
+	<input type="button" name="cancelCutton" id="cancelCutton" value="<?php echo $this->translate('cancel');?>" onClick="back() " />
+</p>
+</form>

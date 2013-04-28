@@ -1,0 +1,63 @@
+<style type="text/css">
+#test{
+	position:relative;
+	text-align:left;
+	//vertical-align:midd;
+	display:inline-block;
+	
+}
+</style>
+<script type="text/javascript">
+function checkform(){
+	var str = document.searchfood.searchItem.value;
+	str=str.Trim();
+	if(str.length==0){
+		document.getElementById("searchItem").focus();
+		return false;
+	}
+}
+var xmlHttp;
+String.prototype.Trim = function()
+{
+        return this.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+function showHint(str){
+	var url="/service/index/catalog";
+	str=str.Trim();
+	if(str.length!=0){
+		url=url+"/key/"+str;
+	}
+	window.location=url;
+}
+function stateChanged(){
+	if(xmlHttp.readyState==4 || xmlHttp.readyState=="complete"){
+		alert("ok!");
+	}
+}
+function GetXmlHttpObject(){
+	var xmlHttp=null;
+	try{
+		xmlHttp=new XmlHttpRequest();
+	}catch(e){
+		try{
+			xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+		}catch(e){
+			xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+	}
+	return xmlHttp;
+}
+</script>
+
+<form action="/service/index/catalog/key/" method="get" name="searchfood" id="searchfood" onSubmit="return checkform();" >
+	<span id="test">
+		<label for="searchItem">Food search:</label>
+    </span>
+    <span id="test" style="width:60%;">
+    	<input type="text" name="searchItem" id="searchItem"/>
+    </span>
+    <span id="test">	
+    	<input type="submit" id="submit" value="Search"/>
+    </span>			
+</form>

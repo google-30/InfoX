@@ -1,0 +1,39 @@
+<div class="wrap">
+<script type="text/javascript" src="/tablet/js/wormhole.js"></script>
+<script>
+
+function openBrowser(device)
+{
+    //alert("openBrowser");    alert(device);
+    var url = "http://www.synrgic.com/";
+    if(device == "table")
+    {// open tab
+        window.open (url);
+    }        
+    else
+    if(device == "tablet")
+    {// call mosync
+        makePlatformRequest(url)
+    }
+    else
+    {
+        alert("current platform is not supported.");
+    }
+}
+
+/**
+ * Calls C++ to invoke syscall maPlatformRequest.
+ */
+function makePlatformRequest(url)
+{
+        // Send message with request to C++.
+        mosync.bridge.send(["Custom", "PlatformRequest", url]);
+}
+</script>
+
+<h1><?php echo $this->translate("Web"); ?></h1>
+<button type="button" id="openBrowser" name="openBrowser"
+onclick="openBrowser('<?php echo $this->device; ?>');"><?=$this->translate('Touch to Open Web Browser');?></button>
+
+
+</div>

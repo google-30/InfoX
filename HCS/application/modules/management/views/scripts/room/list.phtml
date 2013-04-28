@@ -1,0 +1,19 @@
+<h1><?php echo $this->translate('Room List'); ?></h1>
+
+<p><a href="<?php echo $this->url(array('action'=>'add'));?>"><? echo $this->translate('Add A Room'); ?></a>
+
+<?
+   echo $this->grid("Rooms", true)
+              ->field('name', 'Name')
+              ->field('description', 'Description')
+			  ->field('type', 'Type')
+              ->actionField(':modify', null, '&nbsp;|&nbsp;')
+	      	  ->actionField(':delete',null)
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+              ->data($this->data)
+              ->emptyMessage('No Rooms Exist <a href="'.$this->url(array('action'=>'add')).'">here</a> to register one.')
+              ->action(':modify', 'Edit', array( 'url'=>array('action'=>'edit')))
+              ->action(':delete', 'Delete', array( 'url'=>array('action'=>'delete')))
+
+?>

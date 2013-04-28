@@ -1,0 +1,79 @@
+<script src="/common/js/jquery.galleriffic.js"></script>
+<style>
+
+div.slideshow {
+}
+div.slideshow span.image-wrapper {
+	display: block;
+	position: absolute;
+	width:100%;
+	top:0;
+	left:0;
+}
+div.slideshow a.advance-link {
+	display: block;
+	margin:0;
+	height: 302px; /* This should be set to be at least the height of the largest image in the slideshow */
+	text-align: center;
+}
+div.content {
+}
+
+div.slideshow-container {
+    display:block;
+    position: relative;
+    height:302px;
+    width:100%;
+    margin:2px;
+    padding:0;
+}
+div.slideshow img {
+    display:block;
+    position:absolute;
+    margin:0;
+    padding:0px;
+    width:100%;
+    height:302px;
+    top:0px;
+    left:0px;
+    z-index:100;
+}
+</style>
+<div class="wrap">
+<div id="gallery" class="content">
+	<div class="slideshow-container">
+		<div id="slideshow" class="slideshow"></div>
+	</div>
+</div>
+<div id="thumbs" class="navigation">
+	<ul class="thumbs noscript">
+	    <?php if(true):?>
+		<? foreach($this->items as $item):  ?>
+		<li>
+			<a class="thumb" href="<?=$item->value?>" title="<?=$item->description?>"><?=$item->description?></a>
+		</li>		
+		<?endforeach?>
+		<?php endif;?>
+	</ul>
+</div>
+<div style="clear:both"></div>
+<div id="pageContent">
+<?=$this->content;?>
+</div>
+
+<script>
+jQuery(document).ready(function($){
+		       var gallery=$('#thumbs').galleriffic({
+				delay: 3000,
+				numThumbs:0,
+				autoStart:true,
+				syncTransitions:true,
+				imageContainerSel: '#slideshow',
+				enableBottomPager: false
+				});
+		       });
+</script>
+
+
+
+</div>

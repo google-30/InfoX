@@ -1,0 +1,44 @@
+General Statistics<p>
+
+<li>Users: <?=$this->userCount;?>
+<p>
+
+Most recent logins:<p>
+
+<table border=1>
+
+<?
+if( count($this->successfullLogins)){
+	foreach($this->successfullLogins as $login){
+?>
+			<tr><td><?=$login->user->name?><td>
+				<td><?=$login->when?></td>
+			</tr>
+<?	} 
+} else{ ?>
+
+	No Logins have been recorded
+<?
+}
+?>
+
+
+
+
+<p>Failed Logins:<p>
+
+<?
+if( count($this->failedLogins)){
+	foreach($this->failedLogins as $login){
+?>
+			<tr><td><?=$login->user->name?><td>
+				<td><?=$login->when?></td>
+			</tr>
+<?	
+	}
+}else{ ?>
+
+	No Logins have been recorded
+<?
+}
+?>

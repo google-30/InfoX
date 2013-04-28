@@ -1,0 +1,38 @@
+<?
+function light($name,$text,$roomId)
+{
+    ?>
+	<script>
+	$(document).ready(function() {
+		
+	    $("#<?=$name;?>").on( 'slidestop', function( event ) {           
+		var swval = $("#<?=$name?>").val();
+		var img;        
+		img = (swval == "off") ? "/images/room/Lights-off.png" : "/images/room/Lights-on.png";
+		$("#<?=$name?>-img").attr("src", img);
+
+		var url ="/room/index/setstate/deviceId/light/Item/<?=$name?>/roomid/<?=$roomId?>/value/"+swval;
+		$.get(url, function(result){});
+		  
+	     });
+	     
+	});
+    	</script>
+        
+	<div style="float:left;padding: 120px 37px"> 
+	    <p style="text-align:center;">
+	    <h3 style="text-align:center;"><?=$text?></h3>
+	    </p>
+	    <p>
+	    <img src="/images/room/Lights-off.png" alt="lights on" id="<?=$name?>-img">
+	    </p>
+	    <p>
+	    <select name="<?=$name?>" id="<?=$name?>" data-role="slider">
+	   	<option value="off"> Off</option>  
+	    <option value="on">on</option>	      
+	    </select> 
+	    </p>
+	</div>
+    <?
+}
+

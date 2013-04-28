@@ -1,0 +1,90 @@
+@CHARSET "UTF-8";
+div.synrgic-ads-board {
+    overflow: hidden;
+    position:fixed;
+    height: 100%;
+    width: 100%;
+    margin-top:1px;
+    margin-bottom:1px;
+}
+div.synrgic-ads-board .synrgic-ads-board-scroller {
+    left:0;
+    height: 2000px;
+}
+
+div.synrgic-ads-board-scroller .synrgic-ads-entry {
+    float:left;
+    margin: 1px 2px 1px 2px;
+    border: 0px solid blue;
+}
+
+div.synrgic-ads-pbox {
+    opacity: 1.0;
+    height:auto;
+    width:auto;
+    position:fixed;
+    bottom:0px;
+    left:60px;
+    /*border:1px blue solid;*/
+    color:#333;
+    pending:0px;
+    z-index:1001;
+    font-size:12px;
+    margin:0px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -khtml-border-radius: 6px;
+}
+
+div.synrgic-ads-pbox .synrgic-ads-pbox-content {
+    opacity: 1.0;
+    height: auto;
+    width: auto;
+    background:#fff;
+    border-top:1px #005094 solid;
+    border-bottom:1px #005094 solid;
+    border-right:1px #005094 solid;
+    border-left:1px #005094 solid;
+    margin:0px auto;
+    pending:0px;
+}
+
+div.synrgic-ads-pbox .synrgic-ads-pbox-toolbar {
+    opacity:1.0;
+    height:24px;
+    width:auto;
+    /*background:#005094;*/
+    background-repeat:repeat-x;
+    pending-top:1px;
+    pending-left:2px;
+    margin: 0px auto 0px auto;
+}
+
+.synrgic-ads-pbox-toolbar-button {
+    font: bold 13px Arial;
+    font-weight:bold;
+    /*text-shadow: black 0.1em 0.1em 0.1em;*/   
+    text-decoration: none;
+    background-color: #eeeeee;
+    color: #333333;
+    margin: 0px 1px 0px 1px;
+    pending: 2px 6px 2px 6px;
+    border-top: 1px solid #cccccc;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #cccccc;   
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -khtml-border-radius: 6px;
+}
+/*
+.flipIt {
+    -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    -ms-transform: rotateY(-180deg);
+    -o-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+}
+*/

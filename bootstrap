@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#
+# This file helps setup paths, etc
+# for working on the project
+# It starts a secondary shell from the one
+# Your using
+#
+# Usage: source ./bootstrap
+PWD=`pwd`
+
+#
+# Setup Environment
+#
+export PATH=$PATH:$PWD/HCS/bin:$PWD/external/ZendFramework-1.12.0/bin
+
+# Helpers
+export SYN_ZEND=$PWD/external/ZendFramework-1.12.0
+export SYN_SYNRGIC=$PWD/HCS/library/Synrgic/
+export SYN_APP=$PWD/HCS/application
+export SYN_MODELS=$SYN_APP/models/entities/Synrgic
+export SYN_PUBLIC=$PWD/HCS/public
+export SYN_MODULES=$SYN_APP/modules
+export SYN_BIN=$PWD/HCS/bin
+
+alias zf=zf.sh
+alias _zend="cd $SYN_ZEND"
+alias _synrgic="cd $SYN_SYNRGIC"
+alias _app="cd $SYN_APP"
+alias _models="cd $SYN_MODELS"
+alias _public="cd $SYN_PUBLIC"
+alias _modules="cd $SYN_MODULES"
+alias _bin="cd $SYN_BIN"

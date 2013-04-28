@@ -1,0 +1,9 @@
+<h3>Add New Page</h3>
+<!-- TODO: put more info here -->
+<form name="infoform" id="infoform" method="post" action="/information/manage/pageedit">
+<input type="hidden" id="mode" name="mode" value="create"/>
+Language:<select id="language" name="language"><?php echo $this->langSels; ?></select><br>
+Create on:<input type="date" name="date" id="date" value="">
+<br><br>
+<input type="submit" value="Save Draft">
+</form>

@@ -1,0 +1,98 @@
+
+<?
+global $roomcurtains;
+
+$roomcurtains="ui-btn-active";
+
+include('header.phtml');?>
+
+
+<script>
+function Curtainschange(id,state){
+	var curtainsid="#curtains"+id;
+	$(curtainsid).text(state);
+	var url ="/room/index/setstate/roomid/<?php echo $this->roomid ?>/deviceId/curtains/Item/"+id+"/value/"+state;
+	$.get(url, function(result){});
+}
+</script>
+
+<style type="text/css">
+table {
+    width: 100%;
+}
+td {
+	border-right: 0px solid #c1dad7;
+	border-bottom: 0px solid #c1dad7;
+    text-align: center;
+}
+</style>
+<div class="wrap">
+<table class="curtains">
+<tr>
+    <td><h3><?php echo $this->translate('Curtain in Bed Room')?></h3></td>
+    <td><h3><?php echo $this->translate('Curtain in Living Room')?></h3></td>
+</tr>
+<tr>
+    <td><h3  id="curtains1"><?php echo $this->translate($this->state['1']);?></h3></td>
+    <td><h3  id="curtains2"><?php echo $this->translate($this->state['2']);?></h3></td>
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Curtains-Open.png"       
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Curtains-Open.png';" 
+        onmouseup="this.src='/images/room/Curtains-Open.png';Curtainschange('1','on');"/>
+    </td>
+    <td>
+        <img src="/images/room/Curtains-Open.png"       
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Curtains-Open.png';" 
+        onmouseup="this.src='/images/room/Curtains-Open.png';Curtainschange('2','on');"/>
+    </td>
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Curtains-Close.png"       
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Curtains-Close.png';" 
+        onmouseup="this.src='/images/room/Curtains-Close.png';Curtainschange('1','off');"/>
+    </td>
+    <td>
+        <img src="/images/room/Curtains-Close.png"       
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Curtains-Close.png';" 
+        onmouseup="this.src='/images/room/Curtains-Close.png';Curtainschange('2','off');"/>
+    </td>
+</tr>
+
+<tr>
+    <td><h3><?php echo $this->translate('Curtain in Main Door')?></h3></td>
+    <td><h3><?php echo $this->translate('Curtain in Toliet')?></h3></td>
+</tr>
+<tr>
+    <td><h3  id="curtains3"><?php echo $this->translate($this->state['3']);?></h3></td>
+    <td><h3  id="curtains4"><?php echo $this->translate($this->state['4']);?></h3></td>
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Curtains-Open.png"       
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Curtains-Open.png';" 
+        onmouseup="this.src='/images/room/Curtains-Open.png';Curtainschange('3','on');"/>
+    </td>
+    <td>
+        <img src="/images/room/Curtains-Open.png"       
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Curtains-Open.png';" 
+        onmouseup="this.src='/images/room/Curtains-Open.png';Curtainschange('4','on');"/>
+    </td>
+</tr>
+<tr>
+    <td>
+        <img src="/images/room/Curtains-Close.png"       
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Curtains-Close.png';" 
+        onmouseup="this.src='/images/room/Curtains-Close.png';Curtainschange('3','off');"/>
+    </td>
+    <td>
+        <img src="/images/room/Curtains-Close.png"       
+        onmousedown="this.src='/images/room/Button-Hover-Pressed-Curtains-Close.png';" 
+        onmouseup="this.src='/images/room/Curtains-Close.png';Curtainschange('4','off');"/>
+    </td>
+</tr>
+</table>
+
+</div>

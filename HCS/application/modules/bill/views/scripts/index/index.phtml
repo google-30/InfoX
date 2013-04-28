@@ -1,0 +1,64 @@
+<script>
+//http://www.javascriptkit.com/script/script2/autofresh.shtml
+
+var timeout=20
+
+function beginrefresh(){
+    if (!document.images)
+    return
+
+    if (timeout==1){
+    //alert("reload billsheet");
+    //window.location.reload()
+    $('#billsheet').load('/bill/index/billsheet');
+    timeout=10
+    }
+    else{
+    timeout-=1 
+    }
+    setTimeout("beginrefresh()",1000)
+}
+
+window.onload=beginrefresh
+
+function checkout()
+{
+    //alert("checkout");
+    $('#content').load("/bill/index/terms");
+}
+
+function contact()
+{
+    //alert("contact");
+    
+}
+</script>
+<script>
+$(document).ready(function () {
+    $('#billsheet').load('/bill/index/billsheet');
+});
+</script>
+<div class="wrap">
+<h2><?php echo $this->translate("Bill Preview"); ?></h2>
+<style>
+#guestinfo { width:100%; }
+.quickcheckout { text-align: center; }
+</style>
+<table id="guestinfo">
+<tr>
+<td><?=$this->translate('Name');?>:</td><td><strong><?php echo $this->guestname; ?></strong></td>
+<td><?=$this->translate('Room Type');?>:</td><td><strong><?php echo $this->guestroomtype; ?></strong></td>
+<td class="quickcheckout" rowspan="3"><a href="/bill/index/quickcheckout"><img src="/example/images/button-quickcheckout.png" /></a></td>
+</tr>
+<tr>
+<td><?=$this->translate('Arrival');?>:</td><td><strong><?php echo $this->guestarrival; ?></strong></td>
+<td><?=$this->translate('Room Number');?>:</td><td><strong><?php echo $this->guestroom; ?></strong></td>
+</tr>
+<tr>
+<td><?=$this->translate('Departure');?>:</td><td><strong><?php echo $this->guestdeparture; ?></strong></td>
+<td><?=$this->translate('Total Nights');?>:</td><td><strong><?php echo $this->guestnights; ?></strong></td>
+</tr>
+</table>
+<div id="billsheet"></div>
+<?include('footer.phtml');?>
+</div>

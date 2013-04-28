@@ -1,0 +1,41 @@
+
+<!--
+pagination similar to http://developer.yahoo.com/ypatterns/pattern.php?pattern=searchpagination
+-->
+
+<?php if ($this->pageCount): ?>
+<div class="paginationControl">
+<!-- Previous page link -->
+<?php if (isset($this->previous)): ?>
+  <?php $this->paginate_action['p'] = $this->previous; ?>
+  <a href="<?php echo $this->url($this->paginate_action); ?>">
+    &lt; Previous
+  </a> |
+<?php else: ?>
+  <span class="disabled">&lt; Previous</span> |
+<?php endif; ?>
+
+<!-- Numbered page links -->
+<?php foreach ($this->pagesInRange as $page): ?>
+  <?php if ($page != $this->current): ?>
+    <?php $this->paginate_action['p'] = $page; ?>
+    <a href="<?php echo $this->url($this->paginate_action); ?>">
+        <?php echo $page; ?>
+    </a> |
+  <?php else: ?>
+    <?php echo $page; ?> |
+  <?php endif; ?>
+<?php endforeach; ?>
+
+<!-- Next page link -->
+<?php if (isset($this->next)): ?>
+  <?php $this->paginate_action['p'] = $this->next; ?>
+  <a href="<?php echo $this->url($this->paginate_action); ?>">
+    Next &gt;
+  </a>
+<?php else: ?>
+  <span class="disabled">Next &gt;</span>
+<?php endif; ?>
+</div>
+<?php endif; ?>
+

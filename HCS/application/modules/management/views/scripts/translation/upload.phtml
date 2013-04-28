@@ -1,0 +1,20 @@
+<h1><?php echo $this->translate('Upload/Downloud Translation Resources');?></h1>
+
+<?php echo $this->form; ?>
+<p>
+<?php
+    echo $this->grid('translation') 
+              ->field('lang', 'Locale')
+              ->field('file', 'Translation Resource')
+              ->actionField(':download', null)
+              ->action(':download', 'Download',
+                        array(
+                            'url'=>array('action'=>'download'),
+                            'params'=>array('res'=>'file', 'ext'=>'ext')
+                        )
+                      )
+              ->paginatorEnabled(false)
+              ->helper(new GridHelper_Translation())
+              ->data($this->data)
+              ->emptyMessage('No translation resource found.');
+?>

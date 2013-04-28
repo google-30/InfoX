@@ -1,0 +1,120 @@
+<style type="text/css">
+#service_remark {
+	position: relative;
+	left: 149px;
+	top: 200px;
+	width: 462px;
+	height: 128px;
+	z-index: 1;
+	visibility: hidden;
+	background-color: #99CCFF;
+}
+#service_notetitle{
+	float: left;
+	position: relative;
+	top: 35px;
+}
+#service_additionalNotes{
+	position: relative;
+	float: left;
+	top: 4px;
+	height: 80px;
+	width: 320px;
+}
+#service_noteinput{
+	width: 318px;
+	height: 76px;
+	padding: 0px 0px 0px 0px;	
+}
+#parting_line{
+	clear: left;
+	position: relative;
+	top: 8px;
+}
+#service_confirm{
+	float: right;
+	padding-right: 10px;
+}
+#service_cancel{
+	float: right;
+	padding-right: 6px;
+}
+</style>
+
+<script type="text/javascript">
+	$(document).ready(function(e) {
+		var service;
+        $("#service_confirm").click(function(){			
+			var note=$("#service_noteinput").val();			
+			var url="/service/index/other/booking/service/serviceitem/"+service+"/addtionalNotes/"+note;
+			//window.location=url;
+			//$.getJSON(url,function(json){});
+			$.get(url,function(result){
+			//alert(result);
+			//document.location.reload();
+			$("#service_remark").css("visibility","hidden");
+			$("li[id*='service']").css("color","gray");
+			$("#booking_msg").html(result);
+			});
+		});
+		$("#service_cancel").click(function(){			
+			$("#service_remark").css("visibility","hidden");
+			$("li[id*='service']").css("color","gray");
+			var note=$("#service_noteinput").val();
+			var message="service "+service+" has been canceled!";
+			$("#booking_msg").html(message);	
+			
+			//var url="/service/index/other/booking/cancel";
+			//window.location=url;
+			//$.get(url,function(){
+				//document.location.reload();				
+			//});			
+		});
+		$("li[id*='service']").click(function(){
+			//$(this).css("color","red");
+			service=$(this).text();			
+			//$("#service_remark").css("visibility","visible");		
+			location.href='/service/index/other/id/'+service;
+		});
+		$("li").click(function(){
+			//$(this).css("color","red");
+			service=this.id;			
+			//$("#service_remark").css("visibility","visible");		
+			location.href='/service/index/other/id/'+service;
+		});
+		$("li[id*='service']").css("cursor","pointer");
+    });
+</script>
+<div id="service_remark">	
+	<div id="service_notetitle" ><b>Additional Notes</b>:</div>
+	<div class="name" id="service_additionalNotes"><textarea cols="30" rows="5" id="service_noteinput"></textarea></div>
+	<div id="parting_line"><hr /></div>
+	<div>
+		<div id="service_confirm"><input type="button" value="Confirm"></input></div>
+    	<div id="service_cancel"><input type="button" value="Cancel"></input></div>
+	</div>
+</div>
+<?php if(!empty($this->services)):?>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+    <td><h1><?php echo $this->translate('Book Other Services');?></h1></td>
+  </tr>
+</table>
+<ul data-role="listview">	
+    <?php foreach($this->services as $r):?>
+    <li id="<?php echo $r->getId(); ?>"><?php echo $r->getName();?></li>
+    <?php endforeach; ?>
+</ul>
+<?php else:?>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+    <td><h1><?php echo $this->translate($this->service->getName());?></h1></td>
+  </tr>
+	<tr>
+	<td><img src="<?php echo $this->service->getOrg_picture();?>"  alt="<?php echo $this->service->getIntroduction();?>"  />
+<?php echo $this->translate($this->service->getIntroduction());?></td>
+  </tr>
+</table>
+<? echo $this->form; ?>
+<?php endif;?>
+<p><div id="booking_msg"><? echo $this->msg; ?></div></p>

@@ -1,0 +1,122 @@
+body 
+{
+    margin-left: 80px;
+  	margin-right: 80px;
+  	min-width:800px;
+  	min-height: 200px;
+	/*font: 70% georgia, sans-serif;*/
+	color: #555753; 
+	/*background: #fff url(blossoms.jpg) no-repeat bottom right; */
+}
+
+#header, #footer, #breadcrumbs, #container
+{
+	width: 100%;
+}
+
+#header 
+{
+	height: 70px;
+    background-color: #f5fafa;
+	color:#4f6b72;
+	position:relative;
+    /*background: aqua url(images/logo.png) no-repeat top left;*/
+}
+
+#logo {
+    width: 160px;
+    height: 70px;
+    vertical-align:middle;
+    
+}
+
+#logo a img {
+	width:160px;
+	height:70px;
+	/*width:auto;*/
+	/*height:auto;*/
+}
+
+#title 
+{
+    font-size:xx-large;
+    font-weight:bold;
+    padding-left:1em;
+}
+
+#logout
+{
+	float:right;
+	font-size:1.1em;
+	height:70px;
+	line-height:70px;
+	margin-right: 0.8em;
+	/*margin-top: 45px;*/
+}
+
+#header
+{
+    border-bottom: 1px solid #4f6b72;
+}
+
+#footer
+{
+	margin-top: 6px;
+	height: 30px;
+	display: inline;
+	text-align: center;
+	background-color: #f5fafa;
+	width: 100%;
+	float:center;
+}
+
+#breadcrumbs
+{
+	/*height: 30px;*/
+	font-size: 28px;
+    text-valign:middle;
+    /*border: 1px dashed red;*/
+    /*background-color:#e0ff84;*/   
+}
+
+#container 
+{
+	position: relative;
+}
+
+#menu, #sidebar, #content, #dashboard
+{
+	overflow:hidden;
+	/*border: 1px solid gray;
+	border-style: dashed;
+	border-bottom-width: 1;*/
+	margin-top: 1px;
+	padding: .1em .3em .1em .3em;
+}
+
+#menu
+{
+	float: left;
+	overflow:visible;
+	width: 160px;
+	margin-left:0px;
+	padding-left:0px;
+}
+
+#sidebar
+{
+	float: right;
+	width: 20%;
+	display:none;
+}
+
+#content
+{
+	/*margin-right: 20%;*/
+	/*margin-left: 21%;*/
+	margin-left: 170px;
+}
+
+#content-box {
+}
+

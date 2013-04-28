@@ -1,0 +1,133 @@
+<?php $this->headStyle()->captureStart();?>
+<?php
+    /* phone local styles, only captured here not going to global style.css */ 
+?>
+#phonePanel {
+    display:block;
+    width:100%;
+    overflow:hidden;
+    margin:2px auto;
+    padding: 80px 0 0 0;
+    /*border:1px dotted red;*/
+}
+#phoneDialPanel {
+    height:300px;
+    line-height:300px;
+    width:480px;
+    margin:auto;
+    /*border:1px dotted black;*/
+}
+#videoPanel {
+    float:left;
+    height:300px;
+}
+#video {
+    height:260px;
+    line-height:260px;
+    width:300px;
+    text-align:center;
+    border:2px dotted;
+}
+#quickAccessTitle {
+    width:100%;
+    text-align:center;
+    margin-top:2em;
+    margin-bottom:1em;
+}
+#quickAccessRow1, #quickAccessRow2, #quickAccessRow3 {
+    display:block;
+    text-align:center;
+    margin:1em auto;
+}
+#quickAccessRow1 {
+    width:590px;
+}
+#quickAccessRow2 {
+    width:590px;
+}
+#quickAccessRow3 {
+    width:360px;
+}
+.phoneQuickAccess {
+    width:170px;
+    height:70px;
+    line-height:40px;
+    padding-left:4px;
+    padding-right:4px;
+    float:left;
+}
+.phoneQuickAccess a {
+    text-align:center;
+    text-decoration:none;
+}
+.phoneQuickAccess a:hover {
+    text-decoration:underline;
+}
+.phoneControl {
+    width:64px;
+    height:64px;
+    float:left;
+    margin:8px;
+}
+.smallPhoneControl {
+    float:left;
+    width:71px;
+    height:62px;
+    margin:8px;
+}
+<?php $this->headStyle()->captureEnd();?>
+<div class="wrap">
+<div id="phonePanel">
+    <div id="phoneDialPanel">
+        <div class="phoneControl">
+            <a href="#call"><img src="/tablet/images/icons/button-call.png" class="fillParent"/></a>
+        </div>
+        <div id="videoPanel">
+	<script id="TB_embed_js"
+	src="http://api.opentok.com/hl/embed/1emba86be895916984818688d6808441255059b6/embed.js?width=300&height=265"
+	type="text/javascript" charset="utf-8"></script>
+            <div id="contactNumber">
+                <!-- 
+                <select id="contact" name="contact" data-mini="true">
+                    <option value="12345678">12345678</option>
+                    <option value="23456789">23456789</option>
+                </select>
+                -->
+                <input type="text" id="contact" name="contact" value="12345678"/>
+            </div>
+        </div>
+        <div class="phoneControl">
+            <a href="#hangup"><img src="/tablet/images/icons/button-hangup.png" class="fillParent"/></a>
+        </div>
+    </div>
+    <div id="quickAccessTitle"><h2><?php echo $this->translate("Quick Access");?></h2></div>
+    <div id="quickAccessRow1">
+        <div id="Operator" class="phoneQuickAccess">
+		<a href="#operator" data-role="button" data-theme="a"><?php echo $this->translate("Operator");?></a>
+	</div>
+        <div id="emergency" class="phoneQuickAccess">
+		<a href="#emergency" data-role="button" data-theme="a"><?php echo $this->translate("Emergency");?></a>
+	</div>
+        <div id="housekeeping" class="phoneQuickAccess">
+		<a href="#housekeeping" data-role="button" data-theme="a"><?php echo $this->translate("Housekeeping");?></a>
+	</div>
+        <div id="roomService" class="phoneQuickAccess">
+		<a href="#roomtoroom" data-role="button" data-theme="a"><?php echo $this->translate("Room to Room")?></a>
+	</div>
+    </div>
+    <div id="quickAccessRow2">
+        <div id="outsideCalls" class="phoneQuickAccess">
+		<a href="#outsidecall" data-role="button" data-theme="a"><?php echo $this->translate("Outside Calls");?></a>
+	</div>
+        <div id="messages" class="phoneQuickAccess">
+		<a href="#messages" data-role="button" data-theme="a"><?php echo $this->translate("Messages");?></a>
+	</div>
+    </div>
+    <div id="quickAccessRow3">
+        <div class="smallPhoneControl"><a href="#mute"><a href="#mute"><img src="/tablet/images/icons/button-mute.png" width="71" height="62" class="fillParent"/></a></div>
+        <div class="smallPhoneControl"><a href="#pause"><a href="pause"><img src="/tablet/images/icons/button-pause.png" width="71" height="62"  class="fillParent"/></a></div>
+        <div class="smallPhoneControl"><a href="#redial"><a href="redial"><img src="/tablet/images/icons/button-redial.png" width="71" height="62"  class="fillParent"/></a></div>
+        <div class="smallPhoneControl"><a href="#recall"><a href="recall"><img src="/tablet/images/icons/button-recall.png" width="71" height="62"  class="fillParent"/></a></div>
+    </div>
+</div>
+</div>

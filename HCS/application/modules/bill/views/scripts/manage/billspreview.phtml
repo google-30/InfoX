@@ -1,0 +1,81 @@
+<html>
+<head>
+<!--<script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script> -->
+<!-- <script type="text/javascript" src="/common/js/jquery.printarea.js"></script> -->
+<script>
+//http://www.htmlgoodies.com/beyond/javascript/article.php/3471121/Print-a-Web-Page-Using-JavaScript.htm
+function printpage()
+{
+    //alert("Print this bill");
+    window.print();
+}
+</script>
+</head>
+<body>
+<style> 
+#infodiv
+{
+border:2px solid #a1a1a1;
+padding:3px 40px; 
+background:#dddddd;
+border-radius:25px;
+-moz-border-radius:25px; /* Firefox 3.6 and earlier */
+}
+</style>
+<style media="print" type="text/css"> 
+/* http://www.jb51.net/article/18735.htm */
+.Noprint{display:none;} 
+.PageNext{page-break-after: always;} 
+</style> 
+
+<input type="button" value="Print these bills" onclick="printpage()" class="Noprint">
+
+<?php foreach($this->billsarray as $room => $roomdata): ?>
+<div id="printable" class="PageNext">
+<h3>Hotel Name</h3>
+<div id="infodiv">
+<p style="text-align:left;">Name: <?php echo $roomdata['name']; ?></p>
+<p style="text-align:left;">Room: <?php echo $room; ?></p>
+<p style="text-align:left;">Arrival: <?php echo $roomdata['arrival']; ?></p>
+<p style="text-align:left;">Room Type: <?php echo $roomdata['type']; ?></p>
+<p style="text-align:left;">Departure: <?php echo $roomdata['departure']; ?></p>
+<p style="text-align:left;">Total Nights: <?php echo $roomdata['nights']; ?></p>
+</div>
+<br>
+<form name="dataform" id="dataform" method="post" >
+<div class="content-primary">
+<style>
+	table { width:100%; }
+	table caption { text-align:left;  }
+	table thead th { text-align:left; border-bottom-width:1px; border-top-width:1px; }
+	table th, td { text-align:left; padding:6px;} 
+</style>
+
+<table id="datatable" border="5">
+<thead>
+<tr>
+<th>Date</th>
+<th>Descripton</th>
+<th>Amount</th>
+</tr>
+</thead>
+<tbody> 
+<?php foreach($roomdata['bills'] as $r): ?>
+<tr>
+<td><?php echo $r->getDate()->format('Y-m-d H:i:s')?></td>
+<td><?php echo $r->getDescription();?></td>
+<td><?php echo $r->getAmount();?></td>
+</tr>
+<?php endforeach;?>
+</tbody>
+</table>	
+</div><!--/content-primary -->
+</form> <!--/dataform -->
+<h3>Base: S$<?php echo $roomdata['totalamount']; ?></h3>
+<h3>Total:S$<?php echo $roomdata['totalamount']; ?></h3>
+
+</div> <!-- printable -->
+<?php endforeach;?>
+</body>
+</html>
+

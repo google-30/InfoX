@@ -1,0 +1,17 @@
+<h1><?php echo $this->translate("Add Charge Item");?></h1>
+
+<p>
+  <a href="<?php echo $this->url(array('action'=>'index'));?>"><?php echo $this->translate('Show Charge Items');?></a>  
+  &nbsp;&nbsp;&nbsp;<a href="<?php echo $this->url(array('action'=>'index', 'controller'=>'charge-model', 'id'=>null));?>"><?php echo $this->translate('Show Charge Models');?></a>
+</p>
+<table border="0">
+  <tr>
+    <td><?php echo $this->translate('Charge Model');?>:</td>
+    <td><u><b><?php echo $this->model->name;?></b></u></td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><?php echo $this->translate('Computing Method')?>:</td>
+    <td><u><b><?php echo $this->model->algorithm;?></b></u></td>
+  </tr>
+</table>
+<?php echo $this->form; ?>
+

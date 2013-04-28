@@ -1,0 +1,19 @@
+<h1><?php echo $this->translate("Supported Language Management");?></h1>
+
+<?php echo $this->form; ?>
+<p>
+<?php
+    echo $this->grid('supported-language', true) //make sortable
+              ->field('locale', 'Locale')
+              ->field('name', 'Name')
+              ->actionField(':delete', null)
+              ->action(':delete', 'Delete',
+                        array(
+                            'url'=>array('action'=>'delete')
+                        )
+                      )
+              ->itemCountPerPage(5)
+              ->helper(new GridHelper_Language())
+              ->data($this->data)
+              ->emptyMessage('No supported language found.');
+?>

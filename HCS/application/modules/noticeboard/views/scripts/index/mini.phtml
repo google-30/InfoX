@@ -1,0 +1,30 @@
+<?
+/*-
+ * Copyright (c) 2013 Synrgic Research Pte Ltd
+ * All rights reserved
+ *
+ * Redistribution of this file in source code, or binary form is
+ * expressly not permitted without prior written approval of
+ * Synrgic Research Pte Ltd
+ */
+
+?>
+<div id="notificationIconPanel" onclick='synrgic.notices.toggleBoard()'>
+    <p>
+	    <span id="noticeIcon" style="display:none">-1</span>
+	    <img id="notificationIconPanelIcon" src="/tablet/images/icons/icon-notification.png">
+    </p>
+    <div id="soundControl" style="display:none">
+			<embed  src="/services-pic/1.wav" mastersound hidden="true" loop="true" autostart="true"></embed>
+	</div>
+</div>
+
+<div id="notificationMessagePanel">
+    <p>
+	<div onclick='toggleNoticeBoard()'>
+	    <div id="noticePanel" style="display:inline;">
+	    </div>
+	    <a href="#" id="notificationMessagePanelMessageButton" data-role="button" data-inline="true" data-mini="true" style="float:right;display:none">X</a>
+	</div>
+    </p>
+</div>

@@ -1,0 +1,25 @@
+<form id="<?php echo $this->element->getFormId();?>" 
+     enctype="application/x-www-form-urlencoded" method="post" 
+     action="<?php echo $this->element->getAction();?>">
+    <p>
+        <label for="text" class="required"><?=$this->translate("Category:");?></label>
+	    <?php echo $this->element->category; ?>
+    </p>
+    <p>
+    	<label for="" class="required"><?=$this->translate("Room:");?></label>
+        <?php echo $this->element->room; ?>
+    </p>
+    <p>
+        <label for="text" class="required"><?=$this->translate("Title:");?></label>
+	    <?php echo $this->element->title; ?>
+    </p>
+    <p>
+        <label for="text" class="required"><?=$this->translate("Message:");?></label>
+	    <?php echo $this->element->message; ?>
+    </p>
+    <p>
+       	<label>&nbsp;</label>
+        <?php echo $this->element->save; ?>&nbsp;&nbsp;<?php echo $this->element->cancel; ?>
+    </p>
+</form>
+

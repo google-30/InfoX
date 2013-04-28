@@ -1,0 +1,19 @@
+<h1><?php echo $this->translate('Service Provider management');?></h1>
+
+<p>	
+<a data-role="button" data-inline="true" href="<?php echo $this->url(array("action"=>"add"));?>"><?php echo $this->translate('Add Provider');?></a>
+</p>
+
+<?
+   echo $this->grid("grid", true)
+              ->field('name','Name')
+              ->field('remark', 'Remark')
+              ->actionField(':actions', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+              ->data($this->data)
+              ->emptyMessage('No Service Providers currently exist')
+              ->action(':actions', 'Edit', array( 'url'=>array('action'=>'edit')))
+              ->action(':actions', 'Delete', array( 'url'=>array('action'=>'delete')))
+
+?>

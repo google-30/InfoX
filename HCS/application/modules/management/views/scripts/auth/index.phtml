@@ -1,0 +1,16 @@
+<?
+    $settings = Zend_Registry::get('settings');
+?>
+<table width="70%" border="0" cellspacing="0" cellpadding="0" style="margin-left: -10px; margin-top: 95px;">
+  <tr>
+    <td id="mgmtlogin-col1"><img src="<?=$settings->General->Logo->Value?>"?></td>
+    <td id="mgmtlogin-col2">Access to this area requires authentication. Please enter 
+your details below.
+
+<?php if($this->errorMessage != ""): ?>  
+<p class="error"><?= $this->errorMessage; ?></p>  
+<?php endif; ?>  
+  
+<?= $this->form; ?> </td>
+  </tr>
+</table>

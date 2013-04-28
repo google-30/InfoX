@@ -1,0 +1,10 @@
+{
+"username":"tom",
+"age":20,
+"info": {"tel":"123456","cellphone":"98765"},
+"address":
+[
+{"city":"shanghai","postcode":"201203"}, 
+{"city":"suzhou","postcode":"200000"} 
+]
+} 

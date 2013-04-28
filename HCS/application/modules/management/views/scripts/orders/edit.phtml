@@ -1,0 +1,36 @@
+<script language=javascript>
+function checkform()
+{
+}
+
+function back()
+{
+	var page="<?php echo $this->curPage;?>";
+	if(page=="")
+		page=0;
+	window.location ="/management/orders/index/page/"+page;
+}
+</script>
+
+<h2><?php echo $this->translate('Edit Confirm Order Information');?></h2>
+
+<form method="post" id="add_order">
+<h3><?php echo $this->translate('Confirm ID');?>:<?php echo $this->data->getId();?></h3>
+<!--<h2><?php echo $this->translate('Total price');?>:<?php echo $this->data->getTotal_price();?></h2>  -->
+<p><?php echo $this->translate('Room ID');?>:<?php echo $this->rooms['roomName'];?></p>
+<p><?php echo $this->translate('Guest Name');?>:<?php echo $this->rooms['guestName'];?></p>
+
+<p><?php echo $this->translate('Scheduled time');?>:<input id="scheduled_time" name="scheduled_time" type="text" value="<?php echo $this->data->getScheduled_time()->format('Y-m-d H:i:s');?>"/></p>
+<p><?php echo $this->translate('Remark');?>:<br/><textarea cols="70" rows="5" id="remark" name="remark"><?php echo $this->data->getRemark();?></textarea></p>
+
+<p>	
+	<input type="submit" name="submitButton" id="submitButton" value="<?php echo $this->translate('submit');?>" />
+	&nbsp;&nbsp;
+	<input type="button" name="cancelCutton" id="cancelCutton" value="<?php echo $this->translate('cancel');?>" onClick="back() " />
+</p>
+
+<input name="page" type="hidden" value="<?php echo $this->curPage;?>" />
+<input name="editOrderId" type="hidden" value="<?php echo $this->orderId;?>"/>
+
+</form>
+

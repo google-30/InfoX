@@ -1,0 +1,73 @@
+<script language=javascript>
+function stateChange(detailId)
+{
+
+	var state=document.getElementById(detailId).value;
+	var providerId=<?php echo $this->providerId;?>;
+	//alert("detailId="+detailId+" state="+state);
+	window.location ="/management/detailstate/index/page/0/detailId/"+detailId+"/orderState/"+state+"/providerId/"+providerId;
+}
+</script>
+
+<h1><?php echo $this->translate('Detail Orders');?></h1>
+
+<div><?php if (count($this->message)) : ?>
+		<ul id="message">
+			<?php foreach ($this->message as $message) : ?>
+				<li><?php echo $this->escape($message); ?></li>
+    	    <?php endforeach; ?>
+        </ul>
+     <?php endif; ?>
+</div>
+<?php if(empty($this->providerId)):?>
+<h2><?php echo $this->translate('No Provider Id,Please Input providerId in url');?></h2>
+<?php else:?>
+<?php if(empty($this->detailData)&&($this->page==0)):?>
+<h2><?php echo $this->translate('No orders found');?></h2>
+<?php else:?>
+<table border="1">
+	<tr>
+		<th><?php echo $this->translate('Order ID');?></th>
+		<th><?php echo $this->translate('Room');?></th>
+		<th><?php echo $this->translate('Service name');?></th>
+		<th><?php echo $this->translate('Quantity');?></th>		
+		<th><?php echo $this->translate('Remark');?></th>
+		<th><?php echo $this->translate('Scheduled time');?></th>	
+		<th><?php echo $this->translate('Confirm time');?></th>					
+		<th><?php echo $this->translate('Operate time');?></th>		
+		<th><?php echo $this->translate('State');?></th>
+	</tr>
+<?php foreach($this->detailData as $r): ?>
+    <tr>
+		<td><?php echo $r->getConfirm_orders()->getId();?></td> 
+		<td><?php echo $this->rooms[$r->getId()]['roomName'];?></td>  
+		<td><?php echo $this->translate($this->serviceName[$r->getId()]);?></td>
+		<td><?php echo $r->getQuantity();?></td>
+		<td><?php echo $r->getRemark();?></td>
+        <td><?php echo $r->getConfirm_orders()->getScheduled_time()->format('Y-m-d H:i:s');?></td>		
+		<td><?php echo $r->getConfirm_orders()->getConfirm_time()->format('Y-m-d H:i:s');?></td>
+		<td><?php echo $r->getOperate_time()->format('Y-m-d H:i:s');?></td>		
+		<td><select name="order_state" id="<?php echo $r->getId();?>" onchange=stateChange(<?php echo $r->getId();?>)>
+			<?php foreach($this->sts[$r->getConfirm_orders()->getType()] as $t): ?>
+			<option value="<?php echo $t;?>"
+			<?php if ($r->getState()==$t):?> selected="selected" <?php endif;?> 			
+			>
+			<?php echo $this->translate($t);?>
+			</option>
+			<?php endforeach;?>
+			</select>
+		</td>
+	</tr>
+<?php endforeach;?>
+</table>
+
+<p>
+<?php if ($this->page>0) :?>
+	<a href="/management/detailstate/index/providerId/<?php echo $this->providerId;?>/page/<?php echo $this->page-1;?>"><?php echo $this->translate('Previous');?></a>&nbsp;
+<?php endif;?>
+<?php if($this->page<$this->endpage):?>
+	<a href="/management/detailstate/index/providerId/<?php echo $this->providerId;?>/page/<?php echo $this->page+1;?>"><?php echo $this->translate('Next');?></a>
+<?php endif;?>
+</p>
+<?php endif;?>
+<?php endif;?>

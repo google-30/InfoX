@@ -1,0 +1,15 @@
+<?
+   echo $this->grid("grid", true)
+              ->field('id','Id')
+              ->field('title', 'title')
+              ->field('created', 'created')
+              ->field('user', 'User')
+              ->field('revisions', 'Revisions')
+              ->actionField(':modify', null, '&nbsp;|&nbsp;')
+              ->data($this->data)
+              ->emptyMessage('No Pages Exist <a href="'.$this->url(array('action'=>'add')).'">here</a> to register one.')
+              ->action(':modify', 'Edit', array( 'url'=>array('action'=>'edit') ))
+              ->action(':modify', 'Delete', array( 'url'=>array('action'=>'delete')))
+              ->helper(new GridHelper_Page())
+?>
+

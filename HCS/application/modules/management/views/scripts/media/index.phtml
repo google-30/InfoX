@@ -1,0 +1,13 @@
+<h1><?php echo $this->translate('Media List');?></h1>
+
+<?
+   echo $this->grid("grid", true)
+              ->field('id','ID')
+              ->field('view','View')
+              ->field('ipath','Internal Path')
+              ->field('path', 'Relative Path')
+              ->field('type', 'Type')
+              ->data($this->data)
+              ->helper(new GridHelper_Media);
+
+?>

@@ -1,0 +1,29 @@
+<h1><?=$this->translate("All Settings");?></h1>
+
+
+
+<? if(count($this->data)) { ?>
+	<table border=1>
+	    <tr>
+	    	<th>Section</th>
+		<th>Name</th>
+		<th>Description</th>
+		<th>Value</th>
+	    </tr>
+
+<?	foreach($this->data as $k=>$v){ ?>
+		<tr>
+			<td><?=$v->section?></td>
+			<td><?=$k?></td>
+			<td><?=$v->description?></td>
+			<td><?=$v->value?></td>
+		</tr>
+
+
+<?	} ?>
+	</table>
+<?
+  } else {
+    $this->translate("No Settings Exist");
+  }
+?>

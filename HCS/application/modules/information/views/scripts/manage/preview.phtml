@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html>
+<head>
+<title>HCS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<meta charset="UTF-8">
+<title></title><link href="/common/css/synrgic-hcs-jquerymb.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/common/css/jquery.mobile.structure-1.2.0.min.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/tablet/css/style.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/tablet/css/layout.css" media="screen" rel="stylesheet" type="text/css" />
+<style type="text/css" media="screen">
+<!--
+div.synrgic-ads-board {
+    overflow: hidden;
+    position:fixed;
+    height: 100%;
+    width: 100%;
+    margin-top:1px;
+    margin-bottom:1px;
+}
+div.synrgic-ads-board .synrgic-ads-board-scroller {
+    left:0;
+    height: 2000px;
+}
+
+div.synrgic-ads-board-scroller .synrgic-ads-entry {
+    float:left;
+    margin: 1px 2px 1px 2px;
+    border: 2px solid blue;
+}
+
+div.synrgic-ads-pbox {
+    opacity: 1.0;
+    height:auto;
+    width:auto;
+    position:fixed;
+    bottom:0px;
+    left:60px;
+    /*border:1px blue solid;*/
+    color:#333;
+    pending:0px;
+    z-index:1001;
+    font-size:12px;
+    margin:0px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -khtml-border-radius: 6px;
+}
+
+div.synrgic-ads-pbox .synrgic-ads-pbox-content {
+    opacity: 1.0;
+    height: auto;
+    width: auto;
+    background:#fff;
+    border-top:1px #005094 solid;
+    border-bottom:1px #005094 solid;
+    border-right:1px #005094 solid;
+    border-left:1px #005094 solid;
+    margin:0px auto;
+    pending:0px;
+}
+
+div.synrgic-ads-pbox .synrgic-ads-pbox-toolbar {
+    opacity:1.0;
+    height:24px;
+    width:auto;
+    /*background:#005094;*/
+    background-repeat:repeat-x;
+    pending-top:1px;
+    pending-left:2px;
+    margin: 0px auto 0px auto;
+}
+
+.synrgic-ads-pbox-toolbar-button {
+    font: bold 13px Arial;
+    font-weight:bold;
+    /*text-shadow: black 0.1em 0.1em 0.1em;*/   
+    text-decoration: none;
+    background-color: #eeeeee;
+    color: #333333;
+    margin: 0px 1px 0px 1px;
+    pending: 2px 6px 2px 6px;
+    border-top: 1px solid #cccccc;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #cccccc;   
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -khtml-border-radius: 6px;
+}
+
+.flipIt {
+    -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    -ms-transform: rotateY(-180deg);
+    -o-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+}
+
+
+-->
+</style><script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript">
+    //<![CDATA[
+    
+    // Disable AJAX jquerymobile handling for now (makes debugging easier)
+    $(document).bind("mobileinit", function(){
+		     $.mobile.ajaxEnabled = false;
+    });
+        //]]>
+</script>
+<script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+<script type="text/javascript" src="/common/js/ui.js"></script>
+<script type="text/javascript" src="/tablet/js/ui.js"></script>
+<script type="text/javascript" src="/tablet/js/jquery.ui.touch-punch.js"></script>
+<script type="text/javascript" src="/tablet/js/jquery.event.drag-2.2.js"></script>
+<script type="text/javascript" src="/common/js/jquery.flip.min.js"></script>
+</head>
+
+<body>
+<div class="gridContainer" data-role="page">
+    <div id="LayoutDiv1" data-id="sidebar" data-position="fixed">
+	<!--
+    <a href=/auth/>Lock</a>
+    <a href=/welcome/>Change Language</a>
+    -->
+    <div>
+        <!--  
+        <div id="logo">
+	    <img src="/images/logo.jpg" width="100%">
+        </div>	
+        <div id="quickaccess">
+	        <a href="/"><img src="/table/images/icons/plc-home.png"></a>
+	        <a href="/help"><img src="/table/images/icons/plc-help.png"></a>
+        </div>
+        <div id="menu">
+	    </div>    
+  
+            <div id="statusbar">
+            <a href=""><img src="/table/images/icons/plc-notification.png"></a>
+            Weather</div>
+         -->
+    </div>
+</div>
+
+    <div id="LayoutDiv2">
+	<div id="content">
+<script>
+function redirect(url) {
+	window.location = url;
+}
+
+function reload()
+{
+    //alert("reload!");
+    var url = "/information/manage/preview?language=" + $('#language').val();
+    redirect(url);
+}
+
+$(document).ready(function() {
+    $('#language').change(reload);
+});
+
+function publish()
+{
+    alert("Publish this version.");
+    
+}
+
+</script>
+
+<h1><?php echo $this->translate("Information Preview"); ?></h1>
+<div data-role="collapsible-set"  id="infopreview">
+    <?php echo $this->information;?>
+</div>
+</div>
+</div>
+
+        
+<div id="LayoutDiv3" data-id="adverts">
+<div id="advertbar" style="height:100%;width:320px"> 
+    <!-- <iframe src="/adverts" id="iframe_advertbar" frameborder="0" marginheight="0" marginwidth="0" style="height:100%;width:100%;display:block;"></iframe> -->
+</div>
+</div>
+    <!--
+    <div id="notificationPanel">
+ Display Noticeboard here
+ 
+    <div>
+    -->
+    </div>
+</body>
+<script>
+//$("#notificationPanel").hide();
+</script>
+</html>
+
+

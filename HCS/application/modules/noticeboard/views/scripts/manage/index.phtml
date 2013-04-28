@@ -1,0 +1,27 @@
+<h1><?php echo $this->translate('Notification Dashboard'); ?></h1>
+
+<p>
+<a href="/noticeboard/manage/add"><? echo $this->translate('Add Notification'); ?></a>
+</p>
+
+<?
+    echo $this->grid("Notifications", true)
+	      ->field('issued','Issued')
+              ->field('room', 'Room')
+              ->field('category', 'Category')
+              ->field('title', 'Title')
+              ->field('acknowledged', 'Acknowledged')
+              ->actionField(':edit_delete', null, '&nbsp;|&nbsp;')
+              ->itemCountPerPage(5)
+              ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+              ->helper(new GridHelper_Advertiser())
+              ->data($this->data)
+              ->emptyMessage('No Notifications Exist <a href="'.$this->url(array('action'=>'add')).'">here</a> to register one.')
+	      /*
+              ->action(':edit_delete', 'Revoke',
+                        array( 'url'=>array('action'=>'revoke')
+                        )
+		      )
+		      */
+	      ;
+?>

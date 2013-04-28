@@ -1,0 +1,12 @@
+{
+"gw":
+{"ok":"1","mac":"GWmac","ack":"","SW_VER":"0.1","HW_VER":"1.0"},
+"target":
+[	
+{"mac":"1224445","status":"0","type":"light","HP":"50","SW_VER":"0.1","HW_VER":"1.0"},
+{"mac":"5024445","status":"100","type":"light","HP":"80","SW_VER":"0.1","HW_VER":"1.0"},
+{"mac":"1224446","status":"100","type":"light","HP":"70","SW_VER":"0.1","HW_VER":"1.0"},
+{"mac":"5024447","status":"10","type":"light","HP":"80","SW_VER":"0.1","HW_VER":"1.0"},
+{"mac":"3343444","status":"1","type":"ir","HP":"50","SW_VER":"0.1","HW_VER":"1.0"}
+]
+}
