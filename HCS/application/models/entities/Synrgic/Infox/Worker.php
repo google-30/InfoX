@@ -14,6 +14,11 @@ class Worker extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
+     * @Column(type="string")
+     */
+    protected $pic;
+
+    /**
      * @Column(type="string", nullable=true)
      */
     protected $nameeng;
@@ -55,7 +60,7 @@ class Worker extends \Synrgic_Models_Entity {
      * Fin number
      * @Column(type="string")
      */
-    protected $finno;
+    protected $fin;
 
     /**
      * work pass expire
@@ -81,20 +86,46 @@ class Worker extends \Synrgic_Models_Entity {
      */
     protected $securityexp;
 
+    /**
+     * address
+     * @Column(type="string")
+     */
+    protected $address;
+
+    /**
+     * service time
+     * @Column(type="integer")
+     */
+    protected $srvyears;
+
+    /**
+     * home town
+     * @Column(type="string")
+     */
+    protected $hometown;
 
     /**
      * @Column(type="date", nullable=true)
      */
     protected $birth;
-    	
+
+    /**
+     * education
+     * @Column(type="string")
+     */
+    protected $education;
+ 
+    /**
+     * service time
+     * @Column(type="integer")
+     */
+    protected $srvyears;
+
+   	
     /**
      * @Column(type="string")
      */
     protected $skills;
     
-    /**
-     * @Column(type="string")
-     */
-    protected $pic;
     
 }
