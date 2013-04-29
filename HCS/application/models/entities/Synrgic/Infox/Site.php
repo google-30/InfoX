@@ -1,6 +1,6 @@
 <?php
  
-namespace Synrgic;
+namespace Synrgic\Infox;
 /**
  * @Entity
  * @Table(name="infox_site")
@@ -34,7 +34,7 @@ class Site extends \Synrgic_Models_Entity {
     protected $stop;
 
     /**
-     * @Column(type="integer", , nullable=true)
+     * @Column(type="integer", nullable=true)
      */
     protected $workerno;    	
 

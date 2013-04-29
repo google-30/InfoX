@@ -1,6 +1,6 @@
 <?php
  
-namespace Synrgic\InfoX;
+namespace Synrgic\Infox;
 /**
  * @Entity
  * @Table(name="infox_worker")
@@ -14,9 +14,9 @@ class Worker extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
-    protected $name;
+    protected $nameeng;
 
     /**
      * @Column(type="string")
@@ -29,17 +29,17 @@ class Worker extends \Synrgic_Models_Entity {
     protected $age;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string",nullable=true)
      */
     protected $worktype;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string",nullable=true)
      */
     protected $worklevel;
 
     /**
-     * @Column(type="float")
+     * @Column(type="float",nullable=true)
      * houly wage   
      */
     protected $hwage;
@@ -47,7 +47,7 @@ class Worker extends \Synrgic_Models_Entity {
     /**
      * Construction site
      * 
-     * @ManyToOne(targetEntity="Site")
+     * @ManyToOne(targetEntity="Synrgic\Infox\Site")
      */
     protected $site;
 
