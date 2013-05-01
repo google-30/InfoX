@@ -17,4 +17,10 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->view->workers = $workers;
     }
 
+    public function editAction()
+    {
+        $id = $this->_getParam("id"); 
+        //echo "id=$id";
+    }
+    
 }

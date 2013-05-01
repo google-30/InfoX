@@ -111,13 +111,15 @@ function checkall()
 
 <fieldset class="ui-grid-b">
 	<div class="ui-block-a"><button onclick="addfunc()" data-theme="a"><?php echo $this->translate("Add Worker");?></button></div>
+<!--
 	<div class="ui-block-b"><button onclick="editfunc()" data-theme="a">Edit Worker</button></div>	 
 	<div class="ui-block-c"><button onclick="deletefunc()" data-theme="a">Delete Worker</button></div>  
+-->
 </fieldset>
 <form name="dataform" id="dataform">
 <table id="datatable" border="5">
 <thead><tr>
-<th><input type="checkbox" name="toggleall" id="toggleall" onClick="checkall()" data-role="none"></th>
+<!--<th><input type="checkbox" name="toggleall" id="toggleall" onClick="checkall()" data-role="none"></th>-->
 <th>序号</th>
 <th>公司编号</th>
 <th>姓名</th>
@@ -132,18 +134,28 @@ function checkall()
 <?php
 foreach($this->workers as $tmp)
 {
+    $id = $tmp->getId();
+    $company = "todo";
     $namechs = $tmp->getNamechs();
     $nameeng = $tmp->getNameeng();
-    $age = $tmp->getAge();
-    $fin = $tmp->getFinno();
-    $skills = $tmp->getSkills();
-    $pic = $tmp->getPic();
-    //$pic = "/example/images/ted_logo.jpg";
-    $checkbox = '<td><input type="checkbox" name="abc" id="abc" value="' . $tmp->getId() . '" data-role="none">';
-    $body = "";
-    $body .= "<tr>$checkbox<td>$namechs</td><td>$nameeng</td><td>$age</td><td>$fin</td><td>$skills</td>";
-    $body .= '<td><img src="' . $pic.  '" alt="Smiley face" height="66" width="55"></td></tr>';    
-    echo $body;
+    $fin = $tmp->getFin();
+    $worktype = "todo";
+    $level = "todo";
+    $site = "todo";
+    $hrwage = "todo";
+
+    $row = "<tr>";
+    $row .= '<td><a data-role="button"  data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
+    $row .= "<td>$company</td>" ;
+    $row .= "<td>$nameeng</td>" ;
+    $row .= "<td>$namechs</td>" ;
+    $row .= "<td>$fin</td>" ;
+    $row .= "<td>$worktype</td>" ;
+    $row .= "<td>$level</td>" ;
+    $row .= "<td>$site</td>" ;
+    $row .= "<td>$hrwage</td>" ;
+    $row .= "</tr>";
+    echo $row;
 }
 ?>
 </tbody> 

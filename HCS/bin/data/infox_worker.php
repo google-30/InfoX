@@ -1,45 +1,50 @@
 <?
 /**
- * worker demo data
+ * worker personal info data
  */
 
 $tuples = array( 
-/* namechs, nameeng, finno, age, birth, skills, pic*/
-array("张一", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/Philo-Macklemore-CLICK.jpg"),
-array("张二", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("张三", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("张四", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("张五", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
+/* id, nameeng,namechs, finno, passexp, passport, passportexp, age, birth, pic, address, marital, hometown*/
 
-array("周一", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/Philo-Macklemore-CLICK.jpg"),
-array("周二", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/Philo-Macklemore-CLICK.jpg"),
-array("周三", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/Philo-Macklemore-CLICK.jpg"),
-array("周四", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("周五", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-
-array("王一", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("王二", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("王三", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("王四", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("王五", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-
-array("李一", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/Philo-Macklemore-CLICK.jpg"),
-array("李二", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("李三", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("李四", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-array("李五", "zhang yi", "12345678", "32", "Electrician,Bricklayer", "/example/images/ted_logo.jpg"),
-
+array("张二", "zhang er", "W2", new DateTime("2014-10-01"), "G1", new DateTime("2021-10-01"),
+"32", new DateTime("1980-10-01"), "/workers/0002.jpg", "10 Tampines Central 1, #05-35", "single", "Shanghai", 2),
+array("张一", "zhang yi", "W1", new DateTime("2014-10-01"), "G1", new DateTime("2021-10-01"),
+"32", new DateTime("1980-10-01"), "/workers/0001.jpg", "10 Tampines Central 1, #05-35", "single", "Shanghai", 1),
+array("张三", "zhang san", "W3 ", new DateTime("2014-10-01"),"G1", new DateTime("2021-10-01"),
+"32", new DateTime("1980-10-01"), "/workers/0003.jpg", "10 Tampines Central 1, #05-35", "single", "Shanghai", 3),
+array("张四", "zhang si", "W4", new DateTime("2014-10-01"), "G1", new DateTime("2021-10-01"),
+"32", new DateTime("1980-10-01"), "/workers/0004.jpg", "10 Tampines Central 1, #05-35", "married","Shanghai", 4),
+array("张五", "zhang wu", "W5", new DateTime("2014-10-01"), "G1", new DateTime("2021-10-01"),
+"32", new DateTime("1980-10-01"), "/workers/0005.jpg", "10 Tampines Central 1, #05-35", "married","Shanghai", 5),
 	);
 
 foreach( $tuples as $tuple ){
-	$data = new \Synrgic\Infox\Worker();
-	$data->setNamechs($tuple[0]);
-	$data->setNameeng($tuple[1]);
-    $data->setFinno($tuple[2]);
-    $data->setAge($tuple[3]);
-    $data->setSkills($tuple[4]);
-    $data->setPic($tuple[5]);
-	$em->persist($data);
+    $data = new \Synrgic\Infox\Worker();
+
+    // http://stackoverflow.com/questions/5301285/explicitly-set-id-with-doctrine-when-using-auto-strategy
+    // put it here to reset id generator
+    $metadata = $em->getClassMetaData(get_class($data));
+    $metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
+    $data->setId($tuple[12]);
+
+    $data->setNamechs($tuple[0]);
+    $data->setNameeng($tuple[1]);
+    $data->setFin($tuple[2]);
+    $data->setPassexp($tuple[3]);
+    $data->setPassport($tuple[4]);
+    $data->setPassportexp($tuple[5]);
+    $data->setAge($tuple[6]);
+    $data->setBirth($tuple[7]);
+    $data->setPic($tuple[8]);
+    $data->setAddress($tuple[9]);
+    $data->setMarital($tuple[10]);
+    $data->setHometown($tuple[11]);
+
+    $em->persist($data);
+
+    //$metadata = $em->getClassMetaData(get_class($data));
+    //$metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+    //$metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
 }
 
 $em->flush();

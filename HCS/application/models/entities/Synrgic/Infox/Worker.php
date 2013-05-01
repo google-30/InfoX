@@ -29,11 +29,6 @@ class Worker extends \Synrgic_Models_Entity {
     protected $pic;
 
     /**
-     * @Column(type="integer")
-     */
-    protected $age;
-
-    /**
      * Fin number
      * @Column(type="string")
      */
@@ -64,10 +59,9 @@ class Worker extends \Synrgic_Models_Entity {
     protected $address;
 
     /**
-     * home town - 籍贯
-     * @Column(type="string")
+     * @Column(type="integer")
      */
-    protected $hometown;
+    protected $age;
 
     /**
      * birthday
@@ -82,6 +76,12 @@ class Worker extends \Synrgic_Models_Entity {
     protected $marital;
 
     /**
+     * home town - 籍贯
+     * @Column(type="string")
+     */
+    protected $hometown;
+
+    /**
      * @OneToOne(targetEntity="Synrgic\Infox\Workerskill")
      */
     protected $workerskill;
@@ -93,7 +93,7 @@ class Worker extends \Synrgic_Models_Entity {
 
     /**
      * @OneToOne(targetEntity="Synrgic\Infox\Workercompanyinfo")
-     */
+         */
     protected $Workercompanyinfo;
    
 }
