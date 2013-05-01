@@ -14,11 +14,6 @@ class Worker extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * @Column(type="string")
-     */
-    protected $pic;
-
-    /**
      * @Column(type="string", nullable=true)
      */
     protected $nameeng;
@@ -29,32 +24,14 @@ class Worker extends \Synrgic_Models_Entity {
     protected $namechs;
 
     /**
+     * @Column(type="string")
+     */
+    protected $pic;
+
+    /**
      * @Column(type="integer")
      */
     protected $age;
-
-    /**
-     * @Column(type="string",nullable=true)
-     */
-    protected $worktype;
-
-    /**
-     * @Column(type="string",nullable=true)
-     */
-    protected $worklevel;
-
-    /**
-     * @Column(type="float",nullable=true)
-     * houly wage   
-     */
-    protected $hwage;
-
-    /**
-     * Construction site
-     * 
-     * @ManyToOne(targetEntity="Synrgic\Infox\Site")
-     */
-    protected $site;
 
     /**
      * Fin number
@@ -81,51 +58,42 @@ class Worker extends \Synrgic_Models_Entity {
     protected $passportexp;
 
     /**
-     * Security certificate
-     * @Column(type="date", nullable=true)
-     */
-    protected $securityexp;
-
-    /**
      * address
      * @Column(type="string")
      */
     protected $address;
 
     /**
-     * service time
-     * @Column(type="integer")
-     */
-    protected $srvyears;
-
-    /**
-     * home town
+     * home town - 籍贯
      * @Column(type="string")
      */
     protected $hometown;
 
     /**
+     * birthday
      * @Column(type="date", nullable=true)
      */
     protected $birth;
 
     /**
-     * education
+     * Marital status - 婚姻状况  
      * @Column(type="string")
      */
-    protected $education;
- 
-    /**
-     * service time
-     * @Column(type="integer")
-     */
-    protected $srvyears;
+    protected $marital;
 
-   	
     /**
-     * @Column(type="string")
+     * @OneToOne(targetEntity="Synrgic\Infox\Workerskill")
      */
-    protected $skills;
-    
-    
+    protected $workerskill;
+
+    /**
+     * @OneToOne(targetEntity="Synrgic\Infox\Workerfamily")
+     */
+    protected $workerfamily;
+
+    /**
+     * @OneToOne(targetEntity="Synrgic\Infox\Workercompanyinfo")
+     */
+    protected $Workercompanyinfo;
+   
 }
