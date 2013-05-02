@@ -17,10 +17,47 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->view->workers = $workers;
     }
 
+    public function addAction()
+    {
+        $id = $this->_getParam("id"); 
+        //echo "id=$id";
+        //$loginForm = new Synrgic_Forms_Login();
+        //$this->view->workerform = $loginForm;
+        $uploadform = new Synrgic_Forms_Upload();
+        $this->view->workerform = $uploadform;
+    }
+
     public function editAction()
     {
         $id = $this->_getParam("id"); 
         //echo "id=$id";
+        $uploadform = new Synrgic_Forms_Upload();
+
+        if ($this->_request->isPost()) {
+            $formData = $this->_request->getPost();
+            if ($form->isValid($formData)) {
+
+                // success - do something with the uploaded file
+                $uploadedData = $form->getValues();
+                $fullFilePath = $form->file->getFileName();
+
+                Zend_Debug::dump($uploadedData, '$uploadedData');
+                Zend_Debug::dump($fullFilePath, '$fullFilePath');
+
+                echo "done";
+                exit;
+
+            } else {
+                $form->populate($formData);
+            }
+        }       
+
+        $this->view->workerform = $uploadform;
     }
     
+    public function submitAction()
+    {
+
+    }
+
 }
