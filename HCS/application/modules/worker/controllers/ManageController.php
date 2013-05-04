@@ -31,9 +31,40 @@ class Worker_ManageController extends Zend_Controller_Action
     {
         $id = $this->_getParam("id"); 
         //echo "id=$id";
-        $uploadform = new Synrgic_Forms_Upload();
+        $form = new Synrgic_Forms_Worker();
 
         if ($this->_request->isPost()) {
+            $formData = $this->_request->getPost();
+            if ($form->isValid($formData)) {
+
+                // success - do something with the uploaded file
+                $uploadedData = $form->getValues();
+                $fullFilePath = $form->file->getFileName();
+
+                Zend_Debug::dump($uploadedData, '$uploadedData');
+                Zend_Debug::dump($fullFilePath, '$fullFilePath');
+
+                // was a file uploaded?
+                if($form->file->isUploaded()) {
+                    //$form->file->receive(); // move to the specified place
+                    $location = $form->file->getFileName();
+                    Zend_Debug::dump($location, '$location');
+                }
+
+                echo "done";
+                exit;
+
+            } else {
+                $form->populate($formData);
+            }
+        }
+
+        $this->view->workerform = $form;
+    }
+    
+    public function submitAction()
+    {
+       if ($this->_request->isPost()) {
             $formData = $this->_request->getPost();
             if ($form->isValid($formData)) {
 
@@ -51,12 +82,6 @@ class Worker_ManageController extends Zend_Controller_Action
                 $form->populate($formData);
             }
         }       
-
-        $this->view->workerform = $uploadform;
-    }
-    
-    public function submitAction()
-    {
 
     }
 

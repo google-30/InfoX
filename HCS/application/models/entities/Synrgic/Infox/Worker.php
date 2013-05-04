@@ -53,12 +53,6 @@ class Worker extends \Synrgic_Models_Entity {
     protected $passportexp;
 
     /**
-     * address
-     * @Column(type="string")
-     */
-    protected $address;
-
-    /**
      * @Column(type="integer")
      */
     protected $age;
@@ -74,6 +68,12 @@ class Worker extends \Synrgic_Models_Entity {
      * @Column(type="string")
      */
     protected $marital;
+
+    /**
+     * singapore address
+     * @Column(type="string")
+     */
+    protected $address;
 
     /**
      * home town - 籍贯
