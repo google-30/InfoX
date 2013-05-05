@@ -124,7 +124,7 @@ class Synrgic_Models_AclBuilder {
 		    'management:dashboard'=>array('view'),
 		    'management:index'=>array('view'),
             'management:auth'=>array('view','login','logout'),  
-            'worker:manage'=>array('view', 'add', 'edit','delete'),
+            'worker:manage'=>array('view', 'add', 'edit','delete', 'submit'),
             'material:manage'=>array('view','add','edit','delete','savedetail'),  
 		    )
 		),

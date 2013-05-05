@@ -53,6 +53,11 @@ class Worker extends \Synrgic_Models_Entity {
     protected $passportexp;
 
     /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $gender;
+
+    /**
      * @Column(type="integer")
      */
     protected $age;

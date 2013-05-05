@@ -1,11 +1,243 @@
 <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
 <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
+<style> 
+.infoarea
+{
+border:2px solid #a1a1a1;
+/*padding:10px 40px; */
+padding:10px;
+background:#dddddd;
+border-radius:10px;
+-moz-border-radius:10px; /* Firefox 3.6 and earlier */
+}
+
+table { width: 100%; }
+td 
+{
+width: 50%;
+vertical-align:middle;
+}
+</style>
 
 <h3>Add/Edit Worker</h3>
+<!--
 <div data-role="fieldcontain">
     <?php echo $this->workerform; ?>  
 </div>
+-->
+<form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
+
+<div class="infoarea">
+<strong>个人信息栏:</strong><br>
+<table>
+<tr>
 <div data-role="fieldcontain">
-    <?php echo $this->uploadform; ?>  
+<label for="file">照片：</label>
+<input type="file" name="file" id="file">
 </div>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="nameeng">姓名:</label>
+    <input type="text" name="nameeng" id="nameeng" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="namechs">中文姓名:</label>
+    <input type="text" name="namechs" id="namechs" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="gender">性别:</label>
+    <input type="text" name="gender" id="gender" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="hometown">籍贯:</label>
+    <input type="text" name="hometown" id="hometown" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="age">年龄:</label>
+    <input type="text" name="age" id="age" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="birth">出生日期:</label>
+    <input type="text" name="birth" id="birth" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="fin">准证号码:</label>
+    <input type="text" name="fin" id="fin" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="passexp">准证期限:</label>
+    <input type="text" name="passexp" id="passexp" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="passport">护照号码:</label>
+    <input type="text" name="passport" id="passport" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="passportexp">护照期限:</label>
+    <input type="text" name="passportexp" id="passportexp" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="marital">婚姻状况:</label>
+    <input type="text" name="marital" id="marital" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="address">地址:</label>
+    <input type="text" name="address" id="address" value=""  />
+</div></td>
+</tr>
+
+</table>
+</div>
+<br>
+<div class="infoarea">
+<strong>技能信息栏:</strong><br>
+<table>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="worktype">工种:</label>
+    <input type="text" name="worktype" id="worktype" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="worklevel">等级:</label>
+    <input type="text" name="worklevel" id="worklevel" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="skill1">技能1:</label>
+    <input type="text" name="skill1" id="skill1" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="skill2">技能2:</label>
+    <input type="text" name="skill2" id="skill2" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="securityexp">安全证期限:</label>
+    <input type="text" name="securityexp" id="securityexp" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="drvlic">驾照种类:</label>
+    <input type="text" name="drvlic" id="drvlic" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="education">教育程度:</label>
+    <input type="text" name="education" id="education" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="pastwork">国内从事职业:</label>
+    <input type="text" name="pastwork" id="pastwork" value=""  />
+</div></td>
+</tr>
+
+</table>
+</div>
+<br>
+<div class="infoarea">
+<strong>工作信息栏:</strong><br>
+<table>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="companylabel">公司编号:</label>
+    <input type="text" name="companylabel" id="companylabel" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="hwage">小时单价:</label>
+    <input type="text" name="hwage" id="hwage" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="site">所在工地:</label>
+    <input type="text" name="site" id="site" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="srvyears">服务年限:</label>
+    <input type="text" name="srvyears" id="srvyears" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="yrsinsing">在新年限:</label>
+    <input type="text" name="yrsinsing" id="yrsinsing" value=""  />
+</div></td>
+</tr>
+
+</table>
+</div>
+<br>
+
+<div class="infoarea">
+<strong>家庭信息栏:</strong><br>
+<table>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="homeaddr">国内家庭地址:</label>
+    <input type="text" name="homeaddr" id="homeaddr" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="member1">家庭成员1:</label>
+    <input type="text" name="member1" id="member1" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="contact1">联系电话1:</label>
+    <input type="text" name="contact1" id="contact1" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="member2">家庭成员2:</label>
+    <input type="text" name="member2" id="member2" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="contact2">联系电话2:</label>
+    <input type="text" name="contact2" id="contact2" value=""  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="member3">家庭成员3:</label>
+    <input type="text" name="member3" id="member3" value=""  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="contact3">联系电话3:</label>
+    <input type="text" name="contact3" id="contact3" value=""  />
+</div></td>
+</tr>
+
+</table>
+</div>
+
+<input type="submit" name="submit" value="提交">
+</form>
 
