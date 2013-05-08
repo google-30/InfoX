@@ -24,12 +24,12 @@ class Site extends \Synrgic_Models_Entity {
     protected $address;
 
     /**
-     * @Column(name="start", type="datetime", nullable=true)
+     * @Column(type="date", nullable=true)
      */
     protected $start;
 
     /**
-     * @Column(name="stop", type="datetime", nullable=true)
+     * @Column(type="date", nullable=true)
      */
     protected $stop;
 

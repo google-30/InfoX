@@ -20,8 +20,8 @@ class Workercompanyinfo extends \Synrgic_Models_Entity {
     protected $companylabel;
 
     /**
-     * @Column(type="float",nullable=true)
-     * houly wage   
+     * hourly wage
+     * @Column(type="float",nullable=true)   
      */
     protected $hwage;
 
