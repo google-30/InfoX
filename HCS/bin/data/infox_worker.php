@@ -4,18 +4,23 @@
  */
 
 $tuples = array( 
-/* id, nameeng,namechs, finno, passexp, passport, passportexp, age, birth, pic, address, marital, hometown*/
-
-array("张二", "zhang er", "W2", new DateTime("2014-10-01"), "G1", new DateTime("2021-10-01"),
-"32", new DateTime("1980-10-01"), "/workers/0002.jpg", "10 Tampines Central 1, #05-35", "single", "Shanghai", 2),
+/* id, nameeng,namechs, finno, passexp, passport, passportexp, age, birth, pic, 
+address, marital, hometown, workercompanyinfo, workerskill, workerfamily*/
 array("张一", "zhang yi", "W1", new DateTime("2014-10-01"), "G1", new DateTime("2021-10-01"),
-"32", new DateTime("1980-10-01"), "/workers/0001.jpg", "10 Tampines Central 1, #05-35", "single", "Shanghai", 1),
+"32", new DateTime("1980-10-01"), "/workers/0001.jpg", "10 Tampines Central 1, #05-35", "single", "Shanghai", 1,
+1,1),
+array("张二", "zhang er", "W2", new DateTime("2014-10-01"), "G1", new DateTime("2021-10-01"),
+"32", new DateTime("1980-10-01"), "/workers/0002.jpg", "10 Tampines Central 1, #05-35", "single", "Shanghai", 2,
+2,2),
 array("张三", "zhang san", "W3 ", new DateTime("2014-10-01"),"G1", new DateTime("2021-10-01"),
-"32", new DateTime("1980-10-01"), "/workers/0003.jpg", "10 Tampines Central 1, #05-35", "single", "Shanghai", 3),
+"32", new DateTime("1980-10-01"), "/workers/0003.jpg", "10 Tampines Central 1, #05-35", "single", "Shanghai", 3,
+3,3),
 array("张四", "zhang si", "W4", new DateTime("2014-10-01"), "G1", new DateTime("2021-10-01"),
-"32", new DateTime("1980-10-01"), "/workers/0004.jpg", "10 Tampines Central 1, #05-35", "married","Shanghai", 4),
+"32", new DateTime("1980-10-01"), "/workers/0004.jpg", "10 Tampines Central 1, #05-35", "married","Shanghai", 4,
+4,4),
 array("张五", "zhang wu", "W5", new DateTime("2014-10-01"), "G1", new DateTime("2021-10-01"),
-"32", new DateTime("1980-10-01"), "/workers/0005.jpg", "10 Tampines Central 1, #05-35", "married","Shanghai", 5),
+"32", new DateTime("1980-10-01"), "/workers/0005.jpg", "10 Tampines Central 1, #05-35", "married","Shanghai", 5,
+5,5),
 	);
 
 foreach( $tuples as $tuple ){
@@ -40,11 +45,13 @@ foreach( $tuples as $tuple ){
     $data->setMarital($tuple[10]);
     $data->setHometown($tuple[11]);
 
-    $em->persist($data);
+    $obj = $em->getRepository('\Synrgic\Infox\Workercompanyinfo')->findOneBy(array('id'=>$tuple[13]));    
+    $data->setWorkercompanyinfo($obj);
 
-    //$metadata = $em->getClassMetaData(get_class($data));
-    //$metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
-    //$metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
+    $obj = $em->getRepository('\Synrgic\Infox\Workerskill')->findOneBy(array('id'=>$tuple[14]));    
+    $data->setWorkerskill($obj);
+
+    $em->persist($data);
 }
 
 $em->flush();

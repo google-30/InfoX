@@ -4,14 +4,14 @@
  */
 
 $tuples = array( 
-/* id, companylabel, hwage, site, srvyears, yrsinsing*/
-array(1, "公司1", 75, 1, 5, 10),
-array(2, "公司2", 80, 2, 10, 15),
-array(3, "公司3", 85, 3, 15, 20),
+/* id, name, address, start, stop, workerno*/
+array(1, "tampines condo", "tampines", new DateTime("2012-10-01"), new DateTime("2014-10-01"), 50),
+array(2, "orchard condo", "orchard", new DateTime("2012-10-01"), new DateTime("2014-10-01"), 50),
+array(3, "jurong east condo", "jurong east", new DateTime("2012-10-01"), new DateTime("2014-10-01"), 50),
 );
 
 foreach( $tuples as $tuple ){
-    $data = new \Synrgic\Infox\Workercompanyinfo();
+    $data = new \Synrgic\Infox\Site();
 
     // http://stackoverflow.com/questions/5301285/explicitly-set-id-with-doctrine-when-using-auto-strategy
     // put it here to reset id generator
@@ -19,11 +19,11 @@ foreach( $tuples as $tuple ){
     $metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
     $data->setId($tuple[0]);
 
-    $data->setCompanylabel($tuple[1]);
-    $data->setHwage($tuple[2]);
-    $data->setSite($tuple[3]);
-    $data->setSrvyears($tuple[4]);
-    $data->setYrsinsing($tuple[5]);
+    $data->setName($tuple[1]);
+    $data->setAddress($tuple[2]);
+    $data->setStart($tuple[3]);
+    $data->setStop($tuple[4]);
+    $data->setWorkerno($tuple[5]);
 
     $em->persist($data);
 }

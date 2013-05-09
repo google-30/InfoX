@@ -8,6 +8,9 @@ $tuples = array(
 array(1, "公司1", 75, 1, 5, 10),
 array(2, "公司2", 80, 2, 10, 15),
 array(3, "公司3", 85, 3, 15, 20),
+array(4, "公司1", 90, 1, 5, 10),
+array(5, "公司2", 95, 2, 10, 15),
+
 );
 
 foreach( $tuples as $tuple ){
@@ -21,7 +24,10 @@ foreach( $tuples as $tuple ){
 
     $data->setCompanylabel($tuple[1]);
     $data->setHwage($tuple[2]);
-    $data->setSite($tuple[3]);
+
+    $siteobj = $em->getRepository('\Synrgic\Infox\Site')->findOneBy(array('id'=>$tuple[3]));    
+    $data->setSite($siteobj);
+
     $data->setSrvyears($tuple[4]);
     $data->setYrsinsing($tuple[5]);
 

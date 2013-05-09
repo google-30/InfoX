@@ -99,6 +99,6 @@ class Worker extends \Synrgic_Models_Entity {
     /**
      * @OneToOne(targetEntity="Synrgic\Infox\Workercompanyinfo")
          */
-    protected $Workercompanyinfo;
+    protected $workercompanyinfo;
    
 }

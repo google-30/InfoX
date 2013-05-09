@@ -19,7 +19,7 @@ class Site extends \Synrgic_Models_Entity {
     protected $name;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $address;
 
