@@ -15,8 +15,21 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $workers = $this->_worker->findAll();
-        $this->view->workers = $workers;
+        //$workers = $this->_worker->findAll();
+        //$this->view->workers = $workers;
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('a', 'c')
+            ->from('Synrgic\Infox\Worker', 'a')
+           ->leftJoin('a.workercompanyinfo', 'c');
+        $result = $qb->getQuery()->getResult();
+        //var_dump($result);
+        //var_dump($result[0]);
+        foreach($result as $tmp)
+        {
+            print_r($tmp);          
+        }
+        $this->view->result = $result;
     }
 
     public function addAction()

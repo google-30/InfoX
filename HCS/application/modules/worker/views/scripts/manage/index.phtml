@@ -132,9 +132,10 @@ function checkall()
 </tr></thead>
 <tbody> 
 <?php
-foreach($this->workers as $tmp)
+foreach($this->result as $tmp)
 {
     $id = $tmp->getId();
+    //$company = $tmp->getCompanylabel();
     $company = "todo";
     $namechs = $tmp->getNamechs();
     $nameeng = $tmp->getNameeng();
