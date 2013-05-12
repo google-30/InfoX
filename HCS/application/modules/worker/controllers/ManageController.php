@@ -15,20 +15,29 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        //$workers = $this->_worker->findAll();
-        //$this->view->workers = $workers;
-
+        //$result = $this->_worker->findAll();        
+        /*        
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('a', 'c')
+        $qb->select('a')
             ->from('Synrgic\Infox\Worker', 'a')
            ->leftJoin('a.workercompanyinfo', 'c');
         $result = $qb->getQuery()->getResult();
-        //var_dump($result);
-        //var_dump($result[0]);
-        foreach($result as $tmp)
-        {
-            print_r($tmp);          
-        }
+        */
+
+        // http://docs.doctrine-project.org/en/2.1/reference/dql-doctrine-query-language.html
+        $query = $this->_em->createQuery(
+//        'select w, wc.hwage from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc'        
+        'select w,wc.hwage from Synrgic\Infox\Worker w JOIN w.workercompanyinfo wc'        
+//        'select w,wc from Synrgic\Infox\Worker w JOIN w.workercompanyinfo wc'                    
+        );        
+        $result = $query->getResult();
+        //echo $result[0]->getHwage();  
+
+        echo $result[0][0]['nameeng'];
+        echo $result[0]['hwage'];
+        //echo $result[1]->getHwage();
+        //echo $result[0][1]->getHwage();
+        //print_r($result[0]);
         $this->view->result = $result;
     }
 
