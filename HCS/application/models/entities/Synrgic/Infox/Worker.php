@@ -97,8 +97,8 @@ class Worker extends \Synrgic_Models_Entity {
     protected $workerfamily;
 
     /**
-     * @OneToOne(targetEntity="Synrgic\Infox\Workercompanyinfo")
-         */
+     * @OneToOne(targetEntity="Synrgic\Infox\Workercompanyinfo", fetch="EAGER")
+     */
     protected $workercompanyinfo;
    
 }

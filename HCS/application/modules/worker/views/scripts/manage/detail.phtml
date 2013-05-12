@@ -20,13 +20,15 @@ vertical-align:middle;
 </style>
 
 <h3>Add/Edit Worker</h3>
-<!--
-<div data-role="fieldcontain">
+<!--<div data-role="fieldcontain">
     <?php echo $this->workerform; ?>  
-</div>
--->
+</div>-->
 <form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
+<input type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
+<input type="hidden" id="workid" name="workerid" value="<?php echo $this->id; ?>">
 
+<!--<fieldset>
+<legend>Personalia:</legend>-->
 <div class="infoarea">
 <strong>个人信息栏:</strong><br>
 <table>
@@ -105,7 +107,9 @@ vertical-align:middle;
 
 </table>
 </div>
+
 <br>
+
 <div class="infoarea">
 <strong>技能信息栏:</strong><br>
 <table>
@@ -155,7 +159,10 @@ vertical-align:middle;
 
 </table>
 </div>
+<!--</fieldset>-->
+
 <br>
+
 <div class="infoarea">
 <strong>工作信息栏:</strong><br>
 <table>

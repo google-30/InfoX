@@ -24,7 +24,8 @@ class Worker_ManageController extends Zend_Controller_Action
         $result = $qb->getQuery()->getResult();
         */
 
-        // http://docs.doctrine-project.org/en/2.1/reference/dql-doctrine-query-language.html
+        // dql result: http://docs.doctrine-project.org/en/2.1/reference/dql-doctrine-query-language.html
+        // embed select: http://msdn.microsoft.com/zh-cn/library/ms189575(v=sql.105).aspx
         $query = $this->_em->createQuery(
 //        'select w, wc.hwage from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc'        
 //        'select w,wc.hwage,wc.companylable,wc.worktype, from Synrgic\Infox\Worker w JOIN w.workercompanyinfo wc'        
@@ -33,21 +34,25 @@ class Worker_ManageController extends Zend_Controller_Action
          from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
         );        
         $result = $query->getResult();
+        $this->view->result = $result;
+
         //echo $result[1][0]['nameeng'];
         //echo $result[1]['hwage'];
         //echo $result[1]['worktype'];
         //echo $result[1]['sitename'];
-        $this->view->result = $result;
+
     }
 
     public function addAction()
     {
-        $id = $this->_getParam("id"); 
+        //$id = $this->_getParam("id"); 
         //echo "id=$id";
         //$loginForm = new Synrgic_Forms_Login();
         //$this->view->workerform = $loginForm;
-        $uploadform = new Synrgic_Forms_Upload();
-        $this->view->workerform = $uploadform;
+        //$uploadform = new Synrgic_Forms_Upload();
+        //$this->view->workerform = $uploadform;
+        $this->view->id = 0;
+        
     }
 
     public function editAction()
@@ -90,6 +95,13 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
+        if(0)
+        {
+            $requests = $this->getRequest()->getPost();
+            var_dump($requests);
+            return;
+        }            
+
         $uploadpath = UPLOAD_WORKER;
         $allowedExts = array("gif", "jpeg", "jpg", "png");
         $extension = end(explode(".", $_FILES["file"]["name"]));
@@ -129,6 +141,58 @@ class Worker_ManageController extends Zend_Controller_Action
           {
           echo "Invalid file";
           }
+
+    }
+
+    private function storeInfo($requests)
+    {
+        // worker
+        $nameeng = $requests["nameeng"];
+        $namechs = $requests["namechs"];
+        $fin = $requests["fin"];
+        // date
+        $passexp = $requests["passexp"];
+        $passport = $requests["passport"];
+        // date
+        $passportexp = $requests["passportexp"];
+        $gender = $requests["gender"];
+
+        //todo: integer
+        $age = $requests["age"];
+        $birth = $requests["birth"];
+        $marital = $requests["marital"];
+        $address = $requests["address"];
+        $hometown = $requests["hometown"];
+
+        // skill
+        $worktype = $requests["worktype"];
+        $worklevel = $requests["worklevel"];
+        $education = $requests["education"];
+        $pastwork = $requests["pastwork"];
+        $skill1 = $requests["skill1"];
+        $skill2 = $requests["skill2"];
+        $drvlic = $requests["drvlic"];   
+        // date
+        $securityexp = $requests["securityexp"];
+
+        // company info
+        $companylabel = $requests["companylabel"];
+        $hwage = $requests["hwage"];
+        // todo
+        $site = $requests["site"]; 
+        $srvyears = $requests["srvyears"];
+        $yrsinsing = $requests["yrsinsing"];
+
+        // family 
+        $homeaddr = $requests["homeaddr"];
+        $member1 = $requests["member1"];
+        $contact1 = $requests["contact1"];
+        $member2 = $requests["member2"];
+        $contact2 = $requests["contact2"];
+        $member3 = $requests["member3"];
+        $contact3 = $requests["contact3"];
+
+
     }
 
 }
