@@ -134,16 +134,34 @@ function checkall()
 <?php
 foreach($this->result as $tmp)
 {
+/*
+    // worker
     $id = $tmp->getId();
-    //$company = $tmp->getCompanylabel();
-    $company = "todo";
     $namechs = $tmp->getNamechs();
     $nameeng = $tmp->getNameeng();
     $fin = $tmp->getFin();
+
+    // skills
     $worktype = "todo";
     $level = "todo";
+    // company
+    $company = "todo";
     $site = "todo";
     $hrwage = "todo";
+*/
+    // worker
+    $id = $tmp[0]['id'];
+    $namechs = $tmp[0]['namechs'];
+    $nameeng = $tmp[0]['nameeng'];;
+    $fin = $tmp[0]['fin'];;
+
+    // skills
+    $worktype = $tmp["worktype"];//"todo";
+    $level = $tmp["worklevel"];//"todo";
+    // company
+    $company = $tmp["companylabel"];//"todo";
+    $site = $tmp["sitename"];//"todo";
+    $hrwage = $tmp["hwage"];//"todo";
 
     $row = "<tr>";
     $row .= '<td><a data-role="button"  data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;

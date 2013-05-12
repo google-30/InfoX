@@ -27,17 +27,16 @@ class Worker_ManageController extends Zend_Controller_Action
         // http://docs.doctrine-project.org/en/2.1/reference/dql-doctrine-query-language.html
         $query = $this->_em->createQuery(
 //        'select w, wc.hwage from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc'        
-        'select w,wc.hwage from Synrgic\Infox\Worker w JOIN w.workercompanyinfo wc'        
-//        'select w,wc from Synrgic\Infox\Worker w JOIN w.workercompanyinfo wc'                    
+//        'select w,wc.hwage,wc.companylable,wc.worktype, from Synrgic\Infox\Worker w JOIN w.workercompanyinfo wc'        
+        'select w, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,  
+         (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename 
+         from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
         );        
         $result = $query->getResult();
-        //echo $result[0]->getHwage();  
-
-        echo $result[0][0]['nameeng'];
-        echo $result[0]['hwage'];
-        //echo $result[1]->getHwage();
-        //echo $result[0][1]->getHwage();
-        //print_r($result[0]);
+        //echo $result[1][0]['nameeng'];
+        //echo $result[1]['hwage'];
+        //echo $result[1]['worktype'];
+        //echo $result[1]['sitename'];
         $this->view->result = $result;
     }
 
