@@ -18,6 +18,23 @@ width: 50%;
 vertical-align:middle;
 }
 </style>
+<><script type="text/javascript">
+$(function () {
+    //alert("scroller");
+    $('#birth').mobiscroll().date({
+        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+    });  
+
+    $('#passexp').mobiscroll().date({
+        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+    });  
+
+    $('#passportexp').mobiscroll().date({
+        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+    });  
+
+});
+</script>
 
 <h3>Add/Edit Worker</h3>
 <!--<div data-role="fieldcontain">
@@ -53,7 +70,10 @@ vertical-align:middle;
 <tr>
 <td><div data-role="fieldcontain">
     <label for="gender">性别:</label>
-    <input type="text" name="gender" id="gender" value=""  />
+    <select name="gender" id="gender">
+       <option value="male">男</option>
+       <option value="female">女</option>
+    </select>  
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="hometown">籍贯:</label>
@@ -96,8 +116,11 @@ vertical-align:middle;
 
 <tr>
 <td><div data-role="fieldcontain">
-    <label for="marital">婚姻状况:</label>
-    <input type="text" name="marital" id="marital" value=""  />
+    <label for="marital">婚姻状况:</label>    
+    <select name="marital" id="marital">
+       <option value="single">单身</option>
+       <option value="married">已婚</option>
+    </select>        
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="address">地址:</label>

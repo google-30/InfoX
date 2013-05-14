@@ -95,12 +95,14 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
-        if(0)
+        if(1)
         {
             $requests = $this->getRequest()->getPost();
-            var_dump($requests);
-            return;
+            //var_dump($requests);
+            //return;
         }            
+
+        $this->storeInfo($requests);
 
         $uploadpath = UPLOAD_WORKER;
         $allowedExts = array("gif", "jpeg", "jpg", "png");
@@ -146,25 +148,58 @@ class Worker_ManageController extends Zend_Controller_Action
 
     private function storeInfo($requests)
     {
-        // worker
+        $mode = $requests["mode"];
+
+        if($mode == "Edit")
+        {
+            $workerid = $requests["workerid"];
+            $skillid = $requests["skillid"];
+            $companyinfoid = $requests["companyinfoid"];
+            $familyid = $requests["familyid"];
+        }
+        
+        if($mode = "Create")
+        {
+            $workerdata = new \Synrgic\Infox\Worker();
+                
+        }
+
+        // TODO: worker
         $nameeng = $requests["nameeng"];
         $namechs = $requests["namechs"];
         $fin = $requests["fin"];
-        // date
-        $passexp = $requests["passexp"];
+        $passexp = $requests["passexp"];         // date
         $passport = $requests["passport"];
-        // date
-        $passportexp = $requests["passportexp"];
+        $passportexp = $requests["passportexp"];         // date
         $gender = $requests["gender"];
-
-        //todo: integer
-        $age = $requests["age"];
+        $age = $requests["age"];         //TODO: integer
         $birth = $requests["birth"];
         $marital = $requests["marital"];
         $address = $requests["address"];
         $hometown = $requests["hometown"];
 
-        // skill
+        $workerdata->setNameeng($nameeng);
+        $workerdata->setNamechs($namechs);
+        $workerdata->setFin($fin);
+        $workerdata->setPassexp(new DateTime($passexp));
+        $workerdata->setPassport($passport);
+        $workerdata->setPassportexp(new DateTime($passportexp));
+        $workerdata->setGender($gender);
+        $workerdata->setAge(intval($age));
+        $workerdata->setBirth(new DateTime($birth));
+        $workerdata->setMarital($marital);
+        $workerdata->setAddress($address);
+        $workerdata->setHometown($hometown);        
+
+        $this->_em->persist($workerdata);
+        try {
+            $this->_em->flush(); 
+        } catch (Exception $e){
+            var_dump($e);
+            return;
+        }             
+
+        // TODO: skill
         $worktype = $requests["worktype"];
         $worklevel = $requests["worklevel"];
         $education = $requests["education"];
@@ -175,7 +210,7 @@ class Worker_ManageController extends Zend_Controller_Action
         // date
         $securityexp = $requests["securityexp"];
 
-        // company info
+        // TODO: company info
         $companylabel = $requests["companylabel"];
         $hwage = $requests["hwage"];
         // todo
@@ -183,7 +218,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $srvyears = $requests["srvyears"];
         $yrsinsing = $requests["yrsinsing"];
 
-        // family 
+        // TODO: family 
         $homeaddr = $requests["homeaddr"];
         $member1 = $requests["member1"];
         $contact1 = $requests["contact1"];

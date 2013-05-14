@@ -14,17 +14,17 @@ class Worker extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * @Column(type="string", nullable=true)
+     * @Column(type="string")
      */
     protected $nameeng;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $namechs;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $pic;
 
@@ -58,7 +58,7 @@ class Worker extends \Synrgic_Models_Entity {
     protected $gender;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="integer", nullable=true)
      */
     protected $age;
 
@@ -70,19 +70,19 @@ class Worker extends \Synrgic_Models_Entity {
 
     /**
      * Marital status - 婚姻状况  
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $marital;
 
     /**
      * singapore address
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $address;
 
     /**
      * home town - 籍贯
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $hometown;
 
