@@ -156,14 +156,18 @@ class Worker_ManageController extends Zend_Controller_Action
             $skillid = $requests["skillid"];
             $companyinfoid = $requests["companyinfoid"];
             $familyid = $requests["familyid"];
-        }
-        
-        if($mode = "Create")
+        }       
+        else if($mode = "Create")
         {
             $workerdata = new \Synrgic\Infox\Worker();
                 
         }
-
+        else
+        {
+            echo "unknown store mode, please check.";
+            return;
+        }
+        
         // TODO: worker
         $nameeng = $requests["nameeng"];
         $namechs = $requests["namechs"];
