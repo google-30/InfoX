@@ -159,15 +159,17 @@ class Worker_ManageController extends Zend_Controller_Action
         }       
         else if($mode = "Create")
         {
-            $workerdata = new \Synrgic\Infox\Worker();
-                
+            $workerdata = new \Synrgic\Infox\Worker();                
         }
         else
         {
             echo "unknown store mode, please check.";
             return;
         }
-        
+
+    $metadata = $em->getClassMetaData(get_class($data));
+    $metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());        
+
         // TODO: worker
         $nameeng = $requests["nameeng"];
         $namechs = $requests["namechs"];
