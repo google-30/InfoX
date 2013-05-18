@@ -6,11 +6,14 @@ class Worker_ManageController extends Zend_Controller_Action
 {
     private $_em;
     private $_worker;
+    private $_site;
 
     public function init()
     {
         $this->_em = Zend_Registry::get('em');
         $this->_worker = $this->_em->getRepository('Synrgic\Infox\Worker');
+        $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
+
     }
 
     public function indexAction()
@@ -52,6 +55,9 @@ class Worker_ManageController extends Zend_Controller_Action
         //$uploadform = new Synrgic_Forms_Upload();
         //$this->view->workerform = $uploadform;
         $this->view->id = 0;
+
+        $sites = $this->_site->findAll();
+        $this->view->sites = $sites;
         
     }
 
@@ -95,14 +101,13 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
-        if(1)
-        {
-            $requests = $this->getRequest()->getPost();
-            //var_dump($requests);
-            //return;
-        }            
 
-        $this->storeInfo($requests);
+        $requests = $this->getRequest()->getPost();
+        if(0)
+        {
+            var_dump($requests);
+            return;
+        }            
 
         $uploadpath = UPLOAD_WORKER;
         $allowedExts = array("gif", "jpeg", "jpg", "png");
@@ -141,9 +146,10 @@ class Worker_ManageController extends Zend_Controller_Action
           }
         else
           {
-          echo "Invalid file";
+          //echo "Invalid file";
           }
 
+            $this->storeInfo($requests);  
     }
 
     private function storeInfo($requests)
@@ -160,6 +166,9 @@ class Worker_ManageController extends Zend_Controller_Action
         else if($mode = "Create")
         {
             $workerdata = new \Synrgic\Infox\Worker();                
+            $cmydata = new \Synrgic\Infox\Workercompanyinfo();
+            $skilldata = new \Synrgic\Infox\Workerskill();
+            $familydata = new \Synrgic\Infox\Workerfamily();
         }
         else
         {
@@ -167,8 +176,8 @@ class Worker_ManageController extends Zend_Controller_Action
             return;
         }
 
-    $metadata = $em->getClassMetaData(get_class($data));
-    $metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());        
+        //$metadata = $em->getClassMetaData(get_class($data));
+        //$metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());        
 
         // TODO: worker
         $nameeng = $requests["nameeng"];
@@ -216,13 +225,45 @@ class Worker_ManageController extends Zend_Controller_Action
         // date
         $securityexp = $requests["securityexp"];
 
+        $skilldata->setWorktype($worktype);
+        $skilldata->setWorklevel($worklevel);
+        $skilldata->setEducation($education);
+        $skilldata->setPastwork($pastwork);
+        $skilldata->setSkill1($skill1);
+        $skilldata->setSkill2($skill2);
+        $skilldata->setDrvlic($drvlic);        
+        $skilldata->setSecurityexp(new DateTime($securityexp));
+
+        $this->_em->persist($skilldata);
+        try {
+            $this->_em->flush(); 
+        } catch (Exception $e){
+            var_dump($e);
+            return;
+        }                       
+
         // TODO: company info
         $companylabel = $requests["companylabel"];
         $hwage = $requests["hwage"];
         // todo
         $site = $requests["site"]; 
+        $onesite = $this->_site->findOneBy(array('name'=>$site));
         $srvyears = $requests["srvyears"];
         $yrsinsing = $requests["yrsinsing"];
+        
+        $cmydata->setCompanylabel($companylabel);
+        $cmydata->setHwage($hwage);
+        $cmydata->setSite($onesite);
+        $cmydata->setSrvyears($srvyears);
+        $cmydata->setYrsinsing($yrsinsing);
+    
+        $this->_em->persist($cmydata);
+        try {
+            $this->_em->flush(); 
+        } catch (Exception $e){
+            var_dump($e);
+            return;
+        }                       
 
         // TODO: family 
         $homeaddr = $requests["homeaddr"];
@@ -232,6 +273,25 @@ class Worker_ManageController extends Zend_Controller_Action
         $contact2 = $requests["contact2"];
         $member3 = $requests["member3"];
         $contact3 = $requests["contact3"];
+        
+        $familydata->setHomeaddr($homeaddr);
+        $familydata->setMember1($member1);
+        $familydata->setContact1($contact1);
+        $familydata->setMember2($member2);
+        $familydata->setContact2($contact2);
+        $familydata->setMember3($member3);
+        $familydata->setContact3($contact3);
+
+        $this->_em->persist($familydata);
+        try {
+            $this->_em->flush(); 
+        } catch (Exception $e){
+            var_dump($e);
+            return;
+        } 
+
+        // connect skill,company,family with worker
+        
 
 
     }

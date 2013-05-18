@@ -33,6 +33,11 @@ $(function () {
         theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
     });  
 
+    $('#securityexp').mobiscroll().date({
+        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+    });  
+
+
 });
 </script>
 
@@ -143,7 +148,11 @@ $(function () {
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="worklevel">等级:</label>
-    <input type="text" name="worklevel" id="worklevel" value=""  />
+    <select name="worklevel" id="worklevel">
+       <option value="normal">普通</option>
+       <option value="good">好</option>
+       <option value="excellent">很好</option>
+    </select> 
 </div></td>
 </tr>
 
@@ -203,18 +212,29 @@ $(function () {
 <tr>
 <td><div data-role="fieldcontain">
     <label for="site">所在工地:</label>
-    <input type="text" name="site" id="site" value=""  />
+    <!--<input type="text" name="site" id="site" value=""  /> -->
+    <select name="site" id="site">
+<?php
+foreach($this->sites as $tmp)
+{
+    $name = $tmp->getName();
+    echo '<option value="' . $name .'">'. $name .'</option>';
+}
+?>
+    </select>
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="srvyears">服务年限:</label>
-    <input type="text" name="srvyears" id="srvyears" value=""  />
+    <!--<input type="text" name="srvyears" id="srvyears" value=""  /> -->
+ 	<input type="range" name="srvyears" id="srvyears" value="0" min="0" max="30" data-highlight="true"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="yrsinsing">在新年限:</label>
-    <input type="text" name="yrsinsing" id="yrsinsing" value=""  />
+    <!-- <input type="text" name="yrsinsing" id="yrsinsing" value=""  /> -->
+    <input type="range" name="yrsinsing" id="yrsinsing" value="0" min="0" max="50" data-highlight="true"  />
 </div></td>
 </tr>
 
