@@ -53,17 +53,10 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function addAction()
     {
-        //$id = $this->_getParam("id"); 
-        //echo "id=$id";
-        //$loginForm = new Synrgic_Forms_Login();
-        //$this->view->workerform = $loginForm;
-        //$uploadform = new Synrgic_Forms_Upload();
-        //$this->view->workerform = $uploadform;
         $this->view->id = 0;
 
         $sites = $this->_site->findAll();
-        $this->view->sites = $sites;
-        
+        $this->view->sites = $sites;        
     }
 
     public function editAction()
