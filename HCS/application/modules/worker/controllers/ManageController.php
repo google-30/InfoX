@@ -7,13 +7,18 @@ class Worker_ManageController extends Zend_Controller_Action
     private $_em;
     private $_worker;
     private $_site;
+    private $_workerskill;
+    private $_workercompanyinfo;
+    private $_workerfamily;
 
     public function init()
     {
         $this->_em = Zend_Registry::get('em');
         $this->_worker = $this->_em->getRepository('Synrgic\Infox\Worker');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
-
+        $this->_workerskill = $this->_em->getRepository('Synrgic\Infox\Workerskill');
+        $this->_workercompanyinfo = $this->_em->getRepository('Synrgic\Infox\Workercompanyinfo');       
+        $this->_workerfamily = $this->_em->getRepository('Synrgic\Infox\Workerfamily');
     }
 
     public function indexAction()
@@ -63,10 +68,8 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function editAction()
     {
-        $id = $this->_getParam("id"); 
-        //echo "id=$id";
+        /*
         $form = new Synrgic_Forms_Worker();
-
         if ($this->_request->isPost()) {
             $formData = $this->_request->getPost();
             if ($form->isValid($formData)) {
@@ -94,6 +97,19 @@ class Worker_ManageController extends Zend_Controller_Action
         }
 
         $this->view->workerform = $form;
+        */
+
+        $id = $this->_getParam("id"); 
+        //echo "id=$id";
+        $this->view->workerid = $id;
+        $this->view->worker = $worker = $this->_worker->findOneBy(array("id"=>$id));
+        $skillid = $worker->getWorkerskill();
+        $cmyid = $worker->getWorkercompanyinfo();
+        $familyid = $worker->getWorkerfamily();
+
+        $this->view->skill  = $skill = $this->_workerskill->findOneBy(array("id"=>$skillid));
+        $this->view->companyinfo = $companyinfo = $this->_workercompanyinfo->findOneBy(array("id"=>$cmyid));
+        $this->view->family = $family = $this->_workerfamily->findOneBy(array("id"=>$familyid));
     }
     
     public function submitAction()
@@ -213,6 +229,8 @@ class Worker_ManageController extends Zend_Controller_Action
             var_dump($e);
             return;
         }             
+        $workerid = $workerdata->getId();
+        echo "worker id=" . $workerid;
 
         // TODO: skill
         $worktype = $requests["worktype"];
@@ -241,18 +259,19 @@ class Worker_ManageController extends Zend_Controller_Action
             var_dump($e);
             return;
         }                       
+        $skillid = $skilldata->getId();
+        echo "skill id=" . $skillid;
 
         // TODO: company info
         $companylabel = $requests["companylabel"];
-        $hwage = $requests["hwage"];
-        // todo
+        $hwage = $requests["hwage"];    // float
         $site = $requests["site"]; 
         $onesite = $this->_site->findOneBy(array('name'=>$site));
         $srvyears = $requests["srvyears"];
         $yrsinsing = $requests["yrsinsing"];
         
         $cmydata->setCompanylabel($companylabel);
-        $cmydata->setHwage($hwage);
+        $cmydata->setHwage(floatval($hwage));
         $cmydata->setSite($onesite);
         $cmydata->setSrvyears($srvyears);
         $cmydata->setYrsinsing($yrsinsing);
@@ -264,6 +283,8 @@ class Worker_ManageController extends Zend_Controller_Action
             var_dump($e);
             return;
         }                       
+        $cmyid = $cmydata->getId();
+        echo "cmydata id=" . $cmyid;
 
         // TODO: family 
         $homeaddr = $requests["homeaddr"];
@@ -282,17 +303,29 @@ class Worker_ManageController extends Zend_Controller_Action
         $familydata->setMember3($member3);
         $familydata->setContact3($contact3);
 
-        $this->_em->persist($familydata);
+        $this->_em->persist($familydata);        
         try {
             $this->_em->flush(); 
         } catch (Exception $e){
             var_dump($e);
             return;
         } 
+        $fmyid = $familydata->getId();
+        echo "familydata id=" . $fmyid;
 
         // connect skill,company,family with worker
-        
+        $workerdata->setWorkerskill($this->_workerskill->findOneBy(array("id"=>$skillid)));
+        $workerdata->setWorkercompanyinfo($this->_workercompanyinfo->findOneBy(array("id"=>$cmyid)));
+        $workerdata->setWorkerfamily($this->_workerfamily->findOneBy(array("id"=>$fmyid)));
+        $this->_em->persist($workerdata);
+        try {
+            $this->_em->flush(); 
+        } catch (Exception $e){
+            var_dump($e);
+            return;
+        }             
 
+        //$this->_redirect ( "management/orders/index/" );
 
     }
 

@@ -18,7 +18,7 @@ width: 50%;
 vertical-align:middle;
 }
 </style>
-<><script type="text/javascript">
+<script type="text/javascript">
 $(function () {
     //alert("scroller");
     $('#birth').mobiscroll().date({
@@ -47,7 +47,7 @@ $(function () {
 </div>-->
 <form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
 <input type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
-<input type="hidden" id="workid" name="workerid" value="<?php echo $this->id; ?>">
+<input type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
 
 <!--<fieldset>
 <legend>Personalia:</legend>-->
@@ -64,11 +64,11 @@ $(function () {
 <tr>
 <td><div data-role="fieldcontain">
     <label for="nameeng">姓名:</label>
-    <input type="text" name="nameeng" id="nameeng" value=""  />
+    <input type="text" name="nameeng" id="nameeng" value="<?php echo $this->worker->getNameeng(); ?>" />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="namechs">中文姓名:</label>
-    <input type="text" name="namechs" id="namechs" value=""  />
+    <input type="text" name="namechs" id="namechs" value="<?php echo $this->worker->getNamechs(); ?>" />
 </div></td>
 </tr>
 
@@ -82,40 +82,41 @@ $(function () {
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="hometown">籍贯:</label>
-    <input type="text" name="hometown" id="hometown" value=""  />
+    <input type="text" name="hometown" id="hometown" value="<?php echo $this->worker->getHometown(); ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="age">年龄:</label>
-    <input type="text" name="age" id="age" value=""  />
+    <!--<input type="text" name="age" id="age" value="<?php echo $this->worker->getAge(); ?>"  /> -->
+    <input type="range" name="age" id="age" value="<?php echo $this->worker->getAge(); ?>" min="18" max="70" data-highlight="true"  />  
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="birth">出生日期:</label>
-    <input type="text" name="birth" id="birth" value=""  />
+    <input type="text" name="birth" id="birth" value="<?php echo $this->worker->getBirth()->format("Y/m/d"); ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="fin">准证号码:</label>
-    <input type="text" name="fin" id="fin" value=""  />
+    <input type="text" name="fin" id="fin" value="<?php echo $this->worker->getFin(); ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="passexp">准证期限:</label>
-    <input type="text" name="passexp" id="passexp" value=""  />
+    <input type="text" name="passexp" id="passexp" value="<?php echo $this->worker->getPassexp()->format("Y/m/d"); ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="passport">护照号码:</label>
-    <input type="text" name="passport" id="passport" value=""  />
+    <input type="text" name="passport" id="passport" value="<?php echo $this->worker->getPassport(); ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="passportexp">护照期限:</label>
-    <input type="text" name="passportexp" id="passportexp" value=""  />
+    <input type="text" name="passportexp" id="passportexp" value="<?php echo $this->worker->getPassportexp()->format("Y/m/d");; ?>"  />
 </div></td>
 </tr>
 
@@ -129,7 +130,7 @@ $(function () {
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="address">地址:</label>
-    <input type="text" name="address" id="address" value=""  />
+    <input type="text" name="address" id="address" value="<?php echo $this->worker->getAddress(); ?>"  />
 </div></td>
 </tr>
 
@@ -144,7 +145,7 @@ $(function () {
 <tr>
 <td><div data-role="fieldcontain">
     <label for="worktype">工种:</label>
-    <input type="text" name="worktype" id="worktype" value=""  />
+    <input type="text" name="worktype" id="worktype" value="<?php echo $this->skill->getWorktype(); ?>" />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="worklevel">等级:</label>
@@ -159,22 +160,22 @@ $(function () {
 <tr>
 <td><div data-role="fieldcontain">
     <label for="skill1">技能1:</label>
-    <input type="text" name="skill1" id="skill1" value=""  />
+    <input type="text" name="skill1" id="skill1" value="<?php echo $this->skill->getSkill1(); ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="skill2">技能2:</label>
-    <input type="text" name="skill2" id="skill2" value=""  />
+    <input type="text" name="skill2" id="skill2" value="<?php echo $this->skill->getSkill2(); ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="securityexp">安全证期限:</label>
-    <input type="text" name="securityexp" id="securityexp" value=""  />
+    <input type="text" name="securityexp" id="securityexp" value="<?php echo $this->skill->getSecurityexp(); ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="drvlic">驾照种类:</label>
-    <input type="text" name="drvlic" id="drvlic" value=""  />
+    <input type="text" name="drvlic" id="drvlic" value="<?php echo $this->skill->getDrvlic(); ?>"  />
 </div></td>
 </tr>
 
