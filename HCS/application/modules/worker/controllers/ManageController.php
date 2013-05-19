@@ -110,6 +110,9 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->view->skill  = $skill = $this->_workerskill->findOneBy(array("id"=>$skillid));
         $this->view->companyinfo = $companyinfo = $this->_workercompanyinfo->findOneBy(array("id"=>$cmyid));
         $this->view->family = $family = $this->_workerfamily->findOneBy(array("id"=>$familyid));
+
+        $sites = $this->_site->findAll();
+        $this->view->sites = $sites;
     }
     
     public function submitAction()
@@ -175,9 +178,11 @@ class Worker_ManageController extends Zend_Controller_Action
         if($mode == "Edit")
         {
             $workerid = $requests["workerid"];
-            $skillid = $requests["skillid"];
-            $companyinfoid = $requests["companyinfoid"];
-            $familyid = $requests["familyid"];
+            //$skillid = $requests["skillid"];
+            //$companyinfoid = $requests["companyinfoid"];
+            //$familyid = $requests["familyid"];
+
+            
         }       
         else if($mode = "Create")
         {
@@ -188,7 +193,7 @@ class Worker_ManageController extends Zend_Controller_Action
         }
         else
         {
-            echo "unknown store mode, please check.";
+            echo "fatal error: unknown edit mode";
             return;
         }
 

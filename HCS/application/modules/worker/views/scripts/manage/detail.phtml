@@ -105,7 +105,8 @@ $(function () {
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="passexp">准证期限:</label>
-    <input type="text" name="passexp" id="passexp" value="<?php echo $this->worker->getPassexp()->format("Y/m/d"); ?>"  />
+    <!--<input type="text" name="passexp" id="passexp" value='"<?php echo $this->worker->getPassexp()->format("Y/m/d"); ?>"  />-->
+    <input type="text" name="passexp" id="passexp" value=<?php echo $this->worker->getPassportexp()->format("Y/m/d"); ?> />
 </div></td>
 </tr>
 
@@ -116,7 +117,7 @@ $(function () {
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="passportexp">护照期限:</label>
-    <input type="text" name="passportexp" id="passportexp" value="<?php echo $this->worker->getPassportexp()->format("Y/m/d");; ?>"  />
+    <input type="text" name="passportexp" id="passportexp" value="<?php echo $this->worker->getPassportexp()->format("Y/m/d"); ?>" />
 </div></td>
 </tr>
 
@@ -124,8 +125,24 @@ $(function () {
 <td><div data-role="fieldcontain">
     <label for="marital">婚姻状况:</label>    
     <select name="marital" id="marital">
+<!--
        <option value="single">单身</option>
        <option value="married">已婚</option>
+-->
+<?php
+$options=array("single"=>"单身", "married"=>"已婚",);
+foreach($options as $key=>$value)
+{
+    if($this->worker->getMarital() == $key)
+    {
+        echo '<option value="'. $key . '" selected>' . $value . "</option>";
+    }    
+    else
+    {
+        echo '<option value="'. $key . '" >' . $value . "</option>";
+    }
+}
+?>
     </select>        
 </div></td>
 <td><div data-role="fieldcontain">
@@ -150,9 +167,23 @@ $(function () {
 <td><div data-role="fieldcontain">
     <label for="worklevel">等级:</label>
     <select name="worklevel" id="worklevel">
-       <option value="normal">普通</option>
+<!--       <option value="normal">普通</option>
        <option value="good">好</option>
-       <option value="excellent">很好</option>
+       <option value="excellent">很好</option>-->
+<?php
+$options=array("normal"=>"普通","good"=>"好","excellent"=>"很好");
+foreach($options as $key=>$value)
+{
+    if($this->skill->getWorklevel() == $key)
+    {
+        echo '<option value="' . $key . '" selected>' . $value . "</option>";
+    }
+    else
+    {
+        echo '<option value="' . $key . '" >' . $value . "</option>";
+    }
+} 
+?>
     </select> 
 </div></td>
 </tr>
@@ -171,7 +202,7 @@ $(function () {
 <tr>
 <td><div data-role="fieldcontain">
     <label for="securityexp">安全证期限:</label>
-    <input type="text" name="securityexp" id="securityexp" value="<?php echo $this->skill->getSecurityexp(); ?>"  />
+    <input type="text" name="securityexp" id="securityexp" value="<?php echo $this->skill->getSecurityexp()->format("Y/m/d"); ?>" />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="drvlic">驾照种类:</label>
@@ -182,11 +213,11 @@ $(function () {
 <tr>
 <td><div data-role="fieldcontain">
     <label for="education">教育程度:</label>
-    <input type="text" name="education" id="education" value=""  />
+    <input type="text" name="education" id="education" value="<?php echo $this->skill->getEducation(); ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="pastwork">国内从事职业:</label>
-    <input type="text" name="pastwork" id="pastwork" value=""  />
+    <input type="text" name="pastwork" id="pastwork" value="<?php echo $this->skill->getPastwork(); ?>"  />
 </div></td>
 </tr>
 
@@ -202,11 +233,11 @@ $(function () {
 <tr>
 <td><div data-role="fieldcontain">
     <label for="companylabel">公司编号:</label>
-    <input type="text" name="companylabel" id="companylabel" value=""  />
+    <input type="text" name="companylabel" id="companylabel" value="<?php echo $this->companyinfo->getCompanylabel(); ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="hwage">小时单价:</label>
-    <input type="text" name="hwage" id="hwage" value=""  />
+    <input type="text" name="hwage" id="hwage" value="<?php echo $this->companyinfo->getHwage(); ?>"  />
 </div></td>
 </tr>
 
@@ -216,10 +247,18 @@ $(function () {
     <!--<input type="text" name="site" id="site" value=""  /> -->
     <select name="site" id="site">
 <?php
+$thesite=$this->companyinfo->getSite();
 foreach($this->sites as $tmp)
 {
     $name = $tmp->getName();
-    echo '<option value="' . $name .'">'. $name .'</option>';
+    if($thesite->getName() == $name)
+    {
+        echo '<option value="' . $name .'" selected>'. $name .'</option>';
+    }
+    else
+    {
+        echo '<option value="' . $name .'" >'. $name .'</option>';
+    }
 }
 ?>
     </select>
@@ -227,7 +266,7 @@ foreach($this->sites as $tmp)
 <td><div data-role="fieldcontain">
     <label for="srvyears">服务年限:</label>
     <!--<input type="text" name="srvyears" id="srvyears" value=""  /> -->
- 	<input type="range" name="srvyears" id="srvyears" value="0" min="0" max="30" data-highlight="true"  />
+ 	<input type="range" name="srvyears" id="srvyears" value="<?php echo $this->companyinfo->getSrvyears(); ?>" min="0" max="30" data-highlight="true"  />
 </div></td>
 </tr>
 
@@ -235,7 +274,7 @@ foreach($this->sites as $tmp)
 <td><div data-role="fieldcontain">
     <label for="yrsinsing">在新年限:</label>
     <!-- <input type="text" name="yrsinsing" id="yrsinsing" value=""  /> -->
-    <input type="range" name="yrsinsing" id="yrsinsing" value="0" min="0" max="50" data-highlight="true"  />
+    <input type="range" name="yrsinsing" id="yrsinsing" value="<?php echo $this->companyinfo->getYrsinsing(); ?>" min="0" max="50" data-highlight="true"  />
 </div></td>
 </tr>
 
@@ -249,40 +288,40 @@ foreach($this->sites as $tmp)
 <tr>
 <td><div data-role="fieldcontain">
     <label for="homeaddr">国内家庭地址:</label>
-    <input type="text" name="homeaddr" id="homeaddr" value=""  />
+    <input type="text" name="homeaddr" id="homeaddr" value="<?php echo $this->family->getHomeaddr(); ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="member1">家庭成员1:</label>
-    <input type="text" name="member1" id="member1" value=""  />
+    <input type="text" name="member1" id="member1" value="<?php echo $this->family->getMember1(); ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="contact1">联系电话1:</label>
-    <input type="text" name="contact1" id="contact1" value=""  />
+    <input type="text" name="contact1" id="contact1" value="<?php echo $this->family->getContact1(); ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="member2">家庭成员2:</label>
-    <input type="text" name="member2" id="member2" value=""  />
+    <input type="text" name="member2" id="member2" value="<?php echo $this->family->getMember2(); ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="contact2">联系电话2:</label>
-    <input type="text" name="contact2" id="contact2" value=""  />
+    <input type="text" name="contact2" id="contact2" value="<?php echo $this->family->getContact2(); ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="member3">家庭成员3:</label>
-    <input type="text" name="member3" id="member3" value=""  />
+    <input type="text" name="member3" id="member3" value="<?php echo $this->family->getMember3(); ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="contact3">联系电话3:</label>
-    <input type="text" name="contact3" id="contact3" value=""  />
+    <input type="text" name="contact3" id="contact3" value="<?php echo $this->family->getContact3(); ?>"  />
 </div></td>
 </tr>
 
