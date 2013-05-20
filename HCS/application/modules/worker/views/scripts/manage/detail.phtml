@@ -50,7 +50,44 @@ $(function () {
 <input type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
 
 <?php
-if($this->mode == "Edit")
+if($this->mode == "Create")
+{
+    $nameeng = ""; 
+    $namechs = "";
+    $hometown = "";
+    $age = 18;
+    $birth = "";
+    $fin = "";
+    $passexp = "";
+    $passport = "";
+    $passportexp = "";
+    $marital = "";
+    $address = "";
+
+    $worktype = "";
+    $worklevel = "";
+    $skill1 = "";
+    $skill2 = "";
+    $securityexp = "";
+    $drvlic = "";
+    $education = "";
+    $pastwork = "";
+
+    $companylabel = "";
+    $hwage = "";
+    $sitename = "";
+    $srvyears = "";
+    $yrsinsing = "";    
+
+    $homeaddr = "";
+    $member1 = "";
+    $member2 = "";
+    $member3 = "";
+    $contact1 = "";
+    $contact2 = "";
+    $contact3 = "";
+}
+else if($this->mode == "Edit")
 {
     $nameeng = $this->worker->getNameeng();
     $namechs = $this->worker->getNamechs();
@@ -141,7 +178,6 @@ else
 <tr>
 <td><div data-role="fieldcontain">
     <label for="nameeng">姓名:</label>
-    <!--<input type="text" name="nameeng" id="nameeng" value="<?php echo $this->worker->getNameeng(); ?>" />-->
     <input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" />
 </div></td>
 <td><div data-role="fieldcontain">
@@ -167,7 +203,6 @@ else
 <tr>
 <td><div data-role="fieldcontain">
     <label for="age">年龄:</label>
-    <!--<input type="text" name="age" id="age" value="<?php echo $this->worker->getAge(); ?>"  /> -->
     <input type="range" name="age" id="age" value="<?php echo $age; ?>" min="18" max="70" data-highlight="true"  />  
 </div></td>
 <td><div data-role="fieldcontain">
@@ -183,7 +218,6 @@ else
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="passexp">准证期限:</label>
-    <!--<input type="text" name="passexp" id="passexp" value='"<?php echo $this->worker->getPassexp()->format("Y/m/d"); ?>"  />-->
     <input type="text" name="passexp" id="passexp" value="<?php echo $passexp; ?>" />
 </div></td>
 </tr>
@@ -203,10 +237,6 @@ else
 <td><div data-role="fieldcontain">
     <label for="marital">婚姻状况:</label>    
     <select name="marital" id="marital">
-<!--
-       <option value="single">单身</option>
-       <option value="married">已婚</option>
--->
 <?php
 $options=array("single"=>"单身", "married"=>"已婚",);
 foreach($options as $key=>$value)
