@@ -247,12 +247,21 @@ class Worker_ManageController extends Zend_Controller_Action
         $workerdata->setNameeng($nameeng);
         $workerdata->setNamechs($namechs);
         $workerdata->setFin($fin);
-        $workerdata->setPassexp(new DateTime($passexp));
+        if($passexp != "")
+        {
+            $workerdata->setPassexp(new DateTime($passexp));
+        }
         $workerdata->setPassport($passport);
-        $workerdata->setPassportexp(new DateTime($passportexp));
+        if($passportexp != "")
+        {
+            $workerdata->setPassportexp(new DateTime($passportexp));
+        }
         $workerdata->setGender($gender);
         $workerdata->setAge(intval($age));
-        $workerdata->setBirth(new DateTime($birth));
+        if($birth != "")
+        {
+            $workerdata->setBirth(new DateTime($birth));
+        }
         $workerdata->setMarital($marital);
         $workerdata->setAddress($address);
         $workerdata->setHometown($hometown);
@@ -372,7 +381,7 @@ class Worker_ManageController extends Zend_Controller_Action
             return;
         }
 
-        //$this->_redirect ( "worker/manage" );
+        $this->_redirect ( "worker/manage" );
     }
 
 }

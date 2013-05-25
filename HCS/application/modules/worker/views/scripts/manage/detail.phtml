@@ -45,27 +45,6 @@ $(function () {
 });
 </script>
 
-<fieldset class="ui-grid-b">
-<?php
-if($this->mode == "Create")
-{
-    echo '<div class="ui-block-a"><h3>创建工人记录</h3></div>';
-    echo '<div class="ui-block-b"></div>';
-    echo '<div class="ui-block-c"><button>放弃创建</button></div>';
-}
-else
-{
-    echo '<div class="ui-block-a"><h3>编辑工人记录</h3></div>';
-    echo '<div class="ui-block-b"><button>预览并打印</button></div>';
-    echo '<div class="ui-block-c"><button>删除工人记录</button></div>';
-}
-?>
-</fieldset>
-
-<form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
-<input type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
-<input type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
-
 <?php
 {
     $pic = "";
@@ -112,11 +91,20 @@ if($this->mode == "Edit")
     $namechs = $this->worker->getNamechs();
     $hometown = $this->worker->getHometown();
     $age = $this->worker->getAge();
-    $birth = $this->worker->getBirth()->format("Y/m/d");
+    if($this->worker->getBirth())
+    {
+        $birth = $this->worker->getBirth()->format("Y/m/d");
+    }
     $fin = $this->worker->getFin();
-    $passexp = $this->worker->getPassexp()->format("Y/m/d");
+    if($this->worker->getPassexp())
+    {
+        $passexp = $this->worker->getPassexp()->format("Y/m/d");
+    }
     $passport = $this->worker->getPassport();
-    $passportexp = $this->worker->getPassportexp()->format("Y/m/d");
+    if($this->worker->getPassportexp())
+    {
+        $passportexp = $this->worker->getPassportexp()->format("Y/m/d");
+    }
     $marital = $this->worker->getMarital();
     $address = $this->worker->getAddress();
 
@@ -126,7 +114,10 @@ if($this->mode == "Edit")
     $worklevel = $this->skill->getWorklevel();
     $skill1 = $this->skill->getSkill1();
     $skill2 = $this->skill->getSkill2();
-    $securityexp = $this->skill->getSecurityexp()->format("Y/m/d");
+    if($this->skill->getSecurityexp())
+    {        
+        $securityexp = $this->skill->getSecurityexp()->format("Y/m/d");
+    }
     $drvlic = $this->skill->getDrvlic();
     $education = $this->skill->getEducation();
     $pastwork = $this->skill->getPastwork();
@@ -154,10 +145,33 @@ if($this->mode == "Edit")
 }
 ?>
 
-<!--<fieldset>
-<legend>Personalia:</legend>-->
-<div class="infoarea">
-<strong>个人信息栏:</strong><br>
+<!--<fieldset class="ui-grid-b">-->
+<div class="ui-grid-b">
+<?php
+if($this->mode == "Create")
+{
+    echo '<div class="ui-block-a"><h3>创建工人记录</h3></div>';
+    echo '<div class="ui-block-b"></div>';
+    echo '<div class="ui-block-c"><button>放弃创建</button></div>';
+}
+else
+{
+    echo '<div class="ui-block-a"><h3>编辑工人记录</h3></div>';
+    echo '<div class="ui-block-b"><button>预览并打印</button></div>';
+    echo '<div class="ui-block-c"><button>删除工人记录</button></div>';
+}
+?>
+</div><!-- /grid-a -->
+<!--</fieldset>-->
+
+<form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
+<input type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
+<input type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
+
+<fieldset>
+<legend>个人信息栏:</legend>
+<!--<div class="infoarea">-->
+<!--<strong>个人信息栏:</strong><br>-->
 <table>
 <tr>
 <td><div data-role="fieldcontain">
@@ -256,12 +270,14 @@ foreach($options as $key=>$value)
 </tr>
 
 </table>
-</div>
-
+<!--</div>-->
+</fieldset>
 <br>
 
-<div class="infoarea">
-<strong>技能信息栏:</strong><br>
+<fieldset>
+<legend>技能信息栏:</legend>
+<!--<div class="infoarea">
+<strong>技能信息栏:</strong><br>-->
 <table>
 <tr>
 <td><div data-role="fieldcontain">
@@ -323,13 +339,14 @@ foreach($options as $key=>$value)
 </tr>
 
 </table>
-</div>
-<!--</fieldset>-->
-
+<!--</div>-->
+</fieldset>
 <br>
 
-<div class="infoarea">
-<strong>工作信息栏:</strong><br>
+<fieldset>
+<legend>工作信息栏:</legend>
+<!--<div class="infoarea">
+<strong>工作信息栏:</strong><br>-->
 <table>
 <tr>
 <td><div data-role="fieldcontain">
@@ -380,11 +397,14 @@ foreach($this->sites as $tmp)
 </tr>
 
 </table>
-</div>
+<!--</div>-->
+</fieldset>
 <br>
 
-<div class="infoarea">
-<strong>家庭信息栏:</strong><br>
+<fieldset>
+<legend>家庭信息栏:</legend>
+<!--<div class="infoarea">
+<strong>家庭信息栏:</strong><br>-->
 <table>
 <tr>
 <td><div data-role="fieldcontain">
@@ -427,7 +447,8 @@ foreach($this->sites as $tmp)
 </tr>
 
 </table>
-</div>
+<!--</div>-->
+</fieldset>
 
 <input type="submit" name="submit" value="提交">
 </form>
