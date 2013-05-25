@@ -174,8 +174,11 @@ class Worker_ManageController extends Zend_Controller_Action
             //$skillid = $requests["skillid"];
             //$companyinfoid = $requests["companyinfoid"];
             //$familyid = $requests["familyid"];
-
             
+            $workerdata = $this->_worker->findOneBy(array('id'=>$workerid));
+            $skilldata = $workerdata->getWorkerskill();
+            $cmydata = $workerdata->getWorkercompanyinfo();
+            $familydata = $workerdata->getWorkerfamily();    
         }       
         else if($mode = "Create")
         {
@@ -238,7 +241,6 @@ class Worker_ManageController extends Zend_Controller_Action
         $skill1 = $requests["skill1"];
         $skill2 = $requests["skill2"];
         $drvlic = $requests["drvlic"];   
-        // date
         $securityexp = $requests["securityexp"];
 
         $skilldata->setWorktype($worktype);
@@ -248,7 +250,10 @@ class Worker_ManageController extends Zend_Controller_Action
         $skilldata->setSkill1($skill1);
         $skilldata->setSkill2($skill2);
         $skilldata->setDrvlic($drvlic);        
+        if($securityexp != "")
+        {
         $skilldata->setSecurityexp(new DateTime($securityexp));
+        }
 
         $this->_em->persist($skilldata);
         try {
@@ -263,16 +268,23 @@ class Worker_ManageController extends Zend_Controller_Action
         // TODO: company info
         $companylabel = $requests["companylabel"];
         $hwage = $requests["hwage"];    // float
-        $site = $requests["site"]; 
-        $onesite = $this->_site->findOneBy(array('name'=>$site));
         $srvyears = $requests["srvyears"];
         $yrsinsing = $requests["yrsinsing"];
         
         $cmydata->setCompanylabel($companylabel);
         $cmydata->setHwage(floatval($hwage));
-        $cmydata->setSite($onesite);
-        $cmydata->setSrvyears($srvyears);
-        $cmydata->setYrsinsing($yrsinsing);
+
+        $site = $requests["site"]; 
+        if($site != "")
+        {
+            $onesite = $this->_site->findOneBy(array('name'=>$site));
+            if($onesite)
+            {
+            $cmydata->setSite($onesite);
+            }
+        }    
+        $cmydata->setSrvyears(intval($srvyears));
+        $cmydata->setYrsinsing(intval($yrsinsing));
     
         $this->_em->persist($cmydata);
         try {
@@ -323,7 +335,7 @@ class Worker_ManageController extends Zend_Controller_Action
             return;
         }             
 
-        //$this->_redirect ( "management/orders/index/" );
+        $this->_redirect ( "worker/manage" );
 
     }
 

@@ -41,7 +41,24 @@ $(function () {
 });
 </script>
 
-<h3>Add/Edit Worker</h3>
+<fieldset class="ui-grid-b">
+<?php
+if($this->mode == "Create")
+{
+    echo '<div class="ui-block-a"><h3>创建工人记录</h3></div>';
+    echo '<div class="ui-block-b"></div>';
+    echo '<div class="ui-block-c"><button>放弃创建</button></div>';
+}
+else
+{
+    echo '<div class="ui-block-a"><h3>编辑工人记录</h3></div>';
+    echo '<div class="ui-block-b"><button>删除工人记录</button></div>';
+    echo '<div class="ui-block-c"><button>预览并打印</button></div>';
+
+}
+?>
+</fieldset>
+
 <!--<div data-role="fieldcontain">
     <?php echo $this->workerform; ?>  
 </div>-->
@@ -50,7 +67,6 @@ $(function () {
 <input type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
 
 <?php
-if($this->mode == "Create")
 {
     $nameeng = ""; 
     $namechs = "";
@@ -87,7 +103,8 @@ if($this->mode == "Create")
     $contact2 = "";
     $contact3 = "";
 }
-else if($this->mode == "Edit")
+
+if($this->mode == "Edit")
 {
     $nameeng = $this->worker->getNameeng();
     $namechs = $this->worker->getNamechs();
@@ -101,6 +118,8 @@ else if($this->mode == "Edit")
     $marital = $this->worker->getMarital();
     $address = $this->worker->getAddress();
 
+    if($this->skill)
+    {
     $worktype = $this->skill->getWorktype();
     $worklevel = $this->skill->getWorklevel();
     $skill1 = $this->skill->getSkill1();
@@ -109,13 +128,19 @@ else if($this->mode == "Edit")
     $drvlic = $this->skill->getDrvlic();
     $education = $this->skill->getEducation();
     $pastwork = $this->skill->getPastwork();
+    }
 
+    if($this->companyinfo)
+    {
     $companylabel = $this->companyinfo->getCompanylabel();
     $hwage = $this->companyinfo->getHwage();
     $sitename = $this->companyinfo->getSite()->getName();
     $srvyears = $this->companyinfo->getSrvyears();
     $yrsinsing = $this->companyinfo->getYrsinsing();
-    
+    }
+
+    if($this->family)
+    {
     $homeaddr = $this->family->getHomeaddr();
     $member1 = $this->family->getMember1();
     $member2 = $this->family->getMember2();
@@ -123,43 +148,7 @@ else if($this->mode == "Edit")
     $contact1 = $this->family->getContact1();
     $contact2 = $this->family->getContact2();
     $contact3 = $this->family->getContact3();
-}
-else
-{
-    $nameeng = ""; 
-    $namechs = "";
-    $hometown = "";
-    $age = 18;
-    $birth = "";
-    $fin = "";
-    $passexp = "";
-    $passport = "";
-    $passportexp = "";
-    $marital = "";
-    $address = "";
-
-    $worktype = "";
-    $worklevel = "";
-    $skill1 = "";
-    $skill2 = "";
-    $securityexp = "";
-    $drvlic = "";
-    $education = "";
-    $pastwork = "";
-
-    $companylabel = "";
-    $hwage = "";
-    $sitename = "";
-    $srvyears = "";
-    $yrsinsing = "";    
-
-    $homeaddr = "";
-    $member1 = "";
-    $member2 = "";
-    $member3 = "";
-    $contact1 = "";
-    $contact2 = "";
-    $contact3 = "";
+    }
 }
 ?>
 
