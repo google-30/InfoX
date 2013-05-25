@@ -38,6 +38,7 @@ $(function () {
 
     $('#securityexp').mobiscroll().date({
         theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+        endYear: 2050,
     });  
 
 
@@ -55,16 +56,12 @@ if($this->mode == "Create")
 else
 {
     echo '<div class="ui-block-a"><h3>编辑工人记录</h3></div>';
-    echo '<div class="ui-block-b"><button>删除工人记录</button></div>';
-    echo '<div class="ui-block-c"><button>预览并打印</button></div>';
-
+    echo '<div class="ui-block-b"><button>预览并打印</button></div>';
+    echo '<div class="ui-block-c"><button>删除工人记录</button></div>';
 }
 ?>
 </fieldset>
 
-<!--<div data-role="fieldcontain">
-    <?php echo $this->workerform; ?>  
-</div>-->
 <form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
 <input type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
 <input type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
@@ -117,7 +114,7 @@ if($this->mode == "Edit")
     $age = $this->worker->getAge();
     $birth = $this->worker->getBirth()->format("Y/m/d");
     $fin = $this->worker->getFin();
-    $passexp = $this->worker->getPassportexp()->format("Y/m/d");
+    $passexp = $this->worker->getPassexp()->format("Y/m/d");
     $passport = $this->worker->getPassport();
     $passportexp = $this->worker->getPassportexp()->format("Y/m/d");
     $marital = $this->worker->getMarital();
@@ -163,15 +160,14 @@ if($this->mode == "Edit")
 <strong>个人信息栏:</strong><br>
 <table>
 <tr>
-<td>
-<div data-role="fieldcontain">
-<label for="file">上传照片：</label>
-<input type="file" name="file" id="file">
-</div>
-</td>
 <td><div data-role="fieldcontain">
-<label for="pic">工人照片：</label>
-<img src="<?php echo $pic; ?>" alt="无照片显示" width="50%" id="pic" name="pic">
+    <!--<label for="pic" class="ui-input-text">工人照片：</label>-->
+    <label for="pic" class="ui-input-text"></label>
+    <img src="<?php echo $pic; ?>" alt="无照片显示" width="40%"  id="pic" name="pic">
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="file" class="ui-input-text">更新照片：</label>
+    <input type="file" name="file" id="file">
 </div></td>
 </tr>
 
@@ -275,9 +271,6 @@ foreach($options as $key=>$value)
 <td><div data-role="fieldcontain">
     <label for="worklevel">等级:</label>
     <select name="worklevel" id="worklevel">
-<!--       <option value="normal">普通</option>
-       <option value="good">好</option>
-       <option value="excellent">很好</option>-->
 <?php
 $options=array("normal"=>"普通","good"=>"好","excellent"=>"很好");
 foreach($options as $key=>$value)
