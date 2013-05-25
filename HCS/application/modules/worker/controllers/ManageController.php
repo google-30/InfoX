@@ -384,4 +384,10 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_redirect ( "worker/manage" );
     }
 
+    public function outputAction()
+    {
+        $this->_helper->layout->disableLayout();
+    }
+
+
 }

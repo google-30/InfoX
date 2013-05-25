@@ -43,6 +43,14 @@ $(function () {
 
 
 });
+
+function output()
+{
+    //alert("preview and print this bill");
+    var url = "/worker/manage/output?no=" + $('#workerid').val();
+    window.open (url);
+}
+
 </script>
 
 <?php
@@ -157,7 +165,7 @@ if($this->mode == "Create")
 else
 {
     echo '<div class="ui-block-a"><h3>编辑工人记录</h3></div>';
-    echo '<div class="ui-block-b"><button>预览并打印</button></div>';
+    echo '<div class="ui-block-b"><button onclick="output()">预览并打印</button></div>';
     echo '<div class="ui-block-c"><button>删除工人记录</button></div>';
 }
 ?>
