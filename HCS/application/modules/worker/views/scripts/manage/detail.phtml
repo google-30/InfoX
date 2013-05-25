@@ -23,14 +23,17 @@ $(function () {
     //alert("scroller");
     $('#birth').mobiscroll().date({
         theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+        endYear: 2050,
     });  
 
     $('#passexp').mobiscroll().date({
         theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+        endYear: 2050,
     });  
 
     $('#passportexp').mobiscroll().date({
         theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+        endYear: 2050,
     });  
 
     $('#securityexp').mobiscroll().date({
@@ -68,6 +71,7 @@ else
 
 <?php
 {
+    $pic = "";
     $nameeng = ""; 
     $namechs = "";
     $hometown = "";
@@ -106,6 +110,7 @@ else
 
 if($this->mode == "Edit")
 {
+    $pic = $this->worker->getPic();
     $nameeng = $this->worker->getNameeng();
     $namechs = $this->worker->getNamechs();
     $hometown = $this->worker->getHometown();
@@ -158,10 +163,16 @@ if($this->mode == "Edit")
 <strong>个人信息栏:</strong><br>
 <table>
 <tr>
+<td>
 <div data-role="fieldcontain">
-<label for="file">照片：</label>
+<label for="file">上传照片：</label>
 <input type="file" name="file" id="file">
 </div>
+</td>
+<td><div data-role="fieldcontain">
+<label for="pic">工人照片：</label>
+<img src="<?php echo $pic; ?>" alt="无照片显示" width="50%" id="pic" name="pic">
+</div></td>
 </tr>
 
 <tr>
