@@ -1,6 +1,6 @@
 #!/bin/bash
 # module generator - gen module file structure under HCS/application/modules/
-
+# usage: mod_gen.sh worker
 set -v
 modpath=HCS/application/modules/
 workpath=$modpath/$1

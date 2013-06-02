@@ -51,6 +51,16 @@
 		<privilege>view</privilege>
 	    </material2>
 
+	    <archive>
+		<label>文档软件管理</label>
+		<module>archive</module>
+		<controller>manage</controller>
+		<action>index</action>
+		<resource>worker:manage</resource>
+		<privilege>view</privilege>
+	    </archive>
+
+
 	    <information>
 		<label>Information</label>
 		<module>information</module>
