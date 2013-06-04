@@ -1,9 +1,6 @@
 <?php
-/*
- * archive info, software or document
- */   
  
-namespace Synrgic;
+namespace Synrgic\Infox;
 /**
  * @Entity
  * @Table(name="infox_archive")

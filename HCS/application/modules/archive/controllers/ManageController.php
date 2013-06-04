@@ -14,6 +14,9 @@ class Archive_ManageController extends Zend_Controller_Action
 
     public function indexAction()
     {
-
+        $softwares = $this->_archive->findBy(array("type"=>"sw"));
+        $this->view->softwares = $softwares;
+        $documents = $this->_archive->findBy(array("type"=>"doc"));
+        $this->view->documents = $documents;
     }
 }
