@@ -1,5 +1,5 @@
 <style>
-#swdiv { display:none;}
+/*#swdiv { display:none;}*/
 </style>
 
 <div class="ui-grid-b">
@@ -16,15 +16,14 @@ echo $this->grid("Documents", true)
           ->field('title', '名称')
           ->field('remark', '注释')
           ->actionField(':action', null, '&nbsp;|&nbsp;')
-          ->itemCountPerPage(50)
+          ->itemCountPerPage(5)
           ->paginatorEnabled(false) // disable internal paginator, use dataTable's
           ->helper(new GridHelper_Archive())
           ->data($this->documents)
-//          ->emptyMessage('No Pages exist click <a href="'.$this->url(array('action'=>'addpage')).'">here</a> to create a one.')
           ->action(':action', 'Edit', array( 'url'=>array('action'=>'pageedit')))
           ->action(':action', 'Preview', array( 'url'=>array('action'=>'preview')))
           ->action(':action', 'Publish', array( 'url'=>array('action'=>'publishpage')))
-      ->action(':action', 'Delete', array('url'=>array('action'=>'deletepage')));
+        ->action(':action', 'Delete', array('url'=>array('action'=>'deletepage')));
 ?>
 
 </div>
@@ -39,9 +38,8 @@ echo $this->grid("Softwares", true)
           ->actionField(':action', null, '&nbsp;|&nbsp;')
           ->itemCountPerPage(50)
           ->paginatorEnabled(false) // disable internal paginator, use dataTable's
-          ->helper(new GridHelper_Information())
+          ->helper(new GridHelper_Archive())
           ->data($this->softwares)
-          ->emptyMessage('No Pages exist click <a href="'.$this->url(array('action'=>'addpage')).'">here</a> to create a one.')
           ->action(':action', 'Edit', array( 'url'=>array('action'=>'pageedit')))
           ->action(':action', 'Preview', array( 'url'=>array('action'=>'preview')))
           ->action(':action', 'Publish', array( 'url'=>array('action'=>'publishpage')))

@@ -260,7 +260,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public function _initGrid() {       
 		$this->bootstrap('FrontController');
         require_once(APPLICATION_PATH.'/../library/Grid/Helper/Autoloader.php');
-	    $modules = array('adverts', 'bill', 'gambling', 'information', 'local', 'management', 'noticeboard', 'room', 'service');
+	    //$modules = array('adverts', 'bill', 'gambling', 'information', 'local', 'management', 'noticeboard', 'room', 'service', 'archive');
+	$modules = array('archive');
+		
 	    $prefixes = array();
 	    foreach($modules as $m) {
 	        $prefixes[APPLICATION_PATH.'/modules/'.$m.'/views/helpers'] = 'GridHelper_';
