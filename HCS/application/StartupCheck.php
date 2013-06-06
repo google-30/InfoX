@@ -53,11 +53,24 @@ class StartupCheck
 	$dir = APPLICATION_PATH . '/data/uploads/';
 	$this->displayState("Checking upload directory $dir is writeable",is_writable($dir));
 
+    /*
 	$dir = APPLICATION_PATH . '/data/uploads/media';
 	$this->displayState("Checking media directory $dir is writeable",is_writable($dir));
 
 	$dir = APPLICATION_PATH . '/data/uploads/adverts';
 	$this->displayState("Checking media directory $dir is writeable",is_writable($dir));
+    */
+
+    // infox part
+	$dir = APPLICATION_PATH . '/data/uploads/workers/images';
+	$this->displayState("Checking media directory $dir is writeable",is_writable($dir));
+
+	$dir = APPLICATION_PATH . '/data/uploads/archives/softwares';
+	$this->displayState("Checking media directory $dir is writeable",is_writable($dir));
+
+	$dir = APPLICATION_PATH . '/data/uploads/archives/documents';
+	$this->displayState("Checking media directory $dir is writeable",is_writable($dir));
+
 
         // Module checks
 	$this->displaySection("Performing 'Services' checks");
