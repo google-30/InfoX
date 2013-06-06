@@ -2,6 +2,11 @@
 
 class GridHelper_Archive extends Grid_Helper_Abstract 
 {
+    protected function td_path($field, $row) 
+    {
+    	return $row->$field;
+    }
+
     protected function td_update($field, $row) 
     {
     	return $row->$field->format('Y-m-d');

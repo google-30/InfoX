@@ -12,9 +12,10 @@
 <?
 /* id, update, title, path, size, remark, type*/
 echo $this->grid("Documents", true)
+          ->field('path','')
           ->field('update','更新日期')
           ->field('title', '名称')
-          ->field('remark', '注释')
+          ->field('remark', '说明')
           ->actionField(':action', null, '&nbsp;|&nbsp;')
           ->itemCountPerPage(5)
           ->paginatorEnabled(false) // disable internal paginator, use dataTable's

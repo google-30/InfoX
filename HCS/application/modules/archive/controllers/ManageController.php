@@ -1,6 +1,7 @@
 <?php
 
-define('UPLOAD_WORKER', APPLICATION_PATH. '/data/uploads/workers/images/');
+define('UPLOAD_SW', APPLICATION_PATH. '/data/uploads/archives/softwares/');
+define('UPLOAD_Doc', APPLICATION_PATH. '/data/uploads/archives/documents/');
 class Archive_ManageController extends Zend_Controller_Action
 {
     private $_em;
