@@ -40,7 +40,7 @@ $em = Zend_Registry::get('em');
 if( $argc > 1 ){
 	include($argv[1]);
 } else {
-
+/*
 	include('data/language.php');
 	include('data/guestdata.php');
 	include('data/billdata.php');
@@ -59,4 +59,13 @@ if( $argc > 1 ){
 	include('data/infodata.php');
 	include('data/alert.php');
         include('data/chargemodel.php');
+*/
+	include('data/infox_site.php');
+	include('data/infox_workercompanyinfo.php');
+	include('data/infox_workerskill.php');
+	include('data/infox_workerfamily.php');
+	include('data/infox_worker.php');
+	include('data/infox_material.php');
+	include('data/infox_archive.php');
+
 }
