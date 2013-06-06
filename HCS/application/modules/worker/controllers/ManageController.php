@@ -1,6 +1,5 @@
 <?php
 
-//define('UPLOAD_BASE', APPLICATION_PATH. '/data/uploads');
 define('UPLOAD_WORKER', APPLICATION_PATH. '/data/uploads/workers/images/');
 class Worker_ManageController extends Zend_Controller_Action
 {
@@ -309,7 +308,7 @@ class Worker_ManageController extends Zend_Controller_Action
             return;
         }
         $skillid = $skilldata->getId();
-        echo "skill id=" . $skillid;
+        echo "skill id=$skillid<br>";
 
         // company info
         $companylabel = $requests["companylabel"];
@@ -340,7 +339,7 @@ class Worker_ManageController extends Zend_Controller_Action
             return;
         }
         $cmyid = $cmydata->getId();
-        echo "cmydata id=" . $cmyid;
+        echo "cmydata id=$cmyid<br>";
 
         // family
         $homeaddr = $requests["homeaddr"];
@@ -367,7 +366,7 @@ class Worker_ManageController extends Zend_Controller_Action
             return;
         }
         $fmyid = $familydata->getId();
-        echo "familydata id=" . $fmyid;
+        echo "familydata id=$fmyid<br>";
 
         // connect skill,company,family with worker
         $workerdata->setWorkerskill($this->_workerskill->findOneBy(array("id"=>$skillid)));
