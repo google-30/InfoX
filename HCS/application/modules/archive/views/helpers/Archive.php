@@ -4,7 +4,8 @@ class GridHelper_Archive extends Grid_Helper_Abstract
 {
     protected function td_path($field, $row) 
     {
-    	return $row->$field;
+    	//return $row->$field;
+        return '<a href="' . $row->$field . '"><button data-mini="true">下载</button></a>';
     }
 
     protected function td_update($field, $row) 
