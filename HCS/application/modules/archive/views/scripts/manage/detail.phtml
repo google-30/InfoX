@@ -1,3 +1,38 @@
+<script>
+function submit()
+{
+    $title = $("#title1").val();
+    $remark = $("#remark").val();
+    
+    if($title=="")
+    {
+        alert("请提供文件名信息，其他信息可稍后提交");
+    }    
+    else
+    {
+        $("#archiveform").submit();       
+    }
+    
+}
+
+function cancel()
+{
+    var r=confirm("放弃编辑信息，返回列表界面");
+    if (r==true)
+    {
+        gotolist();
+    }
+}
+
+function gotolist()
+{
+    window.location = "/archive/manage";        
+}
+
+function redirect(url) {
+    window.location = url;
+}
+</script>
 <?php
 
 $id = 0;
@@ -23,27 +58,20 @@ $type = $this->archive->getType();
 <div data-role="fieldcontain">
 	<label for="type" class="select">文件类别:</label>
 	<select name="type" id="type">
-<!--
-		<option value="doc">文档</option>
-		<option value="sw">软件</option>
--->
-<?php
-$types = array("doc"=>"文档", "sw"=>"软件");
-foreach($types as $key=>$value)
-{
-    if($type == $tmp)
+    <?php
+    $types = array("doc"=>"文档", "sw"=>"软件");
+    foreach($types as $key=>$value)
     {
-        echo '<option value="' . $key . '" selected>' . $value . "</option>";
+        if($type == $key)
+        {
+            echo '<option value="' . $key . '" selected>' . $value . "</option>";
+        }
+        else
+        {
+            echo '<option value="' . $key . '" >' . $value . "</option>";
+        }
     }
-    else
-    {
-        echo '<option value="' . $key . '" >' . $value . "</option>";
-    }
-
-}
-
-
-?>
+    ?>
 	</select>
 </div>
 
@@ -62,9 +90,8 @@ foreach($types as $key=>$value)
     <label for="file" class="ui-input-text">选择文件:</label>
     <input type="file" name="file" id="file">
 </div>
-
-<fieldset class="ui-grid-a">
-		<div class="ui-block-a"><button type="submit" data-theme="d">Cancel</button></div>
-		<div class="ui-block-b"><button type="submit" data-theme="a">Submit</button></div>
-</fieldset>
 </form> <!--archive form -->
+<fieldset class="ui-grid-a">
+		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
+		<div class="ui-block-b"><button type="submit" data-theme="d" onclick="cancel()">取消</button></div>
+</fieldset>

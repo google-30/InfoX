@@ -19,27 +19,27 @@ class Archive extends \Synrgic_Models_Entity {
     protected $update;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @Column(type="string")
      */
     protected $title;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $path;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="integer", nullable=true)
      */
     protected $size;    	
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $remark;
 
    /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $type;
 

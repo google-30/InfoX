@@ -46,6 +46,36 @@ class Archive_ManageController extends Zend_Controller_Action
             return;
         }        
        
+        $mode = $this->getParam("mode", "Create");
+        $id = $this->getParam("id", "0");
+        $title = $this->getParam("title1");
+        $remark = $this->getParam("remark");
+        $path = $this->getParam("file", "");
+        $type = $this->getParam("type", "doc");
+
+        if($mode == "Create")
+        {
+            $data = new \Synrgic\Infox\Archive(); 
+        }
+        else
+        {
+            $data = $this->_archive->findOneBy(array("id"=>$id));
+        }
+ 
+        $data->setUpdate(new Datetime("now"));       
+        $data->setTitle($title);
+        $data->setRemark($remark);
+        $data->setType($type);
+        $data->setPath($path);
+
+        $this->_em->persist($data);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }        
+
         //$this->_redirect("archive/manage");
     }
 }
