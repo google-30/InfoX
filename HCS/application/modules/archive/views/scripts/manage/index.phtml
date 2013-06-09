@@ -1,30 +1,46 @@
 <style>
-/*#swdiv { display:none;}*/
+#swdiv { display:none; }
+.grid { width:100%; }
+#Documents { width:100%; }
+#Softwares { width:100%; }
 </style>
+<script>
+function showSw()
+{
+    $("#docdiv").hide();
+    $("#swdiv").show();
+           
+}
 
+function showDoc()
+{
+    $("#swdiv").hide();
+    $("#docdiv").show();
+
+}
+
+</script>
 <div class="ui-grid-b">
-	<div class="ui-block-a"><button>文档列表</button></div>
-	<div class="ui-block-b"><button>软件列表</button></div>
-	<div class="ui-block-c"><button>上传文件</button></div>
+	<div class="ui-block-a"><button onclick="showDoc()">文档列表</button></div>
+	<div class="ui-block-b"><button onclick="showSw()">软件列表</button></div>
+	<div class="ui-block-c"><a href="/archive/manage/add"><button>上传文件</button></a></div>
 </div><!-- /grid-b -->
 
 <div id="docdiv">
 <?
 /* id, update, title, path, size, remark, type*/
 echo $this->grid("Documents", true)
-          ->field('path','')
+          ->field('path','文档下载')
           ->field('update','更新日期')
           ->field('title', '名称')
           ->field('remark', '说明')
-          ->actionField(':action', null, '&nbsp;|&nbsp;')
+          ->actionField(':action', "文件操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(5)
           ->paginatorEnabled(false) // disable internal paginator, use dataTable's
           ->helper(new GridHelper_Archive())
           ->data($this->documents)
-          ->action(':action', 'Edit', array( 'url'=>array('action'=>'pageedit')))
-          ->action(':action', 'Preview', array( 'url'=>array('action'=>'preview')))
-          ->action(':action', 'Publish', array( 'url'=>array('action'=>'publishpage')))
-        ->action(':action', 'Delete', array('url'=>array('action'=>'deletepage')));
+          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
 
 </div>
@@ -33,6 +49,7 @@ echo $this->grid("Documents", true)
 <?
 /* id, update, title, path, size, remark, type*/
 echo $this->grid("Softwares", true)
+          ->field('path','软件下载')
           ->field('update','更新日期')
           ->field('title', '名称')
           ->field('remark', '注释')
@@ -41,10 +58,7 @@ echo $this->grid("Softwares", true)
           ->paginatorEnabled(false) // disable internal paginator, use dataTable's
           ->helper(new GridHelper_Archive())
           ->data($this->softwares)
-          ->action(':action', 'Edit', array( 'url'=>array('action'=>'pageedit')))
-          ->action(':action', 'Preview', array( 'url'=>array('action'=>'preview')))
-          ->action(':action', 'Publish', array( 'url'=>array('action'=>'publishpage')))
-      ->action(':action', 'Delete', array('url'=>array('action'=>'deletepage')));
-?>
+          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));?>
 </div>
 

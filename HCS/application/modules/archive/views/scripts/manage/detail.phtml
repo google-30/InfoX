@@ -1,0 +1,70 @@
+<?php
+
+$id = 0;
+$mode = "Create";
+$title="";
+$remark="";
+$type = "doc";
+
+if($this->mode == "Edit")
+{
+$id = $this->archive->getId();
+$mode = "Edit";
+$title = $this->archive->getTitle();
+$remark = $this->archive->getRemark();
+$type = $this->archive->getType();
+}
+     
+?>
+<h3>文件添加与编辑</h3>
+<form id="archiveform" method="post" action="/archive/manage/submit">
+<input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
+<input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+<div data-role="fieldcontain">
+	<label for="type" class="select">文件类别:</label>
+	<select name="type" id="type">
+<!--
+		<option value="doc">文档</option>
+		<option value="sw">软件</option>
+-->
+<?php
+$types = array("doc"=>"文档", "sw"=>"软件");
+foreach($types as $key=>$value)
+{
+    if($type == $tmp)
+    {
+        echo '<option value="' . $key . '" selected>' . $value . "</option>";
+    }
+    else
+    {
+        echo '<option value="' . $key . '" >' . $value . "</option>";
+    }
+
+}
+
+
+?>
+	</select>
+</div>
+
+<div data-role="fieldcontain">
+    <label for="title1">文件名称:</label>
+    <!-- do not use title, which will drive jqm crazy :P -->
+    <input type="text" name="title1" id="title1" value="<?php echo $title; ?>"  />
+</div>
+
+<div data-role="fieldcontain">
+    <label for="remark">文件说明:</label>
+    <textarea cols="40" rows="8" name="remark" id="remark" ><?php echo $remark; ?></textarea>
+</div>
+
+<div data-role="fieldcontain">
+    <label for="file" class="ui-input-text">选择文件:</label>
+    <input type="file" name="file" id="file">
+</div>
+
+<fieldset class="ui-grid-a">
+		<div class="ui-block-a"><button type="submit" data-theme="d">Cancel</button></div>
+		<div class="ui-block-b"><button type="submit" data-theme="a">Submit</button></div>
+</fieldset>
+</form> <!--archive form -->
