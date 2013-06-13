@@ -303,11 +303,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	    $view->navigation()->setAcl($acl)
 		->setRole($user->role);
 
+/*
             $page = $navigation->findByLabel("Services");
             $this->addServices($page);
 
             $page = $navigationmgmt->findByLabel("Manage Services");
             $this->addServices($page,true);
+*/
 	}
         
     }
