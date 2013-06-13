@@ -16,7 +16,7 @@
             </dashboard>
 
 	    <worker>
-		<label>Worker Management</label>
+		<label>工人管理</label>
 		<module>worker</module>
 		<controller>manage</controller>
 		<action>index</action>
@@ -24,23 +24,23 @@
 		<privilege>view</privilege>
 	    </worker>
 
-	    <project>
-		<label>Project Management</label>
-		<module>project</module>
-		<controller>manage</controller>
-		<action>index</action>
-		<resource>project:manage</resource>
-		<privilege>view</privilege>
-	    </project>
-
 	    <material>
-		<label>Material Management</label>
+		<label>材料管理</label>
 		<module>material</module>
 		<controller>manage</controller>
 		<action>index</action>
 		<resource>material:manage</resource>
 		<privilege>view</privilege>
 	    </material>
+
+	    <supplier>
+		<label>供应商管理</label>
+		<module>supplier</module>
+		<controller>manage</controller>
+		<action>index</action>
+		<resource>supplier:manage</resource>
+		<privilege>view</privilege>
+	    </supplier>
 
 	    <material2>
 		<label>工具材料申请</label>
@@ -51,15 +51,23 @@
 		<privilege>view</privilege>
 	    </material2>
 
+	    <project>
+		<label>项目管理</label>
+		<module>project</module>
+		<controller>manage</controller>
+		<action>index</action>
+		<resource>project:manage</resource>
+		<privilege>view</privilege>
+	    </project>
+
 	    <archive>
 		<label>文档软件管理</label>
 		<module>archive</module>
 		<controller>manage</controller>
 		<action>index</action>
-		<resource>worker:manage</resource>
+		<resource>archive:manage</resource>
 		<privilege>view</privilege>
 	    </archive>
-
 
 	    <information>
 		<label>Information</label>

@@ -1,0 +1,113 @@
+<script>
+function submit()
+{
+    $name = $("#name").val();
+    //$remark = $("#remark").val();
+    
+    if($name=="")
+    {
+        alert("请至少提供供应商名称，其他信息可稍后提交");
+    }    
+    else
+    {
+        $("#mainform").submit();       
+    }
+    
+}
+
+function cancel()
+{
+    var r=confirm("放弃编辑信息，返回列表界面");
+    if (r==true)
+    {
+        gotolist();
+    }
+}
+
+function gotolist()
+{
+    window.location = "/supplier/manage";        
+}
+
+function redirect(url) {
+    window.location = url;
+}
+</script>
+<?php
+
+$id = 0;
+$mode = "Create";
+$name="";
+$business="";
+$address="";
+$officephone = "";
+$mobilephone = "";
+$contact="";
+$remark="";
+$email="";
+
+if($this->mode == "Edit")
+{
+$mode = "Edit";
+$id = $this->maindata->getId();
+$name = $this->maindata->getName();
+$business = $this->maindata->getBusiness();
+$address = $this->maindata->getAddress();
+$officephone = $this->maindata->getOfficephone();
+$mobilephone = $this->maindata->getMobilephone();
+$contact=$this->maindata->getContact();
+$remark = $this->maindata->getRemark();
+$email = $this->maindata->getEmail();
+}
+     
+?>
+<h3>供应商添加与编辑</h3>
+<form id="mainform" method="post" action="/supplier/manage/submit" enctype="multipart/form-data">
+<input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
+<input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+
+<div data-role="fieldcontain">
+    <label for="name">供应商名称:</label>
+    <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="business">主营业务:</label>
+    <input type="text" name="business" id="business" value="<?php echo $business; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="contact">联系人:</label>
+    <input type="text" name="contact" id="contact" value="<?php echo $contact; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="officephone">办公电话:</label>
+    <input type="text" name="officephone" id="officephone" value="<?php echo $officephone; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="officephone">移动电话:</label>
+    <input type="text" name="mobilephone" id="mobilephone" value="<?php echo $mobilephone; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="email">电子邮件:</label>
+    <input type="text" name="email" id="email" value="<?php echo $email; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="address">公司地址:</label>
+    <input type="text" name="address" id="address" value="<?php echo $address; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="remark">其他说明:</label>
+    <textarea cols="40" rows="8" name="remark" id="remark" ><?php echo $remark; ?></textarea>
+</div>
+
+</form> <!--main form -->
+<fieldset class="ui-grid-a">
+		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
+		<div class="ui-block-b"><button type="submit" data-theme="d" onclick="cancel()">取消</button></div>
+</fieldset>

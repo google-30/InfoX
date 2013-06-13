@@ -1,0 +1,24 @@
+<style>
+#Suppliers { width:100%; }
+</style>
+<div class="ui-grid-b">
+	<div class="ui-block-c"><a href="/supplier/manage/add"><button>添加新供应商</button></a></div>
+</div><!-- /grid-b -->
+<div id="docdiv">
+<?
+echo $this->grid("Suppliers", true)
+          ->field('update','更新日期')
+          ->field('name', '商家名称')
+          ->field('business', '主营业务')
+          ->field('contact', '联系人')
+          ->field('officephone', '办公电话')  
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          //->helper(new GridHelper_Supplier())
+          ->data($this->suppliers)
+          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+?>
+</div>
+
