@@ -52,7 +52,7 @@ $type = $this->archive->getType();
      
 ?>
 <h3>文件添加与编辑</h3>
-<form id="archiveform" method="post" action="/archive/manage/submit">
+<form id="archiveform" method="post" action="/archive/manage/submit" enctype="multipart/form-data">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 <div data-role="fieldcontain">

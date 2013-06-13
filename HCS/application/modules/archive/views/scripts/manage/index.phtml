@@ -59,6 +59,7 @@ echo $this->grid("Softwares", true)
           ->helper(new GridHelper_Archive())
           ->data($this->softwares)
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
-          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));?>
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+?>
 </div>
 

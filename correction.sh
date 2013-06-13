@@ -25,6 +25,9 @@ mkdir -p $hcspath/data/uploads/workers/images
 chmod a+w  $hcspath/data/uploads/workers/images
 
 mkdir -p $hcspath/data/uploads/archives/softwares
-chmod a+w  $hcspath/data/uploads/archives/softwares
 mkdir -p $hcspath/data/uploads/archives/documents
-chmod a+w  $hcspath/data/uploads/archives/documents
+chmod -R 777 $hcspath/data/uploads/archives
+#chmod -R 755 $hcspath/data/uploads/archives/softwares
+#chmod -R 755 $hcspath/data/uploads/archives/documents
+#chmod a+w  $hcspath/data/uploads/archives/softwares
+#chmod a+w  $hcspath/data/uploads/archives/documents
