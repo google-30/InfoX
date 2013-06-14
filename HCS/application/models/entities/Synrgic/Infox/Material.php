@@ -19,12 +19,17 @@ class Material extends \Synrgic_Models_Entity {
     protected $name;
 
     /**
+     * @Column(type="string")
+     */
+    protected $nameeng;
+
+    /**
      * @Column(type="datetime", nullable=true)
      */
     protected $onlinedate;
     	
     /**
-     * @Column(type="float")
+     * @Column(type="float", nullable=true)
      */
     protected $price;
 
@@ -47,4 +52,13 @@ class Material extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $detailtype;    
+
+    /**
+     * supplier
+     * 
+     * @ManyToOne(targetEntity="Synrgic\InfoX\Supplier")
+     */
+    protected $supplier;
+
+    
 }
