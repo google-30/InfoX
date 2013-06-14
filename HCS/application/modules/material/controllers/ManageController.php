@@ -32,11 +32,14 @@ class Material_ManageController extends Zend_Controller_Action
         }
         $id = $this->_getParam("id");
         $data = $this->_material->findOneBy(array('id' => $id));
+        /*
         $this->view->id = $id;
         $this->view->name = $data->getName();
         $this->view->price = $data->getPrice();
         $this->view->date = $data->getOnlinedate()->format('m/d/Y H:i:s');
         $this->view->description = $data->getDescription();
+        */
+        $this->view->maindata = $data;
 
     }
 

@@ -19,7 +19,7 @@ class Material extends \Synrgic_Models_Entity {
     protected $name;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $nameeng;
 
@@ -56,7 +56,7 @@ class Material extends \Synrgic_Models_Entity {
     /**
      * supplier
      * 
-     * @ManyToOne(targetEntity="Synrgic\InfoX\Supplier")
+     * @ManyToOne(targetEntity="Synrgic\Infox\Supplier")
      */
     protected $supplier;
 

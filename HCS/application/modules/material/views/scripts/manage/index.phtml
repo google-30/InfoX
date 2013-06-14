@@ -1,8 +1,5 @@
 <style>
-table { width:100%; }
-#datatable caption { text-align:left;  }
-#datatable thead th { text-align:left; border-bottom-width:1px; border-top-width:1px; }
-#datatable th, td { text-align:left; padding:6px;} 
+#Materials { width:100%; }
 </style>
 <script>
 $(document).ready(function() {
@@ -109,58 +106,26 @@ function checkall()
 }
 </script>
 
-<h3>工具列表</h3>
-<fieldset class="ui-grid-b">
+<h3>材料列表</h3>
+<div class="ui-grid-b">
 	<div class="ui-block-a"><button onclick="addfunc()" data-theme="a">Add Tools</button></div>
 	<div class="ui-block-b"><button onclick="editfunc()" data-theme="a">Edit Tools</button></div>	 
 	<div class="ui-block-c"><button onclick="deletefunc()" data-theme="a">Delete Tools</button></div>  
-</fieldset>
-<form name="dataform" id="dataform">
-<table id="datatable" border="5">
-<thead><tr>
-<th><input type="checkbox" name="toggleall" id="toggleall" onClick="checkall()" data-role="none"></th>
-<th>Name</th>
-<th>Date</th>
-<th>Type</th>
-<th>Detail</th>
-<th>Warehouse</th>
-<th>Price</th>
-</tr></thead>
-<tbody> 
-<?php
-foreach($this->materials as $tmp)
-{
-    $name = $tmp->getName();
-    $date = $tmp->getOnlinedate()->format("Y-m-d H:i:s");
-    $price = $tmp->getPrice();
-    $warehouse = $tmp->getWarehouse();
-    $type1 = $tmp->getMacrotype();
-    $type2 = $tmp->getDetailtype();
-
-    $checkbox = '<td><input type="checkbox" name="abc" id="abc" value="' . $tmp->getId() . '" data-role="none">';
-    $body = "";
-//    $body .= "<tr>" . $checkbox . "<td>" . $name . "</td><td>" . $date . "</td><td> </td>$type1  <td>" . $price . "</td></tr>";    
-    $body .= "<tr>$checkbox<td>$name</td><td>$date</td><td>$type1</td><td>$type2</td><td>$warehouse</td><td>$price</td></tr>";    
-    echo $body;
-}
-?>
-</tbody> 
-</table>
-</form><!-- dataform -->
-
+</div><!-- /grid-a -->
 <div>
 <?
 echo $this->grid("Materials", true)
-          ->field('name','')
-          ->field('name', '商家名称')
-          ->field('business', '主营业务')
-          ->field('contact', '联系人')
-          ->field('officephone', '办公电话')  
+          ->field('name','中文名称')
+          ->field('nameeng', '英文名称')
+          ->field('macrotype', '产品类别')
+          ->field('detailtype', '详细类别')
+          ->field('supplier', '供应商')
+          ->field('price', '单价')  
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
-          //->helper(new GridHelper_Supplier())
-          ->data($this->suppliers)
+          ->helper(new GridHelper_Material())
+          ->data($this->materials)
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
