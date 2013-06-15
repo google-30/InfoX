@@ -16,31 +16,13 @@
             </dashboard>
 
 	    <worker>
-		<label>工人管理</label>
+		<label>工人信息管理</label>
 		<module>worker</module>
 		<controller>manage</controller>
 		<action>index</action>
 		<resource>worker:manage</resource>
 		<privilege>view</privilege>
 	    </worker>
-
-	    <material>
-		<label>材料管理</label>
-		<module>material</module>
-		<controller>manage</controller>
-		<action>index</action>
-		<resource>material:manage</resource>
-		<privilege>view</privilege>
-	    </material>
-
-	    <supplier>
-		<label>供应商管理</label>
-		<module>supplier</module>
-		<controller>manage</controller>
-		<action>index</action>
-		<resource>supplier:manage</resource>
-		<privilege>view</privilege>
-	    </supplier>
 
 	    <material2>
 		<label>工具材料申请</label>
@@ -69,77 +51,34 @@
 		<privilege>view</privilege>
 	    </archive>
 
-	    <information>
-		<label>Information</label>
-		<module>information</module>
-		<controller>manage</controller>
-		<action>pagemanage</action>
-		<resource>information:manage</resource>
-		<privilege>view</privilege>
-	    </information>
-	    <billpreview>
-		<label>Bill Management</label>
-		<module>bill</module>
-		<controller>manage</controller>
-		<action>index</action>
-		<resource>bill:manage</resource>
-		<privilege>view</privilege>
-	    </billpreview>
-	    <orders>
-			<label>Orders</label>
-			<uri>/management/orders</uri>
-			<resource>management:orders</resource>
-			<privilege>view</privilege>
-	    </orders>
-        
-            <accounts>
-                <label>Accounts</label>
-                <module>management</module>
-                <controller>accounts</controller>
-                <action>index</action>
-		<resource>management:accounts</resource>
-		<privilege>view</privilege>
-            </accounts>
-            <rooms>
-                <label>Rooms</label>
-                <module>management</module>
-                <controller>room</controller>
-                <action>index</action>
-		<resource>management:room</resource>
-		<privilege>view</privilege>
-            </rooms>
-            <devices>
-                <label>Devices</label>
-		<module>management</module>
-		<controller>devices</controller>
-		<action>list</action>
-		<resource>management:devices</resource>
-		<privilege>view</privilege>
-            </devices>
-            <adverts>
-                <label>Adverts</label>
-                <module>adverts</module>
-                <controller>admin</controller>
-                <action>index</action>
-		<resource>adverts:admin</resource>
-		<privilege>view</privilege>
-            </adverts>
-            <translation>
-                <label>Translation</label>
-                <module>management</module>
-                <controller>translation</controller>
-                <action>index</action>
-        <resource>management:translation</resource>
-        <privilege>view</privilege>
-            </translation>
-            <guests>
-                <label>Guests</label>
-                <module>management</module>
-                <controller>guest</controller>
-                <action>index</action>
-		<resource>management:guest</resource>
-		<privilege>view</privilege>
-            </guests>
+        <settings>
+            <label>Settings</label>
+            <module>management</module>
+            <controller>settings</controller>
+            <action>index</action>
+            <class>popup</class>
+            <pages>
+	        <material>
+		    <label>材料信息</label>
+		    <module>material</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>material:manage</resource>
+		    <privilege>view</privilege>
+	        </material>
+
+	        <supplier>
+		    <label>供应商信息</label>
+		    <module>supplier</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>supplier:manage</resource>
+		    <privilege>view</privilege>
+	        </supplier>
+                
+            </pages>
+        </settings>
+
         </pages>
     </nav>
 </configdata>
