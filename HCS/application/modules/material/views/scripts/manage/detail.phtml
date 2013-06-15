@@ -1,3 +1,7 @@
+<style>
+#material {width:100%;}
+#material tr, td {width:50%; vertical-align:middle;}
+</style>
 <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
 <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
 <script>
@@ -45,6 +49,7 @@ $data=$this->maindata;
 $mode=$this->mode;//"Create";
 $id=0;
 $name="";
+$nameeng="";
 $spec="";
 $description="";
 $supplier="";
@@ -55,6 +60,7 @@ if($mode==="Edit")
 {
 $id=$data->getId();
 $name=$data->getName();
+$nameeng=$data->getNameeng();
 //$spec=$data->getSpec();
 $description=$data->getDescription();
 if($data->getSupplier())
@@ -68,28 +74,92 @@ $date=$data->getOnlinedate()->format('Y/m/d');
 
 ?>
 
+<!--
 <h3>材料添加与编辑</h3>
 <form id="dataform" name="dataform">
 <input type="hidden" id="data" name="data">
 <input type="hidden" name="mode" id="mode" value="<?php echo $mode; ?>">
 <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
 <div data-role="fieldcontain">
-<label for="name">Name:</label>
-<input type="text" name="name" id="name" value="<?php echo $name; ?>" />
+<label for="name">中文名:</label>
+<input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
 </div>
 <div data-role="fieldcontain">
-<label for="date">Date:</label>
-<input type="text" name="date" id="date" value="<?php echo $date; ?>" />
+<label for="name">英文名:</label>
+<input type="text" name="name" id="name" value="<?php echo $nameeng; ?>" data-mini="true">
 </div>
 <div data-role="fieldcontain">
-<label for="price">Price:</label>
-<input type="text" name="price" id="price" value="<?php echo $price; ?>" />
+<label for="date">更新日期:</label>
+<input type="text" name="date" id="date" value="<?php echo $date; ?>" data-mini="true">
+</div>
+<div data-role="fieldcontain">
+<label for="price">价格:</label>
+<input type="text" name="price" id="price" value="<?php echo $price; ?>" data-mini="true">
+</div>
+<div data-role="fieldcontain">
+<label for="spec">规格:</label>
+<input type="text" name="spec" id="spec" value="<?php echo $spec; ?>" data-mini="true">
 </div>
 <div data-role="fieldcontain">
     <label for="description">材料描述:</label>
-    <textarea id="description" name="description" rows="3" cols="60"  >
+    <textarea id="description" name="description" rows="2" cols="60" data-mini="true">
     <?php echo $description; ?>  
     </textarea>
 </div>
+<button type="button" id="submitbutton" name="submitbutton" onclick="submitform()">Submit</button>
+</form>
+-->
+<form>
+  <fieldset>
+    <legend><strong>材料添加与编辑</strong></legend>
+<table id="material">
+<tr>
+<td rowspan="3">材料参考照片</td>
+<td>
+<div data-role="fieldcontain">
+<label for="name">中文名:</label>
+<input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
+</div>
+</td>
+</tr>
+<tr><td>
+<div data-role="fieldcontain">
+<label for="name">英文名:</label>
+<input type="text" name="name" id="name" value="<?php echo $nameeng; ?>" data-mini="true">
+</div>
+</td></tr>
+<tr><td>
+<div data-role="fieldcontain">
+<label for="date">更新日期:</label>
+<input type="text" name="date" id="date" value="<?php echo $date; ?>" data-mini="true">
+</div>
+</td></tr>
+<tr><td>
+<div data-role="fieldcontain">
+<label for="supplier">供应商:</label>
+<input type="text" name="supplier" id="supplier" value="<?php echo $supplier; ?>" data-mini="true">
+</div>
+</td><td>
+<div data-role="fieldcontain">
+<label for="price">价格:</label>
+<input type="text" name="price" id="price" value="<?php echo $price; ?>" data-mini="true">
+</div>
+</td></tr>
+<tr><td>
+<div data-role="fieldcontain">
+<label for="spec">规格:</label>
+<input type="text" name="spec" id="spec" value="<?php echo $spec; ?>" data-mini="true">
+</div>
+</td><td>
+<div data-role="fieldcontain">
+    <label for="description">材料描述:</label>
+    <textarea id="description" name="description" rows="2" cols="60" data-mini="true">
+    <?php echo $description; ?>  
+    </textarea>
+</div>
+</td></tr>
+
+</table>
+</fieldset>
 <button type="button" id="submitbutton" name="submitbutton" onclick="submitform()">Submit</button>
 </form>

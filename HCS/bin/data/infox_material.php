@@ -4,24 +4,39 @@
  */
 
 $tuples = array( 
-/* name, onlinedate, price, warehouse, macrotype, detailtype*/
-array("hammer01", new DateTime("2012-10-01"), 10.0, "orchard", "mechanic", "heavy"),
-array("hammer02", new DateTime("2012-10-02"), 20.0, "orchard", "mechanic", "heavy"),
-array("hammer03", new DateTime("2012-10-03"), 30.0, "orchard", "mechanic", "heavy"),
-array("锤子04", new DateTime("2012-10-04"), 40.0, "tampines", "mechanic", "heavy"),
-array("郎头05", new DateTime("2012-10-05"), 50.0, "tampines", "mechanic", "heavy"),
+/* name, onlinedate, price, warehouse, macrotype, detailtype, supplier, nameeng, */
+array("锤子1号", new DateTime("2012-10-01"), 10.0, "orchard", "mechanic", 
+"heavy",1,"hammer01"),
+array("锤子2号", new DateTime("2012-10-02"), 20.0, "orchard", "mechanic", 
+"heavy",1,"hammer02"),
+array("锤子3号", new DateTime("2012-10-03"), 30.0, "orchard", "mechanic", 
+"heavy",1,"hammer03"),
+array("锤子4号", new DateTime("2012-10-04"), 40.0, "tampines", "mechanic", 
+"heavy",1,"hammer04"),
+array("锤子5号", new DateTime("2012-10-05"), 50.0, "tampines", "mechanic", 
+"heavy",1,"hammer05"),
 
-array("drill01", new DateTime("2012-10-01"), 10.0, "orchard","mechanic", "electronic"),
-array("drill02", new DateTime("2012-10-02"), 20.0, "orchard","mechanic", "electronic"),
-array("drill03", new DateTime("2012-10-03"), 30.0, "orchard","mechanic", "electronic"),
-array("电钻04", new DateTime("2012-10-04"), 40.0, "tampines","mechanic", "electronic"),
-array("钻孔机05", new DateTime("2012-10-05"), 50.0, "tampines","mechanic", "electronic"),
+array("电钻1号", new DateTime("2012-10-01"), 10.0, "orchard","mechanic", 
+"electronic",2,"drill01"),
+array("电钻2号", new DateTime("2012-10-02"), 20.0, "orchard","mechanic", 
+"electronic",2,"drill02"),
+array("电钻3号", new DateTime("2012-10-03"), 30.0, "orchard","mechanic", 
+"electronic",2,"drill03"),
+array("电钻4号", new DateTime("2012-10-04"), 40.0, "tampines","mechanic", 
+"electronic",2,"drill04"),
+array("电钻5号", new DateTime("2012-10-05"), 50.0, "tampines","mechanic", 
+"electronic",2,"drill05"),
 
-array("cement01", new DateTime("2012-10-01"), 10.0, "orchard","material", "consumable"),
-array("cement02", new DateTime("2012-10-02"), 20.0, "orchard","material", "consumable"),
-array("cement03", new DateTime("2012-10-03"), 30.0, "orchard","material", "consumable"),
-array("水泥04", new DateTime("2012-10-04"), 40.0, "tampines","material", "building"),
-array("水泥05", new DateTime("2012-10-05"), 50.0, "tampines","material", "building"),
+array("水泥1号", new DateTime("2012-10-01"), 10.0, "orchard","material", 
+"consumable",3,"cement01"),
+array("水泥2号", new DateTime("2012-10-02"), 20.0, "orchard","material", 
+"consumable",3,"cement02"),
+array("水泥3号", new DateTime("2012-10-03"), 30.0, "orchard","material", 
+"consumable",3,"cement03"),
+array("水泥4号", new DateTime("2012-10-04"), 40.0, "tampines","material", 
+"building",3,"cement04"),
+array("水泥5号", new DateTime("2012-10-05"), 50.0, "tampines","material", 
+"building",3,"cement05"),
 
 	);
 
@@ -33,6 +48,12 @@ foreach( $tuples as $tuple ){
     $data->setWarehouse($tuple[3]);
     $data->setMacrotype($tuple[4]);
     $data->setDetailtype($tuple[5]);
+
+    $supplier = $em->getRepository('\Synrgic\Infox\Supplier')->findOneBy(array('id'=>$tuple[6]));
+    $data->setSupplier($supplier);
+
+    $data->setNameeng($tuple[7]);
+
 	$em->persist($data);
 }
 

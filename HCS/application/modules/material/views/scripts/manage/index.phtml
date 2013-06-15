@@ -15,13 +15,6 @@ $(document).ready(function() {
     } );
 } );
 
-function addfunc()
-{
-    alert("addfunc");
-    var url="/material/manage/add";
-    redirect(url);
-}
-
 function editfunc()
 {
     var elmNo = 0; 
@@ -106,12 +99,7 @@ function checkall()
 }
 </script>
 
-<h3>材料列表</h3>
-<div class="ui-grid-b">
-	<div class="ui-block-a"><button onclick="addfunc()" data-theme="a">Add Tools</button></div>
-	<div class="ui-block-b"><button onclick="editfunc()" data-theme="a">Edit Tools</button></div>	 
-	<div class="ui-block-c"><button onclick="deletefunc()" data-theme="a">Delete Tools</button></div>  
-</div><!-- /grid-a -->
+<div><a href="/material/manage/add"><button data-theme="a" data-mini="true">材料添加</button></a></div>
 <div>
 <?
 echo $this->grid("Materials", true)
