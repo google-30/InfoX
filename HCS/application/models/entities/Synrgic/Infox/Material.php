@@ -64,5 +64,10 @@ class Material extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $spec;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $pic;
     
 }
