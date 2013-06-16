@@ -24,7 +24,7 @@ class Material extends \Synrgic_Models_Entity {
     protected $nameeng;
 
     /**
-     * @Column(type="datetime", nullable=true)
+     * @Column(type="date", nullable=true)
      */
     protected $onlinedate;
     	
@@ -60,5 +60,9 @@ class Material extends \Synrgic_Models_Entity {
      */
     protected $supplier;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $spec;
     
 }

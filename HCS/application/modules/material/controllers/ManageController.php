@@ -9,6 +9,7 @@ class Material_ManageController extends Zend_Controller_Action
     {
         $this->_em = Zend_Registry::get('em');
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
+        $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
     }
 
     public function indexAction()
@@ -19,7 +20,7 @@ class Material_ManageController extends Zend_Controller_Action
 
     public function addAction()
     {
-        
+        $this->getSuppliers();    
     }
 
     public function editAction()
@@ -32,15 +33,9 @@ class Material_ManageController extends Zend_Controller_Action
         }
         $id = $this->_getParam("id");
         $data = $this->_material->findOneBy(array('id' => $id));
-        /*
-        $this->view->id = $id;
-        $this->view->name = $data->getName();
-        $this->view->price = $data->getPrice();
-        $this->view->date = $data->getOnlinedate()->format('m/d/Y H:i:s');
-        $this->view->description = $data->getDescription();
-        */
-        $this->view->maindata = $data;
 
+        $this->view->maindata = $data;
+        $this->getSuppliers();
     }
 
     public function deleteAction()
@@ -48,29 +43,16 @@ class Material_ManageController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
-        $requests = $this->getRequest()->getPost();
-        if(0)
-        {                
-            var_dump($requests);
-            return;
-        }   
+        $id = $this->getParam("id");
 
-        foreach($requests as $key => $value)
-        {
-            if($value == 'true' && $key)
-            {                
-                $data = $this->_material->findOneBy(array('id' => $key));
-                if($data)
-                {    
-                    //var_dump($data);
-                    $this->_em->remove($data);
-                }                
-            } 
-        }
+        $data = $this->_material->findOneBy(array('id' => $id));
+        $this->_em->remove($data);
         $this->_em->flush();
+
+        $this->_redirect("material/manage");
     }
 
-    public function savedetailAction()
+    public function submitAction()
     {
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
@@ -80,46 +62,65 @@ class Material_ManageController extends Zend_Controller_Action
             $requests = $this->getRequest()->getPost();
             var_dump($requests);
             return;
-        }                
+        }   
 
-        $id = $this->_getParam("id");
-        $description  = $this->getParam("data");        
-        $mode = $this->getParam("mode");  
-        $name = $this->getParam("name");
-        $date = $this->_getParam("date"); 
-        $price = $this->_getParam("price");
+        $mode = $this->getParam("mode", "Create");
+        $id = $this->getParam("id", "");
+        $name = $this->getParam("name", "");
+        $nameeng = $this->getParam("nameeng", "");
+        $date = $this->getParam("date", "now");
+        $price = $this->getParam("price", "0");
+        $spec = $this->getParam("spec", "");
+        $description = $this->getParam("description", "");
+        $mtype = $this->getParam("mtype", "");
+        $dtype = $this->getParam("dtype", "");
 
-        $data = null;
-        if($mode == "Edit")
+        $supplier = $this->getParam("supplier", "");
+
+        if($mode == "Create")
         {
-            $data = $this->_material->findOneBy(array('id' => $id));
-            echo "Data updated!\n";                         
+            $data = new \Synrgic\Infox\Material(); 
         }
         else
         {
-            $data = new \Synrgic\Infox\Material();
-            echo "Data stored!"; 
+            $data = $this->_material->findOneBy(array("id"=>$id));
         }        
-
+                
         $data->setName($name);
-        $data->setPrice($price);
+        $data->setNameeng($nameeng);
         $data->setOnlinedate(new Datetime($date));
+        $data->setPrice(floatval($price));
+        $data->setSpec($spec);
         $data->setDescription($description);
-
+        $data->setMacrotype($mtype);
+        $data->setDetailtype($dtype);
+        $supobj = $this->_supplier->findOneBy(array("id"=>$supplier));
+        if(isset($supobj))  
+        {
+            $data->setSupplier($supobj);
+        }
+                    
         $this->_em->persist($data);
         try {
-            $this->_em->flush(); 
-        } catch (Exception $e){
+            $this->_em->flush();
+        } catch (Exception $e) {
             var_dump($e);
-            //return;
-        }             
+            return;
+        }        
 
-    }
+        $this->_redirect("material/manage");
+    }    
+
+    private function getSuppliers()
+    {
+        $this->view->suppliers = $this->_supplier->findAll();  
+    }    
 
     public function applymaterialAction()
     {
         echo "applymaterialAction";
     }
+
 }
 
 
