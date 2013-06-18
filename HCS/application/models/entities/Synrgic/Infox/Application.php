@@ -19,55 +19,37 @@ class Application extends \Synrgic_Models_Entity {
     protected $name;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @Column(type="datetime", nullable=true)
      */
-    protected $nameeng;
+    protected $createdate;
 
     /**
-     * @Column(type="date", nullable=true)
+     * @Column(type="datetime", nullable=true)
      */
-    protected $onlinedate;
-    	
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $price;
+    protected $updatedate;
 
     /**
-     * @Column(type="text", nullable=true)
+     * Construction site
+     * @ManyToOne(targetEntity="Synrgic\Infox\Site")
      */
-    protected $description;
-  
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $warehouse;
+    protected $site;
 
     /**
-     * @Column(type="string", nullable=true)
+     * Applicant
+     * @ManyToOne(targetEntity="Synrgic\Infox\Humanresource")
      */
-    protected $macrotype;
+    protected $applicant;
 
     /**
-     * @Column(type="string", nullable=true)
+     * delivery contact person
+     * @ManyToOne(targetEntity="Synrgic\Infox\Humanresource")
      */
-    protected $detailtype;    
+    protected $porter;
 
     /**
-     * supplier
-     * 
-     * @ManyToOne(targetEntity="Synrgic\Infox\Supplier")
+     * @Column(type="text")
      */
-    protected $supplier;
+    protected $materials;
 
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $spec;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $pic;
     
 }

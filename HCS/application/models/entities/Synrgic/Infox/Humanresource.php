@@ -51,11 +51,27 @@ class Humanresource extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
+    protected $othercontact;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
     protected $position; 
 
     /**
      * @Column(type="string", nullable=true)
      */
     protected $remark;    
+ 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $username;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $password;    
+     
     
 }

@@ -24,14 +24,14 @@
 		<privilege>view</privilege>
 	    </worker>
 
-	    <material2>
-		<label>工具材料申请</label>
+	    <appmaterial>
+		<label>材料申请管理</label>
 		<module>material</module>
-		<controller>apply</controller>
-		<action>index</action>
-		<resource>material:apply</resource>
+		<controller>manage</controller>
+		<action>apply</action>
+		<resource>material:manage</resource>
 		<privilege>view</privilege>
-	    </material2>
+	    </appmaterial>
 
 	    <project>
 		<label>项目管理</label>
@@ -75,6 +75,15 @@
 		    <resource>supplier:manage</resource>
 		    <privilege>view</privilege>
 	        </supplier>
+
+	        <humanresource>
+		    <label>人力资源信息</label>
+		    <module>humanresource</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>humanresource:manage</resource>
+		    <privilege>view</privilege>
+	        </humanresource>
                 
             </pages>
         </settings>
