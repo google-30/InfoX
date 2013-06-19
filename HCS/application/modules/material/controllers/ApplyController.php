@@ -40,4 +40,9 @@ class Material_ApplyController extends Zend_Controller_Action
         
     } 
 
+    public function appmanageAction()
+    {
+        echo "appmanageAction";
+    }
+
 }

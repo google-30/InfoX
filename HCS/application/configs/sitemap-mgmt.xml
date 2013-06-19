@@ -24,14 +24,23 @@
 		<privilege>view</privilege>
 	    </worker>
 
-	    <appmaterial>
+	    <applicationmanagement>
 		<label>材料申请管理</label>
 		<module>material</module>
-		<controller>manage</controller>
-		<action>apply</action>
-		<resource>material:manage</resource>
+		<controller>apply</controller>
+		<action>appmanage</action>
+		<resource>material:apply</resource>
 		<privilege>view</privilege>
-	    </appmaterial>
+	    </applicationmanagement>
+
+	    <applymaterials>
+		<label>材料申请</label>
+		<module>material</module>
+		<controller>apply</controller>
+		<action>index</action>
+		<resource>material:apply</resource>
+		<privilege>view</privilege>
+	    </applymaterials>
 
 	    <project>
 		<label>项目管理</label>

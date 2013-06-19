@@ -190,6 +190,8 @@ class Material_ManageController extends Zend_Controller_Action
         echo "applymaterialAction";
     }
 
+
+    
 }
 
 
