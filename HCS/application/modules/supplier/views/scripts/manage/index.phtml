@@ -1,10 +1,8 @@
 <style>
 #Suppliers { width:100%; }
 </style>
-<div class="ui-grid-b">
-	<div class="ui-block-c"><a href="/supplier/manage/add"><button>添加新供应商</button></a></div>
-</div><!-- /grid-b -->
-<div id="docdiv">
+<div><a href="/supplier/manage/add"><button>添加新供应商</button></a></div>
+<div>
 <?
 echo $this->grid("Suppliers", true)
           ->field('update','更新日期')

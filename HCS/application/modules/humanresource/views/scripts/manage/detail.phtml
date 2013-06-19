@@ -1,0 +1,136 @@
+<script>
+function submit()
+{
+    $name = $("#name").val();
+    //$remark = $("#remark").val();
+    
+    if($name=="")
+    {
+        alert("请至少提供人员名称，其他信息可稍后提交");
+    }    
+    else
+    {
+        $("#mainform").submit();       
+    }
+    
+}
+
+function cancel()
+{
+    var r=confirm("放弃编辑信息，返回列表界面");
+    if (r==true)
+    {
+        gotolist();
+    }
+}
+
+function gotolist()
+{
+    window.location = "/humanresource/manage";        
+}
+
+function redirect(url) {
+    window.location = url;
+}
+</script>
+<?php
+
+$maindata=$this->maindata; 
+$id = 0;
+$mode = "Create";
+$name="";
+$nameeng="";
+$phone1="";
+$phone2="";
+$email1="";
+$email2="";
+$othercontact="";
+$position="";
+$remark="";
+$username="";
+$password="";
+
+if($this->mode == "Edit")
+{
+$mode = "Edit";
+$id = $maindata->getId();
+$name = $maindata->getName();
+$nameeng=$maindata->getNameeng();
+$phone1=$maindata->getPhone1();
+$phone2=$maindata->getPhone2();
+$email1=$maindata->getEmail1();
+$email2=$maindata->getEmail2();
+$othercontact=$maindata->getOthercontact();
+$position=$maindata->getPosition();
+$remark=$maindata->getRemark();
+$username=$maindata->getUsername();
+$password=$maindata->getPassword();
+
+}
+     
+?>
+<h3>行政人员添加与编辑</h3>
+<form id="mainform" method="post" action="/humanresource/manage/submit" enctype="multipart/form-data">
+<input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
+<input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+
+<div data-role="fieldcontain">
+    <label for="name">中文名:</label>
+    <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="nameeng">英文名:</label>
+    <input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="position">职位:</label>
+    <input type="text" name="position" id="position" value="<?php echo $position; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="phone1">电话1:</label>
+    <input type="text" name="phone1" id="phone1" value="<?php echo $phone1; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="phone2">电话2:</label>
+    <input type="text" name="phone2" id="phone2" value="<?php echo $phone2; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="email1">电子邮件1:</label>
+    <input type="text" name="email1" id="email1" value="<?php echo $email1; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="email2">电子邮件2:</label>
+    <input type="text" name="email2" id="email2" value="<?php echo $email2; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="othercontact">其他联系方式:</label>
+    <input type="text" name="othercontact" id="othercontact" value="<?php echo $othercontact; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="remark">其他说明:</label>
+    <input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="username">登录用户名:</label>
+    <input type="text" name="username" id="username" value="<?php echo $username; ?>" data-mini="true">
+</div>
+<div data-role="fieldcontain">
+    <label for="password">登录密码:</label>
+    <input type="text" name="password" id="password" value="<?php echo $password; ?>" data-mini="true">
+</div>
+
+
+</form> <!--main form -->
+<fieldset class="ui-grid-a">
+		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
+		<div class="ui-block-b"><button type="submit" data-theme="d" onclick="cancel()">取消</button></div>
+</fieldset>
