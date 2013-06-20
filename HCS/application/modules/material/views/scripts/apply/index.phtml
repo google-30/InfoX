@@ -1,218 +1,144 @@
 <style>
-#typechooser { width:60%; text-align:center; /*vertical-align:middle;*/ float:left; padding-right: 2px; margin: 3px; }
-#choosen { width:35%; text-align:center; float:left; }
-/*http://stackoverflow.com/questions/3148415/how-to-make-a-vertical-line*/
-/*.verticalLine { border-left: 2px solid #000000; }*/
-table { width:100%; }
-#datatable caption { text-align:left; }
-#datatable thead th { text-align:center; border-bottom-width:1px; border-top-width:1px; }
-#datatable th, td { text-align:center; padding:1px;} 
-
-.tdname { width:100px; }
-.tdnameeng { width:100px; }
-.tdamount { width:200px; }
-.tdchoose { width:50px; }
+#wizard1 { text-align:center; }
+#createapp, #editapp { display:none; }
+#createapptable { width:100%; }
+#createapptable td { width:33%; }
 </style>
 <script>
-$(function() {
-    $('#macrotype').change(macroReload);
-    $('#detailtype').change(detailReload);
-});
-
-function macroReload()
+function showcreateapp()
 {
-    //alert("reload!");
-    var url = "/material/apply/index?macro=" + $('#macrotype').val();
-    redirect(url);
+    $("#wizard1").hide();
+    $("#editapp").hide();
+    $("#createapp").show();        
 }
 
-function detailReload()
+function showeditapp()
 {
-    //alert("reload!");
-    var url = "/material/apply/index?macro=" + $('#macrotype').val() + "&detail=" + $('#detailtype').val();
-    redirect(url);
+    $("#wizard1").hide();
+    $("#createapp").hide();
+    $("#editapp").show();        
 }
 
-function redirect(url) 
+function backtowizard()
 {
-	window.location = url;
+    $("#editapp").hide();
+    $("#createapp").hide();
+    $("#wizard1").show(); 
 }
 
-function checkall()
+function createapp()
 {
-    //alert("checkall");
-    var checked = false;
-    var form = document.dataform;
-    
-    for (var i = 0; i < form.elements.length; i++) {
-        if(form.elements[i].id == 'toggleall')
-        {
-            checked = form.elements[i].checked;
-            break;    
-        }    
-    }
-
-    for (var i = 0; i < form.elements.length; i++) {    
-        if(form.elements[i].type == 'checkbox'){
-                form.elements[i].checked = checked;
-            }    
-    }
-}
-
-function submitmaterials()
-{
-    var r=confirm("Confirm to delete?");
-    if (r==false) { return false; }          
-
-    var formname = "dataform";
-
-    var action = "/material/apply/submit";     
-    var method = "post";
-
-    var frm = $('#dataform');    
-    var toServer = {};
-    $('#datatable tbody tr td input').each(function(key, value) {
-        toServer[$(this).val()] = $(this).is(':checked');
-    });
-    
-    frm.submit(function () {
-        $.ajax({
-            type: method,
-            url: action,
-            data: toServer,
-            success: function (data) {
-                //alert(data);
-                window.location.reload();
-            }
-        });
-
-        return false;
-    });
-    
-    frm.submit();
-}
-
-function addchoosen(id)
-{
-    //alert("id="+id);
-    var amount = $('#slider'+id).val();
-    if(amount==0)
+    alert("createapp");
+    var r=confirm("请确认选择正确的工地");
+    if (r==false)
     {
-        alert("请选择数量");
-        return;
-    }
-
-    //alert("amount="+amount);
-
-    // TODO: upload to server
-    $.post("/material/apply/postdata", { id: id, amount: amount }, 
-        function(data) {
-          alert("Data Loaded: " + data);
-    });
-        
-        
-
+        return false;
+    }    
 }
 </script>
-
-<div><button>提交所有已经选择的材料</button></div>
-<hr>
-<div id="bigboss">
-<div id="typechooser" style="clear:both">
+<div id="wizard1">
 <fieldset>
-    <legend>按分类选择材料</legend>
-<div data-role="fieldcontain">
-   <label for="macrotype" class="select">主要分类：</label>
-   <select name="macrotype" id="macrotype" data-mini="true">
-<?php
-$selected=$this->macro;
-$macrotypes = $this->macrotypes;
-//print_r($this->macrotypes);
-foreach($this->macrotypes as $tmp)
-{
-    if($tmp == $selected)
-    {
-        echo "<option value='$tmp' selected>$tmp</option>";
-    }
-    else
-    {
-        echo "<option value='$tmp'>$tmp</option>";
-    }
-}
-?>   
-   </select>
+    <legend><strong>创建申请</strong></legend>
+<button onclick="showcreateapp()">创建新的材料申请</button> 
+<p>如果有新的材料需要申请，请点击按钮进入创建过程。</p>
+</fieldset> 
+<strong>或者</strong>
+<fieldset>
+    <legend><strong>编辑申请</strong></legend>
+<button onclick="showeditapp()">继续编辑之前的材料申请</button>
+<p>如果以前已经在系统申请过材料，只需要修改部分申请，请点击按钮进入编辑过程。</p>
+</fieldset>
 </div>
 
+<!-- create application -->
+<div id="createapp" >
+<h3>创建新的材料申请</h3>
+<!--<button onclick="backtowizard()">放弃创建，回到上一步</button> 
+<form>
 <div data-role="fieldcontain">
-   <label for="detailtype" class="select">详细分类:</label>
-   <select name="detailtype" id="detailtype" data-mini="true">
-<?php
-$selected=$this->detail;
-$detailtypes = $this->detailtypes;
-//print_r($this->detailtypes);
-foreach($this->detailtypes as $tmp)
-{
-    if($tmp == $selected)
-    {
-        echo "<option value='$tmp' selected>$tmp</option>";
-    }
-    else
-    {
-        echo "<option value='$tmp'>$tmp</option>";
-    }
-}
-?>        
-   </select>
-</div>
-
-<table id="datatable" border="4">
-<thead><tr>
-<th>中文名</th>
-<th>英文名</th>
-<th>数量</th>
-<th>选择</th>
-</tr></thead>
-<tbody> 
-<?php
-foreach($this->materials as $tmp)
+    <label for="sites" class="select">选择工地:</label>
+    <select name="sites" id="sites">
+<?php   
+$sites = $this->sites; 
+foreach($sites as $tmp)
 {
     $id = $tmp->getId();
     $name = $tmp->getName();
-    $nameeng = $tmp->getNameeng();
-    //$date = $tmp->getOnlinedate()->format("Y-m-d H:i:s");
-    //$price = $tmp->getPrice();
-    //$warehouse = $tmp->getWarehouse();
-    //$type1 = $tmp->getMacrotype();
-    //$type2 = $tmp->getDetailtype();
-
-    $body = "";
-    //$checkbox = '<td><input type="checkbox" name="abc" id="abc" value="' . $tmp->getId() . '" data-role="none">';
-    //$body .= "<tr>" . $checkbox . "<td>" . $name . "</td><td>" . $date . "</td><td> </td>$type1  <td>" . $price . "</td></tr>";    
-    //$body .= "<tr>$checkbox<td>$name</td><td>$date</td><td>$type1</td><td>$type2</td><td>$warehouse</td><td>$price</td></tr>";    
-    $body .= '<tr><td class="tdname">' . $name . '</td><td class="tdnameeng">' . $nameeng . '</td>';
-    $slider = '<td class="tdamount"><input type="range" name="slider" id="slider' . $id . '" value="0" min="0" max="100" data-highlight="true" data-mini="true"></td>';
-    $body .= $slider;
-    //$gorightbutton = '<td class="tdchoose"><input type="button" value="选择" data-iconpos="notext" data-icon="arrow-r" data-iconpos="bottom"></td>';
-    //$gorightbutton = '<td class="tdchoose"><a href="index.html" data-role="button" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">选中</a></td>';
-    $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">选中</button></td>';
-
-    $body .= $gorightbutton;
-    $body .= "</tr>";    
-    echo $body;
+    echo '<option value="' . $id. '">' . $name . '</option>';
 }
+
 ?>
-</tbody> 
-</table>
-</fieldset>
-</div> <!-- typechooser -->
-
-<div id="choosen"  class="verticalLine">
-<fieldset>
-    <legend>已选择材料</legend>
-</fieldset>
+    </select>
 </div>
-</div> <!-- bigboss -->
-<br>
+<div data-role="fieldcontain">
+    <label for="detailtype" class="select">创建说明:</label>
+    <textarea></textarea>
+</div>
+-->
+<table id="createapptable">
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="sites" class="select">选择工地:</label>
+    <select name="sites" id="sites">
+<?php   
+$sites = $this->sites; 
+foreach($sites as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+    echo '<option value="' . $id. '">' . $name . '</option>';
+}
 
+?>
+    </select>
+</div>
+</td>
+<td>
+<fieldset>
+    <legend><strong>说明</strong></legend>
+    <p>请从下拉列表中选择工地，本次材料申请归属于该工地；如果所需工地不在列表中，请通知办公室人员添加后再申请。</p>
+</fieldset>
+</td>
+</tr>
+<tr>
+<td>
+<div data-role="fieldcontain">
+    <label for="description" class="select">创建说明:</label>
+    <textarea id="description" name="description"></textarea>
+</div>
+</td>
+<td>
+<fieldset>
+    <legend><strong>说明</strong></legend>
+    <p>请从下拉列表中选择工地，本次材料申请归属于该工地；如果所需工地不在列表中，请通知办公室人员添加后再申请。</p>
+</fieldset>
+</td>
+</tr>
 
+<tr>
+<td><input type="submit" value="提交" onclick="createapp()"></td>
+<td><fieldset>
+    <legend><strong>说明</strong></legend>
+    <p>请从下拉列表中选择工地，本次材料申请归属于该工地；如果所需工地不在列表中，请通知办公室人员添加后再申请。</p>
+</fieldset></td>
+</tr>
+
+<tr>
+<td><input type="button" value="取消" onclick="backtowizard()"></td>
+<td><fieldset>
+    <legend><strong>说明</strong></legend>
+    <p>请从下拉列表中选择工地，本次材料申请归属于该工地；如果所需工地不在列表中，请通知办公室人员添加后再申请。</p>
+</fieldset></td>
+</tr>
+
+</table>
+
+</form>
+</div> <!-- createapp -->
+
+<!-- edit application -->
+<div id="editapp">
+<button onclick="backtowizard()">回到上一步</button>
+<h3>继续编辑之前的材料申请</h3>
+</div> <!-- editapp -->
 

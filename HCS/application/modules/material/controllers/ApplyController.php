@@ -9,9 +9,16 @@ class Material_ApplyController extends Zend_Controller_Action
     {
         $this->_em = Zend_Registry::get('em');
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
+        $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
     }
 
     public function indexAction()
+    {
+        $sites = $this->_site->findAll();
+        $this->view->sites = $sites;  
+    }
+
+    public function applymaterialsAction()
     {
         $macro = $this->_getParam("macro", "mechanic");
         $this->view->macro = $macro;                
@@ -32,11 +39,13 @@ class Material_ApplyController extends Zend_Controller_Action
         //echo "$detail";  
 
         $materialobjs = $this->_material->findBy(array("macrotype"=>$macro, "detailtype"=>$detail));
-        $this->view->materials = $materialobjs;        
+        $this->view->materials = $materialobjs;  
+
     }
 
     public function submitAction()
     {
+
         
     } 
 
@@ -45,12 +54,15 @@ class Material_ApplyController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
-        if(1)
+        if(0)
         {    
             $requests = $this->getRequest()->getPost();
             var_dump($requests);
             return;
         }   
+        
         echo "postdataAction";
+
+        
     }
 }

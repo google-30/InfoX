@@ -14,11 +14,6 @@ class Application extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * @Column(type="string")
-     */
-    protected $name;
-
-    /**
      * @Column(type="datetime", nullable=true)
      */
     protected $createdate;
@@ -51,5 +46,28 @@ class Application extends \Synrgic_Models_Entity {
      */
     protected $materials;
 
+    /**
+     * leader can set status for this application
+     * only when this submit to upper level, 
+     * then officer/manager can see it   
+     *   
+     * @Column(type="string")
+     */
+    protected $status0;
+
+    /**
+     * @Column(type="string")
+     */
+    protected $status1;
+
+    /**
+     * @Column(type="string")
+     */
+    protected $status2;
+
+    /**
+     * @Column(type="string")
+     */
+    protected $remark;
     
 }

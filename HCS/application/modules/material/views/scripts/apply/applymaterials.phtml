@@ -1,0 +1,218 @@
+<style>
+#typechooser { width:60%; text-align:center; /*vertical-align:middle;*/ float:left; padding-right: 2px; margin: 3px; }
+#choosen { width:35%; text-align:center; float:left; }
+/*http://stackoverflow.com/questions/3148415/how-to-make-a-vertical-line*/
+/*.verticalLine { border-left: 2px solid #000000; }*/
+table { width:100%; }
+#datatable caption { text-align:left; }
+#datatable thead th { text-align:center; border-bottom-width:1px; border-top-width:1px; }
+#datatable th, td { text-align:center; padding:1px;} 
+
+.tdname { width:100px; }
+.tdnameeng { width:100px; }
+.tdamount { width:200px; }
+.tdchoose { width:50px; }
+</style>
+<script>
+$(function() {
+    $('#macrotype').change(macroReload);
+    $('#detailtype').change(detailReload);
+});
+
+function macroReload()
+{
+    //alert("reload!");
+    var url = "/material/apply/index?macro=" + $('#macrotype').val();
+    redirect(url);
+}
+
+function detailReload()
+{
+    //alert("reload!");
+    var url = "/material/apply/index?macro=" + $('#macrotype').val() + "&detail=" + $('#detailtype').val();
+    redirect(url);
+}
+
+function redirect(url) 
+{
+	window.location = url;
+}
+
+function checkall()
+{
+    //alert("checkall");
+    var checked = false;
+    var form = document.dataform;
+    
+    for (var i = 0; i < form.elements.length; i++) {
+        if(form.elements[i].id == 'toggleall')
+        {
+            checked = form.elements[i].checked;
+            break;    
+        }    
+    }
+
+    for (var i = 0; i < form.elements.length; i++) {    
+        if(form.elements[i].type == 'checkbox'){
+                form.elements[i].checked = checked;
+            }    
+    }
+}
+
+function submitmaterials()
+{
+    var r=confirm("Confirm to delete?");
+    if (r==false) { return false; }          
+
+    var formname = "dataform";
+
+    var action = "/material/apply/submit";     
+    var method = "post";
+
+    var frm = $('#dataform');    
+    var toServer = {};
+    $('#datatable tbody tr td input').each(function(key, value) {
+        toServer[$(this).val()] = $(this).is(':checked');
+    });
+    
+    frm.submit(function () {
+        $.ajax({
+            type: method,
+            url: action,
+            data: toServer,
+            success: function (data) {
+                //alert(data);
+                window.location.reload();
+            }
+        });
+
+        return false;
+    });
+    
+    frm.submit();
+}
+
+function addchoosen(id)
+{
+    //alert("id="+id);
+    var amount = $('#slider'+id).val();
+    if(amount==0)
+    {
+        alert("请选择数量");
+        return;
+    }
+
+    //alert("amount="+amount);
+
+    // TODO: upload to server
+    $.post("/material/apply/postdata", { id: id, amount: amount }, 
+        function(data) {
+          alert("Data Loaded: " + data);
+    });
+        
+        
+
+}
+</script>
+
+<div><button>提交所有已经选择的材料</button></div>
+<hr>
+<div id="bigboss">
+<div id="typechooser" style="clear:both">
+<fieldset>
+    <legend>按分类选择材料</legend>
+<div data-role="fieldcontain">
+   <label for="macrotype" class="select">主要分类：</label>
+   <select name="macrotype" id="macrotype" data-mini="true">
+<?php
+$selected=$this->macro;
+$macrotypes = $this->macrotypes;
+//print_r($this->macrotypes);
+foreach($this->macrotypes as $tmp)
+{
+    if($tmp == $selected)
+    {
+        echo "<option value='$tmp' selected>$tmp</option>";
+    }
+    else
+    {
+        echo "<option value='$tmp'>$tmp</option>";
+    }
+}
+?>   
+   </select>
+</div>
+
+<div data-role="fieldcontain">
+   <label for="detailtype" class="select">详细分类:</label>
+   <select name="detailtype" id="detailtype" data-mini="true">
+<?php
+$selected=$this->detail;
+$detailtypes = $this->detailtypes;
+//print_r($this->detailtypes);
+foreach($this->detailtypes as $tmp)
+{
+    if($tmp == $selected)
+    {
+        echo "<option value='$tmp' selected>$tmp</option>";
+    }
+    else
+    {
+        echo "<option value='$tmp'>$tmp</option>";
+    }
+}
+?>        
+   </select>
+</div>
+
+<table id="datatable" border="4">
+<thead><tr>
+<th>中文名</th>
+<th>英文名</th>
+<th>数量</th>
+<th>选择</th>
+</tr></thead>
+<tbody> 
+<?php
+foreach($this->materials as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+    $nameeng = $tmp->getNameeng();
+    //$date = $tmp->getOnlinedate()->format("Y-m-d H:i:s");
+    //$price = $tmp->getPrice();
+    //$warehouse = $tmp->getWarehouse();
+    //$type1 = $tmp->getMacrotype();
+    //$type2 = $tmp->getDetailtype();
+
+    $body = "";
+    //$checkbox = '<td><input type="checkbox" name="abc" id="abc" value="' . $tmp->getId() . '" data-role="none">';
+    //$body .= "<tr>" . $checkbox . "<td>" . $name . "</td><td>" . $date . "</td><td> </td>$type1  <td>" . $price . "</td></tr>";    
+    //$body .= "<tr>$checkbox<td>$name</td><td>$date</td><td>$type1</td><td>$type2</td><td>$warehouse</td><td>$price</td></tr>";    
+    $body .= '<tr><td class="tdname">' . $name . '</td><td class="tdnameeng">' . $nameeng . '</td>';
+    $slider = '<td class="tdamount"><input type="range" name="slider" id="slider' . $id . '" value="0" min="0" max="100" data-highlight="true" data-mini="true"></td>';
+    $body .= $slider;
+    //$gorightbutton = '<td class="tdchoose"><input type="button" value="选择" data-iconpos="notext" data-icon="arrow-r" data-iconpos="bottom"></td>';
+    //$gorightbutton = '<td class="tdchoose"><a href="index.html" data-role="button" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">选中</a></td>';
+    $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">选中</button></td>';
+
+    $body .= $gorightbutton;
+    $body .= "</tr>";    
+    echo $body;
+}
+?>
+</tbody> 
+</table>
+</fieldset>
+</div> <!-- typechooser -->
+
+<div id="choosen"  class="verticalLine">
+<fieldset>
+    <legend>已选择材料</legend>
+</fieldset>
+</div>
+</div> <!-- bigboss -->
+<br>
+
+
+
