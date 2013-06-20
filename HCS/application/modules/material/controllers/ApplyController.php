@@ -40,9 +40,17 @@ class Material_ApplyController extends Zend_Controller_Action
         
     } 
 
-    public function appmanageAction()
+    public function postdataAction()
     {
-        echo "appmanageAction";
-    }
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
 
+        if(1)
+        {    
+            $requests = $this->getRequest()->getPost();
+            var_dump($requests);
+            return;
+        }   
+        echo "postdataAction";
+    }
 }

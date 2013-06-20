@@ -27,9 +27,9 @@
 	    <applicationmanagement>
 		<label>材料申请管理</label>
 		<module>material</module>
-		<controller>apply</controller>
+		<controller>manage</controller>
 		<action>appmanage</action>
-		<resource>material:apply</resource>
+		<resource>material:manage</resource>
 		<privilege>view</privilege>
 	    </applicationmanagement>
 
