@@ -5,7 +5,7 @@ namespace Synrgic\Infox;
  * @Entity
  * @Table(name="infox_matappdata")
  */
-class Application extends \Synrgic_Models_Entity {
+class Matappdata extends \Synrgic_Models_Entity {
     /**
      * @Id
      * @GeneratedValue(strategy="AUTO")

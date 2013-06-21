@@ -38,5 +38,19 @@ class Site extends \Synrgic_Models_Entity {
      */
     protected $workerno;    	
 
+    /**
+     * leader: person in charge 
+     *   
+     * @ManyToOne(targetEntity="Synrgic\Infox\Humanresource")
+     */
+    protected $leader;
+
+    /**
+     * manager
+     *   
+     * @ManyToOne(targetEntity="Synrgic\Infox\Humanresource")
+     */
+    protected $manager;
+
 
 }

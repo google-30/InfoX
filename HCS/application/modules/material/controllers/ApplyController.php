@@ -16,6 +16,8 @@ class Material_ApplyController extends Zend_Controller_Action
     {
         $sites = $this->_site->findAll();
         $this->view->sites = $sites;  
+
+        
     }
 
     public function applymaterialsAction()
