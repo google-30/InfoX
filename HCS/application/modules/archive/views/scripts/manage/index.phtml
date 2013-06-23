@@ -9,22 +9,29 @@ function showSw()
 {
     $("#docdiv").hide();
     $("#swdiv").show();
-           
+    //$("#docbtn").attr("data-theme", "");
+    //$("#swbtn").attr("data-theme", "a");     
+
+     $("#swbtn").addClass('ui-state-focus');  
 }
 
 function showDoc()
 {
     $("#swdiv").hide();
     $("#docdiv").show();
-
+    $("#docbtn").attr("data-theme", "a");
+    $("#swbtn").attr("data-theme", "");       
 }
 
 </script>
-<div class="ui-grid-b">
-	<div class="ui-block-a"><button onclick="showDoc()">文档列表</button></div>
-	<div class="ui-block-b"><button onclick="showSw()">软件列表</button></div>
-	<div class="ui-block-c"><a href="/archive/manage/add"><button>上传文件</button></a></div>
-</div><!-- /grid-b -->
+
+<div data-role="navbar">
+	<ul>
+		<li><a href="#" onclick="showDoc()" class="ui-btn-active">文档列表</a></li>
+		<li><a href="#" onclick="showSw()">软件列表</a></li>
+		<li><a href="/archive/manage/add" >上传文件</a></li>
+	</ul>
+</div><!-- /navbar -->
 
 <div id="docdiv">
 <?

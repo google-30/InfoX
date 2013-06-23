@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configdata>
     <nav>
-        <label>Management</label>
+        <label>系统功能</label>
         <module>management</module>
         <controller>index</controller>
         <action>index</action>
@@ -43,7 +43,7 @@
 	    </applymaterials>
 
 	    <project>
-		<label>项目管理</label>
+		<label>工地管理</label>
 		<module>project</module>
 		<controller>manage</controller>
 		<action>index</action>
