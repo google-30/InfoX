@@ -95,7 +95,7 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
                         }
                      }
                      if(isset($user) && $user->hasIdentity()) {
-    	        	     echo $this->translate('Welcome').':&nbsp';
+    	        	     echo $this->translate('Welcome').':&nbsp;';
     		             echo $user->getIdentity()->getName();
     		             echo '&nbsp;&#187;&nbsp;';
             		 }
