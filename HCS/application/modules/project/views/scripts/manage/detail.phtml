@@ -52,6 +52,8 @@ $leader="";
 $manager="";
 $workerno="";
 $remark="";
+$leaders=$this->leaders;
+$managers=$this->managers;
 
 if($this->mode == "Edit")
 {
@@ -72,6 +74,7 @@ if($data->getManager())
 }
 $workerno = $data->getWorkerno();
 $remark = $data->getRemark();
+
 }
      
 ?>
@@ -98,11 +101,39 @@ $remark = $data->getRemark();
 <tr>
 <td><div data-role="fieldcontain">
     <label for="leader">工长:</label>
-    <input type="text" name="leader" id="leader" value="<?php echo $leader; ?>" data-mini="true">
+    <!--<input type="text" name="leader" id="leader" value="<?php echo $leader; ?>" data-mini="true">-->
+    <select name="leader" id="leader">
+    <?php
+    foreach($leaders as $tmp)
+    {
+        $id = $tmp->getId();
+        $name = $tmp->getName();
+        if($name == $leader)
+        {
+        echo '<option value="' . $id . '" selected>' . $name . '</option>';
+        }
+        else
+        {
+        echo '<option value="' . $id . '">' . $name . '</option>';
+        }
+    }
+    ?>
+    </select>
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="manager">经理:</label>
-    <input type="text" name="manager" id="manager" value="<?php echo $manager; ?>" data-mini="true">
+    <!--<input type="text" name="manager" id="manager" value="<?php echo $manager; ?>" data-mini="true">-->
+    <select name="manager" id="manager">
+    <?php
+    foreach($managers as $tmp)
+    {
+        $id = $tmp->getId();
+        $name = $tmp->getName();
+        echo '<option value="' . $id . '">' . $name . '</option>';
+    }
+    ?>
+    </select>
+
 </div></td>
 </tr>
 
@@ -112,7 +143,7 @@ $remark = $data->getRemark();
     <input type="text" name="start" id="start" value="<?php echo $start; ?>" data-mini="true">
 </div></td>
 <td><div data-role="fieldcontain">
-    <label for="stop">停工日期:</label>
+    <label for="stop">竣工日期:</label>
     <input type="text" name="stop" id="stop" value="<?php echo $stop; ?>" data-mini="true">
 </div></td>
 </tr>

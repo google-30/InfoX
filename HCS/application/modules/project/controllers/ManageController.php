@@ -9,6 +9,7 @@ class Project_ManageController extends Zend_Controller_Action
     {
         $this->_em = Zend_Registry::get('em');        
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
+        $this->_humanres = $this->_em->getRepository('Synrgic\Infox\Humanresource');
     }
 
     public function indexAction()
@@ -17,12 +18,23 @@ class Project_ManageController extends Zend_Controller_Action
         $this->view->maindata = $maindata;
     }   
 
+    private function findPIC()
+    {
+        $leaders = $this->_humanres->findBy(array("position"=>"leader"));
+        $this->view->leaders = $leaders;
+        $managers = $this->_humanres->findBy(array("position"=>"manager"));
+        $this->view->managers = $managers;
+    }    
+
     public function addAction()
     {
+        $this->findPIC();
     } 
 
     public function editAction()
     {
+        $this->findPIC();
+
         $id = $this->getParam("id");
         //echo "id=$id<br>";
         $maindata = $this->_site->findOneBy(array("id"=>$id));
