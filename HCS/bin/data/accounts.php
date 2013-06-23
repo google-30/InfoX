@@ -15,13 +15,14 @@
 $tuples = array( 
    	       /* username, name, email, disabled, language, password, role, provider */	 
 	 array( "admin", "Administrator", "admin@somewhere.com", false, "English", "admin", "admin","1"),
-	 array( "admincn", "Administrator", "admin@somewhere.com", false, "Chinese", "admin", "admin","1"  ),
 	 array( "staff", "Staff member", "staff@somewhere.com", false, "English", "staff", "staff","1"),
-	 array( "staffcn", "Staff member", "staff@somewhere.com", false, "Chinese", "staff", "staff","3"),
-	 array( "test", "SW Tester", "test@somewhere.com", false, "English", "test", "staff","1"),
-	 array( "manager", "Project Manager", "projectmanager@somewhere.com", false, "English", "manager", "manager","1"),
-	 array( "leader", "Team Leader", "teamleader@somewhere.com", false, "English", "leader", "leader","1"),
-	 array( "hr", "human resource", "humanresource@somewhere.com", false, "English", "hr", "hr","1"),
+
+	 array( "boss", "业主", "boss@somewhere.com", false, "English", "boss", "boss","1"),
+	 array( "manager", "经理", "manager@somewhere.com", false, "English", "manager", "manager","1"),
+	 array( "leader", "工长", "leader@somewhere.com", false, "English", "leader", "leader","1"),
+	 array( "officer", "行政", "officer@somewhere.com", false, "English", "officer", "officer","1"),
+	 array( "hr", "人事", "humanresource@somewhere.com", false, "English", "hr", "hr","1"),
+
 	);
 
 foreach( $tuples as $tuple ){
