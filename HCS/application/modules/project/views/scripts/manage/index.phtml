@@ -1,20 +1,21 @@
 <style>
-#Suppliers { width:100%; }
+#Sites { width:100%; }
 </style>
 <div><a href="/project/manage/add"><button>添加新工地</button></a></div>
 <div>
 <?
 echo $this->grid("Sites", true)
-          ->field('update','更新日期')
-          ->field('name', '商家名称')
-          ->field('business', '主营业务')
-          ->field('contact', '联系人')
-          ->field('officephone', '办公电话')  
+          ->field('name','工地名称')
+          ->field('address', '地址')
+          ->field('leader', '工长')  
+          ->field('workerno', '工人数')  
+          ->field('start', '开工日期')
+          ->field('stop', '停工日期')
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
-          //->helper(new GridHelper_Supplier())
-          ->data($this->suppliers)
+          ->helper(new GridHelper_Project())
+          ->data($this->maindata)
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>

@@ -8,13 +8,13 @@ class Project_ManageController extends Zend_Controller_Action
     public function init()
     {
         $this->_em = Zend_Registry::get('em');        
-        $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
+        $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
     }
 
     public function indexAction()
     {
-        $suppliers = $this->_supplier->findAll();
-        $this->view->suppliers = $suppliers;
+        $maindata = $this->_site->findAll();
+        $this->view->maindata = $maindata;
     }   
 
     public function addAction()
@@ -25,8 +25,8 @@ class Project_ManageController extends Zend_Controller_Action
     {
         $id = $this->getParam("id");
         //echo "id=$id<br>";
-        $archive = $this->_supplier->findOneBy(array("id"=>$id));
-        $this->view->maindata = $archive;
+        $maindata = $this->_site->findOneBy(array("id"=>$id));
+        $this->view->maindata = $maindata;
     } 
 
     public function deleteAction()

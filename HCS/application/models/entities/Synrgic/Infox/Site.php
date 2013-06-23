@@ -52,5 +52,9 @@ class Site extends \Synrgic_Models_Entity {
      */
     protected $manager;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $remark;
 
 }

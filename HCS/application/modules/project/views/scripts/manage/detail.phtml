@@ -1,3 +1,6 @@
+<style>
+#maintable { width:100%; }
+</style>
 <script>
 function submit()
 {
@@ -26,88 +29,106 @@ function cancel()
 
 function gotolist()
 {
-    window.location = "/supplier/manage";        
+    window.location = "/project/manage";        
 }
 
 function redirect(url) {
     window.location = url;
 }
+
+function showWorkers()
+{
+    alert("showWorkers");
+}
 </script>
 <?php
-
 $id = 0;
 $mode = "Create";
 $name="";
-$business="";
 $address="";
-$officephone = "";
-$mobilephone = "";
-$contact="";
+$start = "";
+$stop = "";
+$leader="";
+$manager="";
+$workerno="";
 $remark="";
-$email="";
 
 if($this->mode == "Edit")
 {
+$data = $this->maindata;
 $mode = "Edit";
-$id = $this->maindata->getId();
-$name = $this->maindata->getName();
-$business = $this->maindata->getBusiness();
-$address = $this->maindata->getAddress();
-$officephone = $this->maindata->getOfficephone();
-$mobilephone = $this->maindata->getMobilephone();
-$contact=$this->maindata->getContact();
-$remark = $this->maindata->getRemark();
-$email = $this->maindata->getEmail();
+$id = $data->getId();
+$name = $data->getName();
+$address = $data->getAddress();
+$start = $data->getStart()->format("Y-m-d");
+$stop = $data->getStop()->format("Y-m-d");
+if($data->getLeader())
+{
+    $leader = $data->getLeader()->getName();
+}
+if($data->getManager())
+{
+    $manager = $data->getManager()->getName();
+}
+$workerno = $data->getWorkerno();
+$remark = $data->getRemark();
 }
      
 ?>
-<h3>供应商添加与编辑</h3>
-<form id="mainform" method="post" action="/supplier/manage/submit" enctype="multipart/form-data">
+<h3>工地添加与编辑</h3>
+<form id="mainform" method="post" action="/project/manage/submit" enctype="multipart/form-data">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 
-<div data-role="fieldcontain">
-    <label for="name">供应商名称:</label>
-    <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
-    <label for="business">主营业务:</label>
-    <input type="text" name="business" id="business" value="<?php echo $business; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
-    <label for="contact">联系人:</label>
-    <input type="text" name="contact" id="contact" value="<?php echo $contact; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
-    <label for="officephone">办公电话:</label>
-    <input type="text" name="officephone" id="officephone" value="<?php echo $officephone; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
-    <label for="officephone">移动电话:</label>
-    <input type="text" name="mobilephone" id="mobilephone" value="<?php echo $mobilephone; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
-    <label for="email">电子邮件:</label>
-    <input type="text" name="email" id="email" value="<?php echo $email; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
-    <label for="address">公司地址:</label>
-    <input type="text" name="address" id="address" value="<?php echo $address; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
-    <label for="remark">其他说明:</label>
-    <textarea cols="40" rows="8" name="remark" id="remark" ><?php echo $remark; ?></textarea>
-</div>
-
-</form> <!--main form -->
-<fieldset class="ui-grid-a">
+<div class="ui-grid-a">
 		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
-		<div class="ui-block-b"><button type="submit" data-theme="d" onclick="cancel()">取消</button></div>
-</fieldset>
+		<div class="ui-block-b"><input type="button" onclick="cancel()" value="取消"></div>
+</div>
+<table id="maintable">
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="name">工地名称:</label>
+    <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="address">工地地址:</label>
+    <input type="text" name="address" id="address" value="<?php echo $address; ?>" data-mini="true">
+</div></td>
+</tr>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="leader">工长:</label>
+    <input type="text" name="leader" id="leader" value="<?php echo $leader; ?>" data-mini="true">
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="manager">经理:</label>
+    <input type="text" name="manager" id="manager" value="<?php echo $manager; ?>" data-mini="true">
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="start">开工日期:</label>
+    <input type="text" name="start" id="start" value="<?php echo $start; ?>" data-mini="true">
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="stop">停工日期:</label>
+    <input type="text" name="stop" id="stop" value="<?php echo $stop; ?>" data-mini="true">
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="remark">其他说明:</label>
+    <input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true">
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="workerno">工人数量:</label>
+    <input type="text" name="workerno" id="workerno" value="<?php echo $workerno; ?>" data-mini="true">
+</div></td>
+</tr>
+<!---->
+</table>
+</form> <!--main form-->
+
+<input type="button" onclick="showWorkers()" value="显示工人列表">
