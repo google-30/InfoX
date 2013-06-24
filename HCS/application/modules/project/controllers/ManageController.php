@@ -47,11 +47,11 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
         $id = $this->getParam("id");
-        $data = $this->_supplier->findOneBy(array("id"=>$id));
+        $data = $this->_site->findOneBy(array("id"=>$id));
     	$this->_em->remove($data);
         $this->_em->flush();        
 
-        $this->_redirect("supplier/manage");    
+        $this->_redirect("project/manage");    
     } 
 
     public function submitAction()
@@ -69,32 +69,31 @@ class Project_ManageController extends Zend_Controller_Action
         $mode = $this->getParam("mode", "Create");
         $id = $this->getParam("id", "0");
         $name = $this->getParam("name");
-        $remark = $this->getParam("remark", "");
-        $business = $this->getParam("business", "");
-        $officephone = $this->getParam("officephone", "");
-        $mobilephone = $this->getParam("mobilephone", "");
         $address = $this->getParam("address", "");
-        $contact = $this->getParam("contact", "");
-        $email = $this->getParam("email", "");
+        $leader = $this->getParam("leader", "");
+        $manager = $this->getParam("manager", "");
+        $start = $this->getParam("start", "");
+        $stop = $this->getParam("stop", "");
+        $remark = $this->getParam("remark", "");
+        $workerno = $this->getParam("workerno", "");
 
         if($mode == "Create")
         {
-            $data = new \Synrgic\Infox\Supplier(); 
+            $data = new \Synrgic\Infox\Site(); 
         }
         else
         {
-            $data = $this->_supplier->findOneBy(array("id"=>$id));
+            $data = $this->_site->findOneBy(array("id"=>$id));
         }
  
-        $data->setUpdate(new Datetime("now"));       
         $data->setName($name);
-        $data->setRemark($remark);
-        $data->setBusiness($business);
-        $data->setOfficephone($officephone);
-        $data->setMobilephone($mobilephone);
-        $data->setEmail($email);
-        $data->setContact($contact);
         $data->setAddress($address);
+        $data->setLeader($this->_humanres->findOneBy(array("id"=>$leader)));
+        $data->setManager($this->_humanres->findOneBy(array("id"=>$manager)));
+        $data->setStart(new Datetime($start));
+        $data->setStop(new Datetime($stop));
+        $data->setRemark($remark);
+        $data->setWorkerno($workerno);
 
         $this->_em->persist($data);
         try {
@@ -104,6 +103,6 @@ class Project_ManageController extends Zend_Controller_Action
             return;
         }        
 
-        $this->_redirect("supplier/manage");
+        //$this->_redirect("project/manage");
     } 
 }

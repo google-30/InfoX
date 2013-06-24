@@ -25,7 +25,7 @@
 	    </worker>
 
 	    <applicationmanagement>
-		<label>材料申请管理</label>
+		<label>申请单管理</label>
 		<module>material</module>
 		<controller>manage</controller>
 		<action>appmanage</action>

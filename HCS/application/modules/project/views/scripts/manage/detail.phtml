@@ -101,7 +101,6 @@ $remark = $data->getRemark();
 <tr>
 <td><div data-role="fieldcontain">
     <label for="leader">工长:</label>
-    <!--<input type="text" name="leader" id="leader" value="<?php echo $leader; ?>" data-mini="true">-->
     <select name="leader" id="leader">
     <?php
     foreach($leaders as $tmp)
@@ -122,7 +121,6 @@ $remark = $data->getRemark();
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="manager">经理:</label>
-    <!--<input type="text" name="manager" id="manager" value="<?php echo $manager; ?>" data-mini="true">-->
     <select name="manager" id="manager">
     <?php
     foreach($managers as $tmp)
@@ -155,7 +153,7 @@ $remark = $data->getRemark();
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="workerno">工人数量:</label>
-    <input type="text" name="workerno" id="workerno" value="<?php echo $workerno; ?>" data-mini="true">
+ 	<input type="range" name="workerno" id="workerno" value="0" min="0" max="200" data-highlight="true" data-mini="false" />
 </div></td>
 </tr>
 <!---->

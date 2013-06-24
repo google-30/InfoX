@@ -12,13 +12,17 @@ class GridHelper_Project extends Grid_Helper_Abstract
     	return $row->$field->format('Y-m-d');
     }
 
+    // $row is row data in grid
     protected function td_leader($field, $row) 
     {
+        return $row[$field]->getName();
+        /*
         $em = Zend_Registry::get('em');
-        $data = $em->getRepository('Synrgic\Infox\Humanresource');   
-        $name = $data->findOneBy(array("id"=>$row['id']))->getName();
-        $name = ($name == "") ? "&nbsp;" : $name;
+        $humanres = $em->getRepository('Synrgic\Infox\Humanresource');  
+        $data = $humanres->findOneBy(array("id"=>$row['id']));                
+        $name = (isset($data)) ? $data->getName() : "&nbsp;";
         return $name;
+        */
     }
     
 }
