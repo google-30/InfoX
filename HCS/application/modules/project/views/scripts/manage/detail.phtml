@@ -1,7 +1,21 @@
+<link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
+<script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
 <style>
 #maintable { width:100%; }
+#Workers { width:100%; }
+#workersdiv { display: none; }
 </style>
 <script>
+$('#start').mobiscroll().date({
+    theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+    endYear: 2050,
+});  
+
+$('#stop').mobiscroll().date({
+    theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+    endYear: 2050,
+});  
+
 function submit()
 {
     $name = $("#name").val();
@@ -9,7 +23,7 @@ function submit()
     
     if($name=="")
     {
-        alert("请至少提供供应商名称，其他信息可稍后提交");
+        alert("请至少提供名称，其他信息可稍后提交");
     }    
     else
     {
@@ -38,7 +52,8 @@ function redirect(url) {
 
 function showWorkers()
 {
-    alert("showWorkers");
+    //alert("showWorkers");
+    $("#workersdiv").show();
 }
 </script>
 <?php
@@ -50,7 +65,7 @@ $start = "";
 $stop = "";
 $leader="";
 $manager="";
-$workerno="";
+$workerno=0;
 $remark="";
 $leaders=$this->leaders;
 $managers=$this->managers;
@@ -78,15 +93,26 @@ $remark = $data->getRemark();
 }
      
 ?>
-<h3>工地添加与编辑</h3>
-<form id="mainform" method="post" action="/project/manage/submit" enctype="multipart/form-data">
-<input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
-<input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+
+<?php
+if($mode == "Create")
+{
+    echo "<h3>添加新工地</h3>";
+}
+else
+{
+    echo "<h3>工地详细信息</h3>";    
+}
+?>
 
 <div class="ui-grid-a">
 		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
 		<div class="ui-block-b"><input type="button" onclick="cancel()" value="取消"></div>
 </div>
+<hr>
+<form id="mainform" method="post" action="/project/manage/submit" enctype="multipart/form-data">
+<input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
+<input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 <table id="maintable">
 <tr>
 <td><div data-role="fieldcontain">
@@ -131,7 +157,6 @@ $remark = $data->getRemark();
     }
     ?>
     </select>
-
 </div></td>
 </tr>
 
@@ -153,11 +178,34 @@ $remark = $data->getRemark();
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="workerno">工人数量:</label>
- 	<input type="range" name="workerno" id="workerno" value="0" min="0" max="200" data-highlight="true" data-mini="false" />
+ 	<input type="range" name="workerno" id="workerno" value="<?php echo $workerno; ?>" min="0" max="200" data-highlight="true" data-mini="false" />
 </div></td>
 </tr>
 <!---->
 </table>
 </form> <!--main form-->
 
-<input type="button" onclick="showWorkers()" value="显示工人列表">
+<?php 
+if($mode == "Edit")
+{
+    echo '<input type="button" onclick="showWorkers()" value="显示工人列表">';
+
+}
+?>
+<div id="workersdiv">
+<?php
+    echo $this->grid("Workers", true)
+          ->field('companylabel', '公司编号')  
+          ->field('nameeng', '姓名')
+          ->field('namechs','中文名')
+          ->field('fin', '准证号码')  
+          ->field('worktype', '工种')
+          ->field('worklevel', '等级')
+          ->field('hwage', '小时工资')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          //->helper(new GridHelper_Worker())
+          ->data($this->workers);
+?>
+</div>
+

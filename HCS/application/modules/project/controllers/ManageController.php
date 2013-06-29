@@ -10,6 +10,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_em = Zend_Registry::get('em');        
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_humanres = $this->_em->getRepository('Synrgic\Infox\Humanresource');
+        $this->_worker = $this->_em->getRepository('Synrgic\Infox\Worker');
     }
 
     public function indexAction()
@@ -39,6 +40,23 @@ class Project_ManageController extends Zend_Controller_Action
         //echo "id=$id<br>";
         $maindata = $this->_site->findOneBy(array("id"=>$id));
         $this->view->maindata = $maindata;
+        /*    
+        $query = $this->_em->createQuery(
+        'select w, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
+        (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
+        from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws 
+        where wc.site = ' . $id
+         );
+        */    
+        $query = $this->_em->createQuery(
+        'select w.nameeng, w.namechs, w.fin, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
+        (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
+        from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws 
+        where wc.site = ' . $id
+         );
+        $result = $query->getResult();
+        $this->view->workers = $result;
+        
     } 
 
     public function deleteAction()
@@ -103,6 +121,6 @@ class Project_ManageController extends Zend_Controller_Action
             return;
         }        
 
-        //$this->_redirect("project/manage");
+        $this->_redirect("project/manage");
     } 
 }
