@@ -1,0 +1,23 @@
+<style>
+#Applications { width:100%; }
+</style>
+<div>
+<?
+echo $this->grid("Applications", true)
+          ->field('site','工地')
+          ->field('applicant','申请人')
+          ->field('createdate','创建日期')
+          ->field('updatedate','更新日期')
+          ->field('status0', '申请状态')
+          ->field('status1', '办公人员评估')
+          ->field('status2', '负责经理评估')  
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          //->helper(new GridHelper_Supplier())
+          ->data($this->maindata)
+          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+?>
+</div>
+

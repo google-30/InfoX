@@ -11,6 +11,7 @@ class Material_ManageController extends Zend_Controller_Action
         $this->_em = Zend_Registry::get('em');
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
         $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
+        $this->_application = $this->_em->getRepository('Synrgic\Infox\Application');
     }
 
     public function indexAction()
@@ -191,6 +192,11 @@ class Material_ManageController extends Zend_Controller_Action
     }
 
 
+    public function appmanageAction()
+    {
+        $maindata = $this->_application->findAll();        
+        $this->view->maindata = $maindata;
+    }
     
 }
 

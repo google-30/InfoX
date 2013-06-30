@@ -1,10 +1,11 @@
 <style>
-#wizard1 { text-align:center; }
+#wizard { text-align:center; }
 #createapp, #editapp { display:none; }
 #createapptable { width:100%; }
 #createapptable td { width:33%; }
 </style>
 <script>
+/*
 function showcreateapp()
 {
     $("#wizard1").hide();
@@ -37,110 +38,30 @@ function createapp()
 
     window.location = "/material/apply/applymaterials";
 }
+*/
 </script>
-<div id="wizard1">
+
+<!-- displaying rejected application, if none rejected, this div should be hide. -->
+<div id="appmessage">
+
+</div> <!-- appmessage -->
+
+<div id="wizard">
 <fieldset>
-    <legend><strong>创建申请</strong></legend>
-<button onclick="showcreateapp()">创建新的材料申请</button> 
-<p>如果有新的材料需要申请，请点击按钮进入创建过程。</p>
-</fieldset> 
-<strong>或者</strong>
+    <a href="/material/apply/applymaterials"><button>申请办公物品</button></a> 
+    <p>点击，为办公室申请物品，比如文具等</p>
+</fieldset><br> 
+
 <fieldset>
-    <legend><strong>编辑申请</strong></legend>
-<button onclick="showeditapp()">继续编辑之前的材料申请</button>
-<p>如果以前已经在系统申请过材料，只需要修改部分申请，请点击按钮进入编辑过程。</p>
+    <!--<legend><strong>创建申请</strong></legend>-->
+    <a href="/material/apply/applymaterials"><button>申请工地材料</button></a> 
+    <p>点击，进入工地申请创建过程</p>
+</fieldset><br> 
+
+<fieldset>
+    <!--<legend><strong>编辑申请</strong></legend>-->
+    <button onclick="showeditapp()">更新申请</button>
+    <p>点击，更新申请</p>
 </fieldset>
 </div>
-
-<!-- create application -->
-<div id="createapp" >
-<h3>创建新的材料申请</h3>
-<!--<button onclick="backtowizard()">放弃创建，回到上一步</button> 
-<form>
-<div data-role="fieldcontain">
-    <label for="sites" class="select">选择工地:</label>
-    <select name="sites" id="sites">
-<?php   
-$sites = $this->sites; 
-foreach($sites as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
-    echo '<option value="' . $id. '">' . $name . '</option>';
-}
-
-?>
-    </select>
-</div>
-<div data-role="fieldcontain">
-    <label for="detailtype" class="select">创建说明:</label>
-    <textarea></textarea>
-</div>
--->
-<table id="createapptable">
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="sites" class="select">选择工地:</label>
-    <select name="sites" id="sites">
-<?php   
-$sites = $this->sites; 
-foreach($sites as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
-    echo '<option value="' . $id. '">' . $name . '</option>';
-}
-
-?>
-    </select>
-</div>
-</td>
-<td>
-<fieldset>
-    <legend><strong>说明</strong></legend>
-    <p>请从下拉列表中选择工地，本次材料申请归属于该工地；如果所需工地不在列表中，请通知办公室人员添加后再申请。</p>
-</fieldset>
-</td>
-</tr>
-<tr>
-<td>
-<div data-role="fieldcontain">
-    <label for="description" class="select">创建说明:</label>
-    <textarea id="description" name="description"></textarea>
-</div>
-</td>
-<td>
-<fieldset>
-    <legend><strong>说明</strong></legend>
-    <p>请从下拉列表中选择工地，本次材料申请归属于该工地；如果所需工地不在列表中，请通知办公室人员添加后再申请。</p>
-</fieldset>
-</td>
-</tr>
-
-<tr>
-<td><input type="submit" value="提交" onclick="createapp()"></td>
-<td><fieldset>
-    <legend><strong>说明</strong></legend>
-    <p>请从下拉列表中选择工地，本次材料申请归属于该工地；如果所需工地不在列表中，请通知办公室人员添加后再申请。</p>
-</fieldset></td>
-</tr>
-
-<tr>
-<td><input type="button" value="取消" onclick="backtowizard()"></td>
-<td><fieldset>
-    <legend><strong>说明</strong></legend>
-    <p>请从下拉列表中选择工地，本次材料申请归属于该工地；如果所需工地不在列表中，请通知办公室人员添加后再申请。</p>
-</fieldset></td>
-</tr>
-
-</table>
-
-</form>
-</div> <!-- createapp -->
-
-<!-- edit application -->
-<div id="editapp">
-<button onclick="backtowizard()">回到上一步</button>
-<h3>继续编辑之前的材料申请</h3>
-</div> <!-- editapp -->
 

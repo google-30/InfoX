@@ -12,6 +12,11 @@ table { width:100%; }
 .tdnameeng { width:100px; }
 .tdamount { width:200px; }
 .tdchoose { width:50px; }
+
+.ui-slider { display: none; }
+input.ui-slider {
+    display : none !important;
+}
 </style>
 <script>
 $(function() {
@@ -116,7 +121,6 @@ function addchoosen(id)
 </script>
 
 <div><button>提交所有已经选择的材料</button></div>
-<hr>
 <div id="bigboss">
 <div id="typechooser" style="clear:both">
 <fieldset>
