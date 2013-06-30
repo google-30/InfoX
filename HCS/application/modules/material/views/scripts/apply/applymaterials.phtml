@@ -1,22 +1,21 @@
 <style>
-#typechooser { width:60%; text-align:center; /*vertical-align:middle;*/ float:left; padding-right: 2px; margin: 3px; }
-#choosen { width:35%; text-align:center; float:left; }
 /*http://stackoverflow.com/questions/3148415/how-to-make-a-vertical-line*/
 /*.verticalLine { border-left: 2px solid #000000; }*/
+/*
 table { width:100%; }
 #datatable caption { text-align:left; }
 #datatable thead th { text-align:center; border-bottom-width:1px; border-top-width:1px; }
 #datatable th, td { text-align:center; padding:1px;} 
-
 .tdname { width:100px; }
 .tdnameeng { width:100px; }
 .tdamount { width:200px; }
 .tdchoose { width:50px; }
+*/
 
-.ui-slider { display: none; }
-input.ui-slider {
-    display : none !important;
-}
+#typechooser { width:100%; text-align:center; /*vertical-align:middle;*/ float:left; padding-right: 2px; margin: 3px; }
+#datatable { width:100%; }
+#selected { display: none; }
+
 </style>
 <script>
 $(function() {
@@ -27,14 +26,14 @@ $(function() {
 function macroReload()
 {
     //alert("reload!");
-    var url = "/material/apply/index?macro=" + $('#macrotype').val();
+    var url = "/material/apply/applymaterials?macro=" + $('#macrotype').val();
     redirect(url);
 }
 
 function detailReload()
 {
     //alert("reload!");
-    var url = "/material/apply/index?macro=" + $('#macrotype').val() + "&detail=" + $('#detailtype').val();
+    var url = "/material/apply/applymaterials?macro=" + $('#macrotype').val() + "&detail=" + $('#detailtype').val();
     redirect(url);
 }
 
@@ -107,20 +106,44 @@ function addchoosen(id)
         return;
     }
 
-    //alert("amount="+amount);
+    alert("id="+id+", amount="+amount);
 
     // TODO: upload to server
     $.post("/material/apply/postdata", { id: id, amount: amount }, 
         function(data) {
-          alert("Data Loaded: " + data);
+            alert("Data Loaded: " + data);
+            location.reload();
     });
-        
-        
+                
+}
 
+function showselected()
+{
+    //alert("showselected");
+    $("#selected").show();
+
+    $("#btnSelected").html('Save');
+    $("#btnAddProfile").prop('value', 'Save'); 
+}
+
+function submitselected()
+{
+    alert("submitselected");
 }
 </script>
 
-<div><button>提交所有已经选择的材料</button></div>
+<div class="ui-grid-a">
+	<div class="ui-block-a"><button id="btnSelected" onclick="showselected()">显示已经选择的材料</button></div>
+	<div class="ui-block-b"><button onclick="submitselected()">提交已经选择的材料</button></div>
+</div><!-- /grid-a -->
+
+<input type='button' value='Add' id='btnAddProfile' onclick="showselected()">
+<div id="selected">
+<fieldset>
+    <legend>已选择材料</legend>
+</fieldset>
+</div>
+
 <div id="bigboss">
 <div id="typechooser" style="clear:both">
 <fieldset>
@@ -169,7 +192,7 @@ foreach($this->detailtypes as $tmp)
    </select>
 </div>
 
-<table id="datatable" border="4">
+<table id="datatable" border="3">
 <thead><tr>
 <th>中文名</th>
 <th>英文名</th>
@@ -194,8 +217,10 @@ foreach($this->materials as $tmp)
     //$body .= "<tr>" . $checkbox . "<td>" . $name . "</td><td>" . $date . "</td><td> </td>$type1  <td>" . $price . "</td></tr>";    
     //$body .= "<tr>$checkbox<td>$name</td><td>$date</td><td>$type1</td><td>$type2</td><td>$warehouse</td><td>$price</td></tr>";    
     $body .= '<tr><td class="tdname">' . $name . '</td><td class="tdnameeng">' . $nameeng . '</td>';
-    $slider = '<td class="tdamount"><input type="range" name="slider" id="slider' . $id . '" value="0" min="0" max="100" data-highlight="true" data-mini="true"></td>';
-    $body .= $slider;
+    //$slider = '<td class="tdamount"><input type="range" name="slider" id="slider' . $id . '" value="0" min="0" max="100" data-highlight="true" data-mini="true" data-role="none"></td>';
+    //$amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="0" min="0" max="100" data-highlight="true" ></td>';
+    $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="0" min="0" max="100"></td>';
+    $body .= $amount;
     //$gorightbutton = '<td class="tdchoose"><input type="button" value="选择" data-iconpos="notext" data-icon="arrow-r" data-iconpos="bottom"></td>';
     //$gorightbutton = '<td class="tdchoose"><a href="index.html" data-role="button" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">选中</a></td>';
     $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">选中</button></td>';
@@ -210,11 +235,7 @@ foreach($this->materials as $tmp)
 </fieldset>
 </div> <!-- typechooser -->
 
-<div id="choosen"  class="verticalLine">
-<fieldset>
-    <legend>已选择材料</legend>
-</fieldset>
-</div>
+
 </div> <!-- bigboss -->
 <br>
 

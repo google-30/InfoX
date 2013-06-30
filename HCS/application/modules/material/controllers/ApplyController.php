@@ -4,12 +4,27 @@ class Material_ApplyController extends Zend_Controller_Action
 {
     private $_em;
     private $_material;
+    private $_applysession;
 
     public function init()
     {
         $this->_em = Zend_Registry::get('em');
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
+
+        $nsName = 'applysession';
+        if (Zend_Session::namespaceIsset($nsName)) {
+          //echo $nsName.' exists';
+        }
+        else
+        {
+            try {
+                $this->_applysession = new Zend_Session_Namespace('applysession');
+                //echo "applysession";
+            } catch (Zend_Session_Exception $e) {
+                echo 'Cannot instantiate this namespace since applysession was created\n';
+            }
+        }
     }
 
     public function indexAction()
