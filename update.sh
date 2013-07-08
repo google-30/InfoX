@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#hcspath=/home/philip/Dev/hcsrepo
-hcspath=../
+hcspath=./
 doctrine=$hcspath/HCS/bin/doctrine
 cd $hcspath
 #git pull -q origin master
@@ -10,5 +9,5 @@ cd $hcspath
 source ./bootstrap
 $doctrine orm:schema-tool:drop --force
 $doctrine orm:schema-tool:create
-loaddata.php
+loadinfox.php
 

@@ -73,9 +73,11 @@ class StartupCheck
 
 
         // Module checks
+	/*
 	$this->displaySection("Performing 'Services' checks");
 	$dir = APPLICATION_PATH . '/data/uploads/services-pic';
 	$this->displayState("Checking Image uploade directory $dir is writeable",is_writable($dir));
+	*/
 
         // Database checks
 	//$this->displaySection("Checking Database");
