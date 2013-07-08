@@ -21,6 +21,13 @@ table { width:100%; }
 $(function() {
     $('#macrotype').change(macroReload);
     $('#detailtype').change(detailReload);
+    
+    /*
+    $('#btnAddProfile').click(function(){
+        $(this).val("God");
+    });
+    */
+    
 });
 
 function macroReload()
@@ -117,13 +124,22 @@ function addchoosen(id)
                 
 }
 
+//http://stackoverflow.com/questions/178325/testing-if-something-is-hidden-with-jquery
+// http://stackoverflow.com/questions/4009524/change-button-text-jquery-mobile
 function showselected()
-{
+{    
     //alert("showselected");
-    $("#selected").show();
-
-    $("#btnSelected").html('Save');
-    $("#btnAddProfile").prop('value', 'Save'); 
+    //if($("#selected").is(":visible")) {
+    //if ($("#selected").css("visibility") == "hidden") {
+    if ($("#selected").css('display') == 'none') {    
+        $("#selected").show();
+        $("#btnSelectedText").html('隐藏已选材料'); 
+    }
+    else
+    {
+        $("#selected").hide();    
+        $("#btnSelectedText").html('显示已选材料'); 
+    }            
 }
 
 function submitselected()
@@ -133,11 +149,14 @@ function submitselected()
 </script>
 
 <div class="ui-grid-a">
-	<div class="ui-block-a"><button id="btnSelected" onclick="showselected()">显示已经选择的材料</button></div>
+	<div class="ui-block-a">
+	
+	<button id="btnSelected" onclick="showselected()"><span id="btnSelectedText">显示已选材料</span></button>
+	</div>
+	<!--<div class="ui-block-a"><input type='button' value='Add' id='btnAddProfile' onclick="showselected()"></div>-->
 	<div class="ui-block-b"><button onclick="submitselected()">提交已经选择的材料</button></div>
 </div><!-- /grid-a -->
 
-<input type='button' value='Add' id='btnAddProfile' onclick="showselected()">
 <div id="selected">
 <fieldset>
     <legend>已选择材料</legend>
