@@ -12,22 +12,15 @@ table { width:100%; }
 .tdchoose { width:50px; }
 */
 
-#typechooser { width:100%; text-align:center; /*vertical-align:middle;*/ float:left; padding-right: 2px; margin: 3px; }
+#typechooser { width:100%; text-align:center; /*vertical-align:middle;float:left; padding-right: 2px; margin: 3px; */ }
 #datatable { width:100%; }
-#selected { display: none; }
-
+#selected { display: none; text-align:center;}
+#manualinput { display: none; text-align:center;}
 </style>
 <script>
 $(function() {
     $('#macrotype').change(macroReload);
     $('#detailtype').change(detailReload);
-    
-    /*
-    $('#btnAddProfile').click(function(){
-        $(this).val("God");
-    });
-    */
-    
 });
 
 function macroReload()
@@ -142,28 +135,42 @@ function showselected()
     }            
 }
 
+function showmanualinput()
+{
+    if ($("#manualinput").css('display') == 'none') {    
+        $("#manualinput").show();
+        $("#btnManualText").html('隐藏手动输入'); 
+    }
+    else
+    {
+        $("#manualinput").hide();    
+        $("#btnManualText").html('手动输入材料信息'); 
+    }            
+}
+
 function submitselected()
 {
     alert("submitselected");
 }
 </script>
 
-<div class="ui-grid-a">
-	<div class="ui-block-a">
-	
-	<button id="btnSelected" onclick="showselected()"><span id="btnSelectedText">显示已选材料</span></button>
-	</div>
-	<!--<div class="ui-block-a"><input type='button' value='Add' id='btnAddProfile' onclick="showselected()"></div>-->
-	<div class="ui-block-b"><button onclick="submitselected()">提交已经选择的材料</button></div>
-</div><!-- /grid-a -->
-
+<!--<button onclick="submitselected()" data-mini="true">检查并提交已选材料</button>-->
+<button id="btnSelected" onclick="showselected()" data-mini="true"><span id="btnSelectedText">检查已选材料</span></button>
 <div id="selected">
 <fieldset>
     <legend>已选择材料</legend>
+    <p><strong>未选择任何材料</strong></p>
+</fieldset>
+</div>
+<button id="btnSelected" onclick="showmanualinput()" data-mini="true"><span id="btnManualText">手动输入材料信息</span></button>
+<div id="manualinput">
+<fieldset>
+    <legend>手动输入材料信息</legend>
+    <p><strong>未选择任何材料</strong></p>
 </fieldset>
 </div>
 
-<div id="bigboss">
+<button id="btnSelected" onclick="showselected()" data-mini="true"><span id="btnSelectedText">按分类选择材料</span></button>
 <div id="typechooser" style="clear:both">
 <fieldset>
     <legend>按分类选择材料</legend>
@@ -213,9 +220,10 @@ foreach($this->detailtypes as $tmp)
 
 <table id="datatable" border="3">
 <thead><tr>
-<th>中文名</th>
-<th>英文名</th>
+<th>材料名称</th>
 <th>数量</th>
+<th>单位</th>
+<th>规格</th>
 <th>选择</th>
 </tr></thead>
 <tbody> 
@@ -225,23 +233,13 @@ foreach($this->materials as $tmp)
     $id = $tmp->getId();
     $name = $tmp->getName();
     $nameeng = $tmp->getNameeng();
-    //$date = $tmp->getOnlinedate()->format("Y-m-d H:i:s");
-    //$price = $tmp->getPrice();
-    //$warehouse = $tmp->getWarehouse();
-    //$type1 = $tmp->getMacrotype();
-    //$type2 = $tmp->getDetailtype();
 
     $body = "";
-    //$checkbox = '<td><input type="checkbox" name="abc" id="abc" value="' . $tmp->getId() . '" data-role="none">';
-    //$body .= "<tr>" . $checkbox . "<td>" . $name . "</td><td>" . $date . "</td><td> </td>$type1  <td>" . $price . "</td></tr>";    
-    //$body .= "<tr>$checkbox<td>$name</td><td>$date</td><td>$type1</td><td>$type2</td><td>$warehouse</td><td>$price</td></tr>";    
-    $body .= '<tr><td class="tdname">' . $name . '</td><td class="tdnameeng">' . $nameeng . '</td>';
-    //$slider = '<td class="tdamount"><input type="range" name="slider" id="slider' . $id . '" value="0" min="0" max="100" data-highlight="true" data-mini="true" data-role="none"></td>';
-    //$amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="0" min="0" max="100" data-highlight="true" ></td>';
+    $longname = '<tr><td class="tdname">' . $name . '/' . $nameeng . '</td>';
     $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="0" min="0" max="100"></td>';
-    $body .= $amount;
-    //$gorightbutton = '<td class="tdchoose"><input type="button" value="选择" data-iconpos="notext" data-icon="arrow-r" data-iconpos="bottom"></td>';
-    //$gorightbutton = '<td class="tdchoose"><a href="index.html" data-role="button" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">选中</a></td>';
+    $unit = "<td></td>";
+    $spec = "<td></td>";
+    $body .= $longname . $amount . $unit . $spec;
     $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">选中</button></td>';
 
     $body .= $gorightbutton;
@@ -254,9 +252,6 @@ foreach($this->materials as $tmp)
 </fieldset>
 </div> <!-- typechooser -->
 
-
-</div> <!-- bigboss -->
-<br>
 
 
 
