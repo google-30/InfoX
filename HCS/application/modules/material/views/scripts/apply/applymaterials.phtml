@@ -10,12 +10,15 @@ table { width:100%; }
 .tdnameeng { width:100px; }
 .tdamount { width:200px; }
 .tdchoose { width:50px; }
-*/
 
-#typechooser { width:100%; text-align:center; /*vertical-align:middle;float:left; padding-right: 2px; margin: 3px; */ }
+table.grid {width:100%}
 #datatable { width:100%; }
+
+*/
+#typechooser { width:100%; text-align:center; /*vertical-align:middle;float:left; padding-right: 2px; margin: 3px; */ }
 #selected { display: none; text-align:center;}
 #manualinput { display: none; text-align:center;}
+#selections { display: none; text-align:center;}
 </style>
 <script>
 $(function() {
@@ -111,8 +114,9 @@ function addchoosen(id)
     // TODO: upload to server
     $.post("/material/apply/postdata", { id: id, amount: amount }, 
         function(data) {
-            alert("Data Loaded: " + data);
-            location.reload();
+            //alert("Data Loaded: " + data);
+            console.log(data);
+            //location.reload();
     });
                 
 }
@@ -138,6 +142,8 @@ function showselected()
 function showmanualinput()
 {
     $("#typechooser").hide();
+    $('#selections').hide();
+
     $("#manualinput").show();
        
 }
@@ -145,56 +151,54 @@ function showmanualinput()
 function showtypechooser()
 {
     $("#manualinput").hide();
+    $('#selections').hide();
+
     $("#typechooser").show();
+}
+
+function showselections()
+{
+    $('#selections').load('/material/apply/getselections');
+    $("#typechooser").hide();
+    $("#manualinput").hide();
+    $('#selections').show();
 }
 
 function submitselected()
 {
     alert("submitselected");
 }
+
+
 </script>
 
 <div data-role="navbar">
 	<ul>
 		<li><a href="#" class="ui-btn-active ui-state-persist" onclick="showtypechooser()">分类选择材料</a></li>
 		<li><a href="#" onclick="showmanualinput()">手动输入材料信息</a></li>
-		<li><a href="#">显示选择材料列表</a></li>		
+		<li><a href="#" onclick="showselections()">显示选择材料列表</a></li>		
 	</ul>
 </div><!-- /navbar -->
 
-<!--<button onclick="submitselected()" data-mini="true">检查并提交已选材料</button>
-<button id="btnSelected" onclick="showselected()" data-mini="true"><span id="btnSelectedText">检查已选材料</span></button>
-<div id="selected">
-<fieldset>
-    <legend>已选择材料</legend>
-    <p><strong>未选择任何材料</strong></p>
-</fieldset>
-</div>
-<button id="btnSelected" onclick="showmanualinput()" data-mini="true"><span id="btnManualText">手动输入材料信息</span></button>
-<div id="manualinput">
-<fieldset>
-    <legend>手动输入材料信息</legend>
-    <p><strong>未选择任何材料</strong></p>
-</fieldset>
+<div id="selections">
+
 </div>
 
-<button id="btnSelected" onclick="showselected()" data-mini="true"><span id="btnSelectedText">按分类选择材料</span></button>
--->
 <div id="manualinput">
 <fieldset>
     <legend>手动输入材料信息</legend>
     <form id="manuform">
     <div data-role="fieldcontain">
     <label for="manuname">输入名称:</label>
-    <input type="text" name="manuname" id="manuname" value="材料名称，比如钉子，水泥等"  />
+    <input type="text" name="manuname" id="manuname" placeholder="材料名称，比如钉子，水泥等" value=""  />
     </div>
     <div data-role="fieldcontain">
     <label for="manuamount">输入数量:</label>
-    <input type="text" name="manuamount" id="manuamount" value="填写数量，比如要30包水泥，这里写30"  />
+    <input type="text" name="manuamount" id="manuamount" placeholder="填写数量，比如要30包水泥，这里写30" value=""  />
     </div>
     <div data-role="fieldcontain">
     <label for="manuspec">输入规格:</label>
-    <textarea cols="40" rows="8" name="manuspec" id="manuspec">填写规格说明，比如多大号的钉子，什么水泥等</textarea>
+    <textarea cols="40" rows="8" name="manuspec" id="manuspec" placeholder="填写规格说明，比如多大号的钉子，什么水泥等"></textarea>
     </div>
     </form> <!-- manuform -->					    
     <input type="submit" value="提交到选择列表" >
@@ -248,13 +252,10 @@ foreach($this->detailtypes as $tmp)
    </select>
 </div>
 
-<table id="datatable" border="3">
+<!--<table id="datatable" border="3">-->
+<table id="datatable" class="grid">
 <thead><tr>
-<th>材料名称</th>
-<th>数量</th>
-<th>单位</th>
-<th>规格</th>
-<th>选择</th>
+<th>材料名称</th><th>数量</th><th>单位</th><th>规格</th><th>补充说明</th><th>提交</th>
 </tr></thead>
 <tbody> 
 <?php
@@ -269,8 +270,10 @@ foreach($this->materials as $tmp)
     $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="0" min="0" max="100"></td>';
     $unit = "<td></td>";
     $spec = "<td></td>";
-    $body .= $longname . $amount . $unit . $spec;
-    $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">选中</button></td>';
+    //$remark = '<td><input type="text" name="remark" id="remark" placeholder="填写补充说明" value=""  /></td>';
+    $remark = '<td><textarea name="remark" id="remark" placeholder="填写补充说明"></textarea></td>';
+    $body .= $longname . $amount . $unit . $spec . $remark;
+    $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
 
     $body .= $gorightbutton;
     $body .= "</tr>";    

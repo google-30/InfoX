@@ -5,6 +5,7 @@ class Material_ApplyController extends Zend_Controller_Action
     private $_em;
     private $_material;
     private $_applysession;
+    private $nsName = 'applysession';
 
     public function init()
     {
@@ -14,13 +15,15 @@ class Material_ApplyController extends Zend_Controller_Action
 
         $nsName = 'applysession';
         if (Zend_Session::namespaceIsset($nsName)) {
-          //echo $nsName.' exists';
+            //echo $nsName.' exists';
         }
         else
         {
             try {
-                $this->_applysession = new Zend_Session_Namespace('applysession');
+                $this->_applysession = new Zend_Session_Namespace($nsName);
                 //echo "applysession";
+                $this->_applysession->testkey = "1";
+                $this->_applysession->appmats = array();
             } catch (Zend_Session_Exception $e) {
                 echo 'Cannot instantiate this namespace since applysession was created\n';
             }
@@ -70,16 +73,62 @@ class Material_ApplyController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
-
+  
+        $requests = $this->getRequest()->getPost();
         if(0)
-        {    
-            $requests = $this->getRequest()->getPost();
+        {  
             var_dump($requests);
             return;
         }   
         
-        echo "postdataAction";
+        $id = $requests["id"];
+        $amount = $requests["amount"];        
 
+        //echo "postdataAction";
+        $ans = new Zend_Session_Namespace($this->nsName);
+
+        $matobj = $this->_material->findOneBy(array("id"=>$id));
+        $name = $matobj->getName();
+        $nameeng = $matobj->getNameeng();
+        $longname = $name . "/" . $nameeng;
+        $requests["longname"] = $longname;
+        $ans->appmats[$id] = $requests;
+
+        $array = $ans->appmats;
+        foreach ($array as $index => $value) {
+            echo "aNamespace->$index = '$value';\n";
+        }
         
+    }
+
+    public function getselectionsAction()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+
+        //echo "getselectionsAction";
+        $ans = new Zend_Session_Namespace($this->nsName);
+        $appmats = $ans->appmats;
+
+        echo $this->view->grid("list", true)
+          ->field('longname','材料名称')
+          ->field('amount', '数量')
+          ->field('remark', '补充说明')
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          //->helper(new GridHelper_Supplier())
+          ->data($appmats)
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delselection')));
+
+        //return $array;
+    }
+
+    public function delselectionAction()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+        
+        $this->redirect("/material/apply/applymaterials");
     }
 }
