@@ -137,15 +137,15 @@ function showselected()
 
 function showmanualinput()
 {
-    if ($("#manualinput").css('display') == 'none') {    
-        $("#manualinput").show();
-        $("#btnManualText").html('隐藏手动输入'); 
-    }
-    else
-    {
-        $("#manualinput").hide();    
-        $("#btnManualText").html('手动输入材料信息'); 
-    }            
+    $("#typechooser").hide();
+    $("#manualinput").show();
+       
+}
+
+function showtypechooser()
+{
+    $("#manualinput").hide();
+    $("#typechooser").show();
 }
 
 function submitselected()
@@ -154,7 +154,15 @@ function submitselected()
 }
 </script>
 
-<!--<button onclick="submitselected()" data-mini="true">检查并提交已选材料</button>-->
+<div data-role="navbar">
+	<ul>
+		<li><a href="#" class="ui-btn-active ui-state-persist" onclick="showtypechooser()">分类选择材料</a></li>
+		<li><a href="#" onclick="showmanualinput()">手动输入材料信息</a></li>
+		<li><a href="#">显示选择材料列表</a></li>		
+	</ul>
+</div><!-- /navbar -->
+
+<!--<button onclick="submitselected()" data-mini="true">检查并提交已选材料</button>
 <button id="btnSelected" onclick="showselected()" data-mini="true"><span id="btnSelectedText">检查已选材料</span></button>
 <div id="selected">
 <fieldset>
@@ -171,6 +179,28 @@ function submitselected()
 </div>
 
 <button id="btnSelected" onclick="showselected()" data-mini="true"><span id="btnSelectedText">按分类选择材料</span></button>
+-->
+<div id="manualinput">
+<fieldset>
+    <legend>手动输入材料信息</legend>
+    <form id="manuform">
+    <div data-role="fieldcontain">
+    <label for="manuname">输入名称:</label>
+    <input type="text" name="manuname" id="manuname" value="材料名称，比如钉子，水泥等"  />
+    </div>
+    <div data-role="fieldcontain">
+    <label for="manuamount">输入数量:</label>
+    <input type="text" name="manuamount" id="manuamount" value="填写数量，比如要30包水泥，这里写30"  />
+    </div>
+    <div data-role="fieldcontain">
+    <label for="manuspec">输入规格:</label>
+    <textarea cols="40" rows="8" name="manuspec" id="manuspec">填写规格说明，比如多大号的钉子，什么水泥等</textarea>
+    </div>
+    </form> <!-- manuform -->					    
+    <input type="submit" value="提交到选择列表" >
+</fieldset>
+</div>
+
 <div id="typechooser" style="clear:both">
 <fieldset>
     <legend>按分类选择材料</legend>
