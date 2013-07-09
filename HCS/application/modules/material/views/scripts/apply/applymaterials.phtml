@@ -109,12 +109,10 @@ function addchoosen(id)
         return;
     }
 
-    alert("id="+id+", amount="+amount);
-
-    // TODO: upload to server
+    //alert("id="+id+", amount="+amount);
     $.post("/material/apply/postdata", { id: id, amount: amount }, 
         function(data) {
-            //alert("Data Loaded: " + data);
+            alert("提交成功，请继续申请材料");
             console.log(data);
             //location.reload();
     });
@@ -158,15 +156,36 @@ function showtypechooser()
 
 function showselections()
 {
-    $('#selections').load('/material/apply/getselections');
+    //$('#selections').load('/material/apply/getselections');
+    $('#seltable').load('/material/apply/getselections');
     $("#typechooser").hide();
     $("#manualinput").hide();
     $('#selections').show();
 }
 
-function submitselected()
+function submitmanualinput()
 {
-    alert("submitselected");
+    var id = 0;    
+    var name = $('#manuname').val();
+    var amount = $('#manuamount').val();
+    var remark = $('#manuremark').val();
+
+    if(name=="" || amount=="" || remark=="")
+    {
+        alert("请填写完整，再提交");
+    }
+
+    $.post("/material/apply/postdata", { id:id, amount:amount, remark:remark, longname:name }, 
+        function(data) {
+            alert("提交成功，请继续申请材料");
+            console.log(data);
+            //location.reload();
+    });    
+}
+
+function submitselections()
+{
+    alert("submitselections");
 }
 
 
@@ -181,7 +200,9 @@ function submitselected()
 </div><!-- /navbar -->
 
 <div id="selections">
-
+<div id="seltable">
+</div>
+<input type="submit" value="提交至材料审核人员" onclick="submitselections()">
 </div>
 
 <div id="manualinput">
@@ -197,11 +218,11 @@ function submitselected()
     <input type="text" name="manuamount" id="manuamount" placeholder="填写数量，比如要30包水泥，这里写30" value=""  />
     </div>
     <div data-role="fieldcontain">
-    <label for="manuspec">输入规格:</label>
-    <textarea cols="40" rows="8" name="manuspec" id="manuspec" placeholder="填写规格说明，比如多大号的钉子，什么水泥等"></textarea>
+    <label for="manuremark">输入规格:</label>
+    <textarea cols="40" rows="8" name="manuremark" id="manuremark" placeholder="填写规格说明，比如多大号的钉子，什么水泥等"></textarea>
     </div>
     </form> <!-- manuform -->					    
-    <input type="submit" value="提交到选择列表" >
+    <input type="submit" value="提交到选择列表" onclick="submitmanualinput()">
 </fieldset>
 </div>
 

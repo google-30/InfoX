@@ -87,18 +87,30 @@ class Material_ApplyController extends Zend_Controller_Action
         //echo "postdataAction";
         $ans = new Zend_Session_Namespace($this->nsName);
 
-        $matobj = $this->_material->findOneBy(array("id"=>$id));
-        $name = $matobj->getName();
-        $nameeng = $matobj->getNameeng();
-        $longname = $name . "/" . $nameeng;
-        $requests["longname"] = $longname;
-        $ans->appmats[$id] = $requests;
+        if($id != "0")
+        {//typechooser
+            $matobj = $this->_material->findOneBy(array("id"=>$id));
+            $name = $matobj->getName();
+            $nameeng = $matobj->getNameeng();
+            $longname = $name . "/" . $nameeng;
+            $requests["longname"] = $longname;
+            //$ans->appmats[$id] = $requests;
 
-        $array = $ans->appmats;
-        foreach ($array as $index => $value) {
-            echo "aNamespace->$index = '$value';\n";
+            /*
+            $array = $ans->appmats;
+            foreach ($array as $index => $value) {
+                echo "aNamespace->$index = '$value';\n";
+            }
+            */
         }
-        
+        else
+        {//manualinput
+            $id = rand(1000000,2000000);
+            //echo "manualinput, id=$id\n";
+            $requests["id"] = $id;
+            
+        }
+        $ans->appmats[$id] = $requests;
     }
 
     public function getselectionsAction()
@@ -110,7 +122,8 @@ class Material_ApplyController extends Zend_Controller_Action
         $ans = new Zend_Session_Namespace($this->nsName);
         $appmats = $ans->appmats;
 
-        echo $this->view->grid("list", true)
+        echo $this->view->grid("matlist", true)
+          ->field('id','材料编号')
           ->field('longname','材料名称')
           ->field('amount', '数量')
           ->field('remark', '补充说明')
@@ -121,7 +134,12 @@ class Material_ApplyController extends Zend_Controller_Action
           ->data($appmats)
           ->action(':action', '删除', array( 'url'=>array('action'=>'delselection')));
 
-        //return $array;
+        /*
+        if(count($appmats) != 0)
+        {
+            echo '<input type="submit" value="提交至材料审核人员" onclick="submitselections()">';
+        } 
+        */   
     }
 
     public function delselectionAction()
