@@ -6,14 +6,32 @@ function submitmatapps()
 
 function updaterow(id)
 {
-    alert("updaterow, "+id);
+    var amount = $('#amount'+id).val();
+    var remark = $('#remark'+id).val();
+    var supplierid = $('#select'+id).val();   
+    var price = $('#price'+id).val();
+    price = (price=="") ? 0 : price;
+
+    //alert('updaterow,id='+id+",amount="+amount+",remark="+remark+",supplierid="+supplierid+",price="+price);
+
+    $.post("/material/manage/updatedata", 
+        { id: id, amount: amount, remark:remark, supplierid:supplierid, price:price  }, 
+        function(data) {
+            alert(data);
+            console.log(data);            
+    });
 }
 </script>
 <?php
 $appobj = $this->application;
 $create = $appobj->getCreatedate()->format("Y-m-d h:m:s");
 $update = $appobj->getUpdatedate()->format("Y-m-d h:m:s");
-
+$applicant = $appobj->getApplicant();
+$applicantname = "";
+if($applicant)
+{
+    $applicantname = $applicant->getName();
+}
 ?>
 
 <table class="grid">
@@ -23,10 +41,10 @@ $update = $appobj->getUpdatedate()->format("Y-m-d h:m:s");
 <td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
 </tr>
 <tr>
-<td><strong>工地选择:</strong></td>
+<td><strong>申请工地:</strong></td>
 <td><input type="text" name="name" id="name" value="" data-mini="true" /></td>
 <td><strong>申请人:</strong></td>
-<td><input type="text" name="name" id="name" value="" data-mini="true" /></td>
+<td><strong><?php echo $applicantname; ?></strong></td>
 </tr>
 </tbody>
 </table>

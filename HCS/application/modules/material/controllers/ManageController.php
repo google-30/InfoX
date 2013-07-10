@@ -215,6 +215,52 @@ class Material_ManageController extends Zend_Controller_Action
     
     }
 
+    public function updatedataAction()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+
+        $requests = $this->getRequest()->getPost();
+        if(0)
+        {                
+            var_dump($requests);
+            return;
+        }    
+
+        $id = $requests['id'];
+        $amount = $requests['amount'];
+        $remark = $requests['remark'];
+        $supplierid = $requests['supplierid'];
+        $price = $requests['price'];
+        // update matappdata, update application
+        $matappobj = $this->_matappdata->findOneBy(array("id"=>$id));       
+        $matappobj->setAmount($amount); 
+        $matappobj->setRemark($remark);
+        
+        $supplier = $this->_supplier->findOneBy(array("id"=>$supplierid));
+        $matappobj->setSupplier($supplier);
+        $matappobj->setPrice($price); 
+        $this->_em->persist($matappobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        } 
+
+        $appobj = $matappobj->getApplication();      
+        $appobj->setUpdatedate(new Datetime('now'));
+        $this->_em->persist($appobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        } 
+
+        echo "更新成功";
+
+    }
     
 }
 

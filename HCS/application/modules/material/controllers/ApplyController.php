@@ -124,13 +124,6 @@ class Material_ApplyController extends Zend_Controller_Action
           //->helper(new GridHelper_Supplier())
           ->data($appmats)
           ->action(':action', '删除', array( 'url'=>array('action'=>'delselection')));
-
-        /*
-        if(count($appmats) != 0)
-        {
-            echo '<input type="submit" value="提交至材料审核人员" onclick="submitselections()">';
-        } 
-        */   
     }
 
     public function delselectionAction()
