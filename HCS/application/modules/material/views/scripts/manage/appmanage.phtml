@@ -1,5 +1,5 @@
 <style>
-#Applications { width:100%; }
+/*#Applications { width:100%; }*/
 </style>
 <div>
 <?
@@ -16,8 +16,8 @@ echo $this->grid("Applications", true)
           ->paginatorEnabled(false)
           //->helper(new GridHelper_Supplier())
           ->data($this->maindata)
-          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
-          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+          ->action(':action', '检查申请', array( 'url'=>array('action'=>'appedit')))
+          ->action(':action', '删除申请', array( 'url'=>array('action'=>'appdel')));
 ?>
 </div>
 

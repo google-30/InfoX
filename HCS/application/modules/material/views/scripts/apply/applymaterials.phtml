@@ -109,8 +109,9 @@ function addchoosen(id)
         return;
     }
 
-    //alert("id="+id+", amount="+amount);
-    $.post("/material/apply/postdata", { id: id, amount: amount }, 
+    var remark = $('#remark'+id).val();
+    //alert("id="+id+",amount="+amount+",remark="+remark);
+    $.post("/material/apply/postdata", { id: id, amount: amount, remark:remark }, 
         function(data) {
             alert("提交成功，请继续申请材料");
             console.log(data);
@@ -178,16 +179,26 @@ function submitmanualinput()
     $.post("/material/apply/postdata", { id:id, amount:amount, remark:remark, longname:name }, 
         function(data) {
             alert("提交成功，请继续申请材料");
-            console.log(data);
+            //console.log(data);
             //location.reload();
     });    
 }
 
 function submitselections()
 {
-    alert("submitselections");
+    //alert("submitselections");
+    $.post("/material/apply/submitselections", 
+        function(data) {
+            alert(data);
+            //console.log(data);
+            //location.reload();
+            redirect("/material/apply/");    
+    });    
 }
 
+function redirect(url) {
+    window.location = url;
+}
 
 </script>
 
@@ -207,7 +218,7 @@ function submitselections()
 
 <div id="manualinput">
 <fieldset>
-    <legend>手动输入材料信息</legend>
+    <!--<legend>手动输入材料信息</legend>-->
     <form id="manuform">
     <div data-role="fieldcontain">
     <label for="manuname">输入名称:</label>
@@ -228,7 +239,7 @@ function submitselections()
 
 <div id="typechooser" style="clear:both">
 <fieldset>
-    <legend>按分类选择材料</legend>
+    <!--<legend>按分类选择材料</legend>-->
 <div data-role="fieldcontain">
    <label for="macrotype" class="select">主要分类：</label>
    <select name="macrotype" id="macrotype" data-mini="true">
@@ -273,7 +284,6 @@ foreach($this->detailtypes as $tmp)
    </select>
 </div>
 
-<!--<table id="datatable" border="3">-->
 <table id="datatable" class="grid">
 <thead><tr>
 <th>材料名称</th><th>数量</th><th>单位</th><th>规格</th><th>补充说明</th><th>提交</th>
@@ -290,9 +300,8 @@ foreach($this->materials as $tmp)
     $longname = '<tr><td class="tdname">' . $name . '/' . $nameeng . '</td>';
     $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="0" min="0" max="100"></td>';
     $unit = "<td></td>";
-    $spec = "<td></td>";
-    //$remark = '<td><input type="text" name="remark" id="remark" placeholder="填写补充说明" value=""  /></td>';
-    $remark = '<td><textarea name="remark" id="remark" placeholder="填写补充说明"></textarea></td>';
+    $spec = "<td></td>";    
+    $remark = '<td><textarea name="remark" id="remark' . $id . '" placeholder="填写补充说明"></textarea></td>';
     $body .= $longname . $amount . $unit . $spec . $remark;
     $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
 

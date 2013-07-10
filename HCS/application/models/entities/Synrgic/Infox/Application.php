@@ -42,7 +42,7 @@ class Application extends \Synrgic_Models_Entity {
     protected $porter;
 
     /**
-     * @Column(type="text")
+     * @Column(type="text", nullable=true)
      */
     protected $materials;
 
@@ -51,22 +51,22 @@ class Application extends \Synrgic_Models_Entity {
      * only when this submit to upper level, 
      * then officer/manager can see it   
      *   
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $status0;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $status1;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $status2;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $remark;
     

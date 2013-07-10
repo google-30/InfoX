@@ -1,0 +1,88 @@
+<script>
+function submitmatapps()
+{
+    alert("submitmatapps");
+}
+
+function updaterow(id)
+{
+    alert("updaterow, "+id);
+}
+</script>
+<?php
+$appobj = $this->application;
+$create = $appobj->getCreatedate()->format("Y-m-d h:m:s");
+$update = $appobj->getUpdatedate()->format("Y-m-d h:m:s");
+
+?>
+
+<table class="grid">
+<tbody>
+<tr>
+<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>
+<td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
+</tr>
+<tr>
+<td><strong>工地选择:</strong></td>
+<td><input type="text" name="name" id="name" value="" data-mini="true" /></td>
+<td><strong>申请人:</strong></td>
+<td><input type="text" name="name" id="name" value="" data-mini="true" /></td>
+</tr>
+</tbody>
+</table>
+
+<?php
+
+echo $this->grid("Matapps", true)
+          ->field('longname','材料名称')
+          ->field('amount','申请数量')
+          ->field('remark','补充说明')
+          ->field('supplier', '供应商')
+          ->field('price', '单价')
+          ->field('update', '更新')          
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Matapps())
+          ->data($this->matapps)
+          ->action(':action', '删除', array( 'url'=>array('action'=>'matdel')));
+
+?>
+<input type="button" value="修改完毕提交上级审核" onclick="submitmatapps()">
+<!--
+<table id="datatable" class="grid">
+<thead><tr>
+<th>材料名称</th><th>申请数量</th>
+<th>规格</th><th>补充说明</th><th>供应商单价</th><th>更新</th>
+</tr></thead>
+<tbody> 
+<?php
+foreach($this->matapps as $tmp)
+{
+    $id = $tmp->getId();
+    $longname = $tmp->getLongname();
+    $amount = $tmp->getAmount();
+    $remark = $tmp->getRemark();
+
+    $body = "<tr>";
+    $tdname = '<td class="tdname">' . $longname . '</td>';
+    $tdamount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="'. $amount . '" data-mini="true"></td>';
+    //$tdunit = "<td></td>";
+    $tdspec = "<td></td>";
+    $tdremark = '<td><textarea name="remark" id="remark' . $id . '" placeholder="填写补充说明">'. $remark .'</textarea></td>';
+    
+    $body .= $tdname . $tdamount . $tdspec . $tdremark;
+    $tdupdate = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">更新</button></td>';
+
+    $body .= $tdupdate;
+    $body .= "</tr>";    
+    echo $body;
+}
+?>
+</tbody> 
+</table>
+-->
+
+
+
+

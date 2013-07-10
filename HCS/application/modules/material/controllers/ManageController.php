@@ -12,6 +12,7 @@ class Material_ManageController extends Zend_Controller_Action
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
         $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
         $this->_application = $this->_em->getRepository('Synrgic\Infox\Application');
+        $this->_matappdata = $this->_em->getRepository('Synrgic\Infox\Matappdata');
     }
 
     public function indexAction()
@@ -197,6 +198,23 @@ class Material_ManageController extends Zend_Controller_Action
         $maindata = $this->_application->findAll();        
         $this->view->maindata = $maindata;
     }
+    
+    public function appeditAction()
+    {
+        $id = $this->getParam("id");
+        $appobj = $this->_application->findOneBy(array("id"=>$id));
+        $this->view->application = $appobj;
+        
+        $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
+        $this->view->matapps = $matapps;
+         
+    }
+
+    public function appdelAction()
+    {
+    
+    }
+
     
 }
 
