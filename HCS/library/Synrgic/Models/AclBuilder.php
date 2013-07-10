@@ -114,7 +114,7 @@ class Synrgic_Models_AclBuilder {
 		    'management:dashboard'=>array('view'),
 		    'management:index'=>array('view'),
             'management:auth'=>array('view','login','logout'),  
-            'material:apply'=>array('view','postdata', 'applymaterials'),              
+            'material:apply'=>array('view','postdata', 'applymaterials', 'getselections', 'delselection','submitselections'),
 		    )
 		),
 
@@ -126,7 +126,7 @@ class Synrgic_Models_AclBuilder {
             'management:auth'=>array('view','login','logout'),  
             'worker:manage'=>array('view', 'add', 'edit','delete', 'submit', 'output'),
             'material:apply'=>array('view','postdata', 'applymaterials', 'getselections', 'delselection','submitselections'),              
-            'material:manage'=>array('view','add','edit','delete','submit','appmanage','appedit','appdel','matdel'),
+            'material:manage'=>array('view','add','edit','delete','submit','appmanage','appedit','appdel','matdel','updatedata'),
             'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit'),

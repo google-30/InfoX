@@ -37,7 +37,7 @@ class User extends \Synrgic_Models_Entity {
     /**
      * Email of the user
      *
-     * @Column(type="text")
+     * @Column(type="text", nullable=true)
      */
     protected $email;
 
@@ -77,10 +77,13 @@ class User extends \Synrgic_Models_Entity {
      * @Column(type="string",length=20)
      */
     protected $role;
+
     /**
-     *
-     * @ManyToOne(targetEntity="Synrgic\Service\Provider", fetch="EAGER")
+     * relation between human resource and user
+     * 
+     * @OneToOne(targetEntity="Synrgic\Infox\Humanresource", fetch="EAGER" )
      */
-    protected $provider;
+    protected $humanresource;
+
 }
 

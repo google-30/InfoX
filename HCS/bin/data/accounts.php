@@ -30,22 +30,21 @@ foreach( $tuples as $tuple ){
 	$user->setUsername($tuple[0]);
 	$user->setName($tuple[1]);
 	$user->setEmail($tuple[2]);
-	$user->setDisabled($tuple[3]);
-	
+	$user->setDisabled($tuple[3]);	
 
-	$provider=$em->getRepository('\Synrgic\Service\Provider')->findOneById( $tuple[7]);
-	$user->setprovider($provider);
+	//$provider=$em->getRepository('\Synrgic\Service\Provider')->findOneById( $tuple[7]);
+	//$user->setprovider($provider);
 	
-
-	// Find language
 	$language = $em->getRepository('\Synrgic\Language')->findOneByName($tuple[4]);
 	$user->setpreferredLanguage($language);
 
 	// Handle Password
 	$pwhelper = new Synrgic_Models_PasswordHelper();
 	$cryptedPassword = $pwhelper->cryptPassword($tuple[5]);
-	$user->setRole($tuple[6]);
 	$user->setPassword($cryptedPassword);
+
+	$user->setRole($tuple[6]);
+
 	$em->persist($user);
 }
 

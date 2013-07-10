@@ -9,6 +9,7 @@ class Humanresource_ManageController extends Zend_Controller_Action
     {
         $this->_em = Zend_Registry::get('em');        
         $this->_humanres = $this->_em->getRepository('Synrgic\Infox\Humanresource');
+        $this->_users = $this->_em->getRepository('Synrgic\User');
     }
 
     public function indexAction()
@@ -95,7 +96,6 @@ class Humanresource_ManageController extends Zend_Controller_Action
         // TODO
         $data->setPosition($position);
 
-        // TODO: sync these with user table
         $data->setUsername($username);
         $data->setPassword($password);
 
@@ -106,6 +106,45 @@ class Humanresource_ManageController extends Zend_Controller_Action
             var_dump($e);
             return;
         }        
+
+        // TODO: sync these with user table
+        if($username!="" && $password!="")
+        {
+            if($mode == "Create")
+            {
+                $user = new \Synrgic\User();    
+            }
+            else
+            {
+                $user = $this->_users->findOneBy(array("name"=>$name));
+                if(is_null($user))
+                {
+                    $user = new \Synrgic\User();    
+                }
+            }
+
+            $user->setUsername($username);
+        	$pwhelper = new Synrgic_Models_PasswordHelper();
+        	$cryptedPassword = $pwhelper->cryptPassword($password);
+	        $user->setPassword($cryptedPassword);
+
+            $user->setName($name);
+            $user->setDisabled(false);
+            $user->setRole($position);    
+        
+	        $language = $this->_em->getRepository('\Synrgic\Language')->findOneByName("Chinese");
+	        $user->setpreferredLanguage($language);                    
+
+            $user->setHumanresource($data);
+
+            $this->_em->persist($user);
+            try {
+                $this->_em->flush();
+            } catch (Exception $e) {
+                var_dump($e);
+                return;
+            }
+        }
 
         $this->_redirect("humanresource/manage");
     } 
