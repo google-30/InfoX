@@ -1,9 +1,4 @@
 <script>
-function submitmatapps()
-{
-    alert("submitmatapps");
-}
-
 function updaterow(id)
 {
     var amount = $('#amount'+id).val();
@@ -21,11 +16,65 @@ function updaterow(id)
             console.log(data);            
     });
 }
+
+function submitmatapps()
+{
+    //alert("submitmatapps");
+    var appid = $("#appid").val();
+    $.post("/material/manage/submitmatapps", { appid: appid }, 
+        function(data) {
+            alert(data);
+            console.log(data);            
+            redirect();
+    });
+}
+
+function rejectmatapps()
+{
+    //alert("rejectmatapps");
+    var appid = $("#appid").val();
+    $.post("/material/manage/rejectmatapps", { appid: appid }, 
+        function(data) {
+            alert(data);
+            console.log(data);            
+            redirect();
+    });
+}
+
+function reviewmatapps()
+{
+    //alert("reviewmatapps");
+    var appid = $("#appid").val();
+    $.post("/material/manage/reviewmatapps", { appid: appid }, 
+        function(data) {
+            alert(data);
+            console.log(data);            
+            redirect();
+    });
+}
+
+function approvematapps()
+{
+    //alert("approvematapps");
+
+    var appid = $("#appid").val();
+    $.post("/material/manage/approvematapps", { appid: appid }, 
+        function(data) {
+            alert(data);
+            redirect();
+    });
+}
+
+function redirect()
+{
+    window.location = "/material/manage/appmanage";
+}
 </script>
 <?php
 $appobj = $this->application;
-$create = $appobj->getCreatedate()->format("Y-m-d h:m:s");
-$update = $appobj->getUpdatedate()->format("Y-m-d h:m:s");
+$appid=$appobj->getId();
+$create = $appobj->getCreatedate()->format("Y-m-d H:m:s");
+$update = $appobj->getUpdatedate()->format("Y-m-d H:m:s");
 $applicant = $appobj->getApplicant();
 $applicantname = "";
 if($applicant)
@@ -37,8 +86,12 @@ $siteobj = $appobj->getSite();
 if($siteobj)
 {
     $sitename = $siteobj->getName();
-}
+} 
+
+$role = $this->role;
 ?>
+
+<input type="hidden" id="appid" value="<?php echo $appid; ?>">
 
 <table class="grid">
 <tbody>
@@ -56,7 +109,6 @@ if($siteobj)
 </table>
 
 <?php
-
 echo $this->grid("Matapps", true)
           ->field('longname','材料名称')
           ->field('amount','申请数量')
@@ -71,42 +123,36 @@ echo $this->grid("Matapps", true)
           ->data($this->matapps)
           ->action(':action', '删除', array( 'url'=>array('action'=>'matdel')));
 
-?>
-<input type="button" value="修改完毕提交上级审核" onclick="submitmatapps()">
-<!--
-<table id="datatable" class="grid">
-<thead><tr>
-<th>材料名称</th><th>申请数量</th>
-<th>规格</th><th>补充说明</th><th>供应商单价</th><th>更新</th>
-</tr></thead>
-<tbody> 
-<?php
-foreach($this->matapps as $tmp)
+if($role == "manager")
 {
-    $id = $tmp->getId();
-    $longname = $tmp->getLongname();
-    $amount = $tmp->getAmount();
-    $remark = $tmp->getRemark();
-
-    $body = "<tr>";
-    $tdname = '<td class="tdname">' . $longname . '</td>';
-    $tdamount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="'. $amount . '" data-mini="true"></td>';
-    //$tdunit = "<td></td>";
-    $tdspec = "<td></td>";
-    $tdremark = '<td><textarea name="remark" id="remark' . $id . '" placeholder="填写补充说明">'. $remark .'</textarea></td>';
-    
-    $body .= $tdname . $tdamount . $tdspec . $tdremark;
-    $tdupdate = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">更新</button></td>';
-
-    $body .= $tdupdate;
-    $body .= "</tr>";    
-    echo $body;
+    echo '<div style="display:none;">';
+}
+else
+{
+    echo '<div>';
 }
 ?>
-</tbody> 
-</table>
--->
+<input type="button" value="修改完毕提交上级审核" onclick="submitmatapps()">
+<input type="button" value="取消提交重新审核" onclick="reviewmatapps()">
+<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()">
+<?php
+    echo '</div>';
+?>
 
-
+<?php
+if($role != "manager")
+{
+    echo '<div style="display:none;">';
+}
+else
+{
+    echo '<div>';
+}
+?>
+<input type="button" value="批准该申请" onclick="approvematapps()">
+<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()">
+<?php
+    echo '</div>';
+?>
 
 

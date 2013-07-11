@@ -146,7 +146,7 @@ class Material_ApplyController extends Zend_Controller_Action
             return;    
         }        
         
-        $statusArr = array("提交", "审核", "未审核", "批准");
+        $statusArr = array("提交", "审核", "未审核", "批准", "退回");
         // step1. create application
         $appobj = new \Synrgic\Infox\Application(); 
         $appobj->setCreatedate(new Datetime("now"));

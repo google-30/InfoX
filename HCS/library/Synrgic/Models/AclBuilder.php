@@ -104,7 +104,9 @@ class Synrgic_Models_AclBuilder {
             'management:auth'=>array('view','login','logout'), 
             'worker:manage'=>array('view'),
             'project:manage'=>array('view'),
-            'material:manage'=>array('view','add','edit','delete','savedetail'),   
+            //'material:manage'=>array('view','add','edit','delete','savedetail'),   
+            'material:manage'=>array('view','add','edit','delete','submit','appmanage','appedit','appdel','matdel',
+'updatedata', 'submitmatapps','reviewmatapps','rejectmatapps', 'approvematapps'),
 		    )
 		),
 
@@ -126,7 +128,8 @@ class Synrgic_Models_AclBuilder {
             'management:auth'=>array('view','login','logout'),  
             'worker:manage'=>array('view', 'add', 'edit','delete', 'submit', 'output'),
             'material:apply'=>array('view','postdata', 'applymaterials', 'getselections', 'delselection','submitselections'),              
-            'material:manage'=>array('view','add','edit','delete','submit','appmanage','appedit','appdel','matdel','updatedata'),
+            'material:manage'=>array('view','add','edit','delete','submit','appmanage','appedit','appdel','matdel',
+'updatedata', 'submitmatapps','reviewmatapps','rejectmatapps'),
             'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit'),

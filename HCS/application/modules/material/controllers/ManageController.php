@@ -14,6 +14,7 @@ class Material_ManageController extends Zend_Controller_Action
         $this->_application = $this->_em->getRepository('Synrgic\Infox\Application');
         $this->_matappdata = $this->_em->getRepository('Synrgic\Infox\Matappdata');
         $this->_supplyprice = $this->_em->getRepository('Synrgic\Infox\Supplyprice');
+        $this->_user = $this->_em->getRepository('Synrgic\User');
     }
 
     public function indexAction()
@@ -24,7 +25,8 @@ class Material_ManageController extends Zend_Controller_Action
 
     public function addAction()
     {
-        $this->getSuppliers();    
+        $this->getSuppliers();  
+        $this->getSupplyprice(0);  
     }
 
     public function editAction()
@@ -40,6 +42,7 @@ class Material_ManageController extends Zend_Controller_Action
 
         $this->view->maindata = $data;
         $this->getSuppliers();
+        $this->getSupplyprice($id);
     }
 
     public function deleteAction()
@@ -73,13 +76,13 @@ class Material_ManageController extends Zend_Controller_Action
         $name = $this->getParam("name", "");
         $nameeng = $this->getParam("nameeng", "");
         $date = $this->getParam("date", "now");
-        $price = $this->getParam("price", "0");
+        //$price = $this->getParam("price", "0");
         $spec = $this->getParam("spec", "");
         $description = $this->getParam("description", "");
         $mtype = $this->getParam("mtype", "");
         $dtype = $this->getParam("dtype", "");
 
-        $supplier = $this->getParam("supplier", "");
+        //$supplier = $this->getParam("supplier", "");
 
         if($mode == "Create")
         {
@@ -98,12 +101,14 @@ class Material_ManageController extends Zend_Controller_Action
         $data->setDescription($description);
         $data->setMacrotype($mtype);
         $data->setDetailtype($dtype);
+        /*
         $supobj = $this->_supplier->findOneBy(array("id"=>$supplier));
         if(isset($supobj))  
         {
             $data->setSupplier($supobj);
         }
-                    
+        */
+            
         $this->_em->persist($data);
         try {
             $this->_em->flush();
@@ -115,6 +120,36 @@ class Material_ManageController extends Zend_Controller_Action
         $id = $data->getId();
         // upload pic
         $this->storePic($id);
+
+        // TODO: update supplyprice
+        $suppliers = $this->_supplier->findAll();
+        foreach($suppliers as $tmp)
+        {
+        
+            $id = $tmp->getId();
+            $priceid = "price" . strval($id);
+            $price = $this->getParam($priceid, "0");
+
+            $priceobj = $this->_supplyprice->findOneBy(array("supplier"=>$tmp, "material"=>$data));
+            if(is_null($priceobj))
+            {
+                $priceobj = new \Synrgic\Infox\Supplyprice();
+            }
+            $priceobj->setMaterial($data);
+            $priceobj->setSupplier($tmp);
+            $priceobj->setPrice(floatval($price));
+            $priceobj->setUpdate(new Datetime('now'));
+
+            $this->_em->persist($priceobj);                        
+  
+        }
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }        
 
         $this->_redirect("material/manage");
     }    
@@ -222,6 +257,8 @@ class Material_ManageController extends Zend_Controller_Action
         
         $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
         $this->view->matapps = $matapps;
+
+        $this->view->role = $this->getUserRole();
          
     }
 
@@ -274,9 +311,132 @@ class Material_ManageController extends Zend_Controller_Action
         } 
 
         echo "更新成功";
-
     }
     
+    public function submitmatappsAction()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+
+        $appid = $this->getParam("appid", 0);
+        //echo "appid=$appid";
+
+        $statusArr = $this->getStatusArr();
+
+        $appobj = $this->_application->findOneBy(array("id"=>$appid));
+        $appobj->setUpdatedate(new Datetime('now'));
+        $appobj->setStatus1($statusArr[0]);
+        $this->_em->persist($appobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }         
+        
+        echo "提交成功";
+    }
+
+    public function reviewmatappsAction()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+
+        $appid = $this->getParam("appid", 0);
+        //echo "appid=$appid";
+
+        $statusArr = $this->getStatusArr();
+
+        $appobj = $this->_application->findOneBy(array("id"=>$appid));
+        $appobj->setUpdatedate(new Datetime('now'));
+        $appobj->setStatus1($statusArr[2]);
+        $this->_em->persist($appobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }         
+
+        echo "该申请设成未审核状态";
+    }
+
+    public function rejectmatappsAction()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+
+        $appid = $this->getParam("appid", 0);
+        //echo "appid=$appid";
+
+        $statusArr = $this->getStatusArr();//array("提交", "审核", "未审核", "批准", "退回");
+
+        $appobj = $this->_application->findOneBy(array("id"=>$appid));
+        $appobj->setUpdatedate(new Datetime('now'));
+        $appobj->setStatus1($statusArr[4]);
+        $this->_em->persist($appobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }         
+
+        echo "该申请已经退回";
+    }
+
+    public function approvematappsAction()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+
+        $appid = $this->getParam("appid", 0);
+        $statusArr = $this->getStatusArr();
+
+        $appobj = $this->_application->findOneBy(array("id"=>$appid));
+        $appobj->setUpdatedate(new Datetime('now'));
+        $appobj->setStatus2($statusArr[3]);
+        $this->_em->persist($appobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }         
+
+        echo "该申请已经批准";
+    }
+
+    private function getStatusArr()
+    {
+        $statusArr = array("提交", "审核", "未审核", "批准", "退回");
+        return  $statusArr;
+    }
+
+    private function getUsername()
+    {
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $username = $auth->getIdentity()->username;
+            //echo "username=$username<br>";            
+            return $username;
+        }
+        else
+        {
+            $ted = "Ted, u here~";
+            //echo "username=$ted<br>";            
+            return $ted;
+        }             
+    }    
+
+    private function getUserRole()
+    {
+        $username = $this->getUsername();
+        $user = $this->_user->findOneBy(array("username"=>$username));
+        $role = $user ? $user->getRole() : "";
+        return $role;
+    }    
+
 }
 
 
