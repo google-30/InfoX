@@ -14,6 +14,7 @@ class Material_ApplyController extends Zend_Controller_Action
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_humanres = $this->_em->getRepository('Synrgic\Infox\Humanresource');
+        $this->_user = $this->_em->getRepository('Synrgic\User');
         
         $nsName = 'applysession';
         if (Zend_Session::namespaceIsset($nsName)) {
@@ -34,8 +35,13 @@ class Material_ApplyController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $sites = $this->_site->findAll();
-        $this->view->sites = $sites;     
+        //$sites = $this->_site->findAll();
+        //$this->view->sites = $sites;     
+        $role = $this->getUserRole();        
+        //if($role=="leader")
+        {
+            $this->view->role = $role;
+        }
     }
 
     public function applymaterialsAction()
@@ -86,13 +92,6 @@ class Material_ApplyController extends Zend_Controller_Action
             $nameeng = $matobj->getNameeng();
             $longname = $name . "/" . $nameeng;
             $requests["longname"] = $longname;
-
-            /*
-            $array = $ans->appmats;
-            foreach ($array as $index => $value) {
-                echo "aNamespace->$index = '$value';\n";
-            }
-            */
         }
         else
         {//manualinput
@@ -161,13 +160,14 @@ class Material_ApplyController extends Zend_Controller_Action
         if(isset($curuser))
         {
             $appobj->setApplicant($curuser);
-        }
-        
-        // TODO: get site
-        //$appobj->setSite();
-        
-        // Obsolete
-        //$appobj->setMaterials();
+
+            // TODO: get site            
+            $site = $this->_site->findOneBy(array("leader"=>$curuser));        
+            if($site)
+            {
+                $appobj->setSite($site);
+            }            
+        }        
         
         $this->_em->persist($appobj);
         try {
@@ -222,4 +222,13 @@ class Material_ApplyController extends Zend_Controller_Action
             return $ted;
         }             
     }    
+
+    private function getUserRole()
+    {
+        $username = $this->getUsername();
+        $user = $this->_user->findOneBy(array("username"=>$username));
+        $role = $user ? $user->getRole() : "";
+        return $role;
+    }    
+
 }

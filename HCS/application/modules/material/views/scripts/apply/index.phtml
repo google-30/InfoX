@@ -1,22 +1,32 @@
 <style>
-#wizard { text-align:center; }
+.wizard { text-align:center; }
 </style>
+<?php
+$role=$this->role;
+?>
 
 <!-- displaying rejected application, if none rejected, this div should be hide. -->
 <div id="appmessage">
-
 </div> <!-- appmessage -->
 
-<div id="wizard">
-<fieldset>
-    <a href="/material/apply/applymaterials"><button>申请办公物品</button></a> 
-    <p>点击，为办公室申请物品，比如文具等</p>
-</fieldset><br> 
-
+<div class="wizard">
 <fieldset>
     <!--<legend><strong>创建申请</strong></legend>-->
     <a href="/material/apply/applymaterials"><button>申请工地材料</button></a> 
     <p>点击，进入工地申请创建过程</p>
+</fieldset><br> 
+</div>
+
+<?php
+if($role == "leader")
+{
+    echo '<div style="display:none">';
+}
+?>
+<div class="wizard">
+<fieldset>
+    <a href="/material/apply/applymaterials"><button>申请办公物品</button></a> 
+    <p>点击，为办公室申请物品，比如文具等</p>
 </fieldset><br> 
 
 <fieldset>
@@ -25,4 +35,10 @@
     <p>点击，更新申请</p>
 </fieldset>
 </div>
+<?php
+if($role == "leader")
+{
+    echo '</div>';
+}
+?>
 

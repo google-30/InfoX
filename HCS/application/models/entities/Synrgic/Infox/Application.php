@@ -42,11 +42,6 @@ class Application extends \Synrgic_Models_Entity {
     protected $porter;
 
     /**
-     * @Column(type="text", nullable=true)
-     */
-    protected $materials;
-
-    /**
      * leader can set status for this application
      * only when this submit to upper level, 
      * then officer/manager can see it   
