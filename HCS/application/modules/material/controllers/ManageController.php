@@ -13,6 +13,7 @@ class Material_ManageController extends Zend_Controller_Action
         $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
         $this->_application = $this->_em->getRepository('Synrgic\Infox\Application');
         $this->_matappdata = $this->_em->getRepository('Synrgic\Infox\Matappdata');
+        $this->_supplyprice = $this->_em->getRepository('Synrgic\Infox\Supplyprice');
     }
 
     public function indexAction()
@@ -122,6 +123,20 @@ class Material_ManageController extends Zend_Controller_Action
     {
         $this->view->suppliers = $this->_supplier->findAll();  
     }    
+
+    private function getSupplyprice($id)
+    {
+        $supplyprice = array();
+        $suppliers = $this->_supplier->findAll();  
+
+        $material = $this->_material->findOneBy(array("id"=>$id));
+        if($material)
+        {
+            $supplyprice = $this->_supplyprice->findBy(array("material"=>$material));
+        }
+
+        $this->view->supplyprice = $supplyprice;
+    }
 
     private function storePic($id)
     {// http://www.w3schools.com/php/php_file_upload.asp

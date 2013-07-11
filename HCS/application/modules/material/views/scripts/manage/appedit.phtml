@@ -32,6 +32,12 @@ if($applicant)
 {
     $applicantname = $applicant->getName();
 }
+$sitename = "";
+$siteobj = $appobj->getSite();
+if($siteobj)
+{
+    $sitename = $siteobj->getName();
+}
 ?>
 
 <table class="grid">
@@ -42,7 +48,7 @@ if($applicant)
 </tr>
 <tr>
 <td><strong>申请工地:</strong></td>
-<td><input type="text" name="name" id="name" value="" data-mini="true" /></td>
+<td><strong><?php echo $sitename; ?></strong></td>
 <td><strong>申请人:</strong></td>
 <td><strong><?php echo $applicantname; ?></strong></td>
 </tr>

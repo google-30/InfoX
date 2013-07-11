@@ -89,10 +89,10 @@ $pic=$data->getPic();
 <input type="text" name="date" id="date" value="<?php echo $date; ?>" data-mini="true">
 </div>
 </td></tr>
+<!--
 <tr><td>
 <div data-role="fieldcontain">
 <label for="supplier">供应商:</label>
-<!--<input type="text" name="supplier" id="supplier" value="<?php echo $supplier; ?>" data-mini="true">-->
 <select id="supplier" name="supplier">
 <?php
 foreach($suppliers as $tmp)
@@ -117,6 +117,7 @@ foreach($suppliers as $tmp)
 <input type="text" name="price" id="price" value="<?php echo $price; ?>" data-mini="true">
 </div>
 </td></tr>
+-->
 <tr><td>
 <div data-role="fieldcontain">
 <label for="spec">规格:</label>
@@ -130,6 +131,44 @@ foreach($suppliers as $tmp)
 </td></tr>
 
 </table>
+
+<?
+/*
+echo $this->grid("Materials", true)
+          ->field('supplier', '供应商')
+          ->field('price', '单价')  
+          ->field('update', '报价日期')
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Supplyprice())
+          ->data($this->supplyprice);
+*/
+?>
+
+<table class="grid">
+<thead><tr><th>供应商</th><th>单价</th><th>报价日期</th></tr></thead>
+<tbody>
+<?php
+$suppliers= $this->suppliers;
+foreach($suppliers as $tmp)
+{
+    $name = $tmp->getName();
+    $update = $tmp->getUpdate()->format("Y-m-d h:m:s");    
+
+    $row = "";
+    $tdname = "<td>$name</td>";
+    $tdprice = '<td><input type="text" value="0" ></td>';
+    $tdupdate = "<td>$update</td>";
+
+    $row .= "<tr>" . $tdname . $tdprice . $tdupdate . "</tr>";
+    echo $row;
+}
+
+?>
+</tbody>
+<table>
+
 </fieldset>
 <button type="button" id="submitbutton" name="submitbutton" onclick="submitform()">Submit</button>
 

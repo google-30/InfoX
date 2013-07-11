@@ -14,7 +14,7 @@ echo $this->grid("Applications", true)
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
-          //->helper(new GridHelper_Supplier())
+          ->helper(new GridHelper_Application())
           ->data($this->maindata)
           ->action(':action', '检查申请', array( 'url'=>array('action'=>'appedit')))
           ->action(':action', '删除申请', array( 'url'=>array('action'=>'appdel')));

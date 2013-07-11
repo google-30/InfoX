@@ -1,6 +1,6 @@
 <?php
 
-class GridHelper_Material extends Grid_Helper_Abstract 
+class GridHelper_Supplyprice extends Grid_Helper_Abstract 
 {
     protected function td_supplier($field, $row) 
     {
