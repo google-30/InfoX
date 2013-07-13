@@ -67,6 +67,9 @@ class Material_ApplyController extends Zend_Controller_Action
         $materialobjs = $this->_material->findBy(array("macrotype"=>$macro, "detailtype"=>$detail));
         $this->view->materials = $materialobjs;  
 
+        // sites
+        $sites = $this->getUserSites();
+        $this->view->sites = $sites;
     }
     
     public function postdataAction()
@@ -155,7 +158,7 @@ class Material_ApplyController extends Zend_Controller_Action
         $appobj->setStatus1($statusArr[2]);
         $appobj->setStatus2($statusArr[2]);
 
-        $username = $this->getUsername();
+        $username = $this->getUserName();
         $curuser = $this->_humanres->findOneBy(array("username"=>$username));
         if(isset($curuser))
         {
@@ -207,7 +210,7 @@ class Material_ApplyController extends Zend_Controller_Action
         echo "提交申请成功";
     } 
     
-    private function getUsername()
+    private function getUserName()
     {
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
@@ -225,10 +228,29 @@ class Material_ApplyController extends Zend_Controller_Action
 
     private function getUserRole()
     {
-        $username = $this->getUsername();
+        $username = $this->getUserName();
         $user = $this->_user->findOneBy(array("username"=>$username));
         $role = $user ? $user->getRole() : "";
         return $role;
     }    
+
+    private function getUserSites()
+    {
+        $role = $this->getUserRole();
+        $username = $this->getUserName();
+        $user = $this->_user->findOneBy(array("username"=>$username));
+
+        if($role == "leader")
+        {
+            $sites = $this->_site->findBy(array("leader"=>$user));
+        }
+        else
+        {
+            $sites = $this->_site->findAll();
+        }
+
+        //$this->view->sites = $sites;
+        return $sites;
+    }
 
 }

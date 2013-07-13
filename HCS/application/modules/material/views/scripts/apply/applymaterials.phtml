@@ -201,7 +201,21 @@ function redirect(url) {
 }
 
 </script>
+<?php
+$sites = $this->sites;
+?>
 
+<select >
+<option value="0">请选择申请工地</option>
+<?php
+foreach($sites as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+    echo '<option value="' . $id . '">' . $name . "</option>";
+}
+?>
+</select>
 <div data-role="navbar">
 	<ul>
 		<li><a href="#" class="ui-btn-active ui-state-persist" onclick="showtypechooser()">分类选择材料</a></li>
@@ -240,7 +254,8 @@ function redirect(url) {
 <div id="typechooser" style="clear:both">
 <fieldset>
     <!--<legend>按分类选择材料</legend>-->
-<div data-role="fieldcontain">
+<div class="ui-grid-a">
+<div class="ui-block-a"><div data-role="fieldcontain">
    <label for="macrotype" class="select">主要分类：</label>
    <select name="macrotype" id="macrotype" data-mini="true">
 <?php
@@ -260,9 +275,9 @@ foreach($this->macrotypes as $tmp)
 }
 ?>   
    </select>
-</div>
+</div></div> <!--ui-block-a-->
 
-<div data-role="fieldcontain">
+<div class="ui-block-b"><div data-role="fieldcontain">
    <label for="detailtype" class="select">详细分类:</label>
    <select name="detailtype" id="detailtype" data-mini="true">
 <?php
@@ -282,11 +297,12 @@ foreach($this->detailtypes as $tmp)
 }
 ?>        
    </select>
-</div>
+</div></div>	<!--ui-block-b-->
+</div> <!--ui-grid-a-->
 
 <table id="datatable" class="grid">
 <thead><tr>
-<th>材料名称</th><th>数量</th><th>单位</th><th>规格</th><th>补充说明</th><th>提交</th>
+<th>材料名称</th><th>数量</th><th>单位</th><th>规格</th><th>工程部位</th><th>提交</th>
 </tr></thead>
 <tbody> 
 <?php
@@ -301,7 +317,7 @@ foreach($this->materials as $tmp)
     $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="0" min="0" max="100"></td>';
     $unit = "<td></td>";
     $spec = "<td></td>";    
-    $remark = '<td><textarea name="remark" id="remark' . $id . '" placeholder="填写补充说明"></textarea></td>';
+    $remark = '<td><textarea name="remark" id="remark' . $id . '" placeholder="选择工程部位"></textarea></td>';
     $body .= $longname . $amount . $unit . $spec . $remark;
     $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
 
