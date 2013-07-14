@@ -10,16 +10,18 @@ class Humanresource_ManageController extends Zend_Controller_Action
         $this->_em = Zend_Registry::get('em');        
         $this->_humanres = $this->_em->getRepository('Synrgic\Infox\Humanresource');
         $this->_users = $this->_em->getRepository('Synrgic\User');
+        $this->_role =  $this->_em->getRepository('Synrgic\Infox\Role');    
     }
 
     public function indexAction()
     {
         $humanres = $this->_humanres->findAll();
-        $this->view->humanres = $humanres;
+        $this->view->humanres = $humanres;        
     }   
 
     public function addAction()
     {
+        $this->view->roles = $this->_role->findAll();
     } 
 
     public function editAction()
@@ -28,6 +30,8 @@ class Humanresource_ManageController extends Zend_Controller_Action
         //echo "id=$id<br>";
         $maindata = $this->_humanres->findOneBy(array("id"=>$id));
         $this->view->maindata = $maindata;
+
+        $this->view->roles = $this->_role->findAll();
     } 
 
     public function deleteAction()
@@ -49,11 +53,7 @@ class Humanresource_ManageController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(TRUE);
  
         $requests = $this->getRequest()->getPost();
-        if(0)
-        {
-            var_dump($requests);
-            return;
-        }        
+        if(0) { var_dump($requests); return; }        
        
         $mode = $this->getParam("mode", "Create");
         $id = $this->getParam("id", "0");
@@ -68,11 +68,11 @@ class Humanresource_ManageController extends Zend_Controller_Action
         $remark = $this->getParam("remark", "");
 
         // TODO: positions in a entity
-        $position = $this->getParam("position", "");
+        //$position = $this->getParam("position", "");
+        $roleid = $this->getParam("role", "0");
 
         $username = $this->getParam("username", "");
         $password = $this->getParam("password", "");
-
 
         if($mode == "Create")
         {
@@ -94,7 +94,11 @@ class Humanresource_ManageController extends Zend_Controller_Action
         $data->setRemark($remark);
 
         // TODO
-        $data->setPosition($position);
+        $roleobj = $this->_role->findOneBy(array("id"=>$roleid));
+        if($roleobj)
+        {
+            $data->setRole($roleobj);
+        }        
 
         $data->setUsername($username);
         $data->setPassword($password);
@@ -130,8 +134,14 @@ class Humanresource_ManageController extends Zend_Controller_Action
 
             $user->setName($name);
             $user->setDisabled(false);
-            $user->setRole($position);    
-        
+
+            $rolestr = "";
+            if($roleobj)
+            {
+                $rolestr = $roleobj->getRole();
+            }
+            $user->setRole($rolestr);        
+
 	        $language = $this->_em->getRepository('\Synrgic\Language')->findOneByName("Chinese");
 	        $user->setpreferredLanguage($language);                    
 

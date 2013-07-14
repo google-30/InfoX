@@ -45,10 +45,12 @@ $phone2="";
 $email1="";
 $email2="";
 $othercontact="";
-$position="";
+//$position="";
 $remark="";
 $username="";
 $password="";
+
+$roles=$this->roles;
 
 if($this->mode == "Edit")
 {
@@ -61,7 +63,7 @@ $phone2=$maindata->getPhone2();
 $email1=$maindata->getEmail1();
 $email2=$maindata->getEmail2();
 $othercontact=$maindata->getOthercontact();
-$position=$maindata->getPosition();
+//$position=$maindata->getPosition();
 $remark=$maindata->getRemark();
 $username=$maindata->getUsername();
 $password=$maindata->getPassword();
@@ -85,12 +87,6 @@ $password=$maindata->getPassword();
     <label for="nameeng">英文名:</label>
     <input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
 </div></td></tr>
-
-<tr><td colspan="2"><div data-role="fieldcontain">
-    <label for="position">职位:</label>
-    <input type="text" name="position" id="position" value="<?php echo $position; ?>" data-mini="true">
-</div></td><td>
-</tr>
 
 <tr><td><div data-role="fieldcontain">
     <label for="phone1">电话1:</label>
@@ -118,6 +114,26 @@ $password=$maindata->getPassword();
     <label for="remark">补充说明:</label>
     <input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true">
 </div></td></tr>
+
+<tr><td><div data-role="fieldcontain">
+    <label for="role">工作职位:</label>
+    <!--<input type="text" name="position" id="position" value="<?php echo $position; ?>" data-mini="true">-->
+    <select name="role" id="role">
+    <option value="0">请选择工作职位</option>;
+<?php
+$options="";
+foreach($roles as $tmp)
+{
+    $id = $tmp->getId();
+    $rolechs = $tmp->getRolechs();
+    $roleeng = $tmp->getRole();
+    $options .= '<option value="' . $id . '">' . $rolechs . '/' . $roleeng . '</option>';
+}
+echo $options;
+?>
+    </select>
+</div></td><td>
+<td></td></tr>
 
 <tr><td><div data-role="fieldcontain">
     <label for="username">登录用户名:</label>

@@ -24,7 +24,7 @@ class Humanresource extends \Synrgic_Models_Entity {
     protected $nameeng;
 
     /**
-     * @Column(type="date", nullable=true)
+     * @Column(type="datetime", nullable=true)
      */
     protected $date;
     	
@@ -56,11 +56,6 @@ class Humanresource extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $position; 
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
     protected $remark;    
  
     /**
@@ -71,7 +66,12 @@ class Humanresource extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $password;    
-     
+    protected $password;
+
+    /**
+     * role for acl
+     * @ManyToOne(targetEntity="Synrgic\Infox\Role")
+     */    
+    protected $role;      
     
 }
