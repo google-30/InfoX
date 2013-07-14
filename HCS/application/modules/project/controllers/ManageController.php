@@ -11,6 +11,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_humanres = $this->_em->getRepository('Synrgic\Infox\Humanresource');
         $this->_worker = $this->_em->getRepository('Synrgic\Infox\Worker');
+        $this->_role = $this->_em->getRepository('Synrgic\Infox\Role');
     }
 
     public function indexAction()
@@ -21,10 +22,11 @@ class Project_ManageController extends Zend_Controller_Action
 
     private function findPIC()
     {
-        $leaders = $this->_humanres->findBy(array("position"=>"leader"));
+        $leaderrole = $this->_role->findOneBy(array("role"=>"leader"));        
+        $leaders = $this->_humanres->findBy(array("role"=>$leaderrole));
         $this->view->leaders = $leaders;
-        $managers = $this->_humanres->findBy(array("position"=>"manager"));
-        $this->view->managers = $managers;
+        //$managers = $this->_humanres->findBy(array("position"=>"manager"));
+        //$this->view->managers = $managers;
     }    
 
     public function addAction()
