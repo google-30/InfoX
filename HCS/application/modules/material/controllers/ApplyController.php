@@ -119,7 +119,7 @@ class Material_ApplyController extends Zend_Controller_Action
           ->field('id','材料编号')
           ->field('longname','材料名称')
           ->field('amount', '数量')
-          ->field('remark', '补充说明')
+          ->field('remark', '工程部位')
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
@@ -148,6 +148,15 @@ class Material_ApplyController extends Zend_Controller_Action
             echo "请选择材料，再进行提交";
             return;    
         }        
+
+        // get site
+        $requests = $this->getRequest()->getPost();
+        if(0)
+        {  
+            var_dump($requests);
+            return;
+        }                  
+        $siteid = $requests["siteid"];
         
         $statusArr = array("提交", "审核", "未审核", "批准", "退回");
         // step1. create application
@@ -158,19 +167,20 @@ class Material_ApplyController extends Zend_Controller_Action
         $appobj->setStatus1($statusArr[2]);
         $appobj->setStatus2($statusArr[2]);
 
+        // applicant
         $username = $this->getUserName();
         $curuser = $this->_humanres->findOneBy(array("username"=>$username));
         if(isset($curuser))
         {
             $appobj->setApplicant($curuser);
-
-            // TODO: get site            
-            $site = $this->_site->findOneBy(array("leader"=>$curuser));        
-            if($site)
-            {
-                $appobj->setSite($site);
-            }            
         }        
+
+        // site
+        $site = $this->_site->findOneBy(array("id"=>$siteid));        
+        if($site)
+        {
+            $appobj->setSite($site);
+        }
         
         $this->_em->persist($appobj);
         try {

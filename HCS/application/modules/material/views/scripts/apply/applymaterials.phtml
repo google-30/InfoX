@@ -24,6 +24,8 @@ table.grid {width:100%}
 $(function() {
     $('#macrotype').change(macroReload);
     $('#detailtype').change(detailReload);
+
+    $('#sites').change(setSiteId);
 });
 
 function macroReload()
@@ -184,15 +186,30 @@ function submitmanualinput()
     });    
 }
 
+function setSiteId()
+{
+    var siteid = $('#sites').val();
+    $("#siteid").val(siteid);
+}
+
+
 function submitselections()
 {
-    //alert("submitselections");
-    $.post("/material/apply/submitselections", 
+    var siteid = $('#siteid').val();
+    //alert("submitselections, siteid="+siteid);
+
+    if(siteid == 0)
+    {
+        alert("请选择申请工地");
+        return;    
+    }    
+
+    $.post("/material/apply/submitselections", { siteid:siteid },
         function(data) {
             alert(data);
-            //console.log(data);
+            console.log(data);
             //location.reload();
-            redirect("/material/apply/");    
+            //redirect("/material/apply/");    
     });    
 }
 
@@ -205,7 +222,7 @@ function redirect(url) {
 $sites = $this->sites;
 ?>
 
-<select >
+<select id="sites" data-mini="true">
 <option value="0">请选择申请工地</option>
 <?php
 foreach($sites as $tmp)
@@ -216,6 +233,8 @@ foreach($sites as $tmp)
 }
 ?>
 </select>
+<input type="hidden" id="siteid" value="0">
+
 <div data-role="navbar">
 	<ul>
 		<li><a href="#" class="ui-btn-active ui-state-persist" onclick="showtypechooser()">分类选择材料</a></li>
@@ -224,36 +243,9 @@ foreach($sites as $tmp)
 	</ul>
 </div><!-- /navbar -->
 
-<div id="selections">
-<div id="seltable">
-</div>
-<input type="submit" value="提交至材料审核人员" onclick="submitselections()">
-</div>
-
-<div id="manualinput">
-<fieldset>
-    <!--<legend>手动输入材料信息</legend>-->
-    <form id="manuform">
-    <div data-role="fieldcontain">
-    <label for="manuname">输入名称:</label>
-    <input type="text" name="manuname" id="manuname" placeholder="材料名称，比如钉子，水泥等" value=""  />
-    </div>
-    <div data-role="fieldcontain">
-    <label for="manuamount">输入数量:</label>
-    <input type="text" name="manuamount" id="manuamount" placeholder="填写数量，比如要30包水泥，这里写30" value=""  />
-    </div>
-    <div data-role="fieldcontain">
-    <label for="manuremark">输入规格:</label>
-    <textarea cols="40" rows="8" name="manuremark" id="manuremark" placeholder="填写规格说明，比如多大号的钉子，什么水泥等"></textarea>
-    </div>
-    </form> <!-- manuform -->					    
-    <input type="submit" value="提交到选择列表" onclick="submitmanualinput()">
-</fieldset>
-</div>
-
+<!--按分类选择材料-->
 <div id="typechooser" style="clear:both">
 <fieldset>
-    <!--<legend>按分类选择材料</legend>-->
 <div class="ui-grid-a">
 <div class="ui-block-a"><div data-role="fieldcontain">
    <label for="macrotype" class="select">主要分类：</label>
@@ -314,7 +306,7 @@ foreach($this->materials as $tmp)
 
     $body = "";
     $longname = '<tr><td class="tdname">' . $name . '/' . $nameeng . '</td>';
-    $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="0" min="0" max="100"></td>';
+    $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="" placeholder="0"></td>';
     $unit = "<td></td>";
     $spec = "<td></td>";    
     $remark = '<td><textarea name="remark" id="remark' . $id . '" placeholder="选择工程部位"></textarea></td>';
@@ -331,6 +323,31 @@ foreach($this->materials as $tmp)
 </fieldset>
 </div> <!-- typechooser -->
 
+<!--手动输入材料信息-->
+<div id="manualinput">
+<fieldset>
+    <form id="manuform">
+    <div data-role="fieldcontain">
+    <label for="manuname">输入名称:</label>
+    <input type="text" name="manuname" id="manuname" placeholder="材料名称，比如钉子，水泥等" value=""  />
+    </div>
+    <div data-role="fieldcontain">
+    <label for="manuamount">输入数量:</label>
+    <input type="text" name="manuamount" id="manuamount" placeholder="填写数量，比如要30包水泥，这里写30" value=""  />
+    </div>
+    <div data-role="fieldcontain">
+    <label for="manuremark">输入规格:</label>
+    <textarea cols="40" rows="8" name="manuremark" id="manuremark" placeholder="填写规格说明，比如多大号的钉子，什么水泥等"></textarea>
+    </div>
+    </form> <!-- manuform -->					    
+    <input type="submit" value="提交到选择列表" onclick="submitmanualinput()">
+</fieldset>
+</div>
 
+<div id="selections">
+<div id="seltable">
+</div>
+<input type="submit" value="提交至材料审核人员" onclick="submitselections()">
+</div>
 
 
