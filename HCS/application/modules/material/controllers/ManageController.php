@@ -75,14 +75,13 @@ class Material_ManageController extends Zend_Controller_Action
         $id = $this->getParam("id", "");
         $name = $this->getParam("name", "");
         $nameeng = $this->getParam("nameeng", "");
-        $date = $this->getParam("date", "now");
-        //$price = $this->getParam("price", "0");
         $spec = $this->getParam("spec", "");
         $description = $this->getParam("description", "");
         $mtype = $this->getParam("mtype", "");
         $dtype = $this->getParam("dtype", "");
 
-        //$supplier = $this->getParam("supplier", "");
+        $usage = $this->getParam("usage", "");
+        $unit = $this->getParam("unit", "");
 
         if($mode == "Create")
         {
@@ -95,12 +94,14 @@ class Material_ManageController extends Zend_Controller_Action
                 
         $data->setName($name);
         $data->setNameeng($nameeng);
-        $data->setOnlinedate(new Datetime($date));
-        $data->setPrice(floatval($price));
+        $data->setUpdate(new Datetime("now"));
+        //$data->setPrice(floatval($price));
         $data->setSpec($spec);
         $data->setDescription($description);
         $data->setMacrotype($mtype);
         $data->setDetailtype($dtype);
+        $data->setUsage($usage);
+        $data->setUnit($unit);
         /*
         $supobj = $this->_supplier->findOneBy(array("id"=>$supplier));
         if(isset($supobj))  
@@ -130,6 +131,9 @@ class Material_ManageController extends Zend_Controller_Action
             $priceid = "price" . strval($id);
             $price = $this->getParam($priceid, "0");
 
+            $updateid = "update" . strval($id);
+            $update = $this->getParam($updateid, "now");
+
             $priceobj = $this->_supplyprice->findOneBy(array("supplier"=>$tmp, "material"=>$data));
             if(is_null($priceobj))
             {
@@ -138,7 +142,7 @@ class Material_ManageController extends Zend_Controller_Action
             $priceobj->setMaterial($data);
             $priceobj->setSupplier($tmp);
             $priceobj->setPrice(floatval($price));
-            $priceobj->setUpdate(new Datetime('now'));
+            $priceobj->setUpdate(new Datetime($update));
 
             $this->_em->persist($priceobj);                        
   

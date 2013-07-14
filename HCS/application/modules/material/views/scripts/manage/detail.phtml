@@ -3,10 +3,11 @@
 <script>
 $(function () {
     //alert("scroller");
-    $('#date').mobiscroll().date({
+    $('.classupdate').mobiscroll().date({
         theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
         endYear: 2050,
     });  
+
 });
 
 function submitform()
@@ -28,10 +29,10 @@ $nameeng="";
 $spec="";
 $description="";
 $supplier="";
-$price="";
 $date="";
 $suppliers=$this->suppliers;
 $pic="";
+$usage="";
 
 if($mode==="Edit")
 {
@@ -44,16 +45,14 @@ if($data->getSupplier())
 {
     $supplier=$data->getSupplier()->getName();
 }
-$price=$data->getPrice();
-$date=$data->getOnlinedate()->format('Y/m/d');
-//$date=$data->getOnlinedate()->format('Y/m/d H:i:s');
+$date=$data->getUpdate()->format('Y/m/d');
 $pic=$data->getPic();
+$usage="";
 }
-
 ?>
 
 <fieldset>
-    <legend><strong>材料添加与编辑</strong></legend>
+<legend><strong>材料添加与编辑</strong></legend>
 <form id="dataform" enctype="multipart/form-data" method="post" action="/material/manage/submit">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
@@ -82,25 +81,45 @@ $pic=$data->getPic();
 </td></tr>
 <tr><td>
 <div data-role="fieldcontain">
-<label for="date">更新日期:</label>
-<input type="text" name="date" id="date" value="<?php echo $date; ?>" data-mini="true">
+<label for="usage">材料用途:</label>
+<!--<input type="text" name="date" id="date" value="<?php echo $date; ?>" data-mini="true">-->
+<input type="text" name="usage" id="usage" value="<?php echo $usage; ?>" data-mini="true" placeholder="材料用途，比如木类，金属类等">
 </div>
 </td></tr>
 <tr><td>
 <div data-role="fieldcontain">
-<label for="spec">规格:</label>
-<input type="text" name="spec" id="spec" value="<?php echo $spec; ?>" data-mini="true">
+<label for="spec">材料规格:</label>
+<input type="text" name="spec" id="spec" value="<?php echo $spec; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
 </div>
 </td><td>
 <div data-role="fieldcontain">
     <label for="description">材料描述:</label>
-    <textarea id="description" name="description" rows="2" cols="60" data-mini="true"><?php echo $description; ?></textarea>
+    <textarea id="description" name="description" rows="2" cols="60" data-mini="true" placeholder="补充，比如材料的特殊性，防火放潮等"><?php echo $description; ?></textarea>
+</div>
+</td></tr>
+<tr><td>
+<div data-role="fieldcontain">
+<label for="spec">单位:</label>
+<input type="text" name="unit" id="unit" value="" data-mini="true" placeholder="材料单位，比如：套，袋，个">
+</div>
+</td>
+<td></td></tr>
+
+<tr><td>
+<div data-role="fieldcontain">
+<label for="spec">基本分类:</label>
+<input type="text" name="spec" id="spec" value="<?php echo $spec; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
+</div>
+</td><td>
+<div data-role="fieldcontain">
+    <label for="description">详细分类:</label>
+    <textarea id="description" name="description" rows="2" cols="60" data-mini="true" placeholder="补充，比如材料的特殊性，防火放潮等"><?php echo $description; ?></textarea>
 </div>
 </td></tr>
 </table>
 
 <table class="grid">
-<thead><tr><th>供应商</th><th>单价</th><th>报价日期</th></tr></thead>
+<thead><tr><th>默认供应商</th><th>名称</th><th>价格</th><th>报价日期</th></tr></thead>
 <tbody>
 <?php
 $suppliers= $this->suppliers;
@@ -109,8 +128,9 @@ foreach($suppliers as $tmp)
 {
     $id = $tmp->getId();
     $name = $tmp->getName();
-    $update = $tmp->getUpdate()->format("Y-m-d h:m:s");    
+   
     $price = 0;
+    $update = "";
 
     if(count($supplyprice))
     {
@@ -120,15 +140,17 @@ foreach($suppliers as $tmp)
             if($sid==$id)
             {
                 $price = $sprice->getPrice();
+                $update = $sprice->getUpdate()->format("Y/m/d");
             }        
         }
     }
 
     $row = "";
+    $tdcheck = '<td><input type="checkbox" name="checkbox-1" id="checkbox-1" class="custom" /></td>';    
     $tdname = "<td>$name</td>";
-    $tdprice = '<td><input type="text" value="'. $price .'" name="price' . $id . '" id="price' . $id .'"></td>';
-    $tdupdate = "<td>$update</td>";
-    $row .= "<tr>" . $tdname . $tdprice . $tdupdate . "</tr>";
+    $tdprice = '<td><input type="text" value="'. $price .'" name="price' . $id . '" id="price' . $id .'" placeholder="0"></td>';
+    $tdupdate = '<td><input type="text" class="classupdate" value="'. $update .'" name="update' . $id . '" id="update' . $id .'"></td>';
+    $row .= "<tr>" . $tdcheck . $tdname . $tdprice . $tdupdate . "</tr>";
     echo $row;
 }
 ?>
@@ -138,3 +160,4 @@ foreach($suppliers as $tmp)
 </fieldset>
 
 <button type="button" id="submitbutton" name="submitbutton" onclick="submitform()">提交</button>
+

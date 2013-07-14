@@ -26,13 +26,8 @@ class Material extends \Synrgic_Models_Entity {
     /**
      * @Column(type="date", nullable=true)
      */
-    protected $onlinedate;
+    protected $update;
     	
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $price;
-
     /**
      * @Column(type="text", nullable=true)
      */
@@ -54,7 +49,7 @@ class Material extends \Synrgic_Models_Entity {
     protected $detailtype;    
 
     /**
-     * supplier
+     * default supplier
      * 
      * @ManyToOne(targetEntity="Synrgic\Infox\Supplier")
      */
@@ -69,5 +64,16 @@ class Material extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $pic;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $usage;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $unit;
+
     
 }

@@ -14,7 +14,7 @@ class Supplyprice extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * @Column(type="datetime", nullable=true)
+     * @Column(type="date", nullable=true)
      */
     protected $update;
 

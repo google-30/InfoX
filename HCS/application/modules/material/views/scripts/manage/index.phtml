@@ -98,30 +98,24 @@ function checkall()
     }
 }
 
-$(document).ready(function() {
-/*
-    var str = "";
-    $(".suppliersel option:selected").each(function () {
-        //str += $(this).text() + " ";
-        str = $(this).text();
-        //alert(str);    
-        console.log(str);
-        });  
+function importexcel()
+{
+    alert("importexcel not implemented");
+}
 
 
-    $('.suppliersel').change(function() {
-        //alert('Handler for .change() called.');
-        var str = "";
-        var supplierid = $(".suppliersel option:selected").val();      
-        console.log("supplierid="+supplierid);
-    });
-*/
-} );
-
+function exportexcel()
+{
+    alert("exportexcel not implemented");
+}
 
 </script>
 
-<div><a href="/material/manage/add"><button data-theme="a" data-mini="true">材料添加</button></a></div>
+<div class="ui-grid-b">
+	<div class="ui-block-a"><a href="/material/manage/add"><button data-theme="a" data-mini="true">材料添加</button></a></div>
+	<div class="ui-block-b"><button data-theme="a" data-mini="true" onclick="importexcel()">材料导入</button></div>
+	<div class="ui-block-c"><button data-theme="a" data-mini="true" onclick="exportexcel()">材料导出</button></div>
+</div><!-- /grid-b -->
 <div>
 <?
 echo $this->grid("Materials", true)
@@ -129,8 +123,9 @@ echo $this->grid("Materials", true)
           ->field('nameeng', '英文名称')
           ->field('macrotype', '产品类别')
           ->field('detailtype', '详细类别')
+          ->field('unit', '单位')
+          ->field('spec', '规格')
           ->field('supplier', '供应商')
-          ->field('price', '单价')  
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
