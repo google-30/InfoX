@@ -15,23 +15,26 @@ class Synrgic_Models_AclBuilder {
 	    'anonymous'=>array(
 		'parent'=>null,
 		'acl'=>array(
-		    'adverts:index'=>array('view'),
-		    'default:index'=>array('view'),
-		    'information:index'=>array('view'),
 		    'management:auth'=>array('view','login','logout'),
+/*
+		    'default:index'=>array('view'),
+		    'adverts:index'=>array('view'),
+		    'information:index'=>array('view'),
 		    'noticeboard:index'=>array('view','data'),
 		    'phone:index'=>array('view'),
 		    'room:index'=>array('view','roomlights', 'roomcurtains','roomtv','roomradio','roompreset','roomtemp','data','setstate'),
 		    'welcome:index'=>array('view','set','start'),
 		    'adverts:index'=>array('updschedule'), //allow all see adverts if possible
-		   
+
 		    // Non module/controller based
 		    'menu:hotel'=>array('view'),
 
             // infoX
-            'material:index'=>array('view'),    
+            'material:index'=>array('view'),
+*/		   
 		    ),
 		),
+/*
 	    'guest'=>array(
 		'parent'=>'anonymous',
 		'acl'=>array(
@@ -95,6 +98,7 @@ class Synrgic_Models_AclBuilder {
             'management:cms'=>array('view','add','edit','delete')
                         )
 		),
+*/
 
 	    'manager'=> array(
 		'parent'=>null,
@@ -120,7 +124,7 @@ class Synrgic_Models_AclBuilder {
 		    )
 		),
 
-	    'hr'=> array(
+	    'staff'=> array(
 		'parent'=>null,
 		'acl'=>array(
 		    'management:dashboard'=>array('view'),

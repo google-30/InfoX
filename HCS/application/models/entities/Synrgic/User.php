@@ -35,19 +35,11 @@ class User extends \Synrgic_Models_Entity {
     protected $username;
 
     /**
-     * Email of the user
-     *
-     * @Column(type="text", nullable=true)
-     */
-    protected $email;
-
-    /**
      * Password of the user. 
      *
      * @Column(type="text")
      */
     protected $password;
-
 
     /**
      * Name of the User
