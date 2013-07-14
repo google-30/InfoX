@@ -1,9 +1,10 @@
+<style>
+#hrtable {width:100%;}
+</style>
 <script>
 function submit()
 {
-    $name = $("#name").val();
-    //$remark = $("#remark").val();
-    
+    $name = $("#name").val();    
     if($name=="")
     {
         alert("请至少提供人员名称，其他信息可稍后提交");
@@ -11,8 +12,7 @@ function submit()
     else
     {
         $("#mainform").submit();       
-    }
-    
+    }    
 }
 
 function cancel()
@@ -74,60 +74,63 @@ $password=$maindata->getPassword();
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 
-<div data-role="fieldcontain">
+<table id="hrtable">
+<thead></thead>
+<tbody>
+<tr><td><div data-role="fieldcontain">
     <label for="name">中文名:</label>
     <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
+</div></td><td>
+<td><div data-role="fieldcontain">
     <label for="nameeng">英文名:</label>
     <input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
-</div>
+</div></td></tr>
 
-<div data-role="fieldcontain">
+<tr><td colspan="2"><div data-role="fieldcontain">
     <label for="position">职位:</label>
     <input type="text" name="position" id="position" value="<?php echo $position; ?>" data-mini="true">
-</div>
+</div></td><td>
+</tr>
 
-<div data-role="fieldcontain">
+<tr><td><div data-role="fieldcontain">
     <label for="phone1">电话1:</label>
     <input type="text" name="phone1" id="phone1" value="<?php echo $phone1; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
+</div></td><td>
+<td><div data-role="fieldcontain">
     <label for="phone2">电话2:</label>
     <input type="text" name="phone2" id="phone2" value="<?php echo $phone2; ?>" data-mini="true">
-</div>
+</div></td></tr>
 
-<div data-role="fieldcontain">
+<tr><td><div data-role="fieldcontain">
     <label for="email1">电子邮件1:</label>
     <input type="text" name="email1" id="email1" value="<?php echo $email1; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
+</div></td><td>
+<td><div data-role="fieldcontain">
     <label for="email2">电子邮件2:</label>
     <input type="text" name="email2" id="email2" value="<?php echo $email2; ?>" data-mini="true">
-</div>
+</div></td></tr>
 
-<div data-role="fieldcontain">
+<tr><td><div data-role="fieldcontain">
     <label for="othercontact">其他联系方式:</label>
     <input type="text" name="othercontact" id="othercontact" value="<?php echo $othercontact; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
-    <label for="remark">其他说明:</label>
+</div></td><td>
+<td><div data-role="fieldcontain">
+    <label for="remark">补充说明:</label>
     <input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true">
-</div>
+</div></td></tr>
 
-<div data-role="fieldcontain">
+<tr><td><div data-role="fieldcontain">
     <label for="username">登录用户名:</label>
-    <input type="text" name="username" id="username" value="<?php echo $username; ?>" data-mini="true">
-</div>
-<div data-role="fieldcontain">
+    <input type="text" name="username" id="username" value="<?php echo $username; ?>" 
+data-mini="true" placeholder="注意：请指定每个管理人员不同的用户名，以区分登录身份">
+</div></td><td>
+<td><div data-role="fieldcontain">
     <label for="password">登录密码:</label>
     <input type="text" name="password" id="password" value="<?php echo $password; ?>" data-mini="true">
-</div>
+</div></td></tr>
 
+</tbody>
+</table>
 
 </form> <!--main form -->
 <fieldset class="ui-grid-a">
