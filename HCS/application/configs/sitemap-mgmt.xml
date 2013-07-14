@@ -76,6 +76,15 @@
 		    <privilege>view</privilege>
 	        </material>
 
+	        <materialtype>
+		    <label>材料类型信息</label>
+		    <module>material</module>
+		    <controller>type</controller>
+		    <action>index</action>
+		    <resource>material:type</resource>
+		    <privilege>view</privilege>
+	        </materialtype>
+
 	        <supplier>
 		    <label>供应商信息</label>
 		    <module>supplier</module>
@@ -86,7 +95,7 @@
 	        </supplier>
 
 	        <humanresource>
-		    <label>人力资源信息</label>
+		    <label>行政人员信息</label>
 		    <module>humanresource</module>
 		    <controller>manage</controller>
 		    <action>index</action>
