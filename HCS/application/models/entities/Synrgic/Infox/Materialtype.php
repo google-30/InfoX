@@ -14,10 +14,16 @@ class Materialtype extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * material type   
+     * material type in chs  
      * @Column(type="string", nullable=true)
      */
-    protected $type;
+    protected $typechs;
+
+    /**
+     * material type in Eng
+     * @Column(type="string", nullable=true)
+     */
+    protected $typeeng;
 
     /**
      * main/parent type
