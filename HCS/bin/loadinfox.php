@@ -42,6 +42,8 @@ if( $argc > 1 ){
 } else {
 	include('data/language.php');
 	include('data/settings.php');
+
+	include('data/infox_role.php');
 	include('data/accounts.php');
 	
 	include('data/infox_site.php');

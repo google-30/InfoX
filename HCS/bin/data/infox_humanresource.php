@@ -40,11 +40,13 @@ foreach( $tuples as $tuple ){
     $data->setEmail1($tuple[6]);
     $data->setEmail2($tuple[7]);
     $data->setOthercontact($tuple[8]);
-    $data->setPosition($tuple[9]);
     $data->setRemark($tuple[10]);
     $data->setUsername($tuple[11]);
     $data->setPassword($tuple[12]);
 
+    $role = $em->getRepository('\Synrgic\Infox\Role')->findOneBy(array('role'=>$tuple[9]));
+    $data->setRole($role);
+    
     $em->persist($data);
 }
 

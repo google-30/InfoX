@@ -43,8 +43,8 @@ array("水泥5号", new DateTime("2012-10-05"), 50.0, "tampines","material",
 foreach( $tuples as $tuple ){
 	$data = new \Synrgic\Infox\Material();
 	$data->setName($tuple[0]);
-	$data->setOnlinedate($tuple[1]);
-    $data->setPrice($tuple[2]);
+	$data->setUpdate($tuple[1]);
+    
     $data->setWarehouse($tuple[3]);
     $data->setMacrotype($tuple[4]);
     $data->setDetailtype($tuple[5]);
