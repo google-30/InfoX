@@ -77,7 +77,7 @@
 	        </material>
 
 	        <materialtype>
-		    <label>材料类型信息</label>
+		    <label>材料类型定义</label>
 		    <module>material</module>
 		    <controller>type</controller>
 		    <action>index</action>
