@@ -1,0 +1,125 @@
+<style>
+#maintable { /*width:100%;*/ }
+#maintable, tr td { /*width:100%;*/ text-align: left; }
+#Workers { width:100%; }
+#workersdiv { display: none; }
+</style>
+<script>
+function submit()
+{
+    $name = $("#name").val();
+    //$remark = $("#remark").val();
+    
+    if($name=="")
+    {
+        alert("请至少提供名称，其他信息可稍后提交");
+    }    
+    else
+    {
+        $("#mainform").submit();       
+    }
+    
+}
+
+function cancel()
+{
+    var r=confirm("放弃编辑信息，返回列表界面");
+    if (r==true)
+    {
+        gotolist();
+    }
+}
+
+function gotolist()
+{
+    window.location = "/project/manage";        
+}
+
+function redirect(url) {
+    window.location = url;
+}
+
+function showWorkers()
+{
+    //alert("showWorkers");
+    $("#workersdiv").show();
+}
+</script>
+<?php
+$id = 0;
+$mode = "Create";
+$name="";
+$address="";
+$start = "";
+$stop = "";
+$leader="";
+$manager="";
+$workerno=0;
+$remark="";
+$leaders=$this->leaders;
+$managers=$this->managers;
+
+if(1)
+{
+$data = $this->maindata;
+$mode = "Edit";
+$id = $data->getId();
+$name = $data->getName();
+$address = $data->getAddress();
+$start = $data->getStart()->format("Y-m-d");
+$stop = $data->getStop()->format("Y-m-d");
+if($data->getLeader())
+{
+    $leader = $data->getLeader()->getName();
+}
+if($data->getManager())
+{
+    $manager = $data->getManager()->getName();
+}
+$workerno = $data->getWorkerno();
+$remark = $data->getRemark();
+
+}   
+?>
+
+<h4>工地详细信息</h4>
+<table class="grid" id="maintable">
+<tr>
+<td><strong>工地名称:</strong></td><td><strong><?php echo $name; ?></strong></td>
+<td><strong>工地地址:</strong></td><td><strong><?php echo $address; ?></strong></td>
+</tr>
+<tr>
+<td><strong>开工日期:</strong></td><td><strong><?php echo $start; ?></strong></td>
+<td><strong>竣工日期:</strong></td><td><strong><?php echo $stop; ?></strong></td>
+</tr>
+<tr>
+<td><strong>工长:</strong></td><td><strong><?php echo $leader; ?></strong></td>
+<td><strong>经理:</strong></td><td><strong><?php echo $manager; ?></strong></td>
+</tr>
+<tr></tr>
+</table>
+
+<?php 
+if($mode == "Edit")
+{
+    echo '<input type="button" onclick="showWorkers()" value="显示工人列表">';
+
+}
+?>
+<div id="workersdiv">
+<?php
+    echo $this->grid("Workers", true)
+          ->field('companylabel', '公司编号')  
+          ->field('nameeng', '姓名')
+          ->field('namechs','中文名')
+          ->field('fin', '准证号码')  
+          ->field('worktype', '工种')
+          ->field('worklevel', '等级')
+          ->field('hwage', '小时工资')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          //->helper(new GridHelper_Worker())
+          ->data($this->workers);
+?>
+</div>
+

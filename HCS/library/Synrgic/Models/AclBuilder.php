@@ -136,7 +136,7 @@ class Synrgic_Models_AclBuilder {
 'updatedata', 'submitmatapps','reviewmatapps','rejectmatapps'),
             'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  
-            'project:manage'=>array('view','add', 'edit', 'delete', 'submit'),
+            'project:manage'=>array('view','add', 'edit', 'delete', 'submit', 'sitedetail'),
             'humanresource:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'material:type'=>array('view','add', 'edit', 'delete', 'submit','posttype'),
 		    )

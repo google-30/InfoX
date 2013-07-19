@@ -101,15 +101,10 @@ if($mode == "Create")
 }
 else
 {
-    echo "<h3>工地详细信息</h3>";    
+    echo "<h3>编辑工地信息</h3>";    
 }
 ?>
 
-<div class="ui-grid-a">
-		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
-		<div class="ui-block-b"><input type="button" onclick="cancel()" value="取消"></div>
-</div>
-<hr>
 <form id="mainform" method="post" action="/project/manage/submit" enctype="multipart/form-data">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
@@ -185,13 +180,6 @@ else
 </table>
 </form> <!--main form-->
 
-<?php 
-if($mode == "Edit")
-{
-    echo '<input type="button" onclick="showWorkers()" value="显示工人列表">';
-
-}
-?>
 <div id="workersdiv">
 <?php
     echo $this->grid("Workers", true)
@@ -207,5 +195,10 @@ if($mode == "Edit")
           //->helper(new GridHelper_Worker())
           ->data($this->workers);
 ?>
+</div>
+
+<div class="ui-grid-a">
+		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
+		<div class="ui-block-b"><input type="button" onclick="cancel()" value="取消"></div>
 </div>
 

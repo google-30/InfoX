@@ -125,4 +125,24 @@ class Project_ManageController extends Zend_Controller_Action
 
         $this->_redirect("project/manage");
     } 
+
+    public function sitedetailAction()
+    {
+        $this->findPIC();
+
+        $id = $this->getParam("id");
+        //echo "id=$id<br>";
+        $maindata = $this->_site->findOneBy(array("id"=>$id));
+        $this->view->maindata = $maindata;
+
+        $query = $this->_em->createQuery(
+        'select w.nameeng, w.namechs, w.fin, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
+        (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
+        from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws 
+        where wc.site = ' . $id
+         );
+        $result = $query->getResult();
+        $this->view->workers = $result;
+
+    }
 }

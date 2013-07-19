@@ -1,12 +1,8 @@
-<style>
-#Sites { width:100%; }
-</style>
-<div><a href="/project/manage/add"><button>添加新工地</button></a></div>
-<div>
+<a href="/project/manage/add"><button data-theme="a" data-mini="true">添加新工地</button></a>
 <?
 echo $this->grid("Sites", true)
           ->field('name','工地名称')
-          ->field('address', '地址')
+          //->field('address', '地址')
           ->field('leader', '工长')  
           ->field('workerno', '工人数')  
           ->field('start', '开工日期')
@@ -16,8 +12,9 @@ echo $this->grid("Sites", true)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Project())
           ->data($this->maindata)
+          ->action(':action', '详细信息', array( 'url'=>array('action'=>'sitedetail')))
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
-</div>
+
 
