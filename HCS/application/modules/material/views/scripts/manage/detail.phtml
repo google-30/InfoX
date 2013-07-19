@@ -33,6 +33,7 @@ $date="";
 $suppliers=$this->suppliers;
 $pic="";
 $usage="";
+$typeid=0;
 
 if($mode==="Edit")
 {
@@ -41,13 +42,12 @@ $name=$data->getName();
 $nameeng=$data->getNameeng();
 //$spec=$data->getSpec();
 $description=$data->getDescription();
-if($data->getSupplier())
-{
-    $supplier=$data->getSupplier()->getName();
-}
+if($data->getSupplier()){ $supplier=$data->getSupplier()->getName(); }
 $date=$data->getUpdate()->format('Y/m/d');
 $pic=$data->getPic();
 $usage="";
+$typeobj=$data->getType();
+if($typeobj) { $typeid=$typeobj->getId(); } 
 }
 ?>
 
@@ -57,9 +57,9 @@ $usage="";
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 
-<table class="grid">
+<table class="">
 <tr>
-<td rowspan="3">
+<td rowspan="3" style="width:50%">
 <div data-role="fieldcontain">
     <label for="file" class="ui-input-text">材料照片:</label>
     <input type="file" name="file" id="file">
@@ -103,19 +103,51 @@ $usage="";
 <input type="text" name="unit" id="unit" value="" data-mini="true" placeholder="材料单位，比如：套，袋，个">
 </div>
 </td>
-<td></td></tr>
-
-<tr><td>
+<td>
 <div data-role="fieldcontain">
+<label for="spec">选择分类:</label>
+<select name="type" id="type" data-mini="true">
+<option value="0"></option>
+<?php
+$types=$this->types;
+$options = "";
+foreach($types as $tmp)
+{
+    $id = $tmp->getId();
+    $main = $tmp->getMain();
+    $maintypechs = $main->getTypechs();
+    $typechs = $tmp->getTypechs();
+    $typestr = $maintypechs . "::" . $typechs;
+
+    if($id == $typeid)
+    {
+        $options .= '<option value="' . $id . '" selected>' . $typestr . '</option>';
+    }
+    else
+    {
+        $options .= '<option value="' . $id . '">' . $typestr . '</option>';
+    }
+}
+echo $options;
+?>
+</select>
+</div>
+</td>
+</tr>
+
+<!--
+<tr>
+<td><div data-role="fieldcontain">
 <label for="spec">基本分类:</label>
 <input type="text" name="spec" id="spec" value="<?php echo $spec; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
 </div>
-</td><td>
-<div data-role="fieldcontain">
+</td>
+<td><div data-role="fieldcontain">
     <label for="description">详细分类:</label>
     <textarea id="description" name="description" rows="2" cols="60" data-mini="true" placeholder="补充，比如材料的特殊性，防火放潮等"><?php echo $description; ?></textarea>
-</div>
-</td></tr>
+</div></td>
+</tr>
+-->
 </table>
 
 <table class="grid">

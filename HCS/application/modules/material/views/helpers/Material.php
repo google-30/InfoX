@@ -53,6 +53,21 @@ class GridHelper_Material extends Grid_Helper_Abstract
     {
     	return $row->$field->format('Y-m-d');
     }
+
+    protected function td_type($field, $row) 
+    {
+        if(is_null($row->$field))
+        {
+            return "&nbsp;";
+        }
+        else
+        {
+            $main = $row->$field->getMain();
+            $maintypechs = $main->getTypechs();
+            $typechs = $row->$field->getTypechs();
+            return $maintypechs . "::" . $typechs;
+        }    
+    }
 }
 
 ?>

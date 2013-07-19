@@ -75,5 +75,11 @@ class Material extends \Synrgic_Models_Entity {
      */
     protected $unit;
 
+    /**
+     * material type
+     * 
+     * @ManyToOne(targetEntity="Synrgic\Infox\Materialtype")
+     */
+    protected $type;
     
 }

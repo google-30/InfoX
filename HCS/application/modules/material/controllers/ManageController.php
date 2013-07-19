@@ -15,6 +15,7 @@ class Material_ManageController extends Zend_Controller_Action
         $this->_matappdata = $this->_em->getRepository('Synrgic\Infox\Matappdata');
         $this->_supplyprice = $this->_em->getRepository('Synrgic\Infox\Supplyprice');
         $this->_user = $this->_em->getRepository('Synrgic\User');
+        $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
     }
 
     public function indexAction()
@@ -26,7 +27,8 @@ class Material_ManageController extends Zend_Controller_Action
     public function addAction()
     {
         $this->getSuppliers();  
-        $this->getSupplyprice(0);  
+        $this->getSupplyprice(0);
+        $this->getTypes();  
     }
 
     public function editAction()
@@ -43,6 +45,7 @@ class Material_ManageController extends Zend_Controller_Action
         $this->view->maindata = $data;
         $this->getSuppliers();
         $this->getSupplyprice($id);
+        $this->getTypes();
     }
 
     public function deleteAction()
@@ -77,11 +80,13 @@ class Material_ManageController extends Zend_Controller_Action
         $nameeng = $this->getParam("nameeng", "");
         $spec = $this->getParam("spec", "");
         $description = $this->getParam("description", "");
-        $mtype = $this->getParam("mtype", "");
-        $dtype = $this->getParam("dtype", "");
+        //$mtype = $this->getParam("mtype", "");
+        //$dtype = $this->getParam("dtype", "");
 
         $usage = $this->getParam("usage", "");
         $unit = $this->getParam("unit", "");
+
+        $typeid = $this->getParam("type", "0");
 
         if($mode == "Create")
         {
@@ -109,7 +114,13 @@ class Material_ManageController extends Zend_Controller_Action
             $data->setSupplier($supobj);
         }
         */
-            
+
+        $typeobj = $this->_materialtype->findOneBy(array("id"=>$typeid));
+        if(isset($typeobj)) 
+        {
+            $data->setType($typeobj);
+        }   
+
         $this->_em->persist($data);
         try {
             $this->_em->flush();
@@ -177,6 +188,11 @@ class Material_ManageController extends Zend_Controller_Action
         $this->view->supplyprice = $supplyprice;
     }
 
+    private function getTypes()
+    {
+        $types = $this->_materialtype->findAll();
+        $this->view->types = $types;
+    }
     private function storePic($id)
     {// http://www.w3schools.com/php/php_file_upload.asp
         
