@@ -26,6 +26,29 @@ $("#type").change(function() {
         $('#mainselect').show();
     }    
 });
+
+$('#anytype').change(function() {    
+    var id = $(this).val();
+    //alert("type id="+id);
+    
+    $.post("/material/type/posttype", { id: id }, 
+    function(data) {
+        //alert("");
+        console.log(data);
+        var typechs = "";
+        var typeeng = "";        
+        {
+            var jsonobj = jQuery.parseJSON(data);
+            typechs = jsonobj.typechs;
+            typeeng = jsonobj.typeeng;
+            //alert("typechs="+typechs);
+        }
+
+        $('#editchs').val(typechs);
+        $('#editeng').val(typeeng);
+        $('#editid').val(id);
+    });
+});
 </script>
 
 <div data-role="collapsible-set" >
@@ -82,7 +105,8 @@ $("#type").change(function() {
 <h3>更改材料类型定义</h3>
 <div id="edittype">
 
-<form method="post" action="/material/type/add">
+<form method="post" action="/material/type/edit">
+<input type="hidden" id="editid" value="0">
 <table class="grid">
 <thead></thead>
 <tbody>
@@ -106,14 +130,15 @@ $("#type").change(function() {
 <td></td></tr>
 <tr>
 <td><div data-role="fieldcontain">
-    <label for="typechs">中文类型:</label>
-    <input type="text" name="typechs" id="typechs" value="" data-mini="true" />
+    <label for="editchs">中文类型:</label>
+    <input type="text" name="editchs" id="editchs" value="" data-mini="true" />
 </div></td>
 <td><div data-role="fieldcontain">
-    <label for="typeeng">英文类型:</label>
-    <input type="text" name="typeeng" id="typeeng" value="" data-mini="true" />
+    <label for="editeng">英文类型:</label>
+    <input type="text" name="editeng" id="editeng" value="" data-mini="true" />
 </div></td>
 </tr>
+<!--
 <tr>
 <td><div data-role="fieldcontain">
         <label for="type">类型定义:</label>
@@ -140,9 +165,11 @@ $("#type").change(function() {
         </select>                
 </div></td>
 </tr>
+-->
 </tbody>
 </table>
 <button data-mini="true">更新</button>
+
 </form>
 </div><!-- edittype -->
 

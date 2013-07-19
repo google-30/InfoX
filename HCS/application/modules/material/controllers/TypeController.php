@@ -74,7 +74,6 @@ class Material_TypeController extends Zend_Controller_Action
             var_dump($e);
             return;
         }                
-
         
         $this->redirect("/material/type");
     }
@@ -84,13 +83,39 @@ class Material_TypeController extends Zend_Controller_Action
         $this->turnoffview();
 
         $requests = $this->getRequest()->getPost();
-        if(0)
+        if(1)
         {                
             var_dump($requests);
             return;
         }    
         
+            
     }
+    
+    public function posttypeAction()
+    {
+        $this->turnoffview();
+        
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }    
+
+        $id = $this->getParam("id", "0");        
+        $typeobj = $this->_materialtype->findOneby(array("id"=>$id));
+        if(isset($typeobj))
+        {
+            $typechs = $typeobj->getTypechs();
+            $typeeng = $typeobj->getTypeeng();
+        }        
+        else
+        {
+            return;    
+        }
+        $data["typechs"] = $typechs;
+        $data["typeeng"] = $typeeng;
+        $json = Zend_Json::encode($data);
+        echo $json;        
+         
+    }        
 
     private function turnoffview()
     {
