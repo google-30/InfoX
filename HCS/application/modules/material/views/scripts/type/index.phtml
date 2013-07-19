@@ -30,7 +30,13 @@ $("#type").change(function() {
 $('#anytype').change(function() {    
     var id = $(this).val();
     //alert("type id="+id);
-    
+    if(id=="0")    
+    {
+        $('#editchs').val("");
+        $('#editeng').val("");
+        return;
+    }
+
     $.post("/material/type/posttype", { id: id }, 
     function(data) {
         //alert("");
@@ -49,6 +55,36 @@ $('#anytype').change(function() {
         $('#editid').val(id);
     });
 });
+
+function updatetype()
+{
+    //alert("updatetype");
+    var id = $("#anytype").val();
+    //alert("type id="+id);
+    if(id==0)    
+    {
+        alert("请选择类型");
+        return;
+    }
+
+    var typechs = $('#editchs').val();
+    var typeeng = $('#editeng').val();    
+
+    if(typechs == "")
+    {
+        alert("请填写类型");  
+        return;      
+    }
+
+    $.post("/material/type/edit", { id: id, typechs:typechs, typeeng:typeeng }, 
+    function(data) {
+        console.log(data);
+        alert(data);
+        
+        window.location.reload();
+    });
+
+}
 </script>
 
 <div data-role="collapsible-set" >
@@ -97,7 +133,7 @@ $('#anytype').change(function() {
 </tr>
 </tbody>
 </table>
-<button data-mini="true">添加</button>
+<button data-mini="true" data-theme="a">添加</button>
 </form>
 </div> <!--addtype-->
 
@@ -105,7 +141,7 @@ $('#anytype').change(function() {
 <h3>更改材料类型定义</h3>
 <div id="edittype">
 
-<form method="post" action="/material/type/edit">
+<form method="post" action="/material/type/edit" id="">
 <input type="hidden" id="editid" value="0">
 <table class="grid">
 <thead></thead>
@@ -138,38 +174,9 @@ $('#anytype').change(function() {
     <input type="text" name="editeng" id="editeng" value="" data-mini="true" />
 </div></td>
 </tr>
-<!--
-<tr>
-<td><div data-role="fieldcontain">
-        <label for="type">类型定义:</label>
-        <select name="type" id="type">
-        <option value="0">这是主要类型</option>
-        <option value="1">这是细分类型</option>
-        </select>
-</div></td>
-<td><div data-role="fieldcontain" id="mainselect">
-        <label for="name">主要类型:</label>
-        <select name="maintype" id="maintype">
-        <?php
-        $mains=$this->mains;
-        foreach($mains as $tmp)
-        {
-            $id = $tmp->getId();
-            $typechs = $tmp->getTypechs();
-            $typeeng = $tmp->getTypeeng();
-            $options = "";
-            $options .= '<option value="' . $id . '">' . $typechs . "/" . $typeeng . '</option>';
-            echo $options;
-        }
-        ?>
-        </select>                
-</div></td>
-</tr>
--->
 </tbody>
 </table>
-<button data-mini="true">更新</button>
-
+<input type="button" data-mini="true" data-theme="a" onclick="updatetype()" value="更新">
 </form>
 </div><!-- edittype -->
 

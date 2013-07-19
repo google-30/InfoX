@@ -83,13 +83,31 @@ class Material_TypeController extends Zend_Controller_Action
         $this->turnoffview();
 
         $requests = $this->getRequest()->getPost();
-        if(1)
+        if(0)
         {                
             var_dump($requests);
             return;
         }    
-        
-            
+
+        $id = $this->getParam("id",0);        
+        $typechs = $this->getParam("typechs","");
+        $typeeng = $this->getParam("typeeng","");    
+
+        $typeobj = $this->_materialtype->findOneBy(array("id"=>$id));
+        if(isset($typeobj))
+        {
+            $typeobj->setTypechs($typechs);
+            $typeobj->setTypeeng($typeeng);
+        }
+        $this->_em->persist($typeobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }                  
+
+        echo "更新成功";
     }
     
     public function posttypeAction()
