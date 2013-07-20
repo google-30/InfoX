@@ -26,8 +26,8 @@ class Company_InfoController extends Zend_Controller_Action
     {
         $id = $this->getParam("id");
         //echo "id=$id<br>";
-        $archive = $this->_supplier->findOneBy(array("id"=>$id));
-        $this->view->maindata = $archive;
+        $maindata = $this->_companyinfo->findOneBy(array("id"=>$id));
+        $this->view->maindata = $maindata;
     } 
 
     public function deleteAction()
@@ -57,33 +57,33 @@ class Company_InfoController extends Zend_Controller_Action
        
         $mode = $this->getParam("mode", "Create");
         $id = $this->getParam("id", "0");
-        $name = $this->getParam("name");
-        $remark = $this->getParam("remark", "");
-        $business = $this->getParam("business", "");
-        $officephone = $this->getParam("officephone", "");
-        $mobilephone = $this->getParam("mobilephone", "");
+        $namechs = $this->getParam("namechs", "");
+        $nameeng = $this->getParam("nameeng", "");
+        $phone = $this->getParam("phone", "");
         $address = $this->getParam("address", "");
-        $contact = $this->getParam("contact", "");
         $email = $this->getParam("email", "");
+        $fax = $this->getParam("fax", "");
+        $coregno = $this->getParam("coregno", "");
+        $remark = $this->getParam("remark", "");
 
         if($mode == "Create")
         {
-            $data = new \Synrgic\Infox\Supplier(); 
+            $data = new \Synrgic\Infox\Companyinfo(); 
         }
         else
         {
-            $data = $this->_supplier->findOneBy(array("id"=>$id));
+            $data = $this->_companyinfo->findOneBy(array("id"=>$id));
         }
  
         $data->setUpdate(new Datetime("now"));       
-        $data->setName($name);
-        $data->setRemark($remark);
-        $data->setBusiness($business);
-        $data->setOfficephone($officephone);
-        $data->setMobilephone($mobilephone);
+        $data->setNamechs($namechs);
+        $data->setNameeng($nameeng);
+        $data->setPhone($phone);
+        $data->setFax($fax);
         $data->setEmail($email);
-        $data->setContact($contact);
         $data->setAddress($address);
+        $data->setCoregno($coregno);
+        $data->setRemark($remark);
 
         $this->_em->persist($data);
         try {
@@ -93,7 +93,7 @@ class Company_InfoController extends Zend_Controller_Action
             return;
         }        
 
-        $this->_redirect("supplier/manage");
+        $this->_redirect("/company/info");
     } 
     
 

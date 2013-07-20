@@ -53,7 +53,7 @@ class Companyinfo extends \Synrgic_Models_Entity {
      *      
      * @Column(type="string", nullable=true)
      */
-    protected $coregco;
+    protected $coregno;
 
     /**
      * @Column(type="string", nullable=true)
