@@ -1,0 +1,149 @@
+<link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
+<script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
+<style>
+</style>
+<script>
+$('#start').mobiscroll().date({
+    theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+    endYear: 2050,
+});  
+
+$('#stop').mobiscroll().date({
+    theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+    endYear: 2050,
+});  
+
+function submit()
+{
+    $name = $("#name").val();
+    //$remark = $("#remark").val();
+    
+    if($name=="")
+    {
+        alert("请至少提供名称，其他信息可稍后提交");
+    }    
+    else
+    {
+        $("#mainform").submit();       
+    }
+    
+}
+
+function cancel()
+{
+    var r=confirm("放弃编辑信息，返回列表界面");
+    if (r==true)
+    {
+        gotolist();
+    }
+}
+
+function gotolist()
+{
+    window.location = "/company/info";        
+}
+
+function redirect(url) {
+    window.location = url;
+}
+
+function showWorkers()
+{
+    //alert("showWorkers");
+    $("#workersdiv").show();
+}
+</script>
+<?php
+$id = 0;
+$mode = "Create";
+$name="";
+$address="";
+$start = "";
+$stop = "";
+$leader="";
+$manager="";
+$workerno=0;
+$remark="";
+$leaders=$this->leaders;
+$managers=$this->managers;
+
+if($this->mode == "Edit")
+{
+$data = $this->maindata;
+$mode = "Edit";
+$id = $data->getId();
+$name = $data->getName();
+$address = $data->getAddress();
+$start = $data->getStart()->format("Y-m-d");
+$stop = $data->getStop()->format("Y-m-d");
+if($data->getLeader())
+{
+    $leader = $data->getLeader()->getName();
+}
+if($data->getManager())
+{
+    $manager = $data->getManager()->getName();
+}
+$workerno = $data->getWorkerno();
+$remark = $data->getRemark();
+
+}
+     
+?>
+
+<?php
+if($mode == "Create")
+{
+    echo "<h3>添加公司</h3>";
+}
+else
+{
+    echo "<h3>编辑公司信息</h3>";    
+}
+?>
+
+<form id="mainform" method="post" action="/project/manage/submit" enctype="multipart/form-data">
+<input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
+<input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+
+<form method="post" action="/company/info/add">
+<table class="grid">
+<thead></thead>
+<tbody>
+<tr>
+<td><strong>公司中文名:</strong></td>
+<td><input type="text" name="namechs" id="namechs" value="" data-mini="true" /></td>
+<td><strong>公司英文名:</strong></td>
+<td><input type="text" name="nameeng" id="nameeng" value="" data-mini="true" /></td>
+</tr>
+
+<tr>
+<td><strong>公司电话:</strong></td>
+<td><input type="text" name="phone" id="phone" value="" data-mini="true" /></td>
+<td><strong>公司传真:</strong></td>
+<td><input type="text" name="fax" id="fax" value="" data-mini="true" /></td>
+</tr>
+
+<tr>
+<td><strong>公司地址:</strong></td>
+<td><input type="text" name="address" id="address" value="" data-mini="true" /></td>
+<td><strong>公司电邮:</strong></td>
+<td><input type="text" name="email" id="email" value="" data-mini="true" /></td>
+</tr>
+
+<tr>
+<td><strong>公司CO REG NO:</strong></td>
+<td><input type="text" name="coregno" id="coregno" value="" data-mini="true" /></td>
+<td><strong>公司备注:</strong></td>
+<td><input type="text" name="remark" id="remark" value="" data-mini="true" /></td>
+</tr>
+
+</tbody>
+</table>
+</form>
+
+<div class="ui-grid-a">
+		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
+		<div class="ui-block-b"><input type="button" onclick="cancel()" value="取消"></div>
+</div>
+

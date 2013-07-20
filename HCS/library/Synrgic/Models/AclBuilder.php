@@ -139,6 +139,7 @@ class Synrgic_Models_AclBuilder {
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit', 'sitedetail'),
             'humanresource:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'material:type'=>array('view','add', 'edit', 'delete', 'submit','posttype'),
+            'company:info'=>array('view','add', 'edit', 'delete', 'submit'),
 		    )
 		),
 	);

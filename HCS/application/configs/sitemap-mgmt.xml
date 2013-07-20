@@ -102,6 +102,15 @@
 		    <resource>humanresource:manage</resource>
 		    <privilege>view</privilege>
 	        </humanresource>
+
+	        <companyinfo>
+		    <label>公司信息</label>
+		    <module>company</module>
+		    <controller>info</controller>
+		    <action>index</action>
+		    <resource>company:info</resource>
+		    <privilege>view</privilege>
+	        </companyinfo>
                 
             </pages>
         </settings>

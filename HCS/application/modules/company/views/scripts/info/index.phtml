@@ -1,0 +1,21 @@
+<script>
+$( function() {} );
+</script>
+<a href="/company/info/add"><button data-mini="true" data-theme="a">添加公司</button></a>
+<?php
+echo $this->grid("Companyinfo", true)
+          //->field('id','序号')            
+          ->field('namechs','公司中文名')
+          ->field('nameeng', '公司英文名')
+          ->field('phone', '联系电话')
+          ->field('address', '地址')
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          //->helper(new GridHelper_Materialtype())
+          ->data($this->maindata)
+          //->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+          ->action(':action', '详细信息', array( 'url'=>array('action'=>'infodetail')))  
+          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
+?>
+
