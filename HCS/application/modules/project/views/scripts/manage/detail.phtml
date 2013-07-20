@@ -67,8 +67,10 @@ $leader="";
 $manager="";
 $workerno=0;
 $remark="";
+
 $leaders=$this->leaders;
 $managers=$this->managers;
+$companyinfos=$this->companyinfos;
 
 if($this->mode == "Edit")
 {
@@ -97,7 +99,7 @@ $remark = $data->getRemark();
 <?php
 if($mode == "Create")
 {
-    echo "<h3>添加新工地</h3>";
+    echo "<h3>添加工地信息</h3>";
 }
 else
 {

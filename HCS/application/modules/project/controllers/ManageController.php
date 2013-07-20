@@ -12,6 +12,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_humanres = $this->_em->getRepository('Synrgic\Infox\Humanresource');
         $this->_worker = $this->_em->getRepository('Synrgic\Infox\Worker');
         $this->_role = $this->_em->getRepository('Synrgic\Infox\Role');
+        $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
     }
 
     public function indexAction()
@@ -20,23 +21,16 @@ class Project_ManageController extends Zend_Controller_Action
         $this->view->maindata = $maindata;
     }   
 
-    private function findPIC()
-    {
-        $leaderrole = $this->_role->findOneBy(array("role"=>"leader"));        
-        $leaders = $this->_humanres->findBy(array("role"=>$leaderrole));
-        $this->view->leaders = $leaders;
-        //$managers = $this->_humanres->findBy(array("position"=>"manager"));
-        //$this->view->managers = $managers;
-    }    
-
     public function addAction()
     {
         $this->findPIC();
+        $this->getCompanyinfo();
     } 
 
     public function editAction()
     {
         $this->findPIC();
+        $this->getCompanyinfo();
 
         $id = $this->getParam("id");
         //echo "id=$id<br>";
@@ -144,5 +138,20 @@ class Project_ManageController extends Zend_Controller_Action
         $result = $query->getResult();
         $this->view->workers = $result;
 
+    }
+
+    private function findPIC()
+    {
+        $leaderrole = $this->_role->findOneBy(array("role"=>"leader"));        
+        $leaders = $this->_humanres->findBy(array("role"=>$leaderrole));
+        $this->view->leaders = $leaders;
+        //$managers = $this->_humanres->findBy(array("position"=>"manager"));
+        //$this->view->managers = $managers;
+    }    
+
+    private function getCompanyinfo()
+    {
+        $companyinfos = $this->_companyinfo->findAll();
+        $this->view->companyinfos = $companyinfos;
     }
 }
