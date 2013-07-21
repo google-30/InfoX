@@ -90,6 +90,7 @@ class Project_ManageController extends Zend_Controller_Action
         $stop = $this->getParam("stop", "");
         $remark = $this->getParam("remark", "");
         $workerno = $this->getParam("workerno", "");
+        $company = $this->getParam("company", 0);
 
         if($mode == "Create")
         {
@@ -108,6 +109,12 @@ class Project_ManageController extends Zend_Controller_Action
         $data->setStop(new Datetime($stop));
         $data->setRemark($remark);
         $data->setWorkerno($workerno);
+    
+        $companyobj = $this->_companyinfo->findOneBy(array("id"=>intval($company)));
+        if(isset($companyobj))
+        {
+            $data->setCompany($companyobj);
+        }
 
         $this->_em->persist($data);
         try {

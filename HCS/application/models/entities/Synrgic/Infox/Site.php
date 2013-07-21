@@ -57,4 +57,11 @@ class Site extends \Synrgic_Models_Entity {
      */
     protected $remark;
 
+    /**
+     * company in charge of this site
+     *   
+     * @ManyToOne(targetEntity="Synrgic\Infox\Companyinfo")
+     */
+    protected $company;
+
 }

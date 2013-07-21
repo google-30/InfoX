@@ -67,6 +67,7 @@ $leader="";
 $manager="";
 $workerno=0;
 $remark="";
+$companyid=0;
 
 $leaders=$this->leaders;
 $managers=$this->managers;
@@ -91,11 +92,10 @@ if($data->getManager())
 }
 $workerno = $data->getWorkerno();
 $remark = $data->getRemark();
-
+$companyobj = $data->getCompany();
+if($companyobj) { $companyid = $companyobj->getId(); }
 }
-     
 ?>
-
 <?php
 if($mode == "Create")
 {
@@ -124,7 +124,8 @@ else
 <tr>
 <td><div data-role="fieldcontain">
     <label for="leader">工长:</label>
-    <select name="leader" id="leader">
+    <select name="leader" id="leader" data-mini="true">
+    <option value="0">未指定工长</option>
     <?php
     foreach($leaders as $tmp)
     {
@@ -144,15 +145,19 @@ else
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="manager">经理:</label>
-    <select name="manager" id="manager">
-    <?php
+    <select name="manager" id="manager" data-mini="true">
+    <option value="0">未指定经理</option>
+<?php
+if(isset($managers))
+{
     foreach($managers as $tmp)
     {
         $id = $tmp->getId();
         $name = $tmp->getName();
         echo '<option value="' . $id . '">' . $name . '</option>';
     }
-    ?>
+}
+?>
     </select>
 </div></td>
 </tr>
@@ -170,34 +175,46 @@ else
 
 <tr>
 <td><div data-role="fieldcontain">
-    <label for="remark">其他说明:</label>
-    <input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true">
+    <label for="remark">承包公司:</label>    
+    <select id="company" name="company" data-mini="true">
+    <option value="0">未指定承包公司</option>
+<?
+$options="";    
+foreach($companyinfos as $tmp)
+{
+    $id = $tmp->getId();
+    $namechs = $tmp->getNamechs(); 
+
+    if($companyid == $id)
+    {       
+        $options .= '<option value="' . $id . '" selected>' . $namechs . '</option>';    
+    }
+    else
+    {
+        $options .= '<option value="' . $id . '" >' . $namechs . '</option>';    
+    }
+}
+echo $options;
+?>
+    </select>
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="workerno">工人数量:</label>
  	<input type="range" name="workerno" id="workerno" value="<?php echo $workerno; ?>" min="0" max="200" data-highlight="true" data-mini="false" />
 </div></td>
 </tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="remark">其他说明:</label>
+    <input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true">
+</div></td>
+<td></td>
+</tr>
+
 <!---->
 </table>
 </form> <!--main form-->
-
-<div id="workersdiv">
-<?php
-    echo $this->grid("Workers", true)
-          ->field('companylabel', '公司编号')  
-          ->field('nameeng', '姓名')
-          ->field('namechs','中文名')
-          ->field('fin', '准证号码')  
-          ->field('worktype', '工种')
-          ->field('worklevel', '等级')
-          ->field('hwage', '小时工资')
-          ->itemCountPerPage(30)
-          ->paginatorEnabled(false)
-          //->helper(new GridHelper_Worker())
-          ->data($this->workers);
-?>
-</div>
 
 <div class="ui-grid-a">
 		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
