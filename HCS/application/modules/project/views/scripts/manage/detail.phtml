@@ -50,10 +50,32 @@ function redirect(url) {
     window.location = url;
 }
 
-function showWorkers()
+function addpart()
 {
-    //alert("showWorkers");
-    $("#workersdiv").show();
+    var id = $("#id").val();
+    var partname= $("#partname").val();
+    //alert(partname);
+
+    $.post("/project/manage/addpart", { id:id, partname: partname }, 
+    function(data) {
+        console.log(data);
+        alert(data);        
+        //window.location.reload();
+    });
+}
+
+function delpart()
+{
+    var id = $("#id").val();
+    var delpart= $("#delpart").find(":selected").text();
+    alert(delpart);
+    $.post("/project/manage/delpart", { id:id, delpart:delpart }, 
+    function(data) {
+        console.log(data);
+        alert(data);        
+        //window.location.reload();
+    });
+    
 }
 </script>
 <?php
@@ -68,6 +90,7 @@ $manager="";
 $workerno=0;
 $remark="";
 $companyid=0;
+$parts="";
 
 $leaders=$this->leaders;
 $managers=$this->managers;
@@ -94,6 +117,7 @@ $workerno = $data->getWorkerno();
 $remark = $data->getRemark();
 $companyobj = $data->getCompany();
 if($companyobj) { $companyid = $companyobj->getId(); }
+$parts=$data->getParts();
 }
 ?>
 <?php
@@ -106,11 +130,10 @@ else
     echo "<h3>编辑工地信息</h3>";    
 }
 ?>
-
 <form id="mainform" method="post" action="/project/manage/submit" enctype="multipart/form-data">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
-<table id="maintable">
+<table class="grid">
 <tr>
 <td><div data-role="fieldcontain">
     <label for="name">工地名称:</label>
@@ -211,10 +234,41 @@ echo $options;
 </div></td>
 <td></td>
 </tr>
-
-<!---->
 </table>
 </form> <!--main form-->
+
+<fieldset <?php if($mode=="Create") echo 'style=display:none'; ?>>
+<legend>定义工程部位</legend>
+<div data-role="collapsible-set" data-mini="true">
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>增加工程部位</h3>
+    <input type="text" value="" placeholder='填写部位名称不能含有;/"等符号，一次填写一个名称并提交' id="partname">
+    <button data-mini="true" onclick="addpart()">增加</button>
+    </div>
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>删除工程部位</h3>
+    <select data-mini="true" id="delpart">
+    <option value="0">选择要删除的部位名称</option>
+<?php
+$partsArr=explode(";", $parts);
+$i=0;
+$options="";
+foreach($partsArr as $tmp)
+{
+    $i++;
+    $options .= '<option value="' . $i . '">' . $tmp . '</option>'; 
+}
+echo $options;
+?>    
+    </select>    
+    <button data-mini="true" onclick="delpart()">删除</button>
+    </div>
+</div> <!--collapsible-set-->
+<hr>
+<p><strong>已定义部位</strong></p>
+<p><strong><?php echo $parts; ?></strong></p>
+</fieldset>
+
 
 <div class="ui-grid-a">
 		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>

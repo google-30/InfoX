@@ -64,4 +64,10 @@ class Site extends \Synrgic_Models_Entity {
      */
     protected $company;
 
+    /**
+     * site parts: floor1;floor2;roof;
+     * @Column(type="string", nullable=true)
+     */
+    protected $parts;
+
 }

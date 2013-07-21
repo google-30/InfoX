@@ -161,4 +161,66 @@ class Project_ManageController extends Zend_Controller_Action
         $companyinfos = $this->_companyinfo->findAll();
         $this->view->companyinfos = $companyinfos;
     }
+
+    public function addpartAction()
+    {
+        $this->turnoffview();
+
+        $id = $this->getParam("id", 0);
+        $partname = $this->getParam("partname", "");
+        
+        $data = $this->_site->findOneBy(array("id"=>$id));
+        $parts = $data->getParts();
+        $newparts = $partname . ";" . $parts ;
+        $data->setParts($newparts);
+        $this->_em->persist($data);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }        
+        
+        echo "添加成功";
+    }
+
+    public function delpartAction()
+    {
+        $this->turnoffview();
+
+        $id = $this->getParam("id", 0);
+        $delpart = $this->getParam("delpart", "");
+
+        $data = $this->_site->findOneBy(array("id"=>$id));
+        $parts = $data->getParts();
+
+        //$partsarr = explode(";", $parts);
+        $pos = strpos($parts, $delpart);
+        if($pos===false)
+        {
+            echo "fail to find this part name";
+            return;
+        }
+
+        $newparts = substr($parts, 0, $pos) . substr($parts, $pos+strlen($delpart)+1);
+        echo $newparts;  
+        $data->setParts($newparts);
+        $this->_em->persist($data);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }        
+        
+        echo "删除成功";
+                               
+    }
+
+    private function turnoffview()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+    }
+
 }
