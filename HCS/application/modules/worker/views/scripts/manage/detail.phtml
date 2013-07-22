@@ -12,11 +12,7 @@ border-radius:10px;
 }
 
 table { width: 100%; }
-td 
-{
-width: 50%;
-vertical-align:middle;
-}
+td { width: 50%; vertical-align:middle; }
 </style>
 <script type="text/javascript">
 $(function () {
@@ -158,23 +154,23 @@ if($this->mode == "Edit")
 <?php
 if($this->mode == "Create")
 {
-    echo '<div class="ui-block-a"><h3>创建工人记录</h3></div>';
+    echo '<div class="ui-block-a"><h3>创建工人信息</h3></div>';
     echo '<div class="ui-block-b"></div>';
-    echo '<div class="ui-block-c"><button>放弃创建</button></div>';
+    echo '<div class="ui-block-c"><button data-mini="true">放弃创建</button data-mini="true"></div>';
 }
 else
 {
-    echo '<div class="ui-block-a"><h3>编辑工人记录</h3></div>';
-    echo '<div class="ui-block-b"><button onclick="output()">预览并打印</button></div>';
-    echo '<div class="ui-block-c"><button>删除工人记录</button></div>';
+    echo '<div class="ui-block-a"><h3>编辑工人信息</h3></div>';
+    echo '<div class="ui-block-b"><button data-mini="true" onclick="output()">预览并打印</button data-mini="true"></div>';
+    echo '<div class="ui-block-c"><button data-mini="true">删除工人记录</button data-mini="true"></div>';
 }
 ?>
 </div><!-- /grid-a -->
 <!--</fieldset>-->
 
 <form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
-<input type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
-<input type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
+<input data-mini="true" type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
+<input data-mini="true" type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
 
 <fieldset>
 <legend>个人信息栏:</legend>
@@ -183,85 +179,85 @@ else
 <table>
 <tr>
 <td><div data-role="fieldcontain">
-    <!--<label for="pic" class="ui-input-text">工人照片：</label>-->
-    <label for="pic" class="ui-input-text"></label>
+    <!--<label for="pic" class="ui-input data-mini="true"-text">工人照片：</label>-->
+    <label for="pic" class="ui-input data-mini="true"-text"></label>
     <img src="<?php echo $pic; ?>" alt="无照片显示" width="40%"  id="pic" name="pic">
 </div></td>
 <td><div data-role="fieldcontain">
-    <label for="file" class="ui-input-text">更新照片：</label>
-    <input type="file" name="file" id="file">
+    <label for="file" class="ui-input data-mini="true"-text">更新照片：</label>
+    <input data-mini="true" type="file" name="file" id="file">
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="nameeng">姓名:</label>
-    <input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" />
+    <input data-mini="true" type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="namechs">中文姓名:</label>
-    <input type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" />
+    <input data-mini="true" type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="gender">性别:</label>
-    <select name="gender" id="gender">
+    <select data-mini="true" name="gender" id="gender">
        <option value="male">男</option>
        <option value="female">女</option>
-    </select>  
+    </select data-mini="true">  
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="hometown">籍贯:</label>
-    <input type="text" name="hometown" id="hometown" value="<?php echo $hometown; ?>"  />
+    <input data-mini="true" type="text" name="hometown" id="hometown" value="<?php echo $hometown; ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="age">年龄:</label>
-    <input type="range" name="age" id="age" value="<?php echo $age; ?>" min="18" max="70" data-highlight="true"  />  
+    <input data-mini="true" type="range" name="age" id="age" value="<?php echo $age; ?>" min="18" max="70" data-highlight="true"  />  
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="birth">出生日期:</label>
-    <input type="text" name="birth" id="birth" value="<?php echo $birth; ?>"  />
+    <input data-mini="true" type="text" name="birth" id="birth" value="<?php echo $birth; ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="fin">准证号码:</label>
-    <input type="text" name="fin" id="fin" value="<?php echo $fin; ?>"  />
+    <input data-mini="true" type="text" name="fin" id="fin" value="<?php echo $fin; ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="passexp">准证期限:</label>
-    <input type="text" name="passexp" id="passexp" value="<?php echo $passexp; ?>" />
+    <input data-mini="true" type="text" name="passexp" id="passexp" value="<?php echo $passexp; ?>" />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="passport">护照号码:</label>
-    <input type="text" name="passport" id="passport" value="<?php echo $passport; ?>"  />
+    <input data-mini="true" type="text" name="passport" id="passport" value="<?php echo $passport; ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="passportexp">护照期限:</label>
-    <input type="text" name="passportexp" id="passportexp" value="<?php echo $passportexp; ?>" />
+    <input data-mini="true" type="text" name="passportexp" id="passportexp" value="<?php echo $passportexp; ?>" />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="marital">婚姻状况:</label>    
-    <select name="marital" id="marital">
+    <select data-mini="true" name="marital" id="marital">
 <?php
 $options=array("single"=>"单身", "married"=>"已婚",);
 foreach($options as $key=>$value)
 {
     if($marital == $key)
     {
-        echo '<option value="'. $key . '" selected>' . $value . "</option>";
+        echo '<option value="'. $key . '" select data-mini="true"ed>' . $value . "</option>";
     }    
     else
     {
@@ -269,11 +265,22 @@ foreach($options as $key=>$value)
     }
 }
 ?>
-    </select>        
+    </select data-mini="true">        
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="address">地址:</label>
-    <input type="text" name="address" id="address" value="<?php echo $address; ?>"  />
+    <input data-mini="true" type="text" name="address" id="address" value="<?php echo $address; ?>"  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="birth">到新日期:</label>
+    <input data-mini="true" type="text" name="birth" id="birth" value="<?php echo $birth; ?>"  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="birth">离新日期:</label>
+    <input data-mini="true" type="text" name="birth" id="birth" value="<?php echo $birth; ?>"  />
 </div></td>
 </tr>
 
@@ -290,18 +297,18 @@ foreach($options as $key=>$value)
 <tr>
 <td><div data-role="fieldcontain">
     <label for="worktype">工种:</label>
-    <input type="text" name="worktype" id="worktype" value="<?php echo $worktype; ?>" />
+    <input data-mini="true" type="text" name="worktype" id="worktype" value="<?php echo $worktype; ?>" />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="worklevel">等级:</label>
-    <select name="worklevel" id="worklevel">
+    <select data-mini="true" name="worklevel" id="worklevel">
 <?php
 $options=array("normal"=>"普通","good"=>"好","excellent"=>"很好");
 foreach($options as $key=>$value)
 {
     if($worklevel == $key)
     {
-        echo '<option value="' . $key . '" selected>' . $value . "</option>";
+        echo '<option value="' . $key . '" select data-mini="true"ed>' . $value . "</option>";
     }
     else
     {
@@ -309,40 +316,40 @@ foreach($options as $key=>$value)
     }
 } 
 ?>
-    </select> 
+    </select data-mini="true"> 
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="skill1">技能1:</label>
-    <input type="text" name="skill1" id="skill1" value="<?php echo $skill1; ?>"  />
+    <input data-mini="true" type="text" name="skill1" id="skill1" value="<?php echo $skill1; ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="skill2">技能2:</label>
-    <input type="text" name="skill2" id="skill2" value="<?php echo $skill2; ?>"  />
+    <input data-mini="true" type="text" name="skill2" id="skill2" value="<?php echo $skill2; ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="securityexp">安全证期限:</label>
-    <input type="text" name="securityexp" id="securityexp" value="<?php echo $securityexp; ?>" />
+    <input data-mini="true" type="text" name="securityexp" id="securityexp" value="<?php echo $securityexp; ?>" />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="drvlic">驾照种类:</label>
-    <input type="text" name="drvlic" id="drvlic" value="<?php echo $drvlic; ?>"  />
+    <input data-mini="true" type="text" name="drvlic" id="drvlic" value="<?php echo $drvlic; ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="education">教育程度:</label>
-    <input type="text" name="education" id="education" value="<?php echo $education; ?>"  />
+    <input data-mini="true" type="text" name="education" id="education" value="<?php echo $education; ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="pastwork">国内从事职业:</label>
-    <input type="text" name="pastwork" id="pastwork" value="<?php echo $pastwork; ?>"  />
+    <input data-mini="true" type="text" name="pastwork" id="pastwork" value="<?php echo $pastwork; ?>"  />
 </div></td>
 </tr>
 
@@ -359,19 +366,19 @@ foreach($options as $key=>$value)
 <tr>
 <td><div data-role="fieldcontain">
     <label for="companylabel">公司编号:</label>
-    <input type="text" name="companylabel" id="companylabel" value="<?php echo $companylabel; ?>"  />
+    <input data-mini="true" type="text" name="companylabel" id="companylabel" value="<?php echo $companylabel; ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="hwage">小时单价:</label>
-    <input type="text" name="hwage" id="hwage" value="<?php echo $hwage; ?>"  />
+    <input data-mini="true" type="text" name="hwage" id="hwage" value="<?php echo $hwage; ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="site">所在工地:</label>
-    <!--<input type="text" name="site" id="site" value=""  /> -->
-    <select name="site" id="site">
+    <!--<input data-mini="true" type="text" name="site" id="site" value=""  /> -->
+    <select data-mini="true" name="site" id="site">
 <?php
 
 foreach($this->sites as $tmp)
@@ -379,7 +386,7 @@ foreach($this->sites as $tmp)
     $name = $tmp->getName();
     if($sitename == $name)
     {
-        echo '<option value="' . $name .'" selected>'. $name .'</option>';
+        echo '<option value="' . $name .'" select data-mini="true"ed>'. $name .'</option>';
     }
     else
     {
@@ -387,20 +394,20 @@ foreach($this->sites as $tmp)
     }
 }
 ?>
-    </select>
+    </select data-mini="true">
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="srvyears">服务年限:</label>
-    <!--<input type="text" name="srvyears" id="srvyears" value=""  /> -->
- 	<input type="range" name="srvyears" id="srvyears" value="<?php echo $srvyears; ?>" min="0" max="30" data-highlight="true"  />
+    <!--<input data-mini="true" type="text" name="srvyears" id="srvyears" value=""  /> -->
+ 	<input data-mini="true" type="range" name="srvyears" id="srvyears" value="<?php echo $srvyears; ?>" min="0" max="30" data-highlight="true"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="yrsinsing">在新年限:</label>
-    <!-- <input type="text" name="yrsinsing" id="yrsinsing" value=""  /> -->
-    <input type="range" name="yrsinsing" id="yrsinsing" value="<?php echo $yrsinsing; ?>" min="0" max="50" data-highlight="true"  />
+    <!-- <input data-mini="true" type="text" name="yrsinsing" id="yrsinsing" value=""  /> -->
+    <input data-mini="true" type="range" name="yrsinsing" id="yrsinsing" value="<?php echo $yrsinsing; ?>" min="0" max="50" data-highlight="true"  />
 </div></td>
 </tr>
 
@@ -417,40 +424,40 @@ foreach($this->sites as $tmp)
 <tr>
 <td><div data-role="fieldcontain">
     <label for="homeaddr">国内家庭地址:</label>
-    <input type="text" name="homeaddr" id="homeaddr" value="<?php echo $homeaddr; ?>"  />
+    <input data-mini="true" type="text" name="homeaddr" id="homeaddr" value="<?php echo $homeaddr; ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="member1">家庭成员1:</label>
-    <input type="text" name="member1" id="member1" value="<?php echo $member1; ?>"  />
+    <input data-mini="true" type="text" name="member1" id="member1" value="<?php echo $member1; ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="contact1">联系电话1:</label>
-    <input type="text" name="contact1" id="contact1" value="<?php echo $contact1; ?>"  />
+    <input data-mini="true" type="text" name="contact1" id="contact1" value="<?php echo $contact1; ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="member2">家庭成员2:</label>
-    <input type="text" name="member2" id="member2" value="<?php echo $member2; ?>"  />
+    <input data-mini="true" type="text" name="member2" id="member2" value="<?php echo $member2; ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="contact2">联系电话2:</label>
-    <input type="text" name="contact2" id="contact2" value="<?php echo $contact2; ?>"  />
+    <input data-mini="true" type="text" name="contact2" id="contact2" value="<?php echo $contact2; ?>"  />
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
     <label for="member3">家庭成员3:</label>
-    <input type="text" name="member3" id="member3" value="<?php echo $member3; ?>"  />
+    <input data-mini="true" type="text" name="member3" id="member3" value="<?php echo $member3; ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="contact3">联系电话3:</label>
-    <input type="text" name="contact3" id="contact3" value="<?php echo $contact3; ?>"  />
+    <input data-mini="true" type="text" name="contact3" id="contact3" value="<?php echo $contact3; ?>"  />
 </div></td>
 </tr>
 
@@ -458,6 +465,6 @@ foreach($this->sites as $tmp)
 <!--</div>-->
 </fieldset>
 
-<input type="submit" name="submit" value="提交">
+<input data-mini="true" type="submit" name="submit" value="提交">
 </form>
 
