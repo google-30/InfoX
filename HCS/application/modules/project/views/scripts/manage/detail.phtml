@@ -54,26 +54,38 @@ function addpart()
 {
     var id = $("#id").val();
     var partname= $("#partname").val();
+    if(partname=="")
+    {
+        alert("请填写工程部位名称");
+        return;
+    }       
     //alert(partname);
 
     $.post("/project/manage/addpart", { id:id, partname: partname }, 
     function(data) {
-        console.log(data);
+        //console.log(data);
         alert(data);        
-        //window.location.reload();
+        window.location.reload();
     });
 }
 
 function delpart()
 {
+    var delpartval = $("#delpart").val();
+    if(delpartval==0)
+    {
+        alert("请选择要删除的部位名称");
+        return;
+    }    
+
     var id = $("#id").val();
     var delpart= $("#delpart").find(":selected").text();
     alert(delpart);
     $.post("/project/manage/delpart", { id:id, delpart:delpart }, 
     function(data) {
-        console.log(data);
+        //console.log(data);
         alert(data);        
-        //window.location.reload();
+        window.location.reload();
     });
     
 }
@@ -223,7 +235,7 @@ echo $options;
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="workerno">工人数量:</label>
- 	<input type="range" name="workerno" id="workerno" value="<?php echo $workerno; ?>" min="0" max="200" data-highlight="true" data-mini="false" />
+ 	<input type="range" name="workerno" id="workerno" value="<?php echo $workerno; ?>" min="0" max="200" data-highlight="true" data-mini="true">
 </div></td>
 </tr>
 
@@ -237,14 +249,16 @@ echo $options;
 </table>
 </form> <!--main form-->
 
+
 <fieldset <?php if($mode=="Create") echo 'style=display:none'; ?>>
 <legend>定义工程部位</legend>
 <div data-role="collapsible-set" data-mini="true">
     <div data-role="collapsible" data-collapsed="true">
     <h3>增加工程部位</h3>
     <input type="text" value="" placeholder='填写部位名称不能含有;/"等符号，一次填写一个名称并提交' id="partname">
-    <button data-mini="true" onclick="addpart()">增加</button>
+    <button data-mini="true" data-theme="a" onclick="addpart()">增加</button>
     </div>
+
     <div data-role="collapsible" data-collapsed="true">
     <h3>删除工程部位</h3>
     <select data-mini="true" id="delpart">
@@ -261,15 +275,17 @@ foreach($partsArr as $tmp)
 echo $options;
 ?>    
     </select>    
-    <button data-mini="true" onclick="delpart()">删除</button>
+    <button data-mini="true" data-theme="a" onclick="delpart()">删除</button>
     </div>
-</div> <!--collapsible-set-->
+</div> 
 <hr>
 <p><strong>已定义部位</strong></p>
 <p><strong><?php echo $parts; ?></strong></p>
 </fieldset>
 
-
+<script>
+$("#partsdefine").load("/project/manage/partsdefine"); 
+</script>
 <div class="ui-grid-a">
 		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
 		<div class="ui-block-b"><input type="button" onclick="cancel()" value="取消"></div>

@@ -203,7 +203,7 @@ class Project_ManageController extends Zend_Controller_Action
         }
 
         $newparts = substr($parts, 0, $pos) . substr($parts, $pos+strlen($delpart)+1);
-        echo $newparts;  
+        //echo $newparts;  
         $data->setParts($newparts);
         $this->_em->persist($data);
         try {
@@ -213,14 +213,19 @@ class Project_ManageController extends Zend_Controller_Action
             return;
         }        
         
-        echo "删除成功";
-                               
+        echo "删除成功";                               
     }
 
     private function turnoffview()
     {
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
+    }
+
+    public function partsdefineAction()
+    {
+        //$this->turnoffview();
+        $this->_helper->layout->disableLayout();   
     }
 
 }
