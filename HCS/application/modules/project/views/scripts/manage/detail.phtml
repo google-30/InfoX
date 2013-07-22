@@ -80,7 +80,7 @@ function delpart()
 
     var id = $("#id").val();
     var delpart= $("#delpart").find(":selected").text();
-    alert(delpart);
+    //alert(delpart);
     $.post("/project/manage/delpart", { id:id, delpart:delpart }, 
     function(data) {
         //console.log(data);

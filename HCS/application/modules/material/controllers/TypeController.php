@@ -139,6 +139,5 @@ class Material_TypeController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
-
     }
 }

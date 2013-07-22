@@ -2,21 +2,10 @@
 #mainselect { display:none; }
 </style>
 <script>
-$(function() {
-/*
-    var type = $('#type').val();
-    //alert("type="+type);
-    var prop = (type=="0") ? true : false;
-    //$('#maintype').prop("disabled", prop);
-    $('mainselect').hide();
-*/
-});
-
 $("#type").change(function() {
     var type = $(this).val();
     //alert("type="+type);
     var prop = (type=="0") ? true : false;
-    //$('#maintype').prop("disabled", prop);
     if(prop == true)
     {    
         $('#mainselect').hide();

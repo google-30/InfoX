@@ -1,35 +1,7 @@
 <style>
-#maintable { /*width:100%;*/ }
-#maintable, tr td { /*width:100%;*/ text-align: left; }
-#Workers { width:100%; }
-#workersdiv { display: none; }
+#sitetab { width:100%; }
 </style>
 <script>
-function submit()
-{
-    $name = $("#name").val();
-    //$remark = $("#remark").val();
-    
-    if($name=="")
-    {
-        alert("请至少提供名称，其他信息可稍后提交");
-    }    
-    else
-    {
-        $("#mainform").submit();       
-    }
-    
-}
-
-function cancel()
-{
-    var r=confirm("放弃编辑信息，返回列表界面");
-    if (r==true)
-    {
-        gotolist();
-    }
-}
-
 function gotolist()
 {
     window.location = "/project/manage";        
@@ -37,12 +9,6 @@ function gotolist()
 
 function redirect(url) {
     window.location = url;
-}
-
-function showWorkers()
-{
-    //alert("showWorkers");
-    $("#workersdiv").show();
 }
 </script>
 <?php
@@ -82,31 +48,26 @@ $remark = $data->getRemark();
 }   
 ?>
 
-<h4>工地详细信息</h4>
-<table class="grid" id="maintable">
+<!--<h4>工地详细信息</h4>-->
+<table class="" id="sitetab">
+<thead><strong>工地详细信息</strong></thead>
 <tr>
-<td><strong>工地名称:</strong></td><td><strong><?php echo $name; ?></strong></td>
-<td><strong>工地地址:</strong></td><td><strong><?php echo $address; ?></strong></td>
+<td>工地名称:</td><td><?php echo $name; ?></td>
+<td>工地地址:</td><td><?php echo $address; ?></td>
 </tr>
 <tr>
-<td><strong>开工日期:</strong></td><td><strong><?php echo $start; ?></strong></td>
-<td><strong>竣工日期:</strong></td><td><strong><?php echo $stop; ?></strong></td>
+<td>开工日期:</td><td><?php echo $start; ?></td>
+<td>竣工日期:</td><td><?php echo $stop; ?></td>
 </tr>
 <tr>
-<td><strong>工长:</strong></td><td><strong><?php echo $leader; ?></strong></td>
-<td><strong>经理:</strong></td><td><strong><?php echo $manager; ?></strong></td>
+<td>工长:</td><td><?php echo $leader; ?></td>
+<td>经理:</td><td><?php echo $manager; ?></td>
 </tr>
-<tr></tr>
 </table>
 
-<?php 
-if($mode == "Edit")
-{
-    echo '<input type="button" onclick="showWorkers()" value="显示工人列表">';
-
-}
-?>
-<div id="workersdiv">
+<div data-role="collapsible-set" data-mini="true">
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>工人列表</h3>
 <?php
     echo $this->grid("Workers", true)
           ->field('companylabel', '公司编号')  
@@ -121,5 +82,25 @@ if($mode == "Edit")
           //->helper(new GridHelper_Worker())
           ->data($this->workers);
 ?>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>机械列表</h3>
+    <input type="text" value="" placeholder='填写部位名称不能含有;/"等符号，一次填写一个名称并提交' id="partname">
+    <button data-mini="true" data-theme="a" onclick="addpart()">增加</button>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>申请单列表</h3>
+    <input type="text" value="" placeholder='填写部位名称不能含有;/"等符号，一次填写一个名称并提交' id="partname">
+    <button data-mini="true" data-theme="a" onclick="addpart()">增加</button>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>总申请材料列表</h3>
+    <input type="text" value="" placeholder='填写部位名称不能含有;/"等符号，一次填写一个名称并提交' id="partname">
+    <button data-mini="true" data-theme="a" onclick="addpart()">增加</button>
+    </div>
+
 </div>
 
