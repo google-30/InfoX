@@ -335,10 +335,17 @@ class Worker_ManageController extends Zend_Controller_Action
         echo "skill id=$skillid<br>";
 
         // company info
-        $companylabel = $requests["companylabel"];
+        //$companylabel = $requests["companylabel"];
+        //$cmydata->setCompanylabel($companylabel);
+
         $hwage = $requests["hwage"];    // float
+        $cmydata->setHwage(floatval($hwage));
+
         $srvyears = $requests["srvyears"];
+        $cmydata->setSrvyears(intval($srvyears));
+
         $yrsinsing = $requests["yrsinsing"];
+        $cmydata->setYrsinsing(intval($yrsinsing));
 
         $servecompany = $this->getParam("servecompany", 0);
         $companyobj = $this->_companyinfo->findOneBy(array("id"=>$servecompany));
@@ -347,20 +354,20 @@ class Worker_ManageController extends Zend_Controller_Action
             $cmydata->setCompany($companyobj);
         }
 
-        $cmydata->setCompanylabel($companylabel);
-        $cmydata->setHwage(floatval($hwage));
-
+        /*
         $site = $requests["site"];
         if($site != "")
         {
-            $onesite = $this->_site->findOneBy(array('name'=>$site));
-            if($onesite)
+            $siteobj = $this->_site->findOneBy(array('name'=>$site));
+            if($siteobj)
             {
-                $cmydata->setSite($onesite);
+                $cmydata->setSite($siteobj);
             }
         }
-        $cmydata->setSrvyears(intval($srvyears));
-        $cmydata->setYrsinsing(intval($yrsinsing));
+        */    
+        $siteid = $this->getParam("site", 0);
+        $siteobj = $this->_site->findOneBy(array('id'=>$siteid));
+        $cmydata->setSite($siteobj);
 
         $this->_em->persist($cmydata);
         try {

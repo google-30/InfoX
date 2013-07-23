@@ -85,6 +85,7 @@ $pastwork = "";
 $companylabel = "";
 $hwage = "";
 $sitename = "";
+$siteid=0;
 $srvyears = "";
 $yrsinsing = "";    
 
@@ -152,7 +153,13 @@ if($companyinfo)
 {
     $companylabel = $companyinfo->getCompanylabel();
     $hwage = $companyinfo->getHwage();
-    $sitename = $companyinfo->getSite()->getName();
+
+    $siteobj=$companyinfo->getSite();
+    if($siteobj)
+    {
+        $sitename = $siteobj->getName();
+        $siteid = $siteobj->getId();
+    }
     $srvyears = $companyinfo->getSrvyears();
     $yrsinsing = $companyinfo->getYrsinsing();
 
@@ -432,19 +439,23 @@ echo $options;
     <!--<input data-mini="true" type="text" name="site" id="site" value=""  /> -->
     <select data-mini="true" name="site" id="site">
 <?php
-
-foreach($this->sites as $tmp)
+$sites=$this->sites;
+$options='<option value="0">选择所在工地</option>';
+foreach($sites as $tmp)
 {
+    $id = $tmp->getId();
     $name = $tmp->getName();
-    if($sitename == $name)
+    //if($sitename === $name)
+    if($id == $siteid)
     {
-        echo '<option value="' . $name .'" select data-mini="true"ed>'. $name .'</option>';
+        $options .= '<option value="' . $id .'" selected>'. $name .'</option>';
     }
     else
     {
-        echo '<option value="' . $name .'" >'. $name .'</option>';
+        $options .= '<option value="' . $id .'" >'. $name .'</option>';
     }
 }
+echo $options;
 ?>
     </select data-mini="true">
 </div></td>
