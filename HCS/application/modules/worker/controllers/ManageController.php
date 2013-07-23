@@ -20,6 +20,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_workerskill = $this->_em->getRepository('Synrgic\Infox\Workerskill');
         $this->_workercompanyinfo = $this->_em->getRepository('Synrgic\Infox\Workercompanyinfo');
         $this->_workerfamily = $this->_em->getRepository('Synrgic\Infox\Workerfamily');
+        $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
     }
 
     public function indexAction()
@@ -38,9 +39,16 @@ class Worker_ManageController extends Zend_Controller_Action
         $query = $this->_em->createQuery(
 //        'select w, wc.hwage from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc'
 //        'select w,wc.hwage,wc.companylable,wc.worktype, from Synrgic\Infox\Worker w JOIN w.workercompanyinfo wc'
+/*
                      'select w, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
                      (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
                      from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
+*/
+                     'select w, wc.hwage, ws.worktype, ws.worklevel,
+                     (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename,
+                     (select cinfo.namechs from Synrgic\Infox\Companyinfo cinfo where cinfo.id = wc.company) as companyname   
+                     from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
+
                  );
         $result = $query->getResult();
         $this->view->result = $result;
@@ -58,6 +66,8 @@ class Worker_ManageController extends Zend_Controller_Action
 
         $sites = $this->_site->findAll();
         $this->view->sites = $sites;
+
+        $this->findCompanies();
     }
 
     public function editAction()
@@ -76,6 +86,8 @@ class Worker_ManageController extends Zend_Controller_Action
 
         $sites = $this->_site->findAll();
         $this->view->sites = $sites;
+
+        $this->findCompanies();
     }
 
     public function submitAction()
@@ -328,6 +340,13 @@ class Worker_ManageController extends Zend_Controller_Action
         $srvyears = $requests["srvyears"];
         $yrsinsing = $requests["yrsinsing"];
 
+        $servecompany = $this->getParam("servecompany", 0);
+        $companyobj = $this->_companyinfo->findOneBy(array("id"=>$servecompany));
+        if($companyobj)
+        {
+            $cmydata->setCompany($companyobj);
+        }
+
         $cmydata->setCompanylabel($companylabel);
         $cmydata->setHwage(floatval($hwage));
 
@@ -400,5 +419,9 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
     }
 
+    private function findCompanies()
+    {
+        $this->view->companies = $this->_companyinfo->findAll(); 
+    }
 
 }

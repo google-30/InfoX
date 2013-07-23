@@ -42,6 +42,11 @@ class Workercompanyinfo extends \Synrgic_Models_Entity {
      * @Column(type="integer")
      */
     protected $yrsinsing;
-       
+
+    /**
+     * worker serves this company
+     * @ManyToOne(targetEntity="Synrgic\Infox\Companyinfo")
+     */
+    protected $company;
 
 }

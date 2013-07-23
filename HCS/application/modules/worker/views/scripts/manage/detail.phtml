@@ -99,6 +99,8 @@ $contact3 = "";
 $arrivesing="";
 $leavesing="";
 
+$companyid=0;
+
 if($this->mode == "Edit")
 {
 $worker=$this->worker;
@@ -124,8 +126,10 @@ $worker=$this->worker;
     $marital = $worker->getMarital();
     $address = $worker->getAddress();
 
-$arrivesing = $worker->getArrivesing()->format("Y/m/d");
-$leavesing = $worker->getLeavesing()->format("Y/m/d");
+$arrivedate = $worker->getArrivesing();
+$arrivesing = $arrivedate ? $arrivedate->format("Y/m/d") : "";
+$leavedate = $worker->getLeavesing();
+$leavesing = $leavedate ? $leavedate->format("Y/m/d"): "";
 
 $skill=$this->skill;
     if($skill)
@@ -151,6 +155,12 @@ if($companyinfo)
     $sitename = $companyinfo->getSite()->getName();
     $srvyears = $companyinfo->getSrvyears();
     $yrsinsing = $companyinfo->getYrsinsing();
+
+    $companyobj = $companyinfo->getCompany();
+    if($companyobj)
+    {
+        $companyid = $companyobj->getId();
+    }
 }
 
 $family=$this->family;
@@ -384,8 +394,31 @@ foreach($options as $key=>$value)
 <table>
 <tr>
 <td><div data-role="fieldcontain">
-    <label for="companylabel">公司编号:</label>
-    <input data-mini="true" type="text" name="companylabel" id="companylabel" value="<?php echo $companylabel; ?>"  />
+    <!--<label for="companylabel">公司编号:</label>-->
+    <!--<input data-mini="true" type="text" name="companylabel" id="companylabel" value="<?php echo $companylabel; ?>" >-->
+    <label for="servecompany">公司编号:</label>
+    <select name="servecompany" id="servecompany" data-mini="true">
+    <option value="0">选择所在公司</option>
+<?php
+$companies=$this->companies;
+$options="";
+foreach($companies as $tmp)
+{
+    $id = $tmp->getId();
+    $namechs = $tmp->getNamechs();
+
+    if($companyid == $id)
+    {
+        $options .= '<option value="' . $id . '" selected>' . $namechs . '</option>';
+    }
+    else
+    {
+        $options .= '<option value="' . $id . '">' . $namechs . '</option>';
+    }
+}
+echo $options;
+?>
+    </select>
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="hwage">小时单价:</label>
@@ -484,6 +517,8 @@ foreach($this->sites as $tmp)
 <!--</div>-->
 </fieldset>
 
-<input data-mini="true" type="submit" name="submit" value="提交">
+<input data-mini="true" data-theme="a" type="submit" name="submit" value="提交">
 </form>
+<br>
+<br>
 

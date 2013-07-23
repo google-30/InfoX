@@ -109,25 +109,26 @@ function checkall()
 }
 </script>
 
+<!--
 <fieldset class="ui-grid-b">
 	<div class="ui-block-a"><button onclick="addfunc()" data-theme="a"><?php echo $this->translate("Add Worker");?></button></div>
-<!--
 	<div class="ui-block-b"><button onclick="editfunc()" data-theme="a">Edit Worker</button></div>	 
 	<div class="ui-block-c"><button onclick="deletefunc()" data-theme="a">Delete Worker</button></div>  
--->
 </fieldset>
+-->
+<a href="/worker/manage/add"><button onclick="addfunc()" data-theme="a"><?php echo $this->translate("Add Worker");?></button></a>
 <form name="dataform" id="dataform">
-<table id="datatable" border="5">
+<table id="datatable" border="3">
 <thead><tr>
 <!--<th><input type="checkbox" name="toggleall" id="toggleall" onClick="checkall()" data-role="none"></th>-->
 <th>序号</th>
-<th>公司编号</th>
+<th>服务公司</th>
+<th>所在工地</th>
 <th>姓名</th>
 <th>中文名</th>
 <th>准证号码</th>
 <th>工种</th>
 <th>等级</th>
-<th>所在工地</th>
 <th>小时单价</th>
 </tr></thead>
 <tbody> 
@@ -159,19 +160,20 @@ foreach($this->result as $tmp)
     $worktype = $tmp["worktype"];//"todo";
     $level = $tmp["worklevel"];//"todo";
     // company
-    $company = $tmp["companylabel"];//"todo";
+    //$company = $tmp["companylabel"];
+    $company = $tmp["companyname"];
     $site = $tmp["sitename"];//"todo";
     $hrwage = $tmp["hwage"];//"todo";
 
     $row = "<tr>";
     $row .= '<td><a data-role="button"  data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
     $row .= "<td>$company</td>" ;
+    $row .= "<td>$site</td>" ;
     $row .= "<td>$nameeng</td>" ;
     $row .= "<td>$namechs</td>" ;
     $row .= "<td>$fin</td>" ;
     $row .= "<td>$worktype</td>" ;
     $row .= "<td>$level</td>" ;
-    $row .= "<td>$site</td>" ;
     $row .= "<td>$hrwage</td>" ;
     $row .= "</tr>";
     echo $row;
