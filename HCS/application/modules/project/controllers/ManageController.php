@@ -13,6 +13,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_worker = $this->_em->getRepository('Synrgic\Infox\Worker');
         $this->_role = $this->_em->getRepository('Synrgic\Infox\Role');
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
+        $this->_application = $this->_em->getRepository('Synrgic\Infox\Application');
     }
 
     public function indexAction()
@@ -133,8 +134,8 @@ class Project_ManageController extends Zend_Controller_Action
 
         $id = $this->getParam("id");
         //echo "id=$id<br>";
-        $maindata = $this->_site->findOneBy(array("id"=>$id));
-        $this->view->maindata = $maindata;
+        $siteobj = $this->_site->findOneBy(array("id"=>$id));
+        $this->view->maindata = $siteobj;
 
         $query = $this->_em->createQuery(
         'select w.nameeng, w.namechs, w.fin, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
@@ -144,6 +145,8 @@ class Project_ManageController extends Zend_Controller_Action
          );
         $result = $query->getResult();
         $this->view->workers = $result;
+
+        $this->view->applications = $this->_application->findBy(array("site"=>$siteobj));
 
     }
 

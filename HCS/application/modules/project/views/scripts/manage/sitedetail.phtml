@@ -70,7 +70,7 @@ $remark = $data->getRemark();
     <h3>工人列表</h3>
 <?php
     echo $this->grid("Workers", true)
-          ->field('companylabel', '公司编号')  
+          //->field('companylabel', '公司编号')  
           ->field('nameeng', '姓名')
           ->field('namechs','中文名')
           ->field('fin', '准证号码')  
@@ -92,8 +92,21 @@ $remark = $data->getRemark();
 
     <div data-role="collapsible" data-collapsed="true">
     <h3>申请单列表</h3>
-    <input type="text" value="" placeholder='填写部位名称不能含有;/"等符号，一次填写一个名称并提交' id="partname">
-    <button data-mini="true" data-theme="a" onclick="addpart()">增加</button>
+<?
+echo $this->grid("Applications", true)
+          ->field('applicant','申请人')
+          ->field('createdate','创建日期')
+          ->field('updatedate','更新日期')
+          ->field('status0', '申请状态')
+          ->field('status1', '办公人员评估')
+          ->field('status2', '负责经理评估')  
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Application())
+          ->data($this->applications)
+          ->action(':action', '详细信息', array( 'url'=>array('action'=>'appedit')));
+?>
     </div>
 
     <div data-role="collapsible" data-collapsed="true">

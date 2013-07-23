@@ -1,7 +1,3 @@
-<style>
-/*#Applications { width:100%; }*/
-</style>
-<div>
 <?
 echo $this->grid("Applications", true)
           ->field('site','工地')
@@ -19,5 +15,4 @@ echo $this->grid("Applications", true)
           ->action(':action', '检查申请', array( 'url'=>array('action'=>'appedit')))
           ->action(':action', '删除申请', array( 'url'=>array('action'=>'appdel')));
 ?>
-</div>
 
