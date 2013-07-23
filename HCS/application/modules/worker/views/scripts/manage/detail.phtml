@@ -37,6 +37,15 @@ $(function () {
         endYear: 2050,
     });  
 
+    $('#arrivesing').mobiscroll().date({
+        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+        endYear: 2050,
+    }); 
+
+    $('#leavesing').mobiscroll().date({
+        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+        endYear: 2050,
+    }); 
 
 });
 
@@ -50,102 +59,112 @@ function output()
 </script>
 
 <?php
-{
-    $pic = "";
-    $nameeng = ""; 
-    $namechs = "";
-    $hometown = "";
-    $age = 18;
-    $birth = "";
-    $fin = "";
-    $passexp = "";
-    $passport = "";
-    $passportexp = "";
-    $marital = "";
-    $address = "";
 
-    $worktype = "";
-    $worklevel = "";
-    $skill1 = "";
-    $skill2 = "";
-    $securityexp = "";
-    $drvlic = "";
-    $education = "";
-    $pastwork = "";
+$pic = "";
+$nameeng = ""; 
+$namechs = "";
+$hometown = "";
+$age = 18;
+$birth = "";
+$fin = "";
+$passexp = "";
+$passport = "";
+$passportexp = "";
+$marital = "";
+$address = "";
 
-    $companylabel = "";
-    $hwage = "";
-    $sitename = "";
-    $srvyears = "";
-    $yrsinsing = "";    
+$worktype = "";
+$worklevel = "";
+$skill1 = "";
+$skill2 = "";
+$securityexp = "";
+$drvlic = "";
+$education = "";
+$pastwork = "";
 
-    $homeaddr = "";
-    $member1 = "";
-    $member2 = "";
-    $member3 = "";
-    $contact1 = "";
-    $contact2 = "";
-    $contact3 = "";
-}
+$companylabel = "";
+$hwage = "";
+$sitename = "";
+$srvyears = "";
+$yrsinsing = "";    
+
+$homeaddr = "";
+$member1 = "";
+$member2 = "";
+$member3 = "";
+$contact1 = "";
+$contact2 = "";
+$contact3 = "";
+
+$arrivesing="";
+$leavesing="";
 
 if($this->mode == "Edit")
 {
-    $pic = $this->worker->getPic();
-    $nameeng = $this->worker->getNameeng();
-    $namechs = $this->worker->getNamechs();
-    $hometown = $this->worker->getHometown();
-    $age = $this->worker->getAge();
-    if($this->worker->getBirth())
+$worker=$this->worker;
+    $pic = $worker->getPic();
+    $nameeng = $worker->getNameeng();
+    $namechs = $worker->getNamechs();
+    $hometown = $worker->getHometown();
+    $age = $worker->getAge();
+    if($worker->getBirth())
     {
-        $birth = $this->worker->getBirth()->format("Y/m/d");
+        $birth = $worker->getBirth()->format("Y/m/d");
     }
-    $fin = $this->worker->getFin();
-    if($this->worker->getPassexp())
+    $fin = $worker->getFin();
+    if($worker->getPassexp())
     {
-        $passexp = $this->worker->getPassexp()->format("Y/m/d");
+        $passexp = $worker->getPassexp()->format("Y/m/d");
     }
-    $passport = $this->worker->getPassport();
-    if($this->worker->getPassportexp())
+    $passport = $worker->getPassport();
+    if($worker->getPassportexp())
     {
-        $passportexp = $this->worker->getPassportexp()->format("Y/m/d");
+        $passportexp = $worker->getPassportexp()->format("Y/m/d");
     }
-    $marital = $this->worker->getMarital();
-    $address = $this->worker->getAddress();
+    $marital = $worker->getMarital();
+    $address = $worker->getAddress();
 
-    if($this->skill)
+$arrivesing = $worker->getArrivesing()->format("Y/m/d");
+$leavesing = $worker->getLeavesing()->format("Y/m/d");
+
+$skill=$this->skill;
+    if($skill)
     {
-    $worktype = $this->skill->getWorktype();
-    $worklevel = $this->skill->getWorklevel();
-    $skill1 = $this->skill->getSkill1();
-    $skill2 = $this->skill->getSkill2();
-    if($this->skill->getSecurityexp())
+    $worktype = $skill->getWorktype();
+    $worklevel = $skill->getWorklevel();
+    $skill1 = $skill->getSkill1();
+    $skill2 = $skill->getSkill2();
+    if($skill->getSecurityexp())
     {        
-        $securityexp = $this->skill->getSecurityexp()->format("Y/m/d");
+        $securityexp = $skill->getSecurityexp()->format("Y/m/d");
     }
-    $drvlic = $this->skill->getDrvlic();
-    $education = $this->skill->getEducation();
-    $pastwork = $this->skill->getPastwork();
-    }
-
-    if($this->companyinfo)
-    {
-    $companylabel = $this->companyinfo->getCompanylabel();
-    $hwage = $this->companyinfo->getHwage();
-    $sitename = $this->companyinfo->getSite()->getName();
-    $srvyears = $this->companyinfo->getSrvyears();
-    $yrsinsing = $this->companyinfo->getYrsinsing();
+    $drvlic = $skill->getDrvlic();
+    $education = $skill->getEducation();
+    $pastwork = $skill->getPastwork();
     }
 
-    if($this->family)
-    {
-    $homeaddr = $this->family->getHomeaddr();
-    $member1 = $this->family->getMember1();
-    $member2 = $this->family->getMember2();
-    $member3 = $this->family->getMember3();
-    $contact1 = $this->family->getContact1();
-    $contact2 = $this->family->getContact2();
-    $contact3 = $this->family->getContact3();
-    }
+$companyinfo=$this->companyinfo;
+if($companyinfo)
+{
+    $companylabel = $companyinfo->getCompanylabel();
+    $hwage = $companyinfo->getHwage();
+    $sitename = $companyinfo->getSite()->getName();
+    $srvyears = $companyinfo->getSrvyears();
+    $yrsinsing = $companyinfo->getYrsinsing();
+}
+
+$family=$this->family;
+if($family)
+{
+    $homeaddr = $family->getHomeaddr();
+    $member1 = $family->getMember1();
+    $member2 = $family->getMember2();
+    $member3 = $family->getMember3();
+    $contact1 = $family->getContact1();
+    $contact2 = $family->getContact2();
+    $contact3 = $family->getContact3();
+}
+
 }
 ?>
 
@@ -156,13 +175,13 @@ if($this->mode == "Create")
 {
     echo '<div class="ui-block-a"><h3>创建工人信息</h3></div>';
     echo '<div class="ui-block-b"></div>';
-    echo '<div class="ui-block-c"><button data-mini="true">放弃创建</button data-mini="true"></div>';
+    echo '<div class="ui-block-c"><button data-mini="true">放弃创建</button></div>';
 }
 else
 {
     echo '<div class="ui-block-a"><h3>编辑工人信息</h3></div>';
-    echo '<div class="ui-block-b"><button data-mini="true" onclick="output()">预览并打印</button data-mini="true"></div>';
-    echo '<div class="ui-block-c"><button data-mini="true">删除工人记录</button data-mini="true"></div>';
+    echo '<div class="ui-block-b"><button data-mini="true" onclick="output()">预览并打印</button></div>';
+    echo '<div class="ui-block-c"><button data-mini="true">删除工人记录</button></div>';
 }
 ?>
 </div><!-- /grid-a -->
@@ -180,11 +199,11 @@ else
 <tr>
 <td><div data-role="fieldcontain">
     <!--<label for="pic" class="ui-input data-mini="true"-text">工人照片：</label>-->
-    <label for="pic" class="ui-input data-mini="true"-text"></label>
+    <label for="pic" class="ui-input-text"></label>
     <img src="<?php echo $pic; ?>" alt="无照片显示" width="40%"  id="pic" name="pic">
 </div></td>
 <td><div data-role="fieldcontain">
-    <label for="file" class="ui-input data-mini="true"-text">更新照片：</label>
+    <label for="file" class="ui-input-text">更新照片：</label>
     <input data-mini="true" type="file" name="file" id="file">
 </div></td>
 </tr>
@@ -206,7 +225,7 @@ else
     <select data-mini="true" name="gender" id="gender">
        <option value="male">男</option>
        <option value="female">女</option>
-    </select data-mini="true">  
+    </select>  
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="hometown">籍贯:</label>
@@ -257,7 +276,7 @@ foreach($options as $key=>$value)
 {
     if($marital == $key)
     {
-        echo '<option value="'. $key . '" select data-mini="true"ed>' . $value . "</option>";
+        echo '<option value="'. $key . '" selected>' . $value . "</option>";
     }    
     else
     {
@@ -265,7 +284,7 @@ foreach($options as $key=>$value)
     }
 }
 ?>
-    </select data-mini="true">        
+    </select>        
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="address">地址:</label>
@@ -276,11 +295,11 @@ foreach($options as $key=>$value)
 <tr>
 <td><div data-role="fieldcontain">
     <label for="birth">到新日期:</label>
-    <input data-mini="true" type="text" name="birth" id="birth" value="<?php echo $birth; ?>"  />
+    <input data-mini="true" type="text" name="arrivesing" id="arrivesing" value="<?php echo $arrivesing; ?>"  />
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="birth">离新日期:</label>
-    <input data-mini="true" type="text" name="birth" id="birth" value="<?php echo $birth; ?>"  />
+    <input data-mini="true" type="text" name="leavesing" id="leavesing" value="<?php echo $leavesing; ?>"  />
 </div></td>
 </tr>
 
@@ -308,7 +327,7 @@ foreach($options as $key=>$value)
 {
     if($worklevel == $key)
     {
-        echo '<option value="' . $key . '" select data-mini="true"ed>' . $value . "</option>";
+        echo '<option value="' . $key . '" selected>' . $value . "</option>";
     }
     else
     {
@@ -316,7 +335,7 @@ foreach($options as $key=>$value)
     }
 } 
 ?>
-    </select data-mini="true"> 
+    </select> 
 </div></td>
 </tr>
 

@@ -47,7 +47,7 @@ class Worker extends \Synrgic_Models_Entity {
     protected $passport;
 
     /**
-     * work pass expire
+     * work pass expire date
      * @Column(type="date", nullable=true)
      */
     protected $passportexp;
@@ -100,5 +100,18 @@ class Worker extends \Synrgic_Models_Entity {
      * @OneToOne(targetEntity="Synrgic\Infox\Workercompanyinfo", fetch="EAGER")
      */
     protected $workercompanyinfo;
+
+    /**
+     * date of arriving Singapore
+     * @Column(type="date", nullable=true)
+     */
+    protected $arrivesing;
+
+    /**
+     * date of leaving Singapore
+     * @Column(type="date", nullable=true)
+     */
+    protected $leavesing;
+
    
 }

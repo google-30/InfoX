@@ -242,6 +242,9 @@ class Worker_ManageController extends Zend_Controller_Action
         $marital = $requests["marital"];
         $address = $requests["address"];
         $hometown = $requests["hometown"];
+    
+        $arrivesing = $this->getParam("arrivesing", "");//$requests["arrivesing"];
+        $leavesing = $this->getParam("leavesing", "");//$requests["leavesing"];
 
         $workerdata->setNameeng($nameeng);
         $workerdata->setNamechs($namechs);
@@ -264,6 +267,15 @@ class Worker_ManageController extends Zend_Controller_Action
         $workerdata->setMarital($marital);
         $workerdata->setAddress($address);
         $workerdata->setHometown($hometown);
+
+        if($arrivesing!="")
+        {
+            $workerdata->setArrivesing(new Datetime($arrivesing));
+        }
+        if($leavesing!="")
+        {
+            $workerdata->setLeavesing(new Datetime($leavesing));
+        }
 
         $this->_em->persist($workerdata);
         try {
