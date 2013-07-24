@@ -234,6 +234,10 @@ $('#sites').change(
 $sites = $this->sites;
 $siteparts = $this->siteparts;
 $siteid = $this->siteid;
+$sitename = $this->sitename;
+
+$maintypes = $this->maintypes;
+$subtypes = $this->subtypes;
 ?>
 
 <input type="hidden" id="siteid" value="0">
@@ -241,8 +245,8 @@ $siteid = $this->siteid;
 <div data-role="collapsible-set" >
 
 <div data-role="collapsible" data-collapsed="true">
-<h3>选择申请工地</h3>
-<select id="sites" data-mini="true">
+<h3>选择申请工地 - <?php echo $sitename; ?></h3>
+<select id="sites" data-mini="true" data-theme="a">
 <option value="0">请选择申请工地</option>
 <?php
 $options = '';
@@ -268,53 +272,58 @@ echo $options;
 <!--按分类选择材料-->
 <div data-role="collapsible" data-collapsed="true">
 <h3>分类选择材料</h3>
-<div id="typechooser" style="clear:both">
-<fieldset>
-<div class="ui-grid-a">
-<div class="ui-block-a"><div data-role="fieldcontain">
-   <label for="macrotype" class="select">主要分类：</label>
-   <select name="macrotype" id="macrotype" data-mini="true">
+<div id="typechooser">
+<table class="grid">
+<tr>
+<td>选择主要类型:</td>
+<td>
+<select name="maintype" id="maintype" data-mini="true" data-theme="a">
 <?php
-$selected=$this->macro;
-$macrotypes = $this->macrotypes;
-//print_r($this->macrotypes);
-foreach($this->macrotypes as $tmp)
+foreach($maintypes as $tmp)
 {
-    if($tmp == $selected)
+    $id = $tmp->getId();
+    $namechs = $tmp->getTypechs();
+    $nameeng = $tmp->getTypeeng();
+
+    if($id == $selected)
     {
-        echo "<option value='$tmp' selected>$tmp</option>";
+        echo "<option value='$id' selected>$namechs</option>";
     }
     else
     {
-        echo "<option value='$tmp'>$tmp</option>";
+        echo "<option value='$id'>$namechs</option>";
     }
 }
 ?>   
-   </select>
-</div></div> <!--ui-block-a-->
+</select>
 
-<div class="ui-block-b"><div data-role="fieldcontain">
-   <label for="detailtype" class="select">详细分类:</label>
-   <select name="detailtype" id="detailtype" data-mini="true">
+
+</td>
+<td>选择子类型:</td>
+<td>
+<select name="subtype" id="subtype" data-mini="true" data-theme="a">
 <?php
-$selected=$this->detail;
-$detailtypes = $this->detailtypes;
-//print_r($this->detailtypes);
-foreach($this->detailtypes as $tmp)
+foreach($subtypes as $tmp)
 {
-    if($tmp == $selected)
+    $id = $tmp->getId();
+    $namechs = $tmp->getTypechs();
+    $nameeng = $tmp->getTypeeng();
+
+    if($id == $selected)
     {
-        echo "<option value='$tmp' selected>$tmp</option>";
+        echo "<option value='$id' selected>$namechs</option>";
     }
     else
     {
-        echo "<option value='$tmp'>$tmp</option>";
+        echo "<option value='$id'>$namechs</option>";
     }
 }
-?>        
-   </select>
-</div></div>	<!--ui-block-b-->
-</div> <!--ui-grid-a-->
+?>   
+</select>
+</td>
+</tr>
+
+</table>
 
 <table id="datatable" class="grid">
 <thead><tr>
@@ -358,7 +367,6 @@ foreach($this->materials as $tmp)
 ?>
 </tbody> 
 </table>
-</fieldset>
 </div> <!-- typechooser -->
 </div>
 
@@ -366,7 +374,6 @@ foreach($this->materials as $tmp)
 <div data-role="collapsible" data-collapsed="true">
 <h3>手动输入材料信息</h3>
 <div id="manualinput">
-<fieldset>
     <form id="manuform">
     <div data-role="fieldcontain">
     <label for="manuname">输入名称:</label>
@@ -381,8 +388,7 @@ foreach($this->materials as $tmp)
     <textarea cols="40" rows="8" name="manuremark" id="manuremark" placeholder="填写规格说明，比如多大号的钉子，什么水泥等"></textarea>
     </div>
     </form> <!-- manuform -->					    
-    <input type="submit" value="提交到选择列表" onclick="submitmanualinput()">
-</fieldset>
+    <input type="submit" value="提交到选择列表" onclick="submitmanualinput()" data-theme="a">
 </div>
 </div>
 
@@ -391,18 +397,9 @@ foreach($this->materials as $tmp)
 <div id="selections">
 <div id="seltable">
 </div>
-<input type="submit" value="提交至材料审核人员" onclick="submitselections()">
+<input type="submit" value="提交至材料审核人员" onclick="submitselections()" data-theme="a">
 </div>
 
 </div>
 </div> <!-- collapsible-set -->
-
-
-
-
-
-
-
-
-
 

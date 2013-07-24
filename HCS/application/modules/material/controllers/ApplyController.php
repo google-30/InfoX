@@ -15,6 +15,7 @@ class Material_ApplyController extends Zend_Controller_Action
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_humanres = $this->_em->getRepository('Synrgic\Infox\Humanresource');
         $this->_user = $this->_em->getRepository('Synrgic\User');
+        $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
         
         $nsName = 'applysession';
         if (Zend_Session::namespaceIsset($nsName)) {
@@ -75,20 +76,37 @@ class Material_ApplyController extends Zend_Controller_Action
     public function applymaterialsAction()
     {
         // sites
-        $sites = $this->getUserSites();
-
         $siteid = $this->getParam("siteid", 0);
+        $sitename = "";
         $siteparts = array();
         $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
         if($siteobj)
         {
             $parts = $siteobj->getParts();
             $siteparts = explode(";", $parts);
+            $sitename = $siteobj->getName();
         }
+        $sites = $this->getUserSites();
+
         $this->view->siteid = $siteid;
+        $this->view->sitename = $sitename;        
         $this->view->siteparts = $siteparts;
         $this->view->sites = $sites;                
 
+        //_materialtype
+        $query = $this->_em->createQuery(
+                'select mtype from Synrgic\Infox\Materialtype mtype where mtype.id = mtype.main'
+                );
+        $mains = $query->getResult();
+        $this->view->maintypes = $mains;
+
+        $query = $this->_em->createQuery(
+                'select mtype from Synrgic\Infox\Materialtype mtype where mtype.id != mtype.main'
+                );
+        $subs = $query->getResult();
+        $this->view->subtypes = $subs;
+
+        /*
         $macro = $this->_getParam("macro", "mechanic");
         $this->view->macro = $macro;                
         $this->view->macrotypes= array("mechanic", "material");
@@ -109,7 +127,7 @@ class Material_ApplyController extends Zend_Controller_Action
 
         $materialobjs = $this->_material->findBy(array("macrotype"=>$macro, "detailtype"=>$detail));
         $this->view->materials = $materialobjs;  
-
+        */
     }
 
     
