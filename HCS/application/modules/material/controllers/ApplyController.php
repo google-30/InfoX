@@ -44,7 +44,7 @@ class Material_ApplyController extends Zend_Controller_Action
         }
     }
 
-    public function applymaterialsAction()
+    public function applymaterialsAction1()
     {
         $macro = $this->_getParam("macro", "mechanic");
         $this->view->macro = $macro;                
@@ -71,6 +71,47 @@ class Material_ApplyController extends Zend_Controller_Action
         $sites = $this->getUserSites();
         $this->view->sites = $sites;
     }
+
+    public function applymaterialsAction()
+    {
+        // sites
+        $sites = $this->getUserSites();
+
+        $siteid = $this->getParam("siteid", 0);
+        $siteparts = array();
+        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+        if($siteobj)
+        {
+            $parts = $siteobj->getParts();
+            $siteparts = explode(";", $parts);
+        }
+        $this->view->siteid = $siteid;
+        $this->view->siteparts = $siteparts;
+        $this->view->sites = $sites;                
+
+        $macro = $this->_getParam("macro", "mechanic");
+        $this->view->macro = $macro;                
+        $this->view->macrotypes= array("mechanic", "material");
+
+        $machdetails = array("heavy", "electronic");
+        $matedetails = array("consumable", "building");
+        $macroarr = array();
+        $macroarr["mechanic"] = $machdetails;
+        $macroarr["material"] = $matedetails;    
+
+        $detailtypes = $macroarr[$macro];
+        $this->view->detailtypes = $detailtypes;
+       
+        $detail = $this->_getParam("detail");
+        $detail = ($detail=="") ? $detailtypes[0] : $detail;          
+        $this->view->detail = $detail;
+        //echo "$detail";  
+
+        $materialobjs = $this->_material->findBy(array("macrotype"=>$macro, "detailtype"=>$detail));
+        $this->view->materials = $materialobjs;  
+
+    }
+
     
     public function postdataAction()
     {

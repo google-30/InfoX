@@ -16,11 +16,9 @@ table.grid {width:100%}
 
 */
 #typechooser { width:100%; text-align:center; /*vertical-align:middle;float:left; padding-right: 2px; margin: 3px; */ }
-/*
 #selected { display: none; text-align:center;}
 #manualinput { display: none; text-align:center;}
 #selections { display: none; text-align:center;}
-*/
 </style>
 <script>
 $(function() {
@@ -236,12 +234,6 @@ $siteparts = $this->siteparts;
 $siteid = $this->siteid;
 ?>
 
-<input type="hidden" id="siteid" value="0">
-
-<div data-role="collapsible-set" >
-
-<div data-role="collapsible" data-collapsed="true">
-<h3>选择申请工地</h3>
 <select id="sites" data-mini="true">
 <option value="0">请选择申请工地</option>
 <?php
@@ -263,11 +255,18 @@ foreach($sites as $tmp)
 echo $options;
 ?>
 </select>
-</div>
+<br>
+<input type="hidden" id="siteid" value="0">
+
+<div data-role="navbar">
+	<ul>
+		<li><a href="#" class="ui-btn-active ui-state-persist" onclick="showtypechooser()">分类选择材料</a></li>
+		<li><a href="#" onclick="showmanualinput()">手动输入材料信息</a></li>
+		<li><a href="#" onclick="showselections()">显示选择材料列表</a></li>		
+	</ul>
+</div><!-- /navbar -->
 
 <!--按分类选择材料-->
-<div data-role="collapsible" data-collapsed="true">
-<h3>分类选择材料</h3>
 <div id="typechooser" style="clear:both">
 <fieldset>
 <div class="ui-grid-a">
@@ -360,11 +359,8 @@ foreach($this->materials as $tmp)
 </table>
 </fieldset>
 </div> <!-- typechooser -->
-</div>
 
 <!--手动输入材料信息-->
-<div data-role="collapsible" data-collapsed="true">
-<h3>手动输入材料信息</h3>
 <div id="manualinput">
 <fieldset>
     <form id="manuform">
@@ -384,25 +380,11 @@ foreach($this->materials as $tmp)
     <input type="submit" value="提交到选择列表" onclick="submitmanualinput()">
 </fieldset>
 </div>
-</div>
 
-<div data-role="collapsible" data-collapsed="true">
-<h3>显示已选材料列表</h3>
 <div id="selections">
 <div id="seltable">
 </div>
 <input type="submit" value="提交至材料审核人员" onclick="submitselections()">
 </div>
-
-</div>
-</div> <!-- collapsible-set -->
-
-
-
-
-
-
-
-
 
 
