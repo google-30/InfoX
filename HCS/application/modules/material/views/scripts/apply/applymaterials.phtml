@@ -24,11 +24,12 @@ table.grid {width:100%}
 </style>
 <script>
 $(function() {
-    $('#macrotype').change(macroReload);
-    $('#detailtype').change(detailReload);
-
-    $('#sites').change(setSiteId);
+    //$('#macrotype').change(macroReload);
+    //$('#detailtype').change(detailReload);
+    //$('#sites').change(setSiteId);
+        
 });
+
 
 function macroReload()
 {
@@ -42,6 +43,17 @@ function detailReload()
     //alert("reload!");
     var url = "/material/apply/applymaterials?macro=" + $('#macrotype').val() + "&detail=" + $('#detailtype').val();
     redirect(url);
+}
+
+function pageReload()
+{
+    var mainid = $("#maintype").val();
+    var subid = $("#subtype").val();
+        
+    var siteid = $("#siteid").val();
+    
+    var url = "/material/apply/applymaterials?" + "siteid=" + siteid + "&mainid=" + mainid + "&subid=" + subid;
+    alert(url);
 }
 
 function redirect(url) 
@@ -142,20 +154,18 @@ function showselected()
     }            
 }
 
+/*
 function showmanualinput()
 {
     $("#typechooser").hide();
     $('#selections').hide();
-
-    $("#manualinput").show();
-       
+    $("#manualinput").show();       
 }
 
 function showtypechooser()
 {
     $("#manualinput").hide();
     $('#selections').hide();
-
     $("#typechooser").show();
 }
 
@@ -167,6 +177,7 @@ function showselections()
     $("#manualinput").hide();
     $('#selections').show();
 }
+*/
 
 function submitmanualinput()
 {
@@ -215,10 +226,6 @@ function submitselections()
     });    
 }
 
-function redirect(url) {
-    window.location = url;
-}
-
 $('#sites').change(
     function(event)
     {
@@ -246,7 +253,9 @@ $subtypes = $this->subtypes;
 
 <div data-role="collapsible" data-collapsed="true">
 <h3>选择申请工地 - <?php echo $sitename; ?></h3>
-<select id="sites" data-mini="true" data-theme="a">
+
+<!--<select id="sites" data-mini="true" data-theme="a">-->
+<select id="siteid" data-mini="true" data-theme="a">
 <option value="0">请选择申请工地</option>
 <?php
 $options = '';

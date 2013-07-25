@@ -94,18 +94,28 @@ class Material_ApplyController extends Zend_Controller_Action
         $this->view->sites = $sites;                
 
         //_materialtype
+        $mainid = $this->getParam("mainid", 0);
+        $subid = $this->getParam("subid", 0);
+        
+        // find main types
         $query = $this->_em->createQuery(
                 'select mtype from Synrgic\Infox\Materialtype mtype where mtype.id = mtype.main'
                 );
         $mains = $query->getResult();
         $this->view->maintypes = $mains;
-
+        $maintype = $this->_materialtype->findOneBy(array("id"=>$mainid));
+        /*
         $query = $this->_em->createQuery(
-                'select mtype from Synrgic\Infox\Materialtype mtype where mtype.id != mtype.main'
+                'select mtype from Synrgic\Infox\Materialtype mtype where mtype.id = mtype.main'
                 );
         $subs = $query->getResult();
         $this->view->subtypes = $subs;
-
+        */
+        if($maintype)
+        {
+            $this->view->subtypes = $this->_materialtype->findOneBy(array("main"=>$maintype));
+        }
+        
         /*
         $macro = $this->_getParam("macro", "mechanic");
         $this->view->macro = $macro;                
