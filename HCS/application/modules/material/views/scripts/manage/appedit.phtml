@@ -1,3 +1,6 @@
+<style>
+#appinfotab { width:100%; }
+</style>
 <script>
 function updaterow(id)
 {
@@ -82,18 +85,23 @@ if($applicant)
     $applicantname = $applicant->getName();
 }
 $sitename = "";
+$siteid=0;
 $siteobj = $appobj->getSite();
 if($siteobj)
 {
     $sitename = $siteobj->getName();
+    $siteid = $siteobj->getId();
 } 
+$sites=$this->sites;
 
 $role = $this->role;
+
+$humanres = $this->humanres;
 ?>
 
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
 
-<table class="grid">
+<table class="" id="appinfotab">
 <tbody>
 <tr>
 <td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>
@@ -101,9 +109,53 @@ $role = $this->role;
 </tr>
 <tr>
 <td><strong>申请工地:</strong></td>
-<td><strong><?php echo $sitename; ?></strong></td>
+<td>
+<select data-mini="true">
+<option value="0">未指定工地</option>
+<?php
+$options="";
+foreach($sites as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+
+    if($id == $siteid)
+    {
+        $options .= '<option value=">' . $id . '" selected>' . $name . '</option>';
+    }    
+    else
+    {
+        $options .= '<option value=">' . $id . '" >' . $name . '</option>';
+    }
+}
+echo $options;
+?>
+</select>
+</td>
 <td><strong>申请人:</strong></td>
-<td><strong><?php echo $applicantname; ?></strong></td>
+<!--<td><strong><?php echo $applicantname; ?></strong></td>-->
+<td><select data-mini="true">
+<option value="0">未指定申请人</option>
+<?php
+$options="";
+foreach($humanres as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+    $nameeng = $tmp->getNameeng();
+
+    if($id == $siteid)
+    {
+        $options .= '<option value=">' . $id . '" selected>' . $name . '</option>';
+    }    
+    else
+    {
+        $options .= '<option value=">' . $id . '" >' . $name . '</option>';
+    }
+}
+echo $options;
+?>
+</select></td>
 </tr>
 </tbody>
 </table>
@@ -112,7 +164,8 @@ $role = $this->role;
 echo $this->grid("Matapps", true)
           ->field('longname','材料名称')
           ->field('amount','申请数量')
-          ->field('remark','补充说明')
+          //->field('remark','补充说明')
+          ->field('amount', '工程部位')  
           ->field('supplier', '供应商')
           ->field('price', '单价')
           ->field('update', '更新')          
@@ -132,9 +185,9 @@ else
     echo '<div>';
 }
 ?>
-<input type="button" value="修改完毕提交上级审核" onclick="submitmatapps()">
-<input type="button" value="取消提交重新审核" onclick="reviewmatapps()">
-<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()">
+<input type="button" value="修改完毕提交上级审核" onclick="submitmatapps()" data-theme="a" data-mini="true">
+<input type="button" value="取消提交重新审核" onclick="reviewmatapps()" data-theme="a" data-mini="true">
+<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">
 <?php
     echo '</div>';
 ?>

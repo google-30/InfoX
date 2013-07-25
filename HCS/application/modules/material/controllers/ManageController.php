@@ -16,6 +16,8 @@ class Material_ManageController extends Zend_Controller_Action
         $this->_supplyprice = $this->_em->getRepository('Synrgic\Infox\Supplyprice');
         $this->_user = $this->_em->getRepository('Synrgic\User');
         $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
+        $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
+        $this->_humanresource = $this->_em->getRepository('Synrgic\Infox\Humanresource');
     }
 
     public function indexAction()
@@ -279,7 +281,9 @@ class Material_ManageController extends Zend_Controller_Action
         $this->view->matapps = $matapps;
 
         $this->view->role = $this->getUserRole();
-         
+        
+        $this->view->sites = $sites = $this->_site->findAll();
+        $this->view->humanres = $this->_humanresource->findAll();
     }
 
     public function appdelAction()
