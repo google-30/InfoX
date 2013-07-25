@@ -97,14 +97,14 @@ function updatetype()
 <tr>
 <td><div data-role="fieldcontain">
         <label for="type">类型定义:</label>
-        <select name="type" id="type">
+        <select name="type" id="type" data-mini='true'>
         <option value="0">这是主要类型</option>
         <option value="1">这是细分类型</option>
         </select>
 </div></td>
 <td><div data-role="fieldcontain" id="mainselect">
-        <label for="name">主要类型:</label>
-        <select name="maintype" id="maintype">
+        <label for="maintype">主要类型:</label>
+        <select name="maintype" id="maintype" data-mini='true'>
         <?php
         $mains=$this->mains;
         foreach($mains as $tmp)

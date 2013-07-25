@@ -96,48 +96,61 @@ class Material_ApplyController extends Zend_Controller_Action
         //_materialtype
         $mainid = $this->getParam("mainid", 0);
         $subid = $this->getParam("subid", 0);
-        
-        // find main types
-        $query = $this->_em->createQuery(
-                'select mtype from Synrgic\Infox\Materialtype mtype where mtype.id = mtype.main'
-                );
+
+        $query = $this->_em->createQuery('select mtype from Synrgic\Infox\Materialtype mtype where mtype.id = mtype.main');
         $mains = $query->getResult();
-        $this->view->maintypes = $mains;
-        $maintype = $this->_materialtype->findOneBy(array("id"=>$mainid));
-        /*
-        $query = $this->_em->createQuery(
-                'select mtype from Synrgic\Infox\Materialtype mtype where mtype.id = mtype.main'
-                );
-        $subs = $query->getResult();
-        $this->view->subtypes = $subs;
-        */
-        if($maintype)
-        {
-            $this->view->subtypes = $this->_materialtype->findOneBy(array("main"=>$maintype));
+
+        if($mainid && $subid)
+        {// define main and sub
+            $maintype = $this->_materialtype->findOneBy(array("id"=>$mainid));
+            if($maintype)
+            {
+                $subs = $this->_materialtype->findBy(array("main"=>$maintype));
+            }            
+        }    
+        else if($mainid)
+        {   //change main type
+            $maintype = $this->_materialtype->findOneBy(array("id"=>$mainid));
+            if($maintype)
+            {
+                $subs = $this->_materialtype->findBy(array("main"=>$maintype));
+                if($subs)
+                {
+                    $subfirstid = $subs[0]->getId();
+                }
+            }
+
+            $subid = $subfirstid;
         }
-        
-        /*
-        $macro = $this->_getParam("macro", "mechanic");
-        $this->view->macro = $macro;                
-        $this->view->macrotypes= array("mechanic", "material");
+        else if($subid)
+        {   // change sub type
+            // find subtype
+            $subtype = $this->_materialtype->findOneBy(array("id"=>$subid));
 
-        $machdetails = array("heavy", "electronic");
-        $matedetails = array("consumable", "building");
-        $macroarr = array();
-        $macroarr["mechanic"] = $machdetails;
-        $macroarr["material"] = $matedetails;    
+            // find main of sub
+            $maintype = $subtype->getMain();
+            $mainid = $maintype->getid();
 
-        $detailtypes = $macroarr[$macro];
-        $this->view->detailtypes = $detailtypes;
-       
-        $detail = $this->_getParam("detail");
-        $detail = ($detail=="") ? $detailtypes[0] : $detail;          
-        $this->view->detail = $detail;
-        //echo "$detail";  
+            $subs = $this->_materialtype->findBy(array("main"=>$maintype));           
+        }
+        else
+        {
+            $mainid = $mains[0]->getId();
+            $maintype = $this->_materialtype->findOneBy(array("id"=>$mainid));
+            $subs = $this->_materialtype->findBy(array("main"=>$maintype));
+            $subid = $subs[0]->getId();    
+        }
 
-        $materialobjs = $this->_material->findBy(array("macrotype"=>$macro, "detailtype"=>$detail));
+        $this->view->maintypes = $mains;
+        $this->view->subtypes = $subs;
+        $this->view->mainid = $mainid;
+        $this->view->subid = $subid;
+
+        $subtype = $this->_materialtype->findOneBy(array("id"=>$subid));
+        $materialobjs = $this->_material->findBy(array("type"=>$subtype));
         $this->view->materials = $materialobjs;  
-        */
+
+        $this->view->open = $this->getParam("open", 0);
     }
 
     
