@@ -23,8 +23,11 @@ function updaterow(id)
 function submitmatapps()
 {
     //alert("submitmatapps");
+    var siteid = $('#site').val();
+    var applicantid = $('#applicant').val();
+    
     var appid = $("#appid").val();
-    $.post("/material/manage/submitmatapps", { appid: appid }, 
+    $.post("/material/manage/submitmatapps", { appid:appid, siteid:siteid, applicantid:applicantid }, 
         function(data) {
             alert(data);
             console.log(data);            
@@ -80,9 +83,11 @@ $create = $appobj->getCreatedate()->format("Y-m-d H:m:s");
 $update = $appobj->getUpdatedate()->format("Y-m-d H:m:s");
 $applicant = $appobj->getApplicant();
 $applicantname = "";
+$applicantid =0;
 if($applicant)
 {
     $applicantname = $applicant->getName();
+    $applicantid = $applicant->getId();
 }
 $sitename = "";
 $siteid=0;
@@ -104,13 +109,9 @@ $humanres = $this->humanres;
 <table class="" id="appinfotab">
 <tbody>
 <tr>
-<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>
-<td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
-</tr>
-<tr>
 <td><strong>申请工地:</strong></td>
 <td>
-<select data-mini="true">
+<select id="site" data-mini="true">
 <option value="0">未指定工地</option>
 <?php
 $options="";
@@ -121,20 +122,24 @@ foreach($sites as $tmp)
 
     if($id == $siteid)
     {
-        $options .= '<option value=">' . $id . '" selected>' . $name . '</option>';
+        $options .= '<option value="' . $id . '" selected>' . $name . '</option>';
     }    
     else
     {
-        $options .= '<option value=">' . $id . '" >' . $name . '</option>';
+        $options .= '<option value="' . $id . '" >' . $name . '</option>';
     }
 }
 echo $options;
 ?>
 </select>
 </td>
+
+<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>
+</tr>
+<tr>
 <td><strong>申请人:</strong></td>
 <!--<td><strong><?php echo $applicantname; ?></strong></td>-->
-<td><select data-mini="true">
+<td><select id="applicant" data-mini="true">
 <option value="0">未指定申请人</option>
 <?php
 $options="";
@@ -144,18 +149,19 @@ foreach($humanres as $tmp)
     $name = $tmp->getName();
     $nameeng = $tmp->getNameeng();
 
-    if($id == $siteid)
+    if($id == $applicantid)
     {
-        $options .= '<option value=">' . $id . '" selected>' . $name . '</option>';
+        $options .= '<option value="' . $id . '" selected>' . $name . '</option>';
     }    
     else
     {
-        $options .= '<option value=">' . $id . '" >' . $name . '</option>';
+        $options .= '<option value="' . $id . '" >' . $name . '</option>';
     }
 }
 echo $options;
 ?>
 </select></td>
+<td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
 </tr>
 </tbody>
 </table>
@@ -165,7 +171,7 @@ echo $this->grid("Matapps", true)
           ->field('longname','材料名称')
           ->field('amount','申请数量')
           //->field('remark','补充说明')
-          ->field('amount', '工程部位')  
+          ->field('sitepart', '工程部位')  
           ->field('supplier', '供应商')
           ->field('price', '单价')
           ->field('update', '更新')          

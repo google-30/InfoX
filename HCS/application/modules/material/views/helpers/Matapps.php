@@ -46,7 +46,44 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
     protected function td_update($field, $row) 
     {
     	return '<button onclick="updaterow(' . $row['id'] . ')" data-inline="true" data-mini="true">更新</button>';
-    }           
+    }    
+    
+    protected function td_sitepart($field, $row) 
+    {
+        $appobj = $row["application"];        
+        $siteobj = $appobj->getSite();        
+        $siteparts = $siteobj->getParts();
+        $partArr = explode(";", $siteparts); 
+        
+        $currsitepart = $row["sitepart"];
+        $options = "";
+        foreach($partArr as $tmp)
+        {
+            $name = $tmp;
+            if($name=="")
+            {
+                continue;
+            }    
+            
+            if($currsitepart == $name)
+            {
+                $options .= "<option value=$name selected>$name</option>";
+            }
+            else
+            {
+                $options .= "<option value=$name>$name</option>";
+            }
+        }        
+        $selects = '<select id="select' . $row['id'] . '" data-mini="true">' . $options . "</select>";        
+        
+        $selects = '<select id="select' . $row['id'] . '" data-mini="true">';
+        $option0 = '<option value="0">未定义</option>';
+        $selects .= $option0 . $options . "</select>";
+        
+        //return $partArr[0]; 
+        return $selects;
+    }
+           
 }
 
 ?>

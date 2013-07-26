@@ -63,4 +63,11 @@ class Matappdata extends \Synrgic_Models_Entity {
      */
     protected $price;
     
+    /**
+     * site part: it's defined in site entity
+     *  
+     * @Column(type="string", nullable=true)
+     */
+    protected $sitepart;    
+    
 }

@@ -341,6 +341,9 @@ class Material_ManageController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
+        
+        $siteid = $this->getParam("siteid", 0);
+        $applicantid = $this->getParam("applicantid", 0);
 
         $appid = $this->getParam("appid", 0);
         //echo "appid=$appid";
@@ -350,6 +353,21 @@ class Material_ManageController extends Zend_Controller_Action
         $appobj = $this->_application->findOneBy(array("id"=>$appid));
         $appobj->setUpdatedate(new Datetime('now'));
         $appobj->setStatus1($statusArr[0]);
+        
+        // TODO: update site - this function really needed? 
+        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));
+        if($siteobj)
+        {
+            $appobj->setSite($siteobj);
+        }            
+        
+        // update applicant
+        $applicantobj = $this->_humanresource->findOneBy(array("id"=>$applicantid));
+        //if($applicantobj)
+        {
+            $appobj->setApplicant($applicantobj);
+        }  
+          
         $this->_em->persist($appobj);
         try {
             $this->_em->flush();
