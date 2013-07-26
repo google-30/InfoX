@@ -23,7 +23,19 @@ table.grid {width:100%}
 */
 </style>
 <script>
-$(function() {  });
+$(function() { 
+/*
+$('#selcollapsible').bind('expand', function () {
+    alert('Expanded');
+}).bind('collapse', function () {
+    alert('Collapsed');
+});
+$('#selcollapsible').bind('expand', function () {
+    alert('Expanded');
+});
+*/
+
+});
 
 $('#sites').change(siteReload);
 $('#maintype').change(maintypeReload);
@@ -135,9 +147,10 @@ function addchoosen(id)
         return;
     }
 
-    var remark = $('#remark'+id).val();
+    //var remark = $('#remark'+id).val();
+    var sitepart = $('#sitepart'+id).val();
     //alert("id="+id+",amount="+amount+",remark="+remark);
-    $.post("/material/apply/postdata", { id: id, amount: amount, remark:remark }, 
+    $.post("/material/apply/postdata", { id:id, amount:amount, sitepart:sitepart }, 
         function(data) {
             alert("提交成功，请继续申请材料");
             console.log(data);
@@ -211,10 +224,25 @@ function submitselections()
     });    
 }
 
-
+$('#selcollapsible').bind('expand', function () {
+    //alert('Expanded');
+    $.post("/material/apply/getselections", 
+        function(data) {
+            //alert(data);
+            //console.log(data);
+            $("#seltable").html(data);
+    }); 
+});
 
 </script>
 <?php
+$role=$this->role;
+$displaynone="";
+if($role=="leader")
+{
+    $displaynone = 'style="display:none"';
+}
+
 $sites = $this->sites;
 $siteparts = $this->siteparts;
 $siteid = $this->siteid;
@@ -235,7 +263,6 @@ $open=$this->open;
 
 <div data-role="collapsible" data-collapsed="<?php if($open==1) echo "false"; else {echo "true";} ?>">
 <h3>第一步：选择申请工地 - <?php echo $sitename; ?></h3>
-<!--<select id="sites" data-mini="true" data-theme="a">-->
 <select id="sites" data-mini="true" data-theme="a">
 <option value="0">请选择申请工地</option>
 <?php
@@ -320,6 +347,7 @@ foreach($subtypes as $tmp)
 </tr></thead>
 <tbody> 
 <?php
+/*
 $dropdown = '<select data-mini="true"><option value="无定义">无定义</options>';
 $options ="";
 foreach($siteparts as $tmp)
@@ -331,6 +359,15 @@ foreach($siteparts as $tmp)
 }
 $dropdown .= $options;
 $dropdown .= "</select>";
+*/
+$options='<option value="无定义">无定义</options>';
+foreach($siteparts as $tmp)
+{
+    if($tmp != "")
+    {        
+        $options .= '<option value="' . $tmp . '">' . $tmp . '</option>';
+    }
+}
 
 foreach($this->materials as $tmp)
 {
@@ -343,9 +380,12 @@ foreach($this->materials as $tmp)
     $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="" placeholder="0"></td>';
     $unit = "<td></td>";
     $spec = "<td></td>";    
-            
-    //$remark = '<td><textarea name="remark" id="remark' . $id . '" placeholder="选择工程部位"></textarea></td>';
+    
+    $dropdown = '<select id="sitepart' . $id . '" data-mini="true">';
+    $dropdown .= $options;
+    $dropdown .= '</select>';
     $td_dropdown = '<td>' . $dropdown . '</td>';    
+
     $body .= $longname . $amount . $unit . $spec . $td_dropdown;
     $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
 
@@ -360,7 +400,7 @@ foreach($this->materials as $tmp)
 </div>
 
 <!--手动输入材料信息-->
-<div data-role="collapsible" data-collapsed="<?php if($open==3) echo "false"; else {echo "true";} ?>">
+<div data-role="collapsible" data-collapsed="<?php if($open==3) echo "false"; else {echo "true";} ?>"  <?php echo $displaynone; ?> >
 <h3>第三步：手动输入材料</h3>
 <div id="manualinput">
     <form id="manuform">
@@ -381,14 +421,14 @@ foreach($this->materials as $tmp)
 </div>
 </div>
 
-<div data-role="collapsible" data-collapsed="<?php if($open==4) echo "false"; else {echo "true";} ?>">
+<div id="selcollapsible" data-role="collapsible" data-collapsed="<?php if($open==4) echo "false"; else {echo "true";} ?>">
 <h3>最后步：提交已选材料</h3>
 <div id="selections">
-<div id="seltable">
-</div>
+    <div id="seltable">
+    </div>
 <input type="submit" value="提交至材料审核人员" onclick="submitselections()" data-theme="a">
 </div>
 
 </div>
 </div> <!-- collapsible-set -->
-
+<br><br>

@@ -36,13 +36,9 @@ class Material_ApplyController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        //$sites = $this->_site->findAll();
-        //$this->view->sites = $sites;     
-        $role = $this->getUserRole();        
-        //if($role=="leader")
-        {
-            $this->view->role = $role;
-        }
+        //$role = $this->getUserRole();
+        //$this->view->role = $role;
+        $this->getUserRole();
     }
 
     public function applymaterialsAction1()
@@ -75,6 +71,9 @@ class Material_ApplyController extends Zend_Controller_Action
 
     public function applymaterialsAction()
     {
+        // user & role
+        $this->getUserRole();
+
         // sites
         $siteid = $this->getParam("siteid", 0);
         $sitename = "";
@@ -164,8 +163,8 @@ class Material_ApplyController extends Zend_Controller_Action
         {  
             var_dump($requests);
             return;
-        }   
-        
+        }
+
         //echo "postdataAction";        
         $id = $requests["id"];
         $ans = new Zend_Session_Namespace($this->nsName);
@@ -201,7 +200,7 @@ class Material_ApplyController extends Zend_Controller_Action
           ->field('id','材料编号')
           ->field('longname','材料名称')
           ->field('amount', '数量')
-          ->field('remark', '工程部位')
+          ->field('sitepart', '工程部位')
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
@@ -323,6 +322,8 @@ class Material_ApplyController extends Zend_Controller_Action
         $username = $this->getUserName();
         $user = $this->_user->findOneBy(array("username"=>$username));
         $role = $user ? $user->getRole() : "";
+
+        $this->view->role = $role;
         return $role;
     }    
 
@@ -330,8 +331,8 @@ class Material_ApplyController extends Zend_Controller_Action
     {
         $role = $this->getUserRole();
         $username = $this->getUserName();
-        $user = $this->_user->findOneBy(array("username"=>$username));
-
+        //$user = $this->_user->findOneBy(array("username"=>$username));
+        $user = $this->_humanres->findOneBy(array("username"=>$username));
         if($role == "leader")
         {
             $sites = $this->_site->findBy(array("leader"=>$user));
