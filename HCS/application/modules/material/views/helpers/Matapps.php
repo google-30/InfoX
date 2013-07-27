@@ -82,7 +82,7 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
         //$selects = '<select id="select' . $row['id'] . '" data-mini="true">' . $options . "</select>";        
         
         $selects = '<select id="select' . $row['id'] . '" data-mini="true">';
-        $option0 = '<option value="0">无定义</option>';
+        $option0 = '<option value="无定义">无定义</option>';
         $selects .= $option0 . $options . "</select>";
         
         //return $partArr[0]; 

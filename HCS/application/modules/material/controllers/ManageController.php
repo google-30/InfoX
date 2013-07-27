@@ -66,8 +66,7 @@ class Material_ManageController extends Zend_Controller_Action
 
     public function submitAction()
     {
-        $this->_helper->layout->disableLayout();   
-        $this->_helper->viewRenderer->setNoRender(TRUE);
+        $this->turnoffview();
 
         if(0)
         {    
@@ -142,7 +141,11 @@ class Material_ManageController extends Zend_Controller_Action
         
             $id = $tmp->getId();
             $priceid = "price" . strval($id);
-            $price = $this->getParam($priceid, "0");
+            $price = $this->getParam($priceid, 0);
+            if($price==0)
+            {
+                continue;
+            }
 
             $updateid = "update" . strval($id);
             $update = $this->getParam($updateid, "now");
@@ -157,8 +160,7 @@ class Material_ManageController extends Zend_Controller_Action
             $priceobj->setPrice(floatval($price));
             $priceobj->setUpdate(new Datetime($update));
 
-            $this->_em->persist($priceobj);                        
-  
+            $this->_em->persist($priceobj);  
         }
 
         try {
