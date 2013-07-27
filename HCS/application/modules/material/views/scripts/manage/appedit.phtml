@@ -79,8 +79,8 @@ function redirect()
 <?php
 $appobj = $this->application;
 $appid=$appobj->getId();
-$create = $appobj->getCreatedate()->format("Y-m-d H:m:s");
-$update = $appobj->getUpdatedate()->format("Y-m-d H:m:s");
+$create = $appobj->getCreatedate()->format("Y-m-d H:i:s");
+$update = $appobj->getUpdatedate()->format("Y-m-d H:i:s");
 $applicant = $appobj->getApplicant();
 $applicantname = "";
 $applicantid =0;
@@ -99,9 +99,15 @@ if($siteobj)
 } 
 $sites=$this->sites;
 
-$role = $this->role;
-
 $humanres = $this->humanres;
+
+$role = $this->role;
+$displayblk = 0;    
+if($role=="manager")
+{
+    $displayblk = 1;
+}
+
 ?>
 
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
@@ -173,45 +179,31 @@ echo $this->grid("Matapps", true)
           //->field('remark','补充说明')
           ->field('sitepart', '工程部位')  
           ->field('supplier', '供应商')
-          ->field('price', '单价')
+          //->field('price', '单价')
           ->field('update', '更新')          
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Matapps())
           ->data($this->matapps)
-          ->action(':action', '删除', array( 'url'=>array('action'=>'matdel')));
-
-if($role == "manager")
-{
-    echo '<div style="display:none;">';
-}
-else
-{
-    echo '<div>';
-}
-?>
-<input type="button" value="修改完毕提交上级审核" onclick="submitmatapps()" data-theme="a" data-mini="true">
-<input type="button" value="取消提交重新审核" onclick="reviewmatapps()" data-theme="a" data-mini="true">
-<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">
-<?php
-    echo '</div>';
+          ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
 ?>
 
 <?php
-if($role != "manager")
+$html="";
+if($displayblk==0)
 {
-    echo '<div style="display:none;">';
+    $html = '<input type="button" value="提交上级审核" onclick="submitmatapps()" data-theme="a" data-mini="true">';
+    $html.= '<input type="button" value="取消提交审核" onclick="reviewmatapps()" data-theme="a" data-mini="true">';
+    $html.= '<input type="button" value="申请退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
 }
-else
+else if($displayblk==1)
 {
-    echo '<div>';
+    $html = '<input type="button" value="批准该申请" onclick="approvematapps()" data-theme="a" data-mini="true">';
+    $html.= '<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
 }
+echo $html;
 ?>
-<input type="button" value="批准该申请" onclick="approvematapps()">
-<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()">
-<?php
-    echo '</div>';
-?>
+
 
 

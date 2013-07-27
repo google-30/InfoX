@@ -288,7 +288,69 @@ class Material_ManageController extends Zend_Controller_Action
 
     public function appdelAction()
     {
+        $this->turnoffview();  
+
+        $id = $this->getParam("id", 0);
+        $appobj = $this->_application->findOneBy(array("id"=>$id));
+        if($appobj)
+        {
+            // del matapp first
+            $results = $this->_matappdata->findBy(array("application"=>$appobj));
+            foreach($results as $tmp)
+            {
+                $this->_em->remove($tmp);
+            }
+            $this->_em->remove($appobj);
+            $this->_em->flush();
+        }
+
+        $this->_redirect("material/manage/appmanage");        
+    }
+
+    public function appmatdelAction()
+    {
+        $this->turnoffview();
     
+        $id = $this->getParam("id", 0);
+        $appmatobj = $this->_matappdata->findOneBy(array("id"=>$id));
+
+        $appid = 0;
+        if($appmatobj)
+        {
+            $appobj = $appmatobj->getApplication();
+            if($appobj)
+            {
+                $appid = $appobj->getId();
+                $this->appUpdateByObject($appobj);
+                //$appobj->setUpdatedate(new Datetime('now'));
+                //$this->_em->persist($appobj);
+            }
+
+            $this->_em->remove($appmatobj);
+            $this->_em->flush();
+        }
+
+        $url = "material/manage/appmanage";
+        if($appid!=0)
+        {
+            $url = "/material/manage/appedit/id/" . $appid;
+        }
+        $this->_redirect($url);  
+    }
+
+    private function appUpdateById($id)
+    {
+        $appobj = $this->_application->findOneBy(array("id"=>$id));
+        $appobj->setUpdatedate(new Datetime('now'));
+        $this->_em->persist($appobj);
+        $this->_em->flush();
+    }
+
+    private function appUpdateByObject($appobj)
+    {
+        $appobj->setUpdatedate(new Datetime('now'));
+        $this->_em->persist($appobj);
+        $this->_em->flush();
     }
 
     public function updatedataAction()
@@ -479,6 +541,11 @@ class Material_ManageController extends Zend_Controller_Action
         return $role;
     }    
 
+    private function turnoffview()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+    }
 }
 
 
