@@ -212,8 +212,16 @@ class Material_ApplyController extends Zend_Controller_Action
     public function delselectionAction()
     {
         $this->_helper->layout->disableLayout();   
-        $this->_helper->viewRenderer->setNoRender(TRUE);
-        
+        $this->_helper->viewRenderer->setNoRender(TRUE);        
+
+        $ans = new Zend_Session_Namespace($this->nsName);
+        $appmats = $ans->appmats;
+
+        $id = $this->getParam("id", 0);
+        unset($appmats[$id]);
+
+        $ans->appmats = $appmats;
+
         $this->redirect("/material/apply/applymaterials");
     }
     
@@ -236,7 +244,8 @@ class Material_ApplyController extends Zend_Controller_Action
         {  
             var_dump($requests);
             return;
-        }                  
+        }          
+                
         $siteid = $requests["siteid"];
         
         $statusArr = array("提交", "审核", "未审核", "批准", "退回");
@@ -281,8 +290,12 @@ class Material_ApplyController extends Zend_Controller_Action
             $insys = (intval($id) < 1000000) ? true: false;
             $matobj->setMaterialinsys($insys);
             $matobj->setAmount($requests['amount']);
-            $matobj->setRemark($requests['remark']);
-            $matobj->setLongname($requests['longname']);            
+            if(array_key_exists('remark', $requests))
+            { 
+                $matobj->setRemark($requests['remark']);
+            }
+            $matobj->setLongname($requests['longname']);
+            $matobj->setSitepart($requests['sitepart']);            
             $this->_em->persist($matobj);
             try {
                 $this->_em->flush();
