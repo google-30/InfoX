@@ -108,6 +108,8 @@ if($role=="manager")
     $displayblk = 1;
 }
 
+$matappsInSys=$this->matappsInSys;
+$matappsNotInSys=$this->matappsNotInSys;
 ?>
 
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
@@ -173,7 +175,10 @@ echo $options;
 </table>
 
 <?php
-echo $this->grid("Matapps", true)
+if(count($matappsInSys)>0)
+{
+echo "<p>系统已有信息的材料</p>";
+echo $this->grid("matappsInSys", true)
           ->field('longname','材料名称')
           ->field('amount','申请数量')
           //->field('remark','补充说明')
@@ -185,11 +190,14 @@ echo $this->grid("Matapps", true)
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Matapps())
-          ->data($this->matappsInSys)
+          ->data($matappsInSys)
           ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
-?>
-<?php
-echo $this->grid("Matapps", true)
+}
+
+if(count($matappsNotInSys)>0)
+{
+echo "<p>手动输入信息的材料</p>";
+echo $this->grid("matappsNotInSys", true)
           ->field('longname','材料名称')
           ->field('amount','申请数量')
           //->field('remark','补充说明')
@@ -201,11 +209,10 @@ echo $this->grid("Matapps", true)
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Matapps())
-          ->data($this->matappsNotInSys)
+          ->data($matappsNotInSys)
           ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
+}
 ?>
-
-
 
 <?php
 $html="";

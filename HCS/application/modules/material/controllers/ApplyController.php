@@ -16,6 +16,9 @@ class Material_ApplyController extends Zend_Controller_Action
         $this->_humanres = $this->_em->getRepository('Synrgic\Infox\Humanresource');
         $this->_user = $this->_em->getRepository('Synrgic\User');
         $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
+        $this->_application = $this->_em->getRepository('Synrgic\Infox\Application');
+        $this->_matappdata = $this->_em->getRepository('Synrgic\Infox\Matappdata');
+        $this->_humanresource = $this->_em->getRepository('Synrgic\Infox\Humanresource');
         
         $nsName = 'applysession';
         if (Zend_Session::namespaceIsset($nsName)) {
@@ -39,34 +42,6 @@ class Material_ApplyController extends Zend_Controller_Action
         //$role = $this->getUserRole();
         //$this->view->role = $role;
         $this->getUserRole();
-    }
-
-    public function applymaterialsAction1()
-    {
-        $macro = $this->_getParam("macro", "mechanic");
-        $this->view->macro = $macro;                
-        $this->view->macrotypes= array("mechanic", "material");
-
-        $machdetails = array("heavy", "electronic");
-        $matedetails = array("consumable", "building");
-        $macroarr = array();
-        $macroarr["mechanic"] = $machdetails;
-        $macroarr["material"] = $matedetails;    
-
-        $detailtypes = $macroarr[$macro];
-        $this->view->detailtypes = $detailtypes;
-       
-        $detail = $this->_getParam("detail");
-        $detail = ($detail=="") ? $detailtypes[0] : $detail;          
-        $this->view->detail = $detail;
-        //echo "$detail";  
-
-        $materialobjs = $this->_material->findBy(array("macrotype"=>$macro, "detailtype"=>$detail));
-        $this->view->materials = $materialobjs;  
-
-        // sites
-        $sites = $this->getUserSites();
-        $this->view->sites = $sites;
     }
 
     public function applymaterialsAction()
@@ -317,9 +292,58 @@ class Material_ApplyController extends Zend_Controller_Action
     // list all applications which has not been submitted; 
     public function applistAction()
     {
-               
+        $role = $this->getUserRole();
+        $username = $this->getUserName();
+    
+        if($role == "leader")
+        {//TODO: not working
+            $querystr = "select app from Synrgic\Infox\Application app 
+                        LEFT JOIN app.applicant applicant where app.status1 != '提交' and applicant.username='$username'";
+        }    
+        else if ($role == "staff")
+        {
+            $querystr = "select app from Synrgic\Infox\Application app where app.status1='未审核'";            
+        }
         
+        $query = $this->_em->createQuery($querystr);
+        $result = $query->getResult();    
+        //$maindata = $this->_application->findAll();
+        $this->view->maindata = $result;       
     }    
+
+    public function appeditAction()
+    {
+        $id = $this->getParam("id");
+        $appobj = $this->_application->findOneBy(array("id"=>$id));
+        $this->view->application = $appobj;
+        
+        $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
+        $this->view->matapps = $matapps;
+
+        $matappsInSys = array();
+        $matappsNotInSys = array();
+        foreach($matapps as $tmp)
+        {
+            $insys = $tmp->getMaterialinsys();
+
+            if($insys)
+            {
+                $matappsInSys[] = $tmp;
+            }
+            else
+            {
+                $matappsNotInSys[] = $tmp;
+            }
+        }
+        // split matapps to two tables
+        $this->view->matappsInSys = $matappsInSys;
+        $this->view->matappsNotInSys = $matappsNotInSys;
+
+        $this->view->role = $this->getUserRole();
+        
+        $this->view->sites = $sites = $this->_site->findAll();
+        $this->view->humanres = $this->_humanresource->findAll();
+    }
 
     private function getUserName()
     {
