@@ -25,11 +25,31 @@ class Material_AppmanageController extends Zend_Controller_Action
         $this->view->maindata = $maindata;
     }
 
-    public function applymaterialAction()
+    public function appdetailAction()
     {
-        echo "applymaterialAction";
+        $id = $this->getParam("id");
+        $appobj = $this->_application->findOneBy(array("id"=>$id));
+        $this->view->application = $appobj; 
+
+        $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
+        $this->view->matapps = $matapps;
+        $this->view->role = $this->getUserRole();        
+        $this->view->sites = $sites = $this->_site->findAll();
+        $this->view->humanres = $this->_humanresource->findAll();
+        
+        $total=0;
+        foreach($matapps as $tmp)
+        {
+            $amount = $tmp->getAmount();
+            $price = $tmp->getPrice();
+            
+            $amount = $amount ? $amount : 0;
+            $price = $price ? $price : 0;            
+            $total += $amount * $price;
+        }      
+        $this->view->totalprice = $total;
     }
-    
+
     public function appeditAction()
     {
         $id = $this->getParam("id");
@@ -38,24 +58,6 @@ class Material_AppmanageController extends Zend_Controller_Action
         
         $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
         $this->view->matapps = $matapps;
-        $matappsInSys = array();
-        $matappsNotInSys = array();
-        foreach($matapps as $tmp)
-        {
-            $insys = $tmp->getMaterialinsys();
-
-            if($insys)
-            {
-                $matappsInSys[] = $tmp;
-            }
-            else
-            {
-                $matappsNotInSys[] = $tmp;
-            }
-        }
-        // split matapps to two tables
-        $this->view->matappsInSys = $matappsInSys;
-        $this->view->matappsNotInSys = $matappsNotInSys;
 
         $this->view->role = $this->getUserRole();
         
@@ -113,21 +115,6 @@ class Material_AppmanageController extends Zend_Controller_Action
             $url = "/material/manage/appedit/id/" . $appid;
         }
         $this->_redirect($url);  
-    }
-
-    private function appUpdateById($id)
-    {
-        $appobj = $this->_application->findOneBy(array("id"=>$id));
-        $appobj->setUpdatedate(new Datetime('now'));
-        $this->_em->persist($appobj);
-        $this->_em->flush();
-    }
-
-    private function appUpdateByObject($appobj)
-    {
-        $appobj->setUpdatedate(new Datetime('now'));
-        $this->_em->persist($appobj);
-        $this->_em->flush();
     }
 
     public function updatematappAction()
@@ -346,6 +333,21 @@ class Material_AppmanageController extends Zend_Controller_Action
     {
         $types = $this->_materialtype->findAll();
         $this->view->types = $types;
+    }
+
+    private function appUpdateById($id)
+    {
+        $appobj = $this->_application->findOneBy(array("id"=>$id));
+        $appobj->setUpdatedate(new Datetime('now'));
+        $this->_em->persist($appobj);
+        $this->_em->flush();
+    }
+
+    private function appUpdateByObject($appobj)
+    {
+        $appobj->setUpdatedate(new Datetime('now'));
+        $this->_em->persist($appobj);
+        $this->_em->flush();
     }
 
 }

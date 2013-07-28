@@ -4,7 +4,7 @@ echo $this->grid("Applications", true)
           ->field('site','工地')
           ->field('applicant','申请人')
           //->field('createdate','创建日期')
-          ->field('updatedate','更新日期')
+          ->field('updatedate','更新时间')
           //->field('status0', '申请状态')
           ->field('status1', '办公人员评估')
           ->field('status2', '负责经理评估')  
@@ -13,7 +13,8 @@ echo $this->grid("Applications", true)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Application())
           ->data($this->maindata)
-          ->action(':action', '检查申请', array( 'url'=>array('action'=>'appedit')))
+          ->action(':action', '详情', array( 'url'=>array('action'=>'appdetail')))
+          ->action(':action', '更新', array( 'url'=>array('action'=>'appedit')))
           ->action(':action', '删除申请', array( 'url'=>array('action'=>'appdel')));
 ?>
 <br><br>

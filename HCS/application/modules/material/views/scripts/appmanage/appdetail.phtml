@@ -1,0 +1,102 @@
+<style>
+#appinfotab { width:100%; }
+#totalprice { width:98%; text-align: right; }
+</style>
+<script>
+</script>
+<?php
+$appobj = $this->application;
+$appid=$appobj->getId();
+$create = $appobj->getCreatedate()->format("Y-m-d H:i:s");
+$update = $appobj->getUpdatedate()->format("Y-m-d H:i:s");
+$applicant = $appobj->getApplicant();
+$applicantname = "";
+$applicantid =0;
+if($applicant)
+{
+    $applicantname = $applicant->getName();
+    $applicantid = $applicant->getId();
+}
+$sitename = "";
+$siteid=0;
+$siteobj = $appobj->getSite();
+if($siteobj)
+{
+    $sitename = $siteobj->getName();
+    $siteid = $siteobj->getId();
+} 
+$sites=$this->sites;
+
+$humanres = $this->humanres;
+
+$role = $this->role;
+$displayblk = 0;    
+if($role=="manager")
+{
+    $displayblk = 1;
+}
+$matapps = $this->matapps;
+
+
+$totalprice= $this->totalprice ? $this->totalprice : 0;
+?>
+
+<input type="hidden" id="appid" value="<?php echo $appid; ?>">
+<table class="" id="appinfotab">
+<tbody>
+<tr>
+<td><strong>申请单号:</strong></td><td><strong><?php echo $appid; ?></strong></td>
+<td></td><td></td>
+</tr>
+<tr>
+<td><strong>申请工地:</strong></td><td><strong><?php echo $sitename; ?></strong></td>
+<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>
+</tr>
+<tr>
+<td><strong>申请人员:</strong></td><td><strong><?php echo $applicantname; ?></strong></td>
+<td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
+</tr>
+
+<tr>
+<td><strong>申请总价:</strong></td><td><strong><?php echo $totalprice; ?></strong></td>
+<td></td><td></td>
+</tr>
+
+</tbody>
+</table>
+<?php
+echo $this->grid("matapps", true)
+          ->field('longname','材料名称')
+          ->field('spec','型号规格')
+          ->field('amount','申请数量')
+          ->field('unit','单位')
+          ->field('sitepart', '工程部位')  
+          ->field('supplier', '供应商')
+          ->field('price', '单价')
+          ->field('remark','补充说明')
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Appdetail())
+          ->data($matapps);          
+?>
+<div id="totalprice"><strong>申请总价: <?php echo $totalprice; ?></strong></div>
+
+<?php
+$html="";
+if($displayblk==0)
+{
+    $html = '<input type="button" value="预览和打印材料申请单" onclick="submitmatapps()" data-theme="a" data-mini="true">';
+    $html.= '<input type="button" value="预览和打印Purchase Order" onclick="reviewmatapps()" data-theme="a" data-mini="true">';
+}
+else if($displayblk==1)
+{
+    $html = '<input type="button" value="批准该申请" onclick="approvematapps()" data-theme="a" data-mini="true">';
+    $html.= '<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
+}
+echo $html;
+?>
+<br><br>
+
+
+
