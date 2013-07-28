@@ -12,7 +12,7 @@ function updaterow(id)
 
     //alert('updaterow,id='+id+",amount="+amount+",remark="+remark+",supplierid="+supplierid+",price="+price);
 
-    $.post("/material/manage/updatedata", 
+    $.post("/material/appmanage/updatematapp", 
         { id: id, amount: amount, remark:remark, supplierid:supplierid, price:price  }, 
         function(data) {
             alert(data);
@@ -27,7 +27,7 @@ function submitmatapps()
     var applicantid = $('#applicant').val();
     
     var appid = $("#appid").val();
-    $.post("/material/manage/submitmatapps", { appid:appid, siteid:siteid, applicantid:applicantid }, 
+    $.post("/material/appmanage/submitmatapps", { appid:appid, siteid:siteid, applicantid:applicantid }, 
         function(data) {
             alert(data);
             console.log(data);            
@@ -39,7 +39,7 @@ function rejectmatapps()
 {
     //alert("rejectmatapps");
     var appid = $("#appid").val();
-    $.post("/material/manage/rejectmatapps", { appid: appid }, 
+    $.post("/material/appmanage/rejectmatapps", { appid: appid }, 
         function(data) {
             alert(data);
             console.log(data);            
@@ -51,7 +51,7 @@ function reviewmatapps()
 {
     //alert("reviewmatapps");
     var appid = $("#appid").val();
-    $.post("/material/manage/reviewmatapps", { appid: appid }, 
+    $.post("/material/appmanage/reviewmatapps", { appid: appid }, 
         function(data) {
             alert(data);
             console.log(data);            
@@ -64,7 +64,7 @@ function approvematapps()
     //alert("approvematapps");
 
     var appid = $("#appid").val();
-    $.post("/material/manage/approvematapps", { appid: appid }, 
+    $.post("/material/appmanage/approvematapps", { appid: appid }, 
         function(data) {
             alert(data);
             redirect();
@@ -73,7 +73,7 @@ function approvematapps()
 
 function redirect()
 {
-    window.location = "/material/manage/appmanage";
+    window.location = "/material/appmanage/appmanage";
 }
 </script>
 <?php
@@ -185,9 +185,27 @@ echo $this->grid("Matapps", true)
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Matapps())
-          ->data($this->matapps)
+          ->data($this->matappsInSys)
           ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
 ?>
+<?php
+echo $this->grid("Matapps", true)
+          ->field('longname','材料名称')
+          ->field('amount','申请数量')
+          //->field('remark','补充说明')
+          ->field('sitepart', '工程部位')  
+          ->field('supplier', '供应商')
+          //->field('price', '单价')
+          ->field('update', '更新')          
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Matapps())
+          ->data($this->matappsNotInSys)
+          ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
+?>
+
+
 
 <?php
 $html="";

@@ -23,13 +23,22 @@
 		<resource>worker:manage</resource>
 		<privilege>view</privilege>
 	    </worker>
-
+<!--
 	    <applicationmanagement>
 		<label>申请单管理</label>
 		<module>material</module>
 		<controller>manage</controller>
 		<action>appmanage</action>
 		<resource>material:manage</resource>
+		<privilege>view</privilege>
+	    </applicationmanagement>
+-->
+	    <applicationmanagement>
+		<label>申请单管理</label>
+		<module>material</module>
+		<controller>appmanage</controller>
+		<action>index</action>
+		<resource>material:appmanage</resource>
 		<privilege>view</privilege>
 	    </applicationmanagement>
 
