@@ -127,7 +127,132 @@ class Material_ApplyController extends Zend_Controller_Action
         $this->view->open = $this->getParam("open", 0);
     }
 
+    public function appeditAction()
+    {
+        $this->appsheet();
+    }
     
+    private function appsheet()
+    {
+        // user & role
+        $this->getUserRole();
+
+        // application
+        $id = $this->getParam("id", 0);
+        $appobj = $this->_application->findOneBy(array("id"=>$id));       
+        if($appobj)
+        {
+            $this->view->application = $appobj;
+            $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
+            $this->view->matapps = $matapps;
+        }
+
+        // sites
+        if($id == 0)
+        {// create
+            $siteid = $this->getParam("siteid", 0);
+            $sitename = "";
+            $siteparts = array();
+            $siteobj = $this->_site->findOneBy(array("id"=>$siteid));
+            echo "siteid=" . $siteid;        
+            if($siteobj)
+            {
+                $parts = $siteobj->getParts();
+                $siteparts = explode(";", $parts);
+                $sitename = $siteobj->getName();
+            }
+        }
+        else
+        {// edit
+            $siteid = $this->getParam("siteid", 0);
+            if($siteid)
+            {
+                $siteobj = $this->_site->findOneBy(array("id"=>$siteid));                
+            }
+            else
+            {
+                $siteobj = $appobj->getSite();
+                $siteid = $siteobj->getId();
+            }
+        }
+
+        $sitename = "";
+        $siteparts = array();
+        if($siteobj)
+        {
+            $parts = $siteobj->getParts();
+            $siteparts = explode(";", $parts);
+            $sitename = $siteobj->getName();
+        }
+
+        $sites = $this->getUserSites();
+
+        $this->view->siteid = $siteid;
+        $this->view->sitename = $sitename;        
+        $this->view->siteparts = $siteparts;
+        $this->view->sites = $sites;                
+        //echo "siteid=" . $siteid;   
+
+        //_materialtype
+        $mainid = $this->getParam("mainid", 0);
+        $subid = $this->getParam("subid", 0);
+
+        $query = $this->_em->createQuery('select mtype from Synrgic\Infox\Materialtype mtype where mtype.id = mtype.main');
+        $mains = $query->getResult();
+
+        if($mainid && $subid)
+        {// define main and sub
+            $maintype = $this->_materialtype->findOneBy(array("id"=>$mainid));
+            if($maintype)
+            {
+                $subs = $this->_materialtype->findBy(array("main"=>$maintype));
+            }            
+        }    
+        else if($mainid)
+        {   //change main type
+            $maintype = $this->_materialtype->findOneBy(array("id"=>$mainid));
+            if($maintype)
+            {
+                $subs = $this->_materialtype->findBy(array("main"=>$maintype));
+                if($subs)
+                {
+                    $subfirstid = $subs[0]->getId();
+                }
+            }
+
+            $subid = $subfirstid;
+        }
+        else if($subid)
+        {   // change sub type
+            // find subtype
+            $subtype = $this->_materialtype->findOneBy(array("id"=>$subid));
+
+            // find main of sub
+            $maintype = $subtype->getMain();
+            $mainid = $maintype->getid();
+
+            $subs = $this->_materialtype->findBy(array("main"=>$maintype));           
+        }
+        else
+        {
+            $mainid = $mains[0]->getId();
+            $maintype = $this->_materialtype->findOneBy(array("id"=>$mainid));
+            $subs = $this->_materialtype->findBy(array("main"=>$maintype));
+            $subid = $subs[0]->getId();    
+        }
+
+        $this->view->maintypes = $mains;
+        $this->view->subtypes = $subs;
+        $this->view->mainid = $mainid;
+        $this->view->subid = $subid;
+
+        $subtype = $this->_materialtype->findOneBy(array("id"=>$subid));
+        $materialobjs = $this->_material->findBy(array("type"=>$subtype));
+        $this->view->materials = $materialobjs;  
+
+        $this->view->open = $this->getParam("open", 0);        
+    }
+
     public function postdataAction()
     {
         $this->_helper->layout->disableLayout();   
@@ -310,40 +435,6 @@ class Material_ApplyController extends Zend_Controller_Action
         //$maindata = $this->_application->findAll();
         $this->view->maindata = $result;       
     }    
-
-    public function appeditAction()
-    {
-        $id = $this->getParam("id");
-        $appobj = $this->_application->findOneBy(array("id"=>$id));
-        $this->view->application = $appobj;
-        
-        $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
-        $this->view->matapps = $matapps;
-
-        $matappsInSys = array();
-        $matappsNotInSys = array();
-        foreach($matapps as $tmp)
-        {
-            $insys = $tmp->getMaterialinsys();
-
-            if($insys)
-            {
-                $matappsInSys[] = $tmp;
-            }
-            else
-            {
-                $matappsNotInSys[] = $tmp;
-            }
-        }
-        // split matapps to two tables
-        $this->view->matappsInSys = $matappsInSys;
-        $this->view->matappsNotInSys = $matappsNotInSys;
-
-        $this->view->role = $this->getUserRole();
-        
-        $this->view->sites = $sites = $this->_site->findAll();
-        $this->view->humanres = $this->_humanresource->findAll();
-    }
 
     private function getUserName()
     {
