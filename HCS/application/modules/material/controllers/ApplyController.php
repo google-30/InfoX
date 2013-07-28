@@ -314,6 +314,13 @@ class Material_ApplyController extends Zend_Controller_Action
         echo "提交申请成功";
     } 
     
+    // list all applications which has not been submitted; 
+    public function applistAction()
+    {
+               
+        
+    }    
+
     private function getUserName()
     {
         $auth = Zend_Auth::getInstance();
@@ -335,7 +342,7 @@ class Material_ApplyController extends Zend_Controller_Action
         $username = $this->getUserName();
         $user = $this->_user->findOneBy(array("username"=>$username));
         $role = $user ? $user->getRole() : "";
-
+        //echo "XXXXXXXXXX=" . $role;
         $this->view->role = $role;
         return $role;
     }    

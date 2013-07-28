@@ -3,6 +3,13 @@
 </style>
 <?php
 $role=$this->role;
+$displayblk = 0;
+$style="";    
+if($role=="leader")
+{
+    $displayblk = 1;
+    $style='style="display:none"';
+}
 ?>
 
 <!-- displaying rejected application, if none rejected, this div should be hide. -->
@@ -17,28 +24,15 @@ $role=$this->role;
 </fieldset><br> 
 </div>
 
-<?php
-if($role == "leader")
-{
-    echo '<div style="display:none">';
-}
-?>
-<div class="wizard">
+<div class="wizard" <?php echo $style; ?> >
+<fieldset>
+    <a href="/material/apply/applist"><button onclick="showeditapp()">更新申请</button></a>
+    <p>点击按钮，更新之前的申请</p>
+</fieldset>
+<br>
 <fieldset>
     <a href="/material/apply/applymaterials"><button>申请办公物品</button></a> 
-    <p>点击，为办公室申请物品，比如文具等</p>
+    <p>点击按钮，申请其他物品，比如文具等</p>
 </fieldset><br> 
-
-<fieldset>
-    <!--<legend><strong>编辑申请</strong></legend>-->
-    <button onclick="showeditapp()">更新申请</button>
-    <p>点击，更新申请</p>
-</fieldset>
 </div>
-<?php
-if($role == "leader")
-{
-    echo '</div>';
-}
-?>
 
