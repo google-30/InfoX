@@ -46,8 +46,8 @@ class GridHelper_Appdetail extends Grid_Helper_Abstract
     {
         $materialid = $row['materialid'];
         $em = Zend_Registry::get('em');
-        $matobj = $em->getRepository('Synrgic\Infox\Material')->findOneBy(array("id"=>$materialid));   
-        $unit = $matobj ? $matobj->getUnit() : "&nbsp;";             
+        $matobj = $em->getRepository('Synrgic\Infox\Material')->findOneBy(array("id"=>$materialid));           
+        $unit = $matobj ? $matobj->getUnit() : $row[$field];
         return $unit;     
     }           
     

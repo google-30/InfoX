@@ -387,12 +387,16 @@ class Material_ApplyController extends Zend_Controller_Action
             $matobj->setMaterialid($id);
             $insys = (intval($id) < 1000000) ? true: false;
             $matobj->setMaterialinsys($insys);
+            $matobj->setLongname($requests['longname']);
             $matobj->setAmount($requests['amount']);
+            if(array_key_exists('unit', $requests))
+            { 
+                $matobj->setUnit($requests['unit']);
+            }
             if(array_key_exists('remark', $requests))
             { 
                 $matobj->setRemark($requests['remark']);
             }
-            $matobj->setLongname($requests['longname']);
             $matobj->setSitepart($requests['sitepart']);            
             $this->_em->persist($matobj);
             try {

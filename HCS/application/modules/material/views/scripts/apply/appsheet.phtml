@@ -181,13 +181,14 @@ function submitmanualinput()
     var amount = $('#manuamount').val();
     var remark = $('#manuremark').val();
     var sitepart = $('#manusitepart').val();
+    var unit = $('#manuunit').val();
     
     if(name=="" || amount=="" || remark=="")
     {
         alert("请填写完整，再提交");
     }
 
-    $.post("/material/apply/postdata", { id:id, amount:amount, remark:remark, longname:name, sitepart:sitepart }, 
+    $.post("/material/apply/postdata", { id:id, amount:amount, remark:remark, longname:name, sitepart:sitepart, unit:unit }, 
         function(data) {
             alert("提交成功，请继续申请材料");
             //console.log(data);
@@ -416,6 +417,10 @@ foreach($this->materials as $tmp)
     <div data-role="fieldcontain">
     <label for="manuamount">输入数量:</label>
     <input type="text" name="manuamount" id="manuamount" placeholder="填写数量，比如要30包水泥，这里写30" value=""  />
+    </div>
+    <div data-role="fieldcontain">
+    <label for="manuunit">输入单位:</label>
+    <input type="text" name="manuunit" id="manuunit" placeholder="填写单位，比如袋，包，台" value=""  />
     </div>
     <div data-role="fieldcontain">
     <label for="manuremark">输入规格:</label>
