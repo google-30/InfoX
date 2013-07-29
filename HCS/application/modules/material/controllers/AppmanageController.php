@@ -59,6 +59,24 @@ class Material_AppmanageController extends Zend_Controller_Action
         $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
         $this->view->matapps = $matapps;
 
+        $matappsInSys = array();
+        $matappsNotInSys = array();
+        foreach($matapps as $tmp)
+        {
+            $insys = $tmp->getMaterialinsys();
+            if($insys)
+            {
+                $matappsInSys[] = $tmp;
+            }
+            else
+            {
+                $matappsNotInSys[] = $tmp;
+            }        
+        }    
+        
+        $this->view->matappsInSys = $matappsInSys;
+        $this->view->matappsNotInSys = $matappsNotInSys;
+
         $this->view->role = $this->getUserRole();
         
         $this->view->sites = $sites = $this->_site->findAll();

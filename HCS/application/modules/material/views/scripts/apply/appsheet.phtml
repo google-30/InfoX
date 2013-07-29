@@ -14,7 +14,8 @@ function siteReload()
     var siteid = $("#sites").val();
     
     var appid= $("#appid").val();
-    if(appid)
+    //alert(appid);    
+    if(appid != "0")
     {
         var url = "/material/apply/appedit?&id=" + appid;        
     }
@@ -37,7 +38,7 @@ function maintypeReload()
     var siteid = $("#sites").val();
 
     var appid= $("#appid").val();
-    if(appid)
+    if(appid != "0")
     {
         var url = "/material/apply/appedit?&id=" + appid;        
     }
@@ -60,7 +61,7 @@ function subtypeReload()
     var siteid = $("#sites").val();
 
     var appid= $("#appid").val();
-    if(appid)
+    if(appid != "0")
     {
         var url = "/material/apply/appedit?&id=" + appid;        
     }
@@ -179,13 +180,14 @@ function submitmanualinput()
     var name = $('#manuname').val();
     var amount = $('#manuamount').val();
     var remark = $('#manuremark').val();
-
+    var sitepart = $('#manusitepart').val();
+    
     if(name=="" || amount=="" || remark=="")
     {
         alert("请填写完整，再提交");
     }
 
-    $.post("/material/apply/postdata", { id:id, amount:amount, remark:remark, longname:name }, 
+    $.post("/material/apply/postdata", { id:id, amount:amount, remark:remark, longname:name, sitepart:sitepart }, 
         function(data) {
             alert("提交成功，请继续申请材料");
             //console.log(data);
@@ -204,7 +206,6 @@ function submitselections()
 {
     var siteid = $('#sites').val();
     //alert("submitselections, siteid="+siteid);
-
     if(siteid == 0)
     {
         alert("请选择申请工地");
@@ -250,6 +251,7 @@ $subid=$this->subid;
 $open=$this->open;
 
 $appid=0;
+$matapps=null;
 // create or edit
 $mode=$this->mode;
 if($mode=="edit")
@@ -268,7 +270,7 @@ if($mode=="edit")
 <?php
 if($mode=="create")
 {
-    $title = "<p>创建材料申请</p>";
+    $title = "<p><strong>创建材料申请</strong></p>";
 }
 else if($mode=="edit")
 {
@@ -303,7 +305,7 @@ echo $options;
 </div>
 
 <!--按分类选择材料-->
-<div data-role="collapsible" data-collapsed="<?php if($open==2) echo "false"; else {echo "true";} ?>">
+<div data-role="collapsible" data-collapsed="<?php if($open==2) echo "false"; else {echo "true";} ?>" >
 <h3>第二步：分类选择材料</h3>
 <div id="typechooser">
 <table class="grid">
@@ -419,8 +421,14 @@ foreach($this->materials as $tmp)
     <label for="manuremark">输入规格:</label>
     <textarea cols="40" rows="8" name="manuremark" id="manuremark" placeholder="填写规格说明，比如多大号的钉子，什么水泥等"></textarea>
     </div>
+    <div data-role="fieldcontain">
+    <label for="manusitepart">工程部位:</label>
+    <select id="manusitepart" data-mini="true">
+    <?php echo $options; ?>
+    </select>
+    </div>
     </form> <!-- manuform -->					    
-    <input type="submit" value="提交到选择列表" onclick="submitmanualinput()" data-theme="a">
+    <input type="submit" value="提交到选择列表" onclick="submitmanualinput()" data-mini="true" data-theme="a">
 </div>
 </div>
 
@@ -431,7 +439,7 @@ foreach($this->materials as $tmp)
 </div>
 <hr>    
 <?php
-if(count($matapps)>0)
+if($matapps && count($matapps)>0)
 {
 echo "<p>已申请材料</p>";
 echo $this->grid("matapps", true)
@@ -447,9 +455,9 @@ echo $this->grid("matapps", true)
           ->helper(new GridHelper_Matapps())
           ->data($matapps)
           ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
+echo "<hr>";          
 }
 ?>
-<hr>
 <input type="submit" value="提交至材料审核人员" onclick="submitselections()" data-theme="a">
 </div>
 

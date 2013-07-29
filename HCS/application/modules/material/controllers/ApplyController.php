@@ -44,7 +44,7 @@ class Material_ApplyController extends Zend_Controller_Action
         $this->getUserRole();
     }
 
-    public function applymaterialsAction()
+    public function applymaterialsAction1()
     {
         // user & role
         $this->getUserRole();
@@ -127,6 +127,11 @@ class Material_ApplyController extends Zend_Controller_Action
         $this->view->open = $this->getParam("open", 0);
     }
 
+    public function applymaterialsAction()
+    {
+        $this->appsheet();        
+    }
+
     public function appeditAction()
     {
         $this->appsheet();
@@ -151,16 +156,7 @@ class Material_ApplyController extends Zend_Controller_Action
         if($id == 0)
         {// create
             $siteid = $this->getParam("siteid", 0);
-            $sitename = "";
-            $siteparts = array();
             $siteobj = $this->_site->findOneBy(array("id"=>$siteid));
-            echo "siteid=" . $siteid;        
-            if($siteobj)
-            {
-                $parts = $siteobj->getParts();
-                $siteparts = explode(";", $parts);
-                $sitename = $siteobj->getName();
-            }
         }
         else
         {// edit
@@ -257,7 +253,8 @@ class Material_ApplyController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
-  
+        //$this->turnoffview();
+        
         $requests = $this->getRequest()->getPost();
         if(0)
         {  
@@ -272,6 +269,8 @@ class Material_ApplyController extends Zend_Controller_Action
         if($id != "0")
         {//typechooser
             $matobj = $this->_material->findOneBy(array("id"=>$id));
+            
+            // name to longname(chs&eng)
             $name = $matobj->getName();
             $nameeng = $matobj->getNameeng();
             $longname = $name . "/" . $nameeng;
@@ -327,9 +326,8 @@ class Material_ApplyController extends Zend_Controller_Action
     
     public function submitselectionsAction()
     {
-        $this->_helper->layout->disableLayout();   
-        $this->_helper->viewRenderer->setNoRender(TRUE);
-
+        $this->turnoffview();
+                
         $ans = new Zend_Session_Namespace($this->nsName);
         $appmats = $ans->appmats;        
         if(count($appmats) == 0)
@@ -481,4 +479,9 @@ class Material_ApplyController extends Zend_Controller_Action
         return $sites;
     }
 
+    private function turnoffview()
+    {
+        $this->_helper->layout->disableLayout();   
+        $this->_helper->viewRenderer->setNoRender(TRUE);    
+    }    
 }
