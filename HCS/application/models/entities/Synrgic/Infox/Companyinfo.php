@@ -19,14 +19,28 @@ class Companyinfo extends \Synrgic_Models_Entity {
     protected $update;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     protected $namechs;
 
     /**
      * @Column(type="string", nullable=true)
      */
+    protected $fullnamechs;
+
+    /**
+     * HWA CHENG   
+     *    
+     * @Column(type="string", nullable=true)
+     */
     protected $nameeng;
+
+    /**
+     * HWA CHENG DEVELOPMENT PTE LTD
+     *
+     * @Column(type="string", nullable=true)
+     */
+    protected $fullnameeng;
 
     /**
      * @Column(type="string", nullable=true)

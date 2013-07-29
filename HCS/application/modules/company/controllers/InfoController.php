@@ -66,6 +66,9 @@ class Company_InfoController extends Zend_Controller_Action
         $coregno = $this->getParam("coregno", "");
         $remark = $this->getParam("remark", "");
 
+        $fullnamechs = $this->getParam("fullnamechs", "");
+        $fullnameeng = $this->getParam("fullnameeng", "");
+
         if($mode == "Create")
         {
             $data = new \Synrgic\Infox\Companyinfo(); 
@@ -84,6 +87,9 @@ class Company_InfoController extends Zend_Controller_Action
         $data->setAddress($address);
         $data->setCoregno($coregno);
         $data->setRemark($remark);
+
+        $data->setFullnamechs($fullnamechs);
+        $data->setFullnameeng($fullnameeng);
 
         $this->_em->persist($data);
         try {

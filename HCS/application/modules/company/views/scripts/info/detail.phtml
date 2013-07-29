@@ -67,6 +67,9 @@ $leader="";
 $manager="";
 $workerno=0;
 
+$fullnamechs="";
+$fullnameeng="";
+
 if($this->mode == "Edit")
 {
 $data = $this->maindata;
@@ -80,6 +83,10 @@ $email = $data->getEmail();
 $fax = $data->getFax();
 $coregno= $data->getCoregno();
 $remark = $data->getRemark();
+
+$fullnamechs=$data->getFullnamechs();
+$fullnameeng=$data->getFullnameeng();
+
 }
      
 ?>
@@ -105,8 +112,15 @@ else
 <tr>
 <td style="width:20%"><strong>公司中文名:</strong></td>
 <td style="width:30%"><input type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" data-mini="true" /></td>
+<td style="width:20%"><strong>公司中文全名:</strong></td>
+<td style="width:30%"><input type="text" name="fullnamechs" id="fullnamechs" value="<?php echo $fullnamechs; ?>" data-mini="true" /></td>
+</tr>
+
+<tr>
 <td style="width:20%"><strong>公司英文名:</strong></td>
 <td style="width:30%"><input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true" /></td>
+<td style="width:20%"><strong>公司英文全名:</strong></td>
+<td style="width:30%"><input type="text" name="fullnameeng" id="fullnameeng" value="<?php echo $fullnameeng; ?>" data-mini="true" /></td>
 </tr>
 
 <tr>
