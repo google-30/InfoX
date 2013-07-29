@@ -41,7 +41,24 @@ class GridHelper_Appdetail extends Grid_Helper_Abstract
     {
         return  $row[$field];
     }
-           
+
+    protected function td_unit($field, $row) 
+    {
+        $materialid = $row['materialid'];
+        $em = Zend_Registry::get('em');
+        $matobj = $em->getRepository('Synrgic\Infox\Material')->findOneBy(array("id"=>$materialid));   
+        $unit = $matobj ? $matobj->getUnit() : "&nbsp;";             
+        return $unit;     
+    }           
+    
+    protected function td_spec($field, $row) 
+    {
+        $materialid = $row['materialid'];
+        $em = Zend_Registry::get('em');
+        $matobj = $em->getRepository('Synrgic\Infox\Material')->findOneBy(array("id"=>$materialid));   
+        $spec = $matobj ? $matobj->getSpec() : "&nbsp;";             
+        return $spec;    
+    }      
 }
 
 ?>

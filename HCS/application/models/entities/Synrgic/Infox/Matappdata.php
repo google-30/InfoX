@@ -68,6 +68,15 @@ class Matappdata extends \Synrgic_Models_Entity {
      *  
      * @Column(type="string", nullable=true)
      */
-    protected $sitepart;    
+    protected $sitepart;  
+    
+    /**
+     * unit 
+     * 1. the material is manually input; 
+     * 2. material entity has no unit; 
+     *  
+     * @Column(type="string", nullable=true)
+     */
+    protected $unit;      
     
 }

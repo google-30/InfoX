@@ -81,20 +81,26 @@ echo $this->grid("matapps", true)
           ->data($matapps);          
 ?>
 <div id="totalprice"><strong>申请总价: <?php echo $totalprice; ?></strong></div>
-
+<br>
+<a href="/material/appmanage/previewform" target="_blank"><input type="button" value="预览和打印材料申请单" data-theme="a" data-mini="true"></a> 
+<a href="/material/appmanage/previeworder" target="_blank"><input type="button" value="预览和打印Purchase Order" data-theme="a" data-mini="true"></a>
 <?php
+if(0)
+{
 $html="";
 if($displayblk==0)
 {
-    $html = '<input type="button" value="预览和打印材料申请单" onclick="submitmatapps()" data-theme="a" data-mini="true">';
-    $html.= '<input type="button" value="预览和打印Purchase Order" onclick="reviewmatapps()" data-theme="a" data-mini="true">';
+    
+    $html = '<input type="button" value="预览和打印材料申请单" onclick="previewform()" data-theme="a" data-mini="true">';
+    $html.= '<input type="button" value="预览和打印Purchase Order" onclick="previeworder()" data-theme="a" data-mini="true">';
 }
 else if($displayblk==1)
 {
-    $html = '<input type="button" value="批准该申请" onclick="approvematapps()" data-theme="a" data-mini="true">';
-    $html.= '<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
+    $html = '<input type="button" value="预览和打印材料申请单" onclick="previewform()" data-theme="a" data-mini="true">';
+    $html.= '<input type="button" value="预览和打印Purchase Order" onclick="previeworder()" data-theme="a" data-mini="true">';
 }
 echo $html;
+}
 ?>
 <br><br>
 

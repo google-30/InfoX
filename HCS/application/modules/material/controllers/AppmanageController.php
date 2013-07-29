@@ -292,6 +292,17 @@ class Material_AppmanageController extends Zend_Controller_Action
         echo "该申请已经批准";
     }
 
+    public function previewformAction()
+    {
+        $this->turnoffview();
+    }
+
+    public function previeworderAction()
+    {
+        $this->turnoffview();    
+    }
+
+
     private function getStatusArr()
     {
         $statusArr = array("提交", "审核", "未审核", "批准", "退回");
