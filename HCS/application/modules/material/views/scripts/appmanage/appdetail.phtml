@@ -17,53 +17,47 @@ if($applicant)
     $applicantname = $applicant->getName();
     $applicantid = $applicant->getId();
 }
-$sitename = "";
-$siteid=0;
-$siteobj = $appobj->getSite();
-if($siteobj)
-{
-    $sitename = $siteobj->getName();
-    $siteid = $siteobj->getId();
-} 
-$sites=$this->sites;
 
+$sitename=$this->sitename;
+$siteid=$this->siteid;
+
+$sites=$this->sites;
 $humanres = $this->humanres;
 
 $role = $this->role;
-$displayblk = 0;    
-if($role=="manager")
-{
-    $displayblk = 1;
-}
+$displayblk = ($role=="manager") ? 1 : 0;   
+
 $matapps = $this->matapps;
-
-
 $totalprice= $this->totalprice ? $this->totalprice : 0;
+
+$company=$this->company;
+$cmyname=$this->cmyname;
+/*
+if($company)
+{
+    $cmynamechs = $company->getNamechs();
+    $cmynameeng = $company->getNameeng();
+    $cmyname = $cmynamechs . "/" . $cmynameeng;
+}
+*/
 ?>
 
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
-<table class="" id="appinfotab">
-<tbody>
-<tr>
-<td><strong>申请单号:</strong></td><td><strong><?php echo $appid; ?></strong></td>
-<td></td><td></td>
-</tr>
+<table class="" id="appinfotab"><tbody>
 <tr>
 <td><strong>申请工地:</strong></td><td><strong><?php echo $sitename; ?></strong></td>
-<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>
+<!--<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>-->
+<td><strong>承包公司:</strong></td><td><strong><?php echo $cmyname; ?></strong></td>
 </tr>
 <tr>
 <td><strong>申请人员:</strong></td><td><strong><?php echo $applicantname; ?></strong></td>
 <td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
 </tr>
-
 <tr>
 <td><strong>申请总价:</strong></td><td><strong><?php echo $totalprice; ?></strong></td>
-<td></td><td></td>
+<td><strong>申请单号:</strong></td><td><strong><?php echo $appid; ?></strong></td>
 </tr>
-
-</tbody>
-</table>
+</tbody></table>
 <?php
 echo $this->grid("matapps", true)
           ->field('longname','材料名称')
@@ -80,28 +74,10 @@ echo $this->grid("matapps", true)
           ->helper(new GridHelper_Appdetail())
           ->data($matapps);          
 ?>
-<div id="totalprice"><strong>申请总价: <?php echo $totalprice; ?></strong></div>
+<!--<div id="totalprice"><strong>申请总价: <?php echo $totalprice; ?></strong></div>-->
 <br>
-<a href="/material/appmanage/previewform" target="_blank"><input type="button" value="预览和打印材料申请单" data-theme="a" data-mini="true"></a> 
+<a href="/material/appmanage/previewform?&id=<?php echo $appid; ?>" target="_blank"><input type="button" value="预览和打印材料申请单" data-theme="a" data-mini="true"></a> 
 <a href="/material/appmanage/previeworder" target="_blank"><input type="button" value="预览和打印Purchase Order" data-theme="a" data-mini="true"></a>
-<?php
-if(0)
-{
-$html="";
-if($displayblk==0)
-{
-    
-    $html = '<input type="button" value="预览和打印材料申请单" onclick="previewform()" data-theme="a" data-mini="true">';
-    $html.= '<input type="button" value="预览和打印Purchase Order" onclick="previeworder()" data-theme="a" data-mini="true">';
-}
-else if($displayblk==1)
-{
-    $html = '<input type="button" value="预览和打印材料申请单" onclick="previewform()" data-theme="a" data-mini="true">';
-    $html.= '<input type="button" value="预览和打印Purchase Order" onclick="previeworder()" data-theme="a" data-mini="true">';
-}
-echo $html;
-}
-?>
 <br><br>
 
 

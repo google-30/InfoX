@@ -48,6 +48,23 @@ class Material_AppmanageController extends Zend_Controller_Action
             $total += $amount * $price;
         }      
         $this->view->totalprice = $total;
+
+        $siteobj = $appobj->getSite();
+        if($siteobj)
+        {
+            $this->view->sitename = $siteobj->getName();
+            $this->view->siteid = $siteobj->getId(); 
+
+            $company = $siteobj->getCompany();
+            $this->view->company = $company;
+            if($company)
+            {
+                $cmynamechs = $company->getNamechs();
+                $cmynameeng = $company->getNameeng();
+                $cmyname = $cmynamechs . "/" . $cmynameeng;                
+                $this->view->cmyname = $cmyname;
+            }
+        }
     }
 
     public function appeditAction()
@@ -294,12 +311,14 @@ class Material_AppmanageController extends Zend_Controller_Action
 
     public function previewformAction()
     {
-        $this->turnoffview();
+        $this->turnofflayout();
+
+
     }
 
     public function previeworderAction()
     {
-        $this->turnoffview();    
+        $this->turnofflayout();    
     }
 
 
@@ -337,6 +356,11 @@ class Material_AppmanageController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
+    }
+
+    private function turnofflayout()
+    {
+        $this->_helper->layout->disableLayout();
     }
 
     private function getSuppliers()
