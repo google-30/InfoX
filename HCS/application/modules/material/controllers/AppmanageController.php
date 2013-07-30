@@ -313,7 +313,46 @@ class Material_AppmanageController extends Zend_Controller_Action
     {
         $this->turnofflayout();
 
+        $id = $this->getParam("id", 0);
+        if(!$id)
+        {
+            $this->turnoffrenderer();
+            echo "id, please.";
+            return;
+        }    
 
+        $appobj = $this->_application->findOneBy(array("id"=>$id));
+        $siteobj = $appobj->getSite();
+        if($siteobj)
+        {
+            $cmyobj = $siteobj->getCompany();
+            if($cmyobj)
+            {
+                // company info
+                $this->view->cmyfullnameeng = $cmyfullnameeng = $cmyobj->getFullnameeng();
+                $this->view->cmyaddr = $cmyaddr = $cmyobj->getAddress();
+                $this->view->cmyphone = $cmyphone = $cmyobj->getPhone();
+                $this->view->cmyfax = $cmyfax = $cmyobj->getFax();
+                $this->view->cmyemail = $cmyemail = $cmyobj->getEmail();
+
+                $cmycontact="Tel:" . $cmyphone . "&nbsp;&nbsp;Fax:" . $cmyfax . "&nbsp;&nbsp;Email:" . $cmyemail;
+                $this->view->cmycontact=$cmycontact;
+            }
+
+            // site
+            $this->view->sitename = $sitename = $siteobj->getName();
+        }
+        
+        // date
+        $date = new Datetime("now");
+        $this->view->date = $date->format("Y-m-d");
+
+        // requested/applied materials
+        $this->view->matapps = $this->_matappdata->findBy(array("application"=>$appobj));
+
+        // TODO: contact, manager
+
+        // TODO: ref        
     }
 
     public function previeworderAction()
@@ -361,6 +400,11 @@ class Material_AppmanageController extends Zend_Controller_Action
     private function turnofflayout()
     {
         $this->_helper->layout->disableLayout();
+    }
+
+    private function turnoffrenderer()
+    {
+        $this->_helper->viewRenderer->setNoRender(TRUE);
     }
 
     private function getSuppliers()
