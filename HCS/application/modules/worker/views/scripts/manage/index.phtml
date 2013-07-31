@@ -1,12 +1,7 @@
-<style>
-table { width:100%; }
-#datatable caption { text-align:left;  }
-#datatable thead th { text-align:left; border-bottom-width:1px; border-top-width:1px; }
-#datatable th, td { text-align:left; padding:6px;} 
-</style>
 <script>
 $(document).ready(function() {
     //alert("dataTable");
+    /*
     $('#datatable').dataTable( {
         "bPaginate": false,
         "bLengthChange": false,
@@ -14,9 +9,21 @@ $(document).ready(function() {
         "bSort": true,
         "bInfo": false,
         "bAutoWidth": false,
-        "bRetrieve": true, /* to fix warning: "Cannot reinitialise DataTable." */
+        "bRetrieve": true, // to fix warning: "Cannot reinitialise DataTable." 
     } );
+    */
+
+    $('#datatable').dataTable();
 } );
+
+function fnShowHide( iCol )
+{
+	/* Get the DataTables object again - this is not a recreation, just a get of the object */
+	var oTable = $('#datatable').dataTable();
+	
+	var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+	oTable.fnSetColumnVis( iCol, bVis ? false : true );
+}
 
 function addfunc()
 {
@@ -116,9 +123,20 @@ function checkall()
 	<div class="ui-block-c"><button onclick="deletefunc()" data-theme="a">Delete Worker</button></div>  
 </fieldset>
 -->
-<a href="/worker/manage/add"><button onclick="addfunc()" data-theme="a"><?php echo $this->translate("Add Worker");?></button></a>
+<a href="/worker/manage/add"><button data-theme="a"><?php echo $this->translate("Add Worker");?></button></a>
+
+<a href="javascript:void(0);" onclick="fnShowHide(0);">开关序号栏</a>
+<a href="javascript:void(0);" onclick="fnShowHide(1);">开关公司栏</a>
+<a href="javascript:void(0);" onclick="fnShowHide(2);">开关工地栏</a>
+<a href="javascript:void(0);" onclick="fnShowHide(3);">开关姓名栏</a>
+<a href="javascript:void(0);" onclick="fnShowHide(4);">开关中文名栏</a>
+<a href="javascript:void(0);" onclick="fnShowHide(5);">开关准证栏</a>
+<a href="javascript:void(0);" onclick="fnShowHide(6);">开关工种栏</a>
+<a href="javascript:void(0);" onclick="fnShowHide(7);">开关等级栏</a>
+<a href="javascript:void(0);" onclick="fnShowHide(8);">开关小时工资栏</a>
+
 <form name="dataform" id="dataform">
-<table id="datatable" border="3">
+<table id="datatable">
 <thead><tr>
 <!--<th><input type="checkbox" name="toggleall" id="toggleall" onClick="checkall()" data-role="none"></th>-->
 <th>序号</th>
@@ -129,7 +147,7 @@ function checkall()
 <th>准证号码</th>
 <th>工种</th>
 <th>等级</th>
-<th>小时单价</th>
+<th>小时工资</th>
 </tr></thead>
 <tbody> 
 <?php
@@ -166,7 +184,7 @@ foreach($this->result as $tmp)
     $hrwage = $tmp["hwage"];//"todo";
 
     $row = "<tr>";
-    $row .= '<td><a data-role="button"  data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
+    $row .= '<td><a data-role="button" data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
     $row .= "<td>$company</td>" ;
     $row .= "<td>$site</td>" ;
     $row .= "<td>$nameeng</td>" ;
