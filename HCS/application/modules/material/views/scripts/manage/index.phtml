@@ -2,18 +2,9 @@
 #Materials { width:100%; }
 </style>
 <script>
-$(document).ready(function() {
-    //alert("dataTable");
-    $('#datatable').dataTable( {
-        "bPaginate": false,
-        "bLengthChange": false,
-        "bFilter": false,
-        "bSort": true,
-        "bInfo": false,
-        "bAutoWidth": false,
-        "bRetrieve": true, /* to fix warning: "Cannot reinitialise DataTable." */
-    } );
-} );
+$(function() {
+    $('#Materials').dataTable();
+});
 
 function editfunc()
 {
@@ -116,6 +107,7 @@ function exportexcel()
 	<div class="ui-block-b"><button data-theme="a" data-mini="true" onclick="importexcel()">材料导入</button></div>
 	<div class="ui-block-c"><button data-theme="a" data-mini="true" onclick="exportexcel()">材料导出</button></div>
 </div><!-- /grid-b -->
+<br>
 <div>
 <?
 echo $this->grid("Materials", true)
@@ -126,7 +118,8 @@ echo $this->grid("Materials", true)
           ->field('spec', '规格')
           ->field('supplier', '供应商')
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
-          ->itemCountPerPage(30)
+          ->setSorting(false)  
+          //->itemCountPerPage(30)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Material())
           ->data($this->materials)
@@ -134,4 +127,5 @@ echo $this->grid("Materials", true)
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
 </div>
+<br><br>
 

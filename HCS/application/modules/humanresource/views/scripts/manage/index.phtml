@@ -1,7 +1,9 @@
-<style>
-#Humanres { width:100%; }
-</style>
-<div><a href="/humanresource/manage/add"><button>注册行政人员</button></a></div>
+<script>
+$(function() {
+    $('#Humanres').dataTable();
+});
+</script>
+<a href="/humanresource/manage/add"><button data-mini="true" data-theme="a">注册行政人员</button></a>
 <div>
 <?
 echo $this->grid("Humanres", true)

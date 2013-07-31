@@ -1,18 +1,17 @@
 <style>
 #swdiv { display:none; }
-.grid { width:100%; }
-#Documents { width:100%; }
-#Softwares { width:100%; }
 </style>
 <script>
+$(function() {
+    $('#Documents').dataTable();
+    $('#Softwares').dataTable();
+});
+
 function showSw()
 {
     $("#docdiv").hide();
     $("#swdiv").show();
-    //$("#docbtn").attr("data-theme", "");
-    //$("#swbtn").attr("data-theme", "a");     
-
-     $("#swbtn").addClass('ui-state-focus');  
+    $("#swbtn").addClass('ui-state-focus');  
 }
 
 function showDoc()

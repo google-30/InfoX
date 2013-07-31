@@ -2,6 +2,10 @@
 #mainselect { display:none; }
 </style>
 <script>
+$(function() {
+    $('#Materialtypes').dataTable();
+});
+
 $("#type").change(function() {
     var type = $(this).val();
     //alert("type="+type);
