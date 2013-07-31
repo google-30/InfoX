@@ -317,7 +317,7 @@ class Material_AppmanageController extends Zend_Controller_Action
         if(!$id)
         {
             $this->turnoffrenderer();
-            echo "id, please.";
+            echo "app id, please.";
             return;
         }    
 
@@ -358,6 +358,15 @@ class Material_AppmanageController extends Zend_Controller_Action
     public function previeworderAction()
     {
         $this->turnofflayout();    
+        $id = $this->getParam("id", 0);
+        if(!$id)
+        {
+            $this->turnoffrenderer();
+            echo "app id, please.";
+            return;
+        } 
+
+
     }
 
 
