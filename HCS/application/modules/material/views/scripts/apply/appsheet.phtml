@@ -380,12 +380,14 @@ foreach($this->materials as $tmp)
     $id = $tmp->getId();
     $name = $tmp->getName();
     $nameeng = $tmp->getNameeng();
+    $unit = $tmp->getUnit();
+    $spec = $tmp->getSpec();
 
     $body = "";
     $longname = '<tr><td class="tdname">' . $name . '/' . $nameeng . '</td>';
     $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="" placeholder="0"></td>';
-    $unit = "<td></td>";
-    $spec = "<td></td>";    
+    $unit = "<td>$unit</td>";
+    $spec = "<td>$spec</td>";    
     
     $dropdown = '<select id="sitepart' . $id . '" data-mini="true">';
     $dropdown .= $options;

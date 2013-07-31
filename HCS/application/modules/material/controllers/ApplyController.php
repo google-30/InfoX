@@ -301,6 +301,7 @@ class Material_ApplyController extends Zend_Controller_Action
           ->field('amount', '数量')
           ->field('sitepart', '工程部位')
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->setSorting(false)  
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
           //->helper(new GridHelper_Supplier())
