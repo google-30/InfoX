@@ -43,6 +43,7 @@ if($company)
 ?>
 
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
+
 <table class="" id="appinfotab"><tbody>
 <tr>
 <td><strong>申请工地:</strong></td><td><strong><?php echo $sitename; ?></strong></td>
@@ -58,6 +59,18 @@ if($company)
 <td><strong>申请单号:</strong></td><td><strong><?php echo $appid; ?></strong></td>
 </tr>
 </tbody></table>
+
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>预览和打印材料申请单</h3>
+    <a href="/material/appmanage/previewform?&id=<?php echo $appid; ?>" target="_blank"><input type="button" value="预览和打印材料申请单" data-theme="a" data-mini="true"></a> 
+    </div>
+
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>预览和打印Purchase Order</h3>
+    </div>
+</div>
+
 <?php
 echo $this->grid("matapps", true)
           ->field('longname','材料名称')
@@ -74,10 +87,12 @@ echo $this->grid("matapps", true)
           ->helper(new GridHelper_Appdetail())
           ->data($matapps);          
 ?>
-<!--<div id="totalprice"><strong>申请总价: <?php echo $totalprice; ?></strong></div>-->
+<!--
+<div id="totalprice"><strong>申请总价: <?php echo $totalprice; ?></strong></div>
 <br>
 <a href="/material/appmanage/previewform?&id=<?php echo $appid; ?>" target="_blank"><input type="button" value="预览和打印材料申请单" data-theme="a" data-mini="true"></a> 
 <a href="/material/appmanage/previeworder?&id=<?php echo $appid; ?>" target="_blank"><input type="button" value="预览和打印Purchase Order" data-theme="a" data-mini="true"></a>
+-->
 <br><br>
 
 
