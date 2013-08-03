@@ -25,7 +25,6 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        //$result = $this->_worker->findAll();
         /*
         $qb = $this->_em->createQueryBuilder();
         $qb->select('a')
@@ -58,6 +57,12 @@ class Worker_ManageController extends Zend_Controller_Action
         //echo $result[1]['worktype'];
         //echo $result[1]['sitename'];
 
+        $query = $this->_em->createQuery(
+            'select w, wc, ws from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
+        );
+        $result = $query->getResult();
+        $this->view->workersdata = $result;
+        
     }
 
     public function addAction()

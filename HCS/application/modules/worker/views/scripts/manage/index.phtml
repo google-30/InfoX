@@ -1,18 +1,8 @@
+<style>
+#infoswitches { display: none; }
+</style>
 <script>
 $(document).ready(function() {
-    //alert("dataTable");
-    /*
-    $('#datatable').dataTable( {
-        "bPaginate": false,
-        "bLengthChange": false,
-        "bFilter": false,
-        "bSort": true,
-        "bInfo": false,
-        "bAutoWidth": false,
-        "bRetrieve": true, // to fix warning: "Cannot reinitialise DataTable." 
-    } );
-    */
-
     $('#datatable').dataTable();
 } );
 
@@ -114,17 +104,30 @@ function checkall()
             }    
     }
 }
+
+function infoswitches()
+{
+    var sws = $("#infoswitches");    
+
+    var display = sws.css("display");
+    //alert(display);
+
+    if(display == "none")
+    {
+        $("#infoswitches").show();
+    }
+    else
+    {
+        $("#infoswitches").hide();
+    }
+}
+
 </script>
 
+<a href="/worker/manage/add"><button data-theme="a" data-mini="true"><?php echo $this->translate("Add Worker");?></button></a>
+<button data-theme="a" data-mini="true" onclick="infoswitches()">信息列表开关</button>
+<div id="infoswitches">
 <!--
-<fieldset class="ui-grid-b">
-	<div class="ui-block-a"><button onclick="addfunc()" data-theme="a"><?php echo $this->translate("Add Worker");?></button></div>
-	<div class="ui-block-b"><button onclick="editfunc()" data-theme="a">Edit Worker</button></div>	 
-	<div class="ui-block-c"><button onclick="deletefunc()" data-theme="a">Delete Worker</button></div>  
-</fieldset>
--->
-<a href="/worker/manage/add"><button data-theme="a"><?php echo $this->translate("Add Worker");?></button></a>
-
 <a href="javascript:void(0);" onclick="fnShowHide(0);">开关序号栏</a>
 <a href="javascript:void(0);" onclick="fnShowHide(1);">开关公司栏</a>
 <a href="javascript:void(0);" onclick="fnShowHide(2);">开关工地栏</a>
@@ -134,11 +137,108 @@ function checkall()
 <a href="javascript:void(0);" onclick="fnShowHide(6);">开关工种栏</a>
 <a href="javascript:void(0);" onclick="fnShowHide(7);">开关等级栏</a>
 <a href="javascript:void(0);" onclick="fnShowHide(8);">开关小时工资栏</a>
+-->
+<div class="ui-grid-d">
+<?php
+// http://stackoverflow.com/questions/8375625/jquery-select-table-column
+$switches=array(
+"namechs"=>"中文名","nameeng"=>"英文名","fin"=>"准证","passexp"=>"准证到期","passport"=>"护照",
+"passportexp"=>"护照到期","age"=>"年龄","arrivesing"=>"到新日期","leavesing"=>"离新日期","site"=>"所在工地",
+"company"=>"所在公司","hrwage"=>"时薪","srvyears"=>"服务年限","yrsinsing"=>"在新年限","worktype"=>"工种",
+"worklevel"=>"水平","education"=>"教育程度","pastwork"=>"往日职业","skill1"=>"主要技能一","skill2"=>"主要技能二",
+"drvlic"=>"驾照",);
 
-<form name="dataform" id="dataform">
+$count=0;
+$grids="";
+foreach($switches as $key => $value)
+{
+    $count++;
+    $block="a";
+    switch ($count) {
+        case 1:
+            $block = "a";
+            break;
+        case 2:
+            $block = "b";
+            break;
+        case 3:
+            $block = "c";
+            break;
+        case 4:
+            $block = "d";
+            break;
+        case 5:
+            $block = "e";
+            $count = 0;
+            break;
+    }
+
+    //$checkbox = '<input type="checkbox" name="checkbox-2a" id="checkbox-2a" class="custom" value="' . $key . '" >' . $value;
+    //$checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" class="custom" />';
+    //$checkbox .= '<label for="' . $key  . '">' . $value . '</label>';
+    $checkbox = '<label><input type="checkbox" name="' . $key . '" />' . $value . '</label>';
+    $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>";
+    $grids .= $grid;  
+}
+echo $grids;
+?>
+</div><!-- /grid-d -->
+
+
+
+</div>
+
+<!--
+<div data-role="fieldcontain" style="float:left">
+<fieldset data-role="controlgroup" data-mini="true">
+	<label for="checkbox-1a">Cheetos</label>
+	<input type="checkbox" name="checkbox-1a" id="checkbox-1a" class="custom" />
+
+	<input type="checkbox" name="checkbox-2a" id="checkbox-2a" class="custom" />
+	<label for="checkbox-2a">Doritos</label>
+
+	<input type="checkbox" name="checkbox-3a" id="checkbox-3a" class="custom" />
+	<label for="checkbox-3a">Fritos</label>
+
+	<input type="checkbox" name="checkbox-4a" id="checkbox-4a" class="custom" />
+	<label for="checkbox-4a">Sun Chips</label>
+</fieldset>
+</div>
+-->
+
+
+<?
+$wdtab=$this->grid("Workersdata", true);
+$wdtab=$wdtab->field('id','编号');
+$wdtab=$wdtab->field('nameeng','英名字');
+//$wdtab=$wdtab->field('company', '所在公司');
+$wdtab=$wdtab->data($this->workersdata);
+echo $wdtab;
+?>
+<br>
+
+
+<?
+echo $this->grid("Workersdata", true)
+          ->field('id','编号')
+          ->field('nameeng','英名字')
+          ->field('namechs','中文名')
+          ->field('company', '所在公司')
+          ->field('site', '所在工地')  
+          ->field('passexp', '准证到期') 
+          ->field('securityexp', '安全证到期')  
+          ->actionField(':action', "", '&nbsp;|&nbsp;')
+          ->paginatorEnabled(false)
+          ->setSorting(false)  
+          ->helper(new GridHelper_Worker())
+          ->data($this->workersdata)
+          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+?>
+<br>
+
 <table id="datatable">
 <thead><tr>
-<!--<th><input type="checkbox" name="toggleall" id="toggleall" onClick="checkall()" data-role="none"></th>-->
 <th>序号</th>
 <th>服务公司</th>
 <th>所在工地</th>
@@ -151,23 +251,9 @@ function checkall()
 </tr></thead>
 <tbody> 
 <?php
+$rows="";
 foreach($this->result as $tmp)
 {
-/*
-    // worker
-    $id = $tmp->getId();
-    $namechs = $tmp->getNamechs();
-    $nameeng = $tmp->getNameeng();
-    $fin = $tmp->getFin();
-
-    // skills
-    $worktype = "todo";
-    $level = "todo";
-    // company
-    $company = "todo";
-    $site = "todo";
-    $hrwage = "todo";
-*/
     // worker
     $id = $tmp[0]['id'];
     $namechs = $tmp[0]['namechs'];
@@ -175,13 +261,12 @@ foreach($this->result as $tmp)
     $fin = $tmp[0]['fin'];;
 
     // skills
-    $worktype = $tmp["worktype"];//"todo";
-    $level = $tmp["worklevel"];//"todo";
+    $worktype = $tmp["worktype"];
+    $level = $tmp["worklevel"];
     // company
-    //$company = $tmp["companylabel"];
     $company = $tmp["companyname"];
-    $site = $tmp["sitename"];//"todo";
-    $hrwage = $tmp["hwage"];//"todo";
+    $site = $tmp["sitename"];
+    $hrwage = $tmp["hwage"];
 
     $row = "<tr>";
     $row .= '<td><a data-role="button" data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
@@ -194,9 +279,11 @@ foreach($this->result as $tmp)
     $row .= "<td>$level</td>" ;
     $row .= "<td>$hrwage</td>" ;
     $row .= "</tr>";
-    echo $row;
+    
+    $rows .= $row;
 }
+echo $rows;
 ?>
 </tbody> 
 </table>
-</form><!-- dataform -->
+<br><br>
