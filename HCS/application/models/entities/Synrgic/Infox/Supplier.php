@@ -57,4 +57,25 @@ class Supplier extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $contact;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $fullname;
+
+    /**
+     * this string is for generating PO NO: HCD/WGS/HHL-001
+     *   
+     * @Column(type="string", nullable=true)
+     */
+    protected $postring;
+
+    /**
+     * attn name 
+     *   
+     * @Column(type="string", nullable=true)
+     */
+    protected $attn;
+
+
 }
