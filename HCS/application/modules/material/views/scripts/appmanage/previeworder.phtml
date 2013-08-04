@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>Purchase Orders</title> 
+	<title>PURCHASE ORDER</title> 
 	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
     <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
@@ -55,8 +55,8 @@ $cmyemail=$this->cmyemail;
 
 $cmycontact=$this->cmycontact;
 
-$formnameeng="MATERIAL REQUEST FORM";
-$formnamechs="材料申请单";
+$formnameeng="PURCHASE ORDER";
+//$formnamechs="材料申请单";
 
 $date=$this->date;
 
@@ -65,25 +65,13 @@ $sitename=$this->sitename;
 $matapps=$this->matapps;
 ?>
 <div data-role="page" data-theme="<?php echo $jmtheme; ?>" style="page-break-after:always">
-    <!--
-	<div data-role="header"  data-theme="<?php echo $jmtheme; ?>">
-		<h1><?php echo $cmyfullnameeng; ?></h1>
-        <h4><?php echo $cmyaddr; ?></h4>
-        <h4><?php echo $cmycontact; ?></h4>
-	</div>--><!-- /header -->
-
 	<div data-role="content" class="previewcontent">	
 		<strong><?php echo $cmyfullnameeng; ?></strong><br>
         <?php echo $cmyaddr; ?><br>
         <?php echo $cmycontact; ?><br><br>
 		<strong><?php echo $formnameeng; ?></strong><br>
-		<strong><?php echo $formnamechs; ?></strong><br><br>
 		
-        <div class="stayleft">To:&nbsp;<u>XXX</u></div>
-        <div class="stayright">Date:&nbsp;<u><?php echo $date; ?></u></div><br><br>
-
-        <div class="stayleft">Project:&nbsp;<u><?php echo $sitename; ?></u></div>
-        <div class="stayright">Ref:&nbsp;<u>XXX</u></div><br><br>
+        <div class="stayright">PO NO:&nbsp;<u><?php echo $date; ?></u></div><br><br>
 
 <table id="previewtab">
 <tr><th>S/NO<br>序号</th><th>Description<br>材料名称</th><th>Type<br>型号规格</th>

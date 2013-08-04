@@ -190,8 +190,8 @@ class Material_AppmanageController extends Zend_Controller_Action
 
             $suppriceobj = $this->_supplyprice->findOneBy(array("material"=>$matobj, "supplier"=>$supplier));
             $price = $suppriceobj ? $suppriceobj->getPrice() : $price;
-            $matappobj->setPrice($price);             
         }
+        $matappobj->setPrice($price);             
 
         $sitepart = $this->getParam("sitepart", "未定义");
         $matappobj->setSitepart($sitepart);
@@ -342,6 +342,7 @@ class Material_AppmanageController extends Zend_Controller_Action
         }    
 
         $appobj = $this->_application->findOneBy(array("id"=>$id));
+        /*
         $siteobj = $appobj->getSite();
         if($siteobj)
         {
@@ -362,7 +363,9 @@ class Material_AppmanageController extends Zend_Controller_Action
             // site
             $this->view->sitename = $sitename = $siteobj->getName();
         }
-        
+        */
+        $this->setCompanyinfo($appobj);
+
         // date
         $date = new Datetime("now");
         $this->view->date = $date->format("Y-m-d");
@@ -382,13 +385,42 @@ class Material_AppmanageController extends Zend_Controller_Action
         if(!$id)
         {
             $this->turnoffrenderer();
-            echo "app id, please.";
+            echo "error: app id.";
             return;
         } 
 
+        $appobj = $this->_application->findOneBy(array("id"=>$id));        
+        $this->setCompanyinfo($appobj);
 
+        $supplierid = $this->getParam("supplier", 0);
+        $supplierobj = $this->_supplier->findOneBy(array("id"=>$supplierid));
+
+        $this->view->matapps = $this->_matappdata->findBy(array("application"=>$appobj, "supplier"=>$supplierobj));                    
     }
 
+    private function setCompanyinfo($appobj)
+    {
+        $siteobj = $appobj->getSite();
+        if($siteobj)
+        {
+            $cmyobj = $siteobj->getCompany();
+            if($cmyobj)
+            {
+                // company info
+                $this->view->cmyfullnameeng = $cmyfullnameeng = $cmyobj->getFullnameeng();
+                $this->view->cmyaddr = $cmyaddr = $cmyobj->getAddress();
+                $this->view->cmyphone = $cmyphone = $cmyobj->getPhone();
+                $this->view->cmyfax = $cmyfax = $cmyobj->getFax();
+                $this->view->cmyemail = $cmyemail = $cmyobj->getEmail();
+
+                $cmycontact="Tel:" . $cmyphone . "&nbsp;&nbsp;Fax:" . $cmyfax . "&nbsp;&nbsp;Email:" . $cmyemail;
+                $this->view->cmycontact=$cmycontact;
+            }
+
+            // site
+            $this->view->sitename = $sitename = $siteobj->getName();
+        }
+    }
 
     private function getStatusArr()
     {

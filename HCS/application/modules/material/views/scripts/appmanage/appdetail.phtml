@@ -32,16 +32,24 @@ $totalprice= $this->totalprice ? $this->totalprice : 0;
 
 $company=$this->company;
 $cmyname=$this->cmyname;
-/*
-if($company)
+
+// TODO: group by(sql) supplier id to get all suppliers
+// for convenient
+$suppliers=array();
+foreach($matapps as $tmp)
 {
-    $cmynamechs = $company->getNamechs();
-    $cmynameeng = $company->getNameeng();
-    $cmyname = $cmynamechs . "/" . $cmynameeng;
+    $supplierobj = $tmp->getSupplier();
+    $supplierid = $supplierobj ? $supplierobj->getId(): 0;
+    $suppliername = $supplierobj ? $supplierobj->getName(): "";
+
+    if($supplierid && !in_array($supplierid, $suppliers))
+    {
+        $suppliers[$supplierid] = $suppliername;
+    }
 }
-*/
 ?>
 
+<h3>申请单详细信息</h3>
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
@@ -52,9 +60,21 @@ if($company)
 
     <div data-role="collapsible" data-collapsed="true">
     <h3>预览和打印Purchase Order</h3>
+<?php
+$buttons="";
+foreach($suppliers as $key => $value)
+{
+    $supplierid = $key;
+    $suppliername = $value;
+
+    $button = '<a href="/material/appmanage/previeworder?&id=' . $appid . "&supplier=" . $supplierid . '" target="_blank"><input type="button" value="' . $suppliername .'" data-theme="a" data-mini="true"></a>'; 
+    $buttons .= $button; 
+}    
+echo $buttons;
+?>
     </div>
 </div>
-
+<hr>
 <table class="" id="appinfotab"><tbody>
 <tr>
 <td><strong>申请工地:</strong></td><td><strong><?php echo $sitename; ?></strong></td>
@@ -84,6 +104,7 @@ echo $this->grid("matapps", true)
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
+          ->setSorting(false)  
           ->helper(new GridHelper_Appdetail())
           ->data($matapps);          
 ?>
@@ -94,6 +115,3 @@ echo $this->grid("matapps", true)
 <a href="/material/appmanage/previeworder?&id=<?php echo $appid; ?>" target="_blank"><input type="button" value="预览和打印Purchase Order" data-theme="a" data-mini="true"></a>
 -->
 <br><br>
-
-
-
