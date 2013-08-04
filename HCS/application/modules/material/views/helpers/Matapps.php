@@ -20,6 +20,20 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
         $cursupplier = $row[$field];
         $cursupplierid = $cursupplier ? $cursupplier->getId() : 0;
 
+        $matRepo = $em->getRepository('Synrgic\Infox\Material');
+        if(!$cursupplierid)
+        {// current supplier is not set, query the default supplier of the material 
+            $matid = $row["materialid"];    
+            $matobj = $matRepo->findOneBy(array("id"=>$matid));
+            if($matobj)
+            {
+            $supplierobj = $matobj->getSupplier();
+            $defsupplierid = $supplierobj ? $supplierobj->getId() : 0;
+            }
+            $cursupplierid = $defsupplierid;
+
+        }
+
         $options = "";
         foreach($suppliers as $tmp)
         {
