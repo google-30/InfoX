@@ -10,13 +10,15 @@ function updaterow(id)
     var price = $('#price'+id).val();
     price = (price=="") ? 0 : price;
 
+    var sitepart = $('#sitepart'+id).val();
+
     //alert('updaterow,id='+id+",amount="+amount+",remark="+remark+",supplierid="+supplierid+",price="+price);
 
     $.post("/material/appmanage/updatematapp", 
-        { id: id, amount: amount, remark:remark, supplierid:supplierid, price:price  }, 
+        { id: id, amount: amount, remark:remark, supplierid:supplierid, price:price, sitepart:sitepart }, 
         function(data) {
             alert(data);
-            console.log(data);            
+            //console.log(data);            
     });
 }
 
@@ -179,10 +181,11 @@ if(count($matappsInSys)>0)
 {
 echo "<p><strong>申请材料列表:</strong></p>";
 echo $this->grid("matappsInSys", true)
+          ->field('id','材料编号')
           ->field('longname','材料名称')
           ->field('amount','申请数量')
           ->field('sitepart', '工程部位')  
-          ->field('supplier1', '供应商价格')
+          ->field('supplier', '供应商价格')
           //->field('price', '单价')
           ->field('update', '更新')          
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
@@ -202,7 +205,7 @@ echo $this->grid("matappsNotInSys", true)
           ->field('amount','申请数量')          
           ->field('sitepart', '工程部位')  
           ->field('remark','补充说明')
-          ->field('supplier2', '供应商')
+          ->field('supplier', '供应商')
           ->field('price', '单价')
           ->field('update', '更新')          
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')

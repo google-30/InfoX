@@ -13,84 +13,61 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
     	return '<textarea name="remark" id="remark' . $row['id'] . '" placeholder="填写补充说明">'. $row[$field] .'</textarea>';
     }    
 
-    protected function td_supplier1($field, $row) 
+    protected function td_supplier($field, $row) 
     {
         $em = Zend_Registry::get('em');
         $supplypriceRepo = $em->getRepository('Synrgic\Infox\Supplyprice');
         $matRepo = $em->getRepository('Synrgic\Infox\Material');
-        $suppliers = $em->getRepository('Synrgic\Infox\Supplier')->findAll();    
+        $suppliers = $em->getRepository('Synrgic\Infox\Supplier')->findAll();
+ 
         $cursupplier = $row[$field];
         $cursupplierid = $cursupplier ? $cursupplier->getId() : 0;
 
-
-        if(!$cursupplierid)
-        {// current supplier is not set, query the default supplier of the material 
-            $matid = $row["materialid"];    
-            $matobj = $matRepo->findOneBy(array("id"=>$matid));            
-            if($matobj)
-            {
+        // material in sys or not
+        $matid = $row["materialid"];    
+        $matobj = $matRepo->findOneBy(array("id"=>$matid));            
+        $options = "";
+        if($matobj)
+        {// in sys
+            // current supplier is not set, query the default supplier of the material 
             $supplierobj = $matobj->getSupplier();
             $defsupplierid = $supplierobj ? $supplierobj->getId() : 0;
-            $cursupplierid = $defsupplierid;
-            }
-        }
+            $cursupplierid = $cursupplierid ? $cursupplierid : $defsupplierid;            
 
-
-        $options = "";
-        foreach($suppliers as $tmp)
-        {
-            $id = $tmp->getId();
-            $name = $tmp->getName();
-            if($cursupplierid == $id)
+            foreach($suppliers as $tmp)
             {
-                $options .= "<option value=$id selected>$name</option>";
-            }
-            else
-            {
-                $options .= "<option value=$id>$name</option>";
-            }
-        }        
-        $selects = '<select id="select' . $row['id'] . '" data-mini="true">' . $options . "</select>";
-    	return $selects;
-    }
+                $suppriceobj = $supplypriceRepo->findOneBy(array("material"=>$matobj, "supplier"=>$tmp));
+                $price = $suppriceobj ? $suppriceobj->getPrice() : 0;
 
-    // supplier2 is for displaying price of manual input materials
-    protected function td_supplier2($field, $row) 
-    {
-        $em = Zend_Registry::get('em');
-        $suppliers = $em->getRepository('Synrgic\Infox\Supplier')->findAll();    
-        $cursupplier = $row[$field];
-        $cursupplierid = $cursupplier ? $cursupplier->getId() : 0;
-
-        $matRepo = $em->getRepository('Synrgic\Infox\Material');
-        if(!$cursupplierid)
-        {// current supplier is not set, query the default supplier of the material 
-            $matid = $row["materialid"];    
-            $matobj = $matRepo->findOneBy(array("id"=>$matid));            
-            if($matobj)
+                $id = $tmp->getId();
+                $name = $tmp->getName();
+                if($cursupplierid == $id)
+                {
+                    $options .= "<option value=$id selected>$name::$price</option>";
+                }
+                else
+                {
+                    $options .= "<option value=$id>$name::$price</option>";
+                }
+            }                    
+        }   
+        else
+        {// not in sys
+            foreach($suppliers as $tmp)
             {
-            $supplierobj = $matobj->getSupplier();
-            $defsupplierid = $supplierobj ? $supplierobj->getId() : 0;
-            $cursupplierid = $defsupplierid;
-            }
-        }
+                $id = $tmp->getId();
+                $name = $tmp->getName();
+                if($cursupplierid == $id)
+                {
+                    $options .= "<option value=$id selected>$name</option>";
+                }
+                else
+                {
+                    $options .= "<option value=$id>$name</option>";
+                }
+            }                   
+        }    
 
-        $supplypriceRepo = $em->getRepository('Synrgic\Infox\Supplyprice');
-
-        $options = "";
-        foreach($suppliers as $tmp)
-        {
-            $id = $tmp->getId();
-            $name = $tmp->getName();
-            if($cursupplierid == $id)
-            {
-                $options .= "<option value=$id selected>$name</option>";
-            }
-            else
-            {
-                $options .= "<option value=$id>$name</option>";
-            }
-        }        
         $selects = '<select id="select' . $row['id'] . '" data-mini="true">' . $options . "</select>";
     	return $selects;
     }
@@ -138,7 +115,7 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
         }        
         //$selects = '<select id="select' . $row['id'] . '" data-mini="true">' . $options . "</select>";        
         
-        $selects = '<select id="select' . $row['id'] . '" data-mini="true">';
+        $selects = '<select id="sitepart' . $row['id'] . '" data-mini="true">';
         $option0 = '<option value="无定义">无定义</option>';
         $selects .= $option0 . $options . "</select>";
         

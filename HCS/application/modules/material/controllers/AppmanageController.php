@@ -157,7 +157,7 @@ class Material_AppmanageController extends Zend_Controller_Action
         $this->turnoffview();
 
         $requests = $this->getRequest()->getPost();
-        if(1)
+        if(0)
         {                
             var_dump($requests);
             return;
@@ -165,17 +165,37 @@ class Material_AppmanageController extends Zend_Controller_Action
 
         $id = $requests['id'];
         $amount = $requests['amount'];
+
         //$remark = $requests['remark'];
+        $remark = $this->getParam("remark", 0);
+
         $supplierid = $requests['supplierid'];
-        $price = $requests['price'];
+
+        //$price = $requests['price'];
+        $price = $this->getParam("price", 0);
+
         // update matappdata, update application
         $matappobj = $this->_matappdata->findOneBy(array("id"=>$id));       
+
         $matappobj->setAmount($amount); 
-        $matappobj->setRemark($remark);
-        
+        $matappobj->setRemark($remark);        
         $supplier = $this->_supplier->findOneBy(array("id"=>$supplierid));
         $matappobj->setSupplier($supplier);
-        $matappobj->setPrice($price); 
+
+        $insys = $matappobj->getMaterialinsys();    
+        if(!$price && $insys)
+        {// get default supplier price, and update into matapps
+            $matid = $matappobj->getMaterialid();
+            $matobj = $this->_material->findOneBy(array("id"=>$matid));
+
+            $suppriceobj = $this->_supplyprice->findOneBy(array("material"=>$matobj, "supplier"=>$supplier));
+            $price = $suppriceobj ? $suppriceobj->getPrice() : $price;
+            $matappobj->setPrice($price);             
+        }
+
+        $sitepart = $this->getParam("sitepart", "未定义");
+        $matappobj->setSitepart($sitepart);
+    
         $this->_em->persist($matappobj);
         try {
             $this->_em->flush();
