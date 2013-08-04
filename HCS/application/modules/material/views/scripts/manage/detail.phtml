@@ -19,6 +19,12 @@ function submitform()
 function redirect(url) {
     window.location = url;
 }
+
+$('.defsupplier').change( function() {
+    var id = $(this).attr("id");
+    //alert("defsupplier id="+id);
+    $("#defsupplierid").val(id);
+});
 </script>
 <?php
 $data=$this->maindata;
@@ -34,6 +40,7 @@ $suppliers=$this->suppliers;
 $pic="";
 $usage="";
 $typeid=0;
+$defsupplierid=0;
 
 if($mode==="Edit")
 {
@@ -48,6 +55,11 @@ $pic=$data->getPic();
 $usage="";
 $typeobj=$data->getType();
 if($typeobj) { $typeid=$typeobj->getId(); } 
+$defsupplier=$data->getSupplier();
+if($defsupplier)
+{
+    $defsupplierid=$defsupplier->getId(); 
+}
 }
 ?>
 
@@ -56,6 +68,7 @@ if($typeobj) { $typeid=$typeobj->getId(); }
 <form id="dataform" enctype="multipart/form-data" method="post" action="/material/manage/submit">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+<input type="hidden" id="defsupplierid" name="defsupplierid" value="<?php echo $defsupplierid; ?>">
 
 <table class="">
 <tr>
@@ -82,7 +95,6 @@ if($typeobj) { $typeid=$typeobj->getId(); }
 <tr><td>
 <div data-role="fieldcontain">
 <label for="usage">材料用途:</label>
-<!--<input type="text" name="date" id="date" value="<?php echo $date; ?>" data-mini="true">-->
 <input type="text" name="usage" id="usage" value="<?php echo $usage; ?>" data-mini="true" placeholder="材料用途，比如木类，金属类等">
 </div>
 </td></tr>
@@ -134,24 +146,10 @@ echo $options;
 </div>
 </td>
 </tr>
-
-<!--
-<tr>
-<td><div data-role="fieldcontain">
-<label for="spec">基本分类:</label>
-<input type="text" name="spec" id="spec" value="<?php echo $spec; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
-</div>
-</td>
-<td><div data-role="fieldcontain">
-    <label for="description">详细分类:</label>
-    <textarea id="description" name="description" rows="2" cols="60" data-mini="true" placeholder="补充，比如材料的特殊性，防火放潮等"><?php echo $description; ?></textarea>
-</div></td>
-</tr>
--->
 </table>
 
 <table class="grid">
-<thead><tr><th>默认供应商</th><th>名称</th><th>价格</th><th>报价日期</th></tr></thead>
+<thead><tr><th>优先供应商</th><th>名称</th><th>价格</th><th>报价日期</th></tr></thead>
 <tbody>
 <?php
 $suppliers= $this->suppliers;
@@ -178,11 +176,19 @@ foreach($suppliers as $tmp)
     }
 
     $row = "";
-    $tdcheck = '<td><input type="checkbox" name="checkbox-1" id="checkbox-1" class="custom" /></td>';    
+
+    if($id == $defsupplierid)
+    {
+        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked/></td>';        
+    }
+    else
+    {
+        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" /></td>';    
+    }
     $tdname = "<td>$name</td>";
     $tdprice = '<td><input type="text" value="'. $price .'" name="price' . $id . '" id="price' . $id .'" placeholder="0"></td>';
     $tdupdate = '<td><input type="text" class="classupdate" value="'. $update .'" name="update' . $id . '" id="update' . $id .'"></td>';
-    $row .= "<tr>" . $tdcheck . $tdname . $tdprice . $tdupdate . "</tr>";
+    $row .= "<tr>" . $tdradio . $tdname . $tdprice . $tdupdate . "</tr>";
     echo $row;
 }
 ?>

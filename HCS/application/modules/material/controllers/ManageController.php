@@ -89,6 +89,8 @@ class Material_ManageController extends Zend_Controller_Action
 
         $typeid = $this->getParam("type", "0");
 
+        $defsupplierid = $this->getParam("defsupplierid", "0");
+
         if($mode == "Create")
         {
             $data = new \Synrgic\Infox\Material(); 
@@ -108,13 +110,12 @@ class Material_ManageController extends Zend_Controller_Action
         $data->setDetailtype($dtype);
         $data->setUsage($usage);
         $data->setUnit($unit);
-        /*
-        $supobj = $this->_supplier->findOneBy(array("id"=>$supplier));
-        if(isset($supobj))  
+
+        $supobj = $this->_supplier->findOneBy(array("id"=>$defsupplierid));
+        if($supobj)  
         {
             $data->setSupplier($supobj);
         }
-        */
 
         $typeobj = $this->_materialtype->findOneBy(array("id"=>$typeid));
         if(isset($typeobj)) 
@@ -131,6 +132,7 @@ class Material_ManageController extends Zend_Controller_Action
         }        
 
         $id = $data->getId();
+
         // upload pic
         $this->storePic($id);
 

@@ -4,6 +4,7 @@ class GridHelper_Material extends Grid_Helper_Abstract
 {
     protected function td_supplier($field, $row) 
     {
+        /*
         if(is_null($row->$field))
         {
             return "&nbsp;";
@@ -11,7 +12,10 @@ class GridHelper_Material extends Grid_Helper_Abstract
         else
         {
             return $row->$field->getName();
-        }    
+        } 
+        */
+
+        return $row->$field ? $row->$field->getName() : "&nbsp;";   
     }
 
     protected function td_supplier1($field, $row) 
@@ -41,12 +45,18 @@ class GridHelper_Material extends Grid_Helper_Abstract
     	return $html;
     }
 
-    protected function td_price1($field, $row) 
+    protected function td_price($field, $row) 
     {
-        $price = '<div style="float: left;"><input type="text" id="price' . $row['id'] . '" value="'. '" data-mini="true" placeholder="0" style="width:60px" ></div>';
-        $updatebtn = '<div style="float: right;"><button onclick="updaterow(' . $row['id'] . ')" data-mini="true">更新</button></div>';
-        $html = "<div>". $price . $updatebtn . "</div>";
-        return $html;
+        $supplier = $row['supplier'];
+        //return $supplier ? "yyy" : "xxx";        
+        $id = $row['id'];
+
+        $em = Zend_Registry::get('em');
+        $supplyprices = $em->getRepository('Synrgic\Infox\Supplyprice');
+        $supplypriceobj = $supplyprices->findOneBy(array("material"=>$row, "supplier"=>$supplier));
+        $price = $supplypriceobj ? $supplypriceobj->getPrice() : "&nbsp;";
+
+        return $price;        
     }  
 
     protected function td_update($field, $row) 
