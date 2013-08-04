@@ -177,18 +177,18 @@ echo $options;
 <?php
 if(count($matappsInSys)>0)
 {
-echo "<p>系统已有信息的材料</p>";
+echo "<p><strong>申请材料列表:</strong></p>";
 echo $this->grid("matappsInSys", true)
           ->field('longname','材料名称')
           ->field('amount','申请数量')
-          //->field('remark','补充说明')
           ->field('sitepart', '工程部位')  
-          ->field('supplier', '供应商')
+          ->field('supplier1', '供应商价格')
           //->field('price', '单价')
           ->field('update', '更新')          
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
+          ->setSorting(false)
           ->helper(new GridHelper_Matapps())
           ->data($matappsInSys)
           ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
@@ -196,18 +196,19 @@ echo $this->grid("matappsInSys", true)
 
 if(count($matappsNotInSys)>0)
 {
-echo "<p>手动输入信息的材料</p>";
+echo "<p><strong>手动输入材料列表:</strong></p>";
 echo $this->grid("matappsNotInSys", true)
           ->field('longname','材料名称')
           ->field('amount','申请数量')          
           ->field('sitepart', '工程部位')  
           ->field('remark','补充说明')
-          ->field('supplier', '供应商')
+          ->field('supplier2', '供应商')
           ->field('price', '单价')
           ->field('update', '更新')          
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
+          ->setSorting(false)
           ->helper(new GridHelper_Matapps())
           ->data($matappsNotInSys)
           ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));

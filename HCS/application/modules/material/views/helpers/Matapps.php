@@ -13,7 +13,49 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
     	return '<textarea name="remark" id="remark' . $row['id'] . '" placeholder="填写补充说明">'. $row[$field] .'</textarea>';
     }    
 
-    protected function td_supplier($field, $row) 
+    protected function td_supplier1($field, $row) 
+    {
+        $em = Zend_Registry::get('em');
+        $supplypriceRepo = $em->getRepository('Synrgic\Infox\Supplyprice');
+        $matRepo = $em->getRepository('Synrgic\Infox\Material');
+        $suppliers = $em->getRepository('Synrgic\Infox\Supplier')->findAll();    
+        $cursupplier = $row[$field];
+        $cursupplierid = $cursupplier ? $cursupplier->getId() : 0;
+
+
+        if(!$cursupplierid)
+        {// current supplier is not set, query the default supplier of the material 
+            $matid = $row["materialid"];    
+            $matobj = $matRepo->findOneBy(array("id"=>$matid));            
+            if($matobj)
+            {
+            $supplierobj = $matobj->getSupplier();
+            $defsupplierid = $supplierobj ? $supplierobj->getId() : 0;
+            $cursupplierid = $defsupplierid;
+            }
+        }
+
+
+        $options = "";
+        foreach($suppliers as $tmp)
+        {
+            $id = $tmp->getId();
+            $name = $tmp->getName();
+            if($cursupplierid == $id)
+            {
+                $options .= "<option value=$id selected>$name</option>";
+            }
+            else
+            {
+                $options .= "<option value=$id>$name</option>";
+            }
+        }        
+        $selects = '<select id="select' . $row['id'] . '" data-mini="true">' . $options . "</select>";
+    	return $selects;
+    }
+
+    // supplier2 is for displaying price of manual input materials
+    protected function td_supplier2($field, $row) 
     {
         $em = Zend_Registry::get('em');
         $suppliers = $em->getRepository('Synrgic\Infox\Supplier')->findAll();    
@@ -24,15 +66,16 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
         if(!$cursupplierid)
         {// current supplier is not set, query the default supplier of the material 
             $matid = $row["materialid"];    
-            $matobj = $matRepo->findOneBy(array("id"=>$matid));
+            $matobj = $matRepo->findOneBy(array("id"=>$matid));            
             if($matobj)
             {
             $supplierobj = $matobj->getSupplier();
             $defsupplierid = $supplierobj ? $supplierobj->getId() : 0;
-            }
             $cursupplierid = $defsupplierid;
-
+            }
         }
+
+        $supplypriceRepo = $em->getRepository('Synrgic\Infox\Supplyprice');
 
         $options = "";
         foreach($suppliers as $tmp)
