@@ -23,16 +23,7 @@
 		<resource>worker:manage</resource>
 		<privilege>view</privilege>
 	    </worker>
-<!--
-	    <applicationmanagement>
-		<label>申请单管理</label>
-		<module>material</module>
-		<controller>manage</controller>
-		<action>appmanage</action>
-		<resource>material:manage</resource>
-		<privilege>view</privilege>
-	    </applicationmanagement>
--->
+
 	    <applicationmanagement>
 		<label>申请单管理</label>
 		<module>material</module>
@@ -120,6 +111,15 @@
 		    <resource>company:info</resource>
 		    <privilege>view</privilege>
 	        </companyinfo>
+
+	        <miscinfo>
+		    <label>其他信息</label>
+		    <module>miscinfo</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>miscinfo:manage</resource>
+		    <privilege>view</privilege>
+	        </miscinfo>
                 
             </pages>
         </settings>
