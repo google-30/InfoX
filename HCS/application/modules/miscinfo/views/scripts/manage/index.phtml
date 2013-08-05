@@ -1,41 +1,83 @@
 <script>
-// http://jsfiddle.net/jaredwilli/tZPg4/4/
-$(function() {
-var scntDiv = $('#p_scents');
-var i = $('#p_scents p').size() + 1;
+// Unused - http://jsfiddle.net/jaredwilli/tZPg4/4/
+$(function() {});
 
-$('#addScnt').live('click', function() {
-        $('<p><label for="p_scnts"><input type="text" id="p_scnt" size="20" name="p_scnt_' + i +'" value="" placeholder="Input Value" /></label> <a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
-        i++;
-        return false;
-});
+function addinfo()
+{
+    var namechs = $('#namechs').val();
+    var nameeng = $('#nameeng').val();
 
-$('#remScnt').live('click', function() { 
-        if( i > 2 ) {
-                $(this).parents('p').remove();
-                i--;
-        }
-        return false;
-});
-});
-
+    $.post("/miscinfo/manage/addinfo", { namechs:namechs, nameeng:nameeng }, 
+    function(data) {
+        //console.log(data);
+        alert(data);        
+        window.location.reload();
+    })    
+}
 </script>
+<?php
+$infos=$this->infos;
+
+?>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
-    <h3>添加新的信息类</h3>
-    <input type="text" placeholder="中文名称" id="infonamechs">
-    <input type="text" placeholder="英文名称" id="infonameeng">
-    <button data-mini="true" data-theme="a">提交</button>
+    <h3>添加新的信息</h3>
+    <input type="text" placeholder="中文名称" id="namechs">
+    <input type="text" placeholder="英文名称" id="nameeng">
+    <button data-mini="true" data-theme="a" onclick="addinfo()">提交</button>
     </div>    
 </div>    
 <hr>
+<p><strong>信息列表</strong></p>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
+    <!--
     <div data-role="collapsible" data-collapsed="true">
     <h3>总承包单位/General Contractor</h3>
-    <button data-mini="true" data-theme="a">添加一个项</button>
+    <form method="post" action="/misc/manage/postdata">
     <input type="text" placeholder="中文名称" id="infonamechs">
     <input type="text" placeholder="英文名称" id="infonameeng">
     <button data-mini="true" data-theme="a">提交</button>
+    </form>    
     </div>    
+    -->
+<?php
+foreach($infos as $info)
+{
+    $infohtml='<div data-role="collapsible" data-collapsed="true">';
+
+    $id = $info->getId();
+    $namechs=$info->getNamechs();
+    $nameeng=$info->getNameeng();
+    $values = $info->getValues();
+
+    $h3 = "<h3>$namechs/$nameeng</h3>";
+    $form = '<form method="post" action="/miscinfo/manage/postinfo">';
+    $hiddenid = '<input type="hidden" name="id" id="id" value="'. $id . '">';
+
+    $inputhtml = "";
+    $count = 1;
+    if($values)
+    {
+        $valueArr = explode(";", $values);
+        foreach($valueArr as $tmp)
+        {
+            if($tmp != "")
+            {
+                $inputhtml .= '<input type="text" placeholder="添加一个字串" id="value' . $count++ . '" value="' . $tmp . '">';
+            }
+        }
+    }
+    $inputhtml .= '<input type="text" placeholder="添加一个字串" name="value' . $count . '" value="">';
+    $hiddencount = '<input type="hidden" name="count" id="id" value="'. $count . '">';
+    $button = '<button data-mini="true" data-theme="a">提交</button>';
+    $formend = "</form>";
+    $infohtml .= $h3 . $form . $hiddenid . $hiddencount . $inputhtml . $button . $formend;
+    $infohtml.="</div>";
+    echo $infohtml;
+}
+?>    
 </div>    
+
+
+
 

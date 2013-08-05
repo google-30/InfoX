@@ -142,7 +142,7 @@ class Synrgic_Models_AclBuilder {
             'humanresource:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'material:type'=>array('view','add', 'edit', 'delete', 'submit','posttype'),
             'company:info'=>array('view','add', 'edit', 'delete', 'submit'),
-            'miscinfo:manage'=>array('view','add', 'edit', 'delete', 'submit'),
+            'miscinfo:manage'=>array('view','addinfo', 'postinfo', 'edit', 'delete', 'submit'),
 		    )
 		),
 	);
