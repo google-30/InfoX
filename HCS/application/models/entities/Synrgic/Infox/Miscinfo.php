@@ -14,6 +14,13 @@ class Miscinfo extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
+     * label is for controller to identify this info
+     *   
+     * @Column(type="string", nullable=true)
+     */
+    protected $label;
+
+    /**
      * @Column(type="string")
      */
     protected $namechs;

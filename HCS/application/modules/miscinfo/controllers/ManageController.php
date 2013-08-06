@@ -24,7 +24,10 @@ class Miscinfo_ManageController extends Zend_Controller_Action
     {
         $infos = $this->_miscinfo->findAll();
         $this->view->infos = $infos;
-                
+        
+        // general contractor                
+        $info01 = $this->_miscinfo->findOneBy(array("label"=>"info01"));
+        $this->view->info01 = $info01;
     }    
 
     public function addinfoAction()
@@ -55,7 +58,58 @@ class Miscinfo_ManageController extends Zend_Controller_Action
         echo "添加成功";        
     }
 
+    // this is a general method to add string type data
+    // data stores like this: aaa;bbb;ccc;
     public function postinfoAction()
+    {
+        $this->turnoffview();        
+        $requests = $this->getRequest()->getPost();
+        if(0)
+        {
+            var_dump($requests);
+            return;
+        }           
+        
+        $label = $this->getParam("label", "");
+        $namechs = $this->getParam("namechs", "");
+        $nameeng = $this->getParam("nameeng", "");
+        $count = intval($this->getParam("count", 0));
+
+        $infoobj = $this->_miscinfo->findOneBy(array("label"=>$label));
+        if(!$infoobj)
+        {
+            $infoobj = new \Synrgic\Infox\Miscinfo(); 
+        }
+        
+        $infoobj->setLabel($label);
+        $infoobj->setNamechs($namechs);
+        $infoobj->setNameeng($nameeng);        
+
+        $values="";
+        for($i=0;$i<$count;$i++)
+        {
+            $j = $i+1;
+            $key = "value" . $j;
+            $value = $this->getParam($key, "");
+            if($value != "")
+            {
+                $values .= $value . ";";
+            }
+        }
+        //echo "values=" . $values;
+        $infoobj->setValues($values);
+        $this->_em->persist($infoobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+
+        $this->redirect("/miscinfo/manage");
+    }
+
+    public function postinfoAction1()
     {
         $this->turnoffview();        
         $requests = $this->getRequest()->getPost();

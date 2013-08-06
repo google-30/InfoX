@@ -17,7 +17,7 @@ function addinfo()
 </script>
 <?php
 $infos=$this->infos;
-
+$info01=$this->info01;
 ?>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
@@ -30,17 +30,50 @@ $infos=$this->infos;
 <hr>
 <p><strong>信息列表</strong></p>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
-    <!--
     <div data-role="collapsible" data-collapsed="true">
     <h3>总承包单位/General Contractor</h3>
-    <form method="post" action="/misc/manage/postdata">
-    <input type="text" placeholder="中文名称" id="infonamechs">
-    <input type="text" placeholder="英文名称" id="infonameeng">
+    <form method="post" action="/miscinfo/manage/postinfo">
+    <input type="hidden" value="info01" name="label">
+<?php
+$namechs="总承包单位";
+$nameeng="General Contractor";
+$values="";
+if($info01)
+{
+    $namechs = $info01->getNamechs();
+    $nameeng = $info01->getNameeng();
+    $values = $info01->getValues();
+}
+echo '<input type="text" placeholder="中文名称" name="namechs" value="' . $namechs . '">';
+echo '<input type="text" placeholder="英文名称" name="nameeng" value="' . $nameeng . '"><hr>';
+$count = 1;
+$inputs="";
+if($values!="")
+{
+    $valueArr=explode(";", $values);
+    foreach($valueArr as $tmp)
+    {
+        if($tmp=="")
+        {
+            continue;
+        }
+        $input = '<input type="text" placeholder="填入合适字串" name="value' . $count++ . '" value="' . $tmp . '">';
+        $inputs .= $input;
+    }    
+}
+$inputs .= '<input type="text" placeholder="填入合适字串" name="value' . $count . '"value="">';
+$hiddencount = '<input type="hidden" name="count" id="id" value="'. $count . '">';
+$inputs .= $hiddencount;
+echo $inputs;
+
+?>
     <button data-mini="true" data-theme="a">提交</button>
     </form>    
     </div>    
-    -->
+
 <?php
+if(0)
+{
 foreach($infos as $info)
 {
     $infohtml='<div data-role="collapsible" data-collapsed="true">';
@@ -74,6 +107,7 @@ foreach($infos as $info)
     $infohtml .= $h3 . $form . $hiddenid . $hiddencount . $inputhtml . $button . $formend;
     $infohtml.="</div>";
     echo $infohtml;
+}
 }
 ?>    
 </div>    
