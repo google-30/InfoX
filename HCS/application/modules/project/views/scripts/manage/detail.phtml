@@ -106,28 +106,33 @@ $leaders=$this->leaders;
 $managers=$this->managers;
 $companyinfos=$this->companyinfos;
 
+$contractor="";
+$contractors=$this->contractors;
+
 if($this->mode == "Edit")
 {
-$data = $this->maindata;
-$mode = "Edit";
-$id = $data->getId();
-$name = $data->getName();
-$address = $data->getAddress();
-$start = $data->getStart()->format("Y-m-d");
-$stop = $data->getStop()->format("Y-m-d");
-if($data->getLeader())
-{
-    $leader = $data->getLeader()->getName();
-}
-if($data->getManager())
-{
-    $manager = $data->getManager()->getName();
-}
-$workerno = $data->getWorkerno();
-$remark = $data->getRemark();
-$companyobj = $data->getCompany();
-if($companyobj) { $companyid = $companyobj->getId(); }
-$parts=$data->getParts();
+    $data = $this->maindata;
+    $mode = "Edit";
+    $id = $data->getId();
+    $name = $data->getName();
+    $address = $data->getAddress();
+    $start = $data->getStart()->format("Y-m-d");
+    $stop = $data->getStop()->format("Y-m-d");
+    if($data->getLeader())
+    {
+        $leader = $data->getLeader()->getName();
+    }
+    if($data->getManager())
+    {
+        $manager = $data->getManager()->getName();
+    }
+    $workerno = $data->getWorkerno();
+    $remark = $data->getRemark();
+    $companyobj = $data->getCompany();
+    if($companyobj) { $companyid = $companyobj->getId(); }
+    $parts=$data->getParts();
+
+    $contractor = $data->getContractor();
 }
 ?>
 <?php
@@ -150,11 +155,39 @@ else
     <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
 </div></td>
 <td><div data-role="fieldcontain">
+    <label for="contractor">总包单位:</label>
+    <select name="contractor" id="contractor" data-mini="true">
+    <option value="0"></option>
+<?php
+if(isset($contractors))
+{
+    foreach($contractors as $tmp)
+    {
+        if($tmp == "")
+        {
+            continue;
+        }
+
+        if($tmp == $contractor)
+        {
+            echo '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+        }
+        else
+        {
+            echo '<option value="' . $tmp . '">' . $tmp . '</option>';    
+        }
+    }
+}
+?>
+    </select>
+</div></td>
+
+</tr>
+<tr>
+<td><div data-role="fieldcontain">
     <label for="address">工地地址:</label>
     <input type="text" name="address" id="address" value="<?php echo $address; ?>" data-mini="true">
 </div></td>
-</tr>
-<tr>
 <td><div data-role="fieldcontain">
     <label for="leader">工长:</label>
     <select name="leader" id="leader" data-mini="true">
@@ -176,6 +209,7 @@ else
     ?>
     </select>
 </div></td>
+<!--
 <td><div data-role="fieldcontain">
     <label for="manager">经理:</label>
     <select name="manager" id="manager" data-mini="true">
@@ -193,6 +227,8 @@ if(isset($managers))
 ?>
     </select>
 </div></td>
+-->
+
 </tr>
 
 <tr>
@@ -246,7 +282,6 @@ echo $options;
 </tr>
 </table>
 </form> <!--main form-->
-
 
 <fieldset <?php if($mode=="Create") echo 'style=display:none'; ?>>
 <legend>定义工程部位</legend>

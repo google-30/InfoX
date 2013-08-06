@@ -24,7 +24,7 @@ $workerno=0;
 $remark="";
 $leaders=$this->leaders;
 $managers=$this->managers;
-
+$contractor="";
 if(1)
 {
 $data = $this->maindata;
@@ -44,7 +44,7 @@ if($data->getManager())
 }
 $workerno = $data->getWorkerno();
 $remark = $data->getRemark();
-
+$contractor=$data->getContractor();
 }   
 ?>
 
@@ -53,15 +53,16 @@ $remark = $data->getRemark();
 <thead><strong>工地详细信息</strong></thead>
 <tr>
 <td>工地名称:</td><td><?php echo $name; ?></td>
+<!--<td>经理:</td><td><?php echo $manager; ?></td>-->
+<td>总包单位:</td><td><?php echo $contractor; ?></td>
+</tr>
+<tr>
 <td>工地地址:</td><td><?php echo $address; ?></td>
+<td>工长:</td><td><?php echo $leader; ?></td>
 </tr>
 <tr>
 <td>开工日期:</td><td><?php echo $start; ?></td>
 <td>竣工日期:</td><td><?php echo $stop; ?></td>
-</tr>
-<tr>
-<td>工长:</td><td><?php echo $leader; ?></td>
-<td>经理:</td><td><?php echo $manager; ?></td>
 </tr>
 </table>
 

@@ -14,6 +14,8 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_role = $this->_em->getRepository('Synrgic\Infox\Role');
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
         $this->_application = $this->_em->getRepository('Synrgic\Infox\Application');
+
+        $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
     }
 
     public function indexAction()
@@ -26,12 +28,14 @@ class Project_ManageController extends Zend_Controller_Action
     {
         $this->findPIC();
         $this->getCompanyinfo();
+        $this->getGeneralContractors();
     } 
 
     public function editAction()
     {
         $this->findPIC();
         $this->getCompanyinfo();
+        $this->getGeneralContractors();
 
         $id = $this->getParam("id");
         //echo "id=$id<br>";
@@ -52,8 +56,7 @@ class Project_ManageController extends Zend_Controller_Action
         where wc.site = ' . $id
          );
         $result = $query->getResult();
-        $this->view->workers = $result;
-        
+        $this->view->workers = $result;                
     } 
 
     public function deleteAction()
@@ -85,14 +88,15 @@ class Project_ManageController extends Zend_Controller_Action
         $id = $this->getParam("id", "0");
         $name = $this->getParam("name");
         $address = $this->getParam("address", "");
-        $leader = $this->getParam("leader", "");
-        $manager = $this->getParam("manager", "");
+        $leader = $this->getParam("leader", 0);
+        $manager = $this->getParam("manager", 0);
         $start = $this->getParam("start", "");
         $stop = $this->getParam("stop", "");
         $remark = $this->getParam("remark", "");
         $workerno = $this->getParam("workerno", "");
         $company = $this->getParam("company", 0);
-
+        $contractor = $this->getParam("contractor", "");
+        
         if($mode == "Create")
         {
             $data = new \Synrgic\Infox\Site(); 
@@ -116,6 +120,8 @@ class Project_ManageController extends Zend_Controller_Action
         {
             $data->setCompany($companyobj);
         }
+
+        $data->setContractor($contractor);
 
         $this->_em->persist($data);
         try {
@@ -231,4 +237,14 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();   
     }
 
+    private function getGeneralContractors()
+    {
+        $label = "info01"; // ... use info01 to label contractor info
+        
+        $infoobj = $this->_miscinfo->findOneBy(array("label"=>$label));
+        $values = $infoobj ? $infoobj->getValues() : "";
+        $valueArr = ($values != "") ? explode(";", $values) : array();
+
+        $this->view->contractors = $valueArr;
+    }
 }
