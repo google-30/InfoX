@@ -92,5 +92,21 @@ class Site extends \Synrgic_Models_Entity {
      */
     protected $leaders;
 
+    /**
+     * material applicaiton status
+     * true: allow requests from leaders
+     * false: not allowed leaders to apply
+     *   
+     * @Column(type="boolean", nullable=true)
+     */
+    protected $permission1;
+
+    /**
+     * site progress or status
+     * for example: pending, pause, done, etc.
+     *    
+     * @Column(type="string", nullable=true)
+     */
+    protected $status;
 
 }

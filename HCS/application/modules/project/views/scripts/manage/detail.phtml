@@ -112,6 +112,11 @@ $contractor="";
 $contractors=$this->contractors;
 $siteproperties=$this->siteproperties;
 
+$permission1=0;
+$permission1arr=$this->permission1arr;
+
+$status="";
+
 if($this->mode == "Edit")
 {
     $data = $this->maindata;
@@ -140,6 +145,8 @@ if($this->mode == "Edit")
 
     $selLeadersStr=$data->getLeaders() ? $data->getLeaders() : "";
     $selleaders = explode(";", $selLeadersStr);  
+
+    $permission1 = $data->getPermission1() ? 1 : 0;
 }
 ?>
 <?php
@@ -276,9 +283,6 @@ echo $options;
 </td>
 
 <tr>
-</tr>
-
-<tr>
 <td><div data-role="fieldcontain">
     <label for="start">开工日期:</label>
     <input type="text" name="start" id="start" value="<?php echo $start; ?>" data-mini="true">
@@ -294,15 +298,56 @@ echo $options;
     <label for="workerno">工人数量:</label>
  	<input type="range" name="workerno" id="workerno" value="<?php echo $workerno; ?>" min="0" max="200" data-highlight="true" data-mini="true">
 </div></td>
-</tr>
-
-<tr>
 <td><div data-role="fieldcontain">
     <label for="remark">其他说明:</label>
     <input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true">
 </div></td>
 <td></td>
 </tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="permission1">材料申请:</label>
+    <select id="permission1" name="permission1" data-mini="true">
+<?
+$options="";
+foreach($permission1arr as $key => $value)
+{    
+    if($key == $permission1)
+    {       
+        $options .= '<option value="' . $key . '" selected>' . $value . '</option>';    
+    }
+    else
+    {
+        $options .= '<option value="' . $key . '" >' . $value . '</option>';    
+    }
+}
+echo $options;
+?>
+    </select>
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="status">工程进度:</label>
+    <select id="status" name="status" data-mini="true">
+<?
+$options="";
+foreach($permission1arr as $key => $value)
+{    
+    if($key == $permission1)
+    {       
+        $options .= '<option value="' . $key . '" selected>' . $value . '</option>';    
+    }
+    else
+    {
+        $options .= '<option value="' . $key . '" >' . $value . '</option>';    
+    }
+}
+echo "&nbsp;";//$options;
+?>
+    </select>
+</div></td>
+</tr>
+
 </table>
 </form> <!--main form-->
 

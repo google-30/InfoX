@@ -30,6 +30,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->getCompanyinfo();
         $this->getGeneralContractors();
         $this->getSiteproperties();
+        $this->getPermission1();
     } 
 
     public function editAction()
@@ -38,6 +39,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->getCompanyinfo();
         $this->getGeneralContractors();
         $this->getSiteproperties();
+        $this->getPermission1();
 
         $id = $this->getParam("id");
         //echo "id=$id<br>";
@@ -280,4 +282,12 @@ class Project_ManageController extends Zend_Controller_Action
 
         $this->view->siteproperties = $valueArr;
     }
+
+    // allow or not leader to apply materials 
+    private function getPermission1()
+    {
+        $permission1arr = array(0=>"禁止材料申请",1=>"允许材料申请");
+        $this->view->permission1arr = $permission1arr;
+    }
+
 }
