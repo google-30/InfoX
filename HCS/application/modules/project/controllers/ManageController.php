@@ -29,6 +29,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->findPIC();
         $this->getCompanyinfo();
         $this->getGeneralContractors();
+        $this->getSiteproperties();
     } 
 
     public function editAction()
@@ -36,6 +37,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->findPIC();
         $this->getCompanyinfo();
         $this->getGeneralContractors();
+        $this->getSiteproperties();
 
         $id = $this->getParam("id");
         //echo "id=$id<br>";
@@ -96,7 +98,8 @@ class Project_ManageController extends Zend_Controller_Action
         $workerno = $this->getParam("workerno", "");
         $company = $this->getParam("company", 0);
         $contractor = $this->getParam("contractor", "");
-        
+        $property = $this->getParam("property", "");
+
         if($mode == "Create")
         {
             $data = new \Synrgic\Infox\Site(); 
@@ -122,6 +125,7 @@ class Project_ManageController extends Zend_Controller_Action
         }
 
         $data->setContractor($contractor);
+        $data->setProperty($property);
 
         $this->_em->persist($data);
         try {
@@ -246,5 +250,16 @@ class Project_ManageController extends Zend_Controller_Action
         $valueArr = ($values != "") ? explode(";", $values) : array();
 
         $this->view->contractors = $valueArr;
+    }
+
+    private function getSiteproperties()
+    {
+        $label = "info02";
+        
+        $infoobj = $this->_miscinfo->findOneBy(array("label"=>$label));
+        $values = $infoobj ? $infoobj->getValues() : "";
+        $valueArr = ($values != "") ? explode(";", $values) : array();
+
+        $this->view->siteproperties = $valueArr;
     }
 }

@@ -108,6 +108,7 @@ $companyinfos=$this->companyinfos;
 
 $contractor="";
 $contractors=$this->contractors;
+$siteproperties=$this->siteproperties;
 
 if($this->mode == "Edit")
 {
@@ -133,6 +134,7 @@ if($this->mode == "Edit")
     $parts=$data->getParts();
 
     $contractor = $data->getContractor();
+    $property = $data->getProperty();
 }
 ?>
 <?php
@@ -154,6 +156,13 @@ else
     <label for="name">工地名称:</label>
     <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
 </div></td>
+<td><div data-role="fieldcontain">
+    <label for="address">工地地址:</label>
+    <input type="text" name="address" id="address" value="<?php echo $address; ?>" data-mini="true">
+</div></td>
+
+</tr>
+<tr>
 <td><div data-role="fieldcontain">
     <label for="contractor">总包单位:</label>
     <select name="contractor" id="contractor" data-mini="true">
@@ -182,67 +191,35 @@ if(isset($contractors))
     </select>
 </div></td>
 
-</tr>
-<tr>
 <td><div data-role="fieldcontain">
-    <label for="address">工地地址:</label>
-    <input type="text" name="address" id="address" value="<?php echo $address; ?>" data-mini="true">
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="leader">工长:</label>
-    <select name="leader" id="leader" data-mini="true">
-    <option value="0">未指定工长</option>
-    <?php
-    foreach($leaders as $tmp)
+    <label for="property">工地性质:</label>
+    <select name="property" id="property" data-mini="true">
+    <option value="0"></option>
+<?php
+if(isset($siteproperties))
+{
+    foreach($siteproperties as $tmp)
     {
-        $id = $tmp->getId();
-        $name = $tmp->getName();
-        if($name == $leader)
+        if($tmp == "")
         {
-        echo '<option value="' . $id . '" selected>' . $name . '</option>';
+            continue;
+        }
+
+        if($tmp == $property)
+        {
+            echo '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
         }
         else
         {
-        echo '<option value="' . $id . '">' . $name . '</option>';
+            echo '<option value="' . $tmp . '">' . $tmp . '</option>';    
         }
-    }
-    ?>
-    </select>
-</div></td>
-<!--
-<td><div data-role="fieldcontain">
-    <label for="manager">经理:</label>
-    <select name="manager" id="manager" data-mini="true">
-    <option value="0">未指定经理</option>
-<?php
-if(isset($managers))
-{
-    foreach($managers as $tmp)
-    {
-        $id = $tmp->getId();
-        $name = $tmp->getName();
-        echo '<option value="' . $id . '">' . $name . '</option>';
     }
 }
 ?>
     </select>
 </div></td>
--->
 
 </tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="start">开工日期:</label>
-    <input type="text" name="start" id="start" value="<?php echo $start; ?>" data-mini="true">
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="stop">竣工日期:</label>
-    <input type="text" name="stop" id="stop" value="<?php echo $stop; ?>" data-mini="true">
-</div></td>
-</tr>
-
-<tr>
 <td><div data-role="fieldcontain">
     <label for="remark">承包公司:</label>    
     <select id="company" name="company" data-mini="true">
@@ -267,6 +244,47 @@ echo $options;
 ?>
     </select>
 </div></td>
+
+<td><div data-role="fieldcontain">
+    <label for="leader">工长:</label>
+    <select name="leader" id="leader" data-mini="true">
+    <option value="0">未指定工长</option>
+    <?php
+    foreach($leaders as $tmp)
+    {
+        $id = $tmp->getId();
+        $name = $tmp->getName();
+        if($name == $leader)
+        {
+        echo '<option value="' . $id . '" selected>' . $name . '</option>';
+        }
+        else
+        {
+        echo '<option value="' . $id . '">' . $name . '</option>';
+        }
+    }
+    ?>
+    </select>
+</div></td>
+
+<tr>
+
+
+
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="start">开工日期:</label>
+    <input type="text" name="start" id="start" value="<?php echo $start; ?>" data-mini="true">
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="stop">竣工日期:</label>
+    <input type="text" name="stop" id="stop" value="<?php echo $stop; ?>" data-mini="true">
+</div></td>
+</tr>
+
+<tr>
 <td><div data-role="fieldcontain">
     <label for="workerno">工人数量:</label>
  	<input type="range" name="workerno" id="workerno" value="<?php echo $workerno; ?>" min="0" max="200" data-highlight="true" data-mini="true">

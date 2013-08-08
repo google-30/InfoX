@@ -71,8 +71,18 @@ class Site extends \Synrgic_Models_Entity {
     protected $parts;
 
     /**
+     * general contractor总包单位
+     *   
      * @Column(type="string", nullable=true)
      */
     protected $contractor;
+
+    /**
+     * site property: school, factory, condo
+     *
+     * @Column(type="string", nullable=true)
+     */
+    protected $property;
+
 
 }
