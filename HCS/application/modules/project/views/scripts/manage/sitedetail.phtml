@@ -27,6 +27,8 @@ $managers=$this->managers;
 $contractor="";
 $property="";
 $company="";
+//$selleaders="";
+
 if(1)
 {
 $data = $this->maindata;
@@ -50,6 +52,7 @@ $contractor=$data->getContractor();
 $property=$data->getProperty();
 $cmyobj=$data->getCompany();
 $company= $cmyobj ? $cmyobj->getNamechs(): "";
+
 }   
 ?>
 
@@ -66,7 +69,7 @@ $company= $cmyobj ? $cmyobj->getNamechs(): "";
 </tr>
 <tr>
 <td>承包公司:</td><td><?php echo $company; ?></td>
-<td>工长:</td><td><?php echo $leader; ?></td>
+<td>工长:</td><td><?php echo $leaders; ?></td>
 </tr>
 <tr>
 <td>开工日期:</td><td><?php echo $start; ?></td>

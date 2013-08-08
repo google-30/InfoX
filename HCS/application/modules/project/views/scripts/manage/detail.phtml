@@ -95,12 +95,14 @@ $name="";
 $address="";
 $start = "";
 $stop = "";
-$leader="";
 $manager="";
 $workerno=0;
 $remark="";
 $companyid=0;
 $parts="";
+
+$leader="";
+$selleaders=array();
 
 $leaders=$this->leaders;
 $managers=$this->managers;
@@ -135,6 +137,9 @@ if($this->mode == "Edit")
 
     $contractor = $data->getContractor();
     $property = $data->getProperty();
+
+    $selLeadersStr=$data->getLeaders() ? $data->getLeaders() : "";
+    $selleaders = explode(";", $selLeadersStr);  
 }
 ?>
 <?php
@@ -246,31 +251,31 @@ echo $options;
 </div></td>
 
 <td><div data-role="fieldcontain">
-    <label for="leader">工长:</label>
-    <select name="leader" id="leader" data-mini="true">
-    <option value="0">未指定工长</option>
+    <label for="leaders">工长:</label>
+    <!--http://stackoverflow.com/questions/13727127/submit-data-of-select-multiple-in-jquery-mobile-->
+    <select name=leaders[] id="leaders" data-mini="true" data-native-menu="false" multiple="multiple">
+    <option value=""></option>
     <?php
     foreach($leaders as $tmp)
     {
         $id = $tmp->getId();
         $name = $tmp->getName();
-        if($name == $leader)
+        //if($name == $leader)
+        if(in_array($id, $selleaders))
         {
         echo '<option value="' . $id . '" selected>' . $name . '</option>';
         }
         else
         {
-        echo '<option value="' . $id . '">' . $name . '</option>';
+        echo '<option value="' . $id . '" >' . $name . '</option>';
         }
     }
     ?>
     </select>
-</div></td>
+</div>
+</td>
 
 <tr>
-
-
-
 </tr>
 
 <tr>

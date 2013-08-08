@@ -26,7 +26,7 @@ class Project_ManageController extends Zend_Controller_Action
 
     public function addAction()
     {
-        $this->findPIC();
+        $this->findLeaders();
         $this->getCompanyinfo();
         $this->getGeneralContractors();
         $this->getSiteproperties();
@@ -34,7 +34,7 @@ class Project_ManageController extends Zend_Controller_Action
 
     public function editAction()
     {
-        $this->findPIC();
+        $this->findLeaders();
         $this->getCompanyinfo();
         $this->getGeneralContractors();
         $this->getSiteproperties();
@@ -80,17 +80,12 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(TRUE);
  
         $requests = $this->getRequest()->getPost();
-        if(0)
-        {
-            var_dump($requests);
-            return;
-        }        
+        if(0) { var_dump($requests); return; }        
        
         $mode = $this->getParam("mode", "Create");
         $id = $this->getParam("id", "0");
         $name = $this->getParam("name");
-        $address = $this->getParam("address", "");
-        $leader = $this->getParam("leader", 0);
+        $address = $this->getParam("address", "");        
         $manager = $this->getParam("manager", 0);
         $start = $this->getParam("start", "");
         $stop = $this->getParam("stop", "");
@@ -99,6 +94,13 @@ class Project_ManageController extends Zend_Controller_Action
         $company = $this->getParam("company", 0);
         $contractor = $this->getParam("contractor", "");
         $property = $this->getParam("property", "");
+
+        $leadersArr = $this->getParam("leaders", null);
+        $leadersStr = "";
+        if($leadersArr)
+        {
+            $leadersStr = implode(";", $leadersArr);
+        }        
 
         if($mode == "Create")
         {
@@ -111,12 +113,14 @@ class Project_ManageController extends Zend_Controller_Action
  
         $data->setName($name);
         $data->setAddress($address);
-        $data->setLeader($this->_humanres->findOneBy(array("id"=>$leader)));
         $data->setManager($this->_humanres->findOneBy(array("id"=>$manager)));
         $data->setStart(new Datetime($start));
         $data->setStop(new Datetime($stop));
         $data->setRemark($remark);
         $data->setWorkerno($workerno);
+
+        //$data->setLeader($this->_humanres->findOneBy(array("id"=>$leader)));
+        $data->setLeaders($leadersStr);
     
         $companyobj = $this->_companyinfo->findOneBy(array("id"=>intval($company)));
         if(isset($companyobj))
@@ -140,7 +144,7 @@ class Project_ManageController extends Zend_Controller_Action
 
     public function sitedetailAction()
     {
-        $this->findPIC();
+        $this->findLeaders();
 
         $id = $this->getParam("id");
         //echo "id=$id<br>";
@@ -158,9 +162,23 @@ class Project_ManageController extends Zend_Controller_Action
 
         $this->view->applications = $this->_application->findBy(array("site"=>$siteobj));
 
+        // leaders names
+        $namesStr = "";
+        $selLeadersIdStr = $siteobj->getLeaders();
+        if($selLeadersIdStr)
+        {
+            $selLeadersIdArr = explode(";", $selLeadersIdStr);
+            foreach($selLeadersIdArr as $tmp)
+            {
+                $data = $this->_humanres->findOneBy(array("id"=>$tmp));
+                $name = $data ? $data->getName() : "&nbsp;";
+                $namesStr .= $name .  "；&nbsp;";
+            } 
+        }       
+        $this->view->leaders = $namesStr;
     }
 
-    private function findPIC()
+    private function findLeaders()
     {
         $leaderrole = $this->_role->findOneBy(array("role"=>"leader"));        
         $leaders = $this->_humanres->findBy(array("role"=>$leaderrole));

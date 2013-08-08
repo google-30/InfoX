@@ -39,13 +39,6 @@ class Site extends \Synrgic_Models_Entity {
     protected $workerno;    	
 
     /**
-     * leader: person in charge 
-     *   
-     * @ManyToOne(targetEntity="Synrgic\Infox\Humanresource")
-     */
-    protected $leader;
-
-    /**
      * manager
      *   
      * @ManyToOne(targetEntity="Synrgic\Infox\Humanresource")
@@ -83,6 +76,21 @@ class Site extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $property;
+
+    /**
+     * leader: person in charge 
+     *   
+     * @ManyToOne(targetEntity="Synrgic\Infox\Humanresource")
+     */
+    protected $leader;
+
+    /**
+     * multiple leaders may be in charge in same time
+     * "2,7,10" means id 2,7,10 in humanres table in charge of this site 
+     *    
+     * @Column(type="string", nullable=true)
+     */
+    protected $leaders;
 
 
 }
