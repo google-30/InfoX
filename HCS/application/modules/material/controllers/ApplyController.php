@@ -473,8 +473,19 @@ class Material_ApplyController extends Zend_Controller_Action
         $user = $this->_humanres->findOneBy(array("username"=>$username));
         if($role == "leader")
         {
-            //$sites = $this->_site->findBy(array("leader"=>$user));
             $id = $user->getId();
+
+            $sites1 = $this->_site->findBy(array("permission1"=>true));
+            $sites = array();
+            foreach($sites1 as $tmp)
+            {
+                $leaders = $tmp->getLeaders();
+                $array = explode(";", $leaders);
+                if(in_array($id, $array))
+                {
+                    $sites[] = $tmp;
+                }
+            }
         }
         else
         {

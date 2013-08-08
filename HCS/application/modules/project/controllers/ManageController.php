@@ -102,7 +102,9 @@ class Project_ManageController extends Zend_Controller_Action
         if($leadersArr)
         {
             $leadersStr = implode(";", $leadersArr);
-        }        
+        }   
+
+        $permission1 = $this->getParam("permission1", "0");
 
         if($mode == "Create")
         {
@@ -132,6 +134,9 @@ class Project_ManageController extends Zend_Controller_Action
 
         $data->setContractor($contractor);
         $data->setProperty($property);
+
+        $bPermission1 = ($permission1=="0") ? false : true;
+        $data->setPermission1($bPermission1);
 
         $this->_em->persist($data);
         try {
