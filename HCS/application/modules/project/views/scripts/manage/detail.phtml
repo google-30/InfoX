@@ -116,6 +116,7 @@ $permission1=0;
 $permission1arr=$this->permission1arr;
 
 $status="";
+$phone="";
 
 if($this->mode == "Edit")
 {
@@ -346,6 +347,14 @@ echo "&nbsp;";//$options;
 ?>
     </select>
 </div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="phone">联系电话:</label>    
+    <input type="text" name="phone" id="phone" value="<?php echo $phone; ?>" data-mini="true">
+</div></td>
+<td></td>
 </tr>
 
 </table>
