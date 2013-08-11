@@ -394,9 +394,21 @@ class Material_AppmanageController extends Zend_Controller_Action
 
         $supplierid = $this->getParam("supplier", 0);
         $supplierobj = $this->_supplier->findOneBy(array("id"=>$supplierid));
+        $this->view->supplier=$supplierobj;
+        $this->getSupplierinfo($supplierobj);
 
         $this->view->matapps = $this->_matappdata->findBy(array("application"=>$appobj, "supplier"=>$supplierobj));                    
     }
+
+    private function getSupplierinfo($obj)
+    {
+        $this->view->suppostring = $postring = $obj->getPostring();
+        $this->view->supfullname = $fullname = $obj->getFullname();
+        $this->view->supattn = $attn = $obj->getAttn();
+        $this->view->supattnphone = $obj->getAttnphone() ? $obj->getAttnphone() : "";
+        $this->view->supofficephone = $officephone = $obj->getOfficephone();
+        $this->view->supfax = $fax = $obj->getFax();
+    }    
 
     private function setCompanyinfo($appobj)
     {
@@ -412,6 +424,7 @@ class Material_AppmanageController extends Zend_Controller_Action
                 $this->view->cmyphone = $cmyphone = $cmyobj->getPhone();
                 $this->view->cmyfax = $cmyfax = $cmyobj->getFax();
                 $this->view->cmyemail = $cmyemail = $cmyobj->getEmail();
+                $this->view->cmypostring = $postring = $cmyobj->getPostring();
 
                 $cmycontact="Tel:" . $cmyphone . "&nbsp;&nbsp;Fax:" . $cmyfax . "&nbsp;&nbsp;Email:" . $cmyemail;
                 $this->view->cmycontact=$cmycontact;

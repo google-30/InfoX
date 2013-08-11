@@ -52,17 +52,24 @@ $cmyaddr=$this->cmyaddr;
 $cmyphone=$this->cmyphone;
 $cmyfax=$this->cmyfax;
 $cmyemail=$this->cmyemail;
-
 $cmycontact=$this->cmycontact;
+$cmypostring=$this->cmypostring;
 
 $formnameeng="PURCHASE ORDER";
 //$formnamechs="材料申请单";
-
 $date=$this->date;
-
 $sitename=$this->sitename;
-
 $matapps=$this->matapps;
+
+$supplier=$this->supplier;
+$suppostring=$this->suppostring;
+$supfullname=$this->supfullname;
+$supofficephone=$this->supofficephone;
+$supfax=$this->supfax;
+$supattn=$this->supattn;
+$supattnphone=$this->supattnphone;
+
+$PONO=$suppostring;
 ?>
 <div data-role="page" data-theme="<?php echo $jmtheme; ?>" style="page-break-after:always">
 	<div data-role="content" class="previewcontent">	
@@ -71,8 +78,14 @@ $matapps=$this->matapps;
         <?php echo $cmycontact; ?><br><br>
 		<strong><?php echo $formnameeng; ?></strong><br>
 		
-        <div class="stayright">PO NO:&nbsp;<u><?php echo $date; ?></u></div><br><br>
+        <div class="stayright">PO NO:&nbsp;<u><?php echo $PONO; ?></u></div><br><br>
 
+<table>
+<tr>
+<td>TO:&nbsp;<?php echo $supfullname; ?></td><td>Attn:&nbsp;<?php echo $supattn . "&nbsp;".$supattnphone;?></td>
+</tr>
+
+</table>
 <table id="previewtab">
 <tr><th>S/NO<br>序号</th><th>Description<br>材料名称</th><th>Type<br>型号规格</th>
 <th>QTY<br>数量</th><th>UNIT<br>单位</th><th>REMARKS<br>备注</th></tr>
