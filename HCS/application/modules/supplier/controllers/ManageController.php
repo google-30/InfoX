@@ -59,11 +59,16 @@ class Supplier_ManageController extends Zend_Controller_Action
         $name = $this->getParam("name");
         $remark = $this->getParam("remark", "");
         $business = $this->getParam("business", "");
-        $officephone = $this->getParam("officephone", "");
-        $mobilephone = $this->getParam("mobilephone", "");
+        $officephone = $this->getParam("officephone", "");        
         $address = $this->getParam("address", "");
-        $contact = $this->getParam("contact", "");
+        //$contact = $this->getParam("contact", "");
         $email = $this->getParam("email", "");
+
+        $fax = $this->getParam("fax", "");
+        $attn = $this->getParam("attn", "");
+        $attnphone = $this->getParam("attnphone", "");
+        $postring = $this->getParam("postring", "");
+        $fullname = $this->getParam("fullname", "");
 
         if($mode == "Create")
         {
@@ -79,10 +84,16 @@ class Supplier_ManageController extends Zend_Controller_Action
         $data->setRemark($remark);
         $data->setBusiness($business);
         $data->setOfficephone($officephone);
-        $data->setMobilephone($mobilephone);
+        //$data->setMobilephone($mobilephone);
         $data->setEmail($email);
-        $data->setContact($contact);
+        //$data->setContact($contact);
         $data->setAddress($address);
+
+        $data->setFax($fax);
+        $data->setAttn($attn);
+        $data->setAttnphone($attnphone);
+        $data->setPostring($postring);
+        $data->setFullname($fullname);
 
         $this->_em->persist($data);
         try {

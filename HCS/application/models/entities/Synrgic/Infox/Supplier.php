@@ -36,7 +36,7 @@ class Supplier extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $mobilephone;
+    protected $fax;
 
     /**
      * @Column(type="string", nullable=true)
@@ -77,5 +77,9 @@ class Supplier extends \Synrgic_Models_Entity {
      */
     protected $attn;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $attnphone;
 
 }

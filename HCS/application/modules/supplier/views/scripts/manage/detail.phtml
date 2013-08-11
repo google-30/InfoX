@@ -41,11 +41,14 @@ $name="";
 $business="";
 $address="";
 $officephone = "";
-$mobilephone = "";
-$contact="";
+//$contact="";
 $remark="";
 $email="";
-
+$postring="";
+$fullname="";
+$fax="";
+$attn="";
+$attnphone = "";
 if($this->mode == "Edit")
 {
 $mode = "Edit";
@@ -54,10 +57,14 @@ $name = $this->maindata->getName();
 $business = $this->maindata->getBusiness();
 $address = $this->maindata->getAddress();
 $officephone = $this->maindata->getOfficephone();
-$mobilephone = $this->maindata->getMobilephone();
-$contact=$this->maindata->getContact();
+//$contact=$this->maindata->getContact();
 $remark = $this->maindata->getRemark();
 $email = $this->maindata->getEmail();
+$postring=$this->maindata->getPostring();
+$fullname=$this->maindata->getFullname();
+$fax=$this->maindata->getFax();
+$attn = $this->maindata->getAttn();
+$attnphone = $this->maindata->getAttnphone();
 }
      
 ?>
@@ -68,27 +75,26 @@ $email = $this->maindata->getEmail();
 
 <div data-role="fieldcontain">
     <label for="name">供应商名称:</label>
-    <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
+    <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true" placeholder="用于显示在网页，可以比较短">
 </div>
-
+<div data-role="fieldcontain">
+    <label for="fullname">供应商全称:</label>
+    <input type="text" name="fullname" id="fullname" value="<?php echo $fullname; ?>" data-mini="true" placeholder="用于显示在PO单">
+</div>
+<!--
 <div data-role="fieldcontain">
     <label for="business">主营业务:</label>
     <input type="text" name="business" id="business" value="<?php echo $business; ?>" data-mini="true">
 </div>
-
+-->
 <div data-role="fieldcontain">
-    <label for="contact">联系人:</label>
-    <input type="text" name="contact" id="contact" value="<?php echo $contact; ?>" data-mini="true">
-</div>
-
-<div data-role="fieldcontain">
-    <label for="officephone">办公电话:</label>
+    <label for="officephone">电话:</label>
     <input type="text" name="officephone" id="officephone" value="<?php echo $officephone; ?>" data-mini="true">
 </div>
 
 <div data-role="fieldcontain">
-    <label for="officephone">移动电话:</label>
-    <input type="text" name="mobilephone" id="mobilephone" value="<?php echo $mobilephone; ?>" data-mini="true">
+    <label for="fax">传真:</label>
+    <input type="text" name="fax" id="fax" value="<?php echo $fax; ?>" data-mini="true">
 </div>
 
 <div data-role="fieldcontain">
@@ -102,6 +108,21 @@ $email = $this->maindata->getEmail();
 </div>
 
 <div data-role="fieldcontain">
+    <label for="attn">联系人:</label>
+    <input type="text" name="attn" id="attn" value="<?php echo $attn; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="attnphone">联系人电话:</label>
+    <input type="text" name="attnphone" id="attnphone" value="<?php echo $attnphone; ?>" data-mini="true">
+</div>
+
+<div data-role="fieldcontain">
+    <label for="postring">PO字串:</label>
+    <input type="text" name="postring" id="postring" value="<?php echo $address; ?>" data-mini="true" placeholder="此字串用于PO单，比如LPM，代表Long Pun Machinery Pte Ltd">
+</div>
+
+<div data-role="fieldcontain">
     <label for="remark">其他说明:</label>
     <textarea cols="40" rows="8" name="remark" id="remark" ><?php echo $remark; ?></textarea>
 </div>
@@ -111,3 +132,4 @@ $email = $this->maindata->getEmail();
 		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
 		<div class="ui-block-b"><button type="submit" data-theme="d" onclick="cancel()">取消</button></div>
 </fieldset>
+<br><br>

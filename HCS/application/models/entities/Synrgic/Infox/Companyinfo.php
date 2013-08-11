@@ -79,5 +79,9 @@ class Companyinfo extends \Synrgic_Models_Entity {
      */
     protected $logo;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $postring;
 
 }

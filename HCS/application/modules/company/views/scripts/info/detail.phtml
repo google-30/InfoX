@@ -70,6 +70,7 @@ $workerno=0;
 $fullnamechs="";
 $fullnameeng="";
 
+$postring="";
 if($this->mode == "Edit")
 {
 $data = $this->maindata;
@@ -87,6 +88,7 @@ $remark = $data->getRemark();
 $fullnamechs=$data->getFullnamechs();
 $fullnameeng=$data->getFullnameeng();
 
+$postring=$data->getPostring();
 }
      
 ?>
@@ -142,6 +144,13 @@ else
 <td><input type="text" name="coregno" id="coregno" value="<?php echo $coregno; ?>" data-mini="true" /></td>
 <td><strong>公司备注:</strong></td>
 <td><input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true" /></td>
+</tr>
+
+<tr>
+<td><strong>公司PO字串:</strong></td>
+<td><input type="text" name="postring" id="postring" value="<?php echo $postring; ?>" data-mini="true" /></td>
+<td></td>
+<td></td>
 </tr>
 
 </tbody>

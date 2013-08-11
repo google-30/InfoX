@@ -69,6 +69,8 @@ class Company_InfoController extends Zend_Controller_Action
         $fullnamechs = $this->getParam("fullnamechs", "");
         $fullnameeng = $this->getParam("fullnameeng", "");
 
+        $postring = $this->getParam("postring", "");
+
         if($mode == "Create")
         {
             $data = new \Synrgic\Infox\Companyinfo(); 
@@ -90,6 +92,8 @@ class Company_InfoController extends Zend_Controller_Action
 
         $data->setFullnamechs($fullnamechs);
         $data->setFullnameeng($fullnameeng);
+
+        $data->setPostring($postring);
 
         $this->_em->persist($data);
         try {
