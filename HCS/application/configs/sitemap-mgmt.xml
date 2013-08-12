@@ -24,6 +24,15 @@
 		<privilege>view</privilege>
 	    </worker>
 
+	    <workeronsite>
+		<label>工人在岗管理</label>
+		<module>worker</module>
+		<controller>onsite</controller>
+		<action>index</action>
+		<resource>worker:onsite</resource>
+		<privilege>view</privilege>
+	    </workeronsite>
+
 	    <applicationmanagement>
 		<label>申请单管理</label>
 		<module>material</module>
