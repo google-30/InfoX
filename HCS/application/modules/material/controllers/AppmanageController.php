@@ -364,7 +364,7 @@ class Material_AppmanageController extends Zend_Controller_Action
             $this->view->sitename = $sitename = $siteobj->getName();
         }
         */
-        $this->setCompanyinfo($appobj);
+        $this->getCompanyinfo($appobj);
 
         // date
         $date = new Datetime("now");
@@ -375,7 +375,11 @@ class Material_AppmanageController extends Zend_Controller_Action
 
         // TODO: contact, manager
 
-        // TODO: ref        
+        // TODO: ref     
+
+        // site
+        $siteobj = $appobj->getSite();
+        $this->getSiteinfo($siteobj);   
     }
 
     public function previeworderAction()
@@ -389,15 +393,52 @@ class Material_AppmanageController extends Zend_Controller_Action
             return;
         } 
 
+        // application
         $appobj = $this->_application->findOneBy(array("id"=>$id));        
-        $this->setCompanyinfo($appobj);
 
+        // company
+        $this->getCompanyinfo($appobj);
+
+        // supplier
         $supplierid = $this->getParam("supplier", 0);
         $supplierobj = $this->_supplier->findOneBy(array("id"=>$supplierid));
         $this->view->supplier=$supplierobj;
         $this->getSupplierinfo($supplierobj);
 
+        // materials
         $this->view->matapps = $this->_matappdata->findBy(array("application"=>$appobj, "supplier"=>$supplierobj));                    
+
+        // site
+        $siteobj = $appobj->getSite();
+        $this->getSiteinfo($siteobj);
+
+        // staff
+        $staffobj = $this->_humanresource->findOneBy(array("id"=>3));
+        if($staffobj)
+        {
+            $this->view->staffname = $staffobj->getNameeng();
+            $this->view->staffphone = $staffobj->getPhone1();
+        }
+    }
+
+    private function getSiteinfo($obj)
+    {
+        $this->view->sitename = $sitename = $obj->getName();
+        $this->view->siteaddress = $obj->getAddress();
+        
+        $leaders = $obj->getLeaders();
+        $leadersArr = explode(";", $leaders);
+        $leadersStr = "";
+        $phonesStr ="";    
+        foreach($leadersArr as $leaderid)
+        {
+            $leaderobj = $this->_humanresource->findOneBy(array("id"=>$leaderid));
+            $leadersStr .= $leaderobj->getNameeng() . ";";
+            $phonesStr .= $leaderobj->getPhone1() . ";";
+        }
+
+        $this->view->siteleaders = $leadersStr;
+        $this->view->siteleadersphones = $phonesStr;
     }
 
     private function getSupplierinfo($obj)
@@ -410,7 +451,7 @@ class Material_AppmanageController extends Zend_Controller_Action
         $this->view->supfax = $fax = $obj->getFax();
     }    
 
-    private function setCompanyinfo($appobj)
+    private function getCompanyinfo($appobj)
     {
         $siteobj = $appobj->getSite();
         if($siteobj)
@@ -431,7 +472,7 @@ class Material_AppmanageController extends Zend_Controller_Action
             }
 
             // site
-            $this->view->sitename = $sitename = $siteobj->getName();
+            //$this->view->sitename = $sitename = $siteobj->getName();
         }
     }
 

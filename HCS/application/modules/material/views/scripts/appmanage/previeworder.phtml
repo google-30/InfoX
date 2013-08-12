@@ -78,10 +78,17 @@ $cmypostring=$this->cmypostring;
 
 $formnameeng="PURCHASE ORDER";
 //$formnamechs="材料申请单";
-$date=$this->date;
+
+// site
 $sitename=$this->sitename;
+$siteleaders=$this->siteleaders;
+$siteleadersphones=$this->siteleadersphones;
+$siteaddress=$this->siteaddress;
+
+// materials
 $matapps=$this->matapps;
 
+// supplier
 $supplier=$this->supplier;
 $suppostring=$this->suppostring;
 $supfullname=$this->supfullname;
@@ -90,10 +97,15 @@ $supfax=$this->supfax;
 $supattn=$this->supattn;
 $supattnphone=$this->supattnphone;
 
-$PONO=$suppostring;
+$PONO="&nbsp;&nbsp;". $cmypostring . "/???/" . $suppostring . "-???" . "&nbsp;&nbsp;";
 
+$date=$this->date;
 $date=new Datetime("now");
 $datestr=$date->format("Y/m/d");
+
+// staff
+$staffname=$this->staffname;
+$staffphone=$this->staffphone;
 ?>
 <div data-role="page" data-theme="<?php echo $jmtheme; ?>" style="page-break-after:always">
 	<div data-role="content" class="previewcontent">	
@@ -111,27 +123,27 @@ $datestr=$date->format("Y/m/d");
 </tr>
 <tr>
 <td><strong>Date:&nbsp;</strong><?php echo $datestr; ?></td>
-<td><strong>Date of Delivery:&nbsp;</strong><?php echo ""; ?></td>
+<td><strong>Date of Delivery:&nbsp;</strong><?php echo "???"; ?></td>
 </tr>
 <tr>
 <td><strong>Tel No:&nbsp;</strong><?php echo $supofficephone; ?>&nbsp;&nbsp;<strong>Fax No:&nbsp;</strong><?php echo $supfax; ?></td>
-<td><strong>Time of Delivery:&nbsp;</strong><?php echo ""; ?></td>
+<td><strong>Time of Delivery:&nbsp;</strong><?php echo "???"; ?></td>
 </tr>
 <tr>
-<td><strong>Terms of Payment:&nbsp;</strong><?php echo ""; ?></td>
+<td><strong>Terms of Payment:&nbsp;</strong><?php echo "30 days"; ?></td>
 <td></td>
 </tr>
 <tr>
-<td><strong>Delivery Location:&nbsp;</strong><?php echo ""; ?></td>
+<td><strong>Delivery Location:&nbsp;</strong><?php echo $siteaddress; ?></td>
 <td></td>
 </tr>
 <tr>
-<td><strong>Site Personnel In-Charge:&nbsp;</strong><?php echo ""; ?></td>
-<td><strong>Site Tel./HP:&nbsp;</strong><?php echo ""; ?></td>
+<td><strong>Site Personnel In-Charge:&nbsp;</strong><?php echo $siteleaders; ?></td>
+<td><strong>Site Tel./HP:&nbsp;</strong><?php echo $siteleadersphones; ?></td>
 </tr>
 <tr>
-<td><strong>Office Personnel In-Charge:&nbsp;</strong><?php echo ""; ?></td>
-<td><strong>Contact No:&nbsp;</strong><?php echo ""; ?></td>
+<td><strong>Office Personnel In-Charge:&nbsp;</strong><?php echo $staffname; ?></td>
+<td><strong>Contact No:&nbsp;</strong><?php echo $staffphone; ?></td>
 </tr>
 </table>
 
@@ -155,7 +167,7 @@ foreach($matapps as $tmp)
     
     $tdno = "<td>$count</td>";
     $tdname = '<td style="width:15%">' . $longname . '</td>';
-    $tdspec = "<td></td>";
+    $tdspec = "<td>???</td>";
     $tdunit = "<td></td>";   
     $tdamount = "<td>$amount</td>";
     $tdprice = "<td>$price</td>";  
