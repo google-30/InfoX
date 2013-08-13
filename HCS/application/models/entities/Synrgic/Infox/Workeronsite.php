@@ -24,14 +24,14 @@ class Workeronsite extends \Synrgic_Models_Entity {
      *
      * @Column(type="date", nullable=true)
      */
-    protected $begin;
+    protected $begindate;
 
     /**
      * end date
      *
      * @Column(type="date", nullable=true)
      */
-    protected $end;
+    protected $enddate;
 
     /**
      * 
