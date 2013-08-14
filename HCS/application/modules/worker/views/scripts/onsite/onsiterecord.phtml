@@ -33,19 +33,20 @@ $id=$this->id;
 ?>
 
 <h3><strong>工人在岗记录 - <?php echo $namechs . "/" . $nameeng; ?></strong></h3>
+
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
+
 <div data-role="collapsible" data-collapsed="true">
 <h3>添加记录</h3>
 <form method="post" action="/worker/onsite/addrecord" id="addrecordform">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
-
 <div data-role="fieldcontain">
 <label for="begin">开始日期:</label>
 <input type="text" name="begin" id="begin" class="datepicker" value="" data-mini="true" placeholder="点击选择日期"/>
 </div>
 <div data-role="fieldcontain">
 <label for="end">结束日期:</label>
-<input type="text" name="end" id="end" class="datepicker""value="" data-mini="true" placeholder="点击选择日期"/>
+<input type="text" name="end" id="end" class="datepicker" value="" data-mini="true" placeholder="点击选择日期"/>
 </div>
 <div data-role="fieldcontain">
 	<label for="site" class="select">所在工地:</label>
@@ -85,13 +86,8 @@ echo $this->grid("Recordedit", true)
           ->action(':action', '记录管理', array( 'url'=>array('action'=>'onsiterecord')));
 ?>
 </div>
-<!--
+
 <div data-role="collapsible" data-collapsed="true">
-<h3>详细记录</h3>
-</div>
--->
-</div>
-<hr>
 <h3>详细记录</h3>
 <?
 echo $this->grid("Recordedit", true)
@@ -101,8 +97,10 @@ echo $this->grid("Recordedit", true)
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->paginatorEnabled(false)
           ->setSorting(false)  
-          ->helper(new GridHelper_Worker())
+          ->helper(new GridHelper_Workeronsite())
           ->data($this->records);
 ?>
 </div>
+</div>
+
 <br><br>
