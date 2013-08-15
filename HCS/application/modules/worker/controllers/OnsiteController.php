@@ -14,6 +14,8 @@ class Worker_OnsiteController extends Zend_Controller_Action
 
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_workeronsite = $this->_em->getRepository('Synrgic\Infox\Workeronsite');
+        $this->_workerattendance = $this->_em->getRepository('Synrgic\Infox\Workerattendance');
+        $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
     }
 
     public function indexAction()
@@ -69,6 +71,67 @@ class Worker_OnsiteController extends Zend_Controller_Action
         }      
 
         $this->redirect("/worker/onsite/onsiterecord/id/" . $id);  
+    }
+
+    public function attendancerecordAction()
+    {
+        $id = $this->getParam("id", 0);
+        $workerobj = $this->_worker->findOneBy(array("id"=>$id));  
+        $this->view->worker = $workerobj ? $workerobj : null;
+
+        $this->view->id = $id;
+
+        $records = $this->_workerattendance->findBy(array("worker"=>$workerobj));
+        $this->view->records = $records;
+                
+        $label = "info03"; // for attendance
+        $this->view->reasons = $this->getMiscInfo($label);
+
+        $records = $this->_workerattendance->findBy(array("worker"=>$workerobj));
+        $this->view->records = $records;
+                
+    }
+
+    public function addattendancerecordAction()
+    {
+        $this->turnoffview();
+
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }    
+
+        $id = $this->getParam("id", 0);
+        $begin = $this->getParam("begin", "");
+        $end = $this->getParam("end", "");
+        $days = $this->getParam("days", 0.0);
+        $reason = $this->getParam("reason", 0.0);
+        $remark = $this->getParam("remark", 0.0);
+
+        $worker = $this->_worker->findOneBy(array("id"=>$id));
+
+        $data = new \Synrgic\Infox\Workerattendance();
+        $data->setWorker($worker);
+        $data->setBegindate(new DateTime($begin));
+        $data->setEnddate(new DateTime($end));
+        $data->setDays($days);
+        $data->setReason($reason);
+        $data->setRemark($remark);
+
+        $this->_em->persist($data);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }      
+
+        $this->redirect("/worker/onsite/attendancerecord/id/" . $id);          
+    }
+
+    private function getMiscInfo($label)
+    {
+        $info = $this->_miscinfo->findOneBy(array("label"=>$label));
+        $array = explode(";", $info->getValues());
+        return $array;
     }
 
     private function turnoffview()

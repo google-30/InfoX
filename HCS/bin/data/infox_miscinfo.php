@@ -9,6 +9,8 @@ $tuples = array(
 /* id, label, namechs, nameeng, values */
 array(1, "info01", "总承包单位", "General Contractor", ""),
 array(2, "info02", "工程性质", "Site Property", ""),
+array(3, "info03", "工人考勤", "Worker Attendance", "病假;有薪假;无薪假;出差;其他事由;"),
+array(4, "info04", "工种", "Worker Type", "木工;电工;油漆工;瓦工;"),
 );
 
 foreach( $tuples as $tuple ){

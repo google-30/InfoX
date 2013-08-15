@@ -13,6 +13,7 @@ echo $this->grid("Workersdata", true)
           ->setSorting(false)  
           ->helper(new GridHelper_Worker())
           ->data($this->workersdata)
-          ->action(':action', '记录管理', array( 'url'=>array('action'=>'onsiterecord')));
+          ->action(':action', '工地记录', array( 'url'=>array('action'=>'onsiterecord')))
+          ->action(':action', '考勤记录', array( 'url'=>array('action'=>'attendancerecord')));
 ?>
 <br>

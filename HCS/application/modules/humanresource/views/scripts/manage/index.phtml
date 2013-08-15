@@ -7,6 +7,7 @@ $(function() {
 <div>
 <?
 echo $this->grid("Humanres", true)
+          ->field('id', '序号')
           ->field('name', '中文名')
           ->field('nameeng', '英文名')
           ->field('role', '职位')

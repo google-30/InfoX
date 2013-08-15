@@ -11,11 +11,11 @@ $(function () {
 
 function addrecord()
 {
-    var site = $("#site").val();
+    var site = $("#reason").val();
     //alert("addrecord site="+site);    
     if(site == 0)
     {
-        alert("请选择一个工地");
+        alert("请选择一个事由");
         return;
     }    
 
@@ -27,44 +27,76 @@ function addrecord()
 $worker=$this->worker;
 $nameeng=$worker->getNameeng();
 $namechs=$worker->getNamechs();
-
-$sites=$this->sites;
 $id=$this->id;
+
+$reasons=$this->reasons;
 ?>
 
-<h3>工地记录 - <?php echo $namechs . "/" . $nameeng; ?></h3>
+<h3>考勤记录 - <?php echo $namechs . "/" . $nameeng; ?></h3>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 
 <div data-role="collapsible" data-collapsed="true">
 <h3>添加记录</h3>
-<form method="post" action="/worker/onsite/addrecord" id="addrecordform">
+<form method="post" action="/worker/onsite/addattendancerecord" id="addrecordform">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+<table class="grid">
+<tr>
+<td>
 <div data-role="fieldcontain">
 <label for="begin">开始日期:</label>
 <input type="text" name="begin" id="begin" class="datepicker" value="" data-mini="true" placeholder="点击选择日期"/>
 </div>
+</td>
+<td>
 <div data-role="fieldcontain">
 <label for="end">结束日期:</label>
 <input type="text" name="end" id="end" class="datepicker" value="" data-mini="true" placeholder="点击选择日期"/>
 </div>
+</td>
+</tr>
+
+<tr>
+<td>
 <div data-role="fieldcontain">
-	<label for="site" class="select">所在工地:</label>
-	<select name="site" id="site" data-mini="true">
-		<option value="0">选择工地</option>
+<label for="days">天数:</label>
+<input type="text" name="days" id="days" value="" data-mini="true" placeholder="天数, 0.5,1,2..."/>
+</div>
+</td>
+<td>
+</td>
+</tr>
+
+<tr>
+<td>
+<div data-role="fieldcontain">
+<label for="reason">选择事由:</label>
+<select name="reason" id="reason">
+<option value="0"></option>
 <?php
 $options="";
-foreach($sites as $tmp)
+foreach($reasons as $tmp)
 {
-    $id= $tmp->getId();
-    $name=$tmp->getName();
-
-    $option = "<option value=$id>$name</option>";
-    $options .= $option;
+    if($tmp=="") 
+    {
+        continue;
+    }
+    $option = '<option value="' . $tmp . '">' . $tmp . '</option>';
+    $options .= $option; 
 }
 echo $options;
 ?>
-	</select>
+</select>
 </div>
+</td>
+<td>
+<div data-role="fieldcontain">
+<label for="remark">其他说明:</label>
+<input type="text" name="remark" id="remark" value="" data-mini="true" placeholder="填写补充说明"/>
+</div>
+</td>
+</tr>
+
+</table>
 <input type="button" onclick="addrecord()" value="添加" data-mini="true" data-theme="a">
 </form>
 </div>
@@ -75,8 +107,9 @@ echo $options;
 echo $this->grid("Recordedit", true)
           ->field('begindate','起始日期')
           ->field('enddate','结束日期')
-          //->field('company', '所在公司')
-          ->field('site', '所在工地')  
+          ->field('days', '天数')
+          ->field('reason', '原因')
+          ->field('remark', '其他说明')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->paginatorEnabled(false)
           ->setSorting(false)  
@@ -89,10 +122,12 @@ echo $this->grid("Recordedit", true)
 <div data-role="collapsible" data-collapsed="true">
 <h3>详细记录</h3>
 <?
-echo $this->grid("Recordlist", true)
+echo $this->grid("Recordedit", true)
           ->field('begindate','起始日期')
           ->field('enddate','结束日期')
-          ->field('site', '所在工地')  
+          ->field('days', '天数')
+          ->field('reason', '原因')
+          ->field('remark', '其他说明')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->paginatorEnabled(false)
           ->setSorting(false)  
