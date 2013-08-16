@@ -2,6 +2,20 @@
 
 class GridHelper_Workeronsite extends Grid_Helper_Abstract 
 {
+    protected function td_begindate($field, $row) 
+    {
+        $value = $row[$field] ? $row[$field]->format("Y/m/d") : "";
+        $input = '<input type="text" id="begindate" class="datepicker" value="' . $value . '">';
+        return $input;
+    }    
+
+    protected function td_enddate($field, $row) 
+    {
+        $value = $row[$field] ? $row[$field]->format("Y/m/d") : "";
+        $input = '<input type="text" id="enddate" class="datepicker" value="' . $value . '">';
+        return $input;
+    }    
+
     protected function td_site($field, $row) 
     {
         /*
@@ -19,26 +33,37 @@ class GridHelper_Workeronsite extends Grid_Helper_Abstract
         return $sitename;        
     }
 
-    protected function td_begindate($field, $row) 
+
+    protected function td_update($field, $row) 
     {
-        if($row[$field])
-        {
-            return $row[$field]->format("Y/m/d");
-        }
-        
-        return "&nbsp;";
+    	return '<button onclick="updaterow(' . $row['id'] . ')" data-inline="true" data-mini="true">更新</button>';
     }    
 
-    protected function td_enddate($field, $row) 
+    protected function td_delete($field, $row) 
     {
-        if($row[$field])
-        {
-            return $row[$field]->format("Y/m/d");
-        }
-        
-        return "&nbsp;";
+    	return '<button onclick="updaterow(' . $row['id'] . ')" data-inline="true" data-mini="true">删除</button>';
     }    
 
+    protected function td_begindate1($field, $row) 
+    {
+        $col = 'begindate';
+        return $row[$col] ? $row[$col]->format("Y/m/d") : "&nbsp;";
+    }    
+
+    protected function td_enddate1($field, $row) 
+    {
+        $col = 'enddate';
+        return $row[$col] ? $row[$col]->format("Y/m/d") : "&nbsp;";
+    }    
+
+    protected function td_site1($field, $row) 
+    {
+        $col = "site";
+        $site = $row[$col];
+        $sitename = $site ? $site->getName() : "&nbsp;";
+
+        return $sitename;        
+    }
 }
 
 ?>

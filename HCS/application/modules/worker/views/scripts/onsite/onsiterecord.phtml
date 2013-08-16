@@ -75,14 +75,15 @@ echo $options;
 echo $this->grid("Recordedit", true)
           ->field('begindate','起始日期')
           ->field('enddate','结束日期')
-          //->field('company', '所在公司')
           ->field('site', '所在工地')  
+          ->field('update', '更新')
+          ->field('delete', '删除')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->paginatorEnabled(false)
           ->setSorting(false)  
           ->helper(new GridHelper_Workeronsite())
-          ->data($this->records)
-          ->action(':action', '记录管理', array( 'url'=>array('action'=>'onsiterecord')));
+          ->data($this->records);
+          //->action(':action', '删除', array( 'url'=>array('action'=>'onsiterecord')));
 ?>
 </div>
 
@@ -90,8 +91,8 @@ echo $this->grid("Recordedit", true)
 <h3>详细记录</h3>
 <?
 echo $this->grid("Recordlist", true)
-          ->field('begindate','起始日期')
-          ->field('enddate','结束日期')
+          ->field('begindate1','起始日期')
+          ->field('enddate1','结束日期')
           ->field('site', '所在工地')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->paginatorEnabled(false)
