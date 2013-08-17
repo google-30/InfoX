@@ -22,6 +22,33 @@ function addrecord()
     $("#addrecordform").submit();
 }
 
+function updaterecord(id)
+{
+    var begindate = $("#begindate" + id).val();
+    var enddate = $("#enddate" + id).val();
+    var days = $("#days" + id).val();
+    var reason = $("#reason" + id).val();
+    var remark = $("#remark" + id).val();    
+
+    $.post("/worker/onsite/updateattendancerecord", 
+        { id:id, begindate:begindate, enddate:enddate, days:days, reason:reason, remark:remark }, 
+        function(data) {
+            alert(data);
+            //console.log(data);            
+            window.location.reload();
+    });
+}
+
+function deleterecord(id)
+{
+    $.post("/worker/onsite/deleteattendancerecord", 
+        { id: id }, 
+        function(data) {
+            alert(data);
+            //console.log(data); 
+            window.location.reload();
+    });    
+}
 </script>
 <?php
 $worker=$this->worker;

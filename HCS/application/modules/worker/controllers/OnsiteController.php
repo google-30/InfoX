@@ -177,7 +177,57 @@ class Worker_OnsiteController extends Zend_Controller_Action
         $this->redirect("/worker/onsite/attendancerecord/id/" . $id);          
     }
 
-    
+    public function updateattendancerecordAction()
+    {
+        $this->turnoffview();
+
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }    
+        
+        $id = $this->getParam("id", 0);
+        $begin = $this->getParam("begindate", "");
+        $end = $this->getParam("enddate", "");
+        $days = $this->getParam("days", 0);
+        $reason = $this->getParam("reason", "");
+        $remark = $this->getParam("remark", "");
+
+        $record = $this->_workerattendance->findOneBy(array("id"=>$id));
+        $record->setBegindate(new DateTime($begin));
+        $record->setEnddate(new DateTime($end));
+        $record->setDays($days);
+        $record->setReason($reason);
+        $record->setRemark($remark);
+        
+        $this->_em->persist($record);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }   
+
+        echo "更新成功";           
+    }
+
+    public function deleteattendancerecordAction()
+    {
+        $this->turnoffview();
+
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }    
+        
+        $id=$this->getParam("id", 0);
+        $record = $this->_workerattendance->findOneBy(array("id"=>$id));        
+        $this->_em->remove($record);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }   
+
+        echo "删除成功";
+    }
 
     private function getMiscInfo($label)
     {
