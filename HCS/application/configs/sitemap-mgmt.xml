@@ -60,6 +60,15 @@
 		<privilege>view</privilege>
 	    </project>
 
+	    <emachinery>
+		<label>电动机具管理</label>
+		<module>material</module>
+		<controller>emachinery</controller>
+		<action>index</action>
+		<resource>material:emachinery</resource>
+		<privilege>view</privilege>
+	    </emachinery>
+
 	    <archive>
 		<label>文档软件管理</label>
 		<module>archive</module>
