@@ -35,6 +35,23 @@ $reasons=$this->reasons;
 <h3>考勤记录 - <?php echo $namechs . "/" . $nameeng; ?></h3>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 
+<div data-role="collapsible" data-collapsed="false">
+<h3>详细记录</h3>
+<?
+echo $this->grid("Recordedit", true)
+          ->field('begindate1','起始日期')
+          ->field('enddate1','结束日期')
+          ->field('days1', '天数')
+          ->field('reason1', '原因')
+          ->field('remark1', '其他说明')  
+          ->actionField(':action', "", '&nbsp;|&nbsp;')
+          ->paginatorEnabled(false)
+          ->setSorting(false)  
+          ->helper(new GridHelper_Workeronsite())
+          ->data($this->records);
+?>
+</div>
+
 <div data-role="collapsible" data-collapsed="true">
 <h3>添加记录</h3>
 <form method="post" action="/worker/onsite/addattendancerecord" id="addrecordform">
@@ -110,24 +127,8 @@ echo $this->grid("Recordedit", true)
           ->field('days', '天数')
           ->field('reason', '原因')
           ->field('remark', '其他说明')  
-          ->actionField(':action', "", '&nbsp;|&nbsp;')
-          ->paginatorEnabled(false)
-          ->setSorting(false)  
-          ->helper(new GridHelper_Workeronsite())
-          ->data($this->records)
-          ->action(':action', '记录管理', array( 'url'=>array('action'=>'onsiterecord')));
-?>
-</div>
-
-<div data-role="collapsible" data-collapsed="true">
-<h3>详细记录</h3>
-<?
-echo $this->grid("Recordedit", true)
-          ->field('begindate','起始日期')
-          ->field('enddate','结束日期')
-          ->field('days', '天数')
-          ->field('reason', '原因')
-          ->field('remark', '其他说明')  
+          ->field('update', '更新')
+          ->field('delete', '删除')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->paginatorEnabled(false)
           ->setSorting(false)  
@@ -135,6 +136,7 @@ echo $this->grid("Recordedit", true)
           ->data($this->records);
 ?>
 </div>
+
 </div>
 
 <br><br>
