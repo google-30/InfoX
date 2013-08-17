@@ -3,7 +3,7 @@
 <script>
 $(function () {
     //alert("scroller");
-    $('.classupdate').mobiscroll().date({
+    $('.datepicker').mobiscroll().date({
         theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
         endYear: 2050,
     });  
@@ -12,7 +12,14 @@ $(function () {
 
 function submitform()
 {
-    //alert("submitform");    
+    //alert("submitform"); 
+    var materialid = $('#material').val();   
+    if(materialid=="0")
+    {
+        alert("请选择电动机具");
+        return;
+    }
+
     $("#dataform").submit();
 }
 
@@ -20,15 +27,10 @@ function redirect(url) {
     window.location = url;
 }
 
-$('.defsupplier').change( function() {
-    var id = $(this).attr("id");
-    //alert("defsupplier id="+id);
-    $("#defsupplierid").val(id);
-});
 </script>
 <?php
+/*
 $data=$this->maindata;
-$mode=$this->mode;//"Create";
 $id=0;
 $name="";
 $nameeng="";
@@ -61,6 +63,27 @@ if($defsupplier)
     $defsupplierid=$defsupplier->getId(); 
 }
 }
+*/
+
+$id=0;
+$mode=$this->mode;
+$materials=$this->materials;
+$sites=$this->sites;
+$purchasedate="";
+$sn="";
+$status="";
+$remark="";
+$statusArr=$this->statusArr;
+if($mode==="Edit")
+{
+$data=$this->data;
+$id=$data->getId();
+$thedate=$data->getPurchasedate();
+$purchasedate=$thedate ? $thedate->format("Y/m/d") : ""; 
+$sn=$data->getSn();
+$status=$data->getStatus();
+$remark=$data->getRemark();
+}
 
 $header="<h3>编辑电动机具信息</h3>";
 if($mode=="Create")
@@ -73,17 +96,33 @@ echo $header;
 <form id="dataform" enctype="multipart/form-data" method="post" action="/material/emachinery/submit">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
-<input type="hidden" id="defsupplierid" name="defsupplierid" value="<?php echo $defsupplierid; ?>">
 
 <table class="grid">
 <tr>
 <td style="width:50%"><div data-role="fieldcontain">
-<label for="namechs">选择电动机具:</label>
-<input type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" data-mini="true">
+<label for="material">电动机具:</label>
+<select id="material" name="material" data-mini="true">
+<option value="0">请选择</option>
+<?php
+$options="";
+foreach($materials as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+    $nameeng = $tmp->getNameeng();
+    $namelong = $name . "/" . $nameeng;
+
+    $option = '<option value="'. $id . '">' . $namelong . '</option>';
+    $options .= $option;
+}
+echo $options;
+?>
+</select>
 </div></td>
 <td></td>
 </tr>
 
+<!--
 <tr>
 <td style="width:50%"><div data-role="fieldcontain">
 <label for="namechs">中文名:</label>
@@ -94,39 +133,68 @@ echo $header;
 <input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
 </div></td>
 </tr>
+-->
 
 <tr>
 <td><div data-role="fieldcontain">
 <label for="purchasedate">购买日期:</label>
-<input type="text" name="purchasedate" id="purchasedate" value="<?php echo $purchasedate; ?>" data-mini="true" placeholder="">
+<input type="text" name="purchasedate" id="purchasedate" class="datepicker" value="<?php echo $purchasedate; ?>" data-mini="true" placeholder="点击选择日期">
 </div></td>
 <td><div data-role="fieldcontain">
 <label for="sn">序列号:</label>
-<input type="text" name="sn" id="sn" value="<?php echo $sn; ?>" data-mini="true" placeholder="">
+<input type="text" name="sn" id="sn" value="<?php echo $sn; ?>" data-mini="true" placeholder="设备的唯一序列号">
 </div></td>
 </tr>
 
 <tr>
 <td><div data-role="fieldcontain">
 <label for="site">所在工地:</label>
-<input type="text" name="site" id="site" value="<?php echo $spec; ?>" data-mini="true" placeholder="">
+<select id="site" name="site" data-mini="true">
+<option value="0">请选择</option>
+<?php
+$options="";
+foreach($sites as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+    //$nameeng = $tmp->getNameeng();
+    $namelong = $name;
+
+    $option = '<option value="'. $id . '">' . $namelong . '</option>';
+    $options .= $option;
+}
+echo $options;
+?>
+</select>
 </div></td>
 <td><div data-role="fieldcontain">
 <label for="status">设备状态:</label>
-<input type="text" name="status" id="status" value="<?php echo $spec; ?>" data-mini="true" placeholder="">
+<select id="status" name="status">
+<option value="0">请选择</option>
+<?php
+$options="";
+foreach($statusArr as $tmp)
+{
+    $option = '<option value="'. $tmp . '">' . $tmp . '</option>';
+    $options .= $option;
+}
+echo $options;
+?>
+</select>
+
 </div></td>
 </tr>
 
 <tr><td>
 <div data-role="fieldcontain">
 <label for="remark">其他说明:</label>
-<input type="text" name="remark" id="remark" value="" data-mini="true" placeholder="">
+<input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true" placeholder="">
 </div>
 </td>
 <td></td>
 </tr>
 </table>
-
 </form> <!-- dataform -->
-<button type="button" id="submitbutton" name="submitbutton" onclick="submitform()" data-theme="a" data-mini="true">提交</button>
 
+<button type="button" id="submitbutton" name="submitbutton" onclick="submitform()" data-theme="a" data-mini="true">提交</button>
+<br><br>

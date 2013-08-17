@@ -4,17 +4,6 @@ class GridHelper_Material extends Grid_Helper_Abstract
 {
     protected function td_supplier($field, $row) 
     {
-        /*
-        if(is_null($row->$field))
-        {
-            return "&nbsp;";
-        }
-        else
-        {
-            return $row->$field->getName();
-        } 
-        */
-
         return $row->$field ? $row->$field->getName() : "&nbsp;";   
     }
 
