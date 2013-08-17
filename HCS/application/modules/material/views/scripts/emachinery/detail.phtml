@@ -65,7 +65,7 @@ if($defsupplier)
 $header="<h3>编辑电动机具信息</h3>";
 if($mode=="Create")
 {
-    $header="<h3>注册一个电动机具</h3>";
+    $header="<h3>注册电动机具</h3>";
 }
 echo $header;
 ?>
@@ -75,130 +75,58 @@ echo $header;
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 <input type="hidden" id="defsupplierid" name="defsupplierid" value="<?php echo $defsupplierid; ?>">
 
-<table class="">
-<tr>
-<td rowspan="3" style="width:50%">
-<div data-role="fieldcontain">
-    <label for="file" class="ui-input-text">材料照片:</label>
-    <input type="file" name="file" id="file">
-    <img src="<?php echo $pic; ?>" alt="" width="40%"  id="pic" name="pic">
-</div>
-</td>
-<td>
-<div data-role="fieldcontain">
-<label for="name">中文名:</label>
-<input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
-</div>
-</td>
-</tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="name">英文名:</label>
-<input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
-</div>
-</td></tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="usage">材料用途:</label>
-<input type="text" name="usage" id="usage" value="<?php echo $usage; ?>" data-mini="true" placeholder="材料用途，比如木类，金属类等">
-</div>
-</td></tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="spec">材料规格:</label>
-<input type="text" name="spec" id="spec" value="<?php echo $spec; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
-</div>
-</td><td>
-<div data-role="fieldcontain">
-    <label for="description">材料描述:</label>
-    <textarea id="description" name="description" rows="2" cols="60" data-mini="true" placeholder="补充，比如材料的特殊性，防火放潮等"><?php echo $description; ?></textarea>
-</div>
-</td></tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="spec">单位:</label>
-<input type="text" name="unit" id="unit" value="" data-mini="true" placeholder="材料单位，比如：套，袋，个">
-</div>
-</td>
-<td>
-<div data-role="fieldcontain">
-<label for="spec">选择分类:</label>
-<select name="type" id="type" data-mini="true">
-<option value="0"></option>
-<?php
-$types=$this->types;
-$options = "";
-foreach($types as $tmp)
-{
-    $id = $tmp->getId();
-    $main = $tmp->getMain();
-    $maintypechs = $main->getTypechs();
-    $typechs = $tmp->getTypechs();
-    $typestr = $maintypechs . "::" . $typechs;
-
-    if($id == $typeid)
-    {
-        $options .= '<option value="' . $id . '" selected>' . $typestr . '</option>';
-    }
-    else
-    {
-        $options .= '<option value="' . $id . '">' . $typestr . '</option>';
-    }
-}
-echo $options;
-?>
-</select>
-</div>
-</td>
-</tr>
-</table>
-
 <table class="grid">
-<thead><tr><th>优先供应商</th><th>名称</th><th>价格</th><th>报价日期</th></tr></thead>
-<tbody>
-<?php
-$suppliers= $this->suppliers;
-$supplyprice = $this->supplyprice;
-foreach($suppliers as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
-   
-    $price = 0;
-    $update = "";
+<tr>
+<td style="width:50%"><div data-role="fieldcontain">
+<label for="namechs">选择电动机具:</label>
+<input type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" data-mini="true">
+</div></td>
+<td></td>
+</tr>
 
-    if(count($supplyprice))
-    {
-        foreach($supplyprice as $sprice)
-        {
-            $sid = $sprice->getSupplier()->getId();
-            if($sid==$id)
-            {
-                $price = $sprice->getPrice();
-                $update = $sprice->getUpdate()->format("Y/m/d");
-            }        
-        }
-    }
+<tr>
+<td style="width:50%"><div data-role="fieldcontain">
+<label for="namechs">中文名:</label>
+<input type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" data-mini="true">
+</div></td>
+<td><div data-role="fieldcontain">
+<label for="nameeng">英文名:</label>
+<input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
+</div></td>
+</tr>
 
-    $row = "";
+<tr>
+<td><div data-role="fieldcontain">
+<label for="purchasedate">购买日期:</label>
+<input type="text" name="purchasedate" id="purchasedate" value="<?php echo $purchasedate; ?>" data-mini="true" placeholder="">
+</div></td>
+<td><div data-role="fieldcontain">
+<label for="sn">序列号:</label>
+<input type="text" name="sn" id="sn" value="<?php echo $sn; ?>" data-mini="true" placeholder="">
+</div></td>
+</tr>
 
-    if($id == $defsupplierid)
-    {
-        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked/></td>';        
-    }
-    else
-    {
-        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" /></td>';    
-    }
-    $tdname = "<td>$name</td>";
-    $tdprice = '<td><input type="text" value="'. $price .'" name="price' . $id . '" id="price' . $id .'" placeholder="0"></td>';
-    $tdupdate = '<td><input type="text" class="classupdate" value="'. $update .'" name="update' . $id . '" id="update' . $id .'"></td>';
-    $row .= "<tr>" . $tdradio . $tdname . $tdprice . $tdupdate . "</tr>";
-    echo $row;
-}
-?>
-</tbody>
+<tr>
+<td><div data-role="fieldcontain">
+<label for="site">所在工地:</label>
+<input type="text" name="site" id="site" value="<?php echo $spec; ?>" data-mini="true" placeholder="">
+</div></td>
+<td><div data-role="fieldcontain">
+<label for="status">设备状态:</label>
+<input type="text" name="status" id="status" value="<?php echo $spec; ?>" data-mini="true" placeholder="">
+</div></td>
+</tr>
+
+<tr><td>
+<div data-role="fieldcontain">
+<label for="remark">其他说明:</label>
+<input type="text" name="remark" id="remark" value="" data-mini="true" placeholder="">
+</div>
+</td>
+<td></td>
+</tr>
 </table>
+
 </form> <!-- dataform -->
-<button type="button" id="submitbutton" name="submitbutton" onclick="submitform()" data-theme="a">提交</button>
+<button type="button" id="submitbutton" name="submitbutton" onclick="submitform()" data-theme="a" data-mini="true">提交</button>
 
