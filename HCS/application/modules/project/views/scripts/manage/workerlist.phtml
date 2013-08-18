@@ -1,0 +1,74 @@
+<style>
+#sitetab { width:100%; }
+#sitetab td { width:25%; }
+</style>
+<script>
+function gotolist()
+{
+    window.location = "/project/manage";        
+}
+
+function redirect(url) {
+    window.location = url;
+}
+</script>
+<?php
+$data = $this->maindata;
+$mode = "Edit";
+$id = $data->getId();
+$name = $data->getName();
+$address = $data->getAddress();
+$start = $data->getStart()->format("Y-m-d");
+$stop = $data->getStop()->format("Y-m-d");
+if($data->getLeader())
+{
+    $leader = $data->getLeader()->getName();
+}
+if($data->getManager())
+{
+    $manager = $data->getManager()->getName();
+}
+$workerno = $data->getWorkerno();
+$remark = $data->getRemark();
+$contractor=$data->getContractor();
+$property=$data->getProperty();
+$cmyobj=$data->getCompany();
+$company= $cmyobj ? $cmyobj->getNamechs(): "";
+$leaders=$this->leaders;
+$managers=$this->managers;
+
+?>
+
+<fieldset>
+<legend>工地详细信息</legend>
+<table class="" id="sitetab">
+<!--<thead><strong>工地详细信息</strong></thead>-->
+<tr>
+<td>工地名称:</td><td><?php echo $name; ?></td>
+<td>工地地址:</td><td><?php echo $address; ?></td>
+</tr>
+<tr>
+<td>总包单位:</td><td><?php echo $contractor; ?></td>
+<td>工地性质:</td><td><?php echo $property; ?></td>
+</tr>
+<tr>
+<td>承包公司:</td><td><?php echo $company; ?></td>
+<td>工长:</td><td><?php echo $leaders; ?></td>
+</tr>
+<tr>
+<td>开工日期:</td><td><?php echo $start; ?></td>
+<td>竣工日期:</td><td><?php echo $stop; ?></td>
+</tr>
+</table>
+</fieldset>
+
+<div data-role="navbar">
+	<ul>
+		<li><a href="#" class="ui-btn-active ui-state-persist">工人列表</a></li>
+		<li><a href="b.html">电动机具列表</a></li>
+		<li><a href="c.html">申请单列表</a></li>
+		<li><a href="d.html">材料汇总</a></li>
+	</ul>
+</div><!-- /navbar -->
+
+

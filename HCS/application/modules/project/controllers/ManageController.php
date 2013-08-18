@@ -151,38 +151,7 @@ class Project_ManageController extends Zend_Controller_Action
 
     public function sitedetailAction()
     {
-        $this->findLeaders();
-
-        $id = $this->getParam("id");
-        //echo "id=$id<br>";
-        $siteobj = $this->_site->findOneBy(array("id"=>$id));
-        $this->view->maindata = $siteobj;
-
-        $query = $this->_em->createQuery(
-        'select w.nameeng, w.namechs, w.fin, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
-        (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
-        from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws 
-        where wc.site = ' . $id
-         );
-        $result = $query->getResult();
-        $this->view->workers = $result;
-
-        $this->view->applications = $this->_application->findBy(array("site"=>$siteobj));
-
-        // leaders names
-        $namesStr = "";
-        $selLeadersIdStr = $siteobj->getLeaders();
-        if($selLeadersIdStr)
-        {
-            $selLeadersIdArr = explode(";", $selLeadersIdStr);
-            foreach($selLeadersIdArr as $tmp)
-            {
-                $data = $this->_humanres->findOneBy(array("id"=>$tmp));
-                $name = $data ? $data->getName() : "&nbsp;";
-                $namesStr .= $name .  "；&nbsp;";
-            } 
-        }       
-        $this->view->leaders = $namesStr;
+        $this->getSiteDetails();
     }
 
     private function findLeaders()
@@ -295,4 +264,47 @@ class Project_ManageController extends Zend_Controller_Action
         $this->view->permission1arr = $permission1arr;
     }
 
+    public function workerlistAction()
+    {
+        $this->getSiteDetails();
+
+        $id = $this->getParam("siteid", 0);
+
+        $query = $this->_em->createQuery(
+        'select w.nameeng, w.namechs, w.fin, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
+        (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
+        from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws 
+        where wc.site = ' . $id
+         );
+        $result = $query->getResult();
+        $this->view->workers = $result;
+    }
+
+    private function getSiteDetails()
+    {
+        $this->findLeaders();
+
+        $id = $this->getParam("id",0);
+        //echo "id=$id<br>";
+        $siteobj = $this->_site->findOneBy(array("id"=>$id));
+        $this->view->maindata = $siteobj;
+
+        $this->view->applications = $this->_application->findBy(array("site"=>$siteobj));
+
+        // leaders names
+        $namesStr = "";
+        $selLeadersIdStr = $siteobj->getLeaders();
+        if($selLeadersIdStr)
+        {
+            $selLeadersIdArr = explode(";", $selLeadersIdStr);
+            foreach($selLeadersIdArr as $tmp)
+            {
+                $data = $this->_humanres->findOneBy(array("id"=>$tmp));
+                $name = $data ? $data->getName() : "&nbsp;";
+                $namesStr .= $name .  "；&nbsp;";
+            } 
+        }       
+        $this->view->leaders = $namesStr;
+
+    }
 }

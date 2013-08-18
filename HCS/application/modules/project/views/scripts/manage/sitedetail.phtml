@@ -1,5 +1,6 @@
 <style>
 #sitetab { width:100%; }
+#sitetab td { width:25%; }
 </style>
 <script>
 function gotolist()
@@ -12,6 +13,7 @@ function redirect(url) {
 }
 </script>
 <?php
+/*
 $id = 0;
 $mode = "Create";
 $name="";
@@ -22,15 +24,10 @@ $leader="";
 $manager="";
 $workerno=0;
 $remark="";
-$leaders=$this->leaders;
-$managers=$this->managers;
 $contractor="";
 $property="";
 $company="";
-//$selleaders="";
-
-if(1)
-{
+*/
 $data = $this->maindata;
 $mode = "Edit";
 $id = $data->getId();
@@ -52,13 +49,17 @@ $contractor=$data->getContractor();
 $property=$data->getProperty();
 $cmyobj=$data->getCompany();
 $company= $cmyobj ? $cmyobj->getNamechs(): "";
+$leaders=$this->leaders;
+$managers=$this->managers;
 
-}   
 ?>
 
 <!--<h4>工地详细信息</h4>-->
+
+<fieldset>
+<legend>工地详细信息</legend>
 <table class="" id="sitetab">
-<thead><strong>工地详细信息</strong></thead>
+<!--<thead><strong>工地详细信息</strong></thead>-->
 <tr>
 <td>工地名称:</td><td><?php echo $name; ?></td>
 <td>工地地址:</td><td><?php echo $address; ?></td>
@@ -76,7 +77,8 @@ $company= $cmyobj ? $cmyobj->getNamechs(): "";
 <td>竣工日期:</td><td><?php echo $stop; ?></td>
 </tr>
 </table>
-
+</fieldset>
+<!--
 <div data-role="collapsible-set" data-mini="true">
     <div data-role="collapsible" data-collapsed="true">
     <h3>工人列表</h3>
@@ -126,6 +128,15 @@ echo $this->grid("Applications", true)
     <input type="text" value="" placeholder='填写部位名称不能含有;/"等符号，一次填写一个名称并提交' id="partname">
     <button data-mini="true" data-theme="a" onclick="addpart()">增加</button>
     </div>
-
 </div>
+-->
+<div data-role="navbar">
+	<ul>
+		<li><a href="/project/manage/workerlist?id=<?php echo $id; ?>">工人列表</a></li>
+		<li><a href="/project/manage/workerlist?id=<?php echo $id; ?>">电动机具列表</a></li>
+		<li><a href="c.html">申请单列表</a></li>
+		<li><a href="d.html">材料汇总</a></li>
+	</ul>
+</div><!-- /navbar -->
+
 

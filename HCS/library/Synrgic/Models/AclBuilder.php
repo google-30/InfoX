@@ -140,7 +140,7 @@ class Synrgic_Models_AclBuilder {
             'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit', 
-'sitedetail', 'addpart', 'delpart'),
+'sitedetail', 'addpart', 'delpart', 'workerlist'),
             'humanresource:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'material:type'=>array('view','add', 'edit', 'delete', 'submit','posttype'),
             'company:info'=>array('view','add', 'edit', 'delete', 'submit'),
