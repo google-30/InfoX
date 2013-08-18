@@ -42,7 +42,6 @@ $managers=$this->managers;
 <fieldset>
 <legend>工地详细信息</legend>
 <table class="" id="sitetab">
-<!--<thead><strong>工地详细信息</strong></thead>-->
 <tr>
 <td>工地名称:</td><td><?php echo $name; ?></td>
 <td>工地地址:</td><td><?php echo $address; ?></td>
@@ -62,10 +61,11 @@ $managers=$this->managers;
 </table>
 </fieldset>
 
+
 <div data-role="navbar">
 	<ul>
 		<li><a href="#" class="ui-btn-active ui-state-persist">工人列表</a></li>
-		<li><a href="b.html">电动机具列表</a></li>
+		<li><a href="/project/manage/emachinery?id=<?php echo $id; ?>">电动机具列表</a></li>
 		<li><a href="c.html">申请单列表</a></li>
 		<li><a href="d.html">材料汇总</a></li>
 	</ul>

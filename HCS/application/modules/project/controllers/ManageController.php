@@ -280,6 +280,11 @@ class Project_ManageController extends Zend_Controller_Action
         $this->view->workers = $result;
     }
 
+    public function emachineryAction()
+    {
+        $this->getSiteDetails();        
+    }
+
     private function getSiteDetails()
     {
         $this->findLeaders();

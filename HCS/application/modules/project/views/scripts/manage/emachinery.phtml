@@ -14,20 +14,11 @@ function redirect(url) {
 </script>
 <?php
 $data = $this->maindata;
-$mode = "Edit";
 $id = $data->getId();
 $name = $data->getName();
 $address = $data->getAddress();
 $start = $data->getStart()->format("Y-m-d");
 $stop = $data->getStop()->format("Y-m-d");
-if($data->getLeader())
-{
-    $leader = $data->getLeader()->getName();
-}
-if($data->getManager())
-{
-    $manager = $data->getManager()->getName();
-}
 $workerno = $data->getWorkerno();
 $remark = $data->getRemark();
 $contractor=$data->getContractor();
@@ -36,13 +27,11 @@ $cmyobj=$data->getCompany();
 $company= $cmyobj ? $cmyobj->getNamechs(): "";
 $leaders=$this->leaders;
 $managers=$this->managers;
-
 ?>
 
 <fieldset>
 <legend>工地详细信息</legend>
 <table class="" id="sitetab">
-<!--<thead><strong>工地详细信息</strong></thead>-->
 <tr>
 <td>工地名称:</td><td><?php echo $name; ?></td>
 <td>工地地址:</td><td><?php echo $address; ?></td>
@@ -64,7 +53,7 @@ $managers=$this->managers;
 
 <div data-role="navbar">
 	<ul>
-		<li><a href="" >工人列表</a></li>
+		<li><a href="/project/manage/workerlist?id=<?php echo $id; ?>" >工人列表</a></li>
 		<li><a href="#" class="ui-btn-active ui-state-persist">电动机具列表</a></li>
 		<li><a href="c.html">申请单列表</a></li>
 		<li><a href="d.html">材料汇总</a></li>

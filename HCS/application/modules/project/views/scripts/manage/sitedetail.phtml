@@ -29,7 +29,6 @@ $property="";
 $company="";
 */
 $data = $this->maindata;
-$mode = "Edit";
 $id = $data->getId();
 $name = $data->getName();
 $address = $data->getAddress();
@@ -53,8 +52,6 @@ $leaders=$this->leaders;
 $managers=$this->managers;
 
 ?>
-
-<!--<h4>工地详细信息</h4>-->
 
 <fieldset>
 <legend>工地详细信息</legend>
@@ -133,7 +130,7 @@ echo $this->grid("Applications", true)
 <div data-role="navbar">
 	<ul>
 		<li><a href="/project/manage/workerlist?id=<?php echo $id; ?>">工人列表</a></li>
-		<li><a href="/project/manage/workerlist?id=<?php echo $id; ?>">电动机具列表</a></li>
+		<li><a href="/project/manage/emachinery?id=<?php echo $id; ?>">电动机具列表</a></li>
 		<li><a href="c.html">申请单列表</a></li>
 		<li><a href="d.html">材料汇总</a></li>
 	</ul>
