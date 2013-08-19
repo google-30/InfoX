@@ -16,6 +16,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_application = $this->_em->getRepository('Synrgic\Infox\Application');
 
         $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
+        $this->_emachinery = $this->_em->getRepository('Synrgic\Infox\Emachinery');
     }
 
     public function indexAction()
@@ -282,7 +283,55 @@ class Project_ManageController extends Zend_Controller_Action
 
     public function emachineryAction()
     {
-        $this->getSiteDetails();        
+        $this->getSiteDetails();     
+
+        $siteid = $this->getParam("id",0);
+        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));
+        $emachineries = $this->_emachinery->findBy(array("site"=>$siteobj));   
+
+        $this->view->emachineries = $emachineries;
+    }
+
+    public function applistAction()
+    {
+        $this->getSiteDetails();  
+
+        $siteid = $this->getParam("id",0);
+        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));
+        $applist = $this->_application->findBy(array("site"=>$siteobj));   
+
+        $this->view->applist = $applist;        
+    }
+
+    public function allmaterialsAction()
+    {
+        $this->getSiteDetails();  
+
+        $siteid = $this->getParam("id",0);
+        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));
+        $applist = $this->_application->findBy(array("site"=>$siteobj));   
+
+        //$this->view->applist = $applist;     
+        $idArr = array();
+        foreach($applist as $tmp)
+        {
+            $id = $tmp->getId();            
+            $idArr[] = $id;
+        }   
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->add('select', 'm')
+           ->add('from', 'Synrgic\Infox\Matappdata m');
+        $qb->add('where', $qb->expr()->in('m.application', $idArr));
+        $query = $qb->getQuery();
+        $result = $query->getResult();
+
+        $allmats = array();
+        foreach($result as $tmp)
+        {
+            $tmpArr = array();
+            
+        }
     }
 
     private function getSiteDetails()

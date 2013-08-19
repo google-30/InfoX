@@ -27,6 +27,8 @@ $cmyobj=$data->getCompany();
 $company= $cmyobj ? $cmyobj->getNamechs(): "";
 $leaders=$this->leaders;
 $managers=$this->managers;
+
+$emachineries=$this->emachineries;
 ?>
 
 <fieldset>
@@ -55,9 +57,26 @@ $managers=$this->managers;
 	<ul>
 		<li><a href="/project/manage/workerlist?id=<?php echo $id; ?>" >工人列表</a></li>
 		<li><a href="#" class="ui-btn-active ui-state-persist">电动机具列表</a></li>
-		<li><a href="c.html">申请单列表</a></li>
-		<li><a href="d.html">材料汇总</a></li>
+		<li><a href="/project/manage/applist?id=<?php echo $id; ?>">申请单列表</a></li>
+		<li><a href="/project/manage/allmaterials?id=<?php echo $id; ?>">材料汇总</a></li>
 	</ul>
 </div><!-- /navbar -->
+
+<?
+echo $this->grid("Sites", true)
+          ->field('material','名称')
+          ->field('purchasedate', '购买日期')  
+          ->field('sn', '序列号')  
+          ->field('status', '状态')  
+          ->field('remark', '说明')
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          ->setSorting(false)  
+          ->helper(new GridHelper_Emachinery())
+          ->data($emachineries);
+?>
+
+
 
 

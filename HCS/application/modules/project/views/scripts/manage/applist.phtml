@@ -14,20 +14,11 @@ function redirect(url) {
 </script>
 <?php
 $data = $this->maindata;
-$mode = "Edit";
 $id = $data->getId();
 $name = $data->getName();
 $address = $data->getAddress();
 $start = $data->getStart()->format("Y-m-d");
 $stop = $data->getStop()->format("Y-m-d");
-if($data->getLeader())
-{
-    $leader = $data->getLeader()->getName();
-}
-if($data->getManager())
-{
-    $manager = $data->getManager()->getName();
-}
 $workerno = $data->getWorkerno();
 $remark = $data->getRemark();
 $contractor=$data->getContractor();
@@ -37,6 +28,7 @@ $company= $cmyobj ? $cmyobj->getNamechs(): "";
 $leaders=$this->leaders;
 $managers=$this->managers;
 
+$applist=$this->applist;
 ?>
 
 <fieldset>
@@ -61,14 +53,38 @@ $managers=$this->managers;
 </table>
 </fieldset>
 
-
 <div data-role="navbar">
 	<ul>
-		<li><a href="#" class="ui-btn-active ui-state-persist">工人列表</a></li>
-		<li><a href="/project/manage/emachinery?id=<?php echo $id; ?>">电动机具列表</a></li>
-		<li><a href="/project/manage/applist?id=<?php echo $id; ?>">申请单列表</a></li>
+		<li><a href="/project/manage/workerlist?id=<?php echo $id; ?>" >工人列表</a></li>
+		<li><a href="/project/manage/emachinery?id=<?php echo $id; ?>" >电动机具列表</a></li>
+		<li><a href="#" class="ui-btn-active ui-state-persist">申请单列表</a></li>
 		<li><a href="/project/manage/allmaterials?id=<?php echo $id; ?>">材料汇总</a></li>
 	</ul>
 </div><!-- /navbar -->
+
+<script>
+$(document).ready(function() {
+    $('#Applications').dataTable();
+} );
+</script>
+<?
+echo $this->grid("Applications", true)
+          ->field('id','申请单号')
+          //->field('site','工地')
+          ->field('updatedate','更新时间')
+          ->field('applicant','申请人')
+          //->field('createdate','创建日期')
+          //->field('status0', '申请状态')
+          ->field('status1', '办公人员评估')
+          ->field('status2', '负责经理评估')  
+          ->actionField(':action', "", '&nbsp;|&nbsp;')
+          ->setSorting(false) 
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Application())
+          ->data($applist);
+?>
+<br><br>
+
 
 
