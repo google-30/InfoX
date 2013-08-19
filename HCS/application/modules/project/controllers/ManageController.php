@@ -17,6 +17,7 @@ class Project_ManageController extends Zend_Controller_Action
 
         $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
         $this->_emachinery = $this->_em->getRepository('Synrgic\Infox\Emachinery');
+        $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
     }
 
     public function indexAction()
@@ -329,9 +330,65 @@ class Project_ManageController extends Zend_Controller_Action
         $allmats = array();
         foreach($result as $tmp)
         {
-            $tmpArr = array();
-            
+            $materialid = $tmp->getMaterialid();
+            $amount = $tmp->getAmount();
+            $longname = $tmp->getLongname();
+            $price = $tmp->getPrice();
+            $unit_manual = $tmp->getUnit();
+
+            $matobj = $this->_material->findOneBy(array("id"=>$materialid));
+            $unit = $matobj ? $matobj->getUnit() : $unit_manual ;
+
+            $found = false;
+
+            /* copy array element to $mat
+            foreach($allmats as $mat)
+            {
+                $matid = $mat['materialid'];
+                if($matid == $materialid)
+                {                                        
+                    $mat['amount'] += $amount;
+                    echo "mat amount=" . $mat['amount'] . ",amount=$amount";       
+                    $found = true;
+                    break;
+                }        
+            }
+            */
+
+            // this is ref
+            for($i=0; $i<count($allmats); $i++)
+            {
+                $matid = $allmats[$i]['materialid'];
+                if($matid == $materialid)
+                {                                        
+                    $allmats[$i]['amount'] += $amount;
+                    //echo "mat amount=" . $allmats[$i]['amount'] . ",amount=$amount";       
+                    $allmats[$i]['totalprice'] = $allmats[$i]['amount'] * $allmats[$i]['price'];        
+                    $found = true;
+                    break;
+                }        
+            }
+
+            if($found)
+            {
+                $found = false;
+                continue;
+            }
+            else
+            {
+                $tmpArr = array();
+                $tmpArr['materialid'] = $materialid;
+                $tmpArr['amount'] = $amount;
+                $tmpArr['longname'] = $longname;
+                $tmpArr['price'] = $price;                
+                $tmpArr['unit'] = $unit;
+                $tmpArr['totalprice'] = $price * $amount;
+
+                $allmats[] = $tmpArr;
+            }
         }
+
+        $this->view->allmats = $allmats;
     }
 
     private function getSiteDetails()

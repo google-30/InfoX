@@ -28,7 +28,7 @@ $company= $cmyobj ? $cmyobj->getNamechs(): "";
 $leaders=$this->leaders;
 $managers=$this->managers;
 
-$applist=$this->applist;
+$allmats=$this->allmats;
 ?>
 
 <fieldset>
@@ -67,24 +67,42 @@ $(document).ready(function() {
     $('#Applications').dataTable();
 } );
 </script>
+
+<div data-role="collapsible-set" data-mini="true">
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>按数量汇总</h3>
 <?
 echo $this->grid("Applications", true)
-          ->field('id','申请单号')
-          ->field('site','工地')
-          ->field('applicant','申请人')
-          //->field('createdate','创建日期')
-          ->field('updatedate','更新时间')
-          //->field('status0', '申请状态')
-          ->field('status1', '办公人员评估')
-          ->field('status2', '负责经理评估')  
+          ->field('materialid','材料编号')
+          ->field('longname','材料名称')
+          ->field('amount','数量')
+          ->field('unit','单位')
+          ->field('price', '单价')
+          ->field('totalprice', '合计')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->setSorting(false) 
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Application())
-          ->data($applist);
+          ->data($allmats);
 ?>
+<br>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>按分类汇总</h3>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>申请单列表</h3>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>总申请材料列表</h3>
+    </div>
+</div>
 <br><br>
+
 
 
 
