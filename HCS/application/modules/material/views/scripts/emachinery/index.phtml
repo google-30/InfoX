@@ -1,118 +1,23 @@
 <style>
-#Materials { width:100%; }
 </style>
 <script>
 $(function() {
-    $('#Materials').dataTable();
+    $('#Emachinery').dataTable();
 });
-
-function editfunc()
-{
-    var elmNo = 0; 
-    var chkCount=0;
-    var form = document.dataform;
-    for (var i = 0; i < form.elements.length; i++) { 
-        var element = form.elements[i];   
-        if(element.type == 'checkbox' && element.id != 'toggleall' && element.checked)
-        {
-            chkCount++; 
-            elmNo = i;    
-        }    
-    }
-    
-    if(chkCount != 1)
-    {
-        alert("Choose one to edit!");
-        return;
-    }   
-
-    var url = "/material/manage/edit?id=" + $(form.elements[elmNo]).val();
-    //alert(url);
-    redirect(url);
-}
-
-function deletefunc()
-{
-    var r=confirm("Confirm to delete?");
-    if (r==false) { return false; }          
-
-    var formname = "dataform";
-
-    var action = "/material/manage/delete";     
-    var method = "post";
-
-    var frm = $('#dataform');    
-    var toServer = {};
-    $('#datatable tbody tr td input').each(function(key, value) {
-        toServer[$(this).val()] = $(this).is(':checked');
-    });
-    
-    frm.submit(function () {
-        $.ajax({
-            type: method,
-            url: action,
-            data: toServer,
-            success: function (data) {
-                //alert(data);
-                window.location.reload();
-            }
-        });
-
-        return false;
-    });
-    
-    frm.submit();
-}
-
-function redirect(url) {
-    window.location = url;
-}
-
-function checkall()
-{
-    //alert("checkall");
-    var checked = false;
-    var form = document.dataform;
-    
-    for (var i = 0; i < form.elements.length; i++) {
-        if(form.elements[i].id == 'toggleall')
-        {
-            checked = form.elements[i].checked;
-            break;    
-        }    
-    }
-
-    for (var i = 0; i < form.elements.length; i++) {    
-        if(form.elements[i].type == 'checkbox'){
-                form.elements[i].checked = checked;
-            }    
-    }
-}
-
-function importexcel()
-{
-    alert("importexcel not implemented");
-}
-
-
-function exportexcel()
-{
-    alert("exportexcel not implemented");
-}
-
 </script>
 
 <h3>电动机具列表</h3>
-<a href="/material/emachinery/add"><button data-theme="a" data-mini="true">添加</button></a>
+<a href="/material/emachinery/add"><button data-theme="a" data-mini="true">注册一个电动机具</button></a>
+<br>
 <?
 echo $this->grid("Emachinery", true)
-          ->field('id', '编号')
+          //->field('id', '编号')
+          ->field('site', '所在工地')
           ->field('material','名称')
           ->field('purchasedate', '购买日期')
           ->field('sn', '序列号')
-          ->field('site', '所在工地')
           ->field('status', '状态')
-          //->field('remark', '说明')  
+          ->field('remark', '说明')  
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->setSorting(false)  
           ->paginatorEnabled(false)
