@@ -18,6 +18,7 @@ class Material_ManageController extends Zend_Controller_Action
         $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_humanresource = $this->_em->getRepository('Synrgic\Infox\Humanresource');
+        $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
     }
 
     public function indexAction()
@@ -30,7 +31,8 @@ class Material_ManageController extends Zend_Controller_Action
     {
         $this->getSuppliers();  
         $this->getSupplyprice(0);
-        $this->getTypes();  
+        $this->getTypes();
+        $this->getUnits();      
     }
 
     public function editAction()
@@ -48,6 +50,7 @@ class Material_ManageController extends Zend_Controller_Action
         $this->getSuppliers();
         $this->getSupplyprice($id);
         $this->getTypes();
+        $this->getUnits();
     }
 
     public function deleteAction()
@@ -267,6 +270,13 @@ class Material_ManageController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
+    }
+    
+    private function getUnits()
+    {
+        $label = "info06";
+        $values = $this->_miscinfo->findOneBy(array("label"=>$label))->getValues();
+        $this->view->units = explode(";", $values);
     }
 }
 
