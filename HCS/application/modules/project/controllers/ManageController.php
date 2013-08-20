@@ -18,6 +18,7 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
         $this->_emachinery = $this->_em->getRepository('Synrgic\Infox\Emachinery');
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
+        $this->_workeronsite = $this->_em->getRepository('Synrgic\Infox\Workeronsite');
     }
 
     public function indexAction()
@@ -270,8 +271,13 @@ class Project_ManageController extends Zend_Controller_Action
     {
         $this->getSiteDetails();
 
-        $id = $this->getParam("siteid", 0);
+        $id = $this->getParam("id", 0);
+        $siteobj = $this->_site->findOneBy(array("id"=>$id));
 
+        $records = $this->_workeronsite->findBy(array("site"=>$siteobj));
+        $this->view->records = $records;
+
+        /*
         $query = $this->_em->createQuery(
         'select w.nameeng, w.namechs, w.fin, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
         (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
@@ -280,6 +286,7 @@ class Project_ManageController extends Zend_Controller_Action
          );
         $result = $query->getResult();
         $this->view->workers = $result;
+        */        
     }
 
     public function emachineryAction()

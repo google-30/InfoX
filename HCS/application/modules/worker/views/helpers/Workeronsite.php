@@ -150,6 +150,24 @@ class GridHelper_Workeronsite extends Grid_Helper_Abstract
         return $row[$col] ? $row[$col] : "&nbsp;";
     } 
 
+    protected function td_workername($field, $row) 
+    {
+        $workerobj = $row['worker'];
+        $longname = $workerobj->getNamechs() . "/" . $workerobj->getNameeng();
+
+        return $longname;
+    } 
+
+    protected function td_worktype($field, $row) 
+    {
+        $worker = $row['worker'];
+        $workerskill = $worker->getWorkerskill();
+        $worktype = $workerskill->getWorktype();
+
+        return $worktype;
+    } 
+
+
 }
 
 ?>

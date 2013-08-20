@@ -3,18 +3,12 @@
 #sitetab td { width:25%; }
 </style>
 <script>
-function gotolist()
-{
-    window.location = "/project/manage";        
-}
-
-function redirect(url) {
-    window.location = url;
-}
+$(function() {
+    $('#Workerlist').dataTable();
+});
 </script>
 <?php
 $data = $this->maindata;
-$mode = "Edit";
 $id = $data->getId();
 $name = $data->getName();
 $address = $data->getAddress();
@@ -36,7 +30,7 @@ $cmyobj=$data->getCompany();
 $company= $cmyobj ? $cmyobj->getNamechs(): "";
 $leaders=$this->leaders;
 $managers=$this->managers;
-
+$records=$this->records;
 ?>
 
 <fieldset>
@@ -61,7 +55,6 @@ $managers=$this->managers;
 </table>
 </fieldset>
 
-
 <div data-role="navbar">
 	<ul>
 		<li><a href="#" class="ui-btn-active ui-state-persist">工人列表</a></li>
@@ -71,4 +64,18 @@ $managers=$this->managers;
 	</ul>
 </div><!-- /navbar -->
 
-
+<?
+echo $this->grid("Workerlist", true)
+          ->field('worktype','工种')
+          ->field('workername','工人名字')
+          ->field('begindate1','开始日期')
+          ->field('enddate1','结束日期')
+          ->field('remark1','说明')
+          ->actionField(':action', "", '&nbsp;|&nbsp;')
+          ->setSorting(false) 
+          ->itemCountPerPage(30)
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Workeronsite())
+          ->data($records);
+?>
+<br><br>

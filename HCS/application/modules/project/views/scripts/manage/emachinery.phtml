@@ -3,14 +3,9 @@
 #sitetab td { width:25%; }
 </style>
 <script>
-function gotolist()
-{
-    window.location = "/project/manage";        
-}
-
-function redirect(url) {
-    window.location = url;
-}
+$(function() {
+    $('#Emachinery').dataTable();
+});
 </script>
 <?php
 $data = $this->maindata;
@@ -63,7 +58,7 @@ $emachineries=$this->emachineries;
 </div><!-- /navbar -->
 
 <?
-echo $this->grid("Sites", true)
+echo $this->grid("Emachinery", true)
           ->field('material','名称')
           ->field('purchasedate', '购买日期')  
           ->field('sn', '序列号')  
