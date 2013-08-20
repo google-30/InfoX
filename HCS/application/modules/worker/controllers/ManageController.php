@@ -21,6 +21,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_workercompanyinfo = $this->_em->getRepository('Synrgic\Infox\Workercompanyinfo');
         $this->_workerfamily = $this->_em->getRepository('Synrgic\Infox\Workerfamily');
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
+        $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
     }
 
     public function indexAction()
@@ -39,30 +40,23 @@ class Worker_ManageController extends Zend_Controller_Action
 //        'select w, wc.hwage from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc'
 //        'select w,wc.hwage,wc.companylable,wc.worktype, from Synrgic\Infox\Worker w JOIN w.workercompanyinfo wc'
 /*
-                     'select w, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
-                     (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
-                     from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
+        'select w, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
+        (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
+        from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
 */
-                     'select w, wc.hwage, ws.worktype, ws.worklevel,
-                     (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename,
-                     (select cinfo.namechs from Synrgic\Infox\Companyinfo cinfo where cinfo.id = wc.company) as companyname   
-                     from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
-
-                 );
+        'select w, wc.hwage, ws.worktype, ws.worklevel,
+        (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename,
+        (select cinfo.namechs from Synrgic\Infox\Companyinfo cinfo where cinfo.id = wc.company) as companyname   
+        from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
+         );
         $result = $query->getResult();
         $this->view->result = $result;
-
-        //echo $result[1][0]['nameeng'];
-        //echo $result[1]['hwage'];
-        //echo $result[1]['worktype'];
-        //echo $result[1]['sitename'];
 
         $query = $this->_em->createQuery(
             'select w, wc, ws from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
         );
         $result = $query->getResult();
-        $this->view->workersdata = $result;
-        
+        $this->view->workersdata = $result;        
     }
 
     public function addAction()
@@ -73,6 +67,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->view->sites = $sites;
 
         $this->findCompanies();
+        $this->getWorktypes();
     }
 
     public function editAction()
@@ -93,6 +88,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->view->sites = $sites;
 
         $this->findCompanies();
+        $this->getWorktypes();
     }
 
     public function submitAction()
@@ -434,6 +430,14 @@ class Worker_ManageController extends Zend_Controller_Action
     private function findCompanies()
     {
         $this->view->companies = $this->_companyinfo->findAll(); 
+    }
+
+    private function getWorktypes()
+    {
+        $label = "info04";
+        $values = $this->_miscinfo->findOneBy(array("label"=>$label))->getValues();
+
+        $this->view->worktypes = explode(";", $values);
     }
 
 }

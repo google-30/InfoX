@@ -102,6 +102,8 @@ $leavesing="";
 
 $companyid=0;
 
+$worktypes=$this->worktypes;
+
 if($this->mode == "Edit")
 {
 $worker=$this->worker;
@@ -332,12 +334,36 @@ foreach($options as $key=>$value)
 <table>
 <tr>
 <td><div data-role="fieldcontain">
-    <label for="worktype">工种:</label>
-    <input data-mini="true" type="text" name="worktype" id="worktype" value="<?php echo $worktype; ?>" />
+<label for="worktype">工种:</label>
+<select id="worktype" name="worktype" data-mini="true">
+<option value=""></option>
+<?php
+$options="";
+foreach($worktypes as $tmp)
+{
+    if($tmp == "")
+    {
+        continue;
+    }
+
+    if($tmp == $worktype)
+    {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    }
+    else
+    {
+        $option = '<option value="' . $tmp . '">' . $tmp . '</option>';
+    }
+
+    $options .= $option;
+}
+echo $options;
+?>
+</select>
 </div></td>
 <td><div data-role="fieldcontain">
-    <label for="worklevel">等级:</label>
-    <select data-mini="true" name="worklevel" id="worklevel">
+<label for="worklevel">等级:</label>
+<select data-mini="true" name="worklevel" id="worklevel">
 <?php
 $options=array("normal"=>"普通","good"=>"好","excellent"=>"很好");
 foreach($options as $key=>$value)
@@ -352,7 +378,7 @@ foreach($options as $key=>$value)
     }
 } 
 ?>
-    </select> 
+</select> 
 </div></td>
 </tr>
 

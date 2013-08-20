@@ -183,9 +183,6 @@ foreach($switches as $key => $value)
 echo $grids;
 ?>
 </div><!-- /grid-d -->
-
-
-
 </div>
 
 <!--
@@ -206,8 +203,8 @@ echo $grids;
 </div>
 -->
 
-
 <?
+/*
 $wdtab=$this->grid("Workersdata", true);
 $wdtab=$wdtab->field('id','编号');
 $wdtab=$wdtab->field('nameeng','英名字');
@@ -215,9 +212,6 @@ $wdtab=$wdtab->field('nameeng','英名字');
 $wdtab=$wdtab->data($this->workersdata);
 echo $wdtab;
 ?>
-<br>
-
-
 <?
 echo $this->grid("Workersdata", true)
           ->field('id','编号')
@@ -234,9 +228,9 @@ echo $this->grid("Workersdata", true)
           ->data($this->workersdata)
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+*/
 ?>
 <br>
-
 <table id="datatable">
 <thead><tr>
 <th>序号</th>
