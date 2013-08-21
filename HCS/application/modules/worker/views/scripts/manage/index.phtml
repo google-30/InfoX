@@ -1,5 +1,6 @@
 <style>
 #infoswitches { display: none; }
+#datatable { text-align:center; }
 </style>
 <script>
 $(document).ready(function() {
@@ -230,18 +231,17 @@ echo $this->grid("Workersdata", true)
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 */
 ?>
-<br>
 <table id="datatable">
 <thead><tr>
 <th>序号</th>
 <th>服务公司</th>
-<th>所在工地</th>
-<th>姓名</th>
+<!--<th>所在工地</th>-->
 <th>中文名</th>
+<th>英文名</th>
 <th>准证号码</th>
 <th>工种</th>
-<th>等级</th>
-<th>小时工资</th>
+<th>业务水平</th>
+<!--<th>小时工资</th>-->
 </tr></thead>
 <tbody> 
 <?php
@@ -255,7 +255,7 @@ foreach($this->result as $tmp)
     $fin = $tmp[0]['fin'];;
 
     // skills
-    $worktype = $tmp["worktype"];
+    $worktype = $tmp["worktype"];    
     $level = $tmp["worklevel"];
     // company
     $company = $tmp["companyname"];
@@ -263,15 +263,17 @@ foreach($this->result as $tmp)
     $hrwage = $tmp["hwage"];
 
     $row = "<tr>";
-    $row .= '<td><a data-role="button" data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
-    $row .= "<td>$company</td>" ;
-    $row .= "<td>$site</td>" ;
-    $row .= "<td>$nameeng</td>" ;
-    $row .= "<td>$namechs</td>" ;
-    $row .= "<td>$fin</td>" ;
-    $row .= "<td>$worktype</td>" ;
-    $row .= "<td>$level</td>" ;
-    $row .= "<td>$hrwage</td>" ;
+    //$row .= '<td><a data-role="button" data-theme="a" data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
+    $row .= '<td><a href="/worker/manage/edit?id=' . $id . '"><button data-mini="true" data-theme="a">' . $id . '</button></a></td>' ;
+
+    $row .= "<td>$company</td>";
+    //$row .= "<td>$site</td>" ;
+    $row .= "<td>$namechs</td>";
+    $row .= "<td>$nameeng</td>";
+    $row .= "<td>$fin</td>";
+    $row .= "<td>$worktype</td>";
+    $row .= "<td>$level</td>";
+    //$row .= "<td>$hrwage</td>";
     $row .= "</tr>";
     
     $rows .= $row;

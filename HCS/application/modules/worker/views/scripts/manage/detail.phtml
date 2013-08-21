@@ -1,52 +1,15 @@
 <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
 <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
 <style> 
-.infoarea
-{
-border:2px solid #a1a1a1;
-/*padding:10px 40px; */
-padding:10px;
-background:#dddddd;
-border-radius:10px;
--moz-border-radius:10px; /* Firefox 3.6 and earlier */
-}
-
 table { width: 100%; }
 td { width: 50%; vertical-align:middle; }
 </style>
 <script type="text/javascript">
 $(function () {
-    //alert("scroller");
-    $('#birth').mobiscroll().date({
-        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
-        endYear: 2050,
-    });  
-
-    $('#passexp').mobiscroll().date({
-        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
-        endYear: 2050,
-    });  
-
-    $('#passportexp').mobiscroll().date({
-        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
-        endYear: 2050,
-    });  
-
-    $('#securityexp').mobiscroll().date({
-        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
-        endYear: 2050,
-    });  
-
-    $('#arrivesing').mobiscroll().date({
+    $('.datepicker').mobiscroll().date({
         theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
         endYear: 2050,
     }); 
-
-    $('#leavesing').mobiscroll().date({
-        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
-        endYear: 2050,
-    }); 
-
 });
 
 function output()
@@ -57,9 +20,7 @@ function output()
 }
 
 </script>
-
 <?php
-
 $pic = "";
 $nameeng = ""; 
 $namechs = "";
@@ -187,7 +148,6 @@ if($family)
 }
 ?>
 
-<!--<fieldset class="ui-grid-b">-->
 <div class="ui-grid-b">
 <?php
 if($this->mode == "Create")
@@ -204,20 +164,16 @@ else
 }
 ?>
 </div><!-- /grid-a -->
-<!--</fieldset>-->
 
 <form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
 <input data-mini="true" type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
 <input data-mini="true" type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
 
 <fieldset>
-<legend>个人信息栏:</legend>
-<!--<div class="infoarea">-->
-<!--<strong>个人信息栏:</strong><br>-->
+<legend>个人信息</legend>
 <table>
 <tr>
 <td><div data-role="fieldcontain">
-    <!--<label for="pic" class="ui-input data-mini="true"-text">工人照片：</label>-->
     <label for="pic" class="ui-input-text"></label>
     <img src="<?php echo $pic; ?>" alt="无照片显示" width="40%"  id="pic" name="pic">
 </div></td>
@@ -259,7 +215,7 @@ else
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="birth">出生日期:</label>
-    <input data-mini="true" type="text" name="birth" id="birth" value="<?php echo $birth; ?>"  />
+    <input data-mini="true" type="text" name="birth" id="birth" value="<?php echo $birth; ?>"  class="datepicker">
 </div></td>
 </tr>
 
@@ -270,7 +226,7 @@ else
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="passexp">准证期限:</label>
-    <input data-mini="true" type="text" name="passexp" id="passexp" value="<?php echo $passexp; ?>" />
+    <input data-mini="true" type="text" name="passexp" id="passexp" value="<?php echo $passexp; ?>" class="datepicker">
 </div></td>
 </tr>
 
@@ -281,7 +237,7 @@ else
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="passportexp">护照期限:</label>
-    <input data-mini="true" type="text" name="passportexp" id="passportexp" value="<?php echo $passportexp; ?>" />
+    <input data-mini="true" type="text" name="passportexp" id="passportexp" value="<?php echo $passportexp; ?>" class="datepicker">
 </div></td>
 </tr>
 
@@ -314,11 +270,11 @@ foreach($options as $key=>$value)
 <tr>
 <td><div data-role="fieldcontain">
     <label for="birth">到新日期:</label>
-    <input data-mini="true" type="text" name="arrivesing" id="arrivesing" value="<?php echo $arrivesing; ?>"  />
+    <input data-mini="true" type="text" name="arrivesing" id="arrivesing" value="<?php echo $arrivesing; ?>" class="datepicker">
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="birth">离新日期:</label>
-    <input data-mini="true" type="text" name="leavesing" id="leavesing" value="<?php echo $leavesing; ?>"  />
+    <input data-mini="true" type="text" name="leavesing" id="leavesing" value="<?php echo $leavesing; ?>" class="datepicker">
 </div></td>
 </tr>
 
@@ -328,9 +284,7 @@ foreach($options as $key=>$value)
 <br>
 
 <fieldset>
-<legend>技能信息栏:</legend>
-<!--<div class="infoarea">
-<strong>技能信息栏:</strong><br>-->
+<legend>技能信息</legend>
 <table>
 <tr>
 <td><div data-role="fieldcontain">
@@ -362,7 +316,7 @@ echo $options;
 </select>
 </div></td>
 <td><div data-role="fieldcontain">
-<label for="worklevel">等级:</label>
+<label for="worklevel">业务水平:</label>
 <select data-mini="true" name="worklevel" id="worklevel">
 <?php
 $options=array("normal"=>"普通","good"=>"好","excellent"=>"很好");
@@ -370,11 +324,11 @@ foreach($options as $key=>$value)
 {
     if($worklevel == $key)
     {
-        echo '<option value="' . $key . '" selected>' . $value . "</option>";
+        echo '<option value="' . $value . '" selected>' . $value . "</option>";
     }
     else
     {
-        echo '<option value="' . $key . '" >' . $value . "</option>";
+        echo '<option value="' . $value . '" >' . $value . "</option>";
     }
 } 
 ?>
@@ -396,7 +350,7 @@ foreach($options as $key=>$value)
 <tr>
 <td><div data-role="fieldcontain">
     <label for="securityexp">安全证期限:</label>
-    <input data-mini="true" type="text" name="securityexp" id="securityexp" value="<?php echo $securityexp; ?>" />
+    <input data-mini="true" type="text" name="securityexp" id="securityexp" value="<?php echo $securityexp; ?>" class="datepicker"/>
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="drvlic">驾照种类:</label>
@@ -416,20 +370,15 @@ foreach($options as $key=>$value)
 </tr>
 
 </table>
-<!--</div>-->
 </fieldset>
 <br>
 
 <fieldset>
-<legend>工作信息栏:</legend>
-<!--<div class="infoarea">
-<strong>工作信息栏:</strong><br>-->
+<legend>工作信息</legend>
 <table>
 <tr>
 <td><div data-role="fieldcontain">
-    <!--<label for="companylabel">公司编号:</label>-->
-    <!--<input data-mini="true" type="text" name="companylabel" id="companylabel" value="<?php echo $companylabel; ?>" >-->
-    <label for="servecompany">公司编号:</label>
+    <label for="servecompany">所属公司:</label>
     <select name="servecompany" id="servecompany" data-mini="true">
     <option value="0">选择所在公司</option>
 <?php
@@ -460,9 +409,10 @@ echo $options;
 </tr>
 
 <tr>
-<td><div data-role="fieldcontain">
+<td>
+<!--
+<div data-role="fieldcontain">
     <label for="site">所在工地:</label>
-    <!--<input data-mini="true" type="text" name="site" id="site" value=""  /> -->
     <select data-mini="true" name="site" id="site">
 <?php
 $sites=$this->sites;
@@ -484,31 +434,24 @@ foreach($sites as $tmp)
 echo $options;
 ?>
     </select data-mini="true">
-</div></td>
+</div>-->
+<div data-role="fieldcontain">
+    <label for="yrsinsing">在新年限:</label>
+    <input data-mini="true" type="range" name="yrsinsing" id="yrsinsing" value="<?php echo $yrsinsing; ?>" min="0" max="50" data-highlight="true"  />
+</div>
+</td>
 <td><div data-role="fieldcontain">
     <label for="srvyears">服务年限:</label>
-    <!--<input data-mini="true" type="text" name="srvyears" id="srvyears" value=""  /> -->
  	<input data-mini="true" type="range" name="srvyears" id="srvyears" value="<?php echo $srvyears; ?>" min="0" max="30" data-highlight="true"  />
 </div></td>
 </tr>
 
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="yrsinsing">在新年限:</label>
-    <!-- <input data-mini="true" type="text" name="yrsinsing" id="yrsinsing" value=""  /> -->
-    <input data-mini="true" type="range" name="yrsinsing" id="yrsinsing" value="<?php echo $yrsinsing; ?>" min="0" max="50" data-highlight="true"  />
-</div></td>
-</tr>
-
 </table>
-<!--</div>-->
 </fieldset>
 <br>
 
 <fieldset>
-<legend>家庭信息栏:</legend>
-<!--<div class="infoarea">
-<strong>家庭信息栏:</strong><br>-->
+<legend>家庭信息</legend>
 <table>
 <tr>
 <td><div data-role="fieldcontain">
@@ -551,7 +494,6 @@ echo $options;
 </tr>
 
 </table>
-<!--</div>-->
 </fieldset>
 
 <input data-mini="true" data-theme="a" type="submit" name="submit" value="提交">

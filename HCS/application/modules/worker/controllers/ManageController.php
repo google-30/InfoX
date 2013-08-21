@@ -48,6 +48,7 @@ class Worker_ManageController extends Zend_Controller_Action
         (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename,
         (select cinfo.namechs from Synrgic\Infox\Companyinfo cinfo where cinfo.id = wc.company) as companyname   
         from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
+
          );
         $result = $query->getResult();
         $this->view->result = $result;
@@ -57,6 +58,7 @@ class Worker_ManageController extends Zend_Controller_Action
         );
         $result = $query->getResult();
         $this->view->workersdata = $result;        
+//echo "worktype=" . $result[0]->getWorktype();
     }
 
     public function addAction()
