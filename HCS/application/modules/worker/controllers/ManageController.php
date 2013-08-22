@@ -58,7 +58,17 @@ class Worker_ManageController extends Zend_Controller_Action
         );
         $result = $query->getResult();
         $this->view->workersdata = $result;        
-//echo "worktype=" . $result[0]->getWorktype();
+        //echo "worktype=" . $result[0]->getWorktype();
+
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('w', 'ws')
+            ->from('Synrgic\Infox\Worker', 'w')
+           ->leftJoin('w.workerskill', 'ws');
+        $result = $qb->getQuery()->getResult();
+
+        $this->view->workersdata = $result;  
+
     }
 
     public function addAction()

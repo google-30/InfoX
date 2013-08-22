@@ -30,21 +30,31 @@ class GridHelper_Worker extends Grid_Helper_Abstract
         /*
         $site = $row[$field];
         $sitename = $site ? $site->getName() : "&nbsp;";
-
         return $sitename;        
         */    
     }
 
     protected function td_securityexp($field, $row) 
     {
+/*
         $em = Zend_Registry::get('em');
         $ws = $em->getRepository('Synrgic\Infox\Workerskill');  
         $wsobj = $ws->findOneBy(array("id"=>$row['id']));                
         $sedate = $wsobj ? $wsobj->getSecurityexp() : null;
         $date = $sedate ? $sedate->format('Y-m-d') : "&nbsp;";
-
         return $date;
+*/
+
+        $dateobj = $row["workerskill"]->getSecurityexp();
+        $datestr = $dateobj ? $dateobj->format('Y-m-d') : "&nbsp;";
+        return $datestr;
     }  
+
+    protected function td_worktype($field, $row) 
+    {
+        $worktype = $row["workerskill"]->getWorktype();
+        return $worktype ? $worktype : "&nbsp;";
+    }
 }
 
 ?>

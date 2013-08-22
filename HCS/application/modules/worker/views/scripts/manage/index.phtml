@@ -5,6 +5,8 @@
 <script>
 $(document).ready(function() {
     $('#datatable').dataTable();
+
+    $('#Workersdata').dataTable();
 } );
 
 function fnShowHide( iCol )
@@ -204,7 +206,7 @@ echo $grids;
 </div>
 -->
 
-<?
+<?php
 /*
 $wdtab=$this->grid("Workersdata", true);
 $wdtab=$wdtab->field('id','编号');
@@ -212,14 +214,16 @@ $wdtab=$wdtab->field('nameeng','英名字');
 //$wdtab=$wdtab->field('company', '所在公司');
 $wdtab=$wdtab->data($this->workersdata);
 echo $wdtab;
+*/
 ?>
-<?
+
+<?php
 echo $this->grid("Workersdata", true)
           ->field('id','编号')
-          ->field('nameeng','英名字')
           ->field('namechs','中文名')
+          ->field('nameeng','英名字')
           ->field('company', '所在公司')
-          //->field('site', '所在工地')  
+          ->field('worktype','工种')
           ->field('passexp', '准证到期') 
           ->field('securityexp', '安全证到期')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')
@@ -227,10 +231,10 @@ echo $this->grid("Workersdata", true)
           ->setSorting(false)  
           ->helper(new GridHelper_Worker())
           ->data($this->workersdata)
-          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
-          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
-*/
+          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
+          //->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
+<br>
 <table id="datatable">
 <thead><tr>
 <th>序号</th>
