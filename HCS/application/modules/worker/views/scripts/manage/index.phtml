@@ -1,18 +1,49 @@
 <style>
-#infoswitches { display: none; }
-#datatable { text-align:center; }
+#infoswitches { /*display: none; */}
+#datatable { text-align:center; display:none; }
+#Workersdata { width:100%; }
 </style>
 <script>
 $(document).ready(function() {
-    $('#datatable').dataTable();
+/*
+    $('#datatable').dataTable({ 
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
+*/
+    $('#Workersdata').dataTable({ 
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
 
-    $('#Workersdata').dataTable();
+    fnHideColumns();
 } );
+
+function fnHideColumns()
+{
+    //var oTable = $('#Workersdata').dataTable();
+    var oncount = $('#oncount').val();
+    var offcount = $('#offcount').val();
+    //alert(oncount + "," + offcount);
+
+    for(i=Number(oncount); i<Number(offcount)+Number(oncount); i++)
+    {   //alert(i);
+        fnHideColumn(i);
+    }
+}
+
+function fnHideColumn( iCol )
+{
+	/* Get the DataTables object again - this is not a recreation, just a get of the object */
+	var oTable = $('#Workersdata').dataTable();	
+	var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+	oTable.fnSetColumnVis( iCol, false );
+}
 
 function fnShowHide( iCol )
 {
 	/* Get the DataTables object again - this is not a recreation, just a get of the object */
-	var oTable = $('#datatable').dataTable();
+	var oTable = $('#Workersdata').dataTable();
 	
 	var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
 	oTable.fnSetColumnVis( iCol, bVis ? false : true );
@@ -83,31 +114,6 @@ function deletefunc()
     frm.submit();
 }
 
-function redirect(url) {
-    window.location = url;
-}
-
-function checkall()
-{
-    //alert("checkall");
-    var checked = false;
-    var form = document.dataform;
-    
-    for (var i = 0; i < form.elements.length; i++) {
-        if(form.elements[i].id == 'toggleall')
-        {
-            checked = form.elements[i].checked;
-            break;    
-        }    
-    }
-
-    for (var i = 0; i < form.elements.length; i++) {    
-        if(form.elements[i].type == 'checkbox'){
-                form.elements[i].checked = checked;
-            }    
-    }
-}
-
 function infoswitches()
 {
     var sws = $("#infoswitches");    
@@ -125,11 +131,14 @@ function infoswitches()
     }
 }
 
+
+function redirect(url) {
+    window.location = url;
+}
+
 </script>
 
-<a href="/worker/manage/add"><button data-theme="a" data-mini="true"><?php echo $this->translate("Add Worker");?></button></a>
-<button data-theme="a" data-mini="true" onclick="infoswitches()">信息列表开关</button>
-<div id="infoswitches">
+<a href="javascript:void(0);" onclick="fnHideColumn(2);">开关</a>
 <!--
 <a href="javascript:void(0);" onclick="fnShowHide(0);">开关序号栏</a>
 <a href="javascript:void(0);" onclick="fnShowHide(1);">开关公司栏</a>
@@ -141,20 +150,36 @@ function infoswitches()
 <a href="javascript:void(0);" onclick="fnShowHide(7);">开关等级栏</a>
 <a href="javascript:void(0);" onclick="fnShowHide(8);">开关小时工资栏</a>
 -->
+
+<a href="/worker/manage/add"><button data-theme="a" data-mini="true"><?php echo $this->translate("Add Worker");?></button></a>
+<button data-theme="a" data-mini="true" onclick="infoswitches()">信息列表开关</button>
+<div id="infoswitches">
 <div class="ui-grid-d">
 <?php
 // http://stackoverflow.com/questions/8375625/jquery-select-table-column
+$onswitches=array(
+"id"=>"编号","namechs"=>"中文名","nameeng"=>"英文名","company"=>"所在公司", "worktype"=>"工种", 
+"passexp"=>"准证到期",'securityexp'=>'安全证到期',);
+
+$offswitches=array(
+"fin"=>"准证","passport"=>"护照","passportexp"=>"护照到期","age"=>"年龄","arrivesing"=>"到新日期",
+"leavesing"=>"离新日期","site"=>"所在工地","hrwage"=>"时薪","srvyears"=>"服务年限","yrsinsing"=>"在新年限",
+"worklevel"=>"水平","education"=>"教育程度","pastwork"=>"往日职业","skill1"=>"主要技能一","skill2"=>"主要技能二",
+"drvlic"=>"驾照",);
+
 $switches=array(
 "namechs"=>"中文名","nameeng"=>"英文名","fin"=>"准证","passexp"=>"准证到期","passport"=>"护照",
 "passportexp"=>"护照到期","age"=>"年龄","arrivesing"=>"到新日期","leavesing"=>"离新日期","site"=>"所在工地",
 "company"=>"所在公司","hrwage"=>"时薪","srvyears"=>"服务年限","yrsinsing"=>"在新年限","worktype"=>"工种",
 "worklevel"=>"水平","education"=>"教育程度","pastwork"=>"往日职业","skill1"=>"主要技能一","skill2"=>"主要技能二",
-"drvlic"=>"驾照",);
+"drvlic"=>"驾照",'securityexp'=>'安全证到期',);
 
 $count=0;
+$oncount=0;
 $grids="";
-foreach($switches as $key => $value)
+foreach($onswitches as $key => $value)
 {
+    $oncount++;
     $count++;
     $block="a";
     switch ($count) {
@@ -176,48 +201,73 @@ foreach($switches as $key => $value)
             break;
     }
 
-    //$checkbox = '<input type="checkbox" name="checkbox-2a" id="checkbox-2a" class="custom" value="' . $key . '" >' . $value;
-    //$checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" class="custom" />';
-    //$checkbox .= '<label for="' . $key  . '">' . $value . '</label>';
-    $checkbox = '<label><input type="checkbox" name="' . $key . '" />' . $value . '</label>';
-    $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>";
+    $checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" checked>' . '<label for="' . $key . '">' . $value . '</label>'  ;
+    $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>\n";
     $grids .= $grid;  
 }
 echo $grids;
+echo '</div><hr><div class="ui-grid-d">';
+echo '<input type="hidden" id="oncount" value="'. $oncount . '">';
+
+$offcount=0;
+$count=0;
+$grids="";
+foreach($offswitches as $key => $value)
+{
+    $offcount++;
+    $count++;
+    $block="a";
+    switch ($count) {
+        case 1:
+            $block = "a";
+            break;
+        case 2:
+            $block = "b";
+            break;
+        case 3:
+            $block = "c";
+            break;
+        case 4:
+            $block = "d";
+            break;
+        case 5:
+            $block = "e";
+            $count = 0;
+            break;
+    }
+
+    $checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" >' . '<label for="' . $key . '">' . $value . '</label>'  ;
+    $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>\n";
+    $grids .= $grid;  
+}
+echo $grids;
+echo '<input type="hidden" id="offcount" value="'. $offcount . '">';
 ?>
 </div><!-- /grid-d -->
+<hr>
 </div>
 
-<!--
-<div data-role="fieldcontain" style="float:left">
-<fieldset data-role="controlgroup" data-mini="true">
-	<label for="checkbox-1a">Cheetos</label>
-	<input type="checkbox" name="checkbox-1a" id="checkbox-1a" class="custom" />
+<?php
+$wdtab=$this->grid("Workersdata", true);
+foreach($onswitches as $key=>$value)
+{
+    $wdtab=$wdtab->field($key,$value);
+}
+foreach($offswitches as $key=>$value)
+{
+    $wdtab=$wdtab->field($key,$value);
+}
+$wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+$wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
+$wdtab=$wdtab->helper(new GridHelper_Worker());
+//$wdtab=$wdtab->data($this->workersdata);
+$wdtab=$wdtab->data($this->workersdata)->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
 
-	<input type="checkbox" name="checkbox-2a" id="checkbox-2a" class="custom" />
-	<label for="checkbox-2a">Doritos</label>
-
-	<input type="checkbox" name="checkbox-3a" id="checkbox-3a" class="custom" />
-	<label for="checkbox-3a">Fritos</label>
-
-	<input type="checkbox" name="checkbox-4a" id="checkbox-4a" class="custom" />
-	<label for="checkbox-4a">Sun Chips</label>
-</fieldset>
-</div>
--->
+echo $wdtab;
+?>
 
 <?php
 /*
-$wdtab=$this->grid("Workersdata", true);
-$wdtab=$wdtab->field('id','编号');
-$wdtab=$wdtab->field('nameeng','英名字');
-//$wdtab=$wdtab->field('company', '所在公司');
-$wdtab=$wdtab->data($this->workersdata);
-echo $wdtab;
-*/
-?>
-
-<?php
 echo $this->grid("Workersdata", true)
           ->field('id','编号')
           ->field('namechs','中文名')
@@ -233,6 +283,7 @@ echo $this->grid("Workersdata", true)
           ->data($this->workersdata)
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
           //->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+*/
 ?>
 <br>
 <table id="datatable">
@@ -286,4 +337,6 @@ echo $rows;
 ?>
 </tbody> 
 </table>
+
 <br><br>
+
