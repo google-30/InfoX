@@ -332,7 +332,7 @@ class Grid_View_Helper_Grid extends Zend_View_Helper_Abstract {
     public function render() {
         $style = $this->view->headStyle();
         // hack jqm style
-        $style->appendStyle(".ui-checkbox input {text-align:center; left:0px;right:0px; padding:0px; margin:2px 0px 2px 0px;position:relative;}");
+        //$style->appendStyle(".ui-checkbox input {text-align:center; left:0px;right:0px; padding:0px; margin:2px 0px 2px 0px;position:relative;}");
         
         // scan action fields
         $this->_scanActionPrivileges();
