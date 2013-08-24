@@ -26,24 +26,10 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        /*
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('a')
-            ->from('Synrgic\Infox\Worker', 'a')
-           ->leftJoin('a.workercompanyinfo', 'c');
-        $result = $qb->getQuery()->getResult();
-        */
-
         // dql result: http://docs.doctrine-project.org/en/2.1/reference/dql-doctrine-query-language.html
         // embed select: http://msdn.microsoft.com/zh-cn/library/ms189575(v=sql.105).aspx
+        /*
         $query = $this->_em->createQuery(
-//        'select w, wc.hwage from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc'
-//        'select w,wc.hwage,wc.companylable,wc.worktype, from Synrgic\Infox\Worker w JOIN w.workercompanyinfo wc'
-/*
-        'select w, wc.companylabel, wc.hwage, ws.worktype, ws.worklevel,
-        (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename
-        from Synrgic\Infox\Worker w LEFT JOIN w.workercompanyinfo wc LEFT JOIN w.workerskill ws'
-*/
         'select w, wc.hwage, ws.worktype, ws.worklevel,
         (select site.name from Synrgic\Infox\Site site where site.id = wc.site) as sitename,
         (select cinfo.namechs from Synrgic\Infox\Companyinfo cinfo where cinfo.id = wc.company) as companyname   
@@ -58,17 +44,16 @@ class Worker_ManageController extends Zend_Controller_Action
         );
         $result = $query->getResult();
         $this->view->workersdata = $result;        
-        //echo "worktype=" . $result[0]->getWorktype();
-
+        */
 
         $qb = $this->_em->createQueryBuilder();
         $qb->select('w', 'ws')
             ->from('Synrgic\Infox\Worker', 'w')
-           ->leftJoin('w.workerskill', 'ws');
+            ->leftJoin('w.workerskill', 'ws')
+            ->leftJoin('w.workercompanyinfo', 'wc');
         $result = $qb->getQuery()->getResult();
 
         $this->view->workersdata = $result;  
-
     }
 
     public function addAction()

@@ -14,12 +14,6 @@ class Workercompanyinfo extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * company label - 公司编号   
-     * @Column(type="string",nullable=true)
-     */
-    protected $companylabel;
-
-    /**
      * hourly wage
      * @Column(type="float",nullable=true)   
      */

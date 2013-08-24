@@ -17,16 +17,25 @@ $(document).ready(function() {
     });
 
     fnHideColumns();
+    resizetable();
 } );
+
+function resizetable()
+{
+    //var width = $('#Workersdata').css("width");
+    //alert("width="+width);
+    $('#Workersdata').width('100%');
+    //var width = $('#Workersdata').css("width");
+    //alert("width="+width);
+}
 
 function fnHideColumns()
 {
-    //var oTable = $('#Workersdata').dataTable();
-    var oncount = $('#oncount').val();
-    var offcount = $('#offcount').val();
+    var oncount = Number($('#oncount').val());
+    var offcount = Number($('#offcount').val()) + oncount;
     //alert(oncount + "," + offcount);
 
-    for(i=Number(oncount); i<Number(offcount)+Number(oncount); i++)
+    for(i=oncount; i<offcount; i++)
     {   //alert(i);
         fnHideColumn(i);
     }
@@ -49,71 +58,6 @@ function fnShowHide( iCol )
 	oTable.fnSetColumnVis( iCol, bVis ? false : true );
 }
 
-function addfunc()
-{
-    //alert("addfunc");
-    var url="/worker/manage/add";
-    redirect(url);
-}
-
-function editfunc()
-{
-    var elmNo = 0; 
-    var chkCount=0;
-    var form = document.dataform;
-    for (var i = 0; i < form.elements.length; i++) { 
-        var element = form.elements[i];   
-        if(element.type == 'checkbox' && element.id != 'toggleall' && element.checked)
-        {
-            chkCount++; 
-            elmNo = i;    
-        }    
-    }
-    
-    if(chkCount != 1)
-    {
-        alert("Choose one to edit!");
-        return;
-    }   
-
-    var url = "/material/manage/edit?id=" + $(form.elements[elmNo]).val();
-    //alert(url);
-    redirect(url);
-}
-
-function deletefunc()
-{
-    var r=confirm("Confirm to delete?");
-    if (r==false) { return false; }          
-
-    var formname = "dataform";
-
-    var action = "/material/manage/delete";     
-    var method = "post";
-
-    var frm = $('#dataform');    
-    var toServer = {};
-    $('#datatable tbody tr td input').each(function(key, value) {
-        toServer[$(this).val()] = $(this).is(':checked');
-    });
-    
-    frm.submit(function () {
-        $.ajax({
-            type: method,
-            url: action,
-            data: toServer,
-            success: function (data) {
-                //alert(data);
-                window.location.reload();
-            }
-        });
-
-        return false;
-    });
-    
-    frm.submit();
-}
-
 function infoswitches()
 {
     var sws = $("#infoswitches");    
@@ -131,25 +75,10 @@ function infoswitches()
     }
 }
 
-
 function redirect(url) {
     window.location = url;
 }
-
 </script>
-
-<a href="javascript:void(0);" onclick="fnHideColumn(2);">开关</a>
-<!--
-<a href="javascript:void(0);" onclick="fnShowHide(0);">开关序号栏</a>
-<a href="javascript:void(0);" onclick="fnShowHide(1);">开关公司栏</a>
-<a href="javascript:void(0);" onclick="fnShowHide(2);">开关工地栏</a>
-<a href="javascript:void(0);" onclick="fnShowHide(3);">开关姓名栏</a>
-<a href="javascript:void(0);" onclick="fnShowHide(4);">开关中文名栏</a>
-<a href="javascript:void(0);" onclick="fnShowHide(5);">开关准证栏</a>
-<a href="javascript:void(0);" onclick="fnShowHide(6);">开关工种栏</a>
-<a href="javascript:void(0);" onclick="fnShowHide(7);">开关等级栏</a>
-<a href="javascript:void(0);" onclick="fnShowHide(8);">开关小时工资栏</a>
--->
 
 <a href="/worker/manage/add"><button data-theme="a" data-mini="true"><?php echo $this->translate("Add Worker");?></button></a>
 <button data-theme="a" data-mini="true" onclick="infoswitches()">信息列表开关</button>
@@ -163,16 +92,9 @@ $onswitches=array(
 
 $offswitches=array(
 "fin"=>"准证","passport"=>"护照","passportexp"=>"护照到期","age"=>"年龄","arrivesing"=>"到新日期",
-"leavesing"=>"离新日期","site"=>"所在工地","hrwage"=>"时薪","srvyears"=>"服务年限","yrsinsing"=>"在新年限",
-"worklevel"=>"水平","education"=>"教育程度","pastwork"=>"往日职业","skill1"=>"主要技能一","skill2"=>"主要技能二",
+"leavesing"=>"离新日期","site"=>"所在工地","hwage"=>"时薪","srvyears"=>"服务年限","yrsinsing"=>"在新年限",
+"worklevel"=>"技能水平","education"=>"教育程度","pastwork"=>"往日职业","skill1"=>"主要技能一","skill2"=>"主要技能二",
 "drvlic"=>"驾照",);
-
-$switches=array(
-"namechs"=>"中文名","nameeng"=>"英文名","fin"=>"准证","passexp"=>"准证到期","passport"=>"护照",
-"passportexp"=>"护照到期","age"=>"年龄","arrivesing"=>"到新日期","leavesing"=>"离新日期","site"=>"所在工地",
-"company"=>"所在公司","hrwage"=>"时薪","srvyears"=>"服务年限","yrsinsing"=>"在新年限","worktype"=>"工种",
-"worklevel"=>"水平","education"=>"教育程度","pastwork"=>"往日职业","skill1"=>"主要技能一","skill2"=>"主要技能二",
-"drvlic"=>"驾照",'securityexp'=>'安全证到期',);
 
 $count=0;
 $oncount=0;
@@ -201,7 +123,10 @@ foreach($onswitches as $key => $value)
             break;
     }
 
-    $checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" checked>' . '<label for="' . $key . '">' . $value . '</label>'  ;
+    $colnum = $oncount-1;
+    $checkbox  = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" checked onclick="fnShowHide(' . $colnum .');">'; 
+    $checkbox .= '<label for="' . $key . '">' . $value . '</label>'  ;
+
     $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>\n";
     $grids .= $grid;  
 }
@@ -236,7 +161,10 @@ foreach($offswitches as $key => $value)
             break;
     }
 
-    $checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" >' . '<label for="' . $key . '">' . $value . '</label>'  ;
+    $colnum = $oncount+$offcount-1;
+    $checkbox  = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" onclick="fnShowHide(' . $colnum .');">'; 
+    $checkbox .= '<label for="' . $key . '">' . $value . '</label>'  ;
+
     $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>\n";
     $grids .= $grid;  
 }
@@ -260,30 +188,9 @@ foreach($offswitches as $key=>$value)
 $wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
 $wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
 $wdtab=$wdtab->helper(new GridHelper_Worker());
-//$wdtab=$wdtab->data($this->workersdata);
 $wdtab=$wdtab->data($this->workersdata)->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
 
 echo $wdtab;
-?>
-
-<?php
-/*
-echo $this->grid("Workersdata", true)
-          ->field('id','编号')
-          ->field('namechs','中文名')
-          ->field('nameeng','英名字')
-          ->field('company', '所在公司')
-          ->field('worktype','工种')
-          ->field('passexp', '准证到期') 
-          ->field('securityexp', '安全证到期')  
-          ->actionField(':action', "", '&nbsp;|&nbsp;')
-          ->paginatorEnabled(false)
-          ->setSorting(false)  
-          ->helper(new GridHelper_Worker())
-          ->data($this->workersdata)
-          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
-          //->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
-*/
 ?>
 <br>
 <table id="datatable">
@@ -300,6 +207,7 @@ echo $this->grid("Workersdata", true)
 </tr></thead>
 <tbody> 
 <?php
+/*
 $rows="";
 foreach($this->result as $tmp)
 {
@@ -334,6 +242,7 @@ foreach($this->result as $tmp)
     $rows .= $row;
 }
 echo $rows;
+*/
 ?>
 </tbody> 
 </table>
