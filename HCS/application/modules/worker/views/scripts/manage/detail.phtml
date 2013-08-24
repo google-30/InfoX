@@ -148,22 +148,29 @@ if($family)
 }
 ?>
 
-<div class="ui-grid-b">
 <?php
+$html="";
 if($this->mode == "Create")
 {
+/*
     echo '<div class="ui-block-a"><h3>创建工人信息</h3></div>';
     echo '<div class="ui-block-b"></div>';
     echo '<div class="ui-block-c"><button data-mini="true">放弃创建</button></div>';
+*/
+    $html .= '<h3>创建工人信息</h3>';    
 }
 else
 {
+/*
     echo '<div class="ui-block-a"><h3>编辑工人信息</h3></div>';
-    echo '<div class="ui-block-b"><button data-mini="true" onclick="output()">预览并打印</button></div>';
+    echo '<div class="ui-block-b"><button data-mini="true" onclick="output()">预览和打印</button></div>';
     echo '<div class="ui-block-c"><button data-mini="true">删除工人记录</button></div>';
+*/
+    $html .= '<button data-mini="true" onclick="output()" data-mini="true" data-theme="a">预览和打印</button>';
+    $html .= '<h3>编辑工人信息</h3>';    
 }
+echo $html;
 ?>
-</div><!-- /grid-a -->
 
 <form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
 <input data-mini="true" type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">

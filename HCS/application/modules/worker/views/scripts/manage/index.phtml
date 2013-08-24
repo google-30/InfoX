@@ -110,7 +110,6 @@ $offswitches=array(
 "drvlic"=>"驾照",);
 ?>
 
-<a href="/worker/manage/add"><button data-theme="a" data-mini="true"><?php echo $this->translate("Add Worker");?></button></a>
 <button data-theme="a" data-mini="true" onclick="expiredivshowhide()">工人证照过期提醒</button>
 <div id="expirediv" style="display:<?php echo $expiredivdisplay; ?>;">
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
@@ -162,7 +161,7 @@ echo $wdtab;
 
 </div>
 </div>
-<button data-theme="a" data-mini="true" onclick="infoswitches()">信息列表开关</button>
+<button data-theme="a" data-mini="true" onclick="infoswitches()">功能选项列表</button>
 <div id="infoswitches">
 <div class="ui-grid-d">
 <?php
@@ -245,6 +244,7 @@ echo '<input type="hidden" id="offcount" value="'. $offcount . '">';
 ?>
 </div><!-- /grid-d -->
 <hr>
+<a href="/worker/manage/add"><button data-theme="a" data-mini="true"><?php echo $this->translate("Add Worker");?></button></a>
 </div>
 
 <?php
