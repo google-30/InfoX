@@ -463,6 +463,22 @@ class Worker_ManageController extends Zend_Controller_Action
     public function outputAction()
     {
         $this->_helper->layout->disableLayout();
+        $id = $this->getParam("no", 0);
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('w', 'ws','wc')
+            ->from('Synrgic\Infox\Worker', 'w')
+            ->leftJoin('w.workerskill', 'ws')
+            ->leftJoin('w.workercompanyinfo', 'wc')
+            ->where("w.id = ?1")
+            ->setParameter(1, $id);
+        $result = $qb->getQuery()->getResult();
+
+        $this->view->workerdata = $result;   
+        //var_dump($result);
+        //echo $result ? "got" : "got nothing";
+
+        $this->view->workerdata = $this->_worker->findOneBy(array("id"=>$id));
     }
 
     private function findCompanies()

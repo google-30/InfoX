@@ -1,24 +1,38 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
 <head>
-<title>员工履历表</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>员工履历表</title> 
+	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+</head> 
+
+<body>
 <style>
 /*table { width:100%; }*/
 table td { text-align:center; vertical-align: middle; }
 #filldate { float:right; width:30%}
 #infotab { width:100%; border-collapse:collapse; }
 #infotab td { width: 12.5%; border:1.5px solid black;}
-
 </style>
-</head>
+<?php
+if(1)
+{
+$wcobj=$this->workerdata->getWorkercompanyinfo();
+$cmyobj=$wcobj->getCompany();
+$cmyfullnamechs=$cmyobj->getFullnamechs();
+$cmyfullnameeng=$cmyobj->getFullnameeng();
+}
 
-<body>
+?>
 <table>
 <tr>
 <td rowspan="3"><img src='/example/images/ted_logo.jpg' width="200px"/></td>
-<td><h2>华城发展有限公司</h2></td>
+<td><h2><?php echo $cmyfullnamechs; ?></h2></td>
 </tr>
-<tr><td><h3>HWA CHENG DEVELOPEMENT PTE LTD</h3></td></tr>
+<tr><td><h3><?php echo $cmyfullnameeng; ?></h3></td></tr>
 <tr><td><hr></td></tr>
 <tr><td colspan="2"><h2>员工履历表</h2></td></tr>
 </table>
