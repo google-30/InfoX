@@ -54,6 +54,47 @@ class Worker_ManageController extends Zend_Controller_Action
         $result = $qb->getQuery()->getResult();
 
         $this->view->workersdata = $result;  
+
+        $this->getSecurityexp($result);
+    }
+
+    private function getSecurityexp($allworkers)
+    {// get expired, 1 month, 2 monthes, worker list
+        // http://stackoverflow.com/questions/10582108/how-can-i-compare-a-date-with-current-date-using-doctrine-2
+        // $em->createQuery('SELECT d FROM test d WHERE d.expDate > CURRENT_DATE()');
+
+        $expiredarr = array();
+        $expire1arr = array();
+        $expire2arr = array();
+
+        foreach($allworkers as $tmp)
+        {
+            $date = $tmp["workerskill"]->getSecurityexp();
+            $now = new DateTime("now");
+
+            $interval = $date->diff($now);
+            $invert = $interval->invert;
+            $days = $interval->days;
+            //$mark = $invert ? "+" : "-"; echo $mark . $days . "<br>";
+
+            if(!$invert)
+            {
+                $expiredarr[] = $tmp; 
+            }
+            else if($days <= 30)
+            {
+                $expire1arr[] = $tmp;
+            }
+            else if($days <= 60)
+            {
+                $expire2arr[] = $tmp;
+            }            
+        }
+
+        $this->view->expired = $expiredarr;
+        $this->view->expire1 = $expire1arr;
+        $this->view->expire2 = $expire2arr;        
+        
     }
 
     public function addAction()
