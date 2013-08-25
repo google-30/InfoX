@@ -59,7 +59,15 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
             </span>
             <span id='logout'>
                 <a href='<?php echo $this->url(array("module"=>"management", "controller"=>"auth", "action"=>"logout"));?>'>
-                    <?php echo $this->translate("Logout"); ?>
+                    <?php 
+                        $user = Zend_Auth::getInstance();
+                        if(isset($user) && $user->hasIdentity()) {
+                            echo $user->getIdentity()->getName();
+                            //echo '&nbsp;&#187;&nbsp;';
+                            echo '&nbsp;-&nbsp;';
+                        }
+                        echo $this->translate("Logout");
+                    ?>
                 </a>
             </span>
         </div>
@@ -98,7 +106,7 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
                             $nav = $this->translate('Management');
                         }
                      }
-                     if(isset($user) && $user->hasIdentity()) {
+                     if(0 && isset($user) && $user->hasIdentity()) {
     	        	     echo $this->translate('Welcome').':&nbsp;';
     		             echo $user->getIdentity()->getName();
     		             echo '&nbsp;&#187;&nbsp;';
