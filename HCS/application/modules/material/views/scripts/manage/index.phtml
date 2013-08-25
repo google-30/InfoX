@@ -3,7 +3,10 @@
 </style>
 <script>
 $(function() {
-    $('#Materials').dataTable();
+    $('#Materials').dataTable({
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
 });
 
 function editfunc()

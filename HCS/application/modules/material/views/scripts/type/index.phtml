@@ -3,7 +3,10 @@
 </style>
 <script>
 $(function() {
-    $('#Materialtypes').dataTable();
+    $('#Materialtypes').dataTable({
+        "iDisplayLength": 50,
+        "bRetrieve": true,    
+    });
 });
 
 $("#type").change(function() {

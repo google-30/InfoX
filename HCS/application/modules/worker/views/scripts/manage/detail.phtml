@@ -33,6 +33,7 @@ $passport = "";
 $passportexp = "";
 $marital = "";
 $address = "";
+$gender="";
 
 $worktype = "";
 $worklevel = "";
@@ -68,27 +69,28 @@ $worktypes=$this->worktypes;
 if($this->mode == "Edit")
 {
 $worker=$this->worker;
-    $pic = $worker->getPic();
-    $nameeng = $worker->getNameeng();
-    $namechs = $worker->getNamechs();
-    $hometown = $worker->getHometown();
-    $age = $worker->getAge();
-    if($worker->getBirth())
-    {
-        $birth = $worker->getBirth()->format("Y/m/d");
-    }
-    $fin = $worker->getFin();
-    if($worker->getPassexp())
-    {
-        $passexp = $worker->getPassexp()->format("Y/m/d");
-    }
-    $passport = $worker->getPassport();
-    if($worker->getPassportexp())
-    {
-        $passportexp = $worker->getPassportexp()->format("Y/m/d");
-    }
-    $marital = $worker->getMarital();
-    $address = $worker->getAddress();
+$pic = $worker->getPic();
+$nameeng = $worker->getNameeng();
+$namechs = $worker->getNamechs();
+$hometown = $worker->getHometown();
+$age = $worker->getAge();
+if($worker->getBirth())
+{
+    $birth = $worker->getBirth()->format("Y/m/d");
+}
+$fin = $worker->getFin();
+if($worker->getPassexp())
+{
+    $passexp = $worker->getPassexp()->format("Y/m/d");
+}
+$passport = $worker->getPassport();
+if($worker->getPassportexp())
+{
+    $passportexp = $worker->getPassportexp()->format("Y/m/d");
+}
+$marital = $worker->getMarital();
+$address = $worker->getAddress();
+$gender=$worker->getGender();
 
 $arrivedate = $worker->getArrivesing();
 $arrivesing = $arrivedate ? $arrivedate->format("Y/m/d") : "";
@@ -204,10 +206,29 @@ echo $html;
 <tr>
 <td><div data-role="fieldcontain">
     <label for="gender">性别:</label>
-    <select data-mini="true" name="gender" id="gender">
+<select data-mini="true" name="gender" id="gender">
+<!--
        <option value="男">男</option>
        <option value="女">女</option>
-    </select>  
+-->
+<?php
+$genders=array("男","女");
+$options="";
+foreach($genders as $tmp)
+{
+    if($gender == $tmp)
+    {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    }
+    else
+    {
+        $option = '<option value="' . $tmp . '">' . $tmp . '</option>';
+    }
+    $options .= $option;
+}
+echo $options;
+?>
+</select>  
 </div></td>
 <td><div data-role="fieldcontain">
     <label for="hometown">籍贯:</label>
