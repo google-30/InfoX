@@ -206,6 +206,7 @@ function setSiteId()
 function submitselections()
 {
     var siteid = $('#sites').val();
+    var appid = $('#appid').val();
     //alert("submitselections, siteid="+siteid);
     if(siteid == 0)
     {
@@ -214,12 +215,12 @@ function submitselections()
     }    
     //return;
 
-    $.post("/material/apply/submitselections", { siteid:siteid },
+    $.post("/material/apply/submitselections", { siteid:siteid, appid:appid },
         function(data) {
             alert(data);
             console.log(data);
             //location.reload();
-            redirect("/material/apply/");    
+            //redirect("/material/apply/");    
     });    
 }
 
@@ -272,11 +273,11 @@ if($mode=="edit")
 <?php
 if($mode=="create")
 {
-    $title = "<p><strong>创建材料申请</strong></p>";
+    $title = "<h3><strong>创建材料申请</strong></h3>";
 }
 else if($mode=="edit")
 {
-    $title = "<p><strong>更新材料申请 - 上次更新时间 - $update</strong></p>";
+    $title = "<h3><strong>更新材料申请 - 上次更新时间 - $update</strong></h3>";
 }
 echo $title;
 ?>
@@ -396,7 +397,8 @@ foreach($this->materials as $tmp)
     $td_dropdown = '<td>' . $dropdown . '</td>';    
 
     $body .= $longname . $amount . $unit . $spec . $td_dropdown;
-    $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
+    //$gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
+    $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-inline="true" data-mini="true">提交</button></td>';
 
     $body .= $gorightbutton;
     $body .= "</tr>";    
@@ -466,7 +468,7 @@ echo $this->grid("matapps", true)
 echo "<hr>";          
 }
 ?>
-<input type="submit" value="提交至材料审核人员" onclick="submitselections()" data-theme="a">
+<input type="submit" value="提交所申请材料" onclick="submitselections()" data-theme="a" data-mini="true">
 </div>
 
 </div>

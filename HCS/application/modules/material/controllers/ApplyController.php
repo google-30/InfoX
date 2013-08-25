@@ -346,11 +346,21 @@ class Material_ApplyController extends Zend_Controller_Action
         }          
                 
         $siteid = $requests["siteid"];
+        $appid = $this->getParam("appid", 0);
+        //echo "appid=$appid<br>"; return;
         
         $statusArr = array("提交", "审核", "未审核", "批准", "退回");
         // step1. create application
-        $appobj = new \Synrgic\Infox\Application(); 
-        $appobj->setCreatedate(new Datetime("now"));
+        if(!$appid)
+        {
+            $appobj = new \Synrgic\Infox\Application(); 
+            $appobj->setCreatedate(new Datetime("now"));
+        }
+        else
+        {
+            $appobj = $this->_application->findOneBy(array("id"=>$appid));
+        }
+
         $appobj->setUpdatedate(new Datetime("now"));
         $appobj->setStatus0($statusArr[0]);
         $appobj->setStatus1($statusArr[2]);
