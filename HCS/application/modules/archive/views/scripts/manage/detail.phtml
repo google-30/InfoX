@@ -57,7 +57,7 @@ $type = $this->archive->getType();
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 <div data-role="fieldcontain">
 	<label for="type" class="select">文件类别:</label>
-	<select name="type" id="type">
+	<select name="type" id="type" data-mini="true">
     <?php
     $types = array("doc"=>"文档", "sw"=>"软件");
     foreach($types as $key=>$value)
@@ -91,7 +91,7 @@ $type = $this->archive->getType();
     <input type="file" name="file" id="file">
 </div>
 </form> <!--archive form -->
-<fieldset class="ui-grid-a">
-		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
-		<div class="ui-block-b"><button type="submit" data-theme="d" onclick="cancel()">取消</button></div>
-</fieldset>
+<div class="ui-grid-a">
+		<div class="ui-block-a"><button type="submit" data-theme="a" data-mini="true" onclick="submit()">提交</button></div>
+		<div class="ui-block-b"><button type="submit" data-theme="d" data-mini="true" onclick="cancel()">取消</button></div>
+</div>

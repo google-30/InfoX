@@ -1,12 +1,19 @@
 <style>
-#swdiv { display:none; }
+/*#swdiv { display:none; }*/
 </style>
 <script>
 $(function() {
-    $('#Documents').dataTable();
-    $('#Softwares').dataTable();
+    $('#Documents').dataTable({
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
+    $('#Softwares').dataTable({
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
 });
 
+/*
 function showSw()
 {
     $("#docdiv").hide();
@@ -21,51 +28,65 @@ function showDoc()
     $("#docbtn").attr("data-theme", "a");
     $("#swbtn").attr("data-theme", "");       
 }
-
+*/
 </script>
-
+<!--
 <div data-role="navbar">
 	<ul>
 		<li><a href="#" onclick="showDoc()" class="ui-btn-active">文档列表</a></li>
 		<li><a href="#" onclick="showSw()">软件列表</a></li>
 		<li><a href="/archive/manage/add" >上传文件</a></li>
 	</ul>
-</div><!-- /navbar -->
+</div>--><!-- /navbar -->
 
-<div id="docdiv">
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+<div data-role="collapsible" data-collapsed="true">
+<h3>文档列表</h3>
 <?
 /* id, update, title, path, size, remark, type*/
 echo $this->grid("Documents", true)
           ->field('path','文档下载')
-          ->field('update','更新日期')
           ->field('title', '名称')
           ->field('remark', '说明')
+          ->field('update','更新日期')
           ->actionField(':action', "文件操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(5)
-          ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+          ->paginatorEnabled(false)
+          ->setSorting(false)
           ->helper(new GridHelper_Archive())
           ->data($this->documents)
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
-
+<br>
 </div>
 
-<div id="swdiv">
+<div data-role="collapsible" data-collapsed="true">
+<h3>软件列表</h3>
 <?
 /* id, update, title, path, size, remark, type*/
 echo $this->grid("Softwares", true)
           ->field('path','软件下载')
-          ->field('update','更新日期')
           ->field('title', '名称')
           ->field('remark', '注释')
+          ->field('update','更新日期')
           ->actionField(':action', null, '&nbsp;|&nbsp;')
           ->itemCountPerPage(50)
-          ->paginatorEnabled(false) // disable internal paginator, use dataTable's
+          ->paginatorEnabled(false)
+          ->setSorting(false)  
           ->helper(new GridHelper_Archive())
           ->data($this->softwares)
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
+<br>
 </div>
 
+<div data-role="collapsible" data-collapsed="true">
+<h3>上传文件</h3>
+<div>
+<a href="/archive/manage/add"><button data-theme="a" data-mini="true">上传文件</button></a>
+<br>
+</div>
+
+</div>
