@@ -35,11 +35,11 @@
 #menu a.topmenu + ul > li > a.dashboard {
     height: 70px;
     font-size:1.2em;
-	background: linear-gradient(#797979, #868686) repeat scroll 0 0 #868686; background-color: #868686;
+	/*background: linear-gradient(#797979, #868686) repeat scroll 0 0 #868686; background-color: #868686;*/
 }
 
 #menu a:hover {
-	text-decoration:underline;
+	/*text-decoration:underline;*/
 }
 
 #menu a.topmenu + ul li:hover {
@@ -65,8 +65,8 @@
 	overflow:visible;
     display:block;
 	position: absolute;
-	left: 100px;
-	top: 10px;
+	left: 80px;
+	top: 0px;
 	z-index:10001;
 	width: 160px;
 	

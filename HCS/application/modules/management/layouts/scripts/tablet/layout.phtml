@@ -49,7 +49,10 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
                 $path = $settings->General->Logo->Value;
             ?>
             <span id="logo">
-                <a href='/management/dashboard'><img src='<?php echo $path; ?>'/></a>
+                <a href='/management/dashboard'>
+                    <!--<img src='<?php echo $path; ?>'/>-->
+                    <img src='/example/images/ted_logo_small.png'/>
+                </a>
             </span>
             <span id='title'>
                 <!--<?php echo sprintf('%s ' . $this->translate('Hotel Suite Management Portal'), $settings->General->HotelName->Value);?>-->
@@ -103,7 +106,7 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
                             $nav = $this->translate('Management');
                         }
                      }
-                     if(isset($user) && $user->hasIdentity()) {
+                     if(0 && isset($user) && $user->hasIdentity()) {
     	        	     echo $this->translate('Welcome').':&nbsp;';
     		             echo $user->getIdentity()->getName();
     		             echo '&nbsp;&#187;&nbsp;';
