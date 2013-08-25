@@ -29,35 +29,17 @@ $jmtheme="c";
 $namechs="";
 $gender="";
 $birth="";
-$hometown="";
-$passport="";
-$education="";
-$srvyears="";
-$marital="";
-$familyguys="";
 if(1)
 {
-$workerobj=$this->workerdata;
 $wcobj=$this->workerdata->getWorkercompanyinfo();
-$wsobj=$this->workerdata->getWorkerskill();
-
-$namechs=$workerobj->getNamechs();
-$gender=$workerobj->getGender();
-$birth=$workerobj->getBirth()->format("Y/m/d");
-$hometown=$workerobj->getHometown();
-$passport=$workerobj->getPassport();
-
-$education=$wsobj->getEducation();
-
 $cmyobj=$wcobj->getCompany();
 $cmyfullnamechs=$cmyobj->getFullnamechs();
 $cmyfullnameeng=$cmyobj->getFullnameeng();
-$srvyears=$wcobj->getSrvyears();
 
-$marital=$workerobj->getMarital();
-
-$familyguys="";
-
+$workerobj=$this->workerdata;
+$namechs=$workerobj->getNamechs();
+$gender=$workerobj->getGender();
+$birth=$workerobj->getBirth()->format("Y/m/d");
 }
 
 ?>
@@ -86,7 +68,7 @@ $familyguys="";
 <table id="infotab" name="infotab">
 <tr>
 <td>姓名</td><td><?php echo $namechs; ?></td><td>性别</td><td><?php echo $gender; ?></td>
-<td>出生日期</td><td><?php echo $birth; ?></td><td>籍贯</td><td><?php echo $hometown; ?></td>
+<td>出生日期</td><td><?php echo $birth; ?></td><td>籍贯</td><td></td>
 </tr>
 <tr>
 <td>护照号</td><td></td><td>学历</td><td></td><td>工作年限</td><td colspan="3"></td>
