@@ -14,7 +14,7 @@
                 <action>index</action>
                 <class>dashboard</class>
             </dashboard>
-
+<!--
 	    <worker>
 		<label>工人信息管理</label>
 		<module>worker</module>
@@ -141,6 +141,159 @@
                 
             </pages>
         </settings>
+-->
+        <workermodules>	
+	    <label>工人管理</label>
+	    <uri>#workermodules</uri>
+	    <class>popup</class>
+	    <pages>
+            <worker>
+		    <label>工人信息管理</label>
+		    <module>worker</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>worker:manage</resource>
+		    <privilege>view</privilege>
+	        </worker>
+
+	        <workeronsite>
+		    <label>工人在岗管理</label>
+		    <module>worker</module>
+		    <controller>onsite</controller>
+		    <action>index</action>
+		    <resource>worker:onsite</resource>
+		    <privilege>view</privilege>
+	        </workeronsite>
+    	</pages>
+        </workermodules>
+
+        <materialmodules>	
+	    <label>材料管理</label>
+	    <uri>#materialmodules</uri>
+	    <class>popup</class>
+	    <pages>
+            <material>
+		    <label>材料信息</label>
+		    <module>material</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>material:manage</resource>
+		    <privilege>view</privilege>
+	        </material>
+
+	        <emachinery>
+		    <label>电动机具管理</label>
+		    <module>material</module>
+		    <controller>emachinery</controller>
+		    <action>index</action>
+		    <resource>material:emachinery</resource>
+		    <privilege>view</privilege>
+	        </emachinery>
+
+	        <materialtype>
+		    <label>材料类型定义</label>
+		    <module>material</module>
+		    <controller>type</controller>
+		    <action>index</action>
+		    <resource>material:type</resource>
+		    <privilege>view</privilege>
+	        </materialtype>
+
+	        <supplier>
+		    <label>供应商信息</label>
+		    <module>supplier</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>supplier:manage</resource>
+		    <privilege>view</privilege>
+	        </supplier>
+    	</pages>
+        </materialmodules>
+
+        <applicationmodules>	
+	    <label>材料申请</label>
+	    <uri>#applicationmodules</uri>
+	    <class>popup</class>
+	    <pages>
+	        <applymaterials>
+		    <label>材料申请</label>
+		    <module>material</module>
+		    <controller>apply</controller>
+		    <action>index</action>
+		    <resource>material:apply</resource>
+		    <privilege>view</privilege>
+	        </applymaterials>
+
+	        <applicationmanagement>
+		    <label>申请单管理</label>
+		    <module>material</module>
+		    <controller>appmanage</controller>
+		    <action>index</action>
+		    <resource>material:appmanage</resource>
+		    <privilege>view</privilege>
+	        </applicationmanagement>
+    	</pages>
+        </applicationmodules>
+
+        <sitemodules>	
+	    <label>工地管理</label>
+	    <uri>#sitemodules</uri>
+	    <class>popup</class>
+	    <pages>
+	        <project>
+		    <label>工地管理</label>
+		    <module>project</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>project:manage</resource>
+		    <privilege>view</privilege>
+	        </project>
+    	</pages>
+        </sitemodules>
+
+        <othermodules>	
+	    <label>其他功能</label>
+	    <uri>#othermodules</uri>
+	    <class>popup</class>
+	    <pages>
+	        <archive>
+		    <label>文档软件管理</label>
+		    <module>archive</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>archive:manage</resource>
+		    <privilege>view</privilege>
+	        </archive>
+
+	        <humanresource>
+		    <label>行政人员信息</label>
+		    <module>humanresource</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>humanresource:manage</resource>
+		    <privilege>view</privilege>
+	        </humanresource>
+
+	        <companyinfo>
+		    <label>公司信息</label>
+		    <module>company</module>
+		    <controller>info</controller>
+		    <action>index</action>
+		    <resource>company:info</resource>
+		    <privilege>view</privilege>
+	        </companyinfo>
+
+	        <miscinfo>
+		    <label>其他信息</label>
+		    <module>miscinfo</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>miscinfo:manage</resource>
+		    <privilege>view</privilege>
+	        </miscinfo>
+    	</pages>
+        </othermodules>
+
 
         </pages>
     </nav>

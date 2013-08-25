@@ -31,10 +31,10 @@ class Management_DashboardController extends Zend_Controller_Action
     private function inflateMenuTree() {
         $navigation = Zend_Registry::get('navigation');
         $dashboard = array();
-        $dashboard[] = array('label' => $this->view->translate('Application'), 'pages'=>null);
+        $dashboard[] = array('label' => $this->view->translate(''), 'pages'=>null);
         $appgroup = array();
         foreach($navigation->getChildren() as $page) {
-            if($page->count()>1 ) {
+            if($page->count()>0 ) {
                 //printf("%s<br>",$page->Label);
                 $pages = array();
                 $this->groupPages($page, $pages);
