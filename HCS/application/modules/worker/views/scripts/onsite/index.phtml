@@ -1,3 +1,12 @@
+<script>
+$(function() {
+    $('#Workersdata').dataTable({ 
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
+} );
+
+</script>
 <?
 echo $this->grid("Workersdata", true)
           ->field('id','编号')
@@ -6,8 +15,8 @@ echo $this->grid("Workersdata", true)
           ->field('fin','准证号码')
           //->field('company', '所在公司')
           ->field('site', '所在工地')  
-          ->field('passexp', '准证到期') 
-          ->field('securityexp', '安全证到期')  
+          //->field('passexp', '准证到期') 
+          //->field('securityexp', '安全证到期')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->paginatorEnabled(false)
           ->setSorting(false)  

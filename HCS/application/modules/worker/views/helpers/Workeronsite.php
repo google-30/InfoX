@@ -6,7 +6,7 @@ class GridHelper_Workeronsite extends Grid_Helper_Abstract
     {
         $id = $row["id"];    
         $value = $row[$field] ? $row[$field]->format("Y/m/d") : "";
-        $input = '<input type="text" id="begindate'. $id . '" class="datepicker" value="' . $value . '">';
+        $input = '<input type="text" id="begindate'. $id . '" class="datepicker" value="' . $value . '" data-mini="true">';
         return $input;
     }    
 
@@ -14,7 +14,7 @@ class GridHelper_Workeronsite extends Grid_Helper_Abstract
     {
         $id = $row["id"];    
         $value = $row[$field] ? $row[$field]->format("Y/m/d") : "";
-        $input = '<input type="text" id="enddate'. $id .'" class="datepicker" value="' . $value . '">';
+        $input = '<input type="text" id="enddate'. $id .'" class="datepicker" value="' . $value . '" data-mini="true">';
         return $input;
     }    
 

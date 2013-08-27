@@ -1,12 +1,15 @@
 <script>
 $(document).ready(function() {
-    $('#Applications').dataTable();
+    $('#Applications').dataTable({
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
 } );
 </script>
 <?
 echo $this->grid("Applications", true)
-          ->field('id','申请单号')
           ->field('site','工地')
+          //->field('id','申请单号')
           ->field('applicant','申请人')
           //->field('createdate','创建日期')
           ->field('updatedate','更新时间')

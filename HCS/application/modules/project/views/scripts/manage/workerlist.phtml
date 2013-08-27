@@ -4,7 +4,10 @@
 </style>
 <script>
 $(function() {
-    $('#Workerlist').dataTable();
+    $('#Workerlist').dataTable({
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
 });
 </script>
 <?php
@@ -37,20 +40,20 @@ $records=$this->records;
 <legend>工地详细信息</legend>
 <table class="" id="sitetab">
 <tr>
-<td>工地名称:</td><td><?php echo $name; ?></td>
-<td>工地地址:</td><td><?php echo $address; ?></td>
+<td>工地名称:</td><td><strong><?php echo $name; ?></strong></td>
+<td>工地地址:</td><td><strong><?php echo $address; ?></strong></td>
 </tr>
 <tr>
-<td>总包单位:</td><td><?php echo $contractor; ?></td>
-<td>工地性质:</td><td><?php echo $property; ?></td>
+<td>总包单位:</td><td><strong><?php echo $contractor; ?></strong></td>
+<td>工地性质:</td><td><strong><?php echo $property; ?></strong></td>
 </tr>
 <tr>
-<td>承包公司:</td><td><?php echo $company; ?></td>
-<td>工长:</td><td><?php echo $leaders; ?></td>
+<td>承包公司:</td><td><strong><?php echo $company; ?></strong></td>
+<td>工长:</td><td><strong><?php echo $leaders; ?></strong></td>
 </tr>
 <tr>
-<td>开工日期:</td><td><?php echo $start; ?></td>
-<td>竣工日期:</td><td><?php echo $stop; ?></td>
+<td>开工日期:</td><td><strong><?php echo $start; ?></strong></td>
+<td>竣工日期:</td><td><strong><?php echo $stop; ?></strong></td>
 </tr>
 </table>
 </fieldset>

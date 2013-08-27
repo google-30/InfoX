@@ -1,6 +1,9 @@
 <script>
 $(function() {
-    $('#Humanres').dataTable();
+    $('#Humanres').dataTable({
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
 });
 </script>
 <a href="/humanresource/manage/add"><button data-mini="true" data-theme="a">注册行政人员</button></a>

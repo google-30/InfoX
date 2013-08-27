@@ -2,11 +2,14 @@
 </style>
 <script>
 $(function() {
-    $('#Emachinery').dataTable();
+    $('#Emachinery').dataTable({
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
 });
 </script>
 
-<h3>电动机具列表</h3>
+<!--<h3>电动机具列表</h3>-->
 <a href="/material/emachinery/add"><button data-theme="a" data-mini="true">注册一个电动机具</button></a>
 <br>
 <?

@@ -278,6 +278,8 @@ class Material_ManageController extends Zend_Controller_Action
         $values = $this->_miscinfo->findOneBy(array("label"=>$label))->getValues();
         $this->view->units = explode(";", $values);
     }
+
+    
 }
 
 
