@@ -1,11 +1,13 @@
 <?
     $settings = Zend_Registry::get('settings');
 ?>
-<table width="70%" border="0" cellspacing="0" cellpadding="0" style="margin-left: -10px; margin-top: 95px;">
+<table width="70%" border="0" cellspacing="0" cellpadding="0" style="margin-left: 150px; margin-top: 95px;">
   <tr>
-    <td id="mgmtlogin-col1"><img src="<?=$settings->General->Logo->Value?>"></td>
+    <td id="mgmtlogin-col1"><!--<img src="<?=$settings->General->Logo->Value?>">-->
+    <img src='/example/images/ted_logo_small.png' alt="Ted" height="250" width="250">
+    </td>
     <td id="mgmtlogin-col2">
-Access to this area requires authentication. Please enter your details below.授权用户访问，请输入一下信息。
+Access to this area requires authentication. Please enter your details below.授权用户访问，请输入以下信息。
 <?php if($this->errorMessage != ""): ?>  
 <p class="error"><?= $this->errorMessage; ?></p>  
 <?php endif; ?>  
