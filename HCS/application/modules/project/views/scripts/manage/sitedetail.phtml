@@ -3,6 +3,13 @@
 #sitetab td { width:25%; }
 </style>
 <script>
+$(function() {
+    //alert("load site info");
+    $id = $("#id").val();
+    $url = "/project/manage/siteinfo?id=" + $id;
+    $("#siteinfodiv").load($url);
+});
+
 function gotolist()
 {
     window.location = "/project/manage";        
@@ -53,10 +60,12 @@ $managers=$this->managers;
 
 ?>
 
+<input type="hidden" id="id" value="<?php echo $id; ?>" >
+<div id="siteinfodiv"></div>
+<!--
 <fieldset>
 <legend>工地详细信息</legend>
 <table class="" id="sitetab">
-<!--<thead><strong>工地详细信息</strong></thead>-->
 <tr>
 <td>工地名称:</td><td><?php echo $name; ?></td>
 <td>工地地址:</td><td><?php echo $address; ?></td>
@@ -75,6 +84,7 @@ $managers=$this->managers;
 </tr>
 </table>
 </fieldset>
+-->
 <!--
 <div data-role="collapsible-set" data-mini="true">
     <div data-role="collapsible" data-collapsed="true">

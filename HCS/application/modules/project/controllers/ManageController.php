@@ -232,6 +232,11 @@ class Project_ManageController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(TRUE);
     }
 
+    private function turnofflayout()
+    {
+        $this->_helper->layout->disableLayout();   
+    }
+
     public function partsdefineAction()
     {
         //$this->turnoffview();
@@ -424,5 +429,11 @@ class Project_ManageController extends Zend_Controller_Action
         }       
         $this->view->leaders = $namesStr;
 
+    }
+
+    public function siteinfoAction()
+    {
+        $this->turnofflayout();   
+        $this->getSiteDetails();
     }
 }
