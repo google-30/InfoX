@@ -132,7 +132,7 @@ class Synrgic_Models_AclBuilder {
             'management:auth'=>array('view','login','logout'),  
             'worker:manage'=>array('view', 'add', 'edit','delete', 'submit', 'output'),
             'worker:onsite'=>array('view', 'onsiterecord', 'addrecord','updaterecord', 'deleterecord','attendancerecord', 'addattendancerecord','updateattendancerecord','deleteattendancerecord'),
-            'material:manage'=>array('view','add','edit','delete','submit'),
+            'material:manage'=>array('view','add','edit','delete','submit','importmaterials'),
             'material:apply'=>array('view','postdata', 'applymaterials', 'getselections', 'delselection','submitselections', 'applist', 'appedit','appmatdel'),
             'material:appmanage'=>array('view','appedit','appdel','appmatdel','appdetail','updatematapp',
 'submitmatapps','reviewmatapps','rejectmatapps','previewform','previeworder'),
