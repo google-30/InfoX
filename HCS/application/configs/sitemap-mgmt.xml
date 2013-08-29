@@ -284,13 +284,23 @@
 	        </companyinfo>
 
 	        <miscinfo>
-		    <label>其他信息</label>
+		    <label>多重信息设定</label>
 		    <module>miscinfo</module>
 		    <controller>manage</controller>
 		    <action>index</action>
 		    <resource>miscinfo:manage</resource>
 		    <privilege>view</privilege>
 	        </miscinfo>
+
+	        <manual>
+		    <label>系统使用说明</label>
+		    <module>miscinfo</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>miscinfo:manage</resource>
+		    <privilege>view</privilege>
+	        </manual>
+
     	</pages>
         </othermodules>
 
