@@ -4,7 +4,7 @@ class GridHelper_Worker extends Grid_Helper_Abstract
 {
     protected function td_passexp($field, $row) 
     {
-    	return $row->$field->format('Y-m-d');
+        return $row->$field ? $row->$field->format('Y-m-d') : "&nbsp;";
     }
 
     protected function td_passportexp($field, $row) 
