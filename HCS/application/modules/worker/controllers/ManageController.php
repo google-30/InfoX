@@ -63,6 +63,11 @@ class Worker_ManageController extends Zend_Controller_Action
         // http://stackoverflow.com/questions/10582108/how-can-i-compare-a-date-with-current-date-using-doctrine-2
         // $em->createQuery('SELECT d FROM test d WHERE d.expDate > CURRENT_DATE()');
 
+        if(!count($allworkers))
+        {
+            return;
+        }
+
         $expiredarr = array();
         $expire1arr = array();
         $expire2arr = array();
