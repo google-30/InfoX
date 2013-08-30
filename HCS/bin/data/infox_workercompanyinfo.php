@@ -22,7 +22,7 @@ foreach( $tuples as $tuple ){
     $metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
     $data->setId($tuple[0]);
 
-    $data->setCompanylabel($tuple[1]);
+    //$data->setCompanylabel($tuple[1]);
     $data->setHwage($tuple[2]);
 
     $siteobj = $em->getRepository('\Synrgic\Infox\Site')->findOneBy(array('id'=>$tuple[3]));    

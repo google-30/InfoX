@@ -9,5 +9,5 @@ cd $hcspath
 source ./bootstrap
 $doctrine orm:schema-tool:drop --force
 $doctrine orm:schema-tool:create
-loadinfox.php
+#loadinfox.php
 
