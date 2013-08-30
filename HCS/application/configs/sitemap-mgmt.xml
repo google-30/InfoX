@@ -184,19 +184,19 @@
 	    <pages>
 	        <manual>
 		    <label>系统使用说明</label>
-		    <module>miscinfo</module>
+		    <module>infoxsys</module>
 		    <controller>manage</controller>
 		    <action>index</action>
-		    <resource>miscinfo:manage</resource>
+		    <resource>infoxsys:manage</resource>
 		    <privilege>view</privilege>
 	        </manual>
 
 	        <upgrade>
 		    <label>系统升级</label>
-		    <module>miscinfo</module>
+		    <module>infoxsys</module>
 		    <controller>manage</controller>
 		    <action>index</action>
-		    <resource>miscinfo:manage</resource>
+		    <resource>infoxsys:manage</resource>
 		    <privilege>view</privilege>
 	        </upgrade>
     	</pages>
