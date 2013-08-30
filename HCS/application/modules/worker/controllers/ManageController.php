@@ -55,7 +55,18 @@ class Worker_ManageController extends Zend_Controller_Action
 
         $this->view->workersdata = $result;  
 
-        $this->getSecurityexp($result);
+    }
+
+    public function workerexpireAction()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('w', 'ws')
+            ->from('Synrgic\Infox\Worker', 'w')
+            ->leftJoin('w.workerskill', 'ws')
+            ->leftJoin('w.workercompanyinfo', 'wc');
+        $result = $qb->getQuery()->getResult();
+
+        $this->getSecurityexp($result);        
     }
 
     private function getSecurityexp($allworkers)
@@ -76,6 +87,12 @@ class Worker_ManageController extends Zend_Controller_Action
         {
             $date = $tmp["workerskill"]->getSecurityexp();
             $now = new DateTime("now");
+            
+            if(!$date)
+            {
+                $expiredarr[] = $tmp; 
+                continue;
+            }
 
             $interval = $date->diff($now);
             $invert = $interval->invert;

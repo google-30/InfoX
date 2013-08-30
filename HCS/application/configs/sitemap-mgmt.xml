@@ -29,6 +29,15 @@
 		    <privilege>view</privilege>
 	        </worker>
 
+            <workerexpire>
+		    <label>工人证件过期</label>
+		    <module>worker</module>
+		    <controller>manage</controller>
+		    <action>workerexpire</action>
+		    <resource>worker:manage</resource>
+		    <privilege>view</privilege>
+	        </workerexpire>
+
 	        <workeronsite>
 		    <label>工人在岗管理</label>
 		    <module>worker</module>
