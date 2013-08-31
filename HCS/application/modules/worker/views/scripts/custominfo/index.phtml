@@ -1,0 +1,78 @@
+<script>
+</script>
+<?php
+$infos=$this->infos;
+?>
+<!--<p><strong>信息列表</strong></p>-->
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+<?php
+foreach($infos as $info)
+{
+    $id = $info->getId();
+    $label = $info->getLabel();    
+    $namechs=$info->getNamechs();
+    $nameeng=$info->getNameeng();
+    $values = $info->getValues();
+    //echo "values=$values;";
+    $category=$info->getCategory();
+    $amount=$info->getAmount();
+    
+    $infohtml='<div data-role="collapsible" data-collapsed="true">';
+    $h3 = "<h3>$namechs/$nameeng</h3>";
+    $form = '<form method="post" action="/worker/custominfo/postinfo">';
+    $hiddenid = '<input type="hidden" name="id" id="id" value="'. $id . '">';
+    $hiddenlabel = '<input type="hidden" name="label" id="label" value="'. $label . '">';
+    $namechshtml = '<input type="text" placeholder="中文名称" name="namechs" value="' . $namechs . '">';
+    $nameenghtml = '<input type="text" placeholder="英文名称" name="nameeng" value="' . $nameeng . '"><hr>';
+
+    $inputhtml = "";
+
+    if($amount>0)
+    {
+        $count = 1;
+        if($values)
+        {
+            $valueArr = explode(";", $values);
+            foreach($valueArr as $tmp)
+            {
+                if($tmp != "")
+                {
+                    $inputhtml .= '<input type="text" placeholder="添加一个字串" name="value' . $count++ . '" value="' . $tmp . '">';
+                }
+            }
+        }
+        $count = $amount;        
+    }
+    else
+    {
+        $count = 1;
+        if($values)
+        {
+            $valueArr = explode(";", $values);
+            foreach($valueArr as $tmp)
+            {
+                if($tmp != "")
+                {
+                    $inputhtml .= '<input type="text" placeholder="添加一个字串" name="value' . $count++ . '" value="' . $tmp . '">';
+                }
+            }
+        }
+        $inputhtml .= '<input type="text" placeholder="添加一个字串" name="value' . $count . '" value="">';
+    }
+
+    $hiddencount = '<input type="hidden" name="count" id="id" value="'. $count . '">';
+    //$button = '<button data-mini="true" data-theme="a">提交</button>';
+    $button = '<input type="submit" data-mini="true" data-theme="a" value="提交" >';
+    $formend = "</form>";
+    $infohtml .= $h3 . $form . $hiddenid . $hiddenlabel. $hiddencount . $namechshtml . $nameenghtml . $inputhtml . $button . $formend;
+    $infohtml.="</div>";
+    echo $infohtml;
+}
+?>    
+</div>    
+
+
+
+
+
+

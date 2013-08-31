@@ -35,4 +35,14 @@ class Miscinfo extends \Synrgic_Models_Entity {
      */
     protected $values;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $category;
+
+    /**
+     * @Column(type="integer", nullable=true)
+     */
+    protected $amount;
+
 }

@@ -46,6 +46,16 @@
 		    <resource>worker:onsite</resource>
 		    <privilege>view</privilege>
 	        </workeronsite>
+
+	        <custominfo>
+		    <label>自定义数据</label>
+		    <module>worker</module>
+		    <controller>custominfo</controller>
+		    <action>index</action>
+		    <resource>worker:custominfo</resource>
+		    <privilege>view</privilege>
+	        </custominfo>
+
     	</pages>
         </workermodules>
 

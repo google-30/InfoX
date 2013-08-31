@@ -130,13 +130,17 @@ class Synrgic_Models_AclBuilder {
 		    'management:dashboard'=>array('view'),
 		    'management:index'=>array('view'),
             'management:auth'=>array('view','login','logout'),  
+
             'worker:manage'=>array('view', 'add', 'edit','delete', 'submit', 'output','workerexpire'),
             'worker:onsite'=>array('view', 'onsiterecord', 'addrecord','updaterecord', 'deleterecord','attendancerecord', 'addattendancerecord','updateattendancerecord','deleteattendancerecord'),
+            'worker:custominfo'=>array('view', 'postinfo'),
+
             'material:manage'=>array('view','add','edit','delete','submit','importmaterials'),
             'material:apply'=>array('view','postdata', 'applymaterials', 'getselections', 'delselection','submitselections', 'applist', 'appedit','appmatdel'),
             'material:appmanage'=>array('view','appedit','appdel','appmatdel','appdetail','updatematapp',
 'submitmatapps','reviewmatapps','rejectmatapps','previewform','previeworder'),
             'material:emachinery'=>array('view','add','edit','delete','submit'),
+
             'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit', 
