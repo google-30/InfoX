@@ -66,6 +66,18 @@ $companyid=0;
 
 $worktypes=$this->worktypes;
 
+// custom info
+$customtitles=$this->customtitles;
+$customtitle1=$customtitles[0];
+$customtitle2=$customtitles[1];
+$customtitle3=$customtitles[2];
+$customtitle4=$customtitles[3];
+
+$custom1="";
+$custom2="";
+$custom3="";
+$custom4="";
+
 if($this->mode == "Edit")
 {
 $worker=$this->worker;
@@ -145,6 +157,15 @@ if($family)
     $contact1 = $family->getContact1();
     $contact2 = $family->getContact2();
     $contact3 = $family->getContact3();
+}
+
+$custominfos=$this->custominfos;
+if($custominfos)
+{
+    $custom1 = $custominfos->getCustom1();
+    $custom2 = $custominfos->getCustom2();
+    $custom3 = $custominfos->getCustom3();
+    $custom4 = $custominfos->getCustom4();
 }
 
 }
@@ -523,6 +544,35 @@ echo $options;
 
 </table>
 </fieldset>
+
+<fieldset>
+<legend>自定义信息</legend>
+<table>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="custom1"><?php echo $customtitle1; ?>:</label>
+    <input data-mini="true" type="text" name="custom1" id="custom1" value="<?php echo $custom1; ?>"  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="custom2"><?php echo $customtitle2; ?>:</label>
+    <input data-mini="true" type="text" name="custom2" id="custom2" value="<?php echo $custom2; ?>"  />
+</div></td>
+</tr>
+
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="custom3"><?php echo $customtitle3; ?>:</label>
+    <input data-mini="true" type="text" name="custom3" id="custom3" value="<?php echo $custom3; ?>"  />
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="custom4"><?php echo $customtitle4; ?>:</label>
+    <input data-mini="true" type="text" name="custom4" id="custom4" value="<?php echo $custom4; ?>"  />
+</div></td>
+</tr>
+
+</table>
+</fieldset>
+
 
 <input data-mini="true" data-theme="a" type="submit" name="submit" value="提交">
 </form>

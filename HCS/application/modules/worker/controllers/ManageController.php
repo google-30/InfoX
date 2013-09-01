@@ -22,6 +22,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_workerfamily = $this->_em->getRepository('Synrgic\Infox\Workerfamily');
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
         $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
+        $this->_workercustominfo = $this->_em->getRepository('Synrgic\Infox\Workercustominfo');
     }
 
     public function indexAction()
@@ -54,6 +55,8 @@ class Worker_ManageController extends Zend_Controller_Action
         $result = $qb->getQuery()->getResult();
 
         $this->view->workersdata = $result;  
+
+        $this->getCustominfo(0);
 
     }
 
@@ -119,6 +122,21 @@ class Worker_ManageController extends Zend_Controller_Action
         
     }
 
+    private function getCustominfo($id)
+    {
+        // titles
+        $label="01";
+        $category="worker";
+        $infoobj = $this->_miscinfo->findOneBy(array("category"=>$category, "label"=>$label));        
+        $values = $infoobj ? $infoobj->getValues() : "";
+        $this->view->customtitles = explode(";", $values);
+
+        // data
+        $workerobj = $this->_worker->findOneBy(array("id"=>$id));
+        $custominfoobj = $workerobj ? $workerobj->getWorkercustominfo() : null;
+        $this->view->custominfos = $custominfoobj ? $custominfoobj : null;        
+    }
+
     public function addAction()
     {
         $this->view->id = 0;
@@ -128,6 +146,8 @@ class Worker_ManageController extends Zend_Controller_Action
 
         $this->findCompanies();
         $this->getWorktypes();
+
+        $this->getCustominfo(0);
     }
 
     public function editAction()
@@ -149,6 +169,8 @@ class Worker_ManageController extends Zend_Controller_Action
 
         $this->findCompanies();
         $this->getWorktypes();
+
+        $this->getCustominfo($id);
     }
 
     public function submitAction()
@@ -285,6 +307,12 @@ class Worker_ManageController extends Zend_Controller_Action
             $skilldata = $workerdata->getWorkerskill();
             $cmydata = $workerdata->getWorkercompanyinfo();
             $familydata = $workerdata->getWorkerfamily();
+
+            $customdata = $workerdata->getWorkercustominfo();
+            if(!$customdata)
+            {
+                $customdata = new \Synrgic\Infox\Workercustominfo();
+            }
         }
         else if($mode = "Create")
         {
@@ -292,6 +320,8 @@ class Worker_ManageController extends Zend_Controller_Action
             $cmydata = new \Synrgic\Infox\Workercompanyinfo();
             $skilldata = new \Synrgic\Infox\Workerskill();
             $familydata = new \Synrgic\Infox\Workerfamily();
+
+            $customdata = new \Synrgic\Infox\Workercustominfo();
         }
         else
         {
@@ -349,7 +379,7 @@ class Worker_ManageController extends Zend_Controller_Action
         {
             $workerdata->setLeavesing(new Datetime($leavesing));
         }
-
+       
         $this->_em->persist($workerdata);
         try {
             $this->_em->flush();
@@ -467,10 +497,31 @@ class Worker_ManageController extends Zend_Controller_Action
         $fmyid = $familydata->getId();
         echo "familydata id=$fmyid<br>";
 
+        // custom info
+        $custom1 = $this->getParam("custom1","");
+        $custom2 = $this->getParam("custom2","");
+        $custom3 = $this->getParam("custom3","");
+        $custom4 = $this->getParam("custom4","");
+        $customdata->setCustom1($custom1);
+        $customdata->setCustom2($custom2);
+        $customdata->setCustom3($custom3);
+        $customdata->setCustom4($custom4);
+        $this->_em->persist($customdata);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+        $customid = $customdata->getId();
+        echo "custominfo id=$customid<br>";
+
         // connect skill,company,family with worker
         $workerdata->setWorkerskill($this->_workerskill->findOneBy(array("id"=>$skillid)));
         $workerdata->setWorkercompanyinfo($this->_workercompanyinfo->findOneBy(array("id"=>$cmyid)));
         $workerdata->setWorkerfamily($this->_workerfamily->findOneBy(array("id"=>$fmyid)));
+        $workerdata->setWorkercustominfo($this->_workercustominfo->findOneBy(array("id"=>$customid)));    
+
         $this->_em->persist($workerdata);
         try {
             $this->_em->flush();

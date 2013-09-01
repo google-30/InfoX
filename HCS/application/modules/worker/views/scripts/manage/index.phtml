@@ -80,7 +80,13 @@ function redirect(url) {
 }
 </script>
 
+<a href="/worker/manage/add"><button data-theme="a" data-mini="true"><?php echo $this->translate("Add Worker");?></button></a>
+<button data-theme="a" data-mini="true" onclick="infoswitches()">工人数据筛选</button>
+<div id="infoswitches">
+<div class="ui-grid-d">
 <?php
+// ob: http://stackoverflow.com/questions/8375625/jquery-select-table-column
+
 $onswitches=array(
 "id"=>"编号","namechs"=>"中文名","nameeng"=>"英文名","company"=>"所在公司", "worktype"=>"工种", 
 "passexp"=>"准证到期",'securityexp'=>'安全证到期',);
@@ -90,13 +96,12 @@ $offswitches=array(
 "leavesing"=>"离新日期","site"=>"所在工地","hwage"=>"时薪","srvyears"=>"服务年限","yrsinsing"=>"在新年限",
 "worklevel"=>"技能水平","education"=>"教育程度","pastwork"=>"往日职业","skill1"=>"主要技能一","skill2"=>"主要技能二",
 "drvlic"=>"驾照",);
-?>
-<a href="/worker/manage/add"><button data-theme="a" data-mini="true"><?php echo $this->translate("Add Worker");?></button></a>
-<button data-theme="a" data-mini="true" onclick="infoswitches()">工人数据筛选</button>
-<div id="infoswitches">
-<div class="ui-grid-d">
-<?php
-// ob: http://stackoverflow.com/questions/8375625/jquery-select-table-column
+
+$customtitles=$this->customtitles;
+$offswitches["custom1"]=$customtitles[0];
+$offswitches["custom2"]=$customtitles[1];
+$offswitches["custom3"]=$customtitles[2];
+$offswitches["custom4"]=$customtitles[3];
 
 $count=0;
 $oncount=0;
@@ -172,6 +177,9 @@ foreach($offswitches as $key => $value)
 }
 echo $grids;
 echo '<input type="hidden" id="offcount" value="'. $offcount . '">';
+
+echo '<hr>';
+
 ?>
 </div><!-- /grid-d -->
 <hr>

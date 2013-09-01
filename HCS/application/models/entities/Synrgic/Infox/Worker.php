@@ -113,5 +113,8 @@ class Worker extends \Synrgic_Models_Entity {
      */
     protected $leavesing;
 
-   
+    /**
+     * @OneToOne(targetEntity="Synrgic\Infox\Workercustominfo")
+     */
+    protected $workercustominfo;   
 }

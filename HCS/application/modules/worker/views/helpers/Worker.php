@@ -119,6 +119,31 @@ class GridHelper_Worker extends Grid_Helper_Abstract
         return $worktype ? $worktype : "&nbsp;";
     }
 
+    protected function td_custom1($field, $row) 
+    {
+        $data = $row["workercustominfo"];
+        return $data ? $data->getCustom1() : "&nbsp;";
+    }
+
+    protected function td_custom2($field, $row) 
+    {
+        $data = $row["workercustominfo"];
+        return $data ? $data->getCustom2() : "&nbsp;";
+    }
+
+    protected function td_custom3($field, $row) 
+    {
+        $data = $row["workercustominfo"];
+        return $data ? $data->getCustom3() : "&nbsp;";
+    }
+
+    protected function td_custom4($field, $row) 
+    {
+        $data = $row["workercustominfo"];
+        return $data ? $data->getCustom4() : "&nbsp;";
+    }
+
+
 
 }
 
