@@ -134,6 +134,7 @@ class Synrgic_Models_AclBuilder {
             'worker:manage'=>array('view', 'add', 'edit','delete', 'submit', 'output','workerexpire'),
             'worker:onsite'=>array('view', 'onsiterecord', 'addrecord','updaterecord', 'deleterecord','attendancerecord', 'addattendancerecord','updateattendancerecord','deleteattendancerecord'),
             'worker:custominfo'=>array('view', 'postinfo'),
+            'worker:import'=>array('view', 'submit'),
 
             'material:manage'=>array('view','add','edit','delete','submit','importmaterials'),
             'material:apply'=>array('view','postdata', 'applymaterials', 'getselections', 'delselection','submitselections', 'applist', 'appedit','appmatdel'),

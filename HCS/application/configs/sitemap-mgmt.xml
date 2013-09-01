@@ -29,6 +29,15 @@
 		    <privilege>view</privilege>
 	        </worker>
 
+            <workerimport>
+		    <label>工人信息导入</label>
+		    <module>worker</module>
+		    <controller>import</controller>
+		    <action>index</action>
+		    <resource>worker:import</resource>
+		    <privilege>view</privilege>
+	        </workerimport>
+
             <workerexpire>
 		    <label>工人证件过期</label>
 		    <module>worker</module>

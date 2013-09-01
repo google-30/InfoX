@@ -1,0 +1,134 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>员工履历表</title> 
+	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+</head> 
+
+<body>
+<style>
+/*table { width:100%; }*/
+table td { text-align:center; vertical-align: middle; }
+#filldate { float:right; width:26%}
+#infotab { width:100%; border-collapse:collapse; }
+#infotab td { width: 12.5%; border:1.5px solid black;}
+.center
+{
+margin:auto;
+}
+
+
+</style>
+<?php
+$jmtheme="c";
+
+$namechs="";
+$gender="";
+$birth="";
+$hometown="";
+$passport="";
+$education="";
+$srvyears="";
+$marital="";
+$familyguys="";
+if(1)
+{
+$workerobj=$this->workerdata;
+$wcobj=$this->workerdata->getWorkercompanyinfo();
+$wsobj=$this->workerdata->getWorkerskill();
+
+$namechs=$workerobj->getNamechs();
+$gender=$workerobj->getGender();
+$birth=$workerobj->getBirth()->format("Y/m/d");
+$hometown=$workerobj->getHometown();
+$passport=$workerobj->getPassport();
+
+$education=$wsobj->getEducation();
+
+$cmyobj=$wcobj->getCompany();
+$cmyfullnamechs=$cmyobj->getFullnamechs();
+$cmyfullnameeng=$cmyobj->getFullnameeng();
+$srvyears=$wcobj->getSrvyears();
+
+$marital=$workerobj->getMarital();
+
+$familyguys="";
+
+}
+
+?>
+
+<div data-role="page" data-theme="<?php echo $jmtheme; ?>">
+	<div data-role="content" class="previewcontent">	
+<table class="center">
+<tr>
+<td rowspan="3"><img src='/example/images/ted_logo.jpg' width="200px"/></td>
+<td><h2><?php echo $cmyfullnamechs; ?></h2></td>
+</tr>
+<tr><td><h3><?php echo $cmyfullnameeng; ?></h3></td></tr>
+<tr><td><hr></td></tr>
+<tr><td colspan="2"><h2>员工履历表</h2></td></tr>
+</table>
+
+<table id="filldate" name="filldate">
+<tr>
+<td style="width:50%">填表日期:&nbsp;</td>
+<td style="width:50%;vertical-align:bottom;" >
+<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+</tr>
+</table>
+
+
+<table id="infotab" name="infotab">
+<tr>
+<td>姓名</td><td><?php echo $namechs; ?></td><td>性别</td><td><?php echo $gender; ?></td>
+<td>出生日期</td><td><?php echo $birth; ?></td><td>籍贯</td><td><?php echo $hometown; ?></td>
+</tr>
+<tr>
+<td>护照号</td><td></td><td>学历</td><td></td><td>工作年限</td><td colspan="3"></td>
+</tr>
+<tr>
+<td>婚姻状况</td><td colspan="3"></td><td>家庭成员</td><td colspan="3"></td>
+</tr>
+<tr>
+<td>家庭住址</td><td colspan="3"></td><td>联系电话</td><td colspan="3"></td>
+</tr>
+<tr>
+<td>新加坡住址</td><td colspan="3"></td><td>联系电话</td><td colspan="3"></td>
+</tr>
+<tr>
+<td>应聘工种</td><td colspan="3"></td><td>擅长工种</td><td colspan="3"></td>
+</tr>
+<tr>
+<td>执业资格证书1</td><td></td><td>发证部门</td><td></td><td>取得资格时间</td><td></td><td>编号</td><td></td>
+</tr>
+<tr>
+<td>执业资格证书2</td><td></td><td>发证部门</td><td></td><td>取得资格时间</td><td></td><td>编号</td><td></td>
+</tr>
+<tr>
+<td>驾照种类</td><td></td><td>驾照号码</td><td></td><td>有效期</td><td></td><td>发证部门</td><td></td>
+</tr>
+
+<tr><td colspan="8">相关经验</td></tr>
+<tr>
+<td colspan="3">安全督工</td><td colspan="3">吊举督工</td><td colspan="2">信号工</td>
+</tr>
+<tr>
+<td colspan="3">捆绑工</td><td colspan="3">叉车司机</td><td colspan="2">急救员</td>
+</tr>
+<tr>
+<td colspan="3">新加坡驾照</td><td colspan="3"></td><td colspan="2"></td>
+</tr>
+</table>
+
+	</div><!-- /content -->
+</div><!-- /page -->
+</body>
+
+
+
+</html>

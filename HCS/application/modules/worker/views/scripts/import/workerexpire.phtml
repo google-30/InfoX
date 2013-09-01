@@ -1,0 +1,165 @@
+<style>
+#infoswitches { display: none; }
+#datatable { text-align:center; display:none; }
+#Workersdata { width:100%; }
+</style>
+<script>
+$(document).ready(function() {
+/*
+    $('#datatable').dataTable({ 
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
+*/
+    $('#Workersdata').dataTable({ 
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
+
+    fnHideColumns();
+    resizetable();
+} );
+
+function resizetable()
+{
+    //var width = $('#Workersdata').css("width");
+    //alert("width="+width);
+    $('#Workersdata').width('100%');
+    //var width = $('#Workersdata').css("width");
+    //alert("width="+width);
+}
+
+function fnHideColumns()
+{
+    var oncount = Number($('#oncount').val());
+    var offcount = Number($('#offcount').val()) + oncount;
+    //alert(oncount + "," + offcount);
+
+    for(i=oncount; i<offcount; i++)
+    {   //alert(i);
+        fnHideColumn(i);
+    }
+}
+
+function fnHideColumn( iCol )
+{
+	/* Get the DataTables object again - this is not a recreation, just a get of the object */
+	var oTable = $('#Workersdata').dataTable();	
+	var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+	oTable.fnSetColumnVis( iCol, false );
+}
+
+function fnShowHide( iCol )
+{
+	/* Get the DataTables object again - this is not a recreation, just a get of the object */
+	var oTable = $('#Workersdata').dataTable();
+	
+	var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+	oTable.fnSetColumnVis( iCol, bVis ? false : true );
+}
+
+function infoswitches()
+{
+    var sws = $("#infoswitches");    
+
+    var display = sws.css("display");
+    //alert(display);
+
+    if(display == "none")
+    {
+        $("#infoswitches").show();
+    }
+    else
+    {
+        $("#infoswitches").hide();
+    }
+}
+
+function expiredivshowhide()
+{
+    var thediv = $("#expirediv");    
+    var display = thediv.css("display");
+    //alert(display);
+    (display == "none") ? thediv.show() : thediv.hide();
+}
+
+function redirect(url) {
+    window.location = url;
+}
+</script>
+
+<?php
+$expired=$this->expired;
+$expire1=$this->expire1;
+$expire2=$this->expire2;
+
+$expiredivdisplay="block";
+if(count($expired)>0 || count($expire1)>0)
+{
+    $expiredivdisplay="block";
+}
+
+$onswitches=array(
+"id"=>"编号","namechs"=>"中文名","nameeng"=>"英文名","company"=>"所在公司", "worktype"=>"工种", 
+"passexp"=>"准证到期",'securityexp'=>'安全证到期',);
+
+$offswitches=array(
+"fin"=>"准证","passport"=>"护照","passportexp"=>"护照到期","age"=>"年龄","arrivesing"=>"到新日期",
+"leavesing"=>"离新日期","site"=>"所在工地","hwage"=>"时薪","srvyears"=>"服务年限","yrsinsing"=>"在新年限",
+"worklevel"=>"技能水平","education"=>"教育程度","pastwork"=>"往日职业","skill1"=>"主要技能一","skill2"=>"主要技能二",
+"drvlic"=>"驾照",);
+?>
+
+<button data-theme="a" data-mini="true" onclick="expiredivshowhide()">安全证</button>
+<div id="expirediv" style="display:<?php echo $expiredivdisplay; ?>;">
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+<div data-role="collapsible" data-collapsed="true">
+<h3>安全证1个月到期</h3>
+<?php
+$wdtab=$this->grid("Expire1", true);
+foreach($onswitches as $key=>$value)
+{
+    $wdtab=$wdtab->field($key,$value);
+}
+$wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+$wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
+$wdtab=$wdtab->helper(new GridHelper_Worker());
+$wdtab=$wdtab->data($expire1);
+echo $wdtab;
+?>
+</div>
+<div data-role="collapsible" data-collapsed="true">
+<h3>安全证2个月到期</h3>
+<?php
+$wdtab=$this->grid("Expire2", true);
+foreach($onswitches as $key=>$value)
+{
+    $wdtab=$wdtab->field($key,$value);
+}
+$wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+$wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
+$wdtab=$wdtab->helper(new GridHelper_Worker());
+$wdtab=$wdtab->data($expire2);
+echo $wdtab;
+?>
+</div>
+<div data-role="collapsible" data-collapsed="true">
+<h3>安全证过期</h3>
+<?php
+$wdtab=$this->grid("Expired", true);
+foreach($onswitches as $key=>$value)
+{
+    $wdtab=$wdtab->field($key,$value);
+}
+$wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+$wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
+$wdtab=$wdtab->helper(new GridHelper_Worker());
+$wdtab=$wdtab->data($expired);
+echo $wdtab;
+?>
+</div>
+
+</div>
+</div>
+<br><br>
+

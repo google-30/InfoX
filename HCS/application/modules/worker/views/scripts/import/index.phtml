@@ -1,0 +1,26 @@
+<style>
+#uploaddiv { display: none; }
+#datatable { text-align:center; display:none; }
+#Workersdata { width:100%; }
+</style>
+
+<script>
+function showhideupload()
+{
+    var div = $("#uploaddiv");    
+    var display = div.css("display");
+    (display == "none") ? div.show() : div.hide();
+}
+</script>
+
+<button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人列表</button>
+<div id="uploaddiv">
+<fieldset>
+<form action="/worker/import/submit" method="post" enctype="multipart/form-data">
+<label for="file" class="ui-input-text">上传工人列表(MS Excel file)：</label>
+<input data-mini="true" type="file" name="file" id="file">
+<input type="submit" value="上传" data-mini="true" data-theme="a">
+</form>
+</fieldset>
+</div>
+
