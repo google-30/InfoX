@@ -28,7 +28,7 @@ function updaterecord(id)
     var enddate = $("#enddate" + id).val();
     var siteid = $("#site" + id).val();
 
-    $.post("/worker/onsite/updaterecord", 
+    $.post("/material/emachinery/updaterecord", 
         { id: id, begindate:begindate, enddate:enddate, siteid:siteid }, 
         function(data) {
             alert(data);
@@ -39,7 +39,7 @@ function updaterecord(id)
 
 function deleterecord(id)
 {
-    $.post("/worker/onsite/deleterecord", 
+    $.post("/material/emachinery/deleterecord", 
         { id: id }, 
         function(data) {
             alert(data);
@@ -49,15 +49,18 @@ function deleterecord(id)
 }
 </script>
 <?php
-$worker=$this->worker;
-$nameeng=$worker->getNameeng();
-$namechs=$worker->getNamechs();
+$emobj=$this->emachinery;
+$nameeng=$emobj->getMaterial()->getNameeng();
+$namechs=$emobj->getMaterial()->getName();
+$sn=$emobj->getSn();
 
 $sites=$this->sites;
 $id=$this->id;
+
+$records=$this->records;
 ?>
 
-<h3>工地记录 - <?php echo $namechs . "/" . $nameeng; ?></h3>
+<h3>工地记录 - <?php echo $namechs . "/" . $nameeng . " - " . $sn; ?></h3>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 
 <div data-role="collapsible" data-collapsed="false">
@@ -71,13 +74,13 @@ echo $this->grid("Recordlist", true)
           ->paginatorEnabled(false)
           ->setSorting(false)  
           ->helper(new GridHelper_Workeronsite())
-          ->data($this->records);
+          ->data($records);
 ?>
 </div>
 
 <div data-role="collapsible" data-collapsed="true">
 <h3>添加记录</h3>
-<form method="post" action="/worker/onsite/addrecord" id="addrecordform">
+<form method="post" action="/material/emachinery/addrecord" id="addrecordform">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 <div data-role="fieldcontain">
 <label for="begin">开始日期:</label>

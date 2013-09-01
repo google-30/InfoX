@@ -50,5 +50,13 @@ class Emachinery extends \Synrgic_Models_Entity {
      * @Column(type="text", nullable=true)
      */
     protected $remark;
+
+    /**
+     * when a machine comes to its life end
+     *      
+     * @Column(type="date", nullable=true)
+     */
+    protected $scrapdate;
+
      
 }

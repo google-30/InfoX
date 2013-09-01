@@ -27,6 +27,10 @@ class GridHelper_Emachinery extends Grid_Helper_Abstract
         }    
     }
 
+    protected function td_scrapdate($field, $row) 
+    {
+    	return $row[$field] ? $row->$field->format('Y-m-d') : "&nbsp;";
+    }
     
 }
 

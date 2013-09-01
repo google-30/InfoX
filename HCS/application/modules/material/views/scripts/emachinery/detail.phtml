@@ -29,51 +29,19 @@ function redirect(url) {
 
 </script>
 <?php
-/*
-$data=$this->maindata;
-$id=0;
-$name="";
-$nameeng="";
-$spec="";
-$description="";
-$supplier="";
-$date="";
-$suppliers=$this->suppliers;
-$pic="";
-$usage="";
-$typeid=0;
-$defsupplierid=0;
-
-if($mode==="Edit")
-{
-$id=$data->getId();
-$name=$data->getName();
-$nameeng=$data->getNameeng();
-//$spec=$data->getSpec();
-$description=$data->getDescription();
-if($data->getSupplier()){ $supplier=$data->getSupplier()->getName(); }
-$date=$data->getUpdate()->format('Y/m/d');
-$pic=$data->getPic();
-$usage="";
-$typeobj=$data->getType();
-if($typeobj) { $typeid=$typeobj->getId(); } 
-$defsupplier=$data->getSupplier();
-if($defsupplier)
-{
-    $defsupplierid=$defsupplier->getId(); 
-}
-}
-*/
-
 $id=0;
 $mode=$this->mode;
 $materials=$this->materials;
 $sites=$this->sites;
 $purchasedate="";
 $sn="";
-$status="";
+$emstatus="";
 $remark="";
 $statusArr=$this->statusArr;
+$scrapdate="";
+$materialid=0;
+$siteid=0;
+
 if($mode==="Edit")
 {
 $data=$this->data;
@@ -81,8 +49,14 @@ $id=$data->getId();
 $thedate=$data->getPurchasedate();
 $purchasedate=$thedate ? $thedate->format("Y/m/d") : ""; 
 $sn=$data->getSn();
-$status=$data->getStatus();
+$emstatus=$data->getStatus();
 $remark=$data->getRemark();
+
+$thedate=$data->getScrapdate();
+$scrapdate=$thedate ? $thedate->format("Y/m/d") : ""; 
+
+$materialid=$data->getMaterial()->getId();
+$siteid=$data->getSite()->getId();
 }
 
 $header="<h3>编辑电动机具信息</h3>";
@@ -112,33 +86,19 @@ foreach($materials as $tmp)
     $nameeng = $tmp->getNameeng();
     $namelong = $name . "/" . $nameeng;
 
-    $option = '<option value="'. $id . '">' . $namelong . '</option>';
+    if($materialid == $id)
+    {
+        $option = '<option value="'. $id . '" selected>' . $namelong . '</option>';
+    }
+    else
+    {    
+        $option = '<option value="'. $id . '">' . $namelong . '</option>';
+    }
     $options .= $option;
 }
 echo $options;
 ?>
 </select>
-</div></td>
-<td></td>
-</tr>
-
-<!--
-<tr>
-<td style="width:50%"><div data-role="fieldcontain">
-<label for="namechs">中文名:</label>
-<input type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" data-mini="true">
-</div></td>
-<td><div data-role="fieldcontain">
-<label for="nameeng">英文名:</label>
-<input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
-</div></td>
-</tr>
--->
-
-<tr>
-<td><div data-role="fieldcontain">
-<label for="purchasedate">购买日期:</label>
-<input type="text" name="purchasedate" id="purchasedate" class="datepicker" value="<?php echo $purchasedate; ?>" data-mini="true" placeholder="点击选择日期">
 </div></td>
 <td><div data-role="fieldcontain">
 <label for="sn">序列号:</label>
@@ -160,13 +120,29 @@ foreach($sites as $tmp)
     //$nameeng = $tmp->getNameeng();
     $namelong = $name;
 
-    $option = '<option value="'. $id . '">' . $namelong . '</option>';
+    if($siteid == $id)
+    {
+        $option = '<option value="'. $id . '" selected>' . $namelong . '</option>';
+    }
+    else
+    {
+        $option = '<option value="'. $id . '">' . $namelong . '</option>';
+    }
+
     $options .= $option;
 }
 echo $options;
 ?>
 </select>
 </div></td>
+
+<td><div data-role="fieldcontain">
+<label for="purchasedate">购买日期:</label>
+<input type="text" name="purchasedate" id="purchasedate" class="datepicker" value="<?php echo $purchasedate; ?>" data-mini="true" placeholder="点击选择日期">
+</div></td>
+</tr>
+
+<tr>
 <td><div data-role="fieldcontain">
 <label for="status">设备状态:</label>
 <select id="status" name="status" data-mini="true">
@@ -175,13 +151,24 @@ echo $options;
 $options="";
 foreach($statusArr as $tmp)
 {
-    $option = '<option value="'. $tmp . '">' . $tmp . '</option>';
+    if($tmp == $emstatus)
+    {
+        $option = '<option value="'. $tmp . '" selected>' . $tmp . '</option>';
+    }
+    else
+    {
+        $option = '<option value="'. $tmp . '">' . $tmp . '</option>';
+    }
     $options .= $option;
 }
 echo $options;
 ?>
 </select>
+</div></td>
 
+<td><div data-role="fieldcontain">
+<label for="purchasedate">报废日期:</label>
+<input type="text" name="scrapdate" id="scrapdate" class="datepicker" value="<?php echo $scrapdate; ?>" data-mini="true" placeholder="点击选择日期">
 </div></td>
 </tr>
 

@@ -10,12 +10,32 @@ class Material_EmachineryController extends Zend_Controller_Action
         $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
+        $this->_emachineryonsite = $this->_em->getRepository('Synrgic\Infox\Emachineryonsite');
     }
 
     public function indexAction()
-    {// get all materials in table
+    {   
         $maindata = $this->_emachinery->findAll();
-        $this->view->maindata = $maindata;
+        //$this->view->maindata = $maindata;
+
+        $workingarr = array();
+        $scraparr = array();
+
+        foreach($maindata as $tmp)
+        {
+            $status = $tmp->getStatus();
+            if($status == "报废")
+            {
+                $scraparr[] = $tmp; 
+            }
+            else
+            {
+                $workingarr[] = $tmp;
+            }
+        }
+
+        $this->view->workingarr = $workingarr;
+        $this->view->scraparr = $scraparr;
     }
 
     public function addAction()
@@ -79,6 +99,7 @@ class Material_EmachineryController extends Zend_Controller_Action
         $status = $this->getParam("status", "");
         $remark = $this->getParam("remark", "");
         $siteid = $this->getParam("site", 0);
+        $scrapdate = $this->getParam("scrapdate", "");
 
         if($mode == "Create")
         {
@@ -97,6 +118,7 @@ class Material_EmachineryController extends Zend_Controller_Action
         $data->setRemark($remark);
         $site = $this->_site->findOneBy(array("id"=>$siteid));
         $data->setSite($site);
+        $data->setScrapdate(new DateTime($scrapdate));
 
         $this->_em->persist($data);
         try {
@@ -112,7 +134,7 @@ class Material_EmachineryController extends Zend_Controller_Action
     private function getEmachineryMaterials()
     {
         // parent type
-        $typeobj = $this->_materialtype->findOneBy(array("typechs"=>"机械"));
+        $typeobj = $this->_materialtype->findOneBy(array("typechs"=>"电动机具"));
         if(!$typeobj)
         {
             echo "错误：类型不匹配，请检查！";
@@ -158,5 +180,99 @@ class Material_EmachineryController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(TRUE);
     }    
+
+    public function onsiterecordAction()
+    {
+        $id = $this->getParam("id", 0);
+        $emobj = $this->_emachinery->findOneBy(array("id"=>$id));  
+        $this->view->emachinery = $emobj ? $emobj : null;
+
+        $this->view->sites = $this->_site->findAll();
+        $this->view->id = $id;
+
+        $records = $this->_emachineryonsite->findBy(array("emachinery"=>$emobj));
+        $this->view->records = $records;        
+    }
+
+    public function addrecordAction()
+    {
+        $this->turnoffview();
+
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }    
+
+        $id = $this->getParam("id", 0);
+        $begin = $this->getParam("begin", "");
+        $end = $this->getParam("end", "");
+        $siteid = $this->getParam("site", 0);    
+        $emobj = $this->_emachinery->findOneBy(array("id"=>$id));
+        $site = $this->_site->findOneBy(array("id"=>$siteid));
+
+        $data = new \Synrgic\Infox\Emachineryonsite();
+        $data->setEmachinery($emobj);
+        $data->setSite($site);
+        $data->setBegindate(new DateTime($begin));
+        $data->setEnddate(new DateTime($end));
+
+        $this->_em->persist($data);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }      
+
+        $this->redirect("/material/emachinery/onsiterecord/id/" . $id);  
+    }
+
+    public function updaterecordAction()
+    {
+        $this->turnoffview();
+
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }    
+        
+        $id = $this->getParam("id", 0);
+        $begin = $this->getParam("begindate", "");
+        $end = $this->getParam("enddate", "");
+        $siteid = $this->getParam("siteid", 0);
+
+        $record = $this->_emachineryonsite->findOneBy(array("id"=>$id));
+        $record->setBegindate(new DateTime($begin));
+        $record->setEnddate(new DateTime($end));
+        
+        $site = $this->_site->findOneBy(array("id"=>$siteid));
+        $record->setSite($site);
+
+        $this->_em->persist($record);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }   
+
+        echo "更新成功";   
+    }
+
+    public function deleterecordAction()
+    {
+        $this->turnoffview();
+
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }    
+        
+        $id=$this->getParam("id", 0);
+        $record = $this->_emachineryonsite->findOneBy(array("id"=>$id));        
+        $this->_em->remove($record);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }   
+
+        echo "删除成功";        
+    }
 
 }
