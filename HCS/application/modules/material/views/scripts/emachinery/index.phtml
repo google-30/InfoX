@@ -11,7 +11,10 @@ $(function() {
 
 <!--<h3>电动机具列表</h3>-->
 <a href="/material/emachinery/add"><button data-theme="a" data-mini="true">注册一个电动机具</button></a>
-<br>
+
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+<div data-role="collapsible" data-collapsed="false">
+<h3>工具-使用中</h3>
 <?
 echo $this->grid("Emachinery", true)
           //->field('id', '编号')
@@ -26,8 +29,35 @@ echo $this->grid("Emachinery", true)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Emachinery())
           ->data($this->maindata)
+          ->action(':action', '使用记录', array( 'url'=>array('action'=>'edit')))
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
-<br><br>
+<br>
+</div>
+
+<div data-role="collapsible" data-collapsed="true">
+<h3>工具-已报废</h3>
+<?
+echo $this->grid("Emachinery", true)
+          //->field('id', '编号')
+          ->field('site', '所在工地')
+          ->field('material','名称')
+          ->field('purchasedate', '购买日期')
+          ->field('sn', '序列号')
+          ->field('status', '状态')
+          ->field('remark', '说明')  
+          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->setSorting(false)  
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Emachinery())
+          ->data($this->maindata)
+          ->action(':action', '使用记录', array( 'url'=>array('action'=>'edit')))
+          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+?>
+<br>
+</div>
+</div>
+
 
