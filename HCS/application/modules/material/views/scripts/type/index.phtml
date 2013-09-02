@@ -197,6 +197,7 @@ echo $this->grid("Materialtypes", true)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Materialtype())
           ->data($this->alltypes)
-          //->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
+<br><br>
 

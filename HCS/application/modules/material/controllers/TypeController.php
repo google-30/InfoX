@@ -36,6 +36,11 @@ class Material_TypeController extends Zend_Controller_Action
         $typeeng = $this->getParam("typeeng","");
         $type = $this->getParam("type","0");
 
+        if($typechs==""&& $typeeng=="")
+        {
+            $this->redirect("/material/type");
+        }
+        
         $typeobj = new \Synrgic\Infox\Materialtype();
         $typeobj->setTypechs($typechs);
         $typeobj->setTypeeng($typeeng);
@@ -108,6 +113,11 @@ class Material_TypeController extends Zend_Controller_Action
         }                  
 
         echo "更新成功";
+    }
+    
+    public function deleteAction()
+    {
+        $this->turnoffview();
     }
     
     public function posttypeAction()

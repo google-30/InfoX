@@ -5,7 +5,7 @@ namespace Synrgic\Infox;
  * provide by the company HT/HC
  *   
  * @Entity
- * @Table(name="infox_worker")
+ * @Table(name="infox_workerdetail")
  */
 class Workerdetail extends \Synrgic_Models_Entity {
     /**
