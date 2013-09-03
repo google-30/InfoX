@@ -83,33 +83,29 @@ class Worker_ImportController extends Zend_Controller_Action
             return;
         }
 
-        //$this->storeInfo($requests);
-        //$this->_files = $_FILES;
+        include 'PHPExcel/IOFactory.php';
 
-include 'PHPExcel/IOFactory.php';
+        $inputFileName = $filepath;
+        echo 'Loading file ',pathinfo($inputFileName,PATHINFO_BASENAME),' using IOFactory to identify the format<br>';
+        //$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 
+        $inputFileType = 'Excel5';
+        /**  Create a new Reader of the type defined in $inputFileType  **/
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+        /* reduce memory consumption */
+        $objReader->setReadDataOnly(true); 
+        $objReader->setLoadSheetsOnly( array("HT.B") ); 
+        /**  Load $inputFileName to a PHPExcel Object  **/
+        $objPHPExcel = $objReader->load($inputFileName);
 
-$inputFileName = $filepath;
-echo 'Loading file ',pathinfo($inputFileName,PATHINFO_BASENAME),' using IOFactory to identify the format<br>';
-//$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
+        echo '<hr />';
 
-$inputFileType = 'Excel5';
-/**  Create a new Reader of the type defined in $inputFileType  **/
-$objReader = PHPExcel_IOFactory::createReader($inputFileType);
-/* reduce memory consumption */
-$objReader->setReadDataOnly(true); 
-$objReader->setLoadSheetsOnly( array("HT.B") ); 
-/**  Load $inputFileName to a PHPExcel Object  **/
-$objPHPExcel = $objReader->load($inputFileName);
+        // http://phpexcel.codeplex.com/discussions/265801
+        // http://phpexcel.codeplex.com/discussions/442409
+        // http://phpexcel.codeplex.com/discussions/257839
 
-echo '<hr />';
-
-// http://phpexcel.codeplex.com/discussions/265801
-// http://phpexcel.codeplex.com/discussions/442409
-// http://phpexcel.codeplex.com/discussions/257839
-
-$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-var_dump($sheetData);
+        $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+        var_dump($sheetData);
         
     }
 

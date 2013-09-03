@@ -1,0 +1,129 @@
+<?php
+ 
+namespace Synrgic\Infox;
+/**
+ * provide by the company HT/HC
+ *   
+ * @Entity
+ * @Table(name="infox_workerdetails")
+ */
+class Workerdetails extends \Synrgic_Models_Entity {
+    /**
+     * @Id
+     * @GeneratedValue(strategy="AUTO")
+     * @Column(type="integer")
+     */
+    protected $id;	
+
+    /**
+     * @Column(type="string")
+     */
+    protected $eeeno;
+
+    /**
+     * @Column(type="string")
+     */
+    protected $nameeng;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $namechs;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $wpno;
+
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $wpexpiry;
+
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $doa;
+
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $issuedate;
+
+    /**
+     * Fin number
+     * @Column(type="string", nullable=true)
+     */
+    protected $finno;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $ppno;
+
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $dob;
+
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $ppexpiry;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $rate;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $worktype;
+
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $arrivaldate;
+
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $medicaldate;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $csoc;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $medicalinsurance;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $workingsite;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $dormitory;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $contactno2;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $certificate;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $remarks;
+
+}
