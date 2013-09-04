@@ -3,17 +3,26 @@
 #datatable { text-align:center; display:none; }
 #Workersdata { width:100%; }
 </style>
-
 <script>
+$(function() {
+    $('#Workersdata').dataTable({ 
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
+} );
 function showhideupload()
 {
     var div = $("#uploaddiv");    
     var display = div.css("display");
     (display == "none") ? div.show() : div.hide();
 }
-</script>
 
-<button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人列表</button>
+function clearworkerdetails()
+{
+    alert("清除所有工人数据，尚未实现，sorry");
+}
+</script>
+<button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人数据</button>
 <div id="uploaddiv">
 <fieldset>
 <form action="/worker/import/submit" method="post" enctype="multipart/form-data">
@@ -23,4 +32,25 @@ function showhideupload()
 </form>
 </fieldset>
 </div>
-
+<button data-mini="true" data-theme="a" onclick="clearworkerdetails()">清空工人数据</button>
+<?
+echo $this->grid("Workersdata", true)
+          ->field('sn','S/N')
+          ->field('namechs','中文名')
+          ->field('nameeng','英名字')
+          ->field('wpno','WP No.')
+          ->field('ppno','PP No.')
+          ->field('rate','Rate')
+          ->field('worktype', '主要工种')
+          //->field('site', '所在工地')  
+          //->field('passexp', '准证到期') 
+          //->field('securityexp', '安全证到期')  
+          ->actionField(':action', "", '&nbsp;|&nbsp;')
+          ->paginatorEnabled(false)
+          ->setSorting(false)  
+          //->helper(new GridHelper_Worker())
+          ->data($this->workersdata)
+          ->action(':action', '工地记录', array( 'url'=>array('action'=>'onsiterecord')))
+          ->action(':action', '考勤记录', array( 'url'=>array('action'=>'attendancerecord')));
+?>
+<br><br>

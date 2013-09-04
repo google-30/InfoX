@@ -16,19 +16,24 @@ class Workerdetails extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * @Column(type="string")
+     * @Column(type="integer",nullable=true)
      */
-    protected $eeeno;
+    protected $sn;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string",nullable=true)
      */
-    protected $nameeng;
+    protected $eeeno;
 
     /**
      * @Column(type="string", nullable=true)
      */
     protected $namechs;
+
+    /**
+     * @Column(type="string",nullable=true)
+     */
+    protected $nameeng;
 
     /**
      * @Column(type="string", nullable=true)
@@ -87,7 +92,7 @@ class Workerdetails extends \Synrgic_Models_Entity {
     protected $sbno;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @Column(type="date", nullable=true)
      */
     protected $securityexp;
 
@@ -107,7 +112,7 @@ class Workerdetails extends \Synrgic_Models_Entity {
     protected $medicaldate;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @Column(type="date", nullable=true)
      */
     protected $csoc;
 
@@ -137,7 +142,7 @@ class Workerdetails extends \Synrgic_Models_Entity {
     protected $education;
 
     /**
-     * @Column(type="integer", nullable=true)
+     * @Column(type="string", nullable=true)
      */
     protected $age;
 
@@ -147,7 +152,7 @@ class Workerdetails extends \Synrgic_Models_Entity {
     protected $marital;
 
     /**
-     * @Column(type="boolean", nullable=true)
+     * @Column(type="string", nullable=true)
      */
     protected $constructionworker;
 

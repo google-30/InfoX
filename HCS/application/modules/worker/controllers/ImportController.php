@@ -22,6 +22,8 @@ class Worker_ImportController extends Zend_Controller_Action
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
         $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
         $this->_workercustominfo = $this->_em->getRepository('Synrgic\Infox\Workercustominfo');
+
+        $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
     }
 
     public function indexAction()
@@ -34,10 +36,12 @@ class Worker_ImportController extends Zend_Controller_Action
             ->leftJoin('w.workercompanyinfo', 'wc');
         $result = $qb->getQuery()->getResult();
 
-        $this->view->workersdata = $result;  
+        $this->view->workersdata = $result;
 
         $this->getCustominfo(0);
         */
+
+        $this->view->workersdata = $result = $this->_workerdetails->findAll();
     }
 
     public function submitAction()
@@ -46,8 +50,11 @@ class Worker_ImportController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
         $requests = $this->getRequest()->getPost();
-        if(0) { var_dump($requests); return; }
-        
+        if(0) {
+            var_dump($requests);
+            return;
+        }
+
         // upload excel
         define('UPLOAD_WORKER', APPLICATION_PATH. '/data/uploads/workers/');
         $uploadpath = UPLOAD_WORKER;
@@ -86,8 +93,8 @@ class Worker_ImportController extends Zend_Controller_Action
 
         // TODO: truncate table
         // http://stackoverflow.com/questions/9686888/how-to-truncate-a-table-using-doctrine-2
-        
-        
+
+
         // load data from excel
         include 'PHPExcel/IOFactory.php';
 
@@ -99,9 +106,9 @@ class Worker_ImportController extends Zend_Controller_Action
         /**  Create a new Reader of the type defined in $inputFileType  **/
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         /* reduce memory consumption */
-        $objReader->setReadDataOnly(true); 
+        $objReader->setReadDataOnly(true);
 
-        $objWorksheet = $objReader->setLoadSheetsOnly( array("HC.C") ); 
+        $objWorksheet = $objReader->setLoadSheetsOnly( array("HC.C") );
         /**  Load $inputFileName to a PHPExcel Object  **/
         $objPHPExcel = $objReader->load($inputFileName);
 
@@ -111,50 +118,223 @@ class Worker_ImportController extends Zend_Controller_Action
         // http://phpexcel.codeplex.com/discussions/442409
         // http://phpexcel.codeplex.com/discussions/257839
         // http://phpexcel.codeplex.com/discussions/70463
-        
+
         //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
         //var_dump($sheetData);
         //$objWorksheet = $objPHPExcel->setActiveSheetIndex('0') ;
-        $objWorksheet = $objPHPExcel->setActiveSheetIndexByName('HC.C'); 
+        $objWorksheet = $objPHPExcel->setActiveSheetIndexByName('HC.C');
 
-        $datecolumns = array();
+        $datecolumns = array(6,7,8,11,12,16,18,19,20,);
 
-        $i=0;$dum=false;$sum=0;
+        $i=0;
         $j=0;
-        foreach ($objWorksheet->getRowIterator() as $row) 
+        foreach ($objWorksheet->getRowIterator() as $row)
         {
-            $j=0;
-          $cellIterator = $row->getCellIterator();
-          $cellIterator->setIterateOnlyExistingCells(false); 
-          foreach ($cellIterator as $cell) 
-          {  
-            $j++;
-            //if(PHPExcel_Shared_Date::isDateTime($cell))
-            if($j==6)
-            {
-                echo "here=";
-                //$value = PHPExcel_Style_NumberFormat::toFormattedString($cell, "M/D/YYYY");
-                $value = date('d-M-Y',PHPExcel_Shared_Date::ExcelToPHP($cell->getValue()));
+            if(++$i == 1)
+            {   // ignore the first row
+                continue;
+            }
+
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+
+            $cell = $objWorksheet->getCell("A".$i);
+            $sn = $cell->getValue();
+            if($sn=="")
+            {   // sn equal 0 means not a worker
+                continue;
             }
             else
             {
-                $value = $cell->getFormattedValue();
+                $obj = new \Synrgic\Infox\Workerdetails();
             }
-            echo $value . "<br>";
+
+            $j=0;
+            foreach ($cellIterator as $cell)
+            {
+                $j++;
+                $value = "";
+                if(in_array($j, $datecolumns))
+                {
+                    $cellvalue = $cell->getValue();
+                    if($cellvalue == "" || !intval($cellvalue))
+                    {
+                        $value = null;
+                    }
+                    else
+                    {
+                        $value = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($cellvalue));
+                        $value = new Datetime($value);
+                    }
+                }
+                else
+                {
+                    $value = $cell->getValue();
+                }
+
+                switch ($j)
+                {
+                case 1:
+                    $obj->setSn($value);
+                    break;
+                case 2:
+                    $obj->setEeeno($value);
+                    break;
+                case 3:
+                    $obj->setNamechs($value);
+                    break;
+                case 4:
+                    $obj->setNameeng($value);
+                    break;
+                case 5:
+                    $obj->setWpno($value);
+                    break;
+                case 6:
+                    $obj->setWpexpiry($value);
+                    break;
+                case 7:
+                    $obj->setDoa($value);
+                    break;
+                case 8:
+                    $obj->setIssuedate($value);
+                    break;
+                case 9:
+                    $obj->setFinno($value);
+                    break;
+                case 10:
+                    $obj->setPpno($value);
+                    break;
+                case 11:
+                    $obj->setDob($value);
+                    break;
+                case 12:
+                    $obj->setPpexpiry($value);
+                    break;
+                case 13:
+                    $obj->setRate($value);
+                    break;
+                case 14:
+echo "pano=" . $value . "<br>";
+                    $obj->setPano($value);
+                    break;
+                case 15:
+                    $obj->setSbno($value);
+                    break;
+                case 16:
+                    $obj->setSecurityexp($value);
+                    break;
+                case 17:
+                    $obj->setWorktype($value);
+                    break;
+                case 18:
+                    $obj->setArrivaldate($value);
+                    break;
+                case 19:
+                    $obj->setMedicaldate($value);
+                    break;
+                case 20:
+                    $obj->setCsoc($value);
+                    break;
+                case 21:
+                    $obj->setMedicalinsurance($value);
+                    break;
+                case 22:
+                    $obj->setWorkingsite($value);
+                    break;
+                case 23:
+                    $obj->setDormitory($value);
+                    break;
+                case 24:
+                    $obj->setHometown($value);
+                    break;
+                case 25:
+                    $obj->setEducation($value);
+                    break;
+                case 26:
+                    $obj->setAge($value);
+                    break;
+                case 27:
+                    $obj->setMarital($value);
+                    break;
+                case 28:
+                    $obj->setConstructionworker($value);
+                    break;
+                case 29:
+                    $obj->setApplyfor($value);
+                    break;
+                case 30:
+                    $obj->setGoodat($value);
+                    break;
+                case 31:
+                    $obj->setContactno1($value);
+                    break;
+                case 32:
+                    $obj->setContactno2($value);
+                    break;
+                case 33:
+                    $obj->setCertificate($value);
+                    break;
+                case 34:
+                    $obj->setRemarks($value);
+                    break;
+                }
+
             }
-            $i++;
-            if($i==2)
-            break;
+            $this->_em->persist($obj);
+
         }
-            
+
+            try {
+                $this->_em->flush();
+            } catch (Exception $e) {
+                var_dump($e);
+                return;
+            }
+
+        /*
+                foreach ($objWorksheet->getRowIterator() as $row)
+                {
+                    if(++$i == 1)
+                    {// ignore the first row
+                        continue;
+                    }
+
+                    $j=0;
+                  $cellIterator = $row->getCellIterator();
+                  $cellIterator->setIterateOnlyExistingCells(false);
+                  foreach ($cellIterator as $cell)
+                  {
+                    $j++;
+                    if(in_array($j, $datecolumns))
+                    {
+                        $cellvalue = $cell->getValue();
+                        if($cellvalue == "")
+                        {
+                            $value = "";
+                        }
+                        else
+                        {
+                            $value = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($cellvalue));
+                        }
+                    }
+                    else
+                    {
+                        $value = $cell->getValue();
+                    }
+                    echo $value . "||";
+                    }
+
+                    echo "<hr>";
+                }
+        */
     }
 
     private function storePic($workerid)
-    {// http://www.w3schools.com/php/php_file_upload.asp
+    {   // http://www.w3schools.com/php/php_file_upload.asp
         $files = $this->_files;
-        
+
         echo "<br>";
-        $newfile = "";   
+        $newfile = "";
         $uploadpath = UPLOAD_WORKER;
         $allowedExts = array("gif", "jpeg", "jpg", "png");
         $extension = end(explode(".", $_FILES["file"]["name"]));
@@ -197,14 +377,14 @@ class Worker_ImportController extends Zend_Controller_Action
         {
             //echo "Invalid file";
         }
-        echo "<br>";   
+        echo "<br>";
 
         if($newfile != "")
         {
             $workerdata = $this->_worker->findOneBy(array('id'=>$workerid));
             //$pic = '/data/uploads/workers/images/' . $newfile;
-            $pic = "/workers-pic/images/" . $newfile; 
-            $workerdata->setPic($pic);        
+            $pic = "/workers-pic/images/" . $newfile;
+            $workerdata->setPic($pic);
             $this->_em->persist($workerdata);
             try {
                 $this->_em->flush();
@@ -265,7 +445,7 @@ class Worker_ImportController extends Zend_Controller_Action
         $marital = $requests["marital"];
         $address = $requests["address"];
         $hometown = $requests["hometown"];
-    
+
         $arrivesing = $this->getParam("arrivesing", "");//$requests["arrivesing"];
         $leavesing = $this->getParam("leavesing", "");//$requests["leavesing"];
 
@@ -299,7 +479,7 @@ class Worker_ImportController extends Zend_Controller_Action
         {
             $workerdata->setLeavesing(new Datetime($leavesing));
         }
-       
+
         $this->_em->persist($workerdata);
         try {
             $this->_em->flush();
@@ -375,7 +555,7 @@ class Worker_ImportController extends Zend_Controller_Action
                 $cmydata->setSite($siteobj);
             }
         }
-        */    
+        */
         $siteid = $this->getParam("site", 0);
         $siteobj = $this->_site->findOneBy(array('id'=>$siteid));
         $cmydata->setSite($siteobj);
@@ -440,7 +620,7 @@ class Worker_ImportController extends Zend_Controller_Action
         $workerdata->setWorkerskill($this->_workerskill->findOneBy(array("id"=>$skillid)));
         $workerdata->setWorkercompanyinfo($this->_workercompanyinfo->findOneBy(array("id"=>$cmyid)));
         $workerdata->setWorkerfamily($this->_workerfamily->findOneBy(array("id"=>$fmyid)));
-        $workerdata->setWorkercustominfo($this->_workercustominfo->findOneBy(array("id"=>$customid)));    
+        $workerdata->setWorkercustominfo($this->_workercustominfo->findOneBy(array("id"=>$customid)));
 
         $this->_em->persist($workerdata);
         try {
@@ -460,14 +640,14 @@ class Worker_ImportController extends Zend_Controller_Action
 
         $qb = $this->_em->createQueryBuilder();
         $qb->select('w', 'ws','wc')
-            ->from('Synrgic\Infox\Worker', 'w')
-            ->leftJoin('w.workerskill', 'ws')
-            ->leftJoin('w.workercompanyinfo', 'wc')
-            ->where("w.id = ?1")
-            ->setParameter(1, $id);
+        ->from('Synrgic\Infox\Worker', 'w')
+        ->leftJoin('w.workerskill', 'ws')
+        ->leftJoin('w.workercompanyinfo', 'wc')
+        ->where("w.id = ?1")
+        ->setParameter(1, $id);
         $result = $qb->getQuery()->getResult();
 
-        $this->view->workerdata = $result;   
+        $this->view->workerdata = $result;
         //var_dump($result);
         //echo $result ? "got" : "got nothing";
 
@@ -476,7 +656,7 @@ class Worker_ImportController extends Zend_Controller_Action
 
     private function findCompanies()
     {
-        $this->view->companies = $this->_companyinfo->findAll(); 
+        $this->view->companies = $this->_companyinfo->findAll();
     }
 
     private function getWorktypes()
