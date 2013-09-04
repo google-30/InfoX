@@ -48,6 +48,7 @@ class Worker_ImportController extends Zend_Controller_Action
         $requests = $this->getRequest()->getPost();
         if(0) { var_dump($requests); return; }
         
+        // upload excel
         define('UPLOAD_WORKER', APPLICATION_PATH. '/data/uploads/workers/');
         $uploadpath = UPLOAD_WORKER;
         $filepath = "";
@@ -83,6 +84,11 @@ class Worker_ImportController extends Zend_Controller_Action
             return;
         }
 
+        // TODO: truncate table
+        // http://stackoverflow.com/questions/9686888/how-to-truncate-a-table-using-doctrine-2
+        
+        
+        // load data from excel
         include 'PHPExcel/IOFactory.php';
 
         $inputFileName = $filepath;
@@ -94,7 +100,8 @@ class Worker_ImportController extends Zend_Controller_Action
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         /* reduce memory consumption */
         $objReader->setReadDataOnly(true); 
-        $objReader->setLoadSheetsOnly( array("HT.B") ); 
+
+        $objWorksheet = $objReader->setLoadSheetsOnly( array("HC.C") ); 
         /**  Load $inputFileName to a PHPExcel Object  **/
         $objPHPExcel = $objReader->load($inputFileName);
 
@@ -103,10 +110,43 @@ class Worker_ImportController extends Zend_Controller_Action
         // http://phpexcel.codeplex.com/discussions/265801
         // http://phpexcel.codeplex.com/discussions/442409
         // http://phpexcel.codeplex.com/discussions/257839
-
-        $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-        var_dump($sheetData);
+        // http://phpexcel.codeplex.com/discussions/70463
         
+        //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+        //var_dump($sheetData);
+        //$objWorksheet = $objPHPExcel->setActiveSheetIndex('0') ;
+        $objWorksheet = $objPHPExcel->setActiveSheetIndexByName('HC.C'); 
+
+        $datecolumns = array();
+
+        $i=0;$dum=false;$sum=0;
+        $j=0;
+        foreach ($objWorksheet->getRowIterator() as $row) 
+        {
+            $j=0;
+          $cellIterator = $row->getCellIterator();
+          $cellIterator->setIterateOnlyExistingCells(false); 
+          foreach ($cellIterator as $cell) 
+          {  
+            $j++;
+            //if(PHPExcel_Shared_Date::isDateTime($cell))
+            if($j==6)
+            {
+                echo "here=";
+                //$value = PHPExcel_Style_NumberFormat::toFormattedString($cell, "M/D/YYYY");
+                $value = date('d-M-Y',PHPExcel_Shared_Date::ExcelToPHP($cell->getValue()));
+            }
+            else
+            {
+                $value = $cell->getFormattedValue();
+            }
+            echo $value . "<br>";
+            }
+            $i++;
+            if($i==2)
+            break;
+        }
+            
     }
 
     private function storePic($workerid)

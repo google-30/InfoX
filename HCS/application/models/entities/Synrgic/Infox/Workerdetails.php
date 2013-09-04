@@ -79,6 +79,21 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
+    protected $pano;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $sbno;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $securityexp;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
     protected $worktype;
 
     /**
@@ -114,12 +129,57 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
+    protected $hometown;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $education;
+
+    /**
+     * @Column(type="integer", nullable=true)
+     */
+    protected $age;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $marital;
+
+    /**
+     * @Column(type="boolean", nullable=true)
+     */
+    protected $constructionworker;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $applyfor;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $goodat;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $contactno1;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
     protected $contactno2;
 
     /**
      * @Column(type="string", nullable=true)
      */
     protected $certificate;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $agent;
 
     /**
      * @Column(type="string", nullable=true)
