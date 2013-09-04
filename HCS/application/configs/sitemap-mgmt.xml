@@ -82,6 +82,15 @@
 		    <privilege>view</privilege>
 	        </material>
 
+            <materialimport>
+		    <label>材料信息导入</label>
+		    <module>material</module>
+		    <controller>import</controller>
+		    <action>index</action>
+		    <resource>material:import</resource>
+		    <privilege>view</privilege>
+	        </materialimport>
+
 	        <emachinery>
 		    <label>电动机具管理</label>
 		    <module>material</module>
