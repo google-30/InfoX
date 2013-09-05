@@ -21,6 +21,15 @@ class GridHelper_Application extends Grid_Helper_Abstract
         }
         return $content;
     }
+
+    protected function td_details($field, $row) 
+    {
+        $appid = $row["id"];
+        $detaillink = "/material/appmanage/appdetail/id/" . $appid;
+        $html = '<a href="' . $detaillink .'" target="_blank"><button data-mini="true">详细</button></a>';
+        return $html;
+    }    
+
 }
 
 ?>

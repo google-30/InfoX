@@ -54,13 +54,15 @@ echo $this->grid("Applications", true)
           //->field('createdate','创建日期')
           //->field('status0', '申请状态')
           ->field('status1', '办公人员评估')
-          ->field('status2', '负责经理评估')  
+          ->field('status2', '负责经理评估')
+          ->field('details', '申请明细')    
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->setSorting(false) 
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Application())
           ->data($applist);
+          //->action(':action', '详细信息', array( 'url'=>array('action'=>'appdetail')));
 ?>
 <br><br>
 
