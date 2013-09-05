@@ -2,6 +2,8 @@
 #infoswitches { display: none; }
 #datatable { text-align:center; display:none; }
 #Workersdata { width:100%; }
+#uploaddiv { display: none; }
+/*#featuresdiv { display: none; }*/
 </style>
 <script>
 $(document).ready(function() {
@@ -78,10 +80,50 @@ function infoswitches()
 function redirect(url) {
     window.location = url;
 }
+
+function showhideupload()
+{
+    var div = $("#uploaddiv");    
+    var display = div.css("display");
+    (display == "none") ? div.show() : div.hide();
+}
+
+function clearworkerdetails()
+{
+    alert("清除所有工人数据，尚未实现，hold on...");
+}
 </script>
 
-<a href="/worker/manage/add"><button data-theme="a" data-mini="true"><?php echo $this->translate("Add Worker");?></button></a>
-<button data-theme="a" data-mini="true" onclick="infoswitches()">工人数据筛选</button>
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+
+<div data-role="collapsible" data-collapsed="true">
+<h3>功能列表</h3>
+<div class="ui-grid-b">
+	<div class="ui-block-a">
+    <a href="/worker/manage/add"><button data-mini="true" data-theme="a">注册一个工人</button></a>
+    </div>
+	<div class="ui-block-b">
+    <button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人数据</button>
+    </div>
+	<div class="ui-block-c">
+    <button data-mini="true" data-theme="a" onclick="clearworkerdetails()">清空工人数据</button>
+    </div>
+</div><!-- /grid-b -->
+    <div id="uploaddiv">
+    <fieldset>
+    <form action="/worker/import/submit" method="post" enctype="multipart/form-data">
+    上传工人列表(MS Excel file)：
+    <!--<label for="file" class="ui-input-text">上传工人列表(MS Excel file)：</label>-->
+    <input data-mini="true" type="file" name="file" id="file">
+    <input type="submit" value="上传" data-mini="true" data-theme="a">
+    </form>
+    </fieldset>
+    </div>
+</div>
+
+<div data-role="collapsible" data-collapsed="true">
+<h3>列表操作</h3>
+<button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
 <div id="infoswitches">
 <div class="ui-grid-d">
 <?php
@@ -177,13 +219,15 @@ foreach($offswitches as $key => $value)
 }
 echo $grids;
 echo '<input type="hidden" id="offcount" value="'. $offcount . '">';
-
 echo '<hr>';
-
 ?>
 </div><!-- /grid-d -->
 <hr>
 </div>
+<button data-theme="a" data-mini="true" onclick="infoswitches()">打印列表</button>
+</div>
+
+</div> <!-- collapsible-set -->
 
 <?php
 $wdtab=$this->grid("Workersdata", true);
