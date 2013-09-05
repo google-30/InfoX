@@ -14,14 +14,14 @@ class Material extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * @Column(type="string")
-     */
-    protected $name;
-
-    /**
      * @Column(type="string", nullable=true)
      */
     protected $nameeng;
+
+    /**
+     * @Column(type="string")
+     */
+    protected $name;
     	
     /**
      * @Column(type="text", nullable=true)
@@ -61,7 +61,7 @@ class Material extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $Suppliers;
+    protected $suppliers;
 
     /**
      * @Column(type="date", nullable=true)

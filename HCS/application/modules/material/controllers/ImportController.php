@@ -141,6 +141,7 @@ class Material_ImportController extends Zend_Controller_Action
         return;
         */
 
+        $indexarr = array("B","C","D","E","F","G","H","I","J","K",);
         foreach ($objWorksheet->getRowIterator() as $row)
         {
             if(++$i == 1)
@@ -148,188 +149,73 @@ class Material_ImportController extends Zend_Controller_Action
                 continue;
             }
 
-            $cellIterator = $row->getCellIterator();
-            $cellIterator->setIterateOnlyExistingCells(false);
-
-            $cell = $objWorksheet->getCell("A".$i);
-            $value1 = $cell->getFormattedvalue();
-
             $cell = $objWorksheet->getCell("B".$i);
-            $value2 = $cell->getFormattedvalue();
-
+            $valueb = $cell->getFormattedvalue();
             $cell = $objWorksheet->getCell("C".$i);
-            $value3 = $cell->getFormattedvalue();
+            $valuec = $cell->getFormattedvalue();
 
-            $cell = $objWorksheet->getCell("D".$i);
-            $value4 = $cell->getFormattedvalue();
-
-            $cell = $objWorksheet->getCell("E".$i);
-            $value5 = $cell->getFormattedvalue();
-
-            $cell = $objWorksheet->getCell("F".$i);
-            $value6 = $cell->getFormattedvalue();
-
-            $cell = $objWorksheet->getCell("G".$i);
-            $value7 = $cell->getFormattedvalue();
-
-            $cell = $objWorksheet->getCell("H".$i);
-            $value8 = $cell->getFormattedvalue();
-
-            $cell = $objWorksheet->getCell("I".$i);
-            $value9 = $cell->getFormattedvalue();
-
-            $cell = $objWorksheet->getCell("J".$i);
-            $value10 = $cell->getFormattedvalue();
-
-            $cell = $objWorksheet->getCell("K".$i);
-            $value11 = $cell->getFormattedvalue();
-
-
-
-
-            $cell = $objWorksheet->getCell("A".$i);
-            $sn = $cell->getValue();
-            if($sn=="")
-            {   // sn equal 0 means not a worker
-                continue;
-            }
-            else
+            $nameenglast = "";
+            $namelast = "";
+            if($valueb!="" || $valuec!="")
             {
-                $obj = new \Synrgic\Infox\Workerdetails();
+                $nameenglast = $valueb;
+                $namelast = $valuec;
+                echo "nameenglast=$nameenglast<br>"; //continue;
             }
 
-            $j=0;
-            foreach ($cellIterator as $cell)
+            $valuearr = array();
+            foreach($indexarr as $idx)
             {
-                $j++;
-                $value = "";
-                if(in_array($j, $datecolumns))
+                $cell = $objWorksheet->getCell($idx.$i);
+                $value = $cell->getFormattedvalue();
+                echo "value=$value||";
+
+                if($idx=="B" && ($value==""))
                 {
-                    $cellvalue = $cell->getValue();
-                    if($cellvalue == "" || !intval($cellvalue))
-                    {
-                        $value = null;
-                    }
-                    else
-                    {
-                        $value = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($cellvalue));
-                        $value = new Datetime($value);
-                    }
-                }
-                else
-                {
-                    $value = $cell->getValue();
+                    $value = $nameenglast;
+                echo "XXXXXXvalue=$value||";
                 }
 
-                switch ($j)
+                if($idx=="C" && $value=="")
                 {
-                case 1:
-                    $obj->setSn($value);
-                    break;
-                case 2:
-                    $obj->setEeeno($value);
-                    break;
-                case 3:
-                    $obj->setNamechs($value);
-                    break;
-                case 4:
-                    $obj->setNameeng($value);
-                    break;
-                case 5:
-                    $obj->setWpno($value);
-                    break;
-                case 6:
-                    $obj->setWpexpiry($value);
-                    break;
-                case 7:
-                    $obj->setDoa($value);
-                    break;
-                case 8:
-                    $obj->setIssuedate($value);
-                    break;
-                case 9:
-                    $obj->setFinno($value);
-                    break;
-                case 10:
-                    $obj->setPpno($value);
-                    break;
-                case 11:
-                    $obj->setDob($value);
-                    break;
-                case 12:
-                    $obj->setPpexpiry($value);
-                    break;
-                case 13:
-                    $obj->setRate($value);
-                    break;
-                case 14:
-                    $obj->setPano($value);
-                    break;
-                case 15:
-                    $obj->setSbno($value);
-                    break;
-                case 16:
-                    $obj->setSecurityexp($value);
-                    break;
-                case 17:
-                    $obj->setWorktype($value);
-                    break;
-                case 18:
-                    $obj->setArrivaldate($value);
-                    break;
-                case 19:
-                    $obj->setMedicaldate($value);
-                    break;
-                case 20:
-                    $obj->setCsoc($value);
-                    break;
-                case 21:
-                    $obj->setMedicalinsurance($value);
-                    break;
-                case 22:
-                    $obj->setWorkingsite($value);
-                    break;
-                case 23:
-                    $obj->setDormitory($value);
-                    break;
-                case 24:
-                    $obj->setHometown($value);
-                    break;
-                case 25:
-                    $obj->setEducation($value);
-                    break;
-                case 26:
-                    $obj->setAge($value);
-                    break;
-                case 27:
-                    $obj->setMarital($value);
-                    break;
-                case 28:
-                    $obj->setConstructionworker($value);
-                    break;
-                case 29:
-                    $obj->setApplyfor($value);
-                    break;
-                case 30:
-                    $obj->setGoodat($value);
-                    break;
-                case 31:
-                    $obj->setContactno1($value);
-                    break;
-                case 32:
-                    $obj->setContactno2($value);
-                    break;
-                case 33:
-                    $obj->setCertificate($value);
-                    break;
-                case 34:
-                    $obj->setRemarks($value);
-                    break;
+                    $value = $namelast;                
                 }
 
+                $valuearr[] = $value;
+           
             }
-            $this->_em->persist($obj);
+            echo "<br>";
+            continue;
 
+            $skipflag = true;
+            foreach($valuearr as $value)
+            {
+                if($value != "")
+                {
+                    $skipflag = false;
+                    break;
+                }
+            }
+
+            if(!$skipflag)
+            {// store data
+                $obj = new \Synrgic\Infox\Material();
+                $obj->setNameeng($valuearr[0]);
+                $obj->setName($valuearr[1]);
+                $obj->setDescription($valuearr[2]);
+                $obj->setUnit($valuearr[3]);
+                $obj->setDono($valuearr[4]);
+
+                $value = date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP($valuearr[5]));
+                $value = new Datetime($value);
+                $obj->setDodate($value);
+
+                $obj->setRate($valuearr[6]);
+                $obj->setQuantity($valuearr[7]);
+                $obj->setAmount($valuearr[8]);
+                $obj->setSuppliers($valuearr[9]);
+                $this->_em->persist($obj);
+            }
         }
 
         try {
@@ -339,42 +225,6 @@ class Material_ImportController extends Zend_Controller_Action
             return;
         }
 
-        /*
-                foreach ($objWorksheet->getRowIterator() as $row)
-                {
-                    if(++$i == 1)
-                    {// ignore the first row
-                        continue;
-                    }
-
-                    $j=0;
-                  $cellIterator = $row->getCellIterator();
-                  $cellIterator->setIterateOnlyExistingCells(false);
-                  foreach ($cellIterator as $cell)
-                  {
-                    $j++;
-                    if(in_array($j, $datecolumns))
-                    {
-                        $cellvalue = $cell->getValue();
-                        if($cellvalue == "")
-                        {
-                            $value = "";
-                        }
-                        else
-                        {
-                            $value = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($cellvalue));
-                        }
-                    }
-                    else
-                    {
-                        $value = $cell->getValue();
-                    }
-                    echo $value . "||";
-                    }
-
-                    echo "<hr>";
-                }
-        */
     }
 
     public function truncateAction()

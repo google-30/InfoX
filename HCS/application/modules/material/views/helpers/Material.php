@@ -67,6 +67,12 @@ class GridHelper_Material extends Grid_Helper_Abstract
             return $maintypechs . "::" . $typechs;
         }    
     }
+
+    protected function td_dodate($field, $row) 
+    {        
+    	return ($row->$field) ? $row->$field->format('Y-m-d') : "&nbsp;";
+    }
+
 }
 
 ?>
