@@ -185,7 +185,7 @@ class Material_ImportController extends Zend_Controller_Action
            
             }
             echo "<br>";
-            continue;
+            //continue;
 
             $skipflag = true;
             foreach($valuearr as $value)

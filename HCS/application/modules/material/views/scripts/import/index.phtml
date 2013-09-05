@@ -18,7 +18,7 @@ function showhideupload()
 
 function clearalldata()
 {
-    alert("清除所有数据，尚未实现，sorry");
+    alert("清除所有数据，尚未实现, please hold on...");
 }
 </script>
 <button data-mini="true" data-theme="a" onclick="showhideupload()">导入材料数据</button>
@@ -35,11 +35,11 @@ function clearalldata()
 <?
 echo $this->grid("Maindata", true)
           //->field('sn','S/N')
-          ->field('nameeng','Material')
-          ->field('name','')
+          ->field('nameeng','Title')
+          ->field('name','Title')
           ->field('description','Description ')
           ->field('unit','Unit')
-          ->field('dono','DO No')
+          ->field('dono','DO No.')
           ->field('dodate','DO Date')
           ->field('rate','Rate')
           ->field('quantity', 'Quantity ')

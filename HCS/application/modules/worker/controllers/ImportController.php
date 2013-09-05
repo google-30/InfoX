@@ -214,7 +214,7 @@ class Worker_ImportController extends Zend_Controller_Action
                     $obj->setRate($value);
                     break;
                 case 14:
-echo "pano=" . $value . "<br>";
+                    //echo "pano=" . $value . "<br>";
                     $obj->setPano($value);
                     break;
                 case 15:
@@ -290,6 +290,8 @@ echo "pano=" . $value . "<br>";
                 var_dump($e);
                 return;
             }
+
+            $this->redirect("/worker/import/");
 
         /*
                 foreach ($objWorksheet->getRowIterator() as $row)
