@@ -23,9 +23,44 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
         $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
         $this->_workercustominfo = $this->_em->getRepository('Synrgic\Infox\Workercustominfo');
+        $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
     }
 
     public function indexAction()
+    {
+        $requestsheet = $this->getParam("sheet","HC.C");     
+        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
+        $workerarr = array();
+        $allworkers = $this->_workerdetails->findAll();
+            
+        if(!in_array($requestsheet, $sheetarr))
+        {
+            foreach($allworkers as $worker)
+            {
+                $sheet = $worker->getSheet();
+                if(!in_array($sheet, $sheetarr))
+                {
+                    $workerarr[] = $worker;
+                }
+            }            
+        }
+        else
+        {
+            foreach($allworkers as $worker)
+            {
+                $sheet = $worker->getSheet();
+                if($requestsheet == $sheet)
+                {
+                    $workerarr[] = $worker;
+                }
+            }
+        }
+
+        $this->view->sheetarr = $sheetarr;
+        $this->view->maindata = $workerarr;
+    }
+
+    public function index1Action()
     {
         // dql result: http://docs.doctrine-project.org/en/2.1/reference/dql-doctrine-query-language.html
         // embed select: http://msdn.microsoft.com/zh-cn/library/ms189575(v=sql.105).aspx

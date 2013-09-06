@@ -191,4 +191,21 @@ class Workerdetails extends \Synrgic_Models_Entity {
      */
     protected $remarks;
 
+    /**
+     * sheet name in excel
+     * @Column(type="string", nullable=true)
+     */
+    protected $sheet;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $company;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $race;
+
+
 }

@@ -136,7 +136,6 @@ $maindata=$this->maindata;
 <?php
 // ob: http://stackoverflow.com/questions/8375625/jquery-select-table-column
 
-/*
 $onswitches=array(
 "id"=>"编号","namechs"=>"中文名","nameeng"=>"英文名","company"=>"所在公司", "worktype"=>"工种", 
 "passexp"=>"准证到期",'securityexp'=>'安全证到期',);
@@ -146,19 +145,6 @@ $offswitches=array(
 "leavesing"=>"离新日期","site"=>"所在工地","hwage"=>"时薪","srvyears"=>"服务年限","yrsinsing"=>"在新年限",
 "worklevel"=>"技能水平","education"=>"教育程度","pastwork"=>"往日职业","skill1"=>"主要技能一","skill2"=>"主要技能二",
 "drvlic"=>"驾照",);
-*/
-
-$onswitches=array(
-"sn"=>"S/N","eeeno"=>"E'ee No.","namechs"=>"Name","nameeng"=>"Name Eng","wpno"=>"WP No.", 
-"ppno"=>"PP No.", "rate"=>"RATE",);
-
-$offswitches=array(
-"wpexpiry"=>"WP Expiry","doa"=>"D.O.A","issuedate"=>"Date of Issue","finno"=>"Fin No.",
-"dob"=>"D.O.B","ppexpiry"=>"PP Expiry","pano"=>"PA Reference  No.", "sbno"=>"Security Bond No.", 
-"securityexp"=>"Security Exprity Date", "worktype"=>"主要工种","arrivaldate"=>"Arrival Date","medicaldate"=>"Medical Date", "csoc"=>"C.S.O.C", "medicalinsuranc"=>"Medical Insurance", "workingsite"=>"WORKING SITE", "dormitory"=>"Dormitory", 
-"hometown"=>"区域", "education"=>"教育程度", "age"=>"年龄", "marital"=>"婚姻状况", 
-"constructionworker"=>"建筑工", "applyfor"=>"Apply For", "goodat"=>"Good At", "contactno1"=>"Contact No.1", 
-"contactno2"=>"Contact No.2", "remarks"=>"Remarks(Agent)",);
 
 $customtitles=$this->customtitles;
 $offswitches["custom1"]=$customtitles[0];
@@ -271,6 +257,8 @@ $selects.='</select>';
 echo $selects;
 
 
+
+/*
 $wdtab=$this->grid("Workersdata", true);
 foreach($onswitches as $key=>$value)
 {
@@ -282,9 +270,10 @@ foreach($offswitches as $key=>$value)
 }
 $wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
 $wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
-//$wdtab=$wdtab->helper(new GridHelper_Worker());
-$wdtab=$wdtab->data($maindata)->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
+$wdtab=$wdtab->helper(new GridHelper_Worker());
+$wdtab=$wdtab->data($this->workersdata)->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
 echo $wdtab;
+*/
 ?>
 <br>
 <table id="datatable">
