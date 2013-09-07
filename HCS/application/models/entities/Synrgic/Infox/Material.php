@@ -111,5 +111,11 @@ class Material extends \Synrgic_Models_Entity {
      * @ManyToOne(targetEntity="Synrgic\Infox\Materialtype")
      */
     protected $type;
+
+    /**
+     * sheet name in material_list.xls, it's also equal to main material type   
+     * @Column(type="string", nullable=true)
+     */
+    protected $sheet;
     
 }

@@ -9,11 +9,11 @@ class Material_ImportController extends Zend_Controller_Action
         $this->_em = Zend_Registry::get('em');
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
         $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
+        $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
     }
 
     public function indexAction()
     {
-        $this->view->maindata = $result = $this->_material->findAll();
     }
 
     private function turnoffview()
@@ -23,6 +23,247 @@ class Material_ImportController extends Zend_Controller_Action
     }
 
     public function submitAction()
+    {
+        $this->turnoffview();
+
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }
+
+        // upload excel
+        define('UPLOAD_TMP_PATH', APPLICATION_PATH. '/data/uploads/');
+        $uploadpath = UPLOAD_TMP_PATH;
+        $filepath = "";
+        $allowedExts = array("xls", "xlsx");
+        $extension = end(explode(".", $_FILES["file"]["name"]));
+        if (in_array($extension, $allowedExts))
+        {
+            if ($_FILES["file"]["error"] > 0)
+            {
+                echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
+                return;
+            }
+            else
+            {
+                echo "Upload: " . $_FILES["file"]["name"] . "<br>";
+                echo "Type: " . $_FILES["file"]["type"] . "<br>";
+                echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
+                echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
+
+                if (file_exists($uploadpath . $_FILES["file"]["name"]))
+                {
+                    echo $_FILES["file"]["name"] . " already exists.<br>";
+                }
+
+                $filepath = $uploadpath . $_FILES["file"]["name"];
+                move_uploaded_file($_FILES["file"]["tmp_name"],  $filepath);
+                echo "Stored in:$filepath<br>";
+            }
+        }
+        else
+        {
+            echo "Error: Invalid file, 请上传xls, xlsx后缀文件<br>";
+            return;
+        }
+
+        // load data from excel
+        include 'PHPExcel/IOFactory.php';
+
+        $inputFileName = $filepath;
+        echo 'Loading file ',pathinfo($inputFileName,PATHINFO_BASENAME),' using IOFactory to identify the format<br>';
+        //$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
+
+        $inputFileType = 'Excel5';
+        /**  Create a new Reader of the type defined in $inputFileType  **/
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+        /* reduce memory consumption */
+        $objReader->setReadDataOnly(true);
+        
+        if(0)
+        {
+        $sheetarr =  array("safety material","formwork","concrete", "concrete",
+                            "rebar","equipment","electrical","worker domitory","logistics",
+                            "water pipe","spare parts","scaffolding", );
+        }
+        else
+        {
+        $sheetarr =  array("safety material",);
+        }
+
+        $objWorksheet = $objReader->setLoadSheetsOnly($sheetarr);
+        /**  Load $inputFileName to a PHPExcel Object  **/
+        $objPHPExcel = $objReader->load($inputFileName);
+        echo '<hr />';
+
+        //$objWorksheet = $objPHPExcel->setActiveSheetIndexByName('safety material');
+
+        foreach($sheetarr as $sheetname)
+        {
+            $objWorksheet = $objPHPExcel->setActiveSheetIndexByName($sheetname);
+            if($objWorksheet)
+            {
+                $this->storeDetails($sheetname, $objWorksheet);
+            }
+        }
+    }
+
+    private function storeDetails($sheetname, $objWorksheet)
+    {
+        $datecolumns = array(7,);
+        $i=0;
+        $j=0;
+
+        /*
+        foreach ($objWorksheet->getRowIterator() as $row)
+        {
+            if(++$i == 1)
+            {   // ignore the first row
+                continue;
+            }
+
+            $j=0;
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+            foreach ($cellIterator as $cell)
+            {
+                $j++;
+                if(in_array($j, $datecolumns))
+                {
+                    $cellvalue = $cell->getValue();
+                    if($cellvalue == "" || !intval($cellvalue))
+                    {
+                        $value = "";
+                    }
+                    else
+                    {
+                        $value = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($cellvalue));
+                    }
+                }
+                else
+                {
+                    $value = $cell->getFormattedvalue();
+                }
+                echo $value . "||";
+            }
+
+            echo "<hr>";
+        }
+        return;
+        */
+
+        $maintype = $this->_materialtype->findOneBy(array("typeeng"=>$sheetname));
+        $subtype = null;
+
+        $indexarr = array("B","C","D","E","F","G","H","I","J","K",);
+        $nameenglast = "";
+        $namelast = "";
+
+        foreach ($objWorksheet->getRowIterator() as $row)
+        {
+            if(++$i == 1)
+            {   // ignore the first row
+                continue;
+            }
+
+            $cell = $objWorksheet->getCell("B".$i);
+            $valueb = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("C".$i);
+            $valuec = $cell->getFormattedvalue();
+
+            if($valueb!="" && $valuec!="")
+            {
+                $nameenglast = $valueb;
+                $namelast = $valuec;
+                
+                // find or store sub type
+                $typeobj = $this->_materialtype->findOneBy(array("typeeng"=>$nameenglast, "typechs"=>$namelast));
+                if($typeobj)
+                {
+                    echo "sub type already there.<br>";
+                }
+                else
+                {
+                    echo "nameenglast=$nameenglast,namelast=$namelast<br>"; //continue;
+                    $typeobj = new \Synrgic\Infox\Materialtype();
+                    $typeobj->setTypechs($namelast);
+                    $typeobj->setTypeeng($nameenglast);
+                    $typeobj->setMain($maintype);
+                    $this->_em->persist($typeobj);
+                }
+
+                $subtype = $typeobj;
+            }
+
+        
+        {
+            $valuearr = array();
+            foreach($indexarr as $idx)
+            {
+                $cell = $objWorksheet->getCell($idx.$i);
+                $value = $cell->getFormattedvalue();
+                echo "value=$value||";
+
+                if($idx=="B" && ($value==""))
+                {
+                    $value = $nameenglast;
+                echo "XXXXXXvalue=$value||";
+                }
+
+                if($idx=="C" && $value=="")
+                {
+                    $value = $namelast;                
+                }
+
+                $valuearr[] = $value;
+           
+            }
+            echo "<br>";
+            //continue;
+
+            $skipflag = true;
+            foreach($valuearr as $value)
+            {
+                if($value != "")
+                {
+                    $skipflag = false;
+                    break;
+                }
+            }
+
+            if(!$skipflag)
+            {// store data
+                $obj = new \Synrgic\Infox\Material();
+                $obj->setNameeng($valuearr[0]);
+                $obj->setName($valuearr[1]);
+                $obj->setDescription($valuearr[2]);
+                $obj->setUnit($valuearr[3]);
+                $obj->setDono($valuearr[4]);
+
+                $value = date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP($valuearr[5]));
+                $value = new Datetime($value);
+                $obj->setDodate($value);
+
+                $obj->setRate($valuearr[6]);
+                $obj->setQuantity($valuearr[7]);
+                $obj->setAmount($valuearr[8]);
+                $obj->setSuppliers($valuearr[9]);
+                $this->_em->persist($obj);
+            }
+        }            
+
+        }
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+
+        return;
+
+    }
+
+    public function submit1Action()
     {
         $this->turnoffview();
 

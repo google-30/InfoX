@@ -22,9 +22,39 @@ class Material_ManageController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    {// get all materials in table
-        $materialobjs = $this->_material->findAll();
-        $this->view->materials = $materialobjs;
+    {   
+        //$materialobjs = $this->_material->findAll();
+        //$this->view->materials = $materialobjs;
+
+        $this->getmateriallist();
+    }
+
+    private function getmateriallist()
+    {
+        $requestsheet = $this->getParam("sheet","HC.C");     
+        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
+        $workerarr = array();
+                    
+        if(!in_array($requestsheet, $sheetarr))
+        {
+            $allworkers = $this->_material->findAll();
+            foreach($allworkers as $worker)
+            {
+                $sheet = $worker->getSheet();
+                if(!in_array($sheet, $sheetarr))
+                {
+                    $workerarr[] = $worker;
+                }
+            }            
+        }
+        else
+        {
+            $workerarr = $this->_material->findBy(array('sheet'=>$requestsheet));
+        }
+
+        $this->view->sheet = $requestsheet;        
+        $this->view->sheetarr = $sheetarr;
+        $this->view->maindata = $workerarr;
     }
 
     public function addAction()
