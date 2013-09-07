@@ -28,13 +28,24 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $this->getworkerlist();
+    }
+
+    public function previewlistAction()
+    {
+        $this->_helper->layout->disableLayout();        
+        $this->getworkerlist();
+    }
+
+    private function getworkerlist()
+    {
         $requestsheet = $this->getParam("sheet","HC.C");     
         $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
         $workerarr = array();
-        $allworkers = $this->_workerdetails->findAll();
-            
+                    
         if(!in_array($requestsheet, $sheetarr))
         {
+            $allworkers = $this->_workerdetails->findAll();
             foreach($allworkers as $worker)
             {
                 $sheet = $worker->getSheet();
@@ -46,16 +57,21 @@ class Worker_ManageController extends Zend_Controller_Action
         }
         else
         {
+            /*
             foreach($allworkers as $worker)
             {
+
                 $sheet = $worker->getSheet();
                 if($requestsheet == $sheet)
                 {
                     $workerarr[] = $worker;
                 }
             }
+            */
+            $workerarr = $this->_workerdetails->findBy(array('sheet'=>$requestsheet));
         }
 
+        $this->view->sheet = $requestsheet;        
         $this->view->sheetarr = $sheetarr;
         $this->view->maindata = $workerarr;
     }
@@ -214,52 +230,8 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(TRUE);
 
         $requests = $this->getRequest()->getPost();
-        if(0)
-        {
-            var_dump($requests);
-            return;
-        }
-/*
-        $uploadpath = UPLOAD_WORKER;
-        $allowedExts = array("gif", "jpeg", "jpg", "png");
-        $extension = end(explode(".", $_FILES["file"]["name"]));
-        if ((($_FILES["file"]["type"] == "image/gif")
-                || ($_FILES["file"]["type"] == "image/jpeg")
-                || ($_FILES["file"]["type"] == "image/jpg")
-                || ($_FILES["file"]["type"] == "image/pjpeg")
-                || ($_FILES["file"]["type"] == "image/x-png")
-                || ($_FILES["file"]["type"] == "image/png"))
-                && ($_FILES["file"]["size"] < 100000)
-                && in_array($extension, $allowedExts))
-        {
-            if ($_FILES["file"]["error"] > 0)
-            {
-                echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
-            }
-            else
-            {
-                echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-                echo "Type: " . $_FILES["file"]["type"] . "<br>";
-                echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-                echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
+        if(0) { var_dump($requests); return; }
 
-                if (file_exists($uploadpath . $_FILES["file"]["name"]))
-                {
-                    echo $_FILES["file"]["name"] . " already exists. ";
-                }
-                else
-                {
-                    move_uploaded_file($_FILES["file"]["tmp_name"],
-                                       $uploadpath . $_FILES["file"]["name"]);
-                    echo "Stored in: " . $uploadpath . $_FILES["file"]["name"];
-                }
-            }
-        }
-        else
-        {
-            //echo "Invalid file";
-        }
-*/
         $this->storeInfo($requests);
         $this->_files = $_FILES;
     }

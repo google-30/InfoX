@@ -1,21 +1,32 @@
+<!DOCTYPE html> 
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>工人清单</title> 
+	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+    <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+</head> 
+
+
+<body> 
 <style>
 #infoswitches { display: none; }
-#datatable { text-align:center; display:none; }
 #Workersdata { width:100%; }
-#uploaddiv { display: none; }
-/*#featuresdiv { display: none; }*/
 </style>
 <script>
 $(document).ready(function() {
-/*
-    $('#datatable').dataTable({ 
-        "iDisplayLength": 50,
-        "bRetrieve": true,
-    });
-*/
     $('#Workersdata').dataTable({ 
-        "iDisplayLength": 50,
-        "bRetrieve": true,
+        //"iDisplayLength": 50,
+        //"bRetrieve": true,
+        "bPaginate": false,
+        "bFilter": false,
+        "bInfo": false,
+        "bSort": false,
     });
 
     fnHideColumns();
@@ -105,49 +116,48 @@ function previewlist()
     var url = "/worker/manage/previewlist?sheet=" + sheet;
     window.open (url); 
 }
-
 </script>
+
+<div data-role="page">
+    <!--
+	<div data-role="header">
+		<h1>工人清单</h1>
+	</div>--><!-- /header -->
+
+	<div data-role="content">	
 
 <?php
 $sheet=$this->sheet;
 $sheetarr=$this->sheetarr;
 $maindata=$this->maindata;
 
+/*
+$options="";
+foreach($sheetarr as $tmp)
+{
+    if($sheet == $tmp)
+    {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    }
+    else
+    {
+        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+    }
+
+    $options .= $option;
+}
+$selects='<select data-mini="true" id="sheetselect">';
+$selects.=$options;
+$selects.='</select>';
+echo $selects;
+*/
 ?>
 
-<div data-role="collapsible-set" data-mini="true" data-theme="c">
-
-<div data-role="collapsible" data-collapsed="true">
-<h3>功能列表</h3>
-<div class="ui-grid-b">
-	<div class="ui-block-a">
-    <a href="/worker/manage/add"><button data-mini="true" data-theme="a">注册一个工人</button></a>
-    </div>
-	<div class="ui-block-b">
-    <button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人数据</button>
-    </div>
-	<div class="ui-block-c">
-    <button data-mini="true" data-theme="a" onclick="clearworkerdetails()">清空工人数据</button>
-    </div>
-</div><!-- /grid-b -->
-    <div id="uploaddiv">
-    <fieldset>
-    <form action="/worker/import/submit" method="post" enctype="multipart/form-data">
-    上传工人列表(MS Excel file)：
-    <!--<label for="file" class="ui-input-text">上传工人列表(MS Excel file)：</label>-->
-    <input data-mini="true" type="file" name="file" id="file">
-    <input type="submit" value="上传" data-mini="true" data-theme="a">
-    </form>
-    </fieldset>
-    </div>
-</div>
-
-<div data-role="collapsible" data-collapsed="true">
-<h3>列表操作</h3>
 <button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
 <div id="infoswitches">
-<div class="ui-grid-d">
 <?php
+echo '<div class="ui-grid-d">';
+
 $onswitches=array(
 "sn"=>"S/N","eeeno"=>"E'ee No.","namechs"=>"Name","nameeng"=>"Name Eng","wpno"=>"WP No.", 
 "ppno"=>"PP No.", "rate"=>"RATE",);
@@ -240,38 +250,7 @@ foreach($offswitches as $key => $value)
 }
 echo $grids;
 echo '<input type="hidden" id="offcount" value="'. $offcount . '">';
-echo '<hr>';
-?>
-</div><!-- /grid-d -->
-<hr>
-</div>
-<!--<a href="/worker/manage/previewlist" target="_blank"><button data-theme="a" data-mini="true">预览打印</button></a>-->
-<button data-theme="a" data-mini="true" onclick="previewlist()">预览打印</button>
-</div>
-
-</div> <!-- collapsible-set -->
-
-<?php
-
-$options="";
-foreach($sheetarr as $tmp)
-{
-    if($sheet == $tmp)
-    {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    }
-    else
-    {
-        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
-    }
-
-    $options .= $option;
-}
-$selects='<select data-mini="true" id="sheetselect">';
-$selects.=$options;
-$selects.='</select>';
-echo $selects;
-
+echo '<hr></div></div>';
 
 $wdtab=$this->grid("Workersdata", true);
 foreach($onswitches as $key=>$value)
@@ -285,66 +264,19 @@ foreach($offswitches as $key=>$value)
 $wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
 $wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
 //$wdtab=$wdtab->helper(new GridHelper_Worker());
-$wdtab=$wdtab->data($maindata)->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
+$wdtab=$wdtab->data($maindata);
 echo $wdtab;
+
 ?>
-<br><br>
-
-<!--
-<table id="datatable">
-<thead><tr>
-<th>序号</th>
-<th>服务公司</th>
-<th>所在工地</th>
-<th>中文名</th>
-<th>英文名</th>
-<th>准证号码</th>
-<th>工种</th>
-<th>业务水平</th>
-<th>小时工资</th>
-</tr></thead>
-<tbody> 
-<?php
-/*
-$rows="";
-foreach($this->result as $tmp)
-{
-    // worker
-    $id = $tmp[0]['id'];
-    $namechs = $tmp[0]['namechs'];
-    $nameeng = $tmp[0]['nameeng'];;
-    $fin = $tmp[0]['fin'];;
-
-    // skills
-    $worktype = $tmp["worktype"];    
-    $level = $tmp["worklevel"];
-    // company
-    $company = $tmp["companyname"];
-    $site = $tmp["sitename"];
-    $hrwage = $tmp["hwage"];
-
-    $row = "<tr>";
-    //$row .= '<td><a data-role="button" data-theme="a" data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
-    $row .= '<td><a href="/worker/manage/edit?id=' . $id . '"><button data-mini="true" data-theme="a">' . $id . '</button></a></td>' ;
-
-    $row .= "<td>$company</td>";
-    //$row .= "<td>$site</td>" ;
-    $row .= "<td>$namechs</td>";
-    $row .= "<td>$nameeng</td>";
-    $row .= "<td>$fin</td>";
-    $row .= "<td>$worktype</td>";
-    $row .= "<td>$level</td>";
-    //$row .= "<td>$hrwage</td>";
-    $row .= "</tr>";
-    
-    $rows .= $row;
-}
-echo $rows;
-*/
-?>
-</tbody> 
-</table>
-<br><br>
--->
 
 
+	</div><!-- /content -->
+	<!--
+	<div data-role="footer">
+		<h4>Footer content</h4>
+	</div>--><!-- /footer -->
+	
+</div><!-- /page -->
+
+</body>
+</html>
