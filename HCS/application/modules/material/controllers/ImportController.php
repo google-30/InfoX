@@ -10,6 +10,7 @@ class Material_ImportController extends Zend_Controller_Action
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
         $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
         $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
+        $this->_supplyprice = $this->_em->getRepository('Synrgic\Infox\Supplyprice');
     }
 
     public function indexAction()
@@ -169,6 +170,7 @@ class Material_ImportController extends Zend_Controller_Action
             $cell = $objWorksheet->getCell("C".$i);
             $valuec = $cell->getFormattedvalue();
 
+            // this means a sub type
             if($valueb!="" && $valuec!="")
             {
                 $nameenglast = $valueb;
@@ -192,8 +194,63 @@ class Material_ImportController extends Zend_Controller_Action
 
                 $subtype = $typeobj;
             }
+            // sub type done
+            
+            // supplier
+            $cell = $objWorksheet->getCell("K".$i);
+            $valuek = $cell->getFormattedvalue();
+            if($valuek != "" )
+            {
+                $name = trim($valuek);
+                $supplier = $this->_supplier->findOneBy(array("name"=>$name));
+                if($supplier)
+                {
+                    echo "supplier already there.<br>";
+                }
+                else
+                {
+                    $supplier = new \Synrgic\Infox\Supplier();
+                    $supplier->setName($name);
+                    $this->_em->persist($supplier);
+                }
+            }
+            // supplier done
 
-        
+            $cell = $objWorksheet->getCell("D".$i);
+            $valued = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("E".$i);
+            $valuee = $cell->getFormattedvalue();
+
+            // this is a kind of material
+            if($valued != "")
+            {
+                $nameeng = ($valueb=="") ? $nameenglast : $valueb;
+                $namechs = ($valuec=="") ? $namelast : $valuec;
+                $description = $valued;
+                $unit = $valuee;
+
+                // TODO: check if it's already there
+                $obj = $this->_material->findOneBy(
+                        array('name'=>$namechs,'nameeng'=>$nameeng, 'description'=>$description));
+                if($obj)
+                {
+                    echo "material already there.<br>";
+                }
+                else
+                {
+                    $obj = new \Synrgic\Infox\Material();
+                    $obj->setNameeng($nameeng);
+                    $obj->setName($namechs);
+                    $obj->setDescription($description);
+                    $obj->setType($subtype);
+                    $obj->setUnit($unit);
+                    $obj->setSheet($sheetname);                      
+                    $this->_em->persist($obj);          
+                }
+            }       
+        }
+
+/*
         {
             $valuearr = array();
             foreach($indexarr as $idx)
@@ -205,7 +262,7 @@ class Material_ImportController extends Zend_Controller_Action
                 if($idx=="B" && ($value==""))
                 {
                     $value = $nameenglast;
-                echo "XXXXXXvalue=$value||";
+                    echo "valueB=$value||";
                 }
 
                 if($idx=="C" && $value=="")
@@ -249,9 +306,7 @@ class Material_ImportController extends Zend_Controller_Action
                 $this->_em->persist($obj);
             }
         }            
-
-        }
-
+*/
         try {
             $this->_em->flush();
         } catch (Exception $e) {

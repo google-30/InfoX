@@ -28,7 +28,7 @@
 		    <resource>worker:manage</resource>
 		    <privilege>view</privilege>
 	        </worker>
-
+            <!--
             <workerimport>
 		    <label>工人信息导入</label>
 		    <module>worker</module>
@@ -37,7 +37,7 @@
 		    <resource>worker:import</resource>
 		    <privilege>view</privilege>
 	        </workerimport>
-
+            -->
             <workerexpire>
 		    <label>工人证件过期</label>
 		    <module>worker</module>
@@ -81,7 +81,7 @@
 		    <resource>material:manage</resource>
 		    <privilege>view</privilege>
 	        </material>
-
+            <!--
             <materialimport>
 		    <label>材料信息导入</label>
 		    <module>material</module>
@@ -90,7 +90,7 @@
 		    <resource>material:import</resource>
 		    <privilege>view</privilege>
 	        </materialimport>
-
+            -->    
 	        <emachinery>
 		    <label>电动机具管理</label>
 		    <module>material</module>

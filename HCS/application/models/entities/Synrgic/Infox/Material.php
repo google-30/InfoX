@@ -67,22 +67,7 @@ class Material extends \Synrgic_Models_Entity {
      * @Column(type="date", nullable=true)
      */
     protected $update;
-  
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $warehouse;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $macrotype;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $detailtype;    
-
+    
     /**
      * default supplier
      * 

@@ -31,30 +31,33 @@ class Material_ManageController extends Zend_Controller_Action
 
     private function getmateriallist()
     {
-        $requestsheet = $this->getParam("sheet","HC.C");     
-        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
-        $workerarr = array();
-                    
+        $sheetarr =  array("safety material","formwork","concrete", "concrete",
+                            "rebar","equipment","electrical","worker domitory","logistics",
+                            "water pipe","spare parts","scaffolding", );
+
+        $requestsheet = $this->getParam("sheet", $sheetarr[0]);     
+
+        $dataarr = array();                    
         if(!in_array($requestsheet, $sheetarr))
         {
-            $allworkers = $this->_material->findAll();
-            foreach($allworkers as $worker)
+            $alldata = $this->_material->findAll();
+            foreach($alldata as $tmp)
             {
-                $sheet = $worker->getSheet();
+                $sheet = $tmp->getSheet();
                 if(!in_array($sheet, $sheetarr))
                 {
-                    $workerarr[] = $worker;
+                    $dataarr[] = $tmp;
                 }
             }            
         }
         else
         {
-            $workerarr = $this->_material->findBy(array('sheet'=>$requestsheet));
+            $dataarr = $this->_material->findBy(array('sheet'=>$requestsheet));
         }
 
         $this->view->sheet = $requestsheet;        
         $this->view->sheetarr = $sheetarr;
-        $this->view->maindata = $workerarr;
+        $this->view->maindata = $dataarr;
     }
 
     public function addAction()

@@ -164,11 +164,11 @@ $selects.='</select>';
 echo $selects;
 
 echo $this->grid("Materials", true)
-          ->field('type', '分类')
-          ->field('name','中文名称')
+          //->field('type', '分类')
           ->field('nameeng', '英文名称')
+          ->field('name','中文名称')
+          ->field('description', '规格')
           ->field('unit', '单位')
-          ->field('spec', '规格')
           ->field('supplier', '优先供应商')
           ->field('price', '价格')  
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
