@@ -320,6 +320,38 @@ class Worker_ImportController extends Zend_Controller_Action
 
     }
 
+    public function truncateworkerdetailsAction()
+    {
+        $this->turnoffview();
+
+        // http://stackoverflow.com/questions/5301285/explicitly-set-id-with-doctrine-when-using-auto-strategy
+        // put it here to reset id generator
+        $data = new \Synrgic\Infox\Workerdetails();
+        $cmd = $this->_em->getClassMetadata(get_class($data));
+        $connection = $this->_em->getConnection();
+        $dbPlatform = $connection->getDatabasePlatform();
+        $connection->beginTransaction();
+        try {
+            //$connection->query('SET FOREIGN_KEY_CHECKS=0');
+            $q = $dbPlatform->getTruncateTableSql($cmd->getTableName());
+            $connection->executeUpdate($q);
+            //$connection->query('SET FOREIGN_KEY_CHECKS=1');
+            $connection->commit();
+        }
+        catch (\Exception $e) {
+            $connection->rollback();
+            var_dump($e);
+            return;
+        }        
+
+        $this->redirect("/worker/manage");
+
+        /*
+        $this->_em->remove($data);
+        $this->_em->flush();
+        */
+    }
+
     private function findCompanies()
     {
         $this->view->companies = $this->_companyinfo->findAll();

@@ -57,17 +57,6 @@ class Worker_ManageController extends Zend_Controller_Action
         }
         else
         {
-            /*
-            foreach($allworkers as $worker)
-            {
-
-                $sheet = $worker->getSheet();
-                if($requestsheet == $sheet)
-                {
-                    $workerarr[] = $worker;
-                }
-            }
-            */
             $workerarr = $this->_workerdetails->findBy(array('sheet'=>$requestsheet));
         }
 
