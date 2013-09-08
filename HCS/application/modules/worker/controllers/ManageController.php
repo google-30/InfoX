@@ -195,6 +195,128 @@ class Worker_ManageController extends Zend_Controller_Action
         $id = $this->_getParam("id");
         //echo "id=$id";
         $this->view->workerid = $id;
+        $this->view->worker = $worker = $this->_workerdetails->findOneBy(array("id"=>$id));
+
+        $sites = $this->_site->findAll();
+        $this->view->sites = $sites;
+
+        $this->findCompanies();
+        $this->getWorktypes();
+
+        $this->getCustominfo($id);
+    }
+
+    public function submitAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }
+
+        $this->storeInfo($requests);
+        $this->_files = $_FILES;
+    }
+    
+    private function storeInfo($requests)
+    {
+        $mode = $requests["mode"];
+
+        if($mode == "Edit")
+        {
+            //$workerid = $requests["workerid"];
+            $workerid = $this->getParam("workerid", 0);
+            $data = $this->_workerdetails->findOneBy(array('id'=>$workerid));
+
+            $customdata = $data->getWorkercustominfo();
+            if(!$customdata)
+            {
+                $customdata = new \Synrgic\Infox\Workercustominfo();
+            }
+        }
+        else if($mode = "Create")
+        {
+            $data = new \Synrgic\Infox\Worker();
+            $customdata = new \Synrgic\Infox\Workercustominfo();
+        }
+        
+        $sn=$this->getParam("sn", "");
+        //echo "sn=$sn<br>"; return;        
+        $eeeno=$this->getParam("eeeno", "");
+        $nameeng =$this->getParam("nameeng", "");
+        $namechs =$this->getParam("namechs", "");
+        $wpno=$this->getParam("wpno", "");
+        $wpexpiry=$this->getParam("wpexpiry", "");
+        $wpexpiry = ($wpexpiry=="") ? null : new Datetime($wpexpiry); 
+        $doa=$this->getParam("doa", "");
+        $doa = ($doa=="") ? null : new Datetime($doa);
+        $issuedate=$this->getParam("issuedate", "");
+        $issuedate = ($issuedate=="") ? null : new Datetime($issuedate);
+        $finno=$this->getParam("finno", "");
+        $ppno=$this->getParam("ppno", "");
+        $dob=$this->getParam("dob", "");
+        $dob = ($dob=="") ? null : new Datetime($dob);
+        $ppexpiry=$this->getParam("ppexpiry", "");
+        $ppexpiry = ($ppexpiry=="") ? null : new Datetime($ppexpiry);
+        $rate=$this->getParam("rate", "");
+        $pano=$this->getParam("pano", "");
+        $sbno=$this->getParam("sbno", "");
+        $securityexp=$this->getParam("securityexp", "");
+        $securityexp = ($securityexp=="") ? null : new Datetime($securityexp);
+        $worktype=$this->getParam("worktype", "");
+        $arrivaldate=$this->getParam("arrivaldate", "");
+        $arrivaldate = ($arrivaldate=="") ? null : new Datetime($arrivaldate);
+        $medicaldate=$this->getParam("medicaldate", "");
+        $medicaldate = ($medicaldate=="") ? null : new Datetime($medicaldate);
+        $csoc=$this->getParam("csoc", "");
+        $medicalinsurance=$this->getParam("medicalinsurance", "");
+        $workingsite=$this->getParam("sn", "");
+        $dormitory=$this->getParam("workingsite", "");
+        $hometown = $this->getParam("hometown", "");
+        $education=$this->getParam("education", "");
+        $age = $this->getParam("age", "");
+        $marital=$this->getParam("marital", "");
+        $constructionworker=$this->getParam("constructionworker", "");
+        $applyfor=$this->getParam("applyfor", "");
+        $goodat=$this->getParam("goodat", "");
+        $contactno1=$this->getParam("contactno1", "");
+        $contactno2=$this->getParam("contactno2", "");
+        $certificate=$this->getParam("certificate", "");
+        $remarks=$this->getParam("remarks", "");
+
+        /*
+        $agent=$this->getParam("sn", "");        
+        $company=$this->getParam("sn", "");
+        $race=$this->getParam("sn", "");
+        */
+
+        $data->setSn($sn);
+        $data->setEeeno($eeeno);
+        $data->setNamechs($namechs);    
+        $data->setNameeng($nameeng);
+        $data->setWpno($wpno);
+
+    
+    }
+
+    public function add1Action()
+    {
+        $this->view->id = 0;
+
+        $sites = $this->_site->findAll();
+        $this->view->sites = $sites;
+
+        $this->findCompanies();
+        $this->getWorktypes();
+
+        $this->getCustominfo(0);
+    }
+
+    public function edit1Action()
+    {
+        $id = $this->_getParam("id");
+        //echo "id=$id";
+        $this->view->workerid = $id;
         $this->view->worker = $worker = $this->_worker->findOneBy(array("id"=>$id));
         $skillid = $worker->getWorkerskill();
         $cmyid = $worker->getWorkercompanyinfo();
@@ -213,7 +335,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->getCustominfo($id);
     }
 
-    public function submitAction()
+    public function submit1Action()
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(TRUE);
@@ -291,7 +413,7 @@ class Worker_ManageController extends Zend_Controller_Action
         }
     }
 
-    private function storeInfo($requests)
+    private function storeInfo1($requests)
     {
         $mode = $requests["mode"];
 

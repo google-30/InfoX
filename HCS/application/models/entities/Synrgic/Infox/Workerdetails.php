@@ -16,6 +16,11 @@ class Workerdetails extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $pic;
+
+    /**
      * @Column(type="integer",nullable=true)
      */
     protected $sn;
@@ -207,5 +212,9 @@ class Workerdetails extends \Synrgic_Models_Entity {
      */
     protected $race;
 
+    /**
+     * @OneToOne(targetEntity="Synrgic\Infox\Workercustominfo")
+     */
+    protected $workercustominfo;   
 
 }

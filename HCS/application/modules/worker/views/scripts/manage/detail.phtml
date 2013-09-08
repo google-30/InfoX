@@ -21,9 +21,112 @@ function output()
 
 </script>
 <?php
-$pic = "";
+$sn="";
+$eeeno="";
 $nameeng = ""; 
 $namechs = "";
+$wpno="";
+$wpexpiry="";
+$doa="";
+$issuedate="";
+$finno="";
+$ppno="";
+$dob="";
+$ppexpiry="";
+$rate="";
+$pano="";
+$sbno="";
+$securityexp="";
+$worktype="";
+$arrivaldate="";
+$medicaldate="";
+$csoc="";
+$medicalinsurance="";
+$workingsite="";
+$dormitory="";
+$hometown="";
+$education="";
+$age="";
+$marital="";
+$constructionworker="";
+$applyfor="";
+$goodat="";
+$contactno1="";
+$contactno2="";
+$certificate="";
+$agent="";
+$remarks="";
+$company="";
+$race="";
+
+$pic = "";
+
+// custom info
+$customtitles=$this->customtitles;
+$customtitle1=$customtitles[0];
+$customtitle2=$customtitles[1];
+$customtitle3=$customtitles[2];
+$customtitle4=$customtitles[3];
+
+$custom1="";
+$custom2="";
+$custom3="";
+$custom4="";
+
+if($this->mode == "Edit")
+{
+$worker=$this->worker;
+$pic = $worker->getPic();
+$sn=$worker->getSn();;
+$eeeno=$worker->getEeeno();
+$nameeng = $worker->getNameeng();
+$namechs = $worker->getNamechs();
+$wpno=$worker->getWpno();
+$wpexpiry=$worker->getWpexpiry();
+$wpexpiry=$wpexpiry? $wpexpiry->format("d-m-Y") : "";
+$doa=$worker->getDoa();
+$doa=$doa? $doa->format("d-m-Y") : "";
+$issuedate=$worker->getIssuedate();
+$issuedate=$issuedate? $issuedate->format("d-m-Y") : "";
+$finno=$worker->getFinno();
+$ppno=$worker->getPpno();
+$dob=$worker->getDob();
+$dob=$dob? $dob->format("d-m-Y") : "";
+$ppexpiry=$worker->getPpexpiry();
+$ppexpiry=$ppexpiry? $ppexpiry->format("d-M-Y") : "";
+$rate=$worker->getRate();
+$pano=$worker->getPano();
+$sbno=$worker->getSbno();
+$securityexp=$worker->getSecurityexp();
+$securityexp=$securityexp? $securityexp->format("d-M-Y") : "";
+$worktype=$worker->getWorktype();
+$arrivaldate=$worker->getArrivaldate();
+$arrivaldate=$arrivaldate? $arrivaldate->format("d-M-Y") : "";
+$medicaldate=$worker->getMedicaldate();
+$medicaldate=$medicaldate? $medicaldate->format("d-M-Y") : "";
+$csoc=$worker->getCsoc();
+$medicalinsurance=$worker->getMedicalinsurance();
+$workingsite=$worker->getWorkingsite();
+$dormitory=$worker->getDormitory();
+$hometown = $worker->getHometown();
+$education=$worker->getEducation();
+$age = $worker->getAge();
+$marital=$worker->getMarital();
+$constructionworker=$worker->getConstructionworker();
+$applyfor=$worker->getApplyfor();
+$goodat=$worker->getGoodat();
+$contactno1=$worker->getContactno1();
+$contactno2=$worker->getContactno2();
+$certificate=$worker->getCertificate();
+$agent=$worker->getAgent();
+$remarks=$worker->getRemarks();
+$company=$worker->getCompany();
+$race=$worker->getRace();
+
+}
+
+
+/*
 $hometown = "";
 $age = 18;
 $birth = "";
@@ -169,28 +272,17 @@ if($custominfos)
 }
 
 }
-?>
+*/
 
-<?php
 $html="";
 if($this->mode == "Create")
 {
-/*
-    echo '<div class="ui-block-a"><h3>创建工人信息</h3></div>';
-    echo '<div class="ui-block-b"></div>';
-    echo '<div class="ui-block-c"><button data-mini="true">放弃创建</button></div>';
-*/
     $html .= '<h3>创建工人信息</h3>';    
 }
 else
 {
-/*
-    echo '<div class="ui-block-a"><h3>编辑工人信息</h3></div>';
-    echo '<div class="ui-block-b"><button data-mini="true" onclick="output()">预览和打印</button></div>';
-    echo '<div class="ui-block-c"><button data-mini="true">删除工人记录</button></div>';
-*/
-    $html .= '<button data-mini="true" onclick="output()" data-mini="true" data-theme="a">预览和打印</button>';
     $html .= '<h3>编辑工人信息</h3>';    
+    $html .= '<button data-mini="true" onclick="output()" data-mini="true" data-theme="a">预览和打印</button>';
 }
 echo $html;
 ?>
@@ -199,8 +291,6 @@ echo $html;
 <input data-mini="true" type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
 <input data-mini="true" type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
 
-<fieldset>
-<legend>个人信息</legend>
 <table>
 <tr>
 <td><div data-role="fieldcontain">
@@ -212,367 +302,164 @@ echo $html;
     <input data-mini="true" type="file" name="file" id="file">
 </div></td>
 </tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="nameeng">姓名:</label>
-    <input data-mini="true" type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" />
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="namechs">中文姓名:</label>
-    <input data-mini="true" type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" />
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="gender">性别:</label>
-<select data-mini="true" name="gender" id="gender">
-<!--
-       <option value="男">男</option>
-       <option value="女">女</option>
--->
-<?php
-$genders=array("男","女");
-$options="";
-foreach($genders as $tmp)
-{
-    if($gender == $tmp)
-    {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    }
-    else
-    {
-        $option = '<option value="' . $tmp . '">' . $tmp . '</option>';
-    }
-    $options .= $option;
-}
-echo $options;
-?>
-</select>  
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="hometown">籍贯:</label>
-    <input data-mini="true" type="text" name="hometown" id="hometown" value="<?php echo $hometown; ?>"  />
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="age">年龄:</label>
-    <input data-mini="true" type="range" name="age" id="age" value="<?php echo $age; ?>" min="18" max="70" data-highlight="true"  />  
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="birth">出生日期:</label>
-    <input data-mini="true" type="text" name="birth" id="birth" value="<?php echo $birth; ?>"  class="datepicker">
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="fin">准证号码:</label>
-    <input data-mini="true" type="text" name="fin" id="fin" value="<?php echo $fin; ?>"  />
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="passexp">准证期限:</label>
-    <input data-mini="true" type="text" name="passexp" id="passexp" value="<?php echo $passexp; ?>" class="datepicker">
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="passport">护照号码:</label>
-    <input data-mini="true" type="text" name="passport" id="passport" value="<?php echo $passport; ?>"  />
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="passportexp">护照期限:</label>
-    <input data-mini="true" type="text" name="passportexp" id="passportexp" value="<?php echo $passportexp; ?>" class="datepicker">
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="marital">婚姻状况:</label>    
-    <select data-mini="true" name="marital" id="marital">
-<?php
-$options=array("single"=>"单身", "married"=>"已婚",);
-foreach($options as $key=>$value)
-{
-    if($marital == $key)
-    {
-        echo '<option value="'. $key . '" selected>' . $value . "</option>";
-    }    
-    else
-    {
-        echo '<option value="'. $key . '" >' . $value . "</option>";
-    }
-}
-?>
-    </select>        
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="address">地址:</label>
-    <input data-mini="true" type="text" name="address" id="address" value="<?php echo $address; ?>"  />
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="birth">到新日期:</label>
-    <input data-mini="true" type="text" name="arrivesing" id="arrivesing" value="<?php echo $arrivesing; ?>" class="datepicker">
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="birth">离新日期:</label>
-    <input data-mini="true" type="text" name="leavesing" id="leavesing" value="<?php echo $leavesing; ?>" class="datepicker">
-</div></td>
-</tr>
-
 </table>
-<!--</div>-->
-</fieldset>
-<br>
 
-<fieldset>
-<legend>技能信息</legend>
-<table>
-<tr>
-<td><div data-role="fieldcontain">
-<label for="worktype">工种:</label>
-<select id="worktype" name="worktype" data-mini="true">
-<option value=""></option>
-<?php
-$options="";
-foreach($worktypes as $tmp)
-{
-    if($tmp == "")
-    {
-        continue;
-    }
-
-    if($tmp == $worktype)
-    {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    }
-    else
-    {
-        $option = '<option value="' . $tmp . '">' . $tmp . '</option>';
-    }
-
-    $options .= $option;
-}
-echo $options;
-?>
-</select>
-</div></td>
-<td><div data-role="fieldcontain">
-<label for="worklevel">业务水平:</label>
-<select data-mini="true" name="worklevel" id="worklevel">
-<?php
-$options=array("normal"=>"普通","good"=>"好","excellent"=>"很好");
-foreach($options as $key=>$value)
-{
-    if($worklevel == $key)
-    {
-        echo '<option value="' . $value . '" selected>' . $value . "</option>";
-    }
-    else
-    {
-        echo '<option value="' . $value . '" >' . $value . "</option>";
-    }
-} 
-?>
-</select> 
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="skill1">技能1:</label>
-    <input data-mini="true" type="text" name="skill1" id="skill1" value="<?php echo $skill1; ?>"  />
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="skill2">技能2:</label>
-    <input data-mini="true" type="text" name="skill2" id="skill2" value="<?php echo $skill2; ?>"  />
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="securityexp">安全证期限:</label>
-    <input data-mini="true" type="text" name="securityexp" id="securityexp" value="<?php echo $securityexp; ?>" class="datepicker"/>
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="drvlic">驾照种类:</label>
-    <input data-mini="true" type="text" name="drvlic" id="drvlic" value="<?php echo $drvlic; ?>"  />
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="education">教育程度:</label>
-    <input data-mini="true" type="text" name="education" id="education" value="<?php echo $education; ?>"  />
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="pastwork">国内从事职业:</label>
-    <input data-mini="true" type="text" name="pastwork" id="pastwork" value="<?php echo $pastwork; ?>"  />
-</div></td>
-</tr>
-
-</table>
-</fieldset>
-<br>
-
-<fieldset>
-<legend>工作信息</legend>
-<table>
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="servecompany">所属公司:</label>
-    <select name="servecompany" id="servecompany" data-mini="true">
-    <option value="0">选择所在公司</option>
-<?php
-$companies=$this->companies;
-$options="";
-foreach($companies as $tmp)
-{
-    $id = $tmp->getId();
-    $namechs = $tmp->getNamechs();
-
-    if($companyid == $id)
-    {
-        $options .= '<option value="' . $id . '" selected>' . $namechs . '</option>';
-    }
-    else
-    {
-        $options .= '<option value="' . $id . '">' . $namechs . '</option>';
-    }
-}
-echo $options;
-?>
-    </select>
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="hwage">小时单价:</label>
-    <input data-mini="true" type="text" name="hwage" id="hwage" value="<?php echo $hwage; ?>"  />
-</div></td>
-</tr>
-
-<tr>
-<td>
-<!--
 <div data-role="fieldcontain">
-    <label for="site">所在工地:</label>
-    <select data-mini="true" name="site" id="site">
-<?php
-$sites=$this->sites;
-$options='<option value="0">选择所在工地</option>';
-foreach($sites as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
-    //if($sitename === $name)
-    if($id == $siteid)
-    {
-        $options .= '<option value="' . $id .'" selected>'. $name .'</option>';
-    }
-    else
-    {
-        $options .= '<option value="' . $id .'" >'. $name .'</option>';
-    }
-}
-echo $options;
-?>
-    </select data-mini="true">
-</div>-->
-<div data-role="fieldcontain">
-    <label for="yrsinsing">在新年限:</label>
-    <input data-mini="true" type="range" name="yrsinsing" id="yrsinsing" value="<?php echo $yrsinsing; ?>" min="0" max="50" data-highlight="true"  />
+    <label for="sn">S/N:</label>
+    <input data-mini="true" type="text" name="sn" id="sn" value="<?php echo $sn; ?>" />
 </div>
-</td>
-<td><div data-role="fieldcontain">
-    <label for="srvyears">服务年限:</label>
- 	<input data-mini="true" type="range" name="srvyears" id="srvyears" value="<?php echo $srvyears; ?>" min="0" max="30" data-highlight="true"  />
-</div></td>
-</tr>
-
-</table>
-</fieldset>
-<br>
-
-<fieldset>
-<legend>家庭信息</legend>
-<table>
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="homeaddr">国内家庭地址:</label>
-    <input data-mini="true" type="text" name="homeaddr" id="homeaddr" value="<?php echo $homeaddr; ?>"  />
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="member1">家庭成员1:</label>
-    <input data-mini="true" type="text" name="member1" id="member1" value="<?php echo $member1; ?>"  />
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="contact1">联系电话1:</label>
-    <input data-mini="true" type="text" name="contact1" id="contact1" value="<?php echo $contact1; ?>"  />
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="member2">家庭成员2:</label>
-    <input data-mini="true" type="text" name="member2" id="member2" value="<?php echo $member2; ?>"  />
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="contact2">联系电话2:</label>
-    <input data-mini="true" type="text" name="contact2" id="contact2" value="<?php echo $contact2; ?>"  />
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="member3">家庭成员3:</label>
-    <input data-mini="true" type="text" name="member3" id="member3" value="<?php echo $member3; ?>"  />
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="contact3">联系电话3:</label>
-    <input data-mini="true" type="text" name="contact3" id="contact3" value="<?php echo $contact3; ?>"  />
-</div></td>
-</tr>
-
-</table>
-</fieldset>
+<div data-role="fieldcontain">
+    <label for="nameeng">E'ee No.:</label>
+    <input data-mini="true" type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="namechs">Chinese Name:</label>
+    <input data-mini="true" type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="nameeng">English Name:</label>
+    <input data-mini="true" type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="wpno">WP No.:</label>
+    <input data-mini="true" type="text" name="wpno" id="wpno" value="<?php echo $wpno; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="wpexpiry">WP Expiry:</label>
+    <input data-mini="true" type="text" name="wpexpiry" id="wpexpiry" value="<?php echo $wpexpiry; ?>" class="datepicker"/>
+</div>
+<div data-role="fieldcontain">
+    <label for="doa">D.O.A:</label>
+    <input data-mini="true" type="text" name="doa" id="doa" value="<?php echo $doa; ?>" class="datepicker" />
+</div>
+<div data-role="fieldcontain">
+    <label for="issuedate">Date of Issue:</label>
+    <input data-mini="true" type="text" name="issuedate" id="issuedate" value="<?php echo $issuedate; ?>" class="datepicker" />
+</div>
+<div data-role="fieldcontain">
+    <label for="finno">Fin No.:</label>
+    <input data-mini="true" type="text" name="finno" id="finno" value="<?php echo $finno; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="ppno">PP No.:</label>
+    <input data-mini="true" type="text" name="ppno" id="ppno" value="<?php echo $ppno; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="dob">D.O.B:</label>
+    <input data-mini="true" type="text" name="dob" id="dob" value="<?php echo $dob; ?>" class="datepicker" />
+</div>
+<div data-role="fieldcontain">
+    <label for="ppexpiry">PP Expiry:</label>
+    <input data-mini="true" type="text" name="ppexpiry" id="ppexpiry" value="<?php echo $ppexpiry; ?>" class="datepicker" />
+</div>
+<div data-role="fieldcontain">
+    <label for="rate">RATE:</label>
+    <input data-mini="true" type="text" name="rate" id="rate" value="<?php echo $rate; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="pano">PA Reference No.:</label>
+    <input data-mini="true" type="text" name="pano" id="pano" value="<?php echo $pano; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="sbno">Security Bond No.:</label>
+    <input data-mini="true" type="text" name="sbno" id="sbno" value="<?php echo $sbno; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="securityexp">Security Exprity Date:</label>
+    <input data-mini="true" type="text" name="securityexp" id="securityexp" value="<?php echo $securityexp; ?>" class="datepicker" />
+</div>
+<div data-role="fieldcontain">
+    <label for="worktype">Work Type:</label>
+    <input data-mini="true" type="text" name="worktype" id="worktype" value="<?php echo $worktype; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="arrivaldate">Arrival Date:</label>
+    <input data-mini="true" type="text" name="arrivaldate" id="arrivaldate" value="<?php echo $arrivaldate; ?>" class="datepicker" />
+</div>
+<div data-role="fieldcontain">
+    <label for="medicaldate">Medical Date:</label>
+    <input data-mini="true" type="text" name="medicaldate" id="medicaldate" value="<?php echo $medicaldate; ?>" class="datepicker" />
+</div>
+<div data-role="fieldcontain">
+    <label for="csoc">C.S.O.C:</label>
+    <input data-mini="true" type="text" name="csoc" id="csoc" value="<?php echo $csoc; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="medicalinsurance">Medical Insurance:</label>
+    <input data-mini="true" type="text" name="medicalinsurance" id="medicalinsurance" value="<?php echo $medicalinsurance; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="workingsite">WORKING SITE:</label>
+    <input data-mini="true" type="text" name="workingsite" id="workingsite" value="<?php echo $workingsite; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="dormitory">Dormitory:</label>
+    <input data-mini="true" type="text" name="dormitory" id="dormitory" value="<?php echo $dormitory; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="hometown">区域:</label>
+    <input data-mini="true" type="text" name="hometown" id="hometown" value="<?php echo $hometown; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="education">教育程度:</label>
+    <input data-mini="true" type="text" name="education" id="education" value="<?php echo $education; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="age">年龄:</label>
+    <input data-mini="true" type="text" name="age" id="age" value="<?php echo $age; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="marital">婚姻状况:</label>
+    <input data-mini="true" type="text" name="marital" id="marital" value="<?php echo $marital; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="constructionworker">建筑工:</label>
+    <input data-mini="true" type="text" name="constructionworker" id="constructionworker" value="<?php echo $constructionworker; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="applyfor">Apply For:</label>
+    <input data-mini="true" type="text" name="applyfor" id="applyfor" value="<?php echo $applyfor; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="goodat">Good At:</label>
+    <input data-mini="true" type="text" name="goodat" id="goodat" value="<?php echo $goodat; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="contactno1">Contact No.1:</label>
+    <input data-mini="true" type="text" name="contactno1" id="contactno1" value="<?php echo $contactno1; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="contactno2">Contact No.2:</label>
+    <input data-mini="true" type="text" name="contactno2" id="contactno2" value="<?php echo $contactno2; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="certificate">Certificate:</label>
+    <input data-mini="true" type="text" name="certificate" id="certificate" value="<?php echo $certificate; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="remarks">Remarks(Agent):</label>
+    <input data-mini="true" type="text" name="remarks" id="remarks" value="<?php echo $remarks; ?>" />
+</div>
 
 <fieldset>
 <legend>自定义信息</legend>
-<table>
-<tr>
-<td><div data-role="fieldcontain">
+<div data-role="fieldcontain">
     <label for="custom1"><?php echo $customtitle1; ?>:</label>
     <input data-mini="true" type="text" name="custom1" id="custom1" value="<?php echo $custom1; ?>"  />
-</div></td>
-<td><div data-role="fieldcontain">
+</div>
+<div data-role="fieldcontain">
     <label for="custom2"><?php echo $customtitle2; ?>:</label>
     <input data-mini="true" type="text" name="custom2" id="custom2" value="<?php echo $custom2; ?>"  />
-</div></td>
-</tr>
-
-<tr>
-<td><div data-role="fieldcontain">
+</div>
+<div data-role="fieldcontain">
     <label for="custom3"><?php echo $customtitle3; ?>:</label>
     <input data-mini="true" type="text" name="custom3" id="custom3" value="<?php echo $custom3; ?>"  />
-</div></td>
-<td><div data-role="fieldcontain">
+</div>
+<div data-role="fieldcontain">
     <label for="custom4"><?php echo $customtitle4; ?>:</label>
     <input data-mini="true" type="text" name="custom4" id="custom4" value="<?php echo $custom4; ?>"  />
-</div></td>
-</tr>
-
-</table>
+</div>
 </fieldset>
-
 
 <input data-mini="true" data-theme="a" type="submit" name="submit" value="提交">
 </form>
