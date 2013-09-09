@@ -12,11 +12,11 @@
     <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
 </head> 
 
-
 <body> 
 <style>
 #infoswitches { display: none; }
-#Workersdata { width:100%; }
+#Workersdata { width:100%; border-collapse:collapse;}
+#Workersdata td { text-align:center; border:1px solid black;}
 </style>
 <script>
 $(document).ready(function() {
@@ -26,7 +26,7 @@ $(document).ready(function() {
         "bPaginate": false,
         "bFilter": false,
         "bInfo": false,
-        "bSort": false,
+        "bSort": true,
     });
 
     fnHideColumns();

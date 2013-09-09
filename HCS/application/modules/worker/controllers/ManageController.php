@@ -269,9 +269,10 @@ class Worker_ManageController extends Zend_Controller_Action
         $medicaldate=$this->getParam("medicaldate", "");
         $medicaldate = ($medicaldate=="") ? null : new Datetime($medicaldate);
         $csoc=$this->getParam("csoc", "");
+        $csoc = ($csoc=="") ? null : new Datetime($csoc);
         $medicalinsurance=$this->getParam("medicalinsurance", "");
-        $workingsite=$this->getParam("sn", "");
-        $dormitory=$this->getParam("workingsite", "");
+        $workingsite=$this->getParam("workingsite", "");
+        $dormitory=$this->getParam("dormitory", "");
         $hometown = $this->getParam("hometown", "");
         $education=$this->getParam("education", "");
         $age = $this->getParam("age", "");
@@ -296,12 +297,28 @@ class Worker_ManageController extends Zend_Controller_Action
         $data->setNameeng($nameeng);
         $data->setWpno($wpno);
         $data->setWpexpiry($wpexpiry);
-
-        $data->setApplyfor($applyfor);
-        $data->setApplyfor($applyfor);
-        $data->setApplyfor($applyfor);
-        $data->setApplyfor($applyfor);                        
-
+        $data->setDoa($doa);
+        $data->setIssuedate($issuedate);
+        $data->setFinno($finno);
+        $data->setPpno($ppno);                        
+        $data->setDob($dob); 
+        $data->setPpexpiry($ppexpiry); 
+        $data->setRate($rate); 
+        $data->setPano($pano); 
+        $data->setSbno($sbno); 
+        $data->setSecurityexp($securityexp); 
+        $data->setWorktype($worktype); 
+        $data->setArrivaldate($arrivaldate); 
+        $data->setMedicaldate($medicaldate); 
+        $data->setCsoc($csoc); 
+        $data->setMedicalinsurance($medicalinsurance); 
+        $data->setWorkingsite($workingsite); 
+        $data->setDormitory($dormitory); 
+        $data->setHometown($hometown); 
+        $data->setEducation($education); 
+        $data->setMarital($marital); 
+        $data->setAge($age);
+        $data->setConstructionworker($constructionworker); 
         $data->setApplyfor($applyfor);
         $data->setGoodat($goodat);
         $data->setContactno1($contactno1);        
@@ -309,6 +326,15 @@ class Worker_ManageController extends Zend_Controller_Action
         $data->setCertificate($certificate);        
         $data->setRemarks($remarks);
     
+        $this->_em->persist($data);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+        
+        $this->redirect("/worker/manage/");
     }
 
     public function add1Action()
