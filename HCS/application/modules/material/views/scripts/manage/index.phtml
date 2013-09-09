@@ -112,6 +112,10 @@ function showhideupload()
     (display == "none") ? div.show() : div.hide();
 }
 
+function truncateall()
+{
+       
+}
 </script>
 <?php
 $sheet=$this->sheet;
@@ -130,7 +134,7 @@ $maindata=$this->maindata;
     <button data-mini="true" data-theme="a" onclick="showhideupload()">导入材料数据</button>
     </div>
 	<div class="ui-block-c">
-    <button data-mini="true" data-theme="a" onclick="clearworkerdetails()">清空材料数据</button>
+    <a href="/material/import/truncateall"><button data-mini="true" data-theme="a">清空材料数据</button></a>
     </div>
 </div><!-- /grid-b -->
     <div id="uploaddiv">

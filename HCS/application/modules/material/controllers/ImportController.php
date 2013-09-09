@@ -390,10 +390,38 @@ class Material_ImportController extends Zend_Controller_Action
         $this->redirect("/material/manage/");
     }
 
-    public function truncateAction()
+    public function truncateallAction()
     {
-        // TODO: truncate table
+        $this->turnoffview();
+
         // http://stackoverflow.com/questions/9686888/how-to-truncate-a-table-using-doctrine-2
+        // http://stackoverflow.com/questions/5301285/explicitly-set-id-with-doctrine-when-using-auto-strategy
+        // put it here to reset id generator
+        $data = new \Synrgic\Infox\Material();
+        $cmd = $this->_em->getClassMetadata(get_class($data));
+        $connection = $this->_em->getConnection();
+        $dbPlatform = $connection->getDatabasePlatform();
+        $connection->beginTransaction();
+        try {
+            //$connection->query('SET FOREIGN_KEY_CHECKS=0');
+            $q = $dbPlatform->getTruncateTableSql($cmd->getTableName());
+            $connection->executeUpdate($q);
+            //$connection->query('SET FOREIGN_KEY_CHECKS=1');
+            $connection->commit();
+        }
+        catch (\Exception $e) {
+            $connection->rollback();
+            var_dump($e);
+            return;
+        }        
+
+        //$this->redirect("/material/manage");
+
+        /*
+        $this->_em->remove($data);
+        $this->_em->flush();
+        */
     }
+
 
 }
