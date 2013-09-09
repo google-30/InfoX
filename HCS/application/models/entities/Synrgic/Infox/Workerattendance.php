@@ -15,7 +15,7 @@ class Workerattendance extends \Synrgic_Models_Entity {
 
     /**
      * 
-     * @ManyToOne(targetEntity="Synrgic\Infox\Worker")
+     * @ManyToOne(targetEntity="Synrgic\Infox\Workerdetails")
      */
     protected $worker;
 

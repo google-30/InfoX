@@ -5,9 +5,48 @@ $(function() {
         "bRetrieve": true,
     });
 } );
-
 </script>
 <?
+$sheet=$this->sheet;
+$sheetarr=$this->sheetarr;
+$maindata=$this->maindata;
+
+$options="";
+foreach($sheetarr as $tmp)
+{
+    if($sheet == $tmp)
+    {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    }
+    else
+    {
+        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+    }
+
+    $options .= $option;
+}
+$selects='<select data-mini="true" id="sheetselect">';
+$selects.=$options;
+$selects.='</select>';
+echo $selects;
+
+$onswitches=array(
+"sn"=>"S/N","eeeno"=>"E'ee No.","namechs"=>"Name","nameeng"=>"Name Eng","wpno"=>"WP No.", 
+"ppno"=>"PP No.", "rate"=>"RATE",);
+
+$wdtab=$this->grid("Workersdata", true);
+foreach($onswitches as $key=>$value)
+{
+    $wdtab=$wdtab->field($key,$value);
+}
+$wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+$wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
+//$wdtab=$wdtab->helper(new GridHelper_Worker());
+$wdtab=$wdtab->data($maindata)->action(':action', '工地记录', array( 'url'=>array('action'=>'onsiterecord')));
+$wdtab=$wdtab->action(':action', '考勤记录', array( 'url'=>array('action'=>'attendancerecord')));
+echo $wdtab;
+
+/*
 echo $this->grid("Workersdata", true)
           ->field('id','编号')
           ->field('nameeng','英名字')
@@ -24,5 +63,6 @@ echo $this->grid("Workersdata", true)
           ->data($this->workersdata)
           ->action(':action', '工地记录', array( 'url'=>array('action'=>'onsiterecord')))
           ->action(':action', '考勤记录', array( 'url'=>array('action'=>'attendancerecord')));
+*/
 ?>
-<br>
+<br><br>
