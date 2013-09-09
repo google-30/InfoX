@@ -9,6 +9,12 @@ $(function() {
     });
 });
 
+$("#sheetselect").change(function() {
+    var sheetname = $(this).val();
+    var url = "/material/manage?sheet=" + sheetname;
+    redirect(url);
+});
+
 function editfunc()
 {
     var elmNo = 0; 

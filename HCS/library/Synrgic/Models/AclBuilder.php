@@ -136,7 +136,7 @@ class Synrgic_Models_AclBuilder {
             'worker:custominfo'=>array('view', 'postinfo'),
             'worker:import'=>array('view', 'submit','truncateworkerdetails'),
 
-            'material:manage'=>array('view','add','edit','delete','submit','importmaterials'),
+            'material:manage'=>array('view','add','edit','delete','submit','importmaterials', 'previewlist'),
             'material:apply'=>array('view','postdata', 'applymaterials', 'getselections', 'delselection','submitselections', 'applist', 'appedit','appmatdel'),
             'material:appmanage'=>array('view','appedit','appdel','appmatdel','appdetail','updatematapp',
 'submitmatapps','reviewmatapps','rejectmatapps','previewform','previeworder'),
