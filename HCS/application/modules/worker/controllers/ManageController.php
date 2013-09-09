@@ -3,13 +3,6 @@
 define('UPLOAD_WORKER', APPLICATION_PATH. '/data/uploads/workers/images/');
 class Worker_ManageController extends Zend_Controller_Action
 {
-    private $_em;
-    private $_worker;
-    private $_site;
-    private $_workerskill;
-    private $_workercompanyinfo;
-    private $_workerfamily;
-
     private $_files;
 
     public function init()
@@ -101,6 +94,131 @@ class Worker_ManageController extends Zend_Controller_Action
     }
 
     public function workerexpireAction()
+    {
+        $workers = $this->_workerdetails->findAll();
+        $this->getallexp($workers);    
+    }    
+
+    private function getallexp($workers)
+    {
+        if(!count($workers))
+        {
+            return;
+        }        
+        // wpexpiry, ppexpiry, securityexp
+        // wpexpiry
+        $expiredarr = array();
+        $expire1arr = array();
+        $expire2arr = array();        
+
+        foreach($workers as $tmp)
+        {
+            $date = $tmp->getWpexpiry();
+            $now = new DateTime("now");
+            
+            if(!$date)
+            {//no date, then just say it's already expired
+                $expiredarr[] = $tmp; 
+                continue;
+            }
+
+            $interval = $date->diff($now);
+            $invert = $interval->invert;
+            $days = $interval->days;
+            //$mark = $invert ? "+" : "-"; echo $mark . $days . "<br>";
+
+            if(!$invert)
+            {
+                $expiredarr[] = $tmp; 
+            }
+            else if($days <= 30)
+            {
+                $expire1arr[] = $tmp;
+            }
+            else if($days <= 60)
+            {
+                $expire2arr[] = $tmp;
+            }            
+        }
+
+        $this->view->wpexpiryarr = array($expire1arr, $expire2arr, $expiredarr);
+
+        // ppexpiry
+        $expiredarr = array();
+        $expire1arr = array();
+        $expire2arr = array();        
+
+        foreach($workers as $tmp)
+        {
+            $date = $tmp->getPpexpiry();
+            $now = new DateTime("now");
+            
+            if(!$date)
+            {//no date, then just say it's already expired
+                $expiredarr[] = $tmp; 
+                continue;
+            }
+
+            $interval = $date->diff($now);
+            $invert = $interval->invert;
+            $days = $interval->days;
+            //$mark = $invert ? "+" : "-"; echo $mark . $days . "<br>";
+
+            if(!$invert)
+            {
+                $expiredarr[] = $tmp; 
+            }
+            else if($days <= 30)
+            {
+                $expire1arr[] = $tmp;
+            }
+            else if($days <= 60)
+            {
+                $expire2arr[] = $tmp;
+            }            
+        }
+
+        $this->view->ppexpiryarr = array($expire1arr, $expire2arr, $expiredarr);
+
+        // securityexp
+        $expiredarr = array();
+        $expire1arr = array();
+        $expire2arr = array();        
+
+        foreach($workers as $tmp)
+        {
+            $date = $tmp->getSecurityexp();
+            $now = new DateTime("now");
+            
+            if(!$date)
+            {//no date, then just say it's already expired
+                $expiredarr[] = $tmp; 
+                continue;
+            }
+
+            $interval = $date->diff($now);
+            $invert = $interval->invert;
+            $days = $interval->days;
+            //$mark = $invert ? "+" : "-"; echo $mark . $days . "<br>";
+
+            if(!$invert)
+            {
+                $expiredarr[] = $tmp; 
+            }
+            else if($days <= 30)
+            {
+                $expire1arr[] = $tmp;
+            }
+            else if($days <= 60)
+            {
+                $expire2arr[] = $tmp;
+            }            
+        }
+
+        $this->view->securityexparr = array($expire1arr, $expire2arr, $expiredarr);
+    }
+
+    public function workerexpire1Action()
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('w', 'ws')

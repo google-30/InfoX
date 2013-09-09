@@ -106,12 +106,14 @@ class GridHelper_Worker extends Grid_Helper_Abstract
         */    
     }
 
+    /*
     protected function td_securityexp($field, $row) 
     {
         $dateobj = $row["workerskill"]->getSecurityexp();
         $datestr = $dateobj ? $dateobj->format('Y-m-d') : "&nbsp;";
         return $datestr;
     }  
+    */
 
     protected function td_worktype($field, $row) 
     {
@@ -143,6 +145,20 @@ class GridHelper_Worker extends Grid_Helper_Abstract
         return $data ? $data->getCustom4() : "&nbsp;";
     }
 
+    protected function td_securityexp($field, $row) 
+    {
+        return $row[$field] ? $row[$field]->format('Y-m-d') : "&nbsp;";      
+    }
+
+    protected function td_ppexpiry($field, $row) 
+    {
+        return $row[$field] ? $row[$field]->format('Y-m-d') : "&nbsp;";      
+    }
+
+    protected function td_wpexpiry($field, $row) 
+    {
+        return $row[$field] ? $row[$field]->format('Y-m-d') : "&nbsp;";      
+    }
 
 
 }
