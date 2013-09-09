@@ -295,7 +295,19 @@ class Worker_ManageController extends Zend_Controller_Action
         $data->setNamechs($namechs);    
         $data->setNameeng($nameeng);
         $data->setWpno($wpno);
+        $data->setWpexpiry($wpexpiry);
 
+        $data->setApplyfor($applyfor);
+        $data->setApplyfor($applyfor);
+        $data->setApplyfor($applyfor);
+        $data->setApplyfor($applyfor);                        
+
+        $data->setApplyfor($applyfor);
+        $data->setGoodat($goodat);
+        $data->setContactno1($contactno1);        
+        $data->setContactno2($contactno2);        
+        $data->setCertificate($certificate);        
+        $data->setRemarks($remarks);
     
     }
 
