@@ -151,7 +151,7 @@ class Synrgic_Models_AclBuilder {
             'material:type'=>array('view','add', 'edit', 'delete', 'submit','posttype'),
             'company:info'=>array('view','add', 'edit', 'delete', 'submit'),
             'miscinfo:manage'=>array('view','addinfo', 'postinfo', 'edit', 'delete', 'submit'),
-            'infoxsys:manage'=>array('view','addinfo', 'postinfo', 'edit', 'delete', 'submit'),
+            'infoxsys:manage'=>array('view', 'edit', 'submit'),
 		    )
 		),
 	);
