@@ -28,7 +28,17 @@ foreach( $tuples as $tuple ){
     $data->setTypechs($tuple[2]);
 
     $em->persist($data);
-}
+    $em->flush();
 
-$em->flush();
+    $data = $em->getRepository('Synrgic\Infox\Materialtype')->findOneBy(array("typeeng"=>$tuple[1]));    
+    if($data)
+    {
+        $data->setMain($data);
+    }
+    $em->persist($data);
+    $em->flush();
+}
+//$em->flush();
+
+
 ?>

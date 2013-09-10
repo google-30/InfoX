@@ -46,6 +46,8 @@ if( $argc > 1 ){
 	include('data/infox_role.php');
 	include('data/accounts.php');
 	include('data/infox_miscinfo.php');
+        include('data/infox_materialtype.php');
+
 /*	
 	include('data/infox_site.php');
 	include('data/infox_workercompanyinfo.php');
