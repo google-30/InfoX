@@ -95,8 +95,6 @@ class Material_ImportController extends Zend_Controller_Action
         $objPHPExcel = $objReader->load($inputFileName);
         echo '<hr />';
 
-        //$objWorksheet = $objPHPExcel->setActiveSheetIndexByName('safety material');
-
         foreach($sheetarr as $sheetname)
         {
             $objWorksheet = $objPHPExcel->setActiveSheetIndexByName($sheetname);
@@ -322,63 +320,6 @@ class Material_ImportController extends Zend_Controller_Action
 
         // TODO: import supplyprice
 
-/*
-        {
-            $valuearr = array();
-            foreach($indexarr as $idx)
-            {
-                $cell = $objWorksheet->getCell($idx.$i);
-                $value = $cell->getFormattedvalue();
-                echo "value=$value||";
-
-                if($idx=="B" && ($value==""))
-                {
-                    $value = $nameenglast;
-                    echo "valueB=$value||";
-                }
-
-                if($idx=="C" && $value=="")
-                {
-                    $value = $namelast;                
-                }
-
-                $valuearr[] = $value;
-           
-            }
-            echo "<br>";
-            //continue;
-
-            $skipflag = true;
-            foreach($valuearr as $value)
-            {
-                if($value != "")
-                {
-                    $skipflag = false;
-                    break;
-                }
-            }
-
-            if(!$skipflag)
-            {// store data
-                $obj = new \Synrgic\Infox\Material();
-                $obj->setNameeng($valuearr[0]);
-                $obj->setName($valuearr[1]);
-                $obj->setDescription($valuearr[2]);
-                $obj->setUnit($valuearr[3]);
-                $obj->setDono($valuearr[4]);
-
-                $value = date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP($valuearr[5]));
-                $value = new Datetime($value);
-                $obj->setDodate($value);
-
-                $obj->setRate($valuearr[6]);
-                $obj->setQuantity($valuearr[7]);
-                $obj->setAmount($valuearr[8]);
-                $obj->setSuppliers($valuearr[9]);
-                $this->_em->persist($obj);
-            }
-        }            
-*/
         try {
             $this->_em->flush();
         } catch (Exception $e) {
