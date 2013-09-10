@@ -1,19 +1,13 @@
-
 <?php
 $wpexpiryarr=$this->wpexpiryarr;
 $ppexpiryarr=$this->ppexpiryarr;
 $securityexparr=$this->securityexparr;
-
-$securityexp0tab="";
-$securityexp1tab="";
-$securityexp2tab="";
-
 ?>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 
 <div data-role="collapsible" data-collapsed="true">
 <h3>Security Expiry Date</h3>
-
+<a href="/worker/manage/previewexpiry?expiry=securityexp" target="_blank"><button data-mini="true" data-theme="a">预览和打印列表</button></a>
     <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
     <h3>30天到期</h3>
@@ -72,6 +66,7 @@ echo $this->grid("workers2", true)
 <!-- wpexpiryarr -->
 <div data-role="collapsible" data-collapsed="true">
 <h3>WP Expiry</h3>
+<a href="/worker/manage/previewexpiry?expiry=wpexpiry" target="_blank"><button data-mini="true" data-theme="a">预览和打印列表</button></a>
     <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
     <h3>30天到期</h3>
@@ -132,6 +127,7 @@ echo $this->grid("workers2", true)
 <!-- ppexpiryarr -->
 <div data-role="collapsible" data-collapsed="true">
 <h3>PP Expiry</h3>
+<a href="/worker/manage/previewexpiry?expiry=ppexpiry" target="_blank"><button data-mini="true" data-theme="a">预览和打印列表</button></a>
     <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
     <h3>30天到期</h3>

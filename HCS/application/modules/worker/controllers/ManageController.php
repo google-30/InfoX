@@ -95,12 +95,20 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function workerexpireAction()
     {
-        $workers = $this->_workerdetails->findAll();
-        $this->getallexp($workers);    
+        $this->getallexp();    
     }    
 
-    private function getallexp($workers)
+    public function previewexpiryAction()
     {
+        $this->_helper->layout->disableLayout();
+        $exp = $this->getParam("expiry", "");
+        $this->view->expiry = $exp;
+        $this->getallexp();
+    }
+
+    private function getallexp()
+    {
+        $workers = $this->_workerdetails->findAll();
         if(!count($workers))
         {
             return;

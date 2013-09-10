@@ -1,0 +1,125 @@
+<!DOCTYPE html> 
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>工人证件过期</title> 
+	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+    <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+</head> 
+
+<body> 
+<style>
+.grid { width:100%; border-collapse:collapse;}
+.grid td { text-align:center; border:1px solid black;}
+</style>
+<script>
+$(function() {
+    $('.grid').dataTable({ 
+        //"iDisplayLength": 50,
+        //"bRetrieve": true,
+        "bPaginate": false,
+        "bFilter": false,
+        "bInfo": false,
+        "bSort": true,
+    });
+
+} );
+
+</script>
+
+<div data-role="page">
+    <!--
+	<div data-role="header">
+		<h1>工人清单</h1>
+	</div>--><!-- /header -->
+
+	<div data-role="content">	
+
+<?php
+$wpexpiryarr=$this->wpexpiryarr;
+$ppexpiryarr=$this->ppexpiryarr;
+$securityexparr=$this->securityexparr;
+$expiry=$this->expiry;
+if($expiry=="securityexp")
+{
+    echo '<h3>Security Expiry Date</h3>';
+
+    $arr0 = $securityexparr[0];
+    $arr1 = $securityexparr[1];
+    $arr2 = $securityexparr[2];
+
+    $field = "securityexp";
+    $fieldtitle = 'Security Expiry Date';
+}
+else if($expiry=="ppexpiry")
+{
+    echo '<h3>PP Expiry</h3>';
+    $arr0 = $ppexpiryarr[0];
+    $arr1 = $ppexpiryarr[1];
+    $arr2 = $ppexpiryarr[2];
+
+    $field = "ppexpiry";
+    $fieldtitle = 'PP Expiry';
+}
+else if($expiry=="wpexpiry")
+{
+    echo '<h3>WP Expiry</h3>';
+    $arr0 = $wpexpiryarr[0];
+    $arr1 = $wpexpiryarr[1];
+    $arr2 = $wpexpiryarr[2];
+
+    $field = "wpexpiry";
+    $fieldtitle = 'WP Expiry';
+}
+
+echo "<h3>30天到期</h3>";
+echo $this->grid("workers", false)
+          ->field('eeeno','E\'ee No.')
+          ->field('namechs','中文名称')
+          ->field('nameeng', '英文名称')
+          ->field($field, $fieldtitle)
+          ->setSorting(false)  
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Worker())
+          ->data($arr0);
+
+echo "<h3>60天到期</h3>";
+echo $this->grid("workers", false)
+          ->field('eeeno','E\'ee No.')
+          ->field('namechs','中文名称')
+          ->field('nameeng', '英文名称')
+          ->field($field, $fieldtitle)
+          ->setSorting(false)  
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Worker())
+          ->data($arr1);
+
+echo "<h3>已到期</h3>";
+echo $this->grid("workers", false)
+          ->field('eeeno','E\'ee No.')
+          ->field('namechs','中文名称')
+          ->field('nameeng', '英文名称')
+          ->field($field, $fieldtitle)
+          ->setSorting(false)  
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Worker())
+          ->data($arr2);
+
+?>
+
+
+	</div><!-- /content -->
+	<!--
+	<div data-role="footer">
+		<h4>Footer content</h4>
+	</div>--><!-- /footer -->
+	
+</div><!-- /page -->
+
+</body>
+</html>
