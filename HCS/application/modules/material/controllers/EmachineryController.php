@@ -134,7 +134,8 @@ class Material_EmachineryController extends Zend_Controller_Action
     private function getEmachineryMaterials()
     {
         // parent type
-        $typeobj = $this->_materialtype->findOneBy(array("typechs"=>"电动机具"));
+        //$typeobj = $this->_materialtype->findOneBy(array("typechs"=>"电动机具"));
+        $typeobj = $this->_materialtype->findOneBy(array("typeeng"=>"equipment"));
         if(!$typeobj)
         {
             echo "错误：类型不匹配，请检查！";
@@ -150,8 +151,9 @@ class Material_EmachineryController extends Zend_Controller_Action
         {
             $id = $tmp->getId();
             $ids .= $id . ",";
-            $idArr[] = $id;
+            $idArr[] = $id;            
         }
+        echo $ids;        //return;
 
         $qb = $this->_em->createQueryBuilder();
         $qb->add('select', 'm')

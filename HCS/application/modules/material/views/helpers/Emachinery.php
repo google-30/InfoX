@@ -22,10 +22,25 @@ class GridHelper_Emachinery extends Grid_Helper_Abstract
         {
             $name = $row->$field->getName();
             $nameeng = $row->$field->getNameeng();
-            $namelong = $name . "/" . $nameeng;
+            $namelong = $name . "/" . $nameeng;            
             return $namelong;
         }    
     }
+
+    protected function td_description($field, $row) 
+    {
+        if(is_null($row->$field))
+        {
+            return "&nbsp;";
+        }
+        else
+        {
+            $des = "";
+//            $des = $row['material']->getDescription();
+            return $des;
+        }    
+    }
+
 
     protected function td_scrapdate($field, $row) 
     {

@@ -277,7 +277,7 @@ class Material_ImportController extends Zend_Controller_Action
                 $typeobj = $this->_materialtype->findOneBy(array("typeeng"=>$typeeng, "typechs"=>$typechs));                
                 if($typeobj)
                 {
-                    $sbutype = $typeobj;
+                    $subtype = $typeobj;
                 }
                 else
                 {

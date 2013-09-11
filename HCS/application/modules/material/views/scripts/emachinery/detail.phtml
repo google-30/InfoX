@@ -85,7 +85,9 @@ foreach($materials as $tmp)
     $name = $tmp->getName();
     $nameeng = $tmp->getNameeng();
     $namelong = $name . "/" . $nameeng;
-
+    $description = $tmp->getDescription();
+    $namelong .= "/" . $description;
+    
     if($materialid == $id)
     {
         $option = '<option value="'. $id . '" selected>' . $namelong . '</option>';
