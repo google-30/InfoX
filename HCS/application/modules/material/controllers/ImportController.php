@@ -142,6 +142,8 @@ class Material_ImportController extends Zend_Controller_Action
         */
 
         }
+        
+       $this->redirect("/material/manage/");        
     }
 
     private function storeDetails($sheetname, $objWorksheet)
@@ -328,7 +330,6 @@ class Material_ImportController extends Zend_Controller_Action
         }
 
         //return;
-        $this->redirect("/material/manage/");
     }
 
     public function truncateallAction()
@@ -345,7 +346,7 @@ class Material_ImportController extends Zend_Controller_Action
         $connection->beginTransaction();
         try {
             //$connection->query('SET FOREIGN_KEY_CHECKS=0');
-            $q = $dbPlatform->getTruncateTableSql($cmd->getTableName());
+            $q = $dbPlatform->getTruncateTableSql($cmd->getTableName(), true);
             $connection->executeUpdate($q);
             //$connection->query('SET FOREIGN_KEY_CHECKS=1');
             $connection->commit();
@@ -356,7 +357,7 @@ class Material_ImportController extends Zend_Controller_Action
             return;
         }        
 
-        //$this->redirect("/material/manage");
+        $this->redirect("/material/manage");
 
         /*
         $this->_em->remove($data);
