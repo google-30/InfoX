@@ -275,6 +275,8 @@ class Material_ApplyController extends Zend_Controller_Action
             $nameeng = $matobj->getNameeng();
             $longname = $name . "/" . $nameeng;
             $requests["longname"] = $longname;
+            $requests["description"] = $matobj->getDescription();
+            $requests["unit"] = $matobj->getUnit();            
         }
         else
         {//manualinput
@@ -298,6 +300,8 @@ class Material_ApplyController extends Zend_Controller_Action
         echo $this->view->grid("matlist", true)
           ->field('id','材料编号')
           ->field('longname','材料名称')
+          ->field('description','描述')
+            ->field('unit','单位')
           ->field('amount', '数量')
           ->field('sitepart', '工程部位')
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
@@ -328,10 +332,14 @@ class Material_ApplyController extends Zend_Controller_Action
     public function submitselectionsAction()
     {
         $this->turnoffview();
-                
+
+        $appid = $this->getParam("appid", 0);
+        $appobj = $this->_application->findOneBy(array("id"=>$appid));       
+        $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
+                        
         $ans = new Zend_Session_Namespace($this->nsName);
         $appmats = $ans->appmats;        
-        if(count($appmats) == 0)
+        if(count($appmats) == 0 && count($matapps)==0)
         {
             echo "请选择材料，再进行提交";
             return;    
@@ -346,8 +354,6 @@ class Material_ApplyController extends Zend_Controller_Action
         }          
                 
         $siteid = $requests["siteid"];
-        $appid = $this->getParam("appid", 0);
-        //echo "appid=$appid<br>"; return;
         
         $statusArr = array("提交", "审核", "未审核", "批准", "退回");
         // step1. create application

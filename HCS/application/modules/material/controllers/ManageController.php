@@ -142,8 +142,8 @@ class Material_ManageController extends Zend_Controller_Action
         //$data->setPrice(floatval($price));
         $data->setSpec($spec);
         $data->setDescription($description);
-        $data->setMacrotype($mtype);
-        $data->setDetailtype($dtype);
+        //$data->setMacrotype($mtype);
+        //$data->setDetailtype($dtype);
         $data->setUsage($usage);
         $data->setUnit($unit);
 

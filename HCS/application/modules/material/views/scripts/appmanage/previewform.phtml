@@ -25,7 +25,8 @@ border-collapse:collapse;
 #previewtab td, #previewtab th 
 {
 /*font-size:1.2em;*/
-border:1px solid #98bf21;
+/*border:1px solid #98bf21;*/
+border:1px solid gray;
 padding:3px 7px 2px 7px;
 }
 #previewtab th 
@@ -34,7 +35,8 @@ padding:3px 7px 2px 7px;
 text-align:center;
 padding-top:5px;
 padding-bottom:4px;
-background-color:#A7C942;
+/*background-color:#A7C942;*/
+background-color:gray;
 color:#fff;
 }
 #previewtab tr.alt td 
@@ -94,15 +96,17 @@ foreach($matapps as $tmp)
 {
     $id = $tmp->getId();
     $longname = $tmp->getLongname();
-    $spec = "";
+    $description = $spec = "";
     $amount = $tmp->getAmount();
     $unit = $tmp->getUnit();
     $remark = $tmp->getRemark();
+    $materialid = $tmp->getMaterialid();
+    //$description = $material->getDescription();    
     
     $tr = "<tr>";
     $td_id = "<td>$id</td>";
     $td_longname = "<td>$longname</td>";
-    $td_spec = "<td>$spec</td>";
+    $td_spec = "<td>$description</td>";
     $td_amount = "<td>$amount</td>";
     $td_unit = "<td>$unit</td>";
     $td_remark = "<td>$remark</td>";

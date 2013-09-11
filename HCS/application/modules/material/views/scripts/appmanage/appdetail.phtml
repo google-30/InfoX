@@ -51,7 +51,23 @@ foreach($matapps as $tmp)
 
 <h3>申请单详细信息</h3>
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
-
+<hr>
+<table class="" id="appinfotab"><tbody>
+<tr>
+<td><strong>申请工地:</strong></td><td><strong><?php echo $sitename; ?></strong></td>
+<!--<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>-->
+<td><strong>承包公司:</strong></td><td><strong><?php echo $cmyname; ?></strong></td>
+</tr>
+<tr>
+<td><strong>申请人员:</strong></td><td><strong><?php echo $applicantname; ?></strong></td>
+<td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
+</tr>
+<tr>
+<td><strong>申请总价:</strong></td><td><strong><?php echo $totalprice; ?></strong></td>
+<td><strong>申请单号:</strong></td><td><strong><?php echo $appid; ?></strong></td>
+</tr>
+</tbody></table>
+<hr>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
     <h3>预览和打印材料申请单</h3>
@@ -75,26 +91,11 @@ echo $buttons;
     </div>
 </div>
 <hr>
-<table class="" id="appinfotab"><tbody>
-<tr>
-<td><strong>申请工地:</strong></td><td><strong><?php echo $sitename; ?></strong></td>
-<!--<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>-->
-<td><strong>承包公司:</strong></td><td><strong><?php echo $cmyname; ?></strong></td>
-</tr>
-<tr>
-<td><strong>申请人员:</strong></td><td><strong><?php echo $applicantname; ?></strong></td>
-<td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
-</tr>
-<tr>
-<td><strong>申请总价:</strong></td><td><strong><?php echo $totalprice; ?></strong></td>
-<td><strong>申请单号:</strong></td><td><strong><?php echo $appid; ?></strong></td>
-</tr>
-</tbody></table>
-
 <?php
 echo $this->grid("matapps", true)
           ->field('longname','材料名称')
-          ->field('spec','型号规格')
+          //->field('spec','型号规格')
+          ->field('description','描述')          
           ->field('amount','申请数量')
           ->field('unit','单位')
           ->field('sitepart', '工程部位')  

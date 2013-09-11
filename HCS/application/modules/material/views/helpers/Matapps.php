@@ -122,7 +122,15 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
         //return $partArr[0]; 
         return $selects;
     }
-           
+      
+    protected function td_description($field, $row) 
+    {
+        $materialid = $row['materialid'];
+        $em = Zend_Registry::get('em');
+        $matobj = $em->getRepository('Synrgic\Infox\Material')->findOneBy(array("id"=>$materialid));   
+        $return = $matobj ? $matobj->getDescription() : "&nbsp;";             
+        return $return;    
+    }      
 }
 
 ?>
