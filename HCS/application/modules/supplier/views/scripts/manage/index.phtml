@@ -15,7 +15,7 @@ echo $this->grid("Suppliers", true)
           ->paginatorEnabled(false)
           //->helper(new GridHelper_Supplier())
           ->data($this->suppliers)
-          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
-          //->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+          ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
+          ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
-
+<br><br>
