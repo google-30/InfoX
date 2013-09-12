@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>工人证件过期</title> 
+	<title>工人证件到期</title> 
 	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
     <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
     <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
@@ -15,40 +15,33 @@
 <body> 
 <style>
 .grid { width:100%; border-collapse:collapse;}
-.grid td { text-align:center; border:1px solid black;}
+.grid td, .grid th { text-align:center; border:1px solid black; width:25% }
 </style>
 <script>
 $(function() {
+    /*
     $('.grid').dataTable({ 
         //"iDisplayLength": 50,
         //"bRetrieve": true,
         "bPaginate": false,
         "bFilter": false,
         "bInfo": false,
-        "bSort": true,
+        "bSort": false,
     });
-
+    */
 } );
-
 </script>
-
-<div data-role="page">
-    <!--
-	<div data-role="header">
-		<h1>工人清单</h1>
-	</div>--><!-- /header -->
-
-	<div data-role="content">	
 
 <?php
 $wpexpiryarr=$this->wpexpiryarr;
 $ppexpiryarr=$this->ppexpiryarr;
 $securityexparr=$this->securityexparr;
 $expiry=$this->expiry;
+$headerstr="";
 if($expiry=="securityexp")
 {
-    echo '<h3>Security Expiry Date</h3>';
-
+    $headerstr = "安全证到期";
+    
     $arr0 = $securityexparr[0];
     $arr1 = $securityexparr[1];
     $arr2 = $securityexparr[2];
@@ -58,7 +51,8 @@ if($expiry=="securityexp")
 }
 else if($expiry=="ppexpiry")
 {
-    echo '<h3>PP Expiry</h3>';
+    $headerstr = "护照到期";
+
     $arr0 = $ppexpiryarr[0];
     $arr1 = $ppexpiryarr[1];
     $arr2 = $ppexpiryarr[2];
@@ -68,7 +62,8 @@ else if($expiry=="ppexpiry")
 }
 else if($expiry=="wpexpiry")
 {
-    echo '<h3>WP Expiry</h3>';
+    $headerstr = "工作准证到期";
+
     $arr0 = $wpexpiryarr[0];
     $arr1 = $wpexpiryarr[1];
     $arr2 = $wpexpiryarr[2];
@@ -76,6 +71,20 @@ else if($expiry=="wpexpiry")
     $field = "wpexpiry";
     $fieldtitle = 'WP Expiry';
 }
+?>
+<div data-role="page">
+	<div data-role="header">
+		<h1><? echo $headerstr; ?></h1>
+	</div>
+    <!--
+	<div data-role="header">
+		<h1>工人清单</h1>
+	</div>
+    --><!-- /header -->
+
+	<div data-role="content">	
+
+<?
 
 echo "<h3>30天到期</h3>";
 echo $this->grid("workers", false)
