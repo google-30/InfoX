@@ -21,23 +21,14 @@
 	    <class>popup</class>
 	    <pages>
             <worker>
-		    <label>工人信息管理</label>
+		    <label>工人信息</label>
 		    <module>worker</module>
 		    <controller>manage</controller>
 		    <action>index</action>
 		    <resource>worker:manage</resource>
 		    <privilege>view</privilege>
 	        </worker>
-            <!--
-            <workerimport>
-		    <label>工人信息导入</label>
-		    <module>worker</module>
-		    <controller>import</controller>
-		    <action>index</action>
-		    <resource>worker:import</resource>
-		    <privilege>view</privilege>
-	        </workerimport>
-            -->
+
             <workerexpire>
 		    <label>工人证件过期</label>
 		    <module>worker</module>
@@ -56,8 +47,26 @@
 		    <privilege>view</privilege>
 	        </workeronsite>
 
+            <workersalary>
+		    <label>工人工资管理</label>
+		    <module>worker</module>
+		    <controller>import</controller>
+		    <action>index</action>
+		    <resource>worker:import</resource>
+		    <privilege>view</privilege>
+	        </workersalary>
+
+            <workerarchive>
+		    <label>存档工人信息</label>
+		    <module>worker</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>worker:manage</resource>
+		    <privilege>view</privilege>
+	        </workerarchive>
+
 	        <custominfo>
-		    <label>自定义数据</label>
+		    <label>相关数据</label>
 		    <module>worker</module>
 		    <controller>custominfo</controller>
 		    <action>index</action>
@@ -158,6 +167,16 @@
 		    <resource>project:manage</resource>
 		    <privilege>view</privilege>
 	        </project>
+
+	        <attendance>
+		    <label>工地考勤管理</label>
+		    <module>project</module>
+		    <controller>manage</controller>
+		    <action>index</action>
+		    <resource>project:manage</resource>
+		    <privilege>view</privilege>
+	        </attendance>
+
     	</pages>
         </sitemodules>
 
@@ -194,7 +213,7 @@
 	        </companyinfo>
 
 	        <miscinfo>
-		    <label>多重信息设定</label>
+		    <label>信息标签设定</label>
 		    <module>miscinfo</module>
 		    <controller>manage</controller>
 		    <action>index</action>

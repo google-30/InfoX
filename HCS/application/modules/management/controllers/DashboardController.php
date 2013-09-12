@@ -61,7 +61,7 @@ class Management_DashboardController extends Zend_Controller_Action
     private function addPageToGroup($page, &$group) {
         $icon = $page->icon;
         if(!isset($icon)) {
-            $page->icon = '/images/monitor.png';
+            $page->icon = '/images/lightsoff.png';
         }
 
 	/*
