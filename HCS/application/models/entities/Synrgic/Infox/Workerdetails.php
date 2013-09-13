@@ -217,4 +217,9 @@ class Workerdetails extends \Synrgic_Models_Entity {
      */
     protected $workercustominfo;   
 
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $resignation;
+
 }

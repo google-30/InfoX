@@ -410,6 +410,8 @@ class Worker_ManageController extends Zend_Controller_Action
         $contactno2=$this->getParam("contactno2", "");
         $certificate=$this->getParam("certificate", "");
         $remarks=$this->getParam("remarks", "");
+        $resignation=$this->getParam("resignation", "");
+        $resignation = ($resignation=="") ? null : new Datetime($resignation);
 
         /*
         $agent=$this->getParam("sn", "");        
@@ -451,7 +453,8 @@ class Worker_ManageController extends Zend_Controller_Action
         $data->setContactno2($contactno2);        
         $data->setCertificate($certificate);        
         $data->setRemarks($remarks);
-    
+        $data->setResignation($resignation);
+
         $this->_em->persist($data);
         try {
             $this->_em->flush();

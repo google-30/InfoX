@@ -58,20 +58,8 @@ $agent="";
 $remarks="";
 $company="";
 $race="";
-
+$resignation="";
 $pic = "";
-
-// custom info
-$customtitles=$this->customtitles;
-$customtitle1=$customtitles[0];
-$customtitle2=$customtitles[1];
-$customtitle3=$customtitles[2];
-$customtitle4=$customtitles[3];
-
-$custom1="";
-$custom2="";
-$custom3="";
-$custom4="";
 
 if($this->mode == "Edit")
 {
@@ -122,52 +110,9 @@ $agent=$worker->getAgent();
 $remarks=$worker->getRemarks();
 $company=$worker->getCompany();
 $race=$worker->getRace();
-
+$resignation=$worker->getResignation();
+$resignation=$resignation ? $resignation->format('d-M-Y') : "";
 }
-
-
-/*
-$hometown = "";
-$age = 18;
-$birth = "";
-$fin = "";
-$passexp = "";
-$passport = "";
-$passportexp = "";
-$marital = "";
-$address = "";
-$gender="";
-
-$worktype = "";
-$worklevel = "";
-$skill1 = "";
-$skill2 = "";
-$securityexp = "";
-$drvlic = "";
-$education = "";
-$pastwork = "";
-
-//$companylabel = "";
-$hwage = "";
-$sitename = "";
-$siteid=0;
-$srvyears = "";
-$yrsinsing = "";    
-
-$homeaddr = "";
-$member1 = "";
-$member2 = "";
-$member3 = "";
-$contact1 = "";
-$contact2 = "";
-$contact3 = "";
-
-$arrivesing="";
-$leavesing="";
-
-$companyid=0;
-
-$worktypes=$this->worktypes;
 
 // custom info
 $customtitles=$this->customtitles;
@@ -176,93 +121,11 @@ $customtitle2=$customtitles[1];
 $customtitle3=$customtitles[2];
 $customtitle4=$customtitles[3];
 
+$custominfos=$this->custominfos;
 $custom1="";
 $custom2="";
 $custom3="";
 $custom4="";
-
-if($this->mode == "Edit")
-{
-$worker=$this->worker;
-$pic = $worker->getPic();
-$nameeng = $worker->getNameeng();
-$namechs = $worker->getNamechs();
-$hometown = $worker->getHometown();
-$age = $worker->getAge();
-if($worker->getBirth())
-{
-    $birth = $worker->getBirth()->format("Y/m/d");
-}
-$fin = $worker->getFin();
-if($worker->getPassexp())
-{
-    $passexp = $worker->getPassexp()->format("Y/m/d");
-}
-$passport = $worker->getPassport();
-if($worker->getPassportexp())
-{
-    $passportexp = $worker->getPassportexp()->format("Y/m/d");
-}
-$marital = $worker->getMarital();
-$address = $worker->getAddress();
-$gender=$worker->getGender();
-
-$arrivedate = $worker->getArrivesing();
-$arrivesing = $arrivedate ? $arrivedate->format("Y/m/d") : "";
-$leavedate = $worker->getLeavesing();
-$leavesing = $leavedate ? $leavedate->format("Y/m/d"): "";
-
-$skill=$this->skill;
-    if($skill)
-    {
-    $worktype = $skill->getWorktype();
-    $worklevel = $skill->getWorklevel();
-    $skill1 = $skill->getSkill1();
-    $skill2 = $skill->getSkill2();
-    if($skill->getSecurityexp())
-    {        
-        $securityexp = $skill->getSecurityexp()->format("Y/m/d");
-    }
-    $drvlic = $skill->getDrvlic();
-    $education = $skill->getEducation();
-    $pastwork = $skill->getPastwork();
-    }
-
-$companyinfo=$this->companyinfo;
-if($companyinfo)
-{
-    //$companylabel = $companyinfo->getCompanylabel();
-    $hwage = $companyinfo->getHwage();
-
-    $siteobj=$companyinfo->getSite();
-    if($siteobj)
-    {
-        $sitename = $siteobj->getName();
-        $siteid = $siteobj->getId();
-    }
-    $srvyears = $companyinfo->getSrvyears();
-    $yrsinsing = $companyinfo->getYrsinsing();
-
-    $companyobj = $companyinfo->getCompany();
-    if($companyobj)
-    {
-        $companyid = $companyobj->getId();
-    }
-}
-
-$family=$this->family;
-if($family)
-{
-    $homeaddr = $family->getHomeaddr();
-    $member1 = $family->getMember1();
-    $member2 = $family->getMember2();
-    $member3 = $family->getMember3();
-    $contact1 = $family->getContact1();
-    $contact2 = $family->getContact2();
-    $contact3 = $family->getContact3();
-}
-
-$custominfos=$this->custominfos;
 if($custominfos)
 {
     $custom1 = $custominfos->getCustom1();
@@ -270,9 +133,6 @@ if($custominfos)
     $custom3 = $custominfos->getCustom3();
     $custom4 = $custominfos->getCustom4();
 }
-
-}
-*/
 
 $html="";
 if($this->mode == "Create")
@@ -439,6 +299,10 @@ echo $html;
 <div data-role="fieldcontain">
     <label for="remarks">Remarks(Agent):</label>
     <input data-mini="true" type="text" name="remarks" id="remarks" value="<?php echo $remarks; ?>" />
+</div>
+<div data-role="fieldcontain">
+    <label for="resignation">Resignation:</label>
+    <input data-mini="true" type="text" name="resignation" id="resignation" value="<?php echo $resignation; ?>" class="datepicker" />
 </div>
 
 <fieldset>
