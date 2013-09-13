@@ -24,9 +24,19 @@
 <?php foreach($group['pages'] as $page):?>
         <div class='page'>
             <a href='<?php echo $page->getHref();?>'>
-                <img src='<?php echo $page->icon;?>' class='icon' />
+                <img src='<?php echo $page->icon;?>' class='icon' 
+                onmouseover="this.src='<?php echo $page->iconhover;?>'"
+                onmouseout="this.src='<?php echo $page->icon;?>'" 
+                name="<?php echo $page->Label;?>" />
             </a><br>
+            <!--
             <a href='<?php echo $page->getHref();?>'>
+                <?php echo $page->Label;?>
+            </a>
+            -->
+            <a href="<?php echo $page->getHref();?>" 
+            onmouseover="document.<?php echo $page->Label;?>.src='<?php echo $page->iconhover;?>';" 
+            onmouseout="document.<?php echo $page->Label;?>.src='<?php echo $page->icon;?>';">
                 <?php echo $page->Label;?>
             </a>
         </div>
