@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+    ServerName infox
+    DocumentRoot /home/philip/InfoX/HCS/public
+    SetEnv APPLICATION_ENV "development"
+
+    <Directory /home/philip/InfoX/HCS/public>
+            AllowOverride All
+            Order deny,allow
+            Allow from any
+    </Directory>
+</VirtualHost>
