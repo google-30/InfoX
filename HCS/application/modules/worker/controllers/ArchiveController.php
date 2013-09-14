@@ -1,0 +1,75 @@
+<?php
+
+define('UPLOAD_WORKER', APPLICATION_PATH. '/data/uploads/workers/images/');
+class Worker_ArchiveController extends Zend_Controller_Action
+{
+    private $_files;
+
+    public function init()
+    {
+        $this->_em = Zend_Registry::get('em');
+        $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
+        $this->_workercustominfo = $this->_em->getRepository('Synrgic\Infox\Workercustominfo');
+
+        $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
+        $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
+        $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
+    }
+
+    public function indexAction()
+    {
+        $this->getworkerlist();
+        $this->getCustominfo(0);
+    }
+
+    private function getworkerlist()
+    {
+        $requestsheet = $this->getParam("sheet","HC.C");     
+        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
+        $workerarr = array();
+        $allworkers = $this->_workerdetails->findAll();
+
+        foreach($allworkers as $tmp)
+        {
+            $sheet = $tmp->getSheet();
+            if($sheet != $requestsheet)
+            {
+                continue;
+            }
+
+            $date = $tmp->getResignation();
+            $now = new DateTime("now");
+            
+            if(!$date)
+            {//no date = still on duty
+                continue;
+            }
+
+            $interval = $date->diff($now);
+            $invert = $interval->invert;
+            if(!$invert)
+            {
+                $workerarr[] = $tmp; 
+            }         
+        }
+                  
+        $this->view->sheet = $requestsheet;        
+        $this->view->sheetarr = $sheetarr;
+        $this->view->maindata = $workerarr;
+    }
+
+    private function getCustominfo($id)
+    {
+        // titles
+        $label="01";
+        $category="worker";
+        $infoobj = $this->_miscinfo->findOneBy(array("category"=>$category, "label"=>$label));        
+        $values = $infoobj ? $infoobj->getValues() : "";
+        $this->view->customtitles = explode(";", $values);
+
+        // data
+        $workerobj = $this->_workerdetails->findOneBy(array("id"=>$id));
+        $custominfoobj = $workerobj ? $workerobj->getWorkercustominfo() : null;
+        $this->view->custominfos = $custominfoobj ? $custominfoobj : null;        
+    }
+}

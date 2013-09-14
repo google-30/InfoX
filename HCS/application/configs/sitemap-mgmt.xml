@@ -59,9 +59,9 @@
             <workerarchive>
 		    <label>存档工人信息</label>
 		    <module>worker</module>
-		    <controller>manage</controller>
+		    <controller>archive</controller>
 		    <action>index</action>
-		    <resource>worker:manage</resource>
+		    <resource>worker:archive</resource>
 		    <privilege>view</privilege>
 	        </workerarchive>
 

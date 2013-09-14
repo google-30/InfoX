@@ -7,12 +7,6 @@
 </style>
 <script>
 $(document).ready(function() {
-/*
-    $('#datatable').dataTable({ 
-        "iDisplayLength": 50,
-        "bRetrieve": true,
-    });
-*/
     $('#Workersdata').dataTable({ 
         "iDisplayLength": 50,
         "bRetrieve": true,
@@ -63,7 +57,6 @@ function fnShowHide( iCol )
 function infoswitches()
 {
     var sws = $("#infoswitches");    
-
     var display = sws.css("display");
     //alert(display);
 
@@ -81,28 +74,16 @@ function redirect(url) {
     window.location = url;
 }
 
-function showhideupload()
-{
-    var div = $("#uploaddiv");    
-    var display = div.css("display");
-    (display == "none") ? div.show() : div.hide();
-}
-
-function truncateWorkerdetails()
-{
-    alert("清除所有工人数据，尚未实现，hold on...");
-}
-
 $( "#sheetselect" ).change(function() {
     var sheetname = $(this).val();
-    var url = "/worker/manage?sheet=" + sheetname;
+    var url = "/worker/archive?sheet=" + sheetname;
     redirect(url);
 });
 
 function previewlist()
 {
     var sheet = $("#sheetselect").val();
-    var url = "/worker/manage/previewlist?sheet=" + sheet;
+    var url = "/worker/archive/previewlist?sheet=" + sheet;
     window.open (url); 
 }
 
@@ -112,35 +93,9 @@ function previewlist()
 $sheet=$this->sheet;
 $sheetarr=$this->sheetarr;
 $maindata=$this->maindata;
-
 ?>
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
-
-<div data-role="collapsible" data-collapsed="true">
-<h3>功能列表</h3>
-<div class="ui-grid-b">
-	<div class="ui-block-a">
-    <a href="/worker/manage/add"><button data-mini="true" data-theme="a">注册一个工人</button></a>
-    </div>
-	<div class="ui-block-b">
-    <button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人数据</button>
-    </div>
-	<div class="ui-block-c">
-    <a href="/worker/import/truncateworkerdetails"><button data-mini="true" data-theme="a" >清空工人数据</button></a>
-    </div>
-</div><!-- /grid-b -->
-    <div id="uploaddiv">
-    <fieldset>
-    <form action="/worker/import/submit" method="post" enctype="multipart/form-data">
-    上传工人列表(MS Excel file)：
-    <!--<label for="file" class="ui-input-text">上传工人列表(MS Excel file)：</label>-->
-    <input data-mini="true" type="file" name="file" id="file">
-    <input type="submit" value="上传" data-mini="true" data-theme="a">
-    </form>
-    </fieldset>
-    </div>
-</div>
 
 <div data-role="collapsible" data-collapsed="true">
 <h3>列表操作</h3>
@@ -290,62 +245,5 @@ $wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete
 echo $wdtab;
 ?>
 <br><br>
-
-<!--
-<table id="datatable">
-<thead><tr>
-<th>序号</th>
-<th>服务公司</th>
-<th>所在工地</th>
-<th>中文名</th>
-<th>英文名</th>
-<th>准证号码</th>
-<th>工种</th>
-<th>业务水平</th>
-<th>小时工资</th>
-</tr></thead>
-<tbody> 
-<?php
-/*
-$rows="";
-foreach($this->result as $tmp)
-{
-    // worker
-    $id = $tmp[0]['id'];
-    $namechs = $tmp[0]['namechs'];
-    $nameeng = $tmp[0]['nameeng'];;
-    $fin = $tmp[0]['fin'];;
-
-    // skills
-    $worktype = $tmp["worktype"];    
-    $level = $tmp["worklevel"];
-    // company
-    $company = $tmp["companyname"];
-    $site = $tmp["sitename"];
-    $hrwage = $tmp["hwage"];
-
-    $row = "<tr>";
-    //$row .= '<td><a data-role="button" data-theme="a" data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
-    $row .= '<td><a href="/worker/manage/edit?id=' . $id . '"><button data-mini="true" data-theme="a">' . $id . '</button></a></td>' ;
-
-    $row .= "<td>$company</td>";
-    //$row .= "<td>$site</td>" ;
-    $row .= "<td>$namechs</td>";
-    $row .= "<td>$nameeng</td>";
-    $row .= "<td>$fin</td>";
-    $row .= "<td>$worktype</td>";
-    $row .= "<td>$level</td>";
-    //$row .= "<td>$hrwage</td>";
-    $row .= "</tr>";
-    
-    $rows .= $row;
-}
-echo $rows;
-*/
-?>
-</tbody> 
-</table>
-<br><br>
--->
 
 

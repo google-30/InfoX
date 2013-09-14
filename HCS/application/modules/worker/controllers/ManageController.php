@@ -22,6 +22,7 @@ class Worker_ManageController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->getworkerlist();
+        $this->getCustominfo(0);
     }
 
     public function previewlistAction()
