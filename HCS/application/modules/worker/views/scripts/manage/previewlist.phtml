@@ -130,30 +130,9 @@ function previewlist()
 $sheet=$this->sheet;
 $sheetarr=$this->sheetarr;
 $maindata=$this->maindata;
-
-/*
-$options="";
-foreach($sheetarr as $tmp)
-{
-    if($sheet == $tmp)
-    {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    }
-    else
-    {
-        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
-    }
-
-    $options .= $option;
-}
-$selects='<select data-mini="true" id="sheetselect">';
-$selects.=$options;
-$selects.='</select>';
-echo $selects;
-*/
 ?>
 
-<button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
+<button data-theme="a" data-mini="true" onclick="infoswitches()"><? echo $sheet; ?></button>
 <div id="infoswitches">
 <?php
 echo '<div class="ui-grid-d">';
@@ -263,13 +242,11 @@ foreach($offswitches as $key=>$value)
 }
 $wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
 $wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
-//$wdtab=$wdtab->helper(new GridHelper_Worker());
+$wdtab=$wdtab->helper(new GridHelper_Workerdetails());
 $wdtab=$wdtab->data($maindata);
 echo $wdtab;
 
 ?>
-
-
 	</div><!-- /content -->
 	<!--
 	<div data-role="footer">

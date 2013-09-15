@@ -22,6 +22,29 @@ class Worker_ArchiveController extends Zend_Controller_Action
         $this->getCustominfo(0);
     }
 
+    public function editAction()
+    {
+        $id = $this->_getParam("id");
+        //echo "id=$id";
+        $this->view->workerid = $id;
+        $this->view->worker = $worker = $this->_workerdetails->findOneBy(array("id"=>$id));
+
+        $sites = $this->_site->findAll();
+        $this->view->sites = $sites;
+
+        $this->findCompanies();
+        $this->getWorktypes();
+
+        $this->getCustominfo($id);
+    }
+
+    public function previewlistAction()
+    {
+        $this->_helper->layout->disableLayout();        
+        $this->getworkerlist();
+        $this->getCustominfo($id);
+    }
+
     private function getworkerlist()
     {
         $requestsheet = $this->getParam("sheet","HC.C");     
@@ -71,5 +94,18 @@ class Worker_ArchiveController extends Zend_Controller_Action
         $workerobj = $this->_workerdetails->findOneBy(array("id"=>$id));
         $custominfoobj = $workerobj ? $workerobj->getWorkercustominfo() : null;
         $this->view->custominfos = $custominfoobj ? $custominfoobj : null;        
+    }
+
+    private function findCompanies()
+    {
+        $this->view->companies = $this->_companyinfo->findAll(); 
+    }
+
+    private function getWorktypes()
+    {
+        $label = "info04";
+        $values = $this->_miscinfo->findOneBy(array("label"=>$label))->getValues();
+
+        $this->view->worktypes = explode(";", $values);
     }
 }

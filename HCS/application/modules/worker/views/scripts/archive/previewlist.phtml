@@ -1,15 +1,32 @@
+<!DOCTYPE html> 
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>工人清单</title> 
+	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+    <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+</head> 
+
+<body> 
 <style>
 #infoswitches { display: none; }
-#datatable { text-align:center; display:none; }
-#Workersdata { width:100%; }
-#uploaddiv { display: none; }
-/*#featuresdiv { display: none; }*/
+#Workersdata { width:100%; border-collapse:collapse;}
+#Workersdata td { text-align:center; border:1px solid black;}
 </style>
 <script>
 $(document).ready(function() {
     $('#Workersdata').dataTable({ 
-        "iDisplayLength": 50,
-        "bRetrieve": true,
+        //"iDisplayLength": 50,
+        //"bRetrieve": true,
+        "bPaginate": false,
+        "bFilter": false,
+        "bInfo": false,
+        "bSort": true,
     });
 
     fnHideColumns();
@@ -57,6 +74,7 @@ function fnShowHide( iCol )
 function infoswitches()
 {
     var sws = $("#infoswitches");    
+
     var display = sws.css("display");
     //alert(display);
 
@@ -74,20 +92,39 @@ function redirect(url) {
     window.location = url;
 }
 
+function showhideupload()
+{
+    var div = $("#uploaddiv");    
+    var display = div.css("display");
+    (display == "none") ? div.show() : div.hide();
+}
+
+function clearworkerdetails()
+{
+    alert("清除所有工人数据，尚未实现，hold on...");
+}
+
 $( "#sheetselect" ).change(function() {
     var sheetname = $(this).val();
-    var url = "/worker/archive?sheet=" + sheetname;
+    var url = "/worker/manage?sheet=" + sheetname;
     redirect(url);
 });
 
 function previewlist()
 {
     var sheet = $("#sheetselect").val();
-    var url = "/worker/archive/previewlist?sheet=" + sheet;
+    var url = "/worker/manage/previewlist?sheet=" + sheet;
     window.open (url); 
 }
-
 </script>
+
+<div data-role="page">
+    <!--
+	<div data-role="header">
+		<h1>工人清单</h1>
+	</div>--><!-- /header -->
+
+	<div data-role="content">	
 
 <?php
 $sheet=$this->sheet;
@@ -95,20 +132,17 @@ $sheetarr=$this->sheetarr;
 $maindata=$this->maindata;
 ?>
 
-<div data-role="collapsible-set" data-mini="true" data-theme="c">
-
-<div data-role="collapsible" data-collapsed="true">
-<h3>列表操作</h3>
-<button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
+<button data-theme="a" data-mini="true" onclick="infoswitches()"><? echo $sheet; ?></button>
 <div id="infoswitches">
-<div class="ui-grid-d">
 <?php
+echo '<div class="ui-grid-d">';
+
 $onswitches=array(
 "eeeno"=>"E'ee No.","namechs"=>"Name Chs","nameeng"=>"Name Eng","wpno"=>"WP No.", 
 "ppno"=>"PP No.", "resignation"=>"Resignation");
 
 $offswitches=array(
-"sn"=>"S/N", "rate"=>"RATE", "wpexpiry"=>"WP Expiry","doa"=>"D.O.A","issuedate"=>"Date of Issue","finno"=>"Fin No.",
+"sn"=>"S/N", "rate"=>"RATE","wpexpiry"=>"WP Expiry","doa"=>"D.O.A","issuedate"=>"Date of Issue","finno"=>"Fin No.",
 "dob"=>"D.O.B","ppexpiry"=>"PP Expiry","pano"=>"PA Reference  No.", "sbno"=>"Security Bond No.", 
 "securityexp"=>"Security Exprity Date", "worktype"=>"主要工种","arrivaldate"=>"Arrival Date","medicaldate"=>"Medical Date", "csoc"=>"C.S.O.C", "medicalinsuranc"=>"Medical Insurance", "workingsite"=>"WORKING SITE", "dormitory"=>"Dormitory", 
 "hometown"=>"区域", "education"=>"教育程度", "age"=>"年龄", "marital"=>"婚姻状况", 
@@ -195,38 +229,7 @@ foreach($offswitches as $key => $value)
 }
 echo $grids;
 echo '<input type="hidden" id="offcount" value="'. $offcount . '">';
-echo '<hr>';
-?>
-</div><!-- /grid-d -->
-<hr>
-</div>
-<!--<a href="/worker/manage/previewlist" target="_blank"><button data-theme="a" data-mini="true">预览打印</button></a>-->
-<button data-theme="a" data-mini="true" onclick="previewlist()">预览打印</button>
-</div>
-
-</div> <!-- collapsible-set -->
-
-<?php
-
-$options="";
-foreach($sheetarr as $tmp)
-{
-    if($sheet == $tmp)
-    {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    }
-    else
-    {
-        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
-    }
-
-    $options .= $option;
-}
-$selects='<select data-mini="true" id="sheetselect">';
-$selects.=$options;
-$selects.='</select>';
-echo $selects;
-
+echo '<hr></div></div>';
 
 $wdtab=$this->grid("Workersdata", true);
 foreach($onswitches as $key=>$value)
@@ -240,10 +243,19 @@ foreach($offswitches as $key=>$value)
 $wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
 $wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
 $wdtab=$wdtab->helper(new GridHelper_Workerdetails());
-$wdtab=$wdtab->data($maindata)->action(':action', '详情', array( 'url'=>array('action'=>'edit')));
-//$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+$wdtab=$wdtab->data($maindata);
 echo $wdtab;
+
 ?>
-<br><br>
 
 
+	</div><!-- /content -->
+	<!--
+	<div data-role="footer">
+		<h4>Footer content</h4>
+	</div>--><!-- /footer -->
+	
+</div><!-- /page -->
+
+</body>
+</html>

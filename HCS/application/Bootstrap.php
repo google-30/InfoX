@@ -261,7 +261,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->bootstrap('FrontController');
         require_once(APPLICATION_PATH.'/../library/Grid/Helper/Autoloader.php');
 	    //$modules = array('adverts', 'bill', 'gambling', 'information', 'local', 'management', 'noticeboard', 'room', 'service', 'archive');
-    	$modules = array('archive','material','project','humanresource','worker');
+    	$modules = array('archive','material','project','humanresource','workerdetails', 'worker');
 		
 	    $prefixes = array();
 	    foreach($modules as $m) {

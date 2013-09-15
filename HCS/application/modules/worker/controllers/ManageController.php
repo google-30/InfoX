@@ -57,6 +57,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->view->sheet = $requestsheet;        
         $this->view->sheetarr = $sheetarr;
         $this->view->maindata = $workerarr;
+        $this->getCustominfo(0);
     }
 
     public function index1Action()
