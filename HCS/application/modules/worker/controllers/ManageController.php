@@ -36,7 +36,8 @@ class Worker_ManageController extends Zend_Controller_Action
         $requestsheet = $this->getParam("sheet","HC.C");     
         $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
         $workerarr = array();
-                    
+
+        /*                    
         if(!in_array($requestsheet, $sheetarr))
         {
             $allworkers = $this->_workerdetails->findAll();
@@ -53,7 +54,34 @@ class Worker_ManageController extends Zend_Controller_Action
         {
             $workerarr = $this->_workerdetails->findBy(array('sheet'=>$requestsheet));
         }
+        */
 
+        $allworkers = $this->_workerdetails->findAll();
+        foreach($allworkers as $tmp)
+        {
+            $sheet = $tmp->getSheet();
+            if($sheet != $requestsheet)
+            {
+                continue;
+            }
+
+            $date = $tmp->getResignation();
+            $now = new DateTime("now");
+            
+            if(!$date)
+            {//no date = still on duty
+                $workerarr[] = $tmp; 
+                continue;
+            }
+
+            $interval = $date->diff($now);
+            $invert = $interval->invert;
+            if($invert)
+            {
+                $workerarr[] = $tmp; 
+            }         
+        }
+        
         $this->view->sheet = $requestsheet;        
         $this->view->sheetarr = $sheetarr;
         $this->view->maindata = $workerarr;
