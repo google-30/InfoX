@@ -31,10 +31,18 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->getworkerlist();
     }
 
+    private function getSheetarr()
+    {
+        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
+        $this->view->sheetarr = $sheetarr;
+        return $sheetarr;        
+    }
+
     private function getworkerlist()
     {
         $requestsheet = $this->getParam("sheet","HC.C");     
-        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
+        //$sheetarr = array("HC.C","HT.C","HC.B","HT.B");
+        $this->getSheetarr();
         $workerarr = array();
 
         /*                    
@@ -83,7 +91,6 @@ class Worker_ManageController extends Zend_Controller_Action
         }
         
         $this->view->sheet = $requestsheet;        
-        $this->view->sheetarr = $sheetarr;
         $this->view->maindata = $workerarr;
         $this->getCustominfo(0);
     }
@@ -141,6 +148,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $workers = $this->_workerdetails->findAll();
         if(!count($workers))
         {
+            echo "Please import worker list.";
             return;
         }        
         // wpexpiry, ppexpiry, securityexp
@@ -151,6 +159,14 @@ class Worker_ManageController extends Zend_Controller_Action
 
         foreach($workers as $tmp)
         {
+            $date = $tmp->getResignation();
+            $resigned = $this->workerresigned($date);
+            if($resigned)
+            {// do not count resigned workers
+                //echo "found resigned=" . $tmp->getEeeno();
+                continue;
+            }
+
             $date = $tmp->getWpexpiry();
             $now = new DateTime("now");
             
@@ -188,6 +204,14 @@ class Worker_ManageController extends Zend_Controller_Action
 
         foreach($workers as $tmp)
         {
+            $date = $tmp->getResignation();
+            $resigned = $this->workerresigned($date);
+            if($resigned)
+            {// do not count resigned workers
+                //echo "found resigned=" . $tmp->getEeeno();
+                continue;
+            }
+
             $date = $tmp->getPpexpiry();
             $now = new DateTime("now");
             
@@ -225,6 +249,14 @@ class Worker_ManageController extends Zend_Controller_Action
 
         foreach($workers as $tmp)
         {
+            $date = $tmp->getResignation();
+            $resigned = $this->workerresigned($date);
+            if($resigned)
+            {// do not count resigned workers
+                //echo "found resigned=" . $tmp->getEeeno();
+                continue;
+            }
+
             $date = $tmp->getSecurityexp();
             $now = new DateTime("now");
             
@@ -254,6 +286,24 @@ class Worker_ManageController extends Zend_Controller_Action
         }
 
         $this->view->securityexparr = array($expire1arr, $expire2arr, $expiredarr);
+    }
+
+    private function workerresigned($date)
+    {         
+        if(!$date)
+        {
+            return false;
+        }
+
+        $now = new DateTime("now");       
+        $interval = $date->diff($now);
+        $invert = $interval->invert;
+        if(!$invert)
+        {
+            return true;
+        }   
+        
+        return false;
     }
 
     public function workerexpire1Action()
@@ -344,6 +394,8 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->getWorktypes();
 
         $this->getCustominfo(0);
+
+        $this->getSheetarr();
     }
 
     public function editAction()
@@ -360,6 +412,8 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->getWorktypes();
 
         $this->getCustominfo($id);
+
+        $this->getSheetarr();
     }
 
     public function submitAction()
@@ -442,6 +496,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $remarks=$this->getParam("remarks", "");
         $resignation=$this->getParam("resignation", "");
         $resignation = ($resignation=="") ? null : new Datetime($resignation);
+        $sheet=trim($this->getParam("sheet", ""));
 
         /*
         $agent=$this->getParam("sn", "");        
@@ -484,6 +539,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $data->setCertificate($certificate);        
         $data->setRemarks($remarks);
         $data->setResignation($resignation);
+        $data->setSheet($sheet);
 
         $this->_em->persist($data);
         try {

@@ -20,6 +20,14 @@ class Worker_ArchiveController extends Zend_Controller_Action
     {
         $this->getworkerlist();
         $this->getCustominfo(0);
+        $this->getSheetarr();
+    }
+
+    private function getSheetarr()
+    {
+        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
+        $this->view->sheetarr = $sheetarr;
+        return $sheetarr;        
     }
 
     public function editAction()
@@ -36,6 +44,8 @@ class Worker_ArchiveController extends Zend_Controller_Action
         $this->getWorktypes();
 
         $this->getCustominfo($id);
+
+        $this->getSheetarr();
     }
 
     public function previewlistAction()
@@ -48,7 +58,8 @@ class Worker_ArchiveController extends Zend_Controller_Action
     private function getworkerlist()
     {
         $requestsheet = $this->getParam("sheet","HC.C");     
-        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
+        $this->getSheetarr();
+
         $workerarr = array();
         $allworkers = $this->_workerdetails->findAll();
 
@@ -77,7 +88,6 @@ class Worker_ArchiveController extends Zend_Controller_Action
         }
                   
         $this->view->sheet = $requestsheet;        
-        $this->view->sheetarr = $sheetarr;
         $this->view->maindata = $workerarr;
     }
 

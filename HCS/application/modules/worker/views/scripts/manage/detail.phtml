@@ -60,6 +60,8 @@ $company="";
 $race="";
 $resignation="";
 $pic = "";
+$sheet="";
+$sheetarr=$this->sheetarr;
 
 if($this->mode == "Edit")
 {
@@ -113,6 +115,7 @@ $company=$worker->getCompany();
 $race=$worker->getRace();
 $resignation=$worker->getResignation();
 $resignation=$resignation ? $resignation->format('Y/m/d') : "";
+$sheet=$worker->getSheet();
 }
 
 // custom info
@@ -164,6 +167,28 @@ echo $html;
 </div></td>
 </tr>
 </table>
+
+<div data-role="fieldcontain">
+    <label for="sheet">所属公司:</label>
+    <!--<input data-mini="true" type="text" name="sheet" id="sheet" value="<?php echo $sheet; ?>" />-->
+    <select id="sheet" name="sheet" data-mini="true">
+<?php
+$options="";
+foreach($sheetarr as $tmp)
+{
+    if($tmp == $sheet)
+    {
+        $options .= "<option value=$tmp selected>$tmp</option>";
+    }
+    else
+    {
+        $options .= "<option value=$tmp>$tmp</option>";
+    }
+}
+echo $options;
+?>
+    </select>
+</div>
 
 <div data-role="fieldcontain">
     <label for="sn">S/N:</label>

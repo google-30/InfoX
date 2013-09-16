@@ -227,7 +227,8 @@ $selects.=$options;
 $selects.='</select>';
 echo $selects;
 
-
+if(count($maindata))
+{
 $wdtab=$this->grid("Workersdata", true);
 foreach($onswitches as $key=>$value)
 {
@@ -243,6 +244,11 @@ $wdtab=$wdtab->helper(new GridHelper_Workerdetails());
 $wdtab=$wdtab->data($maindata)->action(':action', '详情', array( 'url'=>array('action'=>'edit')));
 //$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 echo $wdtab;
+}
+else
+{
+echo "No data found;";
+} 
 ?>
 <br><br>
 

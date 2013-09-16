@@ -6,7 +6,7 @@ $securityexparr=$this->securityexparr;
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 
 <div data-role="collapsible" data-collapsed="true">
-<h3>Security Expiry Date</h3>
+<h3>安全证/Security Expiry Date</h3>
 <a href="/worker/manage/previewexpiry?expiry=securityexp" target="_blank"><button data-mini="true" data-theme="a">预览和打印列表</button></a>
     <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
@@ -21,7 +21,9 @@ echo $this->grid("workers0", false)
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Worker())
-          ->data($securityexparr[0]);
+          ->data($securityexparr[0])
+          ->actionField(':action', "", '&nbsp;|&nbsp;')  
+          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));;
 ?>
     </div>
     </div>
@@ -38,7 +40,9 @@ echo $this->grid("workers1", true)
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Worker())
-          ->data($securityexparr[1]);
+          ->data($securityexparr[1])
+          ->actionField(':action', "", '&nbsp;|&nbsp;')  
+          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));;
 ?>
     </div>
     </div>
@@ -55,7 +59,9 @@ echo $this->grid("workers2", true)
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Worker())
-          ->data($securityexparr[2]);;
+          ->data($securityexparr[2])
+          ->actionField(':action', "", '&nbsp;|&nbsp;')  
+          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));;
 ?>
     </div>
     </div>
@@ -65,7 +71,7 @@ echo $this->grid("workers2", true)
 </div>
 <!-- wpexpiryarr -->
 <div data-role="collapsible" data-collapsed="true">
-<h3>WP Expiry</h3>
+<h3>工作准证/WP Expiry</h3>
 <a href="/worker/manage/previewexpiry?expiry=wpexpiry" target="_blank"><button data-mini="true" data-theme="a">预览和打印列表</button></a>
     <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
@@ -81,7 +87,9 @@ echo $this->grid("workers0", false)
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Worker())
-          ->data($wpexpiryarr[0]);
+          ->data($wpexpiryarr[0])
+          ->actionField(':action', "", '&nbsp;|&nbsp;')  
+          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));
 ?>
     </div>
     </div>
@@ -99,7 +107,9 @@ echo $this->grid("workers1", true)
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Worker())
-          ->data($wpexpiryarr[1]);
+          ->data($wpexpiryarr[1])
+          ->actionField(':action', "", '&nbsp;|&nbsp;')  
+          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));;
 ?>
     </div>
     </div>
@@ -117,7 +127,9 @@ echo $this->grid("workers2", true)
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Worker())
-          ->data($wpexpiryarr[2]);;
+          ->data($wpexpiryarr[2])
+          ->actionField(':action', "", '&nbsp;|&nbsp;')  
+          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));
 ?>
     </div>
     </div>
@@ -126,7 +138,7 @@ echo $this->grid("workers2", true)
 
 <!-- ppexpiryarr -->
 <div data-role="collapsible" data-collapsed="true">
-<h3>PP Expiry</h3>
+<h3>护照/PP Expiry</h3>
 <a href="/worker/manage/previewexpiry?expiry=ppexpiry" target="_blank"><button data-mini="true" data-theme="a">预览和打印列表</button></a>
     <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
@@ -142,7 +154,9 @@ echo $this->grid("workers0", false)
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Worker())
-          ->data($ppexpiryarr[0]);
+          ->data($ppexpiryarr[0])
+          ->actionField(':action', "", '&nbsp;|&nbsp;')  
+          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));
 ?>
     </div>
     </div>
@@ -160,7 +174,9 @@ echo $this->grid("workers1", false)
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Worker())
-          ->data($ppexpiryarr[1]);
+          ->data($ppexpiryarr[1])
+          ->actionField(':action', "", '&nbsp;|&nbsp;')
+          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));;
 ?>
     </div>
     </div>
@@ -178,7 +194,9 @@ echo $this->grid("workers2", false)
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Worker())
-          ->data($ppexpiryarr[2]);
+          ->data($ppexpiryarr[2])
+          ->actionField(':action', "", '&nbsp;|&nbsp;')  
+          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));
 ?>
     </div>
     </div>
