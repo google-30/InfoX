@@ -1,10 +1,16 @@
 <?php
+include 'InfoX/infox_worker.php';
 
 class Worker_OnsiteController extends Zend_Controller_Action
 {
     public function init()
     {
         $this->_em = Zend_Registry::get('em');
+        $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
+        $this->_workeronsite = $this->_em->getRepository('Synrgic\Infox\Workeronsite');
+        $this->_workerattendance = $this->_em->getRepository('Synrgic\Infox\Workerattendance');
+        $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
+        $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
 
         /*
         $this->_worker = $this->_em->getRepository('Synrgic\Infox\Worker');
@@ -13,20 +19,14 @@ class Worker_OnsiteController extends Zend_Controller_Action
         $this->_workerfamily = $this->_em->getRepository('Synrgic\Infox\Workerfamily');
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
         */
-
-        $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
-        $this->_workeronsite = $this->_em->getRepository('Synrgic\Infox\Workeronsite');
-        $this->_workerattendance = $this->_em->getRepository('Synrgic\Infox\Workerattendance');
-        $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
-        $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
     }
 
     private function getworkerlist()
     {
-        $requestsheet = $this->getParam("sheet","HC.C");     
-        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
-        $workerarr = array();
-                    
+        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+        $requestsheet = $this->getParam("sheet", $sheetarr[0]);
+
+        $workerarr = array();                    
         if(!in_array($requestsheet, $sheetarr))
         {
             $allworkers = $this->_workerdetails->findAll();
@@ -44,14 +44,15 @@ class Worker_OnsiteController extends Zend_Controller_Action
             $workerarr = $this->_workerdetails->findBy(array('sheet'=>$requestsheet));
         }
 
-        $this->view->sheet = $requestsheet;        
-        $this->view->sheetarr = $sheetarr;
+        $this->view->sheet = $requestsheet;
         $this->view->maindata = $workerarr;
     }
 
     public function indexAction()
     {
-        $this->getworkerlist();
+        //$this->getworkerlist();
+        //infox_worker::getSheetarr();
+        infox_worker::getworkerlist();
     }
 
     public function index1Action()

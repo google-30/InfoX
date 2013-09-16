@@ -1,4 +1,5 @@
 <?php
+include 'InfoX/infox_worker.php';
 
 define('UPLOAD_WORKER', APPLICATION_PATH. '/data/uploads/workers/images/');
 class Worker_ManageController extends Zend_Controller_Action
@@ -31,18 +32,11 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->getworkerlist();
     }
 
-    private function getSheetarr()
-    {
-        $sheetarr = array("HC.C","HT.C","HC.B","HT.B");
-        $this->view->sheetarr = $sheetarr;
-        return $sheetarr;        
-    }
-
     private function getworkerlist()
     {
-        $requestsheet = $this->getParam("sheet","HC.C");     
-        //$sheetarr = array("HC.C","HT.C","HC.B","HT.B");
-        $this->getSheetarr();
+        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+
+        $requestsheet = $this->getParam("sheet",$sheetarr[0]);     
         $workerarr = array();
 
         /*                    
@@ -395,7 +389,7 @@ class Worker_ManageController extends Zend_Controller_Action
 
         $this->getCustominfo(0);
 
-        $this->getSheetarr();
+        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
     }
 
     public function editAction()
@@ -413,7 +407,7 @@ class Worker_ManageController extends Zend_Controller_Action
 
         $this->getCustominfo($id);
 
-        $this->getSheetarr();
+        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
     }
 
     public function submitAction()
