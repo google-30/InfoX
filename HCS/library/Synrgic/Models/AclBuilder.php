@@ -144,15 +144,19 @@ class Synrgic_Models_AclBuilder {
             'material:emachinery'=>array('view','add','edit','delete','submit','onsiterecord','addrecord','updaterecord', 'deleterecord',),
             'material:import'=>array('view', 'submit', 'truncateall'),
 
-            'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
-            'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit', 
 'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery','applist','allmaterials','siteinfo'),
+            'project:attendance'=>array('view','add', 'edit', 'delete', 'submit'),
+
+            'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
+            'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  
             'humanresource:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'material:type'=>array('view','add', 'edit', 'delete', 'submit','posttype'),
             'company:info'=>array('view','add', 'edit', 'delete', 'submit'),
             'miscinfo:manage'=>array('view','addinfo', 'postinfo', 'edit', 'delete', 'submit'),
             'infoxsys:manage'=>array('view', 'edit', 'submit'),
+
+
 		    )
 		),
 	);

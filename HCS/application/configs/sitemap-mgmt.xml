@@ -90,16 +90,7 @@
 		    <resource>material:manage</resource>
 		    <privilege>view</privilege>
 	        </material>
-            <!--
-            <materialimport>
-		    <label>材料信息导入</label>
-		    <module>material</module>
-		    <controller>import</controller>
-		    <action>index</action>
-		    <resource>material:import</resource>
-		    <privilege>view</privilege>
-	        </materialimport>
-            -->    
+ 
 	        <emachinery>
 		    <label>电动机具管理</label>
 		    <module>material</module>
@@ -171,9 +162,9 @@
 	        <attendance>
 		    <label>工地考勤管理</label>
 		    <module>project</module>
-		    <controller>manage</controller>
+		    <controller>attendance</controller>
 		    <action>index</action>
-		    <resource>project:manage</resource>
+		    <resource>project:attendance</resource>
 		    <privilege>view</privilege>
 	        </attendance>
 

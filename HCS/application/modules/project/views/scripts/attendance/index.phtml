@@ -1,0 +1,34 @@
+<style>
+.wizard { text-align:center; }
+</style>
+<?php
+$role=$this->role;
+$displayblk = 0;
+$style="";    
+if($role=="leader")
+{
+    $displayblk = 1;
+    $style='style="display:none"';
+}
+?>
+
+<div id="appmessage">
+</div> <!-- appmessage -->
+
+<div class="wizard">
+<fieldset>
+    <legend>选择考勤工地和月份</legend>
+    <button onclick="">选择考勤</button>
+    <p>点击按钮，选择工地和月份，开始考勤</p>
+</fieldset>
+</div>
+
+<!--
+<div class="wizard" <?php echo $style; ?> >
+<fieldset>
+    <a href="/material/apply/applist"><button onclick="showeditapp()">更新申请</button></a>
+    <p>点击按钮，更新之前的申请</p>
+</fieldset>
+-->
+<br>
+
