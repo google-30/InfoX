@@ -19,12 +19,15 @@ function redirect(url)
 }
 
 function openpage(datestr)
-{
-    alert(datestr);
+{    
     $siteid = $("#siteid").val();
 
-    var url = "/project/attendance/"
-    window.open(datestr);
+    var url = "/project/attendance/attendancepage?";
+    url += "&siteid=" + $siteid;
+    url += "&month=" + datestr; 
+    //alert(url);
+
+    window.open(url);
 }
 </script>
 <?php
@@ -34,7 +37,7 @@ $sites=$this->sites;
 $workingmonths=$this->workingmonths;
 ?>
 
-<input id="siteid" value="<? echo $siteid; ?>">
+<input type="hidden" id="siteid" value="<? echo $siteid; ?>">
 <select id="sites" data-mini="true">
 <option value=0>请选择工地</option>
 <?php
@@ -61,6 +64,9 @@ echo $options;
 <legend>选择月份</legend>
 <div class="ui-grid-d">
 <?php
+$nowdate=new Datetime("now");
+$currentmonth=$nowdate->format("m");
+$currentyear=$nowdate->format("Y");
 $count=0;
 $grids="";
 foreach($workingmonths as $tmp)
@@ -89,7 +95,17 @@ foreach($workingmonths as $tmp)
 
     $datestr = $tmp->format("Y-m");    
     $datestr1 = $tmp->format("Ym");    
-    $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')">'. $datestr . "</button>";
+
+    $year = $tmp->format("Y");
+    $month = $tmp->format("m");
+    if($year==$currentyear && $month==$currentmonth)
+    {
+        $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')" data-theme="a">'. $datestr . "</button>";        
+    }
+    else
+    {
+        $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')">'. $datestr . "</button>";
+    }
 
     $grid = '<div class="ui-block-' . $block . '">' . $button . "</div>\n";
     $grids .= $grid;      

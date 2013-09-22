@@ -1,4 +1,5 @@
 <?php
+include 'InfoX/infox_common.php';
 include 'InfoX/infox_project.php';
 include 'InfoX/infox_user.php';
 
@@ -106,8 +107,19 @@ class Project_AttendanceController extends Zend_Controller_Action
         return $dateArr;
     }
 
-    public function submitAction()
+    public function attendancepageAction()
     {
+        infox_common::turnoffLayout($this->_helper);
+
+        $siteid = $this->getParam("siteid", 0);
+        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+        $this->view->site = $siteobj;
+
+        $monthstr = $this->getParam("month", "");
+        $date = new Datetime($monthstr);
+        $this->view->date=$date;
+        
+        
     }
 
 }
