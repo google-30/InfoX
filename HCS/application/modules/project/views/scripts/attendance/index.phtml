@@ -1,34 +1,102 @@
 <style>
 .wizard { text-align:center; }
 </style>
-<?php
-$role=$this->role;
-$displayblk = 0;
-$style="";    
-if($role=="leader")
+<script>
+$('#sites').change(siteReload);
+function siteReload()
 {
-    $displayblk = 1;
-    $style='style="display:none"';
+    var siteid = $("#sites").val();    
+
+    var url = "/project/attendance?";
+    url += "&siteid=" + siteid;
+    //alert(url);
+    redirect(url);
 }
+
+function redirect(url) 
+{
+	window.location = url;
+}
+
+function openpage(datestr)
+{
+    alert(datestr);
+    $siteid = $("#siteid").val();
+
+    var url = "/project/attendance/"
+    window.open(datestr);
+}
+</script>
+<?php
+$siteid=0;
+$siteid=$this->siteid;
+$sites=$this->sites;
+$workingmonths=$this->workingmonths;
 ?>
 
-<div id="appmessage">
-</div> <!-- appmessage -->
+<input id="siteid" value="<? echo $siteid; ?>">
+<select id="sites" data-mini="true">
+<option value=0>请选择工地</option>
+<?php
+$options = '';
+foreach($sites as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
 
-<div class="wizard">
+    if($siteid == $id)
+    {
+        echo '<option value="' . $id . '" selected>' . $name . "</option>";
+    }
+    else
+    {
+        echo '<option value="' . $id . '" >' . $name . "</option>";
+    }
+}
+echo $options;
+?>
+</select>
+
 <fieldset>
-    <legend>选择考勤工地和月份</legend>
-    <button onclick="">选择考勤</button>
-    <p>点击按钮，选择工地和月份，开始考勤</p>
-</fieldset>
+<legend>选择月份</legend>
+<div class="ui-grid-d">
+<?php
+$count=0;
+$grids="";
+foreach($workingmonths as $tmp)
+{
+    //$oncount++;
+    $count++;
+    $block="a";
+    switch ($count) {
+        case 1:
+            $block = "a";
+            break;
+        case 2:
+            $block = "b";
+            break;
+        case 3:
+            $block = "c";
+            break;
+        case 4:
+            $block = "d";
+            break;
+        case 5:
+            $block = "e";
+            $count = 0;
+            break;
+    }
+
+    $datestr = $tmp->format("Y-m");    
+    $datestr1 = $tmp->format("Ym");    
+    $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')">'. $datestr . "</button>";
+
+    $grid = '<div class="ui-block-' . $block . '">' . $button . "</div>\n";
+    $grids .= $grid;      
+}
+echo $grids;
+?>
 </div>
-
-<!--
-<div class="wizard" <?php echo $style; ?> >
-<fieldset>
-    <a href="/material/apply/applist"><button onclick="showeditapp()">更新申请</button></a>
-    <p>点击按钮，更新之前的申请</p>
 </fieldset>
--->
 <br>
 
