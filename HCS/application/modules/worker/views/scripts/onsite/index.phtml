@@ -5,6 +5,16 @@ $(function() {
         "bRetrieve": true,
     });
 } );
+
+$( "#sheetselect" ).change(function() {
+    var sheetname = $(this).val();
+    var url = "/worker/onsite?sheet=" + sheetname;
+    redirect(url);
+});
+
+function redirect(url) {
+    window.location = url;
+}
 </script>
 <?
 $sheet=$this->sheet;

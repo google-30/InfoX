@@ -2,7 +2,7 @@
 
 class infox_worker
 {
-    private static $_em = Zend_Registry::get('em');
+    //private static $_em = Zend_Registry::get('em');
     //private static $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
 
     public function init()
@@ -24,10 +24,14 @@ class infox_worker
         return $sheetarr;        
     }    
 
+    /*
     public static function getworkerlist()
     {
+        $_em = Zend_Registry::get('em');
+        $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
+
         $workerarr = array();
-        $allworkers = $workerdetails->findAll();
+        $allworkers = $_workerdetails->findAll();
         foreach($allworkers as $tmp)
         {
             $sheet = $tmp->getSheet();
@@ -57,7 +61,30 @@ class infox_worker
 
         return $workerarr;
     }
+    */
 
+    public static function getworkerlistbysheet($sheet)
+    {
+        $_em = Zend_Registry::get('em');
+        $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
+
+        $workerarr = array();
+        $allworkers = $_workerdetails->findBy(array("sheet"=>$sheet));
+        foreach($allworkers as $tmp)
+        {
+            $date = $tmp->getResignation();
+            if(self::workerresigned($date))
+            {
+                continue;
+            }
+            else
+            {
+                $workerarr[] = $tmp; 
+            }         
+        }
+
+        return $workerarr;
+    }
 
     private function workerresigned($date)
     {         
@@ -77,4 +104,35 @@ class infox_worker
         return false;
     }
 
+
+    // TODO: check date, only worker in date return
+    public static function getworkerlistbysitedateobj($siteobj, $dateobj)
+    {
+        $_em = Zend_Registry::get('em');
+        $_workeronsite = $_em->getRepository('Synrgic\Infox\Workeronsite');
+
+        $workerarr= array();
+        $records = $_workeronsite->findBy(array("site"=>$siteobj));
+        foreach($records as $tmp)
+        {
+            $worker = $tmp->getWorker();
+            $flag = false;
+            foreach($workerarr as $tmp1)
+            {
+                if($worker->getId() == $tmp1->getId())
+                {
+                    $flag = true;
+                    break;
+                }
+                
+            }
+
+            if(!$flag)
+            {
+                $workerarr[] = $worker;
+            }
+        }
+        
+        return $workerarr;    
+    }
 }

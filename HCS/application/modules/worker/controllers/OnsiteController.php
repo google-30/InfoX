@@ -50,9 +50,10 @@ class Worker_OnsiteController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        //$this->getworkerlist();
-        //infox_worker::getSheetarr();
-        infox_worker::getworkerlist();
+        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();        
+        $sheet = $this->getParam("sheet", "HC.C");
+        $this->view->maindata = infox_worker::getworkerlistbysheet($sheet);
+        $this->view->sheet = $sheet;
     }
 
     public function index1Action()
@@ -101,15 +102,17 @@ class Worker_OnsiteController extends Zend_Controller_Action
         $id = $this->getParam("id", 0);
         $begin = $this->getParam("begin", "");
         $end = $this->getParam("end", "");
-        $siteid = $this->getParam("site", 0);    
         $worker = $this->_workerdetails->findOneBy(array("id"=>$id));
+        $siteid = $this->getParam("site", 0);    
         $site = $this->_site->findOneBy(array("id"=>$siteid));
-
+        $payment = $this->getParam("payment", "计时");
+        
         $data = new \Synrgic\Infox\Workeronsite();
         $data->setWorker($worker);
         $data->setSite($site);
         $data->setBegindate(new DateTime($begin));
         $data->setEnddate(new DateTime($end));
+        $data->setPayment($payment);
 
         $this->_em->persist($data);
         try {
@@ -122,7 +125,7 @@ class Worker_OnsiteController extends Zend_Controller_Action
         $this->redirect("/worker/onsite/onsiterecord/id/" . $id);  
     }
 
-    public function updaterecordAction()
+    public function updaterecordAction1()
     {
         $this->turnoffview();
 
@@ -141,6 +144,9 @@ class Worker_OnsiteController extends Zend_Controller_Action
         $site = $this->_site->findOneBy(array("id"=>$siteid));
         $record->setSite($site);
 
+        $payment = $this->getParam("payment", "计时");        
+        $data->setPayment($payment);
+
         $this->_em->persist($record);
         try {
             $this->_em->flush();
@@ -150,6 +156,42 @@ class Worker_OnsiteController extends Zend_Controller_Action
         }   
 
         echo "更新成功";   
+    }
+
+    public function updaterecordAction()
+    {
+        $this->turnoffview();
+
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }    
+
+        $id = $this->getParam("id", 0);        
+        $record = $this->_workeronsite->findOneBy(array("id"=>$id));
+        $this->storerecord($record);
+
+        echo "更新成功";   
+    }
+
+    private function storerecord($record)
+    {
+        $begin = $this->getParam("begindate", "");
+        $end = $this->getParam("enddate", "");
+        $siteid = $this->getParam("siteid", 0);
+        $payment = $this->getParam("payment", "计时");        
+
+        $record->setBegindate(new DateTime($begin));
+        $record->setEnddate(new DateTime($end));        
+        $site = $this->_site->findOneBy(array("id"=>$siteid));
+        $record->setSite($site);
+        $record->setPayment($payment);
+
+        $this->_em->persist($record);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }           
     }
 
     public function deleterecordAction()

@@ -27,9 +27,10 @@ function updaterecord(id)
     var begindate = $("#begindate" + id).val();
     var enddate = $("#enddate" + id).val();
     var siteid = $("#site" + id).val();
+    var payment = $("#payment").val();
 
     $.post("/worker/onsite/updaterecord", 
-        { id: id, begindate:begindate, enddate:enddate, siteid:siteid }, 
+        { id: id, begindate:begindate, enddate:enddate, siteid:siteid, payment:payment }, 
         function(data) {
             alert(data);
             //console.log(data);            
@@ -66,7 +67,8 @@ $id=$this->id;
 echo $this->grid("Recordlist", true)
           ->field('begindate1','起始日期')
           ->field('enddate1','结束日期')
-          ->field('site1', '所在工地')  
+          ->field('site1', '所在工地') 
+          ->field('payment1', '考勤方式')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')
           ->paginatorEnabled(false)
           ->setSorting(false)  
@@ -105,6 +107,23 @@ echo $options;
 ?>
 	</select>
 </div>
+
+<div data-role="fieldcontain">
+	<label for="site" class="select">考勤方式:</label>
+	<select name="site" id="site" data-mini="true">		
+<?php
+$payments=array("计时", "计件");
+$options="";
+foreach($payments as $tmp)
+{
+    $option = "<option value=$tmp>$tmp</option>";
+    $options .= $option;
+}
+echo $options;
+?>
+	</select>
+</div>
+
 <input type="button" onclick="addrecord()" value="添加" data-mini="true" data-theme="a">
 </form>
 </div>
@@ -115,7 +134,8 @@ echo $options;
 echo $this->grid("Recordedit", true)
           ->field('begindate','起始日期')
           ->field('enddate','结束日期')
-          ->field('site', '所在工地')  
+          ->field('site', '所在工地') 
+          ->field('payment', '考勤方式')  
           ->field('update', '更新')
           ->field('delete', '删除')  
           ->actionField(':action', "", '&nbsp;|&nbsp;')

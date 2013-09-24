@@ -50,6 +50,31 @@ class GridHelper_Workeronsite extends Grid_Helper_Abstract
         return $select;    
     }
 
+    protected function td_payment($field, $row) 
+    {
+        $id = $row["id"];
+        $curpay = $row[$field];
+        $payments=array("计时", "计件");
+        $select = '<select name="payment" id="payment" data-mini="true">';
+        $options="";
+        foreach($payments as $tmp)
+        {
+            if($tmp == $curpay)
+            {
+                $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+            }
+            else
+            {
+                $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+            }
+            $options .= $option;
+        }
+ 
+        $select .= $options . "</select>";
+
+        return $select;    
+    }
+
     protected function td_days($field, $row) 
     {
         $id = $row["id"];    
@@ -130,6 +155,13 @@ class GridHelper_Workeronsite extends Grid_Helper_Abstract
         $sitename = $site ? $site->getName() : "&nbsp;";
 
         return $sitename;        
+    }
+
+    protected function td_payment1($field, $row) 
+    {
+        $col = "payment";
+        $payment = $row[$col];
+        return $payment ? $payment : "&nbsp;";        
     }
 
     protected function td_days1($field, $row) 
