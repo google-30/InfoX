@@ -43,5 +43,9 @@ class Workeronsite extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $remark;
-    
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $payment;    
 }

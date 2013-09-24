@@ -31,7 +31,7 @@ function openpage(datestr)
 }
 </script>
 <?php
-$siteid=0;
+//$siteid=0;
 $siteid=$this->siteid;
 $sites=$this->sites;
 $workingmonths=$this->workingmonths;
@@ -69,6 +69,8 @@ $currentmonth=$nowdate->format("m");
 $currentyear=$nowdate->format("Y");
 $count=0;
 $grids="";
+if(count($workingmonths))
+{
 foreach($workingmonths as $tmp)
 {
     //$oncount++;
@@ -109,6 +111,7 @@ foreach($workingmonths as $tmp)
 
     $grid = '<div class="ui-block-' . $block . '">' . $button . "</div>\n";
     $grids .= $grid;      
+}
 }
 echo $grids;
 ?>

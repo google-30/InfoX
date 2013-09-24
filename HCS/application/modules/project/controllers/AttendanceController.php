@@ -2,6 +2,7 @@
 include 'InfoX/infox_common.php';
 include 'InfoX/infox_project.php';
 include 'InfoX/infox_user.php';
+include 'InfoX/infox_worker.php';
 
 class Project_AttendanceController extends Zend_Controller_Action
 {
@@ -20,17 +21,23 @@ class Project_AttendanceController extends Zend_Controller_Action
         //echo $userRole . "<br>";
     
         $sites = infox_user::getUserSites();
-        $siteid = $this->getParam("siteid", 0);
-        
-        // get construction time 
-        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
-        $startdate = $siteobj->getStart();
-        $stopdate = $siteobj->getStop();
-        $months = $this->getMonths($startdate, $stopdate);
-
         $this->view->sites = $sites;
+
+        $siteid = $this->getParam("siteid", 0);
         $this->view->siteid = $siteid;
+        
+        $months=null;
+        // get construction time 
+        if($siteid)
+        {
+            $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+            $startdate = $siteobj->getStart();
+            $stopdate = $siteobj->getStop();
+            $months = $this->getMonths($startdate, $stopdate);
+        }
+
         $this->view->workingmonths=$months;
+
     }
 
     private function getMonths($start, $stop)
@@ -119,7 +126,8 @@ class Project_AttendanceController extends Zend_Controller_Action
         $date = new Datetime($monthstr);
         $this->view->date=$date;
         
-        
+        $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
+        $this->view->workerarr = $workerarr;
     }
 
 }
