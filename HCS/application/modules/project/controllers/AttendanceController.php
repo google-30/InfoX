@@ -15,11 +15,6 @@ class Project_AttendanceController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        //$username = infox_user::getUserName();
-        //echo $username . "<br>";
-        //$userRole = infox_user::getUserRole();
-        //echo $userRole . "<br>";
-    
         $sites = infox_user::getUserSites();
         $this->view->sites = $sites;
 
@@ -37,7 +32,6 @@ class Project_AttendanceController extends Zend_Controller_Action
         }
 
         $this->view->workingmonths=$months;
-
     }
 
     private function getMonths($start, $stop)
@@ -121,6 +115,7 @@ class Project_AttendanceController extends Zend_Controller_Action
         $siteid = $this->getParam("siteid", 0);
         $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
         $this->view->site = $siteobj;
+        $this->view->siteid = $siteid;
 
         $monthstr = $this->getParam("month", "");
         $date = new Datetime($monthstr);
@@ -128,6 +123,20 @@ class Project_AttendanceController extends Zend_Controller_Action
         
         $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
         $this->view->workerarr = $workerarr;
+
+        $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
+        $this->view->attendancearr = $attendancearr;
+    }
+
+    public function attendialogAction()
+    {
+        infox_common::turnoffLayout($this->_helper);
+        
+        $siteid = $this->getParam("sid", 0);
+        $workerid = $this->getParam("wid", 0);
+        $monthstr = $this->getParam("month", "");
+
+        
     }
 
 }

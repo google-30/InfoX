@@ -7,8 +7,10 @@ $monthstr=$date->format("Y-m");
 
 $site=$this->site;
 $sitename=$site->getName();
+$siteid=$this->siteid;
 
 $workerarr=$this->workerarr;
+$attendancearr=$this->attendancearr;
 ?>
 
 <head>
@@ -26,6 +28,14 @@ $workerarr=$this->workerarr;
 <style>
 table {width: 100%; border-collapse:collapse;}
 table td, table th { text-align:center; border:1px solid black; }
+.ui-dialog-contain {
+	width: 92.5%;
+	max-width: 2500px;
+	margin: 10% auto 15px auto;
+	padding: 0;
+	position: relative;
+	top: -15px;
+}
 </style>
 <div data-role="page">
 
@@ -49,7 +59,7 @@ table td, table th { text-align:center; border:1px solid black; }
 -->
 <table>
 <tr>
-<th rowspan="2">序号</th><th colspan=4>工人信息</th><th rowspan="2">考勤方式</th><th colspan=31>日期</th>
+<th rowspan="2">序号</th><th colspan=4>工人信息</th><!--<th rowspan="2">考勤方式</th>--><th colspan=31>日期</th>
 <th rowspan="2">考勤</th><th rowspan="2">详细</th></tr>
 <tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th>
 <?php
@@ -58,12 +68,18 @@ $ths="";
 for($i=0; $i<$days; $i++)
 {
     $j = $i+1;
-    $th = "<th>$j</th>";
+    if($j<10)
+    {
+        $th = "<th>0$j</th>";
+    }
+    else
+    {
+        $th = "<th>$j</th>";
+    }
     $ths .= $th;
 }
 echo $ths;
 ?>
-<!--<th><button data-mini="true">考勤</button></th><th><button data-mini="true">详细</button></th>-->
 </tr>
 <?php
 $trs="";
@@ -95,8 +111,97 @@ foreach($workerarr as $tmp)
     $td="<td>$worktype</td>";
     $tr .= $td;
 
+    $workerid = $tmp->getId();
+    $attentds = getAttenTds($attendancearr, $workerid);
+    $tr .= $attentds;
+
+    //$tds = '<td><button data-mini="true">考勤</button></td>'; 
+    $url = "/project/attendance/attendialog?" . "&sid=$siteid&month=$monthstr&wid=$workerid";   
+    $tds = '<td><a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true">考勤</a></td>';    
+    $tr .= $tds;
+
+    $tds = '<td><button data-mini="true">详细</button></td>';    
+    $tr .= $tds;
+    
     $trs .= "<tr>$tr</tr>";        
 }
+
+function getAttenTds($attendancearr, $workerid)
+{
+    $attenobj=null;
+    if(count($attendancearr)>0)
+    {
+        foreach($attendancearr as $atten)
+        {
+            $worker = $atten->getWorker();
+            if($worker->getId() == $workerid)
+            {
+                $attenobj = $atten;
+                break;
+            }
+        }
+    }
+
+    $tds = "";
+
+    if($attenobj)
+    {
+
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    }
+    else
+    {
+        for($i=0; $i<31; $i++)
+        {
+            $tds .= "<td>&nbsp;</td>";
+        }
+    }
+
+    return $tds;        
+}
+
+function getAttenTds1($attenobj)
+{
+    $tds = "";
+
+    if($attenobj)
+    {
+
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    }
+    else
+    {
+        for($i=0; $i<31; $i++)
+        {
+            $tds .= "<td>&nbsp;</td>";
+        }
+    }
+
+    return $tds;
+}
+
 echo $trs;
 ?>
 </table>
