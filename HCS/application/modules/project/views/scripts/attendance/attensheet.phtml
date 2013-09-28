@@ -1,0 +1,154 @@
+<?php
+$worker=$this->workerdetails;
+$wid=$worker->getId();
+$wpno=$worker->getWpno();
+$wname=$worker->getNamechs();
+if(!$wname || $wname=="")
+{
+    $wname = $worker->getNameeng();
+}
+
+$attendance=$this->attendance;
+
+$date=$this->date;
+$monthstr=$this->monthstr;
+?>
+<table>
+<tr><th colspan=4>工人信息</th><th colspan=31>日期</th></tr>
+<tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th>
+<?php
+$days=31;
+$ths="";
+for($i=0; $i<$days; $i++)
+{
+    $j = $i+1;
+    if($j<10)
+    {
+        $th = "<th>0$j</th>";
+    }
+    else
+    {
+        $th = "<th>$j</th>";
+    }
+    $ths .= $th;
+}
+echo $ths;
+echo "</tr>";
+
+$trs="";
+$tmp=$worker;
+{
+    $tr="";
+
+    $wpno=$tmp->getWpno();
+    $td="<td>$wpno</td>";
+    $tr .= $td;
+    
+    $name=$tmp->getNamechs();
+    if(!$name || $name=="")
+    {
+        $name = $tmp->getNameeng();
+    }
+    $td="<td>$name</td>";
+    $tr .= $td;
+
+    $price = 75;
+    $td="<td>$price</td>";
+    $tr .= $td;
+    
+    $worktype=$tmp->getWorktype();
+    $td="<td>$worktype</td>";
+    $tr .= $td;
+
+    $workerid = $tmp->getId();
+    $attentds = getAttenTds($attendance);
+    $tr .= $attentds;
+   
+    $trs .= "<tr>$tr</tr>";        
+}
+
+function getAttenTds($attenobj)
+{
+    $tds = "";
+    if($attenobj)
+    {
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay2();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay3();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay4();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay5();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay6();
+    $tds .= "<td>$value</td>";
+
+    $value = $attenobj->getDay7();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay8();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay9();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay10();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay11();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay12();
+    $tds .= "<td>$value</td>";
+
+    $value = $attenobj->getDay13();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay14();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay15();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay16();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay17();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay18();
+    $tds .= "<td>$value</td>";
+
+    $value = $attenobj->getDay19();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay20();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay21();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay22();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay23();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay24();
+    $tds .= "<td>$value</td>";
+
+    $value = $attenobj->getDay25();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay26();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay27();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay28();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay29();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay30();
+    $tds .= "<td>$value</td>";
+
+    }
+    else
+    {
+        for($i=0; $i<31; $i++)
+        {
+            $tds .= "<td>&nbsp;</td>";
+        }
+    }
+
+    return $tds;
+}
+echo $trs;
+?>
+</table>
+

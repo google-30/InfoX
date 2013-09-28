@@ -11,6 +11,16 @@ class infox_project
         $_ctl = $controller; 
     }
     */
+    public static $_em;
+    public static $_siteatten;
+    public static $_workerdetails;
+    
+    public static function getRepos()
+    {
+        self::$_em = Zend_Registry::get('em');
+        self::$_siteatten = self::$_em->getRepository('Synrgic\Infox\Siteattendance');
+        self::$_workerdetails = self::$_em->getRepository('Synrgic\Infox\Workerdetails');
+    }    
 
     public static function getAttendanceByWorkerMonth($workerarr, $month)
     {
@@ -53,4 +63,96 @@ class infox_project
         return $_repo->findOneBy(array("id"=>$id));
     }
 
+    public static function checkWorkerAtten($wid, $month)
+    {
+        $_em = Zend_Registry::get('em');
+        $_siteatten = $_em->getRepository('Synrgic\Infox\Siteattendance');
+        $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
+
+        $worker = $_workerdetails->findOneBy(array("id"=>$wid));
+        if(!$worker)
+        {
+            return false;
+        }        
+        else
+        {
+            $record = $_siteatten->findOneBy(array("worker"=>$worker, 'month'=>$month));
+            if(!$record)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }        
+    }
+
+    public static function getWorkerAtten($wid, $month)
+    {
+        self::getRepos();
+        $_workerdetails = self::$_workerdetails;
+        $_siteatten = self::$_siteatten;
+
+        $worker = $_workerdetails->findOneBy(array("id"=>$wid));
+        if(!$worker)
+        {
+            return null;
+        }        
+        else
+        {
+            $record = $_siteatten->findOneBy(array("worker"=>$worker, 'month'=>$month));
+            if(!$record)
+            {
+                return null;
+            }
+            else
+            {
+                return $record;
+            }
+        }        
+    }
+
+    public static function createWorkerAtten($wid, $month)
+    {
+        self::getRepos();
+
+        $worker = self::$_workerdetails->findOneBy(array("id"=>$wid));
+        $data = new \Synrgic\Infox\Siteattendance();
+        $data->setWorker($worker); 
+        $data->setMonth($month);
+
+        $em = self::$_em;
+        $em->persist($data);
+        try {
+            $em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }                
+    }
+
+    public static function updateWorkerAtten($record, $date, $salary)
+    {
+        self::getRepos();
+        $_em = self::$_em;
+        $_workerdetails = self::$_workerdetails;
+        $_siteatten = self::$_siteatten;
+        /*
+        $query = $em->createQuery('UPDATE MyProject\Model\User u SET u.password = 'new' WHERE u.id IN (1, 2, 3)');
+        $users = $query->getResult();        
+        */
+        
+        // get column
+        $day = $date->format("d");
+        //echo $day;
+        $month = $date->format("Y-m-01");
+        //echo $month;
+
+        $worker = $record->getWorker();
+        $wid = $worker->getId();
+        $query = "UPDATE Synrgic\Infox\Siteattendance s SET s.day$day = '$salary' WHERE s.worker=$wid and s.month='$month'";
+        $query = $_em->createQuery($query);
+        $result = $query->getResult();
+    }
 }

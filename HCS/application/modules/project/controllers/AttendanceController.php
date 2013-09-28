@@ -162,12 +162,82 @@ class Project_AttendanceController extends Zend_Controller_Action
     {
         infox_common::turnoffView($this->_helper);
 
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }        
+        
         $wid = $this->getParam("wid", 0);
         $date = $this->getParam("date", 0);
+        $salary = $this->getParam("salary", 0);
+        $remark = $this->getParam("remark", 0);                
+        $month = $this->getParam("month", 0);                
 
-        $requests = $this->getRequest()->getPost();
-        if(1) { var_dump($requests); return; }        
+        $monthobj = new Datetime($month);
+        $record = infox_project::getWorkerAtten($wid, $monthobj);
+
+        if(!$record)
+        {// create atten
+            infox_project::createWorkerAtten($wid, $monthobj);              
+        }   
+        // update atten
+        $dateobj = new Datetime($date);
+        infox_project::updateWorkerAtten($record, $dateobj, $salary);
         
+
+    }
+
+    public function attensheetAction()
+    {
+        infox_common::turnoffLayout($this->_helper);        
+
+        // date        
+        $monthstr = $this->getParam("month", "");
+        $date = new Datetime($monthstr);
+        $this->view->date=$date;
+        $this->view->monthstr=$monthstr;
+        $month = $date->format("Y-m-01");
+
+        // worker info
+        $wid = $this->getParam("wid", 0);
+        $wdetails = infox_worker::getWorkerdetailsById($wid);
+        $this->view->workerdetails = $wdetails;
+
+        // site info
+        /*
+        $siteid = $this->getParam("sid", 0);
+        $this->view->siteid = $siteid;
+        $site = infox_project::getSiteById($siteid);
+        $this->view->site = $site;
+        */
+
+        // worker atten
+        $record = infox_project::getAttendanceByIdMonth($wid, $date);
+        $this->view->attendance = $record;        
+
+        /*
+        $query = "SELECT s FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+        //echo $query;
+        $query = $this->_em->createQuery($query);
+        $result = $query->getResult();                
+        echo $result[0]->getDay28();
+        */
+
+        $days = "";
+        for($i=0; $i<31; $i++)
+        {
+            $j = $i+1;                        
+            $days .= "s.day" . $j;            
+            if($i!=30)
+            {
+                $days .=",";
+            }            
+        }
+
+        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+        echo $query;
+        $query = $this->_em->createQuery($query);
+        $result = $query->getResult();        
+
+        //var_dump($result);        
     }
 
 }

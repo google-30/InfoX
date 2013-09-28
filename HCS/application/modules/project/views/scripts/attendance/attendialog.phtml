@@ -36,15 +36,14 @@ table td, table th { text-align:center; border:1px solid black; }
 function post()
 {
     var date = $("#date").val();
-    alert(date);
-
+    //alert(date);
     var wid = $("#wid").val();
-    console.log(wid);
-
+    //console.log(wid);
     var salary = $("#salary").val();
     var remark = $("#remark").val();
+    var month = $("#month").val();
 
-    $.post("/project/attendance/postsalary", { wid:wid, date:date, salary:salary, remark:remark }, 
+    $.post("/project/attendance/postsalary", { wid:wid, date:date, salary:salary, remark:remark, month:month }, 
     function(data) {
         console.log(data);
         //alert(data);        
@@ -52,6 +51,18 @@ function post()
     })  
     
 }
+
+$(function() { 
+    var date = $("#date").val();
+    //alert(date);
+    var wid = $("#wid").val();
+    //console.log(wid);
+    var salary = $("#salary").val();
+    var remark = $("#remark").val();
+    var month = $("#month").val();
+
+    $('#attensheet').load("/project/attendance/attensheet?wid=" + wid + "&month="+month);
+});
 
 </script>
 <?php
@@ -79,7 +90,11 @@ $monthstr=$this->monthstr;
     </div>
 
     <div data-role="content" data-theme="c">
+<div id="attensheet">
+
+</div>
     <div>
+<!--
 <table>
 <tr><th colspan=4>工人信息</th><th colspan=31>日期</th></tr>
 <tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th>
@@ -166,6 +181,7 @@ function getAttenTds($attenobj)
 echo $trs;
 ?>
 </table>
+-->
     </div>
 
     <div style="float:left;width:43%;">
