@@ -146,7 +146,7 @@ class Synrgic_Models_AclBuilder {
 
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit', 
 'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery','applist','allmaterials','siteinfo'),
-            'project:attendance'=>array('view','attendancepage', 'attendialog'),
+            'project:attendance'=>array('view','attendancepage', 'attendialog', 'postsalary'),
 
             'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  

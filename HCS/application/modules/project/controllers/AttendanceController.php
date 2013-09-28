@@ -11,6 +11,7 @@ class Project_AttendanceController extends Zend_Controller_Action
     {
         $this->_em = Zend_Registry::get('em');        
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
+        //$this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
     }
 
     public function indexAction()
@@ -131,11 +132,41 @@ class Project_AttendanceController extends Zend_Controller_Action
     public function attendialogAction()
     {
         infox_common::turnoffLayout($this->_helper);
-        
-        $siteid = $this->getParam("sid", 0);
-        $workerid = $this->getParam("wid", 0);
-        $monthstr = $this->getParam("month", "");
 
+        // date        
+        $monthstr = $this->getParam("month", "");
+        $date = new Datetime($monthstr);
+        $this->view->date=$date;
+        $this->view->monthstr=$monthstr;
+        
+        // worker info
+        $wid = $this->getParam("wid", 0);
+        $wdetails = infox_worker::getWorkerdetailsById($wid);
+        $this->view->workerdetails = $wdetails;
+
+        // site info
+        $siteid = $this->getParam("sid", 0);
+        $this->view->siteid = $siteid;
+        $site = infox_project::getSiteById($siteid);
+        $this->view->site = $site;
+
+        // worker atten
+        $record = infox_project::getAttendanceByIdMonth($wid, $date);
+        $this->view->attendance = $record;
+
+        // datepicker
+
+    }
+
+    public function postsalaryAction()
+    {
+        infox_common::turnoffView($this->_helper);
+
+        $wid = $this->getParam("wid", 0);
+        $date = $this->getParam("date", 0);
+
+        $requests = $this->getRequest()->getPost();
+        if(1) { var_dump($requests); return; }        
         
     }
 

@@ -135,4 +135,12 @@ class infox_worker
         
         return $workerarr;    
     }
+
+    public static function getWorkerdetailsById($wid)
+    {
+        $_em = Zend_Registry::get('em');
+        $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
+
+        return $_workerdetails->findOneBy(array("id"=>$wid));
+    }
 }

@@ -3,32 +3,192 @@
 	<head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>jQuery Mobile Framework - Dialog Example</title> 
+	<title>工人考勤</title> 
 	<link rel="stylesheet"  href="/common/css/jquery.mobile-1.2.0.css" />  
-	<link rel="stylesheet"  href="http://jquerymobile.com/demos/1.2.0/docs/_assets/css/jqm-docs.css" />  
+	<script src="/common/js/jquery-1.8.2.min.js"></script>
+	<script src="/common/js/jquery.mobile-1.2.0.min.js"></script>
 
-	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-    <script src="http://jquerymobile.com/demos/1.2.0/docs/_assets/js/jqm-docs.js"></script>
-	<script src="/common/js/jquery.mobile-1.2.0.js"></script>
-
+    <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
+    <script src="/common/js/jQuery.ui.datepicker.js"></script>
+    <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
+	<script>
+		//reset type=date inputs to text
+		$( document ).bind( "mobileinit", function(){
+			$.mobile.page.prototype.options.degradeInputs.date = true;
+		});	
+	</script>
     </head> 
 <body> 
 
+<style>
+table {width: 100%; border-collapse:collapse;}
+table td, table th { text-align:center; border:1px solid black; }
+.ui-dialog-contain {
+	width: 92.5%;
+	max-width: 2500px;
+	margin: 3% auto 15px auto;
+	padding: 0;
+	position: relative;
+	top: -15px;
+}
+</style>	
+<script>
+function post()
+{
+    var date = $("#date").val();
+    alert(date);
+
+    var wid = $("#wid").val();
+    console.log(wid);
+
+    var salary = $("#salary").val();
+    var remark = $("#remark").val();
+
+    $.post("/project/attendance/postsalary", { wid:wid, date:date, salary:salary, remark:remark }, 
+    function(data) {
+        console.log(data);
+        //alert(data);        
+        //window.location.reload();
+    })  
+    
+}
+
+</script>
+<?php
+$worker=$this->workerdetails;
+$wid=$worker->getId();
+$wpno=$worker->getWpno();
+$wname=$worker->getNamechs();
+if(!$wname || $wname=="")
+{
+    $wname = $worker->getNameeng();
+}
+
+$site=$this->site;
+$sitename=$site->getName();
+
+$attendance=$this->attendance;
+
+$date=$this->date;
+$monthstr=$this->monthstr;
+?>
+
 <div data-role="dialog">
-	
-		<div data-role="header" data-theme="d">
-			<h1>Dialog</h1>
+    <div data-role="header" data-theme="d">
+	    <h1><? echo "$sitename&nbsp;"; ?>考勤</h1>
+    </div>
 
-		</div>
+    <div data-role="content" data-theme="c">
+    <div>
+<table>
+<tr><th colspan=4>工人信息</th><th colspan=31>日期</th></tr>
+<tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th>
+<?php
+$days=31;
+$ths="";
+for($i=0; $i<$days; $i++)
+{
+    $j = $i+1;
+    if($j<10)
+    {
+        $th = "<th>0$j</th>";
+    }
+    else
+    {
+        $th = "<th>$j</th>";
+    }
+    $ths .= $th;
+}
+echo $ths;
+echo "</tr>";
 
-		<div data-role="content" data-theme="c">
-			<h1>Delete page?</h1>
-			<p>This is a regular page, styled as a dialog. To create a dialog, just link to a normal page and include a transition and <code>data-rel="dialog"</code> attribute.</p>
-			<a href="dialog/index.html" data-role="button" data-rel="back" data-theme="b">Sounds good</a>       
-			<a href="dialog/index.html" data-role="button" data-rel="back" data-theme="c">Cancel</a>    
-		</div>
+$trs="";
+$tmp=$worker;
+{
+    $tr="";
+
+    $wpno=$tmp->getWpno();
+    $td="<td>$wpno</td>";
+    $tr .= $td;
+    
+    $name=$tmp->getNamechs();
+    if(!$name || $name=="")
+    {
+        $name = $tmp->getNameeng();
+    }
+    $td="<td>$name</td>";
+    $tr .= $td;
+
+    $price = 75;
+    $td="<td>$price</td>";
+    $tr .= $td;
+    
+    $worktype=$tmp->getWorktype();
+    $td="<td>$worktype</td>";
+    $tr .= $td;
+
+    $workerid = $tmp->getId();
+    $attentds = getAttenTds($attendance);
+    $tr .= $attentds;
+   
+    $trs .= "<tr>$tr</tr>";        
+}
+
+function getAttenTds($attenobj)
+{
+    $tds = "";
+
+    if(0 && $attenobj)
+    {
+    $value = $attenobj->getDay1();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay2();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay3();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay4();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay5();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay6();
+    $tds .= "<td>$value</td>";
+    }
+    else
+    {
+        for($i=0; $i<31; $i++)
+        {
+            $tds .= "<td>&nbsp;</td>";
+        }
+    }
+
+    return $tds;
+}
+echo $trs;
+?>
+</table>
+    </div>
+
+    <div style="float:left;width:43%;">
+    <!--<label for="date">Date Input:</label>-->
+    <input type="date" name="date" id="date" value=""  />	
+    </div>
+
+    <div style="float:right;width:53%;">
+	    <div data-role="fieldcontain">
+     	    <label for="salary">工资:</label>
+     	    <input type="text" name="salary" id="salary" value="" placeholder="工人当日工资" />
+	    </div>	
+	    <div data-role="fieldcontain">
+     	    <label for="remark">备注:</label>
+     	    <input type="text" name="remark" id="remark" value="" placeholder="请假缺勤信息等" />
+	    </div>	
+        <input type="hidden" name="wid" id="wid" value="<? echo $wid; ?>">
+        <input type="hidden" name="month" id="month" value="<? echo $monthstr; ?>">
+        <input type="button" value="提交" onclick="post()">
+    </div>
+
 	</div>
-
+	</div> <!-- dialog -->
 
 </body>
 </html>

@@ -29,4 +29,28 @@ class infox_project
 
         return $attenarr;
     }
+
+    public static function getAttendanceByIdMonth($wid, $month)
+    {
+        $_em = Zend_Registry::get('em');
+        $_siteatten = $_em->getRepository('Synrgic\Infox\Siteattendance');
+        $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
+
+        $record = null;
+        $worker = $_workerdetails->findOneBy(array("id"=>$wid));
+        if($worker)
+        {        
+            $record = $_siteatten->findOneBy(array("worker"=>$worker, "month"=>$month));
+        }
+
+        return $record;
+    }
+
+    public static function getSiteById($id)
+    {
+        $_em = Zend_Registry::get('em');
+        $_repo = $_em->getRepository('Synrgic\Infox\Site');
+        return $_repo->findOneBy(array("id"=>$id));
+    }
+
 }
