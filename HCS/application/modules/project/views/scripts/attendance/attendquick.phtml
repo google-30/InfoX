@@ -52,6 +52,7 @@ function post()
     
 }
 
+/*
 $(function() { 
     var date = $("#date").val();
     //alert(date);
@@ -63,17 +64,9 @@ $(function() {
 
     $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
 });
-
+*/
 </script>
 <?php
-$worker=$this->workerdetails;
-$wid=$worker->getId();
-$wpno=$worker->getWpno();
-$wname=$worker->getNamechs();
-if(!$wname || $wname=="")
-{
-    $wname = $worker->getNameeng();
-}
 
 $site=$this->site;
 $sitename=$site->getName();
@@ -82,45 +75,43 @@ $attendance=$this->attendance;
 
 $date=$this->date;
 $monthstr=$this->monthstr;
+
+$workerarr=$this->workerarr;
+$attendancearr=$this->attendancearr;
+
 ?>
 
 <div data-role="dialog">
     <div data-role="header" data-theme="d">
-	    <h1><? echo "$sitename&nbsp;"; ?>考勤</h1>
+	    <h1>工地:&nbsp;<? echo "$sitename&nbsp;"; ?>&nbsp;&nbsp;月份:&nbsp;<? echo "$monthstr&nbsp;"; ?></h1>
     </div>
-
     <div data-role="content" data-theme="c">
 <div id="attensheet">
 
 </div>
     <div>
-<!--
-<table>
-<tr><th colspan=4>工人信息</th><th colspan=31>日期</th></tr>
-<tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th>
-<?php
-$days=31;
-$ths="";
-for($i=0; $i<$days; $i++)
-{
-    $j = $i+1;
-    if($j<10)
-    {
-        $th = "<th>0$j</th>";
-    }
-    else
-    {
-        $th = "<th>$j</th>";
-    }
-    $ths .= $th;
-}
-echo $ths;
-echo "</tr>";
 
+    </div>
+
+    <div style="float:left;max-width:500px;min-width:400px;">
+    <!--<label for="date">Date Input:</label>-->
+    <input type="date" name="date" id="date" value=""  />	
+    </div>
+
+    <div style="margin: 10px auto 15px auto;  width:65%;">
+<table>
+<tr>
+<th rowspan="2">序号</th><th colspan=4>工人信息</th><th>日期</th></tr>
+<tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th><th><? echo $monthstr; ?></th></tr>
+<?php
 $trs="";
-$tmp=$worker;
+$sn=0;
+foreach($workerarr as $tmp)
 {
     $tr="";
+    $sn++;
+    $td="<td>$sn</td>";
+    $tr .= $td;
 
     $wpno=$tmp->getWpno();
     $td="<td>$wpno</td>";
@@ -143,64 +134,31 @@ $tmp=$worker;
     $tr .= $td;
 
     $workerid = $tmp->getId();
-    $attentds = getAttenTds($attendance);
+    $attentds = getAttenTds($attendancearr, $workerid);
     $tr .= $attentds;
-   
+
+    //$tds = '<td><button data-mini="true">考勤</button></td>'; 
+    /*
+    $url = "/project/attendance/attendialog?" . "&sid=$siteid&month=$monthstr&wid=$workerid";   
+    $tds = '<td><a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true">考勤</a></td>';    
+    $tr .= $tds;
+
+    $tds = '<td><button data-mini="true">详细</button></td>';    
+    $tr .= $tds;
+    */
     $trs .= "<tr>$tr</tr>";        
 }
 
-function getAttenTds($attenobj)
+function getAttenTds($attendancearr, $workerid)
 {
-    $tds = "";
-
-    if(0 && $attenobj)
-    {
-    $value = $attenobj->getDay1();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay2();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay3();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay4();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay5();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay6();
-    $tds .= "<td>$value</td>";
-    }
-    else
-    {
-        for($i=0; $i<31; $i++)
-        {
-            $tds .= "<td>&nbsp;</td>";
-        }
-    }
-
-    return $tds;
+    $input = '<input type="text" id="attend" name="attend" value="78">';
+    return "<td>$input</td>";
 }
-echo $trs;
+
+echo "$trs";
 ?>
 </table>
--->
-    </div>
-
-    <div style="float:left;width:43%;">
-    <!--<label for="date">Date Input:</label>-->
-    <input type="date" name="date" id="date" value=""  />	
-    </div>
-
-    <div style="float:right;width:53%;">
-	    <div data-role="fieldcontain">
-     	    <label for="salary">工资:</label>
-     	    <input type="text" name="salary" id="salary" value="" placeholder="工人当日工资" />
-	    </div>	
-	    <div data-role="fieldcontain">
-     	    <label for="remark">备注:</label>
-     	    <input type="text" name="remark" id="remark" value="" placeholder="请假缺勤信息等" />
-	    </div>	
-        <input type="hidden" name="wid" id="wid" value="<? echo $wid; ?>">
-        <input type="hidden" name="month" id="month" value="<? echo $monthstr; ?>">
-        <input type="button" value="提交" onclick="post()">
+<button>提交</button> 
     </div>
 
 	</div>

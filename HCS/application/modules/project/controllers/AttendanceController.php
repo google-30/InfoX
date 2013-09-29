@@ -185,7 +185,7 @@ class Project_AttendanceController extends Zend_Controller_Action
 
     }
 
-    public function attensheetAction()
+    public function attendsheetAction()
     {
         infox_common::turnoffLayout($this->_helper);        
 
@@ -240,4 +240,34 @@ class Project_AttendanceController extends Zend_Controller_Action
         //var_dump($result);        
     }
 
+    public function attendquickAction()
+    {
+        infox_common::turnoffLayout($this->_helper);
+
+        // date     
+        $monthstr = $this->getParam("month", "");
+        $date = new Datetime($monthstr);
+        $this->view->date=$date;
+        $this->view->monthstr=$monthstr;
+        $month = $date->format("Y-m-01");
+
+        $siteid = $this->getParam("sid", 0);
+        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+        $this->view->site = $siteobj;
+        $this->view->siteid = $siteid;
+
+/*
+        $monthstr = $this->getParam("month", "");
+//echo "$monthstr";
+        $date = new Datetime($monthstr);
+        $this->view->date=$date;
+*/        
+        $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
+        $this->view->workerarr = $workerarr;
+echo "workers=" . count($workerarr);
+        $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
+        $this->view->attendancearr = $attendancearr;
+
+        
+    }
 }
