@@ -22,7 +22,7 @@
 
 <style>
 table {width: 100%; border-collapse:collapse;}
-table td, table th { text-align:center; border:1px solid black; }
+table td, table th { text-align:center; border:1px solid gray; }
 .ui-dialog-contain {
 	width: 92.5%;
 	max-width: 2500px;
@@ -65,6 +65,17 @@ $(function() {
     $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
 });
 */
+
+$("#date").change(function() {
+  alert( "Handler for .change() called." );
+});
+
+
+$( "input[type='date']" ).change(function() {
+  // Check input( $( this ).val() ) for validity here
+    alert("date change");
+});
+
 </script>
 <?php
 
@@ -85,20 +96,16 @@ $attendancearr=$this->attendancearr;
     <div data-role="header" data-theme="d">
 	    <h1>工地:&nbsp;<? echo "$sitename&nbsp;"; ?>&nbsp;&nbsp;月份:&nbsp;<? echo "$monthstr&nbsp;"; ?></h1>
     </div>
+
     <div data-role="content" data-theme="c">
-<div id="attensheet">
-
-</div>
-    <div>
-
-    </div>
-
     <div style="float:left;max-width:500px;min-width:400px;">
-    <!--<label for="date">Date Input:</label>-->
     <input type="date" name="date" id="date" value=""  />	
     </div>
+    <div style="float:left;width:1%;">
+    &nbsp;
+    </div>
 
-    <div style="margin: 10px auto 15px auto;  width:65%;">
+    <div style="margin: 10px auto 15px auto; max-width:65%;">
 <table>
 <tr>
 <th rowspan="2">序号</th><th colspan=4>工人信息</th><th>日期</th></tr>
@@ -156,9 +163,11 @@ function getAttenTds($attendancearr, $workerid)
 }
 
 echo "$trs";
+$tr= '<tr><td colspan=6><button>提交</button></td></tr>';
+echo $tr;
 ?>
 </table>
-<button>提交</button> 
+
     </div>
 
 	</div>

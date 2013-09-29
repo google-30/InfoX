@@ -256,15 +256,9 @@ class Project_AttendanceController extends Zend_Controller_Action
         $this->view->site = $siteobj;
         $this->view->siteid = $siteid;
 
-/*
-        $monthstr = $this->getParam("month", "");
-//echo "$monthstr";
-        $date = new Datetime($monthstr);
-        $this->view->date=$date;
-*/        
         $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
         $this->view->workerarr = $workerarr;
-echo "workers=" . count($workerarr);
+        //echo "workers=" . count($workerarr);
         $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
         $this->view->attendancearr = $attendancearr;
 
