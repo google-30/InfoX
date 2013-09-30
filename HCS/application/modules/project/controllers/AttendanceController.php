@@ -240,6 +240,11 @@ class Project_AttendanceController extends Zend_Controller_Action
         //var_dump($result);        
     }
 
+    private function getdata()
+    {
+
+    }
+
     public function attendquickAction()
     {
         infox_common::turnoffLayout($this->_helper);
@@ -261,7 +266,38 @@ class Project_AttendanceController extends Zend_Controller_Action
         //echo "workers=" . count($workerarr);
         $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
         $this->view->attendancearr = $attendancearr;
-
         
+    }
+
+    public function quicksubmitAction()
+    {
+        infox_common::turnoffView($this->_helper);
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }        
+
+        $quickdate = $this->getParam("quickdate", "");
+        $date = new Datetime($quickdate);
+        $month = $date->format("Y-m-01");        
+        $monthobj = new Datetime($month);
+
+        $siteid = $this->getParam("sid", 0);
+        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+
+        $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
+
+        foreach($workerarr as $tmp) 
+        {
+            $wid = $tmp->getId();
+            $salary = $this->getParam("attend$wid", "");
+
+            //$record = $this->_siteattendance->findOneBy();
+            $record = infox_project::getWorkerAtten($wid, $monthobj);
+            if(!$record)
+            {// create atten
+                infox_project::createWorkerAtten($wid, $monthobj);              
+            }   
+            // update atten
+            infox_project::updateWorkerAtten($wid, $date, $salary);
+        }           
     }
 }

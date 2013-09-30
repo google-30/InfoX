@@ -32,7 +32,6 @@ $attendancearr=$this->attendancearr;
 			$.mobile.page.prototype.options.degradeInputs.date = true;
 		});	
 	</script>
-
 </head> 
 
 <body> 
@@ -49,9 +48,37 @@ table td, table th { text-align:center; border:1px solid black; }
 }
 </style>
 <script>
-$("#date").change(function() {
-  alert( "Handler for .change() called." );
-});
+function quicksubmit()
+{
+    //alert("quicksubmit");
+    var date = $("#date").val();
+    //alert("date="+date);
+    var r=confirm("日期:"+date+"\n确认提交该天的考勤吗？");
+    if (r==false)
+    {
+        return false;
+    }
+
+    $("#quickdate").val(date);
+
+    /*
+    $.post("/project/attendance/postsalary", { wid:wid, date:date, salary:salary, remark:remark, month:month }, 
+    function(data) {
+        console.log(data);
+        //alert(data);        
+        //window.location.reload();
+    });  
+    */
+    $("#quickform").submit();
+
+    /*
+    $( "#quickform" ).submit(function( event ) {
+      alert( "Handler for .submit() called." );
+      //event.preventDefault();
+      //  window.location.reload();
+    });
+    */
+}
 
 </script>
 <div data-role="page">
@@ -71,7 +98,7 @@ $("#date").change(function() {
 <div style="float:right;">
 <?php
 $url = "/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
-$ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" >快速考勤</a></td>';    
+$ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" >快速考勤</a>';    
 echo $ahref;
 ?>
 </div>
@@ -163,7 +190,7 @@ function getAttenTds($attendancearr, $workerid)
 
     $tds = "";
 
-    if($attenobj)
+    if(0 && $attenobj)
     {
 
     $value = $attenobj->getDay1();

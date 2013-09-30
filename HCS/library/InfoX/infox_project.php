@@ -2,15 +2,6 @@
 
 class infox_project
 {
-    //private static $_em = Zend_Registry::get('em');
-    /*
-    private $_ctl;
-    private function __construct() { }
-    private function __construct($controller) 
-    {
-        $_ctl = $controller; 
-    }
-    */
     public static $_em;
     public static $_siteatten;
     public static $_workerdetails;
@@ -132,7 +123,26 @@ class infox_project
         }                
     }
 
-    public static function updateWorkerAtten($record, $date, $salary)
+    public static function updateWorkerAtten($wid, $date, $salary)
+    {
+        self::getRepos();
+        $_em = self::$_em;
+        $_workerdetails = self::$_workerdetails;
+        $_siteatten = self::$_siteatten;
+        
+        // get column
+        $day = $date->format("d");
+        $day = intval($day);
+        //echo $day;
+        $month = $date->format("Y-m-01");
+        //echo $month;
+
+        $query = "UPDATE Synrgic\Infox\Siteattendance s SET s.day$day = '$salary' WHERE s.worker=$wid and s.month='$month'";
+        $query = $_em->createQuery($query);
+        $result = $query->getResult();
+    }
+
+    public static function updateWorkerAtten1($record, $date, $salary)
     {
         self::getRepos();
         $_em = self::$_em;

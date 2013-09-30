@@ -33,6 +33,7 @@ table td, table th { text-align:center; border:1px solid gray; }
 }
 </style>	
 <script>
+/*
 function post()
 {
     var date = $("#date").val();
@@ -52,7 +53,6 @@ function post()
     
 }
 
-/*
 $(function() { 
     var date = $("#date").val();
     //alert(date);
@@ -65,6 +65,7 @@ $(function() {
     $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
 });
 */
+/*
 
 $("#date").change(function() {
   alert( "Handler for .change() called." );
@@ -76,12 +77,27 @@ $( "input[type='date']" ).change(function() {
     alert("date change");
 });
 
+$( ".ui-btn" ).click(function() {
+    alert("clicked");
+});
+
+
+
+$(function() { 
+$( ".ui-body-c" ).click(function() {
+    var date= $("#date").val();    
+    alert(date);    
+});
+
+});
+*/
+
 </script>
 <?php
-
 $site=$this->site;
 $sitename=$site->getName();
-
+$siteid=$site->getId();
+ 
 $attendance=$this->attendance;
 
 $date=$this->date;
@@ -98,15 +114,19 @@ $attendancearr=$this->attendancearr;
     </div>
 
     <div data-role="content" data-theme="c">
+<script>
+</script>
     <div style="float:left;max-width:500px;min-width:400px;">
     <input type="date" name="date" id="date" value=""  />	
     </div>
-    <div style="float:left;width:1%;">
-    &nbsp;
-    </div>
+    <div style="float:left;">&nbsp;</div>
 
-    <div style="margin: 10px auto 15px auto; max-width:65%;">
-<table>
+    <!--<div style="margin: 10px auto 15px auto; max-width:65%;">-->
+    <div style="float:left; width:65%;">
+<form action="/project/attendance/quicksubmit" method="post" name="quickform" id="quickform">
+<input type="hidden" name="quickdate" id="quickdate" value="">
+<input type="hidden" name="sid" id="sid" value="<? echo $siteid; ?>">
+<table style="width:100%;margin-top:10px;">
 <tr>
 <th rowspan="2">序号</th><th colspan=4>工人信息</th><th>日期</th></tr>
 <tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th><th><? echo $monthstr; ?></th></tr>
@@ -144,30 +164,22 @@ foreach($workerarr as $tmp)
     $attentds = getAttenTds($attendancearr, $workerid);
     $tr .= $attentds;
 
-    //$tds = '<td><button data-mini="true">考勤</button></td>'; 
-    /*
-    $url = "/project/attendance/attendialog?" . "&sid=$siteid&month=$monthstr&wid=$workerid";   
-    $tds = '<td><a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true">考勤</a></td>';    
-    $tr .= $tds;
-
-    $tds = '<td><button data-mini="true">详细</button></td>';    
-    $tr .= $tds;
-    */
     $trs .= "<tr>$tr</tr>";        
 }
 
 function getAttenTds($attendancearr, $workerid)
 {
-    $input = '<input type="text" id="attend" name="attend" value="78">';
+    $input = '<input type="text" id="attend" name="attend' . $workerid .  '" value="78">';
     return "<td>$input</td>";
 }
 
 echo "$trs";
-$tr= '<tr><td colspan=6><button>提交</button></td></tr>';
-echo $tr;
+//$tr= '<tr><td colspan=6><button onclick="quicksubmit()">提交</button></td></tr>';
+//echo $tr;
 ?>
 </table>
-
+</form>
+<button onclick="quicksubmit()">提交</button>
     </div>
 
 	</div>
