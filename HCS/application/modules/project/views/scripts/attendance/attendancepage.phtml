@@ -80,6 +80,17 @@ function quicksubmit()
     */
 }
 
+$(function() { 
+    var date = $("#date").val();
+    //alert(date);
+    var wid = $("#wid").val();
+    //console.log(wid);
+    var salary = $("#salary").val();
+    var remark = $("#remark").val();
+    var month = $("#month").val();
+
+    $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
+});
 </script>
 <div data-role="page">
 

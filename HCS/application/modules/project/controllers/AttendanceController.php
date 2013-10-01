@@ -298,6 +298,9 @@ class Project_AttendanceController extends Zend_Controller_Action
             }   
             // update atten
             infox_project::updateWorkerAtten($wid, $date, $salary);
-        }           
+        }
+
+        $url = "/project/attendance/attendancepage?&siteid=$siteid&month=" . $date->format("Ym");
+        $this->_redirect($url);
     }
 }
