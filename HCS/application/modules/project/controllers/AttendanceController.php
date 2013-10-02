@@ -119,7 +119,8 @@ class Project_AttendanceController extends Zend_Controller_Action
         $this->view->siteid = $siteid;
 
         $monthstr = $this->getParam("month", "");
-        $date = new Datetime($monthstr);
+        // 20131001
+        $date = new Datetime($monthstr."01");
         $this->view->date=$date;
         
         $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
@@ -127,6 +128,7 @@ class Project_AttendanceController extends Zend_Controller_Action
 
         $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
         $this->view->attendancearr = $attendancearr;
+        //echo "count=" . count($attendancearr);
     }
 
     public function attendialogAction()
@@ -180,9 +182,7 @@ class Project_AttendanceController extends Zend_Controller_Action
         }   
         // update atten
         $dateobj = new Datetime($date);
-        infox_project::updateWorkerAtten($record, $dateobj, $salary);
-        
-
+        infox_project::updateWorkerAtten($record, $dateobj, $salary);       
     }
 
     public function attendsheetAction()

@@ -37,7 +37,7 @@ $attendancearr=$this->attendancearr;
 <body> 
 <style>
 table {width: 100%; border-collapse:collapse;}
-table td, table th { text-align:center; border:1px solid black; }
+table td, table th { text-align:center; border:1px solid gray; }
 .ui-dialog-contain {
 	width: 92.5%;
 	max-width: 2500px;
@@ -80,6 +80,7 @@ function quicksubmit()
     */
 }
 
+/*
 $(function() { 
     var date = $("#date").val();
     //alert(date);
@@ -91,6 +92,12 @@ $(function() {
 
     $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
 });
+*/
+
+function post()
+{
+    alert("post");
+}
 </script>
 <div data-role="page">
 
@@ -201,20 +208,70 @@ function getAttenTds($attendancearr, $workerid)
 
     $tds = "";
 
-    if(0 && $attenobj)
+    if(1 && $attenobj)
     {
 
     $value = $attenobj->getDay1();
     $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
+    $value = $attenobj->getDay2();
     $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
+    $value = $attenobj->getDay3();
     $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
+    $value = $attenobj->getDay4();
     $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
+    $value = $attenobj->getDay5();
     $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
+    $value = $attenobj->getDay6();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay7();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay8();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay9();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay10();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay11();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay12();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay13();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay14();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay15();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay16();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay17();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay18();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay19();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay20();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay21();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay22();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay23();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay24();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay25();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay26();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay27();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay28();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay29();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay30();
+    $tds .= "<td>$value</td>";
+    $value = $attenobj->getDay31();
     $tds .= "<td>$value</td>";
     }
     else
