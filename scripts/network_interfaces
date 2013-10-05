@@ -1,5 +1,9 @@
-auto lo eth0
+auto lo 
 iface lo inet loopback
+
+# ifconfig -a | grep eth
+# to make sure eth interface no.
+auto eth0
 iface eth0 inet static
 address 192.168.1.211
 gateway 192.168.1.254

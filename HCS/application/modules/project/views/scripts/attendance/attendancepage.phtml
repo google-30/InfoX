@@ -11,6 +11,8 @@ $siteid=$this->siteid;
 
 $workerarr=$this->workerarr;
 $attendancearr=$this->attendancearr;
+
+$workerhtmls=$this->workerhtmls;
 ?>
 
 <head>
@@ -36,7 +38,7 @@ $attendancearr=$this->attendancearr;
 
 <body> 
 <style>
-table {width: 100%; border-collapse:collapse;}
+table { width: 100%; border-collapse:collapse; }
 table td, table th { text-align:center; border:1px solid gray; }
 .ui-dialog-contain {
 	width: 92.5%;
@@ -103,16 +105,28 @@ function post()
 
 	<div data-role="header">
 		<!--<h1>Single page</h1>-->
-<table>
+<table style="table-layout:fixed;">
 <tr>
-<td style="width:33%"><? echo "工地名称: " . $sitename; ?></td>
-<td style="width:33%"><? echo "月份: " . $monthstr; ?></td>
-<td style="width:33%"><? echo "工资负责人: " . ""; ?></td>
+<td><? echo "工地名称: " . $sitename; ?></td>
+<td><? echo "月份: " . $monthstr; ?></td>
+<td><? echo "工资负责人: " . ""; ?></td>
 </tr>
 </table>
 	</div><!-- /header -->
 
 	<div data-role="content">
+<?php
+foreach($workerhtmls as $tmp)
+{
+    //echo $tmp . "<br>";    
+    $tab1 = $tmp[0];
+    $tab2 = $tmp[1];
+
+    echo $tab1. "<br>" . $tab2;
+}
+?>
+
+
 <div style="float:right;">
 <?php
 $url = "/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
@@ -284,38 +298,6 @@ function getAttenTds($attendancearr, $workerid)
 
     return $tds;        
 }
-
-function getAttenTds1($attenobj)
-{
-    $tds = "";
-
-    if($attenobj)
-    {
-
-    $value = $attenobj->getDay1();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
-    $tds .= "<td>$value</td>";
-    $value = $attenobj->getDay1();
-    $tds .= "<td>$value</td>";
-    }
-    else
-    {
-        for($i=0; $i<31; $i++)
-        {
-            $tds .= "<td>&nbsp;</td>";
-        }
-    }
-
-    return $tds;
-}
-
 echo $trs;
 ?>
 </table>

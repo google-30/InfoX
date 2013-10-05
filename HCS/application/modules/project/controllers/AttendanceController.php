@@ -129,6 +129,78 @@ class Project_AttendanceController extends Zend_Controller_Action
         $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
         $this->view->attendancearr = $attendancearr;
         //echo "count=" . count($attendancearr);
+
+        $this->view->workerhtmls = $this->genWorkerHtmls($workerarr, $attendancearr);
+    }
+
+    private function genWorkerHtmls($workerarr, $attendancearr)
+    {
+        $tablearr = array(); 
+        $table ="";
+        $sno = 0;
+        foreach($workerarr as $tmp)
+        {
+            $tabs = array();
+
+            $sno++;           
+            $table = "<table>";
+    
+            $tr = "";
+            $tr .= '<tr><th rowspan="2">序号</th><th colspan=4>工人信息</th>'; 
+            $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th></tr>';
+            $table .= $tr;
+            $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
+            $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
+            $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th></tr>';
+            $table .= $tr;
+            
+            $wpno = $tmp->getWpno();
+            $name=$tmp->getNamechs();
+            if(!$name || $name=="")
+            {
+                $name = $tmp->getNameeng();
+            }
+            //$td="<td>$name</td>";
+            //$tr .= $td;
+            $price = "75"; //$tmp->getPrice();
+
+            $worktype=$tmp->getWorktype();
+            $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
+
+            $tr .= "<td></td><td></td><td></td><td></td><td></td><td></td>";
+            $tr .= "<td></td><td></td><td></td><td></td><td></td>";            
+
+            $table .= $tr;
+            $table .= "</table>";
+            $tabs[] = $table;
+
+            $attendtab = "<table>";
+            $tr = "<tr><tr colspan=31>日期</th></tr>";            
+            $attendtab .= $tr;
+            
+            $ths="";
+            for($i=0; $i<31; $i++)
+            {
+                $j = $i+1;
+                if($j<10)
+                {
+                    $th = "<th>0$j</th>";
+                }
+                else
+                {
+                    $th = "<th>$j</th>";
+                }
+                $ths .= $th;
+            }
+            $tr .= "<tr>$ths</tr>";
+            $attentab .= $tr;
+            $attendtab .= "</table>";
+            $tabs[] = $attendtab;
+
+            $tablearr[] = $tabs;            
+        }
+
+        return $tablearr;
     }
 
     public function attendialogAction()
