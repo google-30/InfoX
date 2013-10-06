@@ -143,15 +143,15 @@ class Project_AttendanceController extends Zend_Controller_Action
             $tabs = array();
 
             $sno++;           
-            $table = "<table>";
+            $table = '<table class="attendsum">';
     
             $tr = "";
             $tr .= '<tr><th rowspan="2">序号</th><th colspan=4>工人信息</th>'; 
-            $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th></tr>';
+            $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>';
             $table .= $tr;
             $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
             $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
-            $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th></tr>';
+            $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>';
             $table .= $tr;
             
             $wpno = $tmp->getWpno();
@@ -168,14 +168,15 @@ class Project_AttendanceController extends Zend_Controller_Action
             $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
 
             $tr .= "<td></td><td></td><td></td><td></td><td></td><td></td>";
-            $tr .= "<td></td><td></td><td></td><td></td><td></td>";            
+            $tr .= "<td></td><td></td><td></td><td></td><td></td><td></td><td></td>";            
 
             $table .= $tr;
             $table .= "</table>";
             $tabs[] = $table;
 
+            // attendance and food
             $attendtab = "<table>";
-            $tr = "<tr><tr colspan=31>日期</th></tr>";            
+            $tr = "<tr><th rowspan=2></th><th colspan=31>日期</th></tr>";            
             $attendtab .= $tr;
             
             $ths="";
@@ -192,9 +193,30 @@ class Project_AttendanceController extends Zend_Controller_Action
                 }
                 $ths .= $th;
             }
-            $tr .= "<tr>$ths</tr>";
-            $attentab .= $tr;
+            $tr = "<tr>$ths</tr>";
+            $attendtab .= $tr;
+
+            $tds = "";    
+            for($i=0; $i<31; $i++)
+            {
+                $td = "<td>&nbsp;</td>";
+                $tds .= $td;
+            }
+            $tr = "<tr><td>考勤</td>$tds</tr>";            
+            $attendtab .= $tr;
+
+            $tds = "";    
+            for($i=0; $i<31; $i++)
+            {
+                $td = "<td>&nbsp;</td>";
+                $tds .= $td;
+            }
+            $tr = "<tr><td>伙食</td>$tds</tr>";            
+            $attendtab .= $tr;
+
             $attendtab .= "</table>";
+            
+
             $tabs[] = $attendtab;
 
             $tablearr[] = $tabs;            

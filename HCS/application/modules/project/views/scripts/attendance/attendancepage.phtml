@@ -39,7 +39,7 @@ $workerhtmls=$this->workerhtmls;
 <body> 
 <style>
 table { width: 100%; border-collapse:collapse; }
-table td, table th { text-align:center; border:1px solid gray; }
+table td, table th { text-align:center; border:1px solid black; }
 .ui-dialog-contain {
 	width: 92.5%;
 	max-width: 2500px;
@@ -48,6 +48,8 @@ table td, table th { text-align:center; border:1px solid gray; }
 	position: relative;
 	top: -15px;
 }
+
+.attendsum  { background-color:#E0E0E0; }
 </style>
 <script>
 function quicksubmit()
@@ -115,18 +117,6 @@ function post()
 	</div><!-- /header -->
 
 	<div data-role="content">
-<?php
-foreach($workerhtmls as $tmp)
-{
-    //echo $tmp . "<br>";    
-    $tab1 = $tmp[0];
-    $tab2 = $tmp[1];
-
-    echo $tab1. "<br>" . $tab2;
-}
-?>
-
-
 <div style="float:right;">
 <?php
 $url = "/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
@@ -135,9 +125,21 @@ echo $ahref;
 ?>
 </div>
 
+<?php
+foreach($workerhtmls as $tmp)
+{
+    //echo $tmp . "<br>";    
+    $tab1 = $tmp[0];
+    $tab2 = $tmp[1];
+
+    echo $tab1. $tab2 . "<br>";
+}
+?>
+
+<!--
 <table>
 <tr>
-<th rowspan="2">序号</th><th colspan=4>工人信息</th><!--<th rowspan="2">考勤方式</th>--><th colspan=31>日期</th>
+<th rowspan="2">序号</th><th colspan=4>工人信息</th><th colspan=31>日期</th>
 <th rowspan="2">考勤</th><th rowspan="2">详细</th></tr>
 <tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th>
 <?php
@@ -301,7 +303,7 @@ function getAttenTds($attendancearr, $workerid)
 echo $trs;
 ?>
 </table>
-
+-->
 
 	</div><!-- /content -->
 	
