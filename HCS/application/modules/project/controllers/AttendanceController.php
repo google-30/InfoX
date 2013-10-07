@@ -145,13 +145,16 @@ class Project_AttendanceController extends Zend_Controller_Action
             $sno++;           
             $table = '<table class="attendsum">';
     
+            // worker info and month summary
             $tr = "";
-            $tr .= '<tr><th rowspan="2">序号</th><th colspan=4>工人信息</th>'; 
-            $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>';
+            $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>'; 
+            $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>
+';
             $table .= $tr;
             $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
             $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
-            $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>';
+            $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
+';
             $table .= $tr;
             
             $wpno = $tmp->getWpno();
@@ -175,8 +178,27 @@ class Project_AttendanceController extends Zend_Controller_Action
             $tabs[] = $table;
 
             // attendance and food
+            $attendrecord = null;
+            foreach($attendancearr as $attendtmp)
+            {
+                $wid = $attendtmp->getWorker()->getId();
+                if($wid == $tmp->getId())
+                {
+                    $attendrecord = $attendtmp;
+                    break;
+                }
+            }
+
+            if(!$attendrecord)
+            {
+                continue;
+            }
+            //var_dump($attendrecord);            
+            $attendresult = $this->getAttendFoodData($attendrecord);
+
             $attendtab = "<table>";
-            $tr = "<tr><th rowspan=2></th><th colspan=31>日期</th></tr>";            
+            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th></tr>
+';            
             $attendtab .= $tr;
             
             $ths="";
@@ -194,6 +216,19 @@ class Project_AttendanceController extends Zend_Controller_Action
                 $ths .= $th;
             }
             $tr = "<tr>$ths</tr>";
+            $attendtab .= $tr;            
+
+            $tds = "";    
+            for($i=0; $i<31; $i++)
+            {
+                $j = $i + 1;
+                $attend = $attendresult[0][$i];
+
+                $td = "<td>$attend</td>";
+                $tds .= $td;
+            }
+            $tr = "<tr><td>考勤</td>$tds</tr>
+";            
             $attendtab .= $tr;
 
             $tds = "";    
@@ -202,16 +237,8 @@ class Project_AttendanceController extends Zend_Controller_Action
                 $td = "<td>&nbsp;</td>";
                 $tds .= $td;
             }
-            $tr = "<tr><td>考勤</td>$tds</tr>";            
-            $attendtab .= $tr;
-
-            $tds = "";    
-            for($i=0; $i<31; $i++)
-            {
-                $td = "<td>&nbsp;</td>";
-                $tds .= $td;
-            }
-            $tr = "<tr><td>伙食</td>$tds</tr>";            
+            $tr = "<tr><td>伙食</td>$tds</tr>
+";            
             $attendtab .= $tr;
 
             $attendtab .= "</table>";
@@ -223,6 +250,59 @@ class Project_AttendanceController extends Zend_Controller_Action
         }
 
         return $tablearr;
+    }
+
+    // data format: 
+    //  "8;1", means work 8 hours, and 1 means had food also
+    //  "9;0", means work 8 hours, and ot 1 hour, and 0 means no food
+    private function getAttendFoodData($record)
+    {
+        /*
+        $query = "SELECT s FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+        //echo $query;
+        $query = $this->_em->createQuery($query);
+        $result = $query->getResult();          
+        */
+
+        $wid = $record->getWorker()->getId();
+        $month = $record->getMonth()->format("Y-m-01");
+
+        $days = "";
+        for($i=1; $i<=31; $i++)
+        {
+            
+            $day = "s.day$i";            
+            if($i != 31)
+            {
+                $day .= ",";
+            }
+
+            $days .= $day;
+        }
+
+        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+        //echo $query; return;
+        $query = $this->_em->createQuery($query);
+        $result = $query->getResult();
+        //echo "result="; var_dump($result);
+        //return $result;
+
+        $attendarr = array();
+        $foodarr = array();
+
+        $tmparr = $result[0];
+        foreach($tmparr as $tmp)
+        {
+            $arr = explode(";", $tmp);
+            
+            $attendarr[] = array_key_exists(0, $arr) ? $arr[0] : "&nbsp;";
+            $foodarr[] = array_key_exists(1, $arr) ? $arr[1] : "&nbsp;";
+        }
+        
+        $newresult = array($attendarr, $foodarr);
+        //print_r($newresult);
+
+        return $newresult;
     }
 
     public function attendialogAction()
