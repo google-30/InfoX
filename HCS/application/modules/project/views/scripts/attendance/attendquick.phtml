@@ -128,8 +128,8 @@ $attendancearr=$this->attendancearr;
 <input type="hidden" name="sid" id="sid" value="<? echo $siteid; ?>">
 <table style="width:100%;margin-top:10px;">
 <tr>
-<th rowspan="2">序号</th><th colspan=4>工人信息</th><th>日期</th></tr>
-<tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th><th><? echo $monthstr; ?></th></tr>
+<th rowspan="2">序号</th><th colspan=4>工人信息</th><th rowspan=2 class="tdattendfood">工作小时</th><th rowspan=2 class="tdattendfood">伙食</th></tr>
+<tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th></tr>
 <?php
 $trs="";
 $sn=0;
@@ -169,8 +169,30 @@ foreach($workerarr as $tmp)
 
 function getAttenTds($attendancearr, $workerid)
 {
-    $input = '<input type="text" id="attend" name="attend' . $workerid .  '" value="78">';
-    return "<td>$input</td>";
+    $attend = '<td><select name="attend' . $workerid .'" id="attend' . $workerid . '" data-theme="b" data-mini="true">
+				<option value="2">2小时</option>
+                <option value="3">3小时</option>
+                <option value="4">4小时</option>
+                <option value="5">5小时</option>
+                <option value="6">6小时</option>
+                <option value="7">7小时</option>
+                <option value="8" selected>8小时</option>
+                <option value="9">9小时</option>
+                <option value="10">10小时</option>
+                <option value="11">11小时</option>
+                <option value="12">12小时</option>
+                <option value="13">13小时</option>
+                <option value="14">14小时</option>
+                <option value="15">15小时</option>
+                <option value="16">16小时</option>
+			</select></td>';
+
+    $food = '<td><select name="food' . $workerid .'" id="food' . $workerid . '" data-role="slider" data-theme="b">
+				<option value="1">有</option>
+				<option value="0">无</option>
+			</select></td>';
+    //$food="<td>&nbsp;</td>";
+    return $attend . $food ;
 }
 
 echo "$trs";

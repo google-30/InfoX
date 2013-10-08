@@ -51,6 +51,7 @@ table td, table th { text-align:center; border:1px solid black; }
 
 .attendsum  { background-color:#D0D0D0; }
 .fixwidthcol { width:45px; }
+.tdattendfood { width:150px; }
 </style>
 <script>
 function quicksubmit()
@@ -118,10 +119,11 @@ function post()
 	</div><!-- /header -->
 
 	<div data-role="content">
-<div style="float:right;">
+<!--<div style="float:right;">-->
+<div>
 <?php
 $url = "/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
-$ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" >快速考勤</a>';    
+$ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" >快速考勤</a>';    
 echo $ahref;
 ?>
 </div>
