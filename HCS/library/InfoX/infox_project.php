@@ -123,7 +123,7 @@ class infox_project
         }                
     }
 
-    public static function updateWorkerAtten($wid, $date, $salary)
+    public static function updateWorkerAtten1($wid, $date, $salary)
     {
         self::getRepos();
         $_em = self::$_em;
@@ -142,7 +142,27 @@ class infox_project
         $result = $query->getResult();
     }
 
-    public static function updateWorkerAtten1($record, $date, $salary)
+    public static function updateWorkerAtten($wid, $date, $attend, $food)
+    {
+        self::getRepos();
+        $_em = self::$_em;
+        $_workerdetails = self::$_workerdetails;
+        $_siteatten = self::$_siteatten;
+        
+        // get column
+        $day = $date->format("d");
+        $day = intval($day);
+        //echo $day;
+        $month = $date->format("Y-m-01");
+        //echo $month;
+
+        $dayvalue= $attend . ";" . $food;
+        $query = "UPDATE Synrgic\Infox\Siteattendance s SET s.day$day = '$dayvalue' WHERE s.worker=$wid and s.month='$month'";
+        $query = $_em->createQuery($query);
+        $result = $query->getResult();
+    }
+
+    public static function updateWorkerAtten2($record, $date, $salary)
     {
         self::getRepos();
         $_em = self::$_em;

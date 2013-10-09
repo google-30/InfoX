@@ -102,7 +102,23 @@ $(function() {
 
 function post()
 {
-    alert("post");
+    var date = $("#date").val();
+    //alert(date); return;
+    
+    var wid = $("#wid").val();
+    //console.log(wid); return;
+    var attend = $("#attend").val();
+    var food = $("#food").val();
+    var remark = $("#remark").val();
+    var month = $("#month").val();
+
+    $.post("/project/attendance/postattend", { wid:wid, date:date, attend:attend, remark:remark, month:month }, 
+    function(data) {
+        console.log(data);
+        //alert(data);        
+        //window.location.reload();
+    })  
+    
 }
 </script>
 <div data-role="page">

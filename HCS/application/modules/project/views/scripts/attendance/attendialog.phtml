@@ -44,7 +44,7 @@ function post()
     var remark = $("#remark").val();
     var month = $("#month").val();
 
-    $.post("/project/attendance/postsalary", { wid:wid, date:date, salary:salary, remark:remark, month:month }, 
+    $.post("/project/attendance/postattend", { wid:wid, date:date, salary:salary, remark:remark, month:month }, 
     function(data) {
         console.log(data);
         //alert(data);        
@@ -193,9 +193,34 @@ echo $trs;
 
     <div style="float:right;width:53%;">
 	    <div data-role="fieldcontain">
-     	    <label for="salary">工资:</label>
-     	    <input type="text" name="salary" id="salary" value="" placeholder="工人当日工资" />
+     	    <label for="attend">工时:</label>
+            <select name="attend" id="attend" data-theme="b" >
+				<option value="2">2小时</option>
+                <option value="3">3小时</option>
+                <option value="4">4小时</option>
+                <option value="5">5小时</option>
+                <option value="6">6小时</option>
+                <option value="7">7小时</option>
+                <option value="8" selected>8小时</option>
+                <option value="9">9小时</option>
+                <option value="10">10小时</option>
+                <option value="11">11小时</option>
+                <option value="12">12小时</option>
+                <option value="13">13小时</option>
+                <option value="14">14小时</option>
+                <option value="15">15小时</option>
+                <option value="16">16小时</option>
+			</select>
 	    </div>	
+	    <div data-role="fieldcontain">
+     	    <label for="food">伙食:</label>
+            <!--<select name="food" id="food" data-role="slider" data-theme="b" style="width:100%">-->
+            <select name="food" id="food" data-theme="b" >
+				<option value="1">有</option>
+				<option value="0">无</option>
+			</select>	    
+        </div>	
+
 	    <div data-role="fieldcontain">
      	    <label for="remark">备注:</label>
      	    <input type="text" name="remark" id="remark" value="" placeholder="请假缺勤信息等" />

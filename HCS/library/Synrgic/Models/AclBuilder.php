@@ -147,7 +147,7 @@ class Synrgic_Models_AclBuilder {
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit', 
 'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery','applist','allmaterials','siteinfo'),
             'project:attendance'=>array('view','attendancepage', 'attendialog', 
-'postsalary', 'attendsheet', 'attendquick', 'quicksubmit'),
+'postattend', 'attendsheet', 'attendquick', 'quicksubmit'),
 
             'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  
@@ -156,7 +156,6 @@ class Synrgic_Models_AclBuilder {
             'company:info'=>array('view','add', 'edit', 'delete', 'submit'),
             'miscinfo:manage'=>array('view','addinfo', 'postinfo', 'edit', 'delete', 'submit'),
             'infoxsys:manage'=>array('view', 'edit', 'submit'),
-
 
 		    )
 		),

@@ -130,10 +130,10 @@ class Project_AttendanceController extends Zend_Controller_Action
         $this->view->attendancearr = $attendancearr;
         //echo "count=" . count($attendancearr);
 
-        $this->view->workerhtmls = $this->genWorkerHtmls($workerarr, $attendancearr);
+        $this->view->workerhtmls = $this->genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr);
     }
 
-    private function genWorkerHtmls($workerarr, $attendancearr)
+    private function genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr)
     {
         $tablearr = array(); 
         $table ="";
@@ -157,6 +157,7 @@ class Project_AttendanceController extends Zend_Controller_Action
 ';
             $table .= $tr;
             
+            $workerid = $tmp->getId();
             $wpno = $tmp->getWpno();
             $name=$tmp->getNamechs();
             if(!$name || $name=="")
@@ -197,8 +198,15 @@ class Project_AttendanceController extends Zend_Controller_Action
             $attendresult = $this->getAttendFoodData($attendrecord);
 
             $attendtab = "<table>";
-            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th></tr>
+/*
+            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th><th rowspan=4><button data-mini="true" data-theme="b">考勤</button></th></tr>
 ';            
+*/
+            $url = "/project/attendance/attendialog?" . "&sid=$siteid&month=$monthstr&wid=$workerid";   
+            $personattendth = '<th rowspan=4><a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a></th>';
+            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th>' . $personattendth . '</tr>
+';                        
+
             $attendtab .= $tr;
             
             $ths="";
@@ -227,14 +235,18 @@ class Project_AttendanceController extends Zend_Controller_Action
                 $td = "<td>$attend</td>";
                 $tds .= $td;
             }
-            $tr = "<tr><td>考勤</td>$tds</tr>
-";            
+            //$tr = "<tr><td>工时</td>$tds" . '<td rowspan=2><button data-mini="true" data-theme="b">考勤</button></td></tr>
+//';            
+            $tr = "<tr><td>工时</td>$tds</tr>
+";          
             $attendtab .= $tr;
 
             $tds = "";    
             for($i=0; $i<31; $i++)
             {
-                $td = "<td>&nbsp;</td>";
+                //$j = $i +1;
+                $food = $attendresult[1][$i];
+                $td = "<td>$food</td>";
                 $tds .= $td;
             }
             $tr = "<tr><td>伙食</td>$tds</tr>
@@ -334,7 +346,7 @@ class Project_AttendanceController extends Zend_Controller_Action
 
     }
 
-    public function postsalaryAction()
+    public function postattendAction()
     {
         infox_common::turnoffView($this->_helper);
 
@@ -342,21 +354,26 @@ class Project_AttendanceController extends Zend_Controller_Action
         if(0) { var_dump($requests); return; }        
         
         $wid = $this->getParam("wid", 0);
-        $date = $this->getParam("date", 0);
-        $salary = $this->getParam("salary", 0);
-        $remark = $this->getParam("remark", 0);                
-        $month = $this->getParam("month", 0);                
-
+        $date = $this->getParam("date", "");
+        $dateobj = new Datetime($date);
+        //$month = $this->getParam("month", 0);                
+        //$monthobj = new Datetime($month);
+        $month = $dateobj->format("Y-m-01");        
         $monthobj = new Datetime($month);
-        $record = infox_project::getWorkerAtten($wid, $monthobj);
 
+        $attend = $this->getParam("attend", 0);
+        $food = $this->getParam("food", 1);
+        $remark = $this->getParam("remark", 0);                
+        
+        $record = infox_project::getWorkerAtten($wid, $monthobj);
         if(!$record)
         {// create atten
             infox_project::createWorkerAtten($wid, $monthobj);              
         }   
         // update atten
         $dateobj = new Datetime($date);
-        infox_project::updateWorkerAtten($record, $dateobj, $salary);       
+        //infox_project::updateWorkerAtten($record, $dateobj, $salary);
+        infox_project::updateWorkerAtten($wid, $dateobj, $attend, $food);       
     }
 
     public function attendsheetAction()
@@ -462,7 +479,8 @@ class Project_AttendanceController extends Zend_Controller_Action
         foreach($workerarr as $tmp) 
         {
             $wid = $tmp->getId();
-            $salary = $this->getParam("attend$wid", "");
+            $attend = $this->getParam("attend$wid", "");
+            $food = $this->getParam("food$wid", "");
 
             //$record = $this->_siteattendance->findOneBy();
             $record = infox_project::getWorkerAtten($wid, $monthobj);
@@ -471,7 +489,7 @@ class Project_AttendanceController extends Zend_Controller_Action
                 infox_project::createWorkerAtten($wid, $monthobj);              
             }   
             // update atten
-            infox_project::updateWorkerAtten($wid, $date, $salary);
+            infox_project::updateWorkerAtten($wid, $date, $attend, $food);
         }
 
         $url = "/project/attendance/attendancepage?&siteid=$siteid&month=" . $date->format("Ym");
