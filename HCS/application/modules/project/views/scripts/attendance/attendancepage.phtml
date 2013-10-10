@@ -103,8 +103,7 @@ $(function() {
 function post()
 {
     var date = $("#date").val();
-    //alert(date); return;
-    
+    //alert(date); return;    
     var wid = $("#wid").val();
     //console.log(wid); return;
     var attend = $("#attend").val();
@@ -112,10 +111,12 @@ function post()
     var remark = $("#remark").val();
     var month = $("#month").val();
 
-    $.post("/project/attendance/postattend", { wid:wid, date:date, attend:attend, remark:remark, month:month }, 
+    $.post("/project/attendance/postattend", { wid:wid, date:date, attend:attend, remark:remark, month:month, food:food }, 
     function(data) {
-        console.log(data);
-        //alert(data);        
+        //console.log(data);
+
+
+        alert("提交成功，请继续考勤");
         //window.location.reload();
     })  
     

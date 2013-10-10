@@ -298,6 +298,8 @@ class Project_AttendanceController extends Zend_Controller_Action
 
     private function getWorkerMonthAttendHtml($sno, $worker, $attendrecord, $siteid, $monthstr, $nobtn=false)
     {
+            $summary = $this->calcMonthSummary($worker, $attendrecord);
+
             $table = '<table class="attendsum">';    
             // worker info and month summary
             $tr = "";
@@ -325,8 +327,11 @@ class Project_AttendanceController extends Zend_Controller_Action
             $worktype=$worker->getWorktype();
             $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
 
-            $tr .= "<td></td><td></td><td></td><td></td><td></td><td></td>";
-            $tr .= "<td></td><td></td><td></td><td></td><td></td><td></td><td></td>";            
+            $totaldays = $summary['totaldays'];
+            $normalhours = $summary["normalhours"];
+
+            $tr .= "<td>$normalhours</td><td></td><td></td><td></td><td></td><td></td>";
+            $tr .= "<td></td><td>$totaldays</td><td></td><td></td><td></td><td></td><td></td>";            
 
             $table .= $tr;
             $table .= "</table>";
@@ -400,6 +405,64 @@ class Project_AttendanceController extends Zend_Controller_Action
             $tabs[] = $attendtab;
 
             return $tabs;
+    }
+
+    private function calcMonthSummary($worker=null, $attendance)
+    {
+        $wid = $attendance->getWorker()->getId();
+        $month = $attendance->getMonth()->format("Y-m-d");;
+
+        $days = "";
+        for($i=1; $i<=31; $i++)
+        {            
+            $day = "s.day$i";            
+            if($i != 31)
+            {
+                $day .= ",";
+            }
+
+            $days .= $day;
+        }
+
+        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+        $result = $this->_em->createQuery($query)->getResult();
+        //print_r($result);
+
+        $summay = array();
+        $totaldays = 0;
+        $normalhours = 0;
+        foreach($result[0] as $tmp)
+        {
+            if($tmp)
+            {
+                $totaldays++;
+
+                // normal work
+                $tmparr = explode(";", $tmp);
+                if(array_key_exists(0, $tmparr))
+                {
+                    $workhours = $tmparr[0];
+                    if($workhours >= 8)
+                    {
+                        $normalhours += 8;
+                    }   
+                    else
+                    {
+                        $normalhours += $workhours;                        
+                    }
+                }
+            }
+        }
+        
+        $summary["totaldays"] = $totaldays;
+        $summary["normalhours"] = $normalhours;
+
+        return $summary;
+    }
+
+    private function calcNormalWork($worker=null, $attendance)
+    {
+        
     }
 
     // data format: 
