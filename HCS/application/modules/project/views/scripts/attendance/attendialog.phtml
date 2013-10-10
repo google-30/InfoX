@@ -53,6 +53,7 @@ function post()
     
 }
 
+/*
 $(function() { 
     alert("xxxxx");
 
@@ -66,7 +67,7 @@ $(function() {
 
     $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
 });
-
+*/
 </script>
 <?php
 $worker=$this->workerdetails;
@@ -85,6 +86,8 @@ $attendance=$this->attendance;
 
 $date=$this->date;
 $monthstr=$this->monthstr;
+
+$workerattendtabs=$this->workerattendtabs;
 ?>
 
 <div data-role="dialog">
@@ -98,10 +101,11 @@ $monthstr=$this->monthstr;
 </div>
     <div>
 
-<table>
+<!--<table>
 <tr><th colspan=4>工人信息</th><th colspan=31>日期</th></tr>
 <tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th>
 <?php
+
 $days=31;
 $ths="";
 for($i=0; $i<$days; $i++)
@@ -181,9 +185,11 @@ function getAttenTds($attenobj)
 
     return $tds;
 }
-echo $trs;
+//echo $trs;
+
 ?>
-</table>
+</table>-->
+<? echo $workerattendtabs[0] . $workerattendtabs[1]; ?>
     </div>
 
     <div style="float:left;width:43%;">

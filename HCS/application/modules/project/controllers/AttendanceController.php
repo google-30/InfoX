@@ -133,7 +133,7 @@ class Project_AttendanceController extends Zend_Controller_Action
         $this->view->workerhtmls = $this->genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr);
     }
 
-    private function genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr)
+    private function genWorkerHtmls1($workerarr, $attendancearr, $siteid, $monthstr)
     {
         $tablearr = array(); 
         $table ="";
@@ -142,9 +142,9 @@ class Project_AttendanceController extends Zend_Controller_Action
         {
             $tabs = array();
 
-            $sno++;           
-            $table = '<table class="attendsum">';
-    
+            $sno++;
+           
+            $table = '<table class="attendsum">';    
             // worker info and month summary
             $tr = "";
             $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>'; 
@@ -264,6 +264,144 @@ class Project_AttendanceController extends Zend_Controller_Action
         return $tablearr;
     }
 
+    private function genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr)
+    {
+        $tablearr = array(); 
+        $table ="";
+        $sno = 0;
+        foreach($workerarr as $tmp)
+        {
+            $sno++;
+            $workerid = $tmp->getId();
+
+            $attendrecord = null;
+            foreach($attendancearr as $attendtmp)
+            {
+                $wid = $attendtmp->getWorker()->getId();
+                if($wid == $workerid)
+                {
+                    $attendrecord = $attendtmp;
+                    break;
+                }
+            }
+
+            if($attendrecord)
+            {
+                $tabs = $this->getWorkerMonthAttendHtml($sno, $tmp, $attendrecord, $siteid, $monthstr);
+            }
+
+            $tablearr[] = $tabs;
+        }
+
+        return $tablearr;
+    }
+
+    private function getWorkerMonthAttendHtml($sno, $worker, $attendrecord, $siteid, $monthstr, $nobtn=false)
+    {
+            $table = '<table class="attendsum">';    
+            // worker info and month summary
+            $tr = "";
+            $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>'; 
+            $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>
+';
+            $table .= $tr;
+            $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
+            $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
+            $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
+';
+            $table .= $tr;
+            
+            $workerid = $worker->getId();
+            $wpno = $worker->getWpno();
+            $name=$worker->getNamechs();
+            if(!$name || $name=="")
+            {
+                $name = $worker->getNameeng();
+            }
+            //$td="<td>$name</td>";
+            //$tr .= $td;
+            $price = "75"; //$worker->getPrice();
+
+            $worktype=$worker->getWorktype();
+            $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
+
+            $tr .= "<td></td><td></td><td></td><td></td><td></td><td></td>";
+            $tr .= "<td></td><td></td><td></td><td></td><td></td><td></td><td></td>";            
+
+            $table .= $tr;
+            $table .= "</table>";
+            $tabs[] = $table;
+
+            // attendance and food           
+            $attendresult = $this->getAttendFoodData($attendrecord);
+
+            $attendtab = "<table>";
+            if(!$nobtn)
+            {
+            $url = "/project/attendance/attendialog?" . "&sid=$siteid&month=$monthstr&wid=$workerid";   
+            $personattendth = '<th rowspan=4><a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a></th>';
+            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th>' . $personattendth . '</tr>
+';                        
+            }
+            else
+            {
+            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th></tr>
+';                        
+            }
+
+            $attendtab .= $tr;
+
+            $nowdate = new Datetime("");
+            $today = $nowdate->format("d");
+            
+            $ths="";
+            for($i=0; $i<31; $i++)
+            {
+                $j = $i+1;
+                $value = ($j<10) ? "0$j" : $j;
+                $th = ($j == $today) ? '<th style="background:#ff5c5c;">' . $value . '</th>' : "<th>$value</th>";
+                $ths .= $th;
+            }
+            $tr = "<tr>$ths</tr>";
+            $attendtab .= $tr;            
+
+
+            $tds = "";    
+            for($i=0; $i<31; $i++)
+            {
+                $j = $i + 1;
+                $value = $attendresult[0][$i];
+
+                //$td = "<td>$attend</td>";
+                $td = ($j == $today) ? '<td style="background:#ff5c5c;">' . $value . '</td>' : "<td>$value</td>";
+                $tds .= $td;
+            }
+            //$tr = "<tr><td>工时</td>$tds" . '<td rowspan=2><button data-mini="true" data-theme="b">考勤</button></td></tr>
+//';            
+            $tr = "<tr><td>工时</td>$tds</tr>
+";          
+            $attendtab .= $tr;
+
+            $tds = "";    
+            for($i=0; $i<31; $i++)
+            {
+                $j = $i +1;
+                $value = $attendresult[1][$i];
+                //$td = "<td>$food</td>";
+
+                $td = ($j == $today) ? '<td style="background:#ff5c5c;">' . $value . '</td>' : "<td>$value</td>";
+                $tds .= $td;
+            }
+            $tr = "<tr><td>伙食</td>$tds</tr>
+";            
+            $attendtab .= $tr;
+            $attendtab .= "</table>";
+            
+            $tabs[] = $attendtab;
+
+            return $tabs;
+    }
+
     // data format: 
     //  "8;1", means work 8 hours, and 1 means had food also
     //  "9;0", means work 8 hours, and ot 1 hour, and 0 means no food
@@ -323,14 +461,14 @@ class Project_AttendanceController extends Zend_Controller_Action
 
         // date        
         $monthstr = $this->getParam("month", "");
-        $date = new Datetime($monthstr);
+        $date = new Datetime($monthstr . "01");
         $this->view->date=$date;
         $this->view->monthstr=$monthstr;
         
         // worker info
         $wid = $this->getParam("wid", 0);
-        $wdetails = infox_worker::getWorkerdetailsById($wid);
-        $this->view->workerdetails = $wdetails;
+        $worker = infox_worker::getWorkerdetailsById($wid);
+        $this->view->workerdetails = $worker;
 
         // site info
         $siteid = $this->getParam("sid", 0);
@@ -340,10 +478,21 @@ class Project_AttendanceController extends Zend_Controller_Action
 
         // worker atten
         $record = infox_project::getAttendanceByIdMonth($wid, $date);
-        $this->view->attendance = $record;
+        //if(!$record) { echo "xxxxx"; }
+        $this->view->attendance = $record;        
 
-        // datepicker
-
+        $workerarr = infox_worker::getworkerlistbysitedateobj($site, $date);
+        $sno = 0;
+        foreach($workerarr as $tmp)
+        {
+            $sno++;
+            if($tmp->getId() == $wid)
+            {
+                $tabs = $this->getWorkerMonthAttendHtml($sno, $worker, $record, $siteid, $monthstr, true);
+                break;
+            }
+        }
+        $this->view->workerattendtabs = $tabs;
     }
 
     public function postattendAction()
