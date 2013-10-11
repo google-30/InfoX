@@ -329,9 +329,15 @@ class Project_AttendanceController extends Zend_Controller_Action
 
             $totaldays = $summary['totaldays'];
             $normalhours = $summary["normalhours"];
+            $othours = $summary["othours"];
+            $totalhours = $summary["totalhours"];
+            $normalsalary = $summary["normalsalary"];
+            $otsalary = $summary["otsalary"];
+            $totalsalary = $summary["totalsalary"];
+            $fooddays = $summary["fooddays"];
 
-            $tr .= "<td>$normalhours</td><td></td><td></td><td></td><td></td><td></td>";
-            $tr .= "<td></td><td>$totaldays</td><td></td><td></td><td></td><td></td><td></td>";            
+            $tr .= "<td>$normalhours</td><td>$normalsalary</td><td></td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
+            $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";            
 
             $table .= $tr;
             $table .= "</table>";
@@ -431,6 +437,11 @@ class Project_AttendanceController extends Zend_Controller_Action
         $summay = array();
         $totaldays = 0;
         $normalhours = 0;
+        $normalsalary = 0;
+        $othours = 0;
+        $otsalary = 0;    
+
+        $fooddays = 0;    
         foreach($result[0] as $tmp)
         {
             if($tmp)
@@ -445,18 +456,32 @@ class Project_AttendanceController extends Zend_Controller_Action
                     if($workhours >= 8)
                     {
                         $normalhours += 8;
+                        $othours += ($workhours - 8);
                     }   
                     else
                     {
                         $normalhours += $workhours;                        
                     }
                 }
+
+                if(array_key_exists(1, $tmparr))
+                {
+                    $food = $tmparr[1];
+                    $fooddays += ($food==="1") ? 1 : 0;
+                    
+                }
             }
         }
         
         $summary["totaldays"] = $totaldays;
         $summary["normalhours"] = $normalhours;
+        $summary["normalsalary"] = $normalsalary;
+        $summary["othours"] = $othours;
+        $summary["otsalary"] = $otsalary;
+        $summary["totalhours"] = $othours + $normalhours;
+        $summary["totalsalary"] = $otsalary + $normalsalary;
 
+        $summary["fooddays"] = $fooddays;
         return $summary;
     }
 
