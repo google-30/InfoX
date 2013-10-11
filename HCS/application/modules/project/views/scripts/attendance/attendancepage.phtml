@@ -110,12 +110,12 @@ function post()
     var food = $("#food").val();
     var remark = $("#remark").val();
     var month = $("#month").val();
+    var siteid = $("#siteid").val();
 
     $.post("/project/attendance/postattend", { wid:wid, date:date, attend:attend, remark:remark, month:month, food:food }, 
     function(data) {
         //console.log(data);
-
-
+        $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month + "&sid="+siteid);
         alert("提交成功，请继续考勤");
         //window.location.reload();
     })  
@@ -137,6 +137,7 @@ function post()
 
 	<div data-role="content">
 <!--<div style="float:right;">-->
+<input type="hidden" id="siteid" name="siteid" value="<? echo $siteid; ?>">
 <div>
 <?php
 $url = "/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   

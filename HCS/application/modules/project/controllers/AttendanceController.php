@@ -590,6 +590,47 @@ class Project_AttendanceController extends Zend_Controller_Action
 
     public function attendsheetAction()
     {
+        infox_common::turnoffLayout($this->_helper);
+
+        // date        
+        $monthstr = $this->getParam("month", "");
+        $date = new Datetime($monthstr . "01");
+        $this->view->date=$date;
+        $this->view->monthstr=$monthstr;
+        
+        // worker info
+        $wid = $this->getParam("wid", 0);
+        $worker = infox_worker::getWorkerdetailsById($wid);
+        $this->view->workerdetails = $worker;
+
+        // site info
+        $siteid = $this->getParam("sid", 0);
+        $this->view->siteid = $siteid;
+        $site = infox_project::getSiteById($siteid);
+        $this->view->site = $site;
+
+        // worker atten
+        $record = infox_project::getAttendanceByIdMonth($wid, $date);
+        //if(!$record) { echo "xxxxx"; }
+        $this->view->attendance = $record;        
+
+        $workerarr = infox_worker::getworkerlistbysitedateobj($site, $date);
+        $sno = 0;
+        foreach($workerarr as $tmp)
+        {
+            $sno++;
+            if($tmp->getId() == $wid)
+            {
+                $tabs = $this->getWorkerMonthAttendHtml($sno, $worker, $record, $siteid, $monthstr, true);
+                break;
+            }
+        }
+        $this->view->workerattendtabs = $tabs;
+
+    }
+
+    public function attendsheetAction1()
+    {
         infox_common::turnoffLayout($this->_helper);        
 
         // date        
@@ -641,11 +682,6 @@ class Project_AttendanceController extends Zend_Controller_Action
         $result = $query->getResult();        
 
         //var_dump($result);        
-    }
-
-    private function getdata()
-    {
-
     }
 
     public function attendquickAction()
