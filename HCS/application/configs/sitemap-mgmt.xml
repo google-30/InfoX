@@ -16,7 +16,7 @@
             </dashboard>
 
         <workermodules>	
-	    <label>工人管理</label>
+	    <label>人力资源</label>
 	    <uri>#workermodules</uri>
 	    <class>popup</class>
 	    <pages>
@@ -50,9 +50,9 @@
             <workersalary>
 		    <label>工人工资管理</label>
 		    <module>worker</module>
-		    <controller>import</controller>
+		    <controller>salary</controller>
 		    <action>index</action>
-		    <resource>worker:import</resource>
+		    <resource>worker:salary</resource>
 		    <privilege>view</privilege>
 	        </workersalary>
 
