@@ -141,7 +141,9 @@ $workerattendtabs=$this->workerattendtabs;
 	    </div>	
         <input type="hidden" name="wid" id="wid" value="<? echo $wid; ?>">
         <input type="hidden" name="month" id="month" value="<? echo $monthstr; ?>">
-        <input type="button" value="提交" onclick="post()">
+        <input type="button" value="提交考勤" onclick="attendialogpost()">
+        <br>
+        <input type="button" value="关闭本页" onclick="attendialogclose()">
     </div>
 
 	</div>
