@@ -114,8 +114,7 @@ $attendancearr=$this->attendancearr;
     </div>
 
     <div data-role="content" data-theme="c">
-<script>
-</script>
+
     <div style="float:left;max-width:500px;min-width:400px;">
     <input type="date" name="date" id="date" value=""  />	
     </div>
@@ -131,6 +130,8 @@ $attendancearr=$this->attendancearr;
 <th rowspan="2">序号</th><th colspan=4>工人信息</th><th rowspan=2 class="tdattendfood">工作小时</th><th rowspan=2 class="tdattendfood">伙食</th></tr>
 <tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th></tr>
 <?php
+$attendoptions="";
+$attendoptions=getAttendoptions();
 $trs="";
 $sn=0;
 foreach($workerarr as $tmp)
@@ -161,31 +162,60 @@ foreach($workerarr as $tmp)
     $tr .= $td;
 
     $workerid = $tmp->getId();
-    $attentds = getAttenTds($attendancearr, $workerid);
+    $attentds = getAttenTds($attendancearr, $workerid, $attendoptions);
     $tr .= $attentds;
 
     $trs .= "<tr>$tr</tr>";        
 }
 
-function getAttenTds($attendancearr, $workerid)
+function getAttendoptions()
 {
-    $attend = '<td><select name="attend' . $workerid .'" id="attend' . $workerid . '" data-theme="b" data-mini="true">
-				<option value="2">2小时</option>
-                <option value="3">3小时</option>
-                <option value="4">4小时</option>
-                <option value="5">5小时</option>
-                <option value="6">6小时</option>
-                <option value="7">7小时</option>
-                <option value="8" selected>8小时</option>
-                <option value="9">9小时</option>
-                <option value="10">10小时</option>
-                <option value="11">11小时</option>
-                <option value="12">12小时</option>
-                <option value="13">13小时</option>
-                <option value="14">14小时</option>
-                <option value="15">15小时</option>
-                <option value="16">16小时</option>
+    $options="";
+    for($count=0;$count<29;$count++)
+    {
+        $hours = 2 + $count * 0.5;
+        $option = "<option value=$hours>$hours" . "小时</option>";
+        if($hours==8)
+        {
+            $option = "<option value=$hours selected>$hours" . "小时</option>";
+        }
+        $options .= $option;
+    }
+
+    return $options;
+}
+
+function getAttenTds($attendancearr, $workerid, $attendoptions)
+{
+    //echo $options;
+    $attend = '<td><select name="attend' . $workerid .'" id="attend' . $workerid . '" data-theme="b" data-mini="true">'
+                . $attendoptions .'</select></td>';
+
+    $food = '<td><select name="food' . $workerid .'" id="food' . $workerid . '" data-role="slider" data-theme="b">
+				<option value="1">有</option>
+				<option value="0">无</option>
 			</select></td>';
+    //$food="<td>&nbsp;</td>";
+    return $attend . $food ;
+}
+
+// static means: just static html
+function getStaticAttenTds($attendancearr, $workerid)
+{
+    $options="";
+    for($count=0;$count<29;$count++)
+    {
+        $hours = 2 + $count * 0.5;
+        $option = "<option value=$hours>$hours" . "小时</option>";
+        if($hours==8)
+        {
+            $option = "<option value=$hours selected>$hours" . "小时</option>";
+        }
+        $options .= $option;
+    }
+    //echo $options;
+    $attend = '<td><select name="attend' . $workerid .'" id="attend' . $workerid . '" data-theme="b" data-mini="true">'
+                . $options .'</select></td>';
 
     $food = '<td><select name="food' . $workerid .'" id="food' . $workerid . '" data-role="slider" data-theme="b">
 				<option value="1">有</option>

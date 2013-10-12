@@ -67,38 +67,17 @@ function quicksubmit()
 
     $("#quickdate").val(date);
 
-    /*
-    $.post("/project/attendance/postsalary", { wid:wid, date:date, salary:salary, remark:remark, month:month }, 
-    function(data) {
-        console.log(data);
-        //alert(data);        
-        //window.location.reload();
-    });  
-    */
-    $("#quickform").submit();
-
-    /*
-    $( "#quickform" ).submit(function( event ) {
-      alert( "Handler for .submit() called." );
-      //event.preventDefault();
-      //  window.location.reload();
-    });
-    */
+    $.ajax({
+     type: "POST",
+     url: "/project/attendance/quicksubmit",
+     data: {'form': $("#quickform").serializeArray(), /*'other': extra_data*/},
+     success: function(msg) {
+        //alert("Form Submitted: " + msg);
+        alert("提交成功，请继续考勤");
+        //console.log(msg);
+     }
+    });    
 }
-
-/*
-$(function() { 
-    var date = $("#date").val();
-    //alert(date);
-    var wid = $("#wid").val();
-    //console.log(wid);
-    var salary = $("#salary").val();
-    var remark = $("#remark").val();
-    var month = $("#month").val();
-
-    $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
-});
-*/
 
 function attendialogpost()
 {
@@ -118,8 +97,7 @@ function attendialogpost()
         $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month + "&sid="+siteid);
         alert("提交成功，请继续考勤");
         //window.location.reload();
-    })  
-    
+    })     
 }
 
 function attendialogclose()

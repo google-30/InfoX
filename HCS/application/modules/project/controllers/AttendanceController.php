@@ -733,17 +733,19 @@ class Project_AttendanceController extends Zend_Controller_Action
         
     }
 
-    public function quicksubmitAction()
+    public function quicksubmitAction1()
     {
         infox_common::turnoffView($this->_helper);
+        //infox_common::turnoffLayout($this->_helper);
         $requests = $this->getRequest()->getPost();
         if(0) { var_dump($requests); return; }        
 
         $quickdate = $this->getParam("quickdate", "");
+        echo "quickdate=$quickdate"; return;
+
         $date = new Datetime($quickdate);
         $month = $date->format("Y-m-01");        
         $monthobj = new Datetime($month);
-
         $siteid = $this->getParam("sid", 0);
         $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
 
@@ -766,6 +768,42 @@ class Project_AttendanceController extends Zend_Controller_Action
         }
 
         //$url = "/project/attendance/attendancepage?&siteid=$siteid&month=" . $date->format("Ym");
+        //echo $url;
         //$this->_redirect($url);
+    }
+
+    public function quicksubmitAction()
+    {
+        infox_common::turnoffView($this->_helper);
+        //infox_common::turnoffLayout($this->_helper);
+        $requests = $this->getRequest()->getPost();
+        if(0) { var_dump($requests); return; }        
+
+       
+        $quickdate = infox_common::getSerializeArrayValueByKey($requests, "quickdate");
+        //echo "quickdate=$quickdate"; return;
+        $date = new Datetime($quickdate);
+        $month = $date->format("Y-m-01");        
+        $monthobj = new Datetime($month);
+        $siteid = infox_common::getSerializeArrayValueByKey($requests, "sid");
+        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+
+        $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
+
+        foreach($workerarr as $tmp) 
+        {
+            $wid = $tmp->getId();
+            $attend = infox_common::getSerializeArrayValueByKey($requests, "attend$wid");
+            $food = infox_common::getSerializeArrayValueByKey($requests, "food$wid");
+
+            //$record = $this->_siteattendance->findOneBy();
+            $record = infox_project::getWorkerAtten($wid, $monthobj);
+            if(!$record)
+            {// create atten
+                infox_project::createWorkerAtten($wid, $monthobj);              
+            }   
+            // update atten
+            infox_project::updateWorkerAtten($wid, $date, $attend, $food);
+        }
     }
 }

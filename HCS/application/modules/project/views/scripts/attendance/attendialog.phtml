@@ -109,22 +109,23 @@ $workerattendtabs=$this->workerattendtabs;
 	    <div data-role="fieldcontain">
      	    <label for="attend">工时:</label>
             <select name="attend" id="attend" data-theme="b" >
-				<option value="2">2小时</option>
-                <option value="3">3小时</option>
-                <option value="4">4小时</option>
-                <option value="5">5小时</option>
-                <option value="6">6小时</option>
-                <option value="7">7小时</option>
-                <option value="8" selected>8小时</option>
-                <option value="9">9小时</option>
-                <option value="10">10小时</option>
-                <option value="11">11小时</option>
-                <option value="12">12小时</option>
-                <option value="13">13小时</option>
-                <option value="14">14小时</option>
-                <option value="15">15小时</option>
-                <option value="16">16小时</option>
-			</select>
+<?php
+//$hours=array("");
+//$hours=0;
+$options="";
+for($count=0;$count<29;$count++)
+{
+    $hours = 2 + $count * 0.5;
+    $option = "<option value=$hours>$hours" . "小时</option>";
+    if($hours==8)
+    {
+        $option = "<option value=$hours selected>$hours" . "小时</option>";
+    }
+    $options .= $option;
+}
+echo $options;
+?>
+    	</select>
 	    </div>	
 	    <div data-role="fieldcontain">
      	    <label for="food">伙食:</label>
