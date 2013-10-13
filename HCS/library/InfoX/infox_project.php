@@ -185,4 +185,43 @@ class infox_project
         $query = $_em->createQuery($query);
         $result = $query->getResult();
     }
+
+    // monthstr format is "2013-10"
+    public static function getAttendanceByMonth($monthstr)
+    {
+        self::getRepos();
+        $_workerdetails = self::$_workerdetails;
+        $_siteatten = self::$_siteatten;
+        
+        $month = new Datetime($monthstr . "-01");
+        $records = $_siteatten->findBy(array("month"=>$month));                
+
+        return $records;
+    }
+
+    public static function getAttendanceByMonthSheet($monthstr, $sheet)
+    {
+        self::getRepos();
+        $_workerdetails = self::$_workerdetails;
+        $_siteatten = self::$_siteatten;
+        
+        $month = new Datetime($monthstr . "-01");
+        $records = $_siteatten->findBy(array("month"=>$month));       
+
+        $attendarr = array();
+        foreach($records as $tmp)
+        {
+            $worker = $tmp->getWorker();
+
+            if($worker->getSheet() == $sheet)
+            {
+                $attendarr[] = $tmp;
+            }
+
+        }         
+
+        return $attendarr;
+    }
+
+
 }

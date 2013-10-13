@@ -23,12 +23,17 @@ $maindata=$this->workerarr;
 
 $nowdate=new Datetime("now");
 $thismonth=$nowdate->format("Y-m");
-$prevmonth = date('Y-m', strtotime("last month"));
+$lastmonth = date('Y-m', strtotime("last month"));
+
+$thismonthurl="/worker/salary/salarybymonth?sheet=$sheet&month=$thismonth";
+$lastmonthurl="/worker/salary/salarybymonth?sheet=$sheet&month=$lastmonth"; 
 ?>
 
 <div class="ui-grid-b">
-	<div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="a">上月工资(<? echo $prevmonth; ?>)</button></a></div>
-	<div class="ui-block-b"><a href="#"><button data-mini="true" data-theme="a">本月工资(<? echo $thismonth; ?>)</button></a></div>
+	<div class="ui-block-a"><a href="<?=$lastmonthurl?>" target="_blank">
+<button data-mini="true" data-theme="a">上月工资(<?=$lastmonth?>)</button></a></div>
+	<div class="ui-block-b"><a href="<?=$thismonthurl?>" target="_blank">
+<button data-mini="true" data-theme="a">本月工资(<?=$thismonth?>)</button></a></div>
 	<div class="ui-block-c"><a href="#"><button data-mini="true" data-theme="a">历史记录</button></a></div>
 </div>
 
