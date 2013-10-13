@@ -25,8 +25,8 @@ class Worker_SalaryController extends Zend_Controller_Action
 
     }
 
-    public function salarymonthAction()
+    public function salarybymonthAction()
     {
-        
+        infox_common::turnoffLayout($this->_helper);        
     }    
 }
