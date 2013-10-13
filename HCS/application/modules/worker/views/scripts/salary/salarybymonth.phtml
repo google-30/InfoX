@@ -42,8 +42,8 @@ $workerhtmls=$this->workerhtmls;
 
 <body> 
 <style>
-table { width: 100%; border-collapse:collapse; }
-table td, table th { text-align:center; border:1px solid black; }
+table { width: 100%; /*border-collapse:collapse; */}
+table td, table th { text-align:center; border:0px solid black; }
 .ui-dialog-contain {
 	width: 92.5%;
 	max-width: 2500px;
@@ -115,7 +115,7 @@ function attendialogclose()
 </script>
 <div data-role="page">
 
-	<div data-role="header">
+	<div data-role="header" data-theme="b">
 		<!--<h1>Single page</h1>-->
 <table style="table-layout:fixed;">
 <tr>
@@ -127,20 +127,20 @@ function attendialogclose()
 
 	<div data-role="content">
 <div class="ui-grid-b">
-	<div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="a">上月工资(<? echo $prevmonth; ?>)</button></a></div>
-	<div class="ui-block-b"><a href="#"><button data-mini="true" data-theme="a">本月工资(<? echo $thismonth; ?>)</button></a></div>
-	<div class="ui-block-c"><a href="#"><button data-mini="true" data-theme="a">历史记录</button></a></div>
+	<div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="b">上月工资(<? ?>)</button></a></div>
+	<div class="ui-block-b"><a href="#"><button data-mini="true" data-theme="b">本月工资(<? ?>)</button></a></div>
+	<div class="ui-block-c"><a href="#" data-mini="true" data-theme="b" data-role="button" >历史记录</a></div>
 </div>
 
-<div>
+
 <?php
+/*
+echo "<div>";
 $url = "/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
 $ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" >快速考勤</a>';    
 echo $ahref;
-?>
-</div>
+echo "</div>";
 
-<?php
 foreach($workerhtmls as $tmp)
 {
     //echo $tmp . "<br>";    
@@ -149,6 +149,7 @@ foreach($workerhtmls as $tmp)
 
     echo $tab1. $tab2 . "<br>";
 }
+*/
 ?>
 	</div><!-- /content -->
 	

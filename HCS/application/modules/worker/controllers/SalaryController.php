@@ -36,6 +36,8 @@ class Worker_SalaryController extends Zend_Controller_Action
         $this->view->monthstr = $monthstr;
 
         // get all records in this month
+
+
         $attendarr = infox_project::getAttendanceByMonthSheet($monthstr, $sheet);
         $this->view->attendarr = $attendarr;
     

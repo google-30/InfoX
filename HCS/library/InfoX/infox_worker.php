@@ -2,11 +2,11 @@
 
 class infox_worker
 {
-    //private static $_em = Zend_Registry::get('em');
-    //private static $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
+    
 
     public function init()
     {
+        echo "infox_worker::init";
         $this->_em = Zend_Registry::get('em');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_workeronsite = $this->_em->getRepository('Synrgic\Infox\Workeronsite');
@@ -17,6 +17,19 @@ class infox_worker
         $em = Zend_Registry::get('em');
         $workerdetails = $em->getRepository('Synrgic\Infox\Workerdetails');
     }
+
+    public static function getRepos()
+    {
+        echo "infox_worker::getRepos";
+        self::$_em = Zend_Registry::get('em');
+        self::$_siteatten = self::$_em->getRepository('Synrgic\Infox\Siteattendance');
+        self::$_workerdetails = self::$_em->getRepository('Synrgic\Infox\Workerdetails');
+
+        self::$_salaryhcc = self::$_em->getRepository('Synrgic\Infox\Workersalaryhcc');
+        self::$_salaryhcb = self::$_em->getRepository('Synrgic\Infox\Workersalaryhcb');
+        self::$_salaryhtc = self::$_em->getRepository('Synrgic\Infox\Workersalaryhtc');
+        self::$_salaryhtb = self::$_em->getRepository('Synrgic\Infox\Workersalaryhtb');
+    }  
 
     public static function getSheetarr()
     {
@@ -142,5 +155,10 @@ class infox_worker
         $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
 
         return $_workerdetails->findOneBy(array("id"=>$wid));
+    }
+
+    public static function getSalaryRecordsByMonthSheet($monthstr, $sheet="HC.C")
+    {
+                
     }
 }
