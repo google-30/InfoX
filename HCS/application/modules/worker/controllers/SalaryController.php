@@ -29,21 +29,38 @@ class Worker_SalaryController extends Zend_Controller_Action
     {
         infox_common::turnoffLayout($this->_helper);
 
+        $error="";
+
         $sheet = $this->getParam("sheet", "HC.C");
         $this->view->sheet = $sheet;
 
-        $monthstr = $this->getParam("month", "now");        
+        // TODO: may cause datetime issue here
+        $monthstr = $this->getParam("month", "now");
+        if($monthstr=="now")
+        {            
+            $error .= "salarybymonthAction:monthstr error.";
+            $this->view->error = $error;
+            return;
+        }
+        $month = new Datetime($monthstr);        
         $this->view->monthstr = $monthstr;
 
-        // get all records in this month
+        // create records first 
+        infox_worker::createSalaryRecordsByMonthSheet($monthstr, $sheet);
 
+        // get all records in this month
+        $salaryrecords = infox_worker::getSalaryRecordsByMonthSheet($month, $sheet);
 
         $attendarr = infox_project::getAttendanceByMonthSheet($monthstr, $sheet);
-        $this->view->attendarr = $attendarr;
+        //$this->view->attendarr = $attendarr;
+
+        $salarytabs = $this->generateSalaryTabs($salaryrecords, $attendarr);
     
     }
 
-    private function generateSalaryTabs($attendarr)
+    
+
+    private function generateSalaryTabs($salaryrecords, $attendarr)
     {
         
     }    

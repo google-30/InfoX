@@ -2,7 +2,13 @@
 
 class infox_worker
 {
-    
+    public static $_em;
+    public static $_siteatten;
+    public static $_workerdetails;
+    public static $_salaryhcc;    
+    public static $_salaryhcb;    
+    public static $_salaryhtc;    
+    public static $_salaryhtb;    
 
     public function init()
     {
@@ -157,8 +163,95 @@ class infox_worker
         return $_workerdetails->findOneBy(array("id"=>$wid));
     }
 
-    public static function getSalaryRecordsByMonthSheet($monthstr, $sheet="HC.C")
+    public static function getReposBySheet($sheet="HC.C")
     {
-                
+        //self::getRepos();
+        $repos = null;
+        switch($sheet)
+        {
+            case "HC.C":
+                $repos = self::$_salaryhcc;
+                break;
+            case "HC.B":
+                $repos = self::$_salaryhcb;
+                break;
+            case "HT.C":
+                $repos = self::$_salaryhtc;
+                break;
+            case "HT.B":
+                $repos = self::$_salaryhtb;
+                break;    
+        }
+
+        return $repos;
+    }
+
+    public static function createSalaryRecordsByMonthSheet($monthstr, $sheet="HC.C")
+    {
+        self::getRepos();
+        $workerarr = self::getworkerlistbysheet($sheet);
+        $salaryrepos = self::getReposBySheet($sheet);
+
+        $month = new Datetime($monthstr . "-01");
+
+        foreach($workerarr as $worker)
+        {
+            $record = self::getSalaryRecordByReposWorkerMonth($salaryrepos, $worker, $month);
+            if(!$record)
+            {
+                //echo "no record for " . $worker->getNamechs();
+                // create record
+                self::createSalaryRecordBySheetWorkerMonth($sheet, $worker, $month);
+            }
+        }
+    }
+
+    public static function getSalaryRecordByReposWorkerMonth($salaryrepos, $worker, $month)
+    {
+        $record = $salaryrepos->findOneBy(array("worker"=>$worker, "month"=>$month));        
+        return $record;
+    }
+
+    public static function createSalaryRecordBySheetWorkerMonth($sheet, $worker, $month)
+    {
+        $data = null;
+        switch($sheet)
+        {
+            case "HC.C":
+                $data = new \Synrgic\Infox\Workersalaryhcc();
+                break;
+            case "HC.B":
+                $data = new \Synrgic\Infox\Workersalaryhcb();
+                break;
+            case "HT.C":
+                $data = new \Synrgic\Infox\Workersalaryhtc();
+                break;
+            case "HT.B":
+                $data = new \Synrgic\Infox\Workersalaryhtb();
+                break;
+        }
+
+        if($data)
+        {
+            $data->setWorker($worker);
+            $data->setMonth($month);
+
+            $em = self::$_em;
+            $em->persist($data);
+            try {
+                $em->flush();
+            } catch (Exception $e) {
+                var_dump($e);
+                return;
+            }                
+        }
+    }
+
+    // sheet, month, workers not resigned    
+    public static function getSalaryRecordsByMonthSheet($month, $sheet="HC.C")
+    {
+        $salaryrepos = self::getReposBySheet($sheet);
+        $records = $salaryrepos->findBy(array("month"=>$month));
+        return $records;
     }
 }
