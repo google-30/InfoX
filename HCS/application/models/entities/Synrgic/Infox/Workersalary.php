@@ -16,6 +16,78 @@ class Workersalary extends \Synrgic_Models_Entity {
     protected $month;
 
     /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $normalhours;
+
+    /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $normalpay;
+
+    /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $othours;
+
+    /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $otpay;
+
+    /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $otprice;
+
+    /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $allhours;
+
+    /**
+     * 总工作 金额   
+     * @Column(type="float", nullable=true)
+     */
+    protected $allpay;
+
+    /**
+     * 考勤天数
+     * @Column(type="integer", nullable=true)
+     */
+    protected $attenddays;
+
+    /**
+     * 缺勤天数
+     * @Column(type="integer", nullable=true)
+     */
+    protected $absencedays;
+
+    /**
+     * 缺勤罚款
+     * @Column(type="float", nullable=true)
+     */
+    protected $absencefines;
+
+    /**
+     * 项目总工资
+     * @Column(type="float", nullable=true)
+     */
+    protected $projectpay;
+
+    /**
+     * 伙食费天数
+     * @Column(type="integer", nullable=true)
+     */
+    protected $fooddays;
+
+    /**
+     * 伙食费
+     * @Column(type="float", nullable=true)
+     */
+    protected $foodpay;
+
+    /**
      * 预扣税 =?= release tax(rt)? 
      * @Column(type="string", nullable=true)
      */
@@ -73,41 +145,6 @@ class Workersalary extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $netpay;
-
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $normalhours;
-
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $normalpay;
-
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $othours;
-
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $otpay;
-
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $otprice;
-
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $allhours;
-
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $allpay;
 
 
 }

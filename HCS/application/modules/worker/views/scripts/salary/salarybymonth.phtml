@@ -5,7 +5,8 @@
 $monthstr=$this->monthstr;
 $sheet=$this->sheet;
 
-$attendarr=$this->attendarr;
+//$attendarr=$this->attendarr;
+$salarytabs= $this->salarytabs;
 
 /*
 $monthstr=$date->format("Y-m");
@@ -42,8 +43,11 @@ $workerhtmls=$this->workerhtmls;
 
 <body> 
 <style>
-table { width: 100%; /*border-collapse:collapse; */}
-table td, table th { text-align:center; border:0px solid black; }
+#headertab { width: 100%;}
+#headertab td, table th { text-align:left; border:0px solid black; }
+table { width: 100%; border-collapse:collapse; table-layout:fixed;}
+table td, table th { text-align:center; border:1px solid black; }
+
 .ui-dialog-contain {
 	width: 92.5%;
 	max-width: 2500px;
@@ -117,7 +121,7 @@ function attendialogclose()
 
 	<div data-role="header" data-theme="b">
 		<!--<h1>Single page</h1>-->
-<table style="table-layout:fixed;">
+<table style="table-layout:fixed;" id="headertab">
 <tr>
 <td><? echo "月份: " . $monthstr; ?></td>
 <td><? echo "工资负责人: " . ""; ?></td>
@@ -129,12 +133,11 @@ function attendialogclose()
 <div id="error">
 <?=$this->error?>
 </div>
-<div class="ui-grid-b">
-	<div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="b">上月工资(<? ?>)</button></a></div>
-	<div class="ui-block-b"><a href="#"><button data-mini="true" data-theme="b">本月工资(<? ?>)</button></a></div>
-	<div class="ui-block-c"><a href="#" data-mini="true" data-theme="b" data-role="button" >历史记录</a></div>
-</div>
 
+<div class="ui-grid-a">
+	<div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="b">sheet(<? ?>)</button></a></div>
+	<div class="ui-block-b"><a href="#"><button data-mini="true" data-theme="b">month(<? ?>)</button></a></div>
+</div>
 
 <?php
 /*
@@ -153,6 +156,16 @@ foreach($workerhtmls as $tmp)
     echo $tab1. $tab2 . "<br>";
 }
 */
+
+$alltabs="";
+foreach($salarytabs as $tmp)
+{
+    $tab0 = $tmp[0]; // worker
+    $tab1 = $tmp[1]; // salary
+    $alltabs .= "$tab0$tab1<br>";
+}
+
+echo $alltabs;
 ?>
 	</div><!-- /content -->
 	
