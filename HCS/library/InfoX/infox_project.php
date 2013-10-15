@@ -223,5 +223,114 @@ class infox_project
         return $attendarr;
     }
 
+    public static function generateAttendanceTab($attendrecord)
+    {
+        $attendresult = self::getAttendFoodData($attendrecord);
 
+        $attendtab = "<table>";
+        $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th></tr>
+';                        
+        $attendtab .= $tr;
+
+        $ths="";
+        for($i=0; $i<31; $i++)
+        {
+            $j = $i+1;
+            $value = ($j<10) ? "0$j" : $j;
+            $th = "<th>$value</th>";
+            $ths .= $th;
+        }
+        $tr = "<tr>$ths</tr>";
+        $attendtab .= $tr;            
+
+        $tds = "";    
+        for($i=0; $i<31; $i++)
+        {
+            $j = $i + 1;
+            $value = $attendresult[0][$i];
+
+            //$td = "<td>$attend</td>";
+            $td = "<td>$value</td>";
+            $tds .= $td;
+        }
+        $tr = "<tr><td>工时</td>$tds</tr>
+";          
+        $attendtab .= $tr;
+
+        $tds = "";    
+        for($i=0; $i<31; $i++)
+        {
+            $j = $i +1;
+            $value = $attendresult[1][$i];
+            //$td = "<td>$food</td>";
+
+            $td = "<td>$value</td>";
+            $tds .= $td;
+        }
+        $tr = "<tr><td>伙食</td>$tds</tr>
+";            
+        $attendtab .= $tr;
+        $attendtab .= "</table>";
+
+        return $attendtab;                 
+    }
+
+    public static function getAttendFoodData($record)
+    {
+        if(!$record)
+        {
+            $attendarr = array();
+            $foodarr = array();
+
+            for($i=1; $i<=31; $i++)
+            {                
+                $attendarr[] = "&nbsp;";
+                $foodarr[] = "&nbsp;";
+            }
+            
+            $newresult = array($attendarr, $foodarr);            
+        }
+        else
+        {
+            $wid = $record->getWorker()->getId();
+            $month = $record->getMonth()->format("Y-m-01");
+
+            $days = "";
+            for($i=1; $i<=31; $i++)
+            {            
+                $day = "s.day$i";            
+                if($i != 31)
+                {
+                    $day .= ",";
+                }
+
+                $days .= $day;
+            }
+
+            $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+            //echo $query; return;
+            $query = self::$_em->createQuery($query);
+            $result = $query->getResult();
+            //echo "result="; var_dump($result);
+            //return $result;
+
+            $attendarr = array();
+            $foodarr = array();
+
+            $tmparr = $result[0];
+            foreach($tmparr as $tmp)
+            {
+                $arr = explode(";", $tmp);
+                
+                $attendarr[] = array_key_exists(0, $arr) ? $arr[0] : "&nbsp;";
+                $foodarr[] = array_key_exists(1, $arr) ? $arr[1] : "&nbsp;";
+            }
+            
+            $newresult = array($attendarr, $foodarr);
+            //print_r($newresult);
+        }
+
+        return $newresult;
+    }    
+    
 }

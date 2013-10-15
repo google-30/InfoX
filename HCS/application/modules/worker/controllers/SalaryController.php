@@ -80,6 +80,22 @@ class Worker_SalaryController extends Zend_Controller_Action
             $tab = $this->generatePaymentTab($record);
             $tmparr[] = $tab;
 
+            $attendrecord = null;
+            foreach($attendarr as $attend)
+            {
+                $attendworker = $attend->getWorker();
+
+                if($attendworker->getId() == $worker->getId())
+                {
+                    $attendrecord = $attend;
+                    break;
+                }
+            }
+            //$tab = $this->generateAttendanceTab($attendrecord);
+            $tab = infox_project::generateAttendanceTab($attendrecord);
+
+            $tmparr[] = $tab;
+
             $salarytabs[] = $tmparr;   
         }
 
@@ -164,4 +180,10 @@ class Worker_SalaryController extends Zend_Controller_Action
         $tab .= "</table>";                
         return $tab;
     }
+
+    private function generateAttendanceTab($record)
+    {
+        
+    }
+
 }
