@@ -28,11 +28,12 @@ class Worker_SalaryController extends Zend_Controller_Action
     public function salarybymonthAction()
     {
         infox_common::turnoffLayout($this->_helper);
-
+        
         $error="";
 
         $sheet = $this->getParam("sheet", "HC.C");
         $this->view->sheet = $sheet;
+        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
 
         // TODO: may cause datetime issue here
         $monthstr = $this->getParam("month", "now");
@@ -98,7 +99,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         $price = "6"; //TODO: what's this value
         $type = $worker->getWorktype();
 
-        $tab = "<table>";
+        $tab = '<table class="workerinfo">';
         //$tab .= "<tr><th colspan=4>工人信息</th></tr>";
         $tab .= "<tr><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
         $tab .= "<tr><td>$wpno</td><td>$eeeno</td><td>$name</td><td>$price</td><td>$type</td></tr>";
@@ -126,6 +127,16 @@ class Worker_SalaryController extends Zend_Controller_Action
         $fooddays = "fd";
         $foodpay = "fp";
 
+        $rtmonthpay = $record->getRtmonthpay();
+        $rtmonths = $record->getRtmonths();
+        $rtall = $record->getRtall();
+        $utfee = $record->getUtfee();
+        $utallowance = $record->getUtallowance();
+        $otherfee = $record->getOtherfee();
+        $inadvance = $record->getInadvance();
+        $salary = $record->getSalary();
+        $netpay = $record->getNetpay();
+
         $tab = "<table>";
         $tab .= "<tr><td colspan=2>正常工作</td><td colspan=3>加班工作</td><td colspan=2>总工作</td>"
                 . "<td rowspan=2>考勤天数</td><td colspan=2>缺勤罚款</td><td rowspan=2>项目总工资</td>";
@@ -145,8 +156,9 @@ class Worker_SalaryController extends Zend_Controller_Action
         $tab .= "<td>$absencedays</td><td>$absencefines</td>";
         $tab .= "<td>$projectpay</td>";
         $tab .= "<td>$fooddays</td><td>$foodpay</td>";
-        $tab .= "<td>当月</td><td>月数</td><td>累计</td>";        
-        $tab .= "<td>扣款</td><td>补助</td>";
+        $tab .= "<td>$rtmonthpay</td><td>$rtmonths</td><td>$rtall</td>";        
+        $tab .= "<td>$utfee</td><td>$utallowance</td>";
+        $tab .= "<td>$otherfee</td><td>$inadvance</td><td>$salary</td>";
         $tab .= "</tr>";
 
         $tab .= "</table>";                

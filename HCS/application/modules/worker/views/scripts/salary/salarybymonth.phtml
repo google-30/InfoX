@@ -4,6 +4,7 @@
 <?php
 $monthstr=$this->monthstr;
 $sheet=$this->sheet;
+$sheetarr=$this->sheetarr;
 
 //$attendarr=$this->attendarr;
 $salarytabs= $this->salarytabs;
@@ -29,6 +30,9 @@ $workerhtmls=$this->workerhtmls;
     <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
     <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+
+    <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
+    <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
 
     <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
     <script src="/common/js/jQuery.ui.datepicker.js"></script>
@@ -60,8 +64,18 @@ table td, table th { text-align:center; border:1px solid black; }
 .attendsum  { background-color:#D0D0D0; }
 .fixwidthcol { width:45px; }
 .tdattendfood { width:150px; }
+.workerinfo { background: #6FACD5;
+/*linear-gradient(#6FACD5, #497BAE) repeat scroll 0 0 #5E87B0;*/
+/*linear-gradient(#5F9CC5, #396B9E) repeat scroll 0 0 #396B9E*/ }
 </style>
 <script>
+$(function () {
+    $('.datepicker').mobiscroll().date({
+        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm', dateFormat: 'yy-mm',
+        endYear: 2050,
+    }); 
+});
+
 function quicksubmit()
 {
     //alert("quicksubmit");
@@ -135,28 +149,32 @@ function attendialogclose()
 </div>
 
 <div class="ui-grid-a">
-	<div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="b">sheet(<? ?>)</button></a></div>
-	<div class="ui-block-b"><a href="#"><button data-mini="true" data-theme="b">month(<? ?>)</button></a></div>
-</div>
-
-<?php
-/*
-echo "<div>";
-$url = "/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
-$ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" >快速考勤</a>';    
-echo $ahref;
-echo "</div>";
-
-foreach($workerhtmls as $tmp)
+	<div class="ui-block-a">
+<?
+$options="";
+foreach($sheetarr as $tmp)
 {
-    //echo $tmp . "<br>";    
-    $tab1 = $tmp[0];
-    $tab2 = $tmp[1];
+    if($sheet == $tmp)
+    {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    }
+    else
+    {
+        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+    }
 
-    echo $tab1. $tab2 . "<br>";
+    $options .= $option;
 }
-*/
-
+$selects='<select data-mini="true" id="sheetselect">';
+$selects.=$options;
+$selects.='</select>';
+echo $selects;
+?>
+    </div>
+	<div class="ui-block-b"><input data-mini="true" type="text" name="month" id="month" value="<?=$monthstr?>" class="datepicker" /></div>
+</div>
+<br>
+<?php
 $alltabs="";
 foreach($salarytabs as $tmp)
 {
