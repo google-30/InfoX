@@ -49,7 +49,7 @@ $workerhtmls=$this->workerhtmls;
 <style>
 #headertab { width: 100%;}
 #headertab td, table th { text-align:left; border:0px solid black; }
-table { width: 100%; border-collapse:collapse; table-layout:fixed;}
+table { width: 100%; border-collapse:collapse; /*table-layout:fixed;*/}
 table td, table th { text-align:center; border:1px solid black; }
 
 .ui-dialog-contain {
@@ -64,9 +64,12 @@ table td, table th { text-align:center; border:1px solid black; }
 .attendsum  { background-color:#D0D0D0; }
 .fixwidthcol { width:45px; }
 .tdattendfood { width:150px; }
-.workerinfo { background: #6FACD5;
-/*linear-gradient(#6FACD5, #497BAE) repeat scroll 0 0 #5E87B0;*/
-/*linear-gradient(#5F9CC5, #396B9E) repeat scroll 0 0 #396B9E*/ }
+.workerinfo { background: #D0D0D0 /*#6FACD5*/; 
+            /*linear-gradient(#6FACD5, #497BAE) repeat scroll 0 0 #5E87B0;*/
+            /*linear-gradient(#5F9CC5, #396B9E) repeat scroll 0 0 #396B9E*/ 
+            table-layout:fixed;
+}
+
 </style>
 <script>
 $(function () {
@@ -148,7 +151,7 @@ function attendialogclose()
 <?=$this->error?>
 </div>
 
-<div class="ui-grid-a">
+<div class="ui-grid-b">
 	<div class="ui-block-a">
 <?
 $options="";
@@ -172,8 +175,15 @@ echo $selects;
 ?>
     </div>
 	<div class="ui-block-b"><input data-mini="true" type="text" name="month" id="month" value="<?=$monthstr?>" class="datepicker" /></div>
+	<div class="ui-block-c"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button">预览工资单</a></div>
 </div>
-<br>
+<div>
+<?php
+$url = "xxx"; //"/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
+$ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">批量输入</a>';    
+echo $ahref;
+?>
+</div>
 <?php
 $alltabs="";
 foreach($salarytabs as $tmp)

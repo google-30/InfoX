@@ -63,6 +63,7 @@ class Worker_SalaryController extends Zend_Controller_Action
     private function generateSalaryTabs($salaryrecords, $attendarr)
     {
         $salarytabs = array();
+        $sno = 0;
         foreach($salaryrecords as $record)
         {
             $tmparr = array();
@@ -74,7 +75,8 @@ class Worker_SalaryController extends Zend_Controller_Action
             $workertab = "";
             $worker = $record->getWorker();
             
-            $tab = $this->generateWorkerTab($worker);
+            $sno++;
+            $tab = $this->generateWorkerTab($worker, $sno);
             $tmparr[] = $tab;
 
             $tab = $this->generatePaymentTab($record);
@@ -92,7 +94,7 @@ class Worker_SalaryController extends Zend_Controller_Action
                 }
             }
             //$tab = $this->generateAttendanceTab($attendrecord);
-            $tab = infox_project::generateAttendanceTab($attendrecord);
+            $tab = infox_project::generateAttendanceTab($attendrecord, true);
 
             $tmparr[] = $tab;
 
@@ -102,7 +104,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         return $salarytabs;
     } 
 
-    private function generateWorkerTab($worker)
+    private function generateWorkerTab($worker, $sno)
     {
         $name = $worker->getNamechs();
         if(!$name || $name == "")
@@ -117,8 +119,8 @@ class Worker_SalaryController extends Zend_Controller_Action
 
         $tab = '<table class="workerinfo">';
         //$tab .= "<tr><th colspan=4>工人信息</th></tr>";
-        $tab .= "<tr><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
-        $tab .= "<tr><td>$wpno</td><td>$eeeno</td><td>$name</td><td>$price</td><td>$type</td></tr>";
+        $tab .= "<tr><th rowspan=1>序号</th><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
+        $tab .= "<tr><td>$sno</td><td>$wpno</td><td>$eeeno</td><td>$name</td><td>$price</td><td>$type</td></tr>";
         $tab .= "</table>";
         
         return $tab;
@@ -157,7 +159,8 @@ class Worker_SalaryController extends Zend_Controller_Action
         $tab .= "<tr><td colspan=2>正常工作</td><td colspan=3>加班工作</td><td colspan=2>总工作</td>"
                 . "<td rowspan=2>考勤天数</td><td colspan=2>缺勤罚款</td><td rowspan=2>项目总工资</td>";
         $tab .= "<td colspan=2>伙食费</td><td colspan=3>预扣税</td><td colspan=2>水电费</td>"
-                . "<td rowspan=2>其他补扣</td><td rowspan=2>提前结帐</td><td rowspan=2>当月净工资</td></tr>";
+                . "<td rowspan=2>其他补扣</td><td rowspan=2>提前结帐</td><td rowspan=2>当月净工资</td>"
+                . '<td rowspan=3><button data-mini="true" data-theme="b">输入</button></td></tr>';
         $tab .= "<tr><td>小时</td><td>金额</td><td>单价</td><td>小时</td><td>金额</td><td>小时</td>"
                 . "<td>金额</td><td>天数</td><td>金额</td>";
         $tab .= "<td>天数</td><td>金额</td>";
@@ -179,11 +182,6 @@ class Worker_SalaryController extends Zend_Controller_Action
 
         $tab .= "</table>";                
         return $tab;
-    }
-
-    private function generateAttendanceTab($record)
-    {
-        
     }
 
 }

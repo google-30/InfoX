@@ -223,13 +223,23 @@ class infox_project
         return $attendarr;
     }
 
-    public static function generateAttendanceTab($attendrecord)
+    public static function generateAttendanceTab($attendrecord, $attendbtn=false, $highlight=false)
     {
         $attendresult = self::getAttendFoodData($attendrecord);
 
         $attendtab = "<table>";
+
+        if($attendbtn)
+        {
+        $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th>
+                <th rowspan=4><button data-mini="true" data-theme="b">考勤</th></tr>
+';       
+        }
+        else
+        {
         $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th></tr>
-';                        
+';       
+        }                 
         $attendtab .= $tr;
 
         $ths="";
