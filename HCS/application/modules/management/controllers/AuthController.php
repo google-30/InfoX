@@ -67,7 +67,8 @@ class Management_AuthController extends Zend_Controller_Action
 	    }
 	    $this->_redirect($this->_request->getPost('return'));
 	} else {
-	    $this->_redirect('/management/auth/');  
+	    //$this->_redirect('/management/auth/');  
+        $this->_redirect('/management/');  
 	}
     }
 
