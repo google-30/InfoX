@@ -41,7 +41,7 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
 <body>
     <div id="container">
         <div id="content" class="column">
-            <div id="context-box">
+            <div id="context-box" style="width:60%; margin:auto;">
 	    	<div id="messages">
                     <ul id="messages">
 	                <?php 
@@ -52,7 +52,9 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
     	            <?php endforeach; ?>
                     </ul>
 		</div>
+		<div>
                 <?php echo $this->layout()->content;?>			
+        </div>
             </div>
 	</div>
     </div>
