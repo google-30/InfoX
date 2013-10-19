@@ -94,7 +94,7 @@ class Worker_SalaryController extends Zend_Controller_Action
                 }
             }
             //$tab = $this->generateAttendanceTab($attendrecord);
-            $tab = infox_project::generateAttendanceTab($attendrecord, true);
+            $tab = infox_project::generateAttendanceTab($attendrecord, false);
 
             $tmparr[] = $tab;
 
@@ -114,7 +114,7 @@ class Worker_SalaryController extends Zend_Controller_Action
 
         $wpno = $worker->getWpno();
         $eeeno = $worker->getEeeno();
-        $price = "6"; //TODO: what's this value
+        $price = $worker->getPrice();
         $type = $worker->getWorktype();
 
         $tab = '<table class="workerinfo">';

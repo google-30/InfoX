@@ -225,32 +225,37 @@ class infox_project
 
     public static function generateAttendanceTab($attendrecord, $attendbtn=false, $highlight=false)
     {
+        self::getRepos();
         $attendresult = self::getAttendFoodData($attendrecord);
 
+        $nowdate = new Datetime("");
+        $today = $nowdate->format("d");
+        $todaystyle= $highlight ? "background:#ff5c5c;" : "";        
+
+
         $attendtab = "<table>";
-
-        if($attendbtn)
-        {
-        $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th>
-                <th rowspan=4><button data-mini="true" data-theme="b">考勤</th></tr>
-';       
-        }
-        else
-        {
-        $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th></tr>
-';       
-        }                 
-        $attendtab .= $tr;
-
-        $ths="";
+        $tds="";
         for($i=0; $i<31; $i++)
         {
             $j = $i+1;
             $value = ($j<10) ? "0$j" : $j;
-            $th = "<th>$value</th>";
-            $ths .= $th;
+
+            $td = ($j == $today) ? '<td style="' . $todaystyle .'">' . $value . '</td>' : "<td>$value</td>";
+            //$td = "<td>$value</td>";
+            $tds .= $td;
         }
-        $tr = "<tr>$ths</tr>";
+        $tr = '<tr><td class="fixwidthcol">日期</td>' . $tds;
+
+        if($attendbtn)
+        {
+            $attendbtntd = '<td rowspan=3><button data-mini="true" data-theme="b">考勤</td>';
+        }
+        else
+        {
+            $attendbtntd = '';
+        }
+        $tr .= $attendbtntd . "</tr>";
+
         $attendtab .= $tr;            
 
         $tds = "";    
@@ -259,7 +264,6 @@ class infox_project
             $j = $i + 1;
             $value = $attendresult[0][$i];
 
-            //$td = "<td>$attend</td>";
             $td = "<td>$value</td>";
             $tds .= $td;
         }
@@ -272,7 +276,6 @@ class infox_project
         {
             $j = $i +1;
             $value = $attendresult[1][$i];
-            //$td = "<td>$food</td>";
 
             $td = "<td>$value</td>";
             $tds .= $td;

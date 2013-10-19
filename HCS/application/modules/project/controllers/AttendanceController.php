@@ -346,6 +346,7 @@ class Project_AttendanceController extends Zend_Controller_Action
             // attendance and food           
             $attendresult = $this->getAttendFoodData($attendrecord);
 
+/*
             $attendtab = "<table>";
             if(!$nobtn)
             {
@@ -407,6 +408,9 @@ class Project_AttendanceController extends Zend_Controller_Action
 ";            
             $attendtab .= $tr;
             $attendtab .= "</table>";
+*/
+
+            $attendtab = infox_project::generateAttendanceTab($attendrecord, true, true);
             
             $tabs[] = $attendtab;
 
