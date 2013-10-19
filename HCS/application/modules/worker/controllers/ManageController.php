@@ -440,11 +440,11 @@ class Worker_ManageController extends Zend_Controller_Action
         }
         else if($mode = "Create")
         {
-            $data = new \Synrgic\Infox\Worker();
+            $data = new \Synrgic\Infox\Workerdetails();
             $customdata = new \Synrgic\Infox\Workercustominfo();
         }
         
-        $sn=$this->getParam("sn", "");
+        $sn=(int)$this->getParam("sn", "");
         //echo "sn=$sn<br>"; return;        
         $eeeno=$this->getParam("eeeno", "");
         $nameeng =$this->getParam("nameeng", "");
@@ -498,6 +498,9 @@ class Worker_ManageController extends Zend_Controller_Action
         $race=$this->getParam("sn", "");
         */
 
+        $price = (float)$this->getParam("price", 0);
+        
+
         $data->setSn($sn);
         $data->setEeeno($eeeno);
         $data->setNamechs($namechs);    
@@ -534,6 +537,7 @@ class Worker_ManageController extends Zend_Controller_Action
         $data->setRemarks($remarks);
         $data->setResignation($resignation);
         $data->setSheet($sheet);
+        $data->setPrice($price);
 
         $this->_em->persist($data);
         try {

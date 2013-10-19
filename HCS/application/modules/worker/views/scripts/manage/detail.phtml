@@ -63,6 +63,8 @@ $pic = "";
 $sheet="";
 $sheetarr=$this->sheetarr;
 
+$price="";
+
 if($this->mode == "Edit")
 {
 $worker=$this->worker;
@@ -116,6 +118,7 @@ $race=$worker->getRace();
 $resignation=$worker->getResignation();
 $resignation=$resignation ? $resignation->format('Y/m/d') : "";
 $sheet=$worker->getSheet();
+$price=$worker->getPrice();
 }
 
 // custom info
@@ -329,6 +332,11 @@ echo $options;
 <div data-role="fieldcontain">
     <label for="resignation">Resignation:</label>
     <input data-mini="true" type="text" name="resignation" id="resignation" value="<?php echo $resignation; ?>" class="datepicker" />
+</div>
+
+<div data-role="fieldcontain">
+    <label for="price">单价:</label>
+    <input data-mini="true" type="text" name="price" id="price" value="<?php echo $price; ?>" class="" placeholder="填写工人小时单价，比如5.5，6" />
 </div>
 
 <fieldset>
