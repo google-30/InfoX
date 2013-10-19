@@ -344,6 +344,11 @@ class infox_project
         }
 
         return $newresult;
-    }    
+    } 
+
+    public static function calcAttendancePay()
+    {
+
+    }  
     
 }

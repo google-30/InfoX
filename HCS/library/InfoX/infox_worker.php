@@ -26,7 +26,7 @@ class infox_worker
 
     public static function getRepos()
     {
-        echo "infox_worker::getRepos";
+        //echo "infox_worker::getRepos";
         self::$_em = Zend_Registry::get('em');
         self::$_siteatten = self::$_em->getRepository('Synrgic\Infox\Siteattendance');
         self::$_workerdetails = self::$_em->getRepository('Synrgic\Infox\Workerdetails');

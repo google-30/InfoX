@@ -184,4 +184,14 @@ class Worker_SalaryController extends Zend_Controller_Action
         return $tab;
     }
 
+    public function gensalaryrecordsAction()
+    {
+        infox_common::turnoffView($this->_helper);        
+        $sheet = $this->getParam("sheet", "HC.C");
+        $month = $this->getParam("month", "");
+        $date = new Datetime($month . "01");        
+        $monthstr = $date->format("Y-m");
+        
+        infox_worker::createSalaryRecordsByMonthSheet($monthstr, $sheet);
+    }
 }
