@@ -1,4 +1,5 @@
 <?php
+include 'InfoX/infox_common.php';
 
 class Material_ImportController extends Zend_Controller_Action
 {
@@ -25,7 +26,7 @@ class Material_ImportController extends Zend_Controller_Action
 
     public function submitAction()
     {
-        $this->turnoffview();
+        infox_common::turnoffView($this->_helper);
 
         $requests = $this->getRequest()->getPost();
         if(0) { var_dump($requests); return; }
@@ -146,11 +147,9 @@ class Material_ImportController extends Zend_Controller_Action
        $this->redirect("/material/manage/");        
     }
 
-    private function storeDetails($sheetname, $objWorksheet)
-    {
-        $datecolumns = array(7,);
-
-        // supplier    
+    private function storeSupplier($objWorksheet)
+    { 
+        // step1 - supplier    
         $i=0;
         $supplierArr = array();       
         foreach ($objWorksheet->getRowIterator() as $row)
@@ -192,6 +191,62 @@ class Material_ImportController extends Zend_Controller_Action
         }
         //return;
         // supplier done    
+    }
+
+    private function storeSupplyprice($objWorksheet)
+    {
+
+    }
+
+    private function storeDetails($sheetname, $objWorksheet)
+    {
+        //$datecolumns = array(7,);
+
+        $this->storeSupplier($objWorksheet);
+        // step1 - supplier  
+        /*  
+        $i=0;
+        $supplierArr = array();       
+        foreach ($objWorksheet->getRowIterator() as $row)
+        {
+            if(++$i == 1)
+            {   // ignore the first row
+                continue;
+            }
+            
+            $cell = $objWorksheet->getCell("K".$i);
+            $valuek = $cell->getFormattedvalue();
+            if($valuek != "" )
+            {
+                $name = trim($valuek);
+                $supplier = $this->_supplier->findOneBy(array("name"=>$name));
+                if($supplier)
+                {
+                    //echo "supplier already there.<br>";
+                }
+                else if(!in_array($name, $supplierArr))
+                {
+                    $supplierArr[] = $name;
+                }
+            }        
+        }
+
+        foreach($supplierArr as $tmp)
+        {
+            $supplier = new \Synrgic\Infox\Supplier();
+            $supplier->setName($tmp);
+            $this->_em->persist($supplier);            
+        }
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+        //return;
+        // supplier done    
+        */
 
         // sub type
         $i=0;
@@ -291,9 +346,9 @@ class Material_ImportController extends Zend_Controller_Action
             $cell = $objWorksheet->getCell("E".$i);
             $valuee = $cell->getFormattedvalue();
 
-            // this is a kind of material
+            // this is kind of material
             if(trim($valued) != "")
-            {
+            {// find material, store it in db
                 $nameeng = ($valueb=="") ? $nameenglast : $valueb;
                 $namechs = ($valuec=="") ? $namelast : $valuec;
                 $description = trim($valued);
@@ -317,10 +372,18 @@ class Material_ImportController extends Zend_Controller_Action
                     $obj->setSheet($sheetname);                      
                     $this->_em->persist($obj);          
                 }
+
+                // store supplyprice in same row
+                
+            }
+            else
+            {// valued is empty, means it's almost supplyprice, store it
+                
             }       
         }
 
         // TODO: import supplyprice
+        //$this->storeSupplyprice($objWorksheet);
 
         try {
             $this->_em->flush();
@@ -334,7 +397,7 @@ class Material_ImportController extends Zend_Controller_Action
 
     public function truncateallAction()
     {
-        $this->turnoffview();
+        infox_common::turnoffView($this->_helper);
 
         // http://stackoverflow.com/questions/9686888/how-to-truncate-a-table-using-doctrine-2
         // http://stackoverflow.com/questions/5301285/explicitly-set-id-with-doctrine-when-using-auto-strategy
@@ -364,6 +427,4 @@ class Material_ImportController extends Zend_Controller_Action
         $this->_em->flush();
         */
     }
-
-
 }

@@ -14,12 +14,6 @@ class Supplyprice extends \Synrgic_Models_Entity {
     protected $id;	
 
     /**
-     * @Column(type="date", nullable=true)
-     */
-    protected $update;
-
-    /**
-     * 
      * @ManyToOne(targetEntity="Synrgic\Infox\Material")
      */
     protected $material;
@@ -29,6 +23,27 @@ class Supplyprice extends \Synrgic_Models_Entity {
      * @ManyToOne(targetEntity="Synrgic\Infox\Supplier")
      */
     protected $supplier;
+
+    /**
+     * DO Date   
+     * @Column(type="date", nullable=true)
+     */
+    protected $update;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $unit;
+
+    /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $rate;
+
+    /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $quantity;
 
     /**
      * @Column(type="float", nullable=true)
