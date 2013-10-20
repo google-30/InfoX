@@ -46,7 +46,7 @@
 		    <resource>worker:onsite</resource>
 		    <privilege>view</privilege>
 	        </workeronsite>
-
+            <!--
             <workersalary>
 		    <label>工人工资管理</label>
 		    <module>worker</module>
@@ -55,7 +55,7 @@
 		    <resource>worker:salary</resource>
 		    <privilege>view</privilege>
 	        </workersalary>
-
+            -->
             <workerarchive>
 		    <label>存档工人信息</label>
 		    <module>worker</module>
@@ -76,6 +76,32 @@
 
     	</pages>
         </workermodules>
+
+        <salarymodules>	
+	    <label>工资管理</label>
+	    <uri>#salarymodules</uri>
+	    <class>popup</class>
+	    <pages>
+            <workersalary>
+		    <label>工人工资管理</label>
+		    <module>worker</module>
+		    <controller>salary</controller>
+		    <action>index</action>
+		    <resource>worker:salary</resource>
+		    <privilege>view</privilege>
+	        </workersalary>
+
+            <salarysettings>
+		    <label>工资设定</label>
+		    <module>salary</module>
+		    <controller>settings</controller>
+		    <action>index</action>
+		    <resource>salary:settings</resource>
+		    <privilege>view</privilege>
+	        </salarysettings>
+
+    	</pages>
+        </salarymodules>
 
         <materialmodules>	
 	    <label>材料管理</label>
