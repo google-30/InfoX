@@ -3,33 +3,77 @@ include 'InfoX/infox_common.php';
 include 'InfoX/infox_project.php';
 include 'InfoX/infox_user.php';
 include 'InfoX/infox_worker.php';
-//include 'InfoX/infox_salary.php';
+include 'InfoX/infox_salary.php';
 
 class Salary_SettingsController extends Zend_Controller_Action
 {
     public function init()
     {
         $this->_em = Zend_Registry::get('em');
-        $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
-        $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
+        $this->_setting = $this->_em->getRepository('Synrgic\Infox\Setting');
     }
 
     public function indexAction()
     {
-        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
-        $this->view->sheet = $requestsheet = $this->getParam("sheet",$sheetarr[0]);
-        $this->view->workerarr = infox_worker::getworkerlistbysheet($requestsheet);
+        $settingnames = infox_salary::getSettingArray();
+        /*
+        array("cotmultiple", "botmultiple", "workerfood", "leaderfood", 
+            "absencedays", "absencelow", "absencehigh", "absencetotal");
+        */
+        foreach($settingnames as $name)
+        {
+            switch($name)
+            {
+                case "cotmultiple";
+                    $value = infox_salary::getSettingBySectionName("salary", "cotmultiple");
+                    $this->view->cotmultiple = $value;
+                    break;
+                case "botmultiple";
+                    $value = infox_salary::getSettingBySectionName("salary", "botmultiple");
+                    $this->view->botmultiple = $value;
+                    break;
+                case "workerfood";
+                    $value = infox_salary::getSettingBySectionName("salary", "workerfood");
+                    $this->view->workerfood = $value;
+                    break;
+                case "leaderfood";
+                    $value = infox_salary::getSettingBySectionName("salary", "leaderfood");
+                    $this->view->leaderfood = $value;
+                    break;
+                case "absencedays";
+                    $value = infox_salary::getSettingBySectionName("salary", "absencedays");
+                    $this->view->absencedays = $value;
+                    break;
+                case "absencelow";
+                    $value = infox_salary::getSettingBySectionName("salary", "absencelow");
+                    $this->view->absencelow = $value;
+                    break;
+                case "absencehigh";
+                    $value = infox_salary::getSettingBySectionName("salary", "absencehigh");
+                    $this->view->absencehigh = $value;
+                    break;
+                case "absencetotal";
+                    $value = infox_salary::getSettingBySectionName("salary", "absencetotal");
+                    $this->view->absencetotal = $value;
+                    break;
+                }
+        }
     }
 
     public function submitAction()
     {
         infox_common::turnoffView($this->_helper);
         $requests = $this->getRequest()->getPost();
-        if(1) { var_dump($requests); return; }
+        if(0) { var_dump($requests); return; }
         
+        $settingnames = infox_salary::getSettingArray();
+        foreach($settingnames as $name)
+        {   
+            $value = $this->getParam($name, "");
+            infox_salary::setSettingBySectionName("salary", $name, $value);
+        }
 
-
-        //$this->redirect("/salary/settings/");
+        $this->redirect("/salary/settings/");
     }
 
 }

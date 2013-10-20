@@ -3,6 +3,20 @@ $cotmultiple="";
 $botmultiple="";
 $workerfood="";
 $leaderfood="";
+$absencedays="";
+$absencelow="";
+$absencehigh="";
+$absencetotal="";
+
+$cotmultiple=$this->cotmultiple;
+$botmultiple=$this->botmultiple;
+$workerfood=$this->workerfood;
+$leaderfood=$this->leaderfood;
+$absencedays=$this->absencedays;
+$absencelow=$this->absencelow;
+$absencehigh=$this->absencehigh;
+$absencetotal=$this->absencetotal;
+
 ?>
 <form method="post" action="/salary/settings/submit">
 <div data-role="fieldcontain">
@@ -12,7 +26,7 @@ $leaderfood="";
 
 <div data-role="fieldcontain">
     <label for="cotmultiple">孟加拉人加班倍率:</label>
-    <input data-mini="true" type="text" name="cotmultiple" id="cotmultiple" value="<?php echo $botmultiple; ?>" class=""/>
+    <input data-mini="true" type="text" name="botmultiple" id="botmultiple" value="<?php echo $botmultiple; ?>" class=""/>
 </div>
 
 <div data-role="fieldcontain">
@@ -26,22 +40,25 @@ $leaderfood="";
 </div>
 
 <div data-role="fieldcontain">
-    <label for="cotmultiple">旷工天数界限:</label>
-    <input data-mini="true" type="text" name="cotmultiple" id="cotmultiple" value="<?php echo $cotmultiple; ?>" class=""/>
+    <label for="absencedays">旷工天数界限:</label>
+    <input data-mini="true" type="text" name="absencedays" id="absencedays" value="<?php echo $absencedays; ?>" class=""/>
 </div>
 
 <div data-role="fieldcontain">
-    <label for="cotmultiple">低于界限扣款:</label>
-    <input data-mini="true" type="text" name="cotmultiple" id="cotmultiple" value="<?php echo $cotmultiple; ?>" class=""/>
+    <label for="absencelow">低于界限扣款:</label>
+    <input data-mini="true" type="text" name="absencelow" id="absencelow" value="<?php echo $absencelow; ?>" class=""/>
 </div>
 
 <div data-role="fieldcontain">
-    <label for="cotmultiple">高于界限扣款:</label>
-    <input data-mini="true" type="text" name="cotmultiple" id="cotmultiple" value="<?php echo $cotmultiple; ?>" class=""/>
+    <label for="absencehigh">高于界限扣款:</label>
+    <input data-mini="true" type="text" name="absencehigh" id="absencehigh" value="<?php echo $absencehigh; ?>" class=""/>
 </div>
 
 <div data-role="fieldcontain">
-    <label for="cotmultiple">扣款上限:</label>
-    <input data-mini="true" type="text" name="cotmultiple" id="cotmultiple" value="<?php echo $cotmultiple; ?>" class=""/>
+    <label for="absencetotal">扣款上限:</label>
+    <input data-mini="true" type="text" name="absencetotal" id="absencetotal" value="<?php echo $absencetotal; ?>" class=""/>
 </div>
 <input type="submit" value="提交" data-mini="true" data-theme="a">
+
+
+
