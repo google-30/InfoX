@@ -1,1 +1,132 @@
-Phone Layout yet to be created
+<?php
+// Global Defines for templates
+$settings = Zend_Registry::get('settings');
+$user = Zend_Auth::getInstance()->getIdentity();
+$acl = Zend_Registry::get('acl');
+
+// Note these are prepended in reverse order
+// to be correct
+$this->headScript()->prependFile('/tablet/js/jquery.event.drag-2.2.js');
+$this->headScript()->prependFile('/tablet/js/jquery.ui.touch-punch.js');
+$this->headScript()->prependFile('/tablet/js/ui.js');
+$this->headScript()->prependFile('/common/js/ui.js');
+$this->headScript()->prependFile('/common/js/jquery.mobile-1.2.0.min.js');
+$this->headScript()->prependScript('
+    // Disable AJAX jquerymobile handling for now (makes debugging easier)
+    $(document).bind("mobileinit", function(){
+		     $.mobile.ajaxEnabled = false;
+    });
+    ', $type='text/javascript');
+$this->headScript()->prependFile('/common/js/jquery-1.8.2.min.js');
+
+// Reverse order
+$this->headLink()->prependStylesheet('/tablet/css/layout.css');
+$this->headLink()->prependStylesheet('/tablet/css/style.css');
+$this->headLink()->prependStylesheet('/common/css/jquery.mobile.structure-1.2.0.min.css');
+$this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb.css');
+
+// Sub requests. We run the subrequest here as $this->headScripts executes at time of
+// call hence any output must be caught before it runs
+$advertOutput = $this->action('index','index','adverts');
+$notificationPanelOutput = $this->action('mini','index','noticeboard');
+$notificationBoardOutput = $this->action('index','index','noticeboard');
+$languageOutput = $this->action('language','index');
+
+
+?>
+<?php echo $this->docType(); ?>
+<html>
+<head>
+<title>HCS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<meta charset="UTF-8">
+<?php echo $this->headMeta() ?>
+<?php echo $this->headTitle() ?>
+<?php echo $this->headLink()?>
+<?php echo $this->headStyle() ?>
+<?php echo $this->headScript() ?>
+<?php
+?>
+</head>
+<body>
+<div class="gridContainer" data-role="page">
+    <div id="LayoutDiv1" data-id="sidebar" data-position="fixed">
+        <div id="sidebarPanel">
+	        <?php include('sidebar.phtml'); ?>
+	    </div>
+	    <div id="dividerPanel">
+	         <div id="dividerButton"></div>
+	    </div>
+    </div>
+    <div id="LayoutDiv2">
+	    <div id="content" class="fillParent">
+	        <?php echo $this->layout()->content; ?>
+	    </div>
+    </div>
+    <div id="LayoutDiv3" data-id="adverts">
+	<?php echo $advertOutput; ?>
+	</div>
+    <?php echo $notificationBoardOutput; ?>
+</div>
+<script>
+$(document).ready(function(){
+
+    /** 
+     * Sidebar Dragger 
+     */
+    var minWidth = $('#dividerPanel').width(), 
+        maxWidth = $('#LayoutDiv1').width(),
+        sidebarPlusContentWidth = $('#LayoutDiv2').width() + maxWidth;
+
+    $('#dividerPanel').bind('dragstart', function(evt) {
+        if(!$(evt.target).is('#dividerButton')) return false;
+        $(this).addClass('active');
+        $('#dividerButton').addClass('drag');
+        $(this).css('z-index', 1);
+        $('#menuPanel').css({'overflow':'hidden', 'z-index': '2'});
+    }).bind('drag', function(evt) {
+        var x = evt.offsetX?evt.offsetX:evt.pageX;
+        x += minWidth;
+        if(x<=minWidth) {
+            x=minWidth;
+        }
+        else if(x>=maxWidth) {
+            x=maxWidth;
+        }
+
+        $('#LayoutDiv1').width(x);
+        $('#sidebarPanel').width(x-minWidth);
+        $('#menuPanelOuter').width(x-minWidth);
+        $('#menuPanel').width(x-minWidth);
+        
+        $('#LayoutDiv2').css({
+            'margin-left':x +'px',
+            'width':(sidebarPlusContentWidth-x)+'px' });
+    }).bind('dragend', function(evt) {
+        $(this).removeClass('active');
+        $('#dividerButton').removeClass('drag');
+        $('#menuPanel').width($('#menuPanelOuter').width()+16) // adjust scrollbar size
+                       .css('overflow', 'scroll');
+    });
+
+
+$('#menuPanel [data-role="collapsible"]').on('expand', function(e){
+    $(e + '.ui-btn').collapsible("refresh");
+ });
+
+
+});
+
+/**
+ * Collapsible Animation
+ */
+$('[data-role="collapsible"]').on('expand', function (e) {
+    $(this).children().slideDown(350);
+
+}).bind('collapse', function () {
+    $(this).children().next().slideUp(350);
+});
+
+</script>
+</body>
+</html>

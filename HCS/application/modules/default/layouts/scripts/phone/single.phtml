@@ -1,0 +1,42 @@
+<?php
+/*-
+ * Copyright (c) 2013 Synrgic Research Pte Ltd
+ * All rights reserved
+ *
+ * Redistribution of this file in source code, or binary form is
+ * expressly not permitted without prior written approval of
+ * Synrgic Research Pte Ltd
+ */
+
+// Layout soley for testing/developing, this can be hacked however you want to
+// Allow you to test/develop your component
+
+$this->headScript()->prependFile('/common/js/jquery.mobile-1.2.0.min.js');
+$this->headScript()->prependScript('
+    // Disable AJAX jquerymobile handling for now (makes debugging easier)
+    $(document).bind("mobileinit", function(){
+		     $.mobile.ajaxEnabled = false;
+    });
+    ', $type='text/javascript');
+$this->headScript()->prependFile('/common/js/jquery-1.8.2.min.js');
+$this->headLink()->prependStylesheet('/common/css/jquery.mobile.structure-1.2.0.min.css');
+$this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb.css');
+?>
+
+<!DOCTYPE html> 
+<html>
+<head>
+<title>HCS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<?php echo $this->headMeta() ?>
+<?php echo $this->headTitle() ?>
+<?php echo $this->headLink()?>
+<?php echo $this->headStyle() ?>
+<?php echo $this->headScript() ?>
+<?php
+?>
+
+<?php echo $this->layout()->content; ?>
+
+</body>
+</html>

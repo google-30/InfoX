@@ -1,0 +1,143 @@
+<?
+// Global Defines for templates
+$settings = Zend_Registry::get('settings');
+
+// Note these are prepended in reverse order
+// to be correct
+//$this->headScript()->prependFile('/tablet/js/jquery.event.drag-2.2.js');
+//$this->headScript()->prependFile('/tablet/js/jquery.ui.touch-punch.js');
+//$this->headScript()->prependFile('/tablet/js/ui.js');
+$this->headScript()->prependFile('/common/js/jquery.mobile-1.2.0.min.js');
+$this->headScript()->prependScript('
+    // Disable AJAX jquerymobile handling for now (makes debugging easier)
+    $(document).bind("mobileinit", function(){
+		     $.mobile.ajaxEnabled = false;
+    });
+    ', $type='text/javascript');
+//$this->headScript()->prependFile('/common/js/jquery.dataTables.min.js');
+$this->headScript()->prependFile('/DataTables-1.9.4/media/js/jquery.dataTables.min.js');
+$this->headScript()->prependFile('/common/js/jquery-1.8.2.min.js');
+
+// Reverse order
+$this->headLink()->prependStylesheet('/DataTables-1.9.4/media/css/jquery.dataTables.css');
+$this->headLink()->prependStylesheet('/tablet/css/layout-mgmt.css');
+$this->headLink()->prependStylesheet('/tablet/css/menu-mgmt.css');
+$this->headLink()->prependStylesheet('/tablet/css/style-mgmt.css');
+$this->headLink()->prependStylesheet('/common/css/jquery.mobile.structure-1.2.0.min-mgmt.css');
+//$this->headLink()->prependStylesheet('/common/css/jquery.mobile-1.2.0.css');
+$this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css');
+
+?>
+<?php echo $this->doctype();?>
+<html lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body {<?php echo $this->layout()->style;?>;}
+    </style>
+    <?php echo $this->headMeta() ?>
+    <title>InfoX</title>    
+    <!--<?php echo $this->headTitle() ?>-->
+    <?php echo $this->headLink()?>
+    <?php echo $this->headStyle() ?>
+    <?php echo $this->headScript() ?>
+</head>
+<body>
+    <div id='header' style="margin-bottom: 0px;">
+        <?php /*echo $this->partial("_header.phtml"); */?>
+        <div>
+            <?php
+                $settings = Zend_Registry::get('settings');
+                $path = $settings->General->Logo->Value;
+            ?>
+            <span id="logo">
+                <a href='/management/dashboard'>
+                    <!--<img src='<?php echo $path; ?>'/>-->
+                    <img src='/example/images/ted_logo_small.png'/>
+                </a>
+            </span>
+            <span id='title'>
+                <!--<?php echo sprintf('%s ' . $this->translate('Hotel Suite Management Portal'), $settings->General->HotelName->Value);?>-->
+                InfoX Portal
+            </span>
+            <span id='logout'>
+                <a href='<?php echo $this->url(array("module"=>"management", "controller"=>"auth", "action"=>"logout"));?>'>
+                    <?php 
+                        $user = Zend_Auth::getInstance();
+                        if(isset($user) && $user->hasIdentity()) {
+                            echo $user->getIdentity()->getName();
+                            //echo '&nbsp;&#187;&nbsp;';
+                            echo '&nbsp;-&nbsp;';
+                        }
+                        echo $this->translate("Logout");
+                    ?>
+                </a>
+            </span>
+        </div>
+    </div>
+    <div id="top-header-shadow"></div>
+    <div id="container">
+        <!--<div id="menu" class="column">
+	    <?php 
+	    if(Zend_Auth::getInstance()->hasIdentity())
+		echo $this->navigation(); 
+		?>
+	    </div>-->
+        <div id="content" class="column">
+        
+            <div id="breadcrumbs">
+                <?php 
+                    $user = Zend_Auth::getInstance();
+                    $nav = $this->navigation()
+                                ->breadcrumbs()
+                                ->setLinkLast(true)
+                                ->setMinDepth(1)
+                                ->setSeparator('&nbsp;&#187;&nbsp;', PHP_EOL)
+                                ->render();
+                     if(!empty($nav)) {
+                         if($user->hasIdentity()) {
+                            Zend_Registry::get(SYNRGIC_SESSION)->navigation = $nav;
+                         }
+                     }
+                     else {
+                        if($user->hasIdentity()) {
+                            if($this->userAgent()->getServerValue('request_uri') == '/management') {
+                                Zend_Registry::get(SYNRGIC_SESSION)->navigation = null;
+                            }
+                            $nav = Zend_Registry::get(SYNRGIC_SESSION)->navigation;
+                        }
+                        if(!isset($nav)) {
+                            $nav = $this->translate('Management');
+                        }
+                     }
+                     if(0 && isset($user) && $user->hasIdentity()) {
+    	        	     echo $this->translate('Welcome').':&nbsp;';
+    		             echo $user->getIdentity()->getName();
+    		             echo '&nbsp;&#187;&nbsp;';
+            		 }
+                     echo $nav;
+                ?>
+            </div>
+            <div id="context-box">
+	    	<div id="messages">
+                    <ul id="messages">
+	                <?php 
+			$fm = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+			$messages = array_merge($fm->getMessages(), $fm->getCurrentMessages());
+			foreach ($messages as $message) : ?>
+    		            <li><?php echo $this->escape($message); ?></li>
+    	            <?php endforeach; ?>
+                    </ul>
+		</div>
+                <?php echo $this->layout()->content;?>			
+            </div>
+		</div>
+		<div id="sidebar" class="column">
+	        <?php echo $this->layout()->sidebar;?>
+		</div>
+	</div>
+	<div id="footer">
+        <?php /*echo $this->partial("_footer.phtml"); */?>
+	</div>
+</body>
+</html>
