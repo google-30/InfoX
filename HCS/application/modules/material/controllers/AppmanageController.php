@@ -427,6 +427,12 @@ class Material_AppmanageController extends Zend_Controller_Action
         $this->view->siteaddress = $obj->getAddress();
         
         $leaders = $obj->getLeaders();
+        if($leaders == null || $leaders == "")
+        {
+            $this->view->siteleaders = "&nbsp;";
+            $this->view->siteleadersphones = "&nbsp;";
+            return;
+        }
         $leadersArr = explode(";", $leaders);
         $leadersStr = "";
         $phonesStr ="";    
