@@ -47,7 +47,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         $this->view->monthstr = $monthstr;
 
         // create records first 
-        infox_worker::createSalaryRecordsByMonthSheet($monthstr, $sheet);
+        //infox_worker::createSalaryRecordsByMonthSheet($monthstr, $sheet);
 
         // get all records in this month
         $salaryrecords = infox_worker::getSalaryRecordsByMonthSheet($month, $sheet);
@@ -67,10 +67,6 @@ class Worker_SalaryController extends Zend_Controller_Action
         foreach($salaryrecords as $record)
         {
             $tmparr = array();
-
-            // TODO: worker info
-            // TODO: pay/salary/allowance
-            // TODO: attendance
 
             $workertab = "";
             $worker = $record->getWorker();
@@ -118,7 +114,6 @@ class Worker_SalaryController extends Zend_Controller_Action
         $type = $worker->getWorktype();
 
         $tab = '<table class="workerinfo">';
-        //$tab .= "<tr><th colspan=4>工人信息</th></tr>";
         $tab .= "<tr><th rowspan=1>序号</th><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
         $tab .= "<tr><td>$sno</td><td>$wpno</td><td>$eeeno</td><td>$name</td><td>$price</td><td>$type</td></tr>";
         $tab .= "</table>";
@@ -193,5 +188,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         $monthstr = $date->format("Y-m");
         
         infox_worker::createSalaryRecordsByMonthSheet($monthstr, $sheet);
+
+
     }
 }

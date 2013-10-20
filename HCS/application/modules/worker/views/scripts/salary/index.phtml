@@ -18,12 +18,12 @@ function redirect(url) {
 
 function gensalarydata(month) 
 {
-    alert(month);
+    //alert(month);
 
     var sheet = $("#sheetselect").val();
     $.post("/worker/salary/gensalaryrecords", { sheet:sheet, month:month }, 
     function(data) {
-        alert("成功生成工资数据");
+        alert("工资数据已生成");
         //console.log(data);
         //window.location.reload();
     })   
