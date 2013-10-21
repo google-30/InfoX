@@ -145,7 +145,8 @@ class Worker_ManageController extends Zend_Controller_Action
             echo "Please import worker list.";
             return;
         }        
-        // wpexpiry, ppexpiry, securityexp
+        // wpexpiry, ppexpiry, csoc
+
         // wpexpiry
         $expiredarr = array();
         $expire1arr = array();
@@ -251,7 +252,8 @@ class Worker_ManageController extends Zend_Controller_Action
                 continue;
             }
 
-            $date = $tmp->getSecurityexp();
+            //$date = $tmp->getSecurityexp();
+            $date = $tmp->getCsoc();
             $now = new DateTime("now");
             
             if(!$date)

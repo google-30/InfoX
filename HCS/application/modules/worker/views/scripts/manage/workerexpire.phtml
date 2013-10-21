@@ -6,7 +6,7 @@ $securityexparr=$this->securityexparr;
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 
 <div data-role="collapsible" data-collapsed="true">
-<h3>安全证/Security Expiry Date</h3>
+<h3>安全证/CSOC</h3>
 <a href="/worker/manage/previewexpiry?expiry=securityexp" target="_blank"><button data-mini="true" data-theme="a">预览和打印列表</button></a>
     <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
@@ -17,10 +17,10 @@ echo $this->grid("workers0", false)
           ->field('eeeno','E\'ee No.')
           ->field('namechs','中文名称')
           ->field('nameeng', '英文名称')
-          ->field('securityexp', 'Security Expiry Date')
+          ->field('csoc', 'C.S.O.C')
           ->setSorting(false)  
           ->paginatorEnabled(false)
-          ->helper(new GridHelper_Worker())
+          ->helper(new GridHelper_Workerdetails())
           ->data($securityexparr[0])
           ->actionField(':action', "", '&nbsp;|&nbsp;')  
           ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));;
@@ -36,10 +36,10 @@ echo $this->grid("workers1", true)
           ->field('eeeno','E\'ee No.')
           ->field('namechs','中文名称')
           ->field('nameeng', '英文名称')
-          ->field('securityexp', 'Security Expiry Date')
+          ->field('csoc', 'C.S.O.C')
           ->setSorting(false)  
           ->paginatorEnabled(false)
-          ->helper(new GridHelper_Worker())
+          ->helper(new GridHelper_Workerdetails())
           ->data($securityexparr[1])
           ->actionField(':action', "", '&nbsp;|&nbsp;')  
           ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));;
