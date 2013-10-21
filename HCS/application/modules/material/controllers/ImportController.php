@@ -343,8 +343,18 @@ class Material_ImportController extends Zend_Controller_Action
 
             $cell = $objWorksheet->getCell("D".$i);
             $valued = $cell->getFormattedvalue();
+
             $cell = $objWorksheet->getCell("E".$i);
             $valuee = $cell->getFormattedvalue();
+
+            $cell = $objWorksheet->getCell("G".$i);
+            $valuee = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("H".$i);
+            $valuee = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("I".$i);
+            $valuee = $cell->getFormattedvalue();
+
+
 
             // this is kind of material
             if(trim($valued) != "")
@@ -393,6 +403,32 @@ class Material_ImportController extends Zend_Controller_Action
         }
 
         //return;
+    }
+
+    private function persistSupplyprice($dataarr)
+    {// dataarr = { material name, material nameeng, material description, supplier name, unit, update, rate, quantity, }
+        $mname = $dataarr[0];
+        $mnameeng = $dataarr[1];
+        $mdescription = $dataarr[2];
+        $sname = $dataarr[3];
+        $unit = $dataarr[4];
+        $update = $dataarr[5];
+        $rate = $dataarr[6];
+        $quantity = $dataarr[7];
+
+        $material = $this->_material->findOneBy(array("name"=>$mname, "nameeng"=>$mnameeng, "description"=>$mdescription));
+        $supplier = $this->_supplier->findOneBy(array("name"=>$sname));
+
+        $supplyprice = new \Synrgic\Infox\Supplyprice();
+        $supplyprice->setMaterial($material);
+        $supplyprice->setSupplier($supplier);        
+        $supplyprice->setUnit($unit);        
+        $supplyprice->setUpdate(new Datetime($update));        
+        $supplyprice->setRate($rate);        
+        $supplyprice->setQuantity($quantity);
+        
+        $this->_em->persist($supplyprice);          
+        
     }
 
     public function truncateallAction()
