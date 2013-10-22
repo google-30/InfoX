@@ -144,7 +144,7 @@ class Material_ImportController extends Zend_Controller_Action
 
         }
         
-       $this->redirect("/material/manage/");        
+       //$this->redirect("/material/manage/");        
     }
 
     private function storeSupplier($objWorksheet)
@@ -191,11 +191,6 @@ class Material_ImportController extends Zend_Controller_Action
         }
         //return;
         // supplier done    
-    }
-
-    private function storeSupplyprice($objWorksheet)
-    {
-
     }
 
     private function storeDetails($sheetname, $objWorksheet)
@@ -320,10 +315,28 @@ class Material_ImportController extends Zend_Controller_Action
                 continue;
             }
 
+            // related to type
             $cell = $objWorksheet->getCell("B".$i);
             $valueb = $cell->getFormattedvalue();
             $cell = $objWorksheet->getCell("C".$i);
             $valuec = $cell->getFormattedvalue();
+
+            // related to material description
+            $cell = $objWorksheet->getCell("D".$i);
+            $valued = $cell->getFormattedvalue();
+
+            // unit
+            $cell = $objWorksheet->getCell("E".$i);
+            $valuee = $cell->getFormattedvalue();
+            // dodate/update
+            $cell = $objWorksheet->getCell("G".$i);
+            $valuee = $cell->getFormattedvalue();
+            // rate
+            $cell = $objWorksheet->getCell("H".$i);
+            $valuee = $cell->getFormattedvalue();
+            // quantity
+            $cell = $objWorksheet->getCell("I".$i);
+            $valuee = $cell->getFormattedvalue();
            
             if($valueb!="" && $valuec!="")
             {// materials from a new subtype
@@ -341,26 +354,11 @@ class Material_ImportController extends Zend_Controller_Action
                 }
             }
 
-            $cell = $objWorksheet->getCell("D".$i);
-            $valued = $cell->getFormattedvalue();
-
-            $cell = $objWorksheet->getCell("E".$i);
-            $valuee = $cell->getFormattedvalue();
-
-            $cell = $objWorksheet->getCell("G".$i);
-            $valuee = $cell->getFormattedvalue();
-            $cell = $objWorksheet->getCell("H".$i);
-            $valuee = $cell->getFormattedvalue();
-            $cell = $objWorksheet->getCell("I".$i);
-            $valuee = $cell->getFormattedvalue();
-
-
-
             // this is kind of material
             if(trim($valued) != "")
             {// find material, store it in db
-                $nameeng = ($valueb=="") ? $nameenglast : $valueb;
-                $namechs = ($valuec=="") ? $namelast : $valuec;
+                $nameenglast = $nameeng = ($valueb=="") ? $nameenglast : $valueb;
+                $namelast = $namechs = ($valuec=="") ? $namelast : $valuec;
                 $description = trim($valued);
                 $unit = trim($valuee);
 
@@ -381,19 +379,9 @@ class Material_ImportController extends Zend_Controller_Action
                     $obj->setUnit($unit);
                     $obj->setSheet($sheetname);                      
                     $this->_em->persist($obj);          
-                }
-
-                // store supplyprice in same row
-                
+                }                
             }
-            else
-            {// valued is empty, means it's almost supplyprice, store it
-                
-            }       
         }
-
-        // TODO: import supplyprice
-        //$this->storeSupplyprice($objWorksheet);
 
         try {
             $this->_em->flush();
@@ -402,7 +390,102 @@ class Material_ImportController extends Zend_Controller_Action
             return;
         }
 
-        //return;
+        // import supplyprice
+        $this->storeSupplyprice($objWorksheet);
+    }
+
+    private function storeSupplyprice($objWorksheet)
+    {
+        //echo "storeSupplyprice<br>";
+
+        $subtype = null;
+        $indexarr = array("B","C","D","E","F","G","H","I","J","K",);
+        $nameenglast = "";
+        $namelast = "";
+        $supplypriceArr = array();
+        $i = 0;
+
+        $nameeng = "";
+        $namechs = "";
+        $description = "";
+
+        foreach ($objWorksheet->getRowIterator() as $row)
+        {
+            if(++$i == 1)
+            {   // ignore the first row
+                continue;
+            }
+
+            $cell = $objWorksheet->getCell("B".$i);
+            $valueb = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("C".$i);
+            $valuec = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("D".$i);
+            $valued = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("E".$i);
+            $valuee = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("G".$i);
+            $valueg = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("H".$i);
+            $valueh = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("I".$i);
+            $valuei = $cell->getFormattedvalue();
+            $cell = $objWorksheet->getCell("K".$i);
+            $valuek = $cell->getFormattedvalue();
+
+            if($valueb != "")
+            {
+                $nameeng = $valueb;
+            }        
+
+            if($valuec != "")
+            {
+                $namechs = $valuec;
+            }
+
+            if($valued != "")
+            {
+                $description = $valued;
+            }
+
+            if($valuee != "" && $valueg != "" && $valueh != "" && $valuei != "")
+            {//in this case, store the supplyprice
+
+                $tmparr = array();
+                $tmparr[] = $namechs;
+                $tmparr[] = $nameeng;
+                $tmparr[] = $description;
+
+                $tmparr[] = trim($valuek);
+
+                $tmparr[] = trim($valuee);
+                $tmparr[] = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($valueg));//trim($valueg);                
+                $tmparr[] = trim($valueh);
+                $tmparr[] = trim($valuei);   
+
+                $supplypricearr[] = $tmparr;
+            }     
+        }
+
+        $this->persistAllSupplyPrices($supplypricearr);
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+    }
+
+    private function persistAllSupplyPrices($supplypricearr)
+    {
+        // debug, dump the array
+        echo "supplypricearr count=" . count($supplypricearr);
+        foreach($supplypricearr as $tmp)
+        {
+            print_r($tmp); echo "<br>";
+            //$this->persistSupplyprice($tmp);
+        }
     }
 
     private function persistSupplyprice($dataarr)
@@ -427,8 +510,7 @@ class Material_ImportController extends Zend_Controller_Action
         $supplyprice->setRate($rate);        
         $supplyprice->setQuantity($quantity);
         
-        $this->_em->persist($supplyprice);          
-        
+        $this->_em->persist($supplyprice);        
     }
 
     public function truncateallAction()
