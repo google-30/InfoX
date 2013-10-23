@@ -1,4 +1,5 @@
 <?php
+set_time_limit(0);
 include 'InfoX/infox_common.php';
 
 class Material_ImportController extends Zend_Controller_Action
@@ -303,11 +304,13 @@ class Material_ImportController extends Zend_Controller_Action
         // sub type done
 
         $subtype = null;
+        $subtypeflag = false;  // subtype found
         $indexarr = array("B","C","D","E","F","G","H","I","J","K",);
         $nameenglast = "";
         $namelast = "";
         $materialArr = array();
         $i = 0;
+        
         foreach ($objWorksheet->getRowIterator() as $row)
         {
             if(++$i == 1)
@@ -330,13 +333,13 @@ class Material_ImportController extends Zend_Controller_Action
             $valuee = $cell->getFormattedvalue();
             // dodate/update
             $cell = $objWorksheet->getCell("G".$i);
-            $valuee = $cell->getFormattedvalue();
+            $valueg = $cell->getFormattedvalue();
             // rate
             $cell = $objWorksheet->getCell("H".$i);
-            $valuee = $cell->getFormattedvalue();
+            $valueh = $cell->getFormattedvalue();
             // quantity
             $cell = $objWorksheet->getCell("I".$i);
-            $valuee = $cell->getFormattedvalue();
+            $valuei = $cell->getFormattedvalue();
            
             if($valueb!="" && $valuec!="")
             {// materials from a new subtype
@@ -346,41 +349,87 @@ class Material_ImportController extends Zend_Controller_Action
                 if($typeobj)
                 {
                     $subtype = $typeobj;
+                    $subtypeflag = true;
                 }
                 else
                 {
-                    echo "shit, what happened...";
+                    //echo "shit, what happened...";
                     continue;
                 }
             }
 
-            // this is kind of material
+            $materialfound = false;
             if(trim($valued) != "")
             {// find material, store it in db
+                $materialfound = true;             
+                $description = trim($valued);
+            }
+            else if($valuee!="" && $valueg!="" && $valueh!="" && $valuei!="" && $subtypeflag)
+            {// another case: no description(spec), but it's still a material
+                $materialfound = true;             
+                $description = "NO DESCRIPTION";                    
+            }
+
+            if($materialfound)
+            {
                 $nameenglast = $nameeng = ($valueb=="") ? $nameenglast : $valueb;
                 $namelast = $namechs = ($valuec=="") ? $namelast : $valuec;
-                $description = trim($valued);
-                $unit = trim($valuee);
 
-                // TODO: check if it's already there
-                $obj = $this->_material->findOneBy(
-                        array('name'=>$namechs,'nameeng'=>$nameeng, 'description'=>$description));
-                if($obj)
-                {
-                    //echo "material already there.<br>";
-                }
-                else
-                {
-                    $obj = new \Synrgic\Infox\Material();
-                    $obj->setNameeng($nameeng);
-                    $obj->setName($namechs);
-                    $obj->setDescription($description);
-                    $obj->setType($subtype);
-                    $obj->setUnit($unit);
-                    $obj->setSheet($sheetname);                      
-                    $this->_em->persist($obj);          
-                }                
+                $tmparr = array();
+                $tmparr['name'] = $namechs;
+                $tmparr['nameeng'] = $nameeng;
+                $tmparr['description'] = $description;
+                $tmparr['type'] = $subtype;
+                $tmparr['sheet'] = $sheetname;
+
+                $materialArr[] = $tmparr; 
+                $materialfound = false;
+                $subtypeflag = false;
             }
+        }
+
+        $this->storeMaterials($materialArr);
+
+        // import supplyprice
+        $this->storeSupplyprice($objWorksheet);
+
+        /*
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }*/
+    }
+
+    private function storeMaterials($materialarr)
+    {
+        foreach($materialarr as $tmp)
+        {
+            $name = $tmp['name'];
+            $nameeng = $tmp['nameeng'];
+            $description = $tmp['description'];
+            $type = $tmp['type'];
+            $sheet = $tmp['sheet'];
+
+            $obj = $this->_material->findOneBy(
+                    array('name'=>$name,'nameeng'=>$nameeng, 'description'=>$description));
+            if($obj)
+            {
+                //echo "material already there.<br>";
+            }
+            else
+            {
+                $obj = new \Synrgic\Infox\Material();
+                $obj->setNameeng($nameeng);
+                $obj->setName($name);
+                $obj->setDescription($description);
+                $obj->setType($type);
+                //$obj->setUnit($unit);
+                $obj->setSheet($sheet);                      
+                $this->_em->persist($obj);          
+            } 
+
         }
 
         try {
@@ -389,9 +438,7 @@ class Material_ImportController extends Zend_Controller_Action
             var_dump($e);
             return;
         }
-
-        // import supplyprice
-        $this->storeSupplyprice($objWorksheet);
+        
     }
 
     private function storeSupplyprice($objWorksheet)
@@ -399,6 +446,8 @@ class Material_ImportController extends Zend_Controller_Action
         //echo "storeSupplyprice<br>";
 
         $subtype = null;
+        $subtypeflag = false;
+
         $indexarr = array("B","C","D","E","F","G","H","I","J","K",);
         $nameenglast = "";
         $namelast = "";
@@ -436,6 +485,7 @@ class Material_ImportController extends Zend_Controller_Action
             if($valueb != "")
             {
                 $nameeng = $valueb;
+                $subtypeflag = true;
             }        
 
             if($valuec != "")
@@ -446,6 +496,10 @@ class Material_ImportController extends Zend_Controller_Action
             if($valued != "")
             {
                 $description = $valued;
+            }
+            else if($valued=="" && $subtypeflag)
+            {
+                $description = "NO DESCRIPTION";
             }
 
             if($valuee != "" && $valueg != "" && $valueh != "" && $valuei != "")
@@ -464,6 +518,8 @@ class Material_ImportController extends Zend_Controller_Action
                 $tmparr[] = trim($valuei);   
 
                 $supplypricearr[] = $tmparr;
+
+                $subtypeflag = false;
             }     
         }
 
@@ -480,11 +536,11 @@ class Material_ImportController extends Zend_Controller_Action
     private function persistAllSupplyPrices($supplypricearr)
     {
         // debug, dump the array
-        echo "supplypricearr count=" . count($supplypricearr);
+        echo "supplypricearr count=" . count($supplypricearr) . "<br>";
         foreach($supplypricearr as $tmp)
         {
             print_r($tmp); echo "<br>";
-            //$this->persistSupplyprice($tmp);
+            $this->persistSupplyprice($tmp);
         }
     }
 
