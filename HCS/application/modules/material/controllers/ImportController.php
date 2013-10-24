@@ -260,7 +260,8 @@ class Material_ImportController extends Zend_Controller_Action
             $valuec = $cell->getFormattedvalue();
 
             // this means a sub type
-            if($valueb!="" && $valuec!="")
+            //if($valueb!="" && $valuec!="")
+            if($valueb!="")
             {                
                 $typeeng = trim($valueb);
                 $typechs = trim($valuec);
@@ -341,7 +342,8 @@ class Material_ImportController extends Zend_Controller_Action
             $cell = $objWorksheet->getCell("I".$i);
             $valuei = $cell->getFormattedvalue();
            
-            if($valueb!="" && $valuec!="")
+            //if($valueb!="" && $valuec!="")
+            if($valueb!="")
             {// materials from a new subtype
                 $nameenglast = $typeeng = trim($valueb);
                 $namelast = $typechs = trim($valuec);
@@ -376,9 +378,9 @@ class Material_ImportController extends Zend_Controller_Action
                 $namelast = $namechs = ($valuec=="") ? $namelast : $valuec;
 
                 $tmparr = array();
-                $tmparr['name'] = $namechs;
-                $tmparr['nameeng'] = $nameeng;
-                $tmparr['description'] = $description;
+                $tmparr['name'] = trim($namechs);
+                $tmparr['nameeng'] = trim($nameeng);
+                $tmparr['description'] = trim($description);
                 $tmparr['type'] = $subtype;
                 $tmparr['sheet'] = $sheetname;
 
@@ -506,9 +508,9 @@ class Material_ImportController extends Zend_Controller_Action
             {//in this case, store the supplyprice
 
                 $tmparr = array();
-                $tmparr[] = $namechs;
-                $tmparr[] = $nameeng;
-                $tmparr[] = $description;
+                $tmparr[] = trim($namechs);
+                $tmparr[] = trim($nameeng);
+                $tmparr[] = trim($description);
 
                 $tmparr[] = trim($valuek);
 
@@ -539,7 +541,7 @@ class Material_ImportController extends Zend_Controller_Action
         echo "supplypricearr count=" . count($supplypricearr) . "<br>";
         foreach($supplypricearr as $tmp)
         {
-            print_r($tmp); echo "<br>";
+            //print_r($tmp); echo "<br>";
             $this->persistSupplyprice($tmp);
         }
     }
@@ -556,6 +558,14 @@ class Material_ImportController extends Zend_Controller_Action
         $quantity = $dataarr[7];
 
         $material = $this->_material->findOneBy(array("name"=>$mname, "nameeng"=>$mnameeng, "description"=>$mdescription));
+        if(!$material)
+        {
+            //print_r($dataarr); echo "<br>";
+            echo "nameeng=$mnameeng,name=$mname,description=$mdescription<br>";
+            //$obj = $this->_material->findOneBy(array("nameeng"=>$mnameeng));
+            //echo $obj->getId() . "<br>";
+        }
+
         $supplier = $this->_supplier->findOneBy(array("name"=>$sname));
 
         $supplyprice = new \Synrgic\Infox\Supplyprice();

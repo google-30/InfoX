@@ -8,11 +8,11 @@ $(document).ready(function() {
 </script>
 <?
 echo $this->grid("Applications", true)
+          ->field('updatedate','更新时间')
           ->field('site','工地')
           //->field('id','申请单号')
           ->field('applicant','申请人')
-          //->field('createdate','创建日期')
-          ->field('updatedate','更新时间')
+          //->field('createdate','创建日期')          
           //->field('status0', '申请状态')
           ->field('status1', '办公人员评估')
           ->field('status2', '负责经理评估')  

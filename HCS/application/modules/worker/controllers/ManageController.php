@@ -1,4 +1,5 @@
 <?php
+include 'InfoX/infox_common.php';
 include 'InfoX/infox_worker.php';
 
 define('UPLOAD_WORKER', APPLICATION_PATH. '/data/uploads/workers/images/');
@@ -410,6 +411,16 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->getCustominfo($id);
 
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+    }
+
+    public function deleteAction()
+    {
+        infox_common::turnoffView($this->_helper);
+        $id = $this->getParam("id");
+        $data = $this->_workerdetails->findOneBy(array('id' => $id));
+        $this->_em->remove($data);
+        $this->_em->flush();
+        $this->_redirect("worker/manage");        
     }
 
     public function submitAction()
