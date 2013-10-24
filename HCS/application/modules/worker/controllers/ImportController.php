@@ -1,4 +1,6 @@
 <?php
+set_time_limit(0);
+include 'InfoX/infox_common.php';
 
 class Worker_ImportController extends Zend_Controller_Action
 {
@@ -320,7 +322,7 @@ class Worker_ImportController extends Zend_Controller_Action
 
     }
 
-    public function truncateworkerdetailsAction()
+    public function truncateworkerdetailsAction1()
     {
         $this->turnoffview();
 
@@ -350,6 +352,31 @@ class Worker_ImportController extends Zend_Controller_Action
         $this->_em->remove($data);
         $this->_em->flush();
         */
+    }
+
+    public function truncateworkerdetailsAction()
+    {
+        infox_common::turnoffView($this->_helper);
+
+        $data = new \Synrgic\Infox\Workerdetails();
+        $cmd = $this->_em->getClassMetadata(get_class($data));
+        $connection = $this->_em->getConnection();
+        $dbPlatform = $connection->getDatabasePlatform();
+        $connection->beginTransaction();
+        try {
+            //$connection->query('SET FOREIGN_KEY_CHECKS=0');
+            $q = $dbPlatform->getTruncateTableSql($cmd->getTableName(), true);
+            $connection->executeUpdate($q);
+            //$connection->query('SET FOREIGN_KEY_CHECKS=1');
+            $connection->commit();
+        }
+        catch (\Exception $e) {
+            $connection->rollback();
+            var_dump($e);
+            return;
+        }        
+
+        //$this->redirect("/worker/manage");        
     }
 
     private function findCompanies()

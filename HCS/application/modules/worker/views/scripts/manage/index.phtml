@@ -1,7 +1,7 @@
 <style>
 #infoswitches { display: none; }
 #datatable { text-align:center; display:none; }
-#Workersdata { width:100%; }
+#Workersdata {  font: 80%/0.8em "Lucida Grande",Verdana,Arial,Helvetica,sans-serif; }
 #uploaddiv { display: none; }
 /*#featuresdiv { display: none; }*/
 </style>
@@ -88,11 +88,6 @@ function showhideupload()
     (display == "none") ? div.show() : div.hide();
 }
 
-function truncateWorkerdetails()
-{
-    alert("清除所有工人数据，尚未实现，hold on...");
-}
-
 $( "#sheetselect" ).change(function() {
     var sheetname = $(this).val();
     var url = "/worker/manage?sheet=" + sheetname;
@@ -106,6 +101,22 @@ function previewlist()
     window.open (url); 
 }
 
+function clearworkerdetails()
+{
+    var r=confirm("确认删除工人数据? 其他相关数据，比如工资，考勤一并会消除");
+    if (r==false)
+      {
+        return false;
+      }       
+
+    $.post("/worker/import/truncateworkerdetails", {},
+    function(data) {
+        //console.log(data);
+        //$('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month + "&sid="+siteid);
+        alert("删除成功");
+        window.location.reload();
+    })    
+}
 </script>
 
 <?php
@@ -118,7 +129,7 @@ $maindata=$this->maindata;
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 
 <div data-role="collapsible" data-collapsed="true">
-<h3>功能列表</h3>
+<h3>工人数据操作</h3>
 <div class="ui-grid-b">
 	<div class="ui-block-a">
     <a href="/worker/manage/add"><button data-mini="true" data-theme="a">注册一个工人</button></a>
@@ -127,7 +138,8 @@ $maindata=$this->maindata;
     <button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人数据</button>
     </div>
 	<div class="ui-block-c">
-    <a href="/worker/import/truncateworkerdetails"><button data-mini="true" data-theme="a" >清空工人数据</button></a>
+    <!--<a href="/worker/import/truncateworkerdetails"><button data-mini="true" data-theme="a" onclick>清空工人数据</button></a>-->
+    <button data-mini="true" data-theme="a" onclick="clearworkerdetails()">清空工人数据</button>
     </div>
 </div><!-- /grid-b -->
     <div id="uploaddiv">
@@ -143,11 +155,25 @@ $maindata=$this->maindata;
 </div>
 
 <div data-role="collapsible" data-collapsed="true">
-<h3>列表操作</h3>
+<h3>工人列表操作</h3>
 <button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
 <div id="infoswitches">
 <div class="ui-grid-d">
 <?php
+$onswitches=array(
+/*"namechs"=>"Name Chs","nameeng"=>"Name Eng",*/ "name"=>"Name ", "dob"=>"D.O.B","wpno"=>"WP No.", 
+"wpexpiry"=>"WP Expiry", "doa"=>"D.O.A", "issuedate"=>"Date of Issue", 
+"finno"=>"Fin No.", "ppno"=>"PP No.", "rate"=>"RATE", 
+"ppexpiry"=>"PP Expiry", "csoc"=>"C.S.O.C",);
+
+$offswitches=array(
+"pano"=>"PA Reference  No.", "sbno"=>"Security Bond No.", 
+"securityexp"=>"Security Expiry", "worktype"=>"主要工种","arrivaldate"=>"Arrival Date","medicaldate"=>"Medical Date",  "medicalinsuranc"=>"Medical Insurance", "workingsite"=>"WORKING SITE", "dormitory"=>"Dormitory", 
+"hometown"=>"区域", "education"=>"教育程度", "age"=>"年龄", "marital"=>"婚姻状况", 
+"constructionworker"=>"建筑工", "applyfor"=>"Apply For", "goodat"=>"Good At", "contactno1"=>"Contact No.1", 
+"contactno2"=>"Contact No.2", "remarks"=>"Remarks(Agent)",);
+
+/*
 $onswitches=array(
 "sn"=>"S/N","eeeno"=>"E'ee No.","namechs"=>"Name Chs","nameeng"=>"Name Eng","wpno"=>"WP No.", 
 "ppno"=>"PP No.", "rate"=>"RATE",);
@@ -159,7 +185,7 @@ $offswitches=array(
 "hometown"=>"区域", "education"=>"教育程度", "age"=>"年龄", "marital"=>"婚姻状况", 
 "constructionworker"=>"建筑工", "applyfor"=>"Apply For", "goodat"=>"Good At", "contactno1"=>"Contact No.1", 
 "contactno2"=>"Contact No.2", "remarks"=>"Remarks(Agent)",);
-
+*/
 $customtitles=$this->customtitles;
 $offswitches["custom1"]=$customtitles[0];
 $offswitches["custom2"]=$customtitles[1];
@@ -284,7 +310,7 @@ foreach($offswitches as $key=>$value)
 }
 $wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
 $wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
-//$wdtab=$wdtab->helper(new GridHelper_Worker());
+$wdtab=$wdtab->helper(new GridHelper_Workerdetails());
 $wdtab=$wdtab->data($maindata)->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
 $wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 echo $wdtab;

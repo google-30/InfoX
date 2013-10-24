@@ -26,7 +26,7 @@ table.grid th {
     border-right: 0px solid #c1dad7;
     border-bottom: 0px solid #c1dad7;
     border-top: 0px solid #c1dad7;
-    letter-spacing: 2px;
+    /*letter-spacing: 2px;*/
     text-align: center;
     padding: 20px 10px 20px 10px;
     background: #4EB7C1;
