@@ -37,53 +37,8 @@ class Worker_ManageController extends Zend_Controller_Action
     {
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
 
-        $requestsheet = $this->getParam("sheet",$sheetarr[0]);     
-        $workerarr = array();
-
-        /*                    
-        if(!in_array($requestsheet, $sheetarr))
-        {
-            $allworkers = $this->_workerdetails->findAll();
-            foreach($allworkers as $worker)
-            {
-                $sheet = $worker->getSheet();
-                if(!in_array($sheet, $sheetarr))
-                {
-                    $workerarr[] = $worker;
-                }
-            }            
-        }
-        else
-        {
-            $workerarr = $this->_workerdetails->findBy(array('sheet'=>$requestsheet));
-        }
-        */
-
-        $allworkers = $this->_workerdetails->findAll();
-        foreach($allworkers as $tmp)
-        {
-            $sheet = $tmp->getSheet();
-            if($sheet != $requestsheet)
-            {
-                continue;
-            }
-
-            $date = $tmp->getResignation();
-            $now = new DateTime("now");
-            
-            if(!$date)
-            {//no date = still on duty
-                $workerarr[] = $tmp; 
-                continue;
-            }
-
-            $interval = $date->diff($now);
-            $invert = $interval->invert;
-            if($invert)
-            {
-                $workerarr[] = $tmp; 
-            }         
-        }
+        $requestsheet = $this->getParam("sheet",$sheetarr[0]); 
+        $workerarr = infox_worker::getActiveWorkerdetailsBySheet($requestsheet);
         
         $this->view->sheet = $requestsheet;        
         $this->view->maindata = $workerarr;
@@ -127,7 +82,9 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function workerexpireAction()
     {
-        $this->getallexp();    
+        $params = array("wpexpiry"=>"工作准证到期", "ppexpiry"=>"护照到期");
+
+        //$this->getallexp();    
     }    
 
     public function previewexpiryAction()
@@ -303,7 +260,7 @@ class Worker_ManageController extends Zend_Controller_Action
         return false;
     }
 
-    public function workerexpire1Action()
+    public function workerexpireAction1()
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('w', 'ws')
