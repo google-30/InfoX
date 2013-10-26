@@ -89,7 +89,8 @@ class Material_ImportController extends Zend_Controller_Action
         }
         else
         {
-        $sheetarr =  array("safety material",);
+        //$sheetarr =  array("safety material",);
+        $sheetarr =  array("scaffolding",);
         }
 
         $objWorksheet = $objReader->setLoadSheetsOnly($sheetarr);
@@ -321,26 +322,26 @@ class Material_ImportController extends Zend_Controller_Action
 
             // related to type
             $cell = $objWorksheet->getCell("B".$i);
-            $valueb = $cell->getFormattedvalue();
+            $valueb = trim($cell->getFormattedvalue());
             $cell = $objWorksheet->getCell("C".$i);
-            $valuec = $cell->getFormattedvalue();
+            $valuec = trim($cell->getFormattedvalue());
 
             // related to material description
             $cell = $objWorksheet->getCell("D".$i);
-            $valued = $cell->getFormattedvalue();
+            $valued = trim($cell->getFormattedvalue());
 
             // unit
             $cell = $objWorksheet->getCell("E".$i);
-            $valuee = $cell->getFormattedvalue();
+            $valuee = trim($cell->getFormattedvalue());
             // dodate/update
             $cell = $objWorksheet->getCell("G".$i);
-            $valueg = $cell->getFormattedvalue();
+            $valueg = trim($cell->getFormattedvalue());
             // rate
             $cell = $objWorksheet->getCell("H".$i);
-            $valueh = $cell->getFormattedvalue();
+            $valueh = trim($cell->getFormattedvalue());
             // quantity
             $cell = $objWorksheet->getCell("I".$i);
-            $valuei = $cell->getFormattedvalue();
+            $valuei = trim($cell->getFormattedvalue());
            
             //if($valueb!="" && $valuec!="")
             if($valueb!="")
@@ -366,10 +367,14 @@ class Material_ImportController extends Zend_Controller_Action
                 $materialfound = true;             
                 $description = trim($valued);
             }
-            else if($valuee!="" && $valueg!="" && $valueh!="" && $valuei!="" && $subtypeflag)
+            else if($valuee!="" && $valueg!="" && $valueh!="" && $valuei!="" && ($subtypeflag || $valuec!=""))
             {// another case: no description(spec), but it's still a material
                 $materialfound = true;             
                 $description = "NO DESCRIPTION";                    
+            }
+            else if($valuec!="")
+            {
+                $namelast = $valuec;
             }
 
             if($materialfound)
@@ -468,31 +473,34 @@ class Material_ImportController extends Zend_Controller_Action
             }
 
             $cell = $objWorksheet->getCell("B".$i);
-            $valueb = $cell->getFormattedvalue();
+            $valueb = trim($cell->getFormattedvalue());
             $cell = $objWorksheet->getCell("C".$i);
-            $valuec = $cell->getFormattedvalue();
+            $valuec = trim($cell->getFormattedvalue());
             $cell = $objWorksheet->getCell("D".$i);
-            $valued = $cell->getFormattedvalue();
+            $valued = trim($cell->getFormattedvalue());
             $cell = $objWorksheet->getCell("E".$i);
-            $valuee = $cell->getFormattedvalue();
+            $valuee = trim($cell->getFormattedvalue());
             $cell = $objWorksheet->getCell("G".$i);
-            $valueg = $cell->getFormattedvalue();
+            $valueg = trim($cell->getFormattedvalue());
             $cell = $objWorksheet->getCell("H".$i);
-            $valueh = $cell->getFormattedvalue();
+            $valueh = trim($cell->getFormattedvalue());
             $cell = $objWorksheet->getCell("I".$i);
-            $valuei = $cell->getFormattedvalue();
+            $valuei = trim($cell->getFormattedvalue());
             $cell = $objWorksheet->getCell("K".$i);
-            $valuek = $cell->getFormattedvalue();
+            $valuek = trim($cell->getFormattedvalue());
 
             if($valueb != "")
             {
                 $nameeng = $valueb;
+                $namechs = $valuec;
+                $description = $valued;
                 $subtypeflag = true;
             }        
 
             if($valuec != "")
             {
                 $namechs = $valuec;
+                $description = $valued;
             }
 
             if($valued != "")
@@ -503,6 +511,11 @@ class Material_ImportController extends Zend_Controller_Action
             {
                 $description = "NO DESCRIPTION";
             }
+            else if($valued=="" && $valuec!="")
+            {
+                $description = "NO DESCRIPTION";
+            }
+
 
             if($valuee != "" && $valueg != "" && $valueh != "" && $valuei != "")
             {//in this case, store the supplyprice

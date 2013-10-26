@@ -2,6 +2,25 @@
 #uploaddiv { display: none; }
 </style>
 <script>
+$(document).on("click", ".show-page-loading-msg", function() {
+	var $this = $( this ),
+		theme = $this.jqmData("theme") || $.mobile.loader.prototype.options.theme,
+		msgText = $this.jqmData("msgtext") || $.mobile.loader.prototype.options.text,
+		textVisible = $this.jqmData("textvisible") || $.mobile.loader.prototype.options.textVisible,
+		textonly = !!$this.jqmData("textonly");
+		html = $this.jqmData("html") || "";
+	$.mobile.loading( 'show', {
+			text: msgText,
+			textVisible: textVisible,
+			theme: theme,
+			textonly: textonly,
+			html: html
+	});
+})
+.on("click", ".hide-page-loading-msg", function() {
+	$.mobile.loading( 'hide' );
+});
+
 $(function() {
     $('#Materials').dataTable({
         "iDisplayLength": 50,
@@ -142,7 +161,7 @@ $maindata=$this->maindata;
     <fieldset>
     <form action="/material/import/submit" method="post" enctype="multipart/form-data">
     上传材料列表(MS Excel file)：<input data-mini="true" type="file" name="file" id="file">
-    <input type="submit" value="上传" data-mini="true" data-theme="a">
+    <input type="submit" value="上传" data-mini="true" data-theme="a" class="show-page-loading-msg" data-textonly="false" data-textvisible="true" data-msgtext="数据处理中，请稍候...">
     </form>
     </fieldset>
     </div>
@@ -169,7 +188,7 @@ foreach($sheetarr as $tmp)
 
     $options .= $option;
 }
-$selects='<select data-mini="true" id="sheetselect">';
+$selects='<select data-mini="true" id="sheetselect" data-theme="a">';
 $selects.=$options;
 $selects.='</select>';
 echo $selects;
