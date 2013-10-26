@@ -82,10 +82,61 @@ class Worker_ManageController extends Zend_Controller_Action
 
     public function workerexpireAction()
     {
-        $params = array("wpexpiry"=>"工作准证到期", "ppexpiry"=>"护照到期");
+        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+        $this->view->sheet = $requestsheet = $this->getParam("sheet",$sheetarr[0]); 
+        $this->view->paramarr = $paramarr = array("wpexpiry"=>"Work Pass/工作准证到期", 
+            "ppexpiry"=>"Pass Port/护照到期", "csoc"=>"Csoc/安全证到期", "securityexp"=>"Security Bond Expiry", );
+
+        $expiryarr = array();
+
+        $workerarr = infox_worker::getActiveWorkerdetailsBySheet($requestsheet);
+        foreach($paramarr as $param=>$title)
+        {
+            $tmparr = $this->getExpiryArr($workerarr, $param);
+            //var_dump($tmparr); return;
+            ksort($tmparr);
+            $expiryarr[$param] = $tmparr;
+        }
+        
+        $this->view->expiryarr = $expiryarr;
 
         //$this->getallexp();    
     }    
+
+    private function getExpiryArr($workerarr, $param)
+    {
+        $returnarr = array();
+        $keystr = "";
+        foreach($workerarr as $worker)
+        {
+            switch($param)
+            {
+                case "wpexpiry":
+                    $date = $worker->getWpexpiry();
+                    break;
+                case "ppexpiry":
+                    $date = $worker->getPpexpiry();
+                    break;
+                case "csoc":
+                    $date = $worker->getCsoc();
+                    break;
+                case "securityexp":
+                    $date = $worker->getSecurityexp();
+                    break;
+                default:
+                    return null;                    
+            }
+
+            $keystr = $date ? $date->format("Y-m") : "日期未定义";
+            if(!array_key_exists($keystr, $returnarr))
+            {
+                $returnarr[$keystr] = array();
+            }
+            $returnarr[$keystr][] = $worker;
+        }
+
+        return $returnarr;
+    }
 
     public function previewexpiryAction()
     {

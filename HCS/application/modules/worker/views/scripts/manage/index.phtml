@@ -313,7 +313,14 @@ $wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
 $wdtab=$wdtab->helper(new GridHelper_Workerdetails());
 $wdtab=$wdtab->data($maindata)->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
 $wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+if(count($maindata))
+{
 echo $wdtab;
+}
+else
+{
+echo "<strong>没有记录，请导入或者编辑工人数据</strong>";
+}
 ?>
 <br><br>
 
