@@ -39,7 +39,6 @@ $mode=$this->mode;//"Create";
 $id=0;
 $name="";
 $nameeng="";
-$spec="";
 $description="";
 $supplier="";
 $date="";
@@ -49,15 +48,14 @@ $usage="";
 $typeid=0;
 $defsupplierid=0;
 
-$units=$this->units;
-$unit="";
+//$units=$this->units;
+//$unit="";
 
 if($mode==="Edit")
 {
 $id=$data->getId();
 $name=$data->getName();
 $nameeng=$data->getNameeng();
-//$spec=$data->getSpec();
 $description=$data->getDescription();
 if($data->getSupplier()){ $supplier=$data->getSupplier()->getName(); }
 $date=$data->getUpdate();
@@ -66,12 +64,11 @@ $pic=$data->getPic();
 $usage="";
 $typeobj=$data->getType();
 if($typeobj) { $typeid=$typeobj->getId(); } 
-$defsupplier=$data->getSupplier();
+$defsupplier=$data->getSupplyprice();
 if($defsupplier)
 {
     $defsupplierid=$defsupplier->getId(); 
 }
-$unit=$data->getUnit();
 
 $supplypricearr=$this->supplypricearr;
 }
@@ -163,9 +160,9 @@ echo $options;
 $tabrows="";
 foreach($supplypricearr as $tmp)
 {
+    $id = $tmp->getId();
     $supplier = $tmp->getSupplier();
     $suppliername = $supplier ? $supplier->getName() : "&nbsp;";
-
     $unit = $tmp->getUnit();
     $rate = $tmp->getRate();
     $quantity = $tmp->getQuantity();
@@ -176,7 +173,7 @@ foreach($supplypricearr as $tmp)
 
     if($id == $defsupplierid)
     {
-        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked /></td>';        
+        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked data-role="none"/></td>';        
     }
     else
     {
@@ -247,4 +244,5 @@ foreach($suppliers as $tmp)
 </fieldset>
 
 <button type="button" id="submitbutton" name="submitbutton" onclick="submitform()" data-theme="a" data-mini="true">提交</button>
+<br>
 

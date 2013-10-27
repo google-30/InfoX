@@ -96,13 +96,14 @@ foreach($matapps as $tmp)
 {
     $id = $tmp->getId();
     $longname = $tmp->getLongname();
-    $description = $spec = "";
     $amount = $tmp->getAmount();
     $unit = $tmp->getUnit();
-    $remark = $tmp->getRemark();
+    $remark = "&nbsp;";//$tmp->getRemark();
     $materialid = $tmp->getMaterialid();
     //$description = $material->getDescription();    
-    
+    $material = $this->materialentity->findOneBy(array('id' => $materialid));
+    $description = $material ? $material->getDescription() : "&nbsp;";
+
     $tr = "<tr>";
     $td_id = "<td>$id</td>";
     $td_longname = "<td>$longname</td>";

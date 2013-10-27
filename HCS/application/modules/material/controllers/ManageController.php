@@ -1,4 +1,5 @@
 <?php
+include "InfoX/infox_common.php";
 include "InfoX/infox_material.php";
 
 define('UPLOAD_PATH', APPLICATION_PATH. '/data/uploads/materials/');
@@ -24,9 +25,6 @@ class Material_ManageController extends Zend_Controller_Action
 
     public function indexAction()
     {   
-        //$materialobjs = $this->_material->findAll();
-        //$this->view->materials = $materialobjs;
-
         $this->getmateriallist();
     }
 
@@ -74,8 +72,7 @@ class Material_ManageController extends Zend_Controller_Action
         if(0)
         {    
             $requests = $this->getRequest()->getPost();
-            var_dump($requests);
-            if(1) return;
+            var_dump($requests); if(1) return;
         }
         $id = $this->_getParam("id");
         $material = $this->_material->findOneBy(array('id' => $id));
@@ -84,7 +81,6 @@ class Material_ManageController extends Zend_Controller_Action
         /*
         $this->getSuppliers();
         $this->getSupplyprice($id);
-
         $this->getUnits();
         */
 
@@ -123,49 +119,39 @@ class Material_ManageController extends Zend_Controller_Action
         $nameeng = $this->getParam("nameeng", "");
         $spec = $this->getParam("spec", "");
         $description = $this->getParam("description", "");
-        //$mtype = $this->getParam("mtype", "");
-        //$dtype = $this->getParam("dtype", "");
-
         $usage = $this->getParam("usage", "");
-        $unit = $this->getParam("unit", "");
-
         $typeid = $this->getParam("type", "0");
 
         $defsupplierid = $this->getParam("defsupplierid", "0");
 
         if($mode == "Create")
         {
-            $data = new \Synrgic\Infox\Material(); 
+            $material = new \Synrgic\Infox\Material(); 
         }
         else
         {
-            $data = $this->_material->findOneBy(array("id"=>$id));
+            $material = $this->_material->findOneBy(array("id"=>$id));
         }        
                 
-        $data->setName($name);
-        $data->setNameeng($nameeng);
-        $data->setUpdate(new Datetime("now"));
-        //$data->setPrice(floatval($price));
-        $data->setSpec($spec);
-        $data->setDescription($description);
-        //$data->setMacrotype($mtype);
-        //$data->setDetailtype($dtype);
-        $data->setUsage($usage);
-        $data->setUnit($unit);
+        $material->setName($name);
+        $material->setNameeng($nameeng);
+        $material->setUpdate(new Datetime("now"));
+        $material->setDescription($description);
+        $material->setUsage($usage);
 
-        $supobj = $this->_supplier->findOneBy(array("id"=>$defsupplierid));
-        if($supobj)  
+        $supplyprice = $this->_supplyprice->findOneBy(array("id"=>$defsupplierid));
+        if($supplyprice)
         {
-            $data->setSupplier($supobj);
+            $material->setSupplyprice($supplyprice);
         }
 
         $typeobj = $this->_materialtype->findOneBy(array("id"=>$typeid));
         if(isset($typeobj)) 
         {
-            $data->setType($typeobj);
+            $material->setType($typeobj);
         }   
 
-        $this->_em->persist($data);
+        $this->_em->persist($material);
         try {
             $this->_em->flush();
         } catch (Exception $e) {
@@ -173,18 +159,34 @@ class Material_ManageController extends Zend_Controller_Action
             return;
         }        
 
-        $id = $data->getId();
+        $id = $material->getId();
 
         // upload pic
         $this->storePic($id);
 
         // TODO: update supplyprice
+        $supplypricearr = infox_material::getSupplypricesByMaterial($material);        
+        foreach($supplypricearr as $tmp)
+        {
+            $id = $tmp->getId();
+            $rateid = "rate" . strval($id);
+            $rate = $this->getParam($rateid, 0);
+            
+            $updateid = "update" . strval($id);
+            $update = $this->getParam($updateid, "now");
+
+            $tmp->setRate($rate);
+            $tmp->setUpdate(new Datetime($update));
+            $this->_em->persist($tmp);     
+        }
+
+        /*
         $suppliers = $this->_supplier->findAll();
         foreach($suppliers as $tmp)
         {
         
             $id = $tmp->getId();
-            $priceid = "price" . strval($id);
+            $priceid = "rate" . strval($id);
             $price = $this->getParam($priceid, 0);
             if($price==0)
             {
@@ -194,18 +196,19 @@ class Material_ManageController extends Zend_Controller_Action
             $updateid = "update" . strval($id);
             $update = $this->getParam($updateid, "now");
 
-            $priceobj = $this->_supplyprice->findOneBy(array("supplier"=>$tmp, "material"=>$data));
+            $priceobj = $this->_supplyprice->findOneBy(array("supplier"=>$tmp, "material"=>$material));
             if(is_null($priceobj))
             {
                 $priceobj = new \Synrgic\Infox\Supplyprice();
             }
-            $priceobj->setMaterial($data);
+            $priceobj->setMaterial($material);
             $priceobj->setSupplier($tmp);
             $priceobj->setPrice(floatval($price));
             $priceobj->setUpdate(new Datetime($update));
 
             $this->_em->persist($priceobj);  
         }
+        */
 
         try {
             $this->_em->flush();
@@ -214,7 +217,7 @@ class Material_ManageController extends Zend_Controller_Action
             return;
         }        
 
-        $this->_redirect("material/manage");
+        //$this->_redirect("material/manage");
     }    
 
     private function getSuppliers()

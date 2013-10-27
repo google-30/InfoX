@@ -29,41 +29,6 @@ class Material extends \Synrgic_Models_Entity {
     protected $description;
 
     /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $unit;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $dono;
-
-    /**
-     * @Column(type="date", nullable=true)
-     */
-    protected $dodate;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $rate;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $quantity;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $amount;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $suppliers;
-
-    /**
      * @Column(type="date", nullable=true)
      */
     protected $update;
@@ -76,9 +41,11 @@ class Material extends \Synrgic_Models_Entity {
     protected $supplier;
 
     /**
-     * @Column(type="string", nullable=true)
+     * default price from supplier
+     * 
+     * @ManyToOne(targetEntity="Synrgic\Infox\Supplyprice")
      */
-    protected $spec;
+    protected $supplyprice;
 
     /**
      * @Column(type="string", nullable=true)
@@ -102,5 +69,10 @@ class Material extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $sheet;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $unit;
     
 }

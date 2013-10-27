@@ -1,4 +1,6 @@
 <?php
+include "InfoX/infox_common.php";
+include "InfoX/infox_material.php";
 
 class Material_ApplyController extends Zend_Controller_Action
 {
@@ -251,9 +253,7 @@ class Material_ApplyController extends Zend_Controller_Action
 
     public function postdataAction()
     {
-        $this->_helper->layout->disableLayout();   
-        $this->_helper->viewRenderer->setNoRender(TRUE);
-        //$this->turnoffview();
+        infox_common::turnoffView($this->_helper);
         
         $requests = $this->getRequest()->getPost();
         if(0)
@@ -331,7 +331,8 @@ class Material_ApplyController extends Zend_Controller_Action
     
     public function submitselectionsAction()
     {
-        $this->turnoffview();
+        //$this->turnoffview();
+        infox_common::turnoffView($this->_helper);
 
         $appid = $this->getParam("appid", 0);
         $appobj = $this->_application->findOneBy(array("id"=>$appid));       
@@ -512,9 +513,28 @@ class Material_ApplyController extends Zend_Controller_Action
         return $sites;
     }
 
-    private function turnoffview()
+    public function appmatdelAction()
     {
-        $this->_helper->layout->disableLayout();   
-        $this->_helper->viewRenderer->setNoRender(TRUE);    
-    }    
+        infox_common::turnoffView($this->_helper);
+        
+        $appmatid = $this->getParam("id", 0);
+        $appid = 0;
+        $siteid = 0;
+        $subid = 0;
+
+        if($appmatid)
+        {
+            $data = $this->_matappdata->findOneBy(array("id"=>$appmatid));
+            $appobj = $data->getApplication();
+            $appid = $appobj ? $appobj->getId() : 0;
+            $siteobj = $appobj ? $appobj->getSite() : null;
+            $siteid = $siteobj ? $siteobj->getId() : 0;
+
+            $this->_em->remove($data);
+            $this->_em->flush();            
+        }
+
+        $url = "/material/apply/appedit?&id=$appid&siteid=$siteid&open=4";
+        $this->redirect($url);
+    }
 }

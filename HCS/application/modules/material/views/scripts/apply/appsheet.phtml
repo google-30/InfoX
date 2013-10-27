@@ -366,7 +366,7 @@ foreach($subtypes as $tmp)
 
 <table id="datatable" class="grid">
 <thead><tr>
-<th>材料名称</th><th>描述</th><th>数量</th><th>单位</th><th>工程部位</th><th>提交</th>
+<th>名称</th><th>描述</th><th>数量</th><th>工程部位</th><th>提交</th>
 </tr></thead>
 <tbody> 
 <?php
@@ -384,15 +384,15 @@ foreach($this->materials as $tmp)
     $id = $tmp->getId();
     $name = $tmp->getName();
     $nameeng = $tmp->getNameeng();
-    $unit = $tmp->getUnit();
-    $spec = $tmp->getSpec();
+    //$unit = ""; //$tmp->getUnit();
+    //$spec = ""; //$tmp->getSpec();
     $description = $tmp->getDescription();
 
     $body = "";
     
     $longname = '<tr><td class="tdname">' . $name . '/' . $nameeng . '</td>';
     $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="" placeholder="0"></td>';
-    $unit = "<td>$unit</td>";
+    //$unit = "<td>$unit</td>";
     //$spec = "<td>$spec</td>";    
     $deshtml = "<td>$description</td>";    
     
@@ -401,7 +401,7 @@ foreach($this->materials as $tmp)
     $dropdown .= '</select>';
     $td_dropdown = '<td>' . $dropdown . '</td>';    
 
-    $body .= $longname . $deshtml . $amount . $unit . $td_dropdown;
+    $body .= $longname . $deshtml . $amount . $td_dropdown;
     //$gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
     $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-inline="true" data-mini="true">提交</button></td>';
 

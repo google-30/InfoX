@@ -379,7 +379,9 @@ class Material_AppmanageController extends Zend_Controller_Action
 
         // site
         $siteobj = $appobj->getSite();
-        $this->getSiteinfo($siteobj);   
+        $this->getSiteinfo($siteobj); 
+
+        $this->view->materialentity = $this->_material;  
     }
 
     public function previeworderAction()
