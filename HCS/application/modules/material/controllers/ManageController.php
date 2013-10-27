@@ -1,4 +1,5 @@
 <?php
+include "InfoX/infox_material.php";
 
 define('UPLOAD_PATH', APPLICATION_PATH. '/data/uploads/materials/');
 class Material_ManageController extends Zend_Controller_Action
@@ -77,13 +78,18 @@ class Material_ManageController extends Zend_Controller_Action
             if(1) return;
         }
         $id = $this->_getParam("id");
-        $data = $this->_material->findOneBy(array('id' => $id));
+        $material = $this->_material->findOneBy(array('id' => $id));
 
-        $this->view->maindata = $data;
+        $this->view->maindata = $material;
+        /*
         $this->getSuppliers();
         $this->getSupplyprice($id);
-        $this->getTypes();
+
         $this->getUnits();
+        */
+
+        $this->getTypes();
+        $this->view->supplypricearr = $supplypricearr = infox_material::getSupplypricesByMaterial($material);
     }
 
     public function deleteAction()

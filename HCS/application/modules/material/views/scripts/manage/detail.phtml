@@ -68,7 +68,7 @@ $unit=$data->getUnit();
 ?>
 
 <fieldset>
-<legend><strong>材料添加与编辑</strong></legend>
+<legend><strong>材料信息</strong></legend>
 <form id="dataform" enctype="multipart/form-data" method="post" action="/material/manage/submit">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
@@ -76,7 +76,7 @@ $unit=$data->getUnit();
 
 <table class="grid">
 <tr>
-<td rowspan="3" style="width:50%">
+<td rowspan="5" style="width:50%">
 <div data-role="fieldcontain">
     <label for="file" class="ui-input-text">材料照片:</label>
     <input type="file" name="file" id="file">
@@ -85,69 +85,7 @@ $unit=$data->getUnit();
 </td>
 <td>
 <div data-role="fieldcontain">
-<label for="name">中文名:</label>
-<input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
-</div>
-</td>
-</tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="name">英文名:</label>
-<input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
-</div>
-</td></tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="usage">材料用途:</label>
-<input type="text" name="usage" id="usage" value="<?php echo $usage; ?>" data-mini="true" placeholder="材料用途，比如木类，金属类等">
-</div>
-</td></tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="spec">材料规格描述:</label>
-<input type="text" name="description" id="description" value="<?php echo $description; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
-</div>
-</td><td>
-<!--
-<div data-role="fieldcontain">
-<label for="description">材料其他信息:</label>
-<textarea id="description" name="description" rows="2" cols="60" data-mini="true" placeholder="补充，比如材料的特殊性，防火放潮等"><?php echo $description; ?></textarea>
-</div>-->
-</td></tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="unit">材料单位:</label>
-<input type="text" name="unit" id="unit" data-mini="true" value="<?php echo $unit; ?>" placeholder="材料单位，比如：pc(套)，pair(双)，个">
-<!--
-<select name="unit" id="unit" data-mini="true">
-<option value=""></option>
-<?php
-$options = "";
-foreach($units as $tmp)
-{
-    if($tmp == "")
-    {
-        continue;
-    }
-    
-    if($tmp == $unit)
-    {
-        $options .= '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    }
-    else
-    {
-        $options .= '<option value="' . $tmp . '">' . $tmp . '</option>';
-    }
-}
-echo $options;
-?>
-</select>
--->
-</div>
-</td>
-<td>
-<div data-role="fieldcontain">
-<label for="spec">选择分类:</label>
+<label for="type">分类:</label>
 <select name="type" id="type" data-mini="true">
 <option value="0"></option>
 <?php
@@ -176,12 +114,49 @@ echo $options;
 </div>
 </td>
 </tr>
-</table>
+<tr><td>
+<div data-role="fieldcontain">
+<label for="name">中文名:</label>
+<input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
+</div>
+</td></tr>
+<tr><td>
+<div data-role="fieldcontain">
+<label for="name">英文名:</label>
+<input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
+</div>
+</td></tr>
+<tr><td>
+<div data-role="fieldcontain">
+<label for="description">材料规格:</label>
+<input type="text" name="description" id="description" value="<?php echo $description; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
+</div>
+</td><td>
 
+</td></tr>
+<tr>
+<td>
+<div data-role="fieldcontain">
+<label for="usage">材料用途:</label>
+<input type="text" name="usage" id="usage" value="<?php echo $usage; ?>" data-mini="true" placeholder="材料用途，比如木类，金属类等">
+</div>
+</td>
+</tr>
+</table>
+</fieldset>
+<fieldset>
+<legend><strong>供应商价格信息</strong></legend>
 <table class="grid">
-<thead><tr><th>优先供应商</th><th>名称</th><th>价格</th><th>报价日期</th></tr></thead>
+<thead><tr><th></th><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th></tr></thead>
 <tbody>
 <?php
+foreach($supplypricearr as $tmp)
+{
+    
+}
+
+if(0)
+{
 $suppliers= $this->suppliers;
 $supplyprice = $this->supplyprice;
 foreach($suppliers as $tmp)
@@ -221,11 +196,12 @@ foreach($suppliers as $tmp)
     $row .= "<tr>" . $tdradio . $tdname . $tdprice . $tdupdate . "</tr>";
     echo $row;
 }
+}
 ?>
 </tbody>
 </table>
 </form> <!-- dataform -->
 </fieldset>
 
-<button type="button" id="submitbutton" name="submitbutton" onclick="submitform()" data-theme="a">提交</button>
+<button type="button" id="submitbutton" name="submitbutton" onclick="submitform()" data-theme="a" data-mini="true">提交</button>
 

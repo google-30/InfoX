@@ -17,5 +17,10 @@ class infox_material
 
     }
 
-    
+    public static function getSupplypricesByMaterial($material)
+    {
+        self::getRepos();
+        $prices = self::$_supplyprice->findBy(array("material"=>$material));
+        return $prices;
+    }
 }
