@@ -4,12 +4,12 @@ class GridHelper_Project extends Grid_Helper_Abstract
 {
     protected function td_start($field, $row) 
     {
-    	return $row->$field->format('Y-m-d');
+    	return $row->$field ? $row->$field->format('Y-m-d') : "&nbsp;";
     }
 
     protected function td_stop($field, $row) 
     {
-    	return $row->$field->format('Y-m-d');
+    	return $row->$field ? $row->$field->format('Y-m-d') : "&nbsp;";
     }
 
     protected function td_company($field, $row) 

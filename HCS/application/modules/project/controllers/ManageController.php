@@ -75,11 +75,11 @@ class Project_ManageController extends Zend_Controller_Action
         $id = $this->getParam("id", "0");
         $name = $this->getParam("name");
         $address = $this->getParam("address", "");        
-        $manager = $this->getParam("manager", 0);
+        //$manager = $this->getParam("manager", 0);
         $start = $this->getParam("start", "");
         $stop = $this->getParam("stop", "");
         $remark = $this->getParam("remark", "");
-        $workerno = $this->getParam("workerno", "");
+        //$workerno = $this->getParam("workerno", "");
         $company = $this->getParam("company", 0);
         $contractor = $this->getParam("contractor", "");
         $property = $this->getParam("property", "");
@@ -91,7 +91,7 @@ class Project_ManageController extends Zend_Controller_Action
             $leadersStr = implode(";", $leadersArr);
         }   
 
-        $permission1 = $this->getParam("permission1", "0");
+        //$permission1 = $this->getParam("permission1", "0");
 
         if($mode == "Create")
         {
@@ -104,11 +104,17 @@ class Project_ManageController extends Zend_Controller_Action
  
         $data->setName($name);
         $data->setAddress($address);
-        $data->setManager($this->_humanres->findOneBy(array("id"=>$manager)));
-        $data->setStart(new Datetime($start));
-        $data->setStop(new Datetime($stop));
+        if($start!="")
+        {
+            $data->setStart(new Datetime($start));
+        }
+        if($stop!="")
+        {
+            $data->setStop(new Datetime($stop));
+        }
         $data->setRemark($remark);
-        $data->setWorkerno($workerno);
+        //$data->setManager($this->_humanres->findOneBy(array("id"=>$manager)));
+        //$data->setWorkerno($workerno);
 
         //$data->setLeader($this->_humanres->findOneBy(array("id"=>$leader)));
         $data->setLeaders($leadersStr);
@@ -304,6 +310,10 @@ class Project_ManageController extends Zend_Controller_Action
             $id = $tmp->getId();            
             $idArr[] = $id;
         }   
+        if(count($idArr)==0)
+        {
+            return;
+        }
 
         $qb = $this->_em->createQueryBuilder();
         $qb->add('select', 'm')

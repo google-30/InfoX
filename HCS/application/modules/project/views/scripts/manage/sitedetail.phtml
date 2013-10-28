@@ -39,8 +39,8 @@ $data = $this->maindata;
 $id = $data->getId();
 $name = $data->getName();
 $address = $data->getAddress();
-$start = $data->getStart()->format("Y-m-d");
-$stop = $data->getStop()->format("Y-m-d");
+$start = $data->getStart() ? $data->getStart()->format("Y-m-d") : "";
+$stop = $data->getStop() ? $data->getStop()->format("Y-m-d") : "";
 if($data->getLeader())
 {
     $leader = $data->getLeader()->getName();

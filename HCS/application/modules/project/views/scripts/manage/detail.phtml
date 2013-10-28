@@ -125,8 +125,8 @@ if($this->mode == "Edit")
     $id = $data->getId();
     $name = $data->getName();
     $address = $data->getAddress();
-    $start = $data->getStart()->format("Y-m-d");
-    $stop = $data->getStop()->format("Y-m-d");
+    $start = $data->getStart() ? $data->getStart()->format("Y-m-d") : "";
+    $stop = $data->getStop() ? $data->getStop()->format("Y-m-d") : "";
     if($data->getLeader())
     {
         $leader = $data->getLeader()->getName();
@@ -163,7 +163,7 @@ else
 <form id="mainform" method="post" action="/project/manage/submit" enctype="multipart/form-data">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
-<table class="" id="maintab">
+<table class="" id="maintab" style="table-layout:fixed;">
 <tr>
 <td><div data-role="fieldcontain">
     <label for="name">工地名称:</label>
@@ -173,116 +173,7 @@ else
     <label for="address">工地地址:</label>
     <input type="text" name="address" id="address" value="<?php echo $address; ?>" data-mini="true">
 </div></td>
-
 </tr>
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="contractor">总包单位:</label>
-    <select name="contractor" id="contractor" data-mini="true">
-    <option value=""></option>
-<?php
-if(isset($contractors))
-{
-    foreach($contractors as $tmp)
-    {
-        if($tmp == "")
-        {
-            continue;
-        }
-
-        if($tmp == $contractor)
-        {
-            echo '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-        }
-        else
-        {
-            echo '<option value="' . $tmp . '">' . $tmp . '</option>';    
-        }
-    }
-}
-?>
-    </select>
-</div></td>
-
-<td><div data-role="fieldcontain">
-    <label for="property">工地性质:</label>
-    <select name="property" id="property" data-mini="true">
-    <option value="0"></option>
-<?php
-if(isset($siteproperties))
-{
-    foreach($siteproperties as $tmp)
-    {
-        if($tmp == "")
-        {
-            continue;
-        }
-
-        if($tmp == $property)
-        {
-            echo '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-        }
-        else
-        {
-            echo '<option value="' . $tmp . '">' . $tmp . '</option>';    
-        }
-    }
-}
-?>
-    </select>
-</div></td>
-
-</tr>
-<td><div data-role="fieldcontain">
-    <label for="remark">承包公司:</label>    
-    <select id="company" name="company" data-mini="true">
-    <option value="0">未指定承包公司</option>
-<?
-$options="";    
-foreach($companyinfos as $tmp)
-{
-    $id = $tmp->getId();
-    $namechs = $tmp->getNamechs(); 
-
-    if($companyid == $id)
-    {       
-        $options .= '<option value="' . $id . '" selected>' . $namechs . '</option>';    
-    }
-    else
-    {
-        $options .= '<option value="' . $id . '" >' . $namechs . '</option>';    
-    }
-}
-echo $options;
-?>
-    </select>
-</div></td>
-
-<td><div data-role="fieldcontain">
-    <label for="leaders">工长:</label>
-    <!--http://stackoverflow.com/questions/13727127/submit-data-of-select-multiple-in-jquery-mobile-->
-    <select name=leaders[] id="leaders" data-mini="true" data-native-menu="false" multiple="multiple">
-    <option value=""></option>
-    <?php
-    foreach($leaders as $tmp)
-    {
-        $id = $tmp->getId();
-        $name = $tmp->getName();
-        //if($name == $leader)
-        if(in_array($id, $selleaders))
-        {
-        echo '<option value="' . $id . '" selected>' . $name . '</option>';
-        }
-        else
-        {
-        echo '<option value="' . $id . '" >' . $name . '</option>';
-        }
-    }
-    ?>
-    </select>
-</div>
-</td>
-
 <tr>
 <td><div data-role="fieldcontain">
     <label for="start">开工日期:</label>
@@ -294,18 +185,7 @@ echo $options;
 </div></td>
 </tr>
 
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="workerno">工人数量:</label>
- 	<input type="range" name="workerno" id="workerno" value="<?php echo $workerno; ?>" min="0" max="200" data-highlight="true" data-mini="true">
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="remark">其他说明:</label>
-    <input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true">
-</div></td>
-<td></td>
-</tr>
-
+<!--
 <tr>
 <td><div data-role="fieldcontain">
     <label for="permission1">材料申请:</label>
@@ -348,15 +228,143 @@ echo "&nbsp;";//$options;
     </select>
 </div></td>
 </tr>
-
+-->
 <tr>
+<td><div data-role="fieldcontain">
+    <label for="leaders">工长:</label>
+    <!--http://stackoverflow.com/questions/13727127/submit-data-of-select-multiple-in-jquery-mobile-->
+    <select name=leaders[] id="leaders" data-mini="true" data-native-menu="false" multiple="multiple">
+    
+<?php
+$options="";
+if(count($leaders)==0)
+{
+    $options='<option value="">请先设定工长（人事管理）</option>';
+}
+else
+{
+$options='<option value=""></option>';
+foreach($leaders as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+    //if($name == $leader)
+    if(in_array($id, $selleaders))
+    {
+        $option = '<option value="' . $id . '" selected>' . $name . '</option>';
+    }
+    else
+    {
+        $option = '<option value="' . $id . '" >' . $name . '</option>';
+    }
+    $options .= $option;
+}
+}
+echo $options;
+?>
+    </select>
+</div></td>
 <td><div data-role="fieldcontain">
     <label for="phone">联系电话:</label>    
     <input type="text" name="phone" id="phone" value="<?php echo $phone; ?>" data-mini="true">
 </div></td>
+</tr>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="contractor">总包单位:</label>
+    <select name="contractor" id="contractor" data-mini="true">
+    <option value=""></option>
+<?php
+if(isset($contractors))
+{
+    foreach($contractors as $tmp)
+    {
+        if($tmp == "")
+        {
+            continue;
+        }
+
+        if($tmp == $contractor)
+        {
+            echo '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+        }
+        else
+        {
+            echo '<option value="' . $tmp . '">' . $tmp . '</option>';    
+        }
+    }
+}
+?>
+    </select>
+</div></td>
+
+<td><div data-role="fieldcontain">
+    <label for="remark">承包公司:</label>    
+    <select id="company" name="company" data-mini="true">
+    <option value="0">未指定承包公司</option>
+<?
+$options="";    
+foreach($companyinfos as $tmp)
+{
+    $id = $tmp->getId();
+    $namechs = $tmp->getNamechs(); 
+
+    if($companyid == $id)
+    {       
+        $options .= '<option value="' . $id . '" selected>' . $namechs . '</option>';    
+    }
+    else
+    {
+        $options .= '<option value="' . $id . '" >' . $namechs . '</option>';    
+    }
+}
+echo $options;
+?>
+    </select>
+</div></td>
+</tr>
+<tr>
+<td><div data-role="fieldcontain">
+    <label for="property">工地性质:</label>
+    <select name="property" id="property" data-mini="true">
+    <option value=""></option>
+<?php
+if(isset($siteproperties))
+{
+    foreach($siteproperties as $tmp)
+    {
+        if($tmp == "")
+        {
+            continue;
+        }
+
+        if($tmp == $property)
+        {
+            echo '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+        }
+        else
+        {
+            echo '<option value="' . $tmp . '">' . $tmp . '</option>';    
+        }
+    }
+}
+?>
+    </select>
+</div></td>
+<td><div data-role="fieldcontain">
+    <label for="remark">备注:</label>
+    <input type="text" name="remark" id="remark" value="<?php echo $remark; ?>" data-mini="true">
+</div>
+</td>
+</tr>
+<tr>
+<!--<td><div data-role="fieldcontain">
+    <label for="workerno">工人数量:</label>
+ 	<input type="range" name="workerno" id="workerno" value="<?php echo $workerno; ?>" min="0" max="200" data-highlight="true" data-mini="true">
+</div></td>-->
+<td></td>
 <td></td>
 </tr>
-
 </table>
 </form> <!--main form-->
 
@@ -401,4 +409,5 @@ $("#partsdefine").load("/project/manage/partsdefine");
 		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()">提交</button></div>
 		<div class="ui-block-b"><input type="button" onclick="cancel()" value="取消"></div>
 </div>
+<br><br>
 
