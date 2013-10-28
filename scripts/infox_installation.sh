@@ -1,12 +1,13 @@
 #!/bin/bash
 set -v
-sudo apt-get install vim screen git pgadmin3
+sudo apt-get install vim screen git openssh-server pgadmin3
 
 git config --global user.name "philipzhou2009"
 git config --global user.email "philip.zhou.2009@gmail.com"
 git config --global credential.helper cache
 git config --global credential.helper 'cache --timeout=72000'
 git clone https://github.com/philipzhou2009/InfoX.git
+sudo chown -R philip:philip InfoX
 
 cd InfoX
 sudo ./sysprep.sh

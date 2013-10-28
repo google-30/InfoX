@@ -14,12 +14,8 @@ chmod a+w $hcspath/models/proxies
 mkdir -p $hcspath/data/uploads
 chmod a+w  $hcspath/data/uploads
 
-#mkdir -p $hcspath/data/uploads/media
-#chmod a+w $hcspath/data/uploads/media 
-#mkdir -p  $hcspath/data/uploads/adverts
-#chmod a+w $hcspath/data/uploads/adverts
-#mkdir -p $hcspath/data/uploads/services-pic
-#chmod a+w  $hcspath/data/uploads/services-pic
+mkdir -p $hcspath/data/uploads/workers
+chmod a+w  $hcspath/data/uploads/workers
 
 mkdir -p $hcspath/data/uploads/workers/images
 chmod a+w  $hcspath/data/uploads/workers/images
