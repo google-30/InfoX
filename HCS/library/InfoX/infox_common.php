@@ -7,7 +7,7 @@ class infox_common
         $helper->layout->disableLayout();
     }
 
-    // usage:         infox_common::turnoffView($this->_helper);
+    // usage: infox_common::turnoffView($this->_helper);
     public static function turnoffView($helper)
     {
         $helper->layout->disableLayout();   

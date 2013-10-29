@@ -77,6 +77,9 @@ foreach($matapps as $tmp)
     <div data-role="collapsible" data-collapsed="true">
     <h3>预览和打印Purchase Order</h3>
 <?php
+if(count($suppliers))
+{
+
 $buttons="";
 foreach($suppliers as $key => $value)
 {
@@ -87,6 +90,11 @@ foreach($suppliers as $key => $value)
     $buttons .= $button; 
 }    
 echo $buttons;
+}
+else
+{
+    echo "请更新所申请材料的供应商，以打印PO单";
+}
 ?>
     </div>
 </div>
@@ -98,10 +106,12 @@ echo $this->grid("matapps", true)
           ->field('description','描述')          
           ->field('amount','申请数量')
           ->field('unit','单位')
-          ->field('sitepart', '工程部位')  
-          ->field('supplier', '供应商')
-          ->field('price', '单价')
-          ->field('remark','补充说明')
+          ->field('rate', '单价')
+          ->field('quantity', '数量')
+          ->field('total', '总价')          
+          ->field('supplier', '供应商')          
+          ->field('sitepart', '工程部位')            
+          //->field('remark','补充说明')
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
           ->itemCountPerPage(30)
           ->paginatorEnabled(false)

@@ -1,4 +1,5 @@
 <?php
+include 'InfoX/infox_common.php';
 
 class Material_AppmanageController extends Zend_Controller_Action
 {
@@ -41,11 +42,12 @@ class Material_AppmanageController extends Zend_Controller_Action
         foreach($matapps as $tmp)
         {
             $amount = $tmp->getAmount();
-            $price = $tmp->getPrice();
+            $rate = $tmp->getRate();
+            $quantity = $tmp->getQuantity() ? $tmp->getQuantity() : 0;
             
             $amount = $amount ? $amount : 0;
-            $price = $price ? $price : 0;            
-            $total += $amount * $price;
+            $rate = $rate ? $rate : 0;            
+            $total += $amount * $rate * $quantity;
         }      
         $this->view->totalprice = $total;
 
@@ -151,8 +153,58 @@ class Material_AppmanageController extends Zend_Controller_Action
         }
         $this->_redirect($url);  
     }
-
+    
     public function updatematappAction()
+    {
+        infox_common::turnoffView($this->_helper);  
+
+        $requests = $this->getRequest()->getPost();
+        if(0)
+        {                
+            var_dump($requests); return;
+        }    
+
+        $id = $requests['id'];
+        $amount = $requests['amount'];
+        $supplypriceid = $requests['supplypriceid'];
+        $sitepart = $this->getParam("sitepart", "未定义");        
+        //$remark = $requests['remark'];
+        //$remark = $this->getParam("remark", "");
+        //$price = $requests['price'];
+        //$price = $this->getParam("price", 0);
+
+        $supplyprice = $this->_supplyprice->findOneBy(array("id"=>$supplypriceid));
+        $rate = $supplyprice->getRate();
+        $quantity = $supplyprice->getQuantity();
+        $unit = $supplyprice->getUnit();
+        $supplier = $supplyprice->getSupplier();
+        
+        // update matappdata, update application
+        $matappobj = $this->_matappdata->findOneBy(array("id"=>$id));       
+
+        $matappobj->setAmount($amount);         
+        $matappobj->setSupplier($supplier);
+        $matappobj->setRate($rate); 
+        $matappobj->setQuantity($quantity); 
+        $matappobj->setUnit($unit); 
+        $matappobj->setSitepart($sitepart);    
+        $this->_em->persist($matappobj);
+
+        $appobj = $matappobj->getApplication();      
+        $appobj->setUpdatedate(new Datetime('now'));
+        $this->_em->persist($appobj);
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        } 
+
+        echo "更新成功";
+    }
+    
+    public function updatematappAction0()
     {
         $this->turnoffview();
 
@@ -421,6 +473,8 @@ class Material_AppmanageController extends Zend_Controller_Action
             $this->view->staffname = $staffobj->getNameeng();
             $this->view->staffphone = $staffobj->getPhone1();
         }
+        
+        $this->view->materialrepo = $this->_material;
     }
 
     private function getSiteinfo($obj)

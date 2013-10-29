@@ -50,7 +50,14 @@ class Matappdata extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $longname;
-    
+            
+    /**
+     * site part: it's defined in site entity
+     *  
+     * @Column(type="string", nullable=true)
+     */
+    protected $sitepart;  
+
     /**
      * one application has multiple material data 
      *   
@@ -61,14 +68,7 @@ class Matappdata extends \Synrgic_Models_Entity {
     /**
      * @Column(type="float",nullable=true)
      */
-    protected $price;
-    
-    /**
-     * site part: it's defined in site entity
-     *  
-     * @Column(type="string", nullable=true)
-     */
-    protected $sitepart;  
+    protected $rate;
     
     /**
      * unit 
@@ -78,5 +78,10 @@ class Matappdata extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $unit;      
+
+    /**
+     * @Column(type="float",nullable=true)
+     */
+    protected $quantity;
     
 }

@@ -103,10 +103,13 @@ $PONO="&nbsp;&nbsp;". $cmypostring . "/???/" . $suppostring . "-???" . "&nbsp;&n
 $date=$this->date;
 $date=new Datetime("now");
 $datestr=$date->format("Y/m/d");
+$nextdatestr=date( "Y/m/d", strtotime("tomorrow"));
 
 // staff
 $staffname=$this->staffname;
 $staffphone=$this->staffphone;
+
+$materialrepo=$this->materialrepo;
 ?>
 <div data-role="page" data-theme="<?php echo $jmtheme; ?>" style="page-break-after:always">
 	<div data-role="content" class="previewcontent">	
@@ -124,11 +127,11 @@ $staffphone=$this->staffphone;
 </tr>
 <tr>
 <td><strong>Date:&nbsp;</strong><?php echo $datestr; ?></td>
-<td><strong>Date of Delivery:&nbsp;</strong><?php echo "???"; ?></td>
+<td><strong>Date of Delivery:&nbsp;</strong><?php echo $nextdatestr; ?></td>
 </tr>
 <tr>
 <td><strong>Tel No:&nbsp;</strong><?php echo $supofficephone; ?>&nbsp;&nbsp;<strong>Fax No:&nbsp;</strong><?php echo $supfax; ?></td>
-<td><strong>Time of Delivery:&nbsp;</strong><?php echo "???"; ?></td>
+<td><strong>Time of Delivery:&nbsp;</strong><?php echo "&nbsp;"; ?></td>
 </tr>
 <tr>
 <td><strong>Terms of Payment:&nbsp;</strong><?php echo "30 days"; ?></td>
@@ -161,20 +164,27 @@ foreach($matapps as $tmp)
     $count++;
     $longname = $tmp->getLongname();
     $amount = $tmp->getAmount();
-    $price = $tmp->getPrice();
-    $total = $amount * $price; 
-
+    $rate = $tmp->getRate();
+    $quantity = $tmp->getQuantity();
+    $total = $amount * $rate * $quantity; 
+    $unitprice = $rate * $quantity; 
+    
+    $unit = $tmp->getUnit();
+    $matid = $tmp->getMaterialid();
+    $matobj = $materialrepo->findOneBy(array("id"=>$matid));    
+    $description = $matobj->getDescription();
+    
     $totalprice += $total;
     
     $tdno = "<td>$count</td>";
-    $tdname = '<td style="width:15%">' . $longname . '</td>';
-    $tdspec = "<td>???</td>";
-    $tdunit = "<td></td>";   
+    $tdname = '<td style="width:25%">' . $longname . '</td>';
+    $tdspec = "<td>$description</td>";
+    $tdunit = "<td>$unit</td>";   
     $tdamount = "<td>$amount</td>";
-    $tdprice = "<td>$price</td>";  
+    $tdunitprice = "<td>$unitprice</td>";  
     $tdtotal = "<td>$total</td>";  
 
-    $tr = "<tr>" . $tdno . $tdname . $tdspec . $tdunit . $tdamount . $tdprice . $tdtotal . "</tr>";
+    $tr = "<tr>" . $tdno . $tdname . $tdspec . $tdunit . $tdamount . $tdunitprice. $tdtotal . "</tr>";
     $trs .= $tr;
 }
 
@@ -194,10 +204,10 @@ Distribution: Original = Accounts&nbsp;&nbsp;&nbsp;&nbsp;Duplicate = Purchasing 
 </div>
 <br><br><br><br><br><br><br><br><br><br>
 <div class="stayleft">
-Prepared by:&nbsp;<u><?php echo "______________"; ?></u> 
+Prepared by:<u><?php echo "____________"; ?></u> 
 </div>
-Checked by:&nbsp;<u><?php echo "______________"; ?></u>
-<div class="stayright">Approved by:&nbsp;<u><?php echo "______________"; ?></u></div><br><br>		
+Checked by:<u><?php echo "____________"; ?></u>
+<div class="stayright">Approved by:<u><?php echo "____________"; ?></u></div><br><br>		
 
 </div><!-- /content -->
 </div><!-- /page -->

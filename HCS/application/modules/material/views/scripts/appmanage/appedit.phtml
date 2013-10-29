@@ -4,6 +4,26 @@
 <script>
 function updaterow(id)
 {
+    var supplypriceid = $('#select'+id).val();
+    var amount = $('#amount'+id).val();
+    //var remark = $('#remark'+id).val();
+    //var price = $('#price'+id).val();
+    //price = (price=="") ? 0 : price;
+
+    var sitepart = $('#sitepart'+id).val();
+
+    //alert('updaterow,id='+id+",amount="+amount+",remark="+remark+",supplierid="+supplierid+",price="+price);
+
+    $.post("/material/appmanage/updatematapp", 
+        { id: id, amount: amount, supplypriceid:supplypriceid, sitepart:sitepart }, 
+        function(data) {
+            alert(data);
+            //console.log(data);            
+    });
+}
+
+function updaterow0(id)
+{
     var amount = $('#amount'+id).val();
     var remark = $('#remark'+id).val();
     var supplierid = $('#select'+id).val();   
@@ -179,13 +199,13 @@ echo $options;
 <?php
 if(count($matappsInSys)>0)
 {
-echo "<p><strong>申请材料列表:</strong></p>";
+//echo "<p><strong>申请材料列表:</strong></p>";
 echo $this->grid("matappsInSys", true)
-          ->field('id','材料编号')
+          //->field('id','序号')
           ->field('longname','材料名称')
           ->field('amount','申请数量')
           ->field('sitepart', '工程部位')  
-          ->field('supplier', '供应商价格')
+          ->field('supplier', '供应价格')
           //->field('price', '单价')
           ->field('update', '更新')          
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
@@ -222,14 +242,14 @@ echo $this->grid("matappsNotInSys", true)
 $html="";
 if($displayblk==0)
 {
-    $html = '<input type="button" value="提交上级审核" onclick="submitmatapps()" data-theme="a" data-mini="true">';
-    $html.= '<input type="button" value="取消提交审核" onclick="reviewmatapps()" data-theme="a" data-mini="true">';
-    $html.= '<input type="button" value="申请退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
+    $html = '<input type="button" value="更新以上信息" onclick="submitmatapps()" data-theme="a" data-mini="true">';
+    //$html.= '<input type="button" value="取消提交审核" onclick="reviewmatapps()" data-theme="a" data-mini="true">';
+    //$html.= '<input type="button" value="申请退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
 }
 else if($displayblk==1)
 {
     $html = '<input type="button" value="批准该申请" onclick="approvematapps()" data-theme="a" data-mini="true">';
-    $html.= '<input type="button" value="申请不合格退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
+    $html.= '<input type="button" value="申请退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
 }
 echo $html;
 ?>

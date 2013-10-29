@@ -16,6 +16,36 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
     protected function td_supplier($field, $row) 
     {
         $em = Zend_Registry::get('em');
+        $supplypriceRepo = $em->getRepository('Synrgic\Infox\Supplyprice');        
+        $matRepo = $em->getRepository('Synrgic\Infox\Material');
+                
+        $materialid = $row["materialid"]; //$matappobj->getMaterialid();
+        $materialobj = $matRepo->findOneBy(array('id'=>$materialid));
+        $pricearr = $supplypriceRepo->findBy(array("material"=>$materialobj));
+        
+        $options="";
+        foreach($pricearr as $tmp)
+        {
+            $id = $tmp->getId();
+            $supplier = $tmp->getSupplier();
+            $supname = $supplier->getName();
+            $rate = $tmp->getRate();
+            $unit = $tmp->getUnit();
+            $quantity = $tmp->getQuantity();
+            $amount = $rate * $quantity;
+            
+            $value = $id;
+            $str = "$supname:$rate*$quantity($unit)=$amount"; 
+            $option = "<option value=$value>$str</option>";
+            $options.=$option;
+        }
+        $selects = '<select id="select' . $row['id'] . '" data-mini="true">' . $options . "</select>";
+    	return $selects;                
+    }
+
+    protected function td_supplier0($field, $row) 
+    {
+        $em = Zend_Registry::get('em');
         $supplypriceRepo = $em->getRepository('Synrgic\Infox\Supplyprice');
         $matRepo = $em->getRepository('Synrgic\Infox\Material');
         $suppliers = $em->getRepository('Synrgic\Infox\Supplier')->findAll();

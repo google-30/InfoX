@@ -42,6 +42,7 @@ class GridHelper_Appdetail extends Grid_Helper_Abstract
         return  $row[$field];
     }
 
+    /*
     protected function td_unit($field, $row) 
     {
         $materialid = $row['materialid'];
@@ -50,6 +51,7 @@ class GridHelper_Appdetail extends Grid_Helper_Abstract
         $unit = $matobj ? $matobj->getUnit() : $row[$field];
         return $unit;     
     }           
+    */
     
     protected function td_spec($field, $row) 
     {
@@ -68,7 +70,16 @@ class GridHelper_Appdetail extends Grid_Helper_Abstract
         $return = $matobj ? $matobj->getDescription() : "&nbsp;";             
         return $return;    
     }      
-    
+   
+    protected function td_total($field, $row)     
+    {
+        $amount = $row['amount'];
+        $rate = $row['rate'];
+        $quantity = $row['quantity'];        
+        $total = $amount * $rate * $quantity;
+        
+        return $total;
+    }
 }
 
 ?>
