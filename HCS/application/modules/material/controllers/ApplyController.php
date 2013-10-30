@@ -335,8 +335,8 @@ class Material_ApplyController extends Zend_Controller_Action
         infox_common::turnoffView($this->_helper);
 
         $appid = $this->getParam("appid", 0);
-        $appobj = $this->_application->findOneBy(array("id"=>$appid));       
-        $matapps = $this->_matappdata->findBy(array("application"=>$appobj));
+        //$appobj = $this->_application->findOneBy(array("id"=>$appid));       
+        //$matapps = $this->_matappdata->findBy(array("application"=>$appobj));
                         
         $ans = new Zend_Session_Namespace($this->nsName);
         $appmats = $ans->appmats;        
