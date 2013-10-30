@@ -288,11 +288,12 @@ class Project_AttendanceController extends Zend_Controller_Action
                     break;
                 }
             }
-
-            if($attendrecord)
+            
+            //if($attendrecord)
             {
                 $tabs = $this->getWorkerMonthAttendHtml($sno, $tmp, $attendrecord, $siteid, $monthstr);
             }
+            
 
             $tablearr[] = $tabs;
         }
@@ -302,128 +303,73 @@ class Project_AttendanceController extends Zend_Controller_Action
 
     private function getWorkerMonthAttendHtml($sno, $worker, $attendrecord, $siteid, $monthstr, $nobtn=false)
     {
-            $summary = $this->calcMonthSummary($worker, $attendrecord);
+        $summary = $this->calcMonthSummary($worker, $attendrecord);
 
-            $table = '<table class="attendsum">';    
-            // worker info and month summary
-            $tr = "";
-            $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>'; 
-            $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>
+        $table = '<table class="attendsum">';    
+        // worker info and month summary
+        $tr = "";
+        $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>'; 
+        $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>
 ';
-            $table .= $tr;
-            $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
-            $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
-            $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
+        $table .= $tr;
+        $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
+        $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
+        $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
 ';
-            $table .= $tr;
-            
-            $workerid = $worker->getId();
-            $wpno = $worker->getWpno();
-            $name=$worker->getNamechs();
-            if(!$name || $name=="")
-            {
-                $name = $worker->getNameeng();
-            }
-            //$td="<td>$name</td>";
-            //$tr .= $td;
-            // TODO: rate define by staff
-            $price = "5.5"; //$worker->getPrice();
+        $table .= $tr;
+        
+        $workerid = $worker->getId();
+        $wpno = $worker->getWpno();
+        $name=$worker->getNamechs();
+        if(!$name || $name=="")
+        {
+            $name = $worker->getNameeng();
+        }
 
-            $worktype=$worker->getWorktype();
-            $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
+        // TODO: rate define by staff
+        $price = "5.5"; //$worker->getPrice();
 
-            $totaldays = $summary['totaldays'];
-            $normalhours = $summary["normalhours"];
-            $othours = $summary["othours"];
-            $totalhours = $summary["totalhours"];
-            $normalsalary = $summary["normalsalary"];
-            $otsalary = $summary["otsalary"];
-            $totalsalary = $summary["totalsalary"];
-            $fooddays = $summary["fooddays"];
+        $worktype=$worker->getWorktype();
+        $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
 
-            $tr .= "<td>$normalhours</td><td>$normalsalary</td><td></td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
-            $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";            
+        $totaldays = $summary['totaldays'];
+        $normalhours = $summary["normalhours"];
+        $othours = $summary["othours"];
+        $totalhours = $summary["totalhours"];
+        $normalsalary = $summary["normalsalary"];
+        $otsalary = $summary["otsalary"];
+        $totalsalary = $summary["totalsalary"];
+        $fooddays = $summary["fooddays"];
 
-            $table .= $tr;
-            $table .= "</table>";
-            $tabs[] = $table;
+        $tr .= "<td>$normalhours</td><td>$normalsalary</td><td></td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
+        $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";            
 
-            // attendance and food           
-            $attendresult = $this->getAttendFoodData($attendrecord);
+        $table .= $tr;
+        $table .= "</table>";
+        $tabs[] = $table;
 
-/*
-            $attendtab = "<table>";
-            if(!$nobtn)
-            {
-            $url = "/project/attendance/attendialog?" . "&sid=$siteid&month=$monthstr&wid=$workerid";   
-            $personattendth = '<th rowspan=4><a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a></th>';
-            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th>' . $personattendth . '</tr>
-';                        
-            }
-            else
-            {
-            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th></tr>
-';                        
-            }
+        $attendtab = infox_project::generateAttendanceTab($attendrecord, true, true);        
+        $tabs[] = $attendtab;
 
-            $attendtab .= $tr;
-
-            $nowdate = new Datetime("");
-            $today = $nowdate->format("d");
-            
-            $ths="";
-            for($i=0; $i<31; $i++)
-            {
-                $j = $i+1;
-                $value = ($j<10) ? "0$j" : $j;
-                $th = ($j == $today) ? '<th style="background:#ff5c5c;">' . $value . '</th>' : "<th>$value</th>";
-                $ths .= $th;
-            }
-            $tr = "<tr>$ths</tr>";
-            $attendtab .= $tr;            
-
-
-            $tds = "";    
-            for($i=0; $i<31; $i++)
-            {
-                $j = $i + 1;
-                $value = $attendresult[0][$i];
-
-                //$td = "<td>$attend</td>";
-                $td = ($j == $today) ? '<td style="background:#ff5c5c;">' . $value . '</td>' : "<td>$value</td>";
-                $tds .= $td;
-            }
-            //$tr = "<tr><td>工时</td>$tds" . '<td rowspan=2><button data-mini="true" data-theme="b">考勤</button></td></tr>
-//';            
-            $tr = "<tr><td>工时</td>$tds</tr>
-";          
-            $attendtab .= $tr;
-
-            $tds = "";    
-            for($i=0; $i<31; $i++)
-            {
-                $j = $i +1;
-                $value = $attendresult[1][$i];
-                //$td = "<td>$food</td>";
-
-                $td = ($j == $today) ? '<td style="background:#ff5c5c;">' . $value . '</td>' : "<td>$value</td>";
-                $tds .= $td;
-            }
-            $tr = "<tr><td>伙食</td>$tds</tr>
-";            
-            $attendtab .= $tr;
-            $attendtab .= "</table>";
-*/
-
-            $attendtab = infox_project::generateAttendanceTab($attendrecord, true, true);
-            
-            $tabs[] = $attendtab;
-
-            return $tabs;
+        return $tabs;
     }
 
     private function calcMonthSummary($worker=null, $attendance)
     {
+        $summay = array();
+        if(!$attendance)
+        {
+        $summary["totaldays"] = "";
+        $summary["normalhours"] = "";
+        $summary["normalsalary"] = "";
+        $summary["othours"] = "";
+        $summary["otsalary"] = "";
+        $summary["totalhours"] = "";
+        $summary["totalsalary"] = "";
+        $summary["fooddays"] = "";        
+        }
+        else
+        {
         $wid = $attendance->getWorker()->getId();
         $month = $attendance->getMonth()->format("Y-m-d");;
 
@@ -443,7 +389,7 @@ class Project_AttendanceController extends Zend_Controller_Action
         $result = $this->_em->createQuery($query)->getResult();
         //print_r($result);
 
-        $summay = array();
+        
         $totaldays = 0;
         $normalhours = 0;
         $normalsalary = 0;
@@ -489,8 +435,9 @@ class Project_AttendanceController extends Zend_Controller_Action
         $summary["otsalary"] = $otsalary;
         $summary["totalhours"] = $othours + $normalhours;
         $summary["totalsalary"] = $otsalary + $normalsalary;
-
         $summary["fooddays"] = $fooddays;
+        }
+        
         return $summary;
     }
 
