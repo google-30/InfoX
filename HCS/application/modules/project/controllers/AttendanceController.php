@@ -125,6 +125,10 @@ class Project_AttendanceController extends Zend_Controller_Action
         
         $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
         $this->view->workerarr = $workerarr;
+        foreach($workerarr as $tmp)
+        {
+            echo "getNamechs=" . $tmp->getNamechs();
+        }
 
         $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
         $this->view->attendancearr = $attendancearr;
@@ -322,7 +326,8 @@ class Project_AttendanceController extends Zend_Controller_Action
             }
             //$td="<td>$name</td>";
             //$tr .= $td;
-            $price = "75"; //$worker->getPrice();
+            // TODO: rate define by staff
+            $price = "5.5"; //$worker->getPrice();
 
             $worktype=$worker->getWorktype();
             $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
