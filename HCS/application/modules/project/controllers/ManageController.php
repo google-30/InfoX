@@ -270,6 +270,11 @@ class Project_ManageController extends Zend_Controller_Action
         $siteobj = $this->_site->findOneBy(array("id"=>$id));
 
         $records = $this->_workeronsite->findBy(array("site"=>$siteobj));
+        $sn=0;
+        foreach($records as $tmp)
+        {
+            $tmp["sn"] = ++$sn;
+        }
         $this->view->records = $records;
     }
 
@@ -328,7 +333,7 @@ class Project_ManageController extends Zend_Controller_Action
             $materialid = $tmp->getMaterialid();
             $amount = $tmp->getAmount();
             $longname = $tmp->getLongname();
-            $price = $tmp->getPrice();
+            $price = $tmp->getRate();
             $unit_manual = $tmp->getUnit();
 
             $matobj = $this->_material->findOneBy(array("id"=>$materialid));

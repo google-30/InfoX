@@ -146,7 +146,7 @@ class Material_ImportController extends Zend_Controller_Action
 
         }
         
-       //$this->redirect("/material/manage/");        
+       $this->redirect("/material/manage/");        
     }
 
     private function storeSupplier($objWorksheet)

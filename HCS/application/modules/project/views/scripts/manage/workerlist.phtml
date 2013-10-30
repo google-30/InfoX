@@ -45,7 +45,7 @@ $records=$this->records;
 
 <div data-role="navbar">
 	<ul>
-		<li><a href="#" class="ui-btn-active ui-state-persist">工人列表</a></li>
+		<li><a href="#" class="ui-btn-active ui-state-persist">工人列表单</a></li>
 		<li><a href="/project/manage/emachinery?id=<?php echo $id; ?>">电动机具列表</a></li>
 		<li><a href="/project/manage/applist?id=<?php echo $id; ?>">申请单列表</a></li>
 		<li><a href="/project/manage/allmaterials?id=<?php echo $id; ?>">材料汇总</a></li>
@@ -54,7 +54,8 @@ $records=$this->records;
 
 <?
 echo $this->grid("Workerlist", true)
-          ->field('worktype','工种')
+          //->field('worktype','工种')
+          ->field('sn','')
           ->field('workername','工人名字')
           ->field('begindate1','开始日期')
           ->field('enddate1','结束日期')

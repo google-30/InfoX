@@ -172,7 +172,7 @@ foreach($matapps as $tmp)
     $unit = $tmp->getUnit();
     $matid = $tmp->getMaterialid();
     $matobj = $materialrepo->findOneBy(array("id"=>$matid));    
-    $description = $matobj->getDescription();
+    $description = $matobj ? $matobj->getDescription(): "&nbsp;";
     
     $totalprice += $total;
     
