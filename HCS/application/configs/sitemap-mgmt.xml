@@ -172,7 +172,7 @@
         </applicationmodules>
 
         <sitemodules>	
-	    <label>工地管理</label>
+	    <label>工地相关</label>
 	    <uri>#sitemodules</uri>
 	    <class>popup</class>
 	    <pages>
@@ -186,14 +186,13 @@
 	        </project>
 
 	        <attendance>
-		    <label>工地考勤管理</label>
+		    <label>工地考勤</label>
 		    <module>project</module>
 		    <controller>attendance</controller>
 		    <action>index</action>
 		    <resource>project:attendance</resource>
 		    <privilege>view</privilege>
 	        </attendance>
-
     	</pages>
         </sitemodules>
 

@@ -240,10 +240,7 @@ class infox_salary
             if(!$attendrecord)
             {// TODO: no attend, 
                 continue;
-            }
-
-            
-        }
-        
-    }
+            }            
+        }        
+    }    
 }

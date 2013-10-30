@@ -182,4 +182,38 @@ class infox_worker
 
         return $workerarr;    
     }
+    
+    public static function getWorkerRace($worker)
+    {
+        $sheet = $worker->getSheet();
+        $race = 0; // 0, for chinese, 1 for bag; 2, 3....
+        if($sheet == "HC.C" || $sheet == "HT.C")
+        {
+            $race = 0;
+        }
+        else
+        {
+            $race = 1;
+        }
+        
+        return $race;
+    }
+
+    public static function getWorkerOtRate($worker)
+    {
+        $race = self::getWorkerRace($worker);
+        $rate = $worker->getCurrentrate();
+        $otrate = 0;
+        switch($race)
+        {
+            case 0:
+                $otrate = $rate;
+                break;
+            case 1:
+                $otrate = $rate * 1.5;
+                break;
+        }
+        
+        return $otrate;
+    }        
 }

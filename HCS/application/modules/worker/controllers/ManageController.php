@@ -512,14 +512,13 @@ class Worker_ManageController extends Zend_Controller_Action
         $resignation=$this->getParam("resignation", "");
         $resignation = ($resignation=="") ? null : new Datetime($resignation);
         $sheet=trim($this->getParam("sheet", ""));
-
+        $currentrate = (float)$this->getParam("currentrate", 0);
+        $monthrate = (float)$this->getParam("monthrate", 0);
         /*
         $agent=$this->getParam("sn", "");        
         $company=$this->getParam("sn", "");
         $race=$this->getParam("sn", "");
         */
-
-        $price = (float)$this->getParam("price", 0);
         
 
         $data->setSn($sn);
@@ -558,7 +557,8 @@ class Worker_ManageController extends Zend_Controller_Action
         $data->setRemarks($remarks);
         $data->setResignation($resignation);
         $data->setSheet($sheet);
-        $data->setPrice($price);
+        $data->setCurrentrate($currentrate);
+        $data->setMonthrate($monthrate);
 
         $this->_em->persist($data);
         try {

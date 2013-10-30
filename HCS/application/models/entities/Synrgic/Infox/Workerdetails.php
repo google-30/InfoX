@@ -223,10 +223,15 @@ class Workerdetails extends \Synrgic_Models_Entity {
     protected $resignation;
 
     /**
-     * hour price 
+     * hour rate
      * @Column(type="float", nullable=true)
      */
-    protected $price;
+    protected $currentrate;
 
+    /**
+     * month rate
+     * @Column(type="float", nullable=true)
+     */
+    protected $monthrate;
 
 }

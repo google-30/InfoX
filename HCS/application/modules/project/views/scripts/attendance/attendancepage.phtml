@@ -13,6 +13,8 @@ $workerarr=$this->workerarr;
 $attendancearr=$this->attendancearr;
 
 $workerhtmls=$this->workerhtmls;
+
+$username=$this->username;
 ?>
 
 <head>
@@ -117,7 +119,7 @@ function attendialogclose()
 <tr>
 <td><? echo "工地名称: " . $sitename; ?></td>
 <td><? echo "月份: " . $monthstr; ?></td>
-<td><? echo "工资负责人: " . ""; ?></td>
+<td>工资负责人:&nbsp;<?=$username?></td>
 </tr>
 </table>
 	</div><!-- /header -->
@@ -127,7 +129,7 @@ function attendialogclose()
 <input type="hidden" id="siteid" name="siteid" value="<? echo $siteid; ?>">
 <div>
 <?php
-$url = "/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
+$url = "/project/attendance/attendquick?" . "sid=$siteid&amp;month=$monthstr";   
 $ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" >快速考勤</a>';    
 echo $ahref;
 ?>

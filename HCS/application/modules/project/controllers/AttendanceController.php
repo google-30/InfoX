@@ -16,6 +16,8 @@ class Project_AttendanceController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $error = "";
+        
         $sites = infox_user::getUserSites();
         $this->view->sites = $sites;
 
@@ -30,13 +32,22 @@ class Project_AttendanceController extends Zend_Controller_Action
             $startdate = $siteobj->getStart();
             $stopdate = $siteobj->getStop();
             $months = $this->getMonths($startdate, $stopdate);
+            if(!$months)
+            {
+                $error .= infox_common::setErrorOutput("请在工地管理指定开始和结束日期");
+            }
         }
 
         $this->view->workingmonths=$months;
+        $this->view->error = $error;
     }
 
     private function getMonths($start, $stop)
     {
+        if(!$start || !$stop)
+        {
+            return null;
+        }
         $startyear = $start->format("Y");
         $stopyear = $stop->format("Y");
 
@@ -125,19 +136,24 @@ class Project_AttendanceController extends Zend_Controller_Action
         
         $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
         $this->view->workerarr = $workerarr;
-        foreach($workerarr as $tmp)
+        if(0)
         {
-            echo "getNamechs=" . $tmp->getNamechs();
+            foreach($workerarr as $tmp)
+            {
+                echo "getNamechs=" . $tmp->getNamechs();
+            }
         }
-
+        
         $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
         $this->view->attendancearr = $attendancearr;
         //echo "count=" . count($attendancearr);
 
         $this->view->workerhtmls = $this->genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr);
+        
+        $this->view->username = infox_common::getUsername();
     }
 
-    private function genWorkerHtmls1($workerarr, $attendancearr, $siteid, $monthstr)
+    private function genWorkerHtmls111($workerarr, $attendancearr, $siteid, $monthstr)
     {
         $tablearr = array(); 
         $table ="";
@@ -289,12 +305,7 @@ class Project_AttendanceController extends Zend_Controller_Action
                 }
             }
             
-            //if($attendrecord)
-            {
-                $tabs = $this->getWorkerMonthAttendHtml($sno, $tmp, $attendrecord, $siteid, $monthstr);
-            }
-            
-
+            $tabs = $this->getWorkerMonthAttendHtml($sno, $tmp, $attendrecord, $siteid, $monthstr);
             $tablearr[] = $tabs;
         }
 
@@ -303,7 +314,29 @@ class Project_AttendanceController extends Zend_Controller_Action
 
     private function getWorkerMonthAttendHtml($sno, $worker, $attendrecord, $siteid, $monthstr, $nobtn=false)
     {
-        $summary = $this->calcMonthSummary($worker, $attendrecord);
+        $workerid = $worker->getId();
+        $wpno = $worker->getWpno();
+        $name=$worker->getNamechs();
+        if(!$name || $name=="")
+        {
+            $name = $worker->getNameeng();
+        }
+        $worktype=$worker->getWorktype();
+
+        // TODO: rate can be defined by staff
+        // if 计时，currentrate; if 计件， monthrate
+        $currentrate = $price = $worker->getCurrentrate();
+        $otrate = infox_worker::getWorkerOtRate($worker);
+        
+        $summary = $this->calcMonthSummary($worker, $attendrecord, $currentrate, $otrate);        
+        $totaldays = $summary['totaldays'];
+        $normalhours = $summary["normalhours"];
+        $othours = $summary["othours"];
+        $totalhours = $summary["totalhours"];
+        $normalsalary = $summary["normalsalary"];
+        $otsalary = $summary["otsalary"];
+        $totalsalary = $summary["totalsalary"];
+        $fooddays = $summary["fooddays"];
 
         $table = '<table class="attendsum">';    
         // worker info and month summary
@@ -316,45 +349,24 @@ class Project_AttendanceController extends Zend_Controller_Action
         $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
         $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
 ';
-        $table .= $tr;
-        
-        $workerid = $worker->getId();
-        $wpno = $worker->getWpno();
-        $name=$worker->getNamechs();
-        if(!$name || $name=="")
-        {
-            $name = $worker->getNameeng();
-        }
+        $table .= $tr;       
 
-        // TODO: rate define by staff
-        $price = "5.5"; //$worker->getPrice();
-
-        $worktype=$worker->getWorktype();
         $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
-
-        $totaldays = $summary['totaldays'];
-        $normalhours = $summary["normalhours"];
-        $othours = $summary["othours"];
-        $totalhours = $summary["totalhours"];
-        $normalsalary = $summary["normalsalary"];
-        $otsalary = $summary["otsalary"];
-        $totalsalary = $summary["totalsalary"];
-        $fooddays = $summary["fooddays"];
-
-        $tr .= "<td>$normalhours</td><td>$normalsalary</td><td></td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
+        $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
         $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";            
 
         $table .= $tr;
         $table .= "</table>";
         $tabs[] = $table;
 
-        $attendtab = infox_project::generateAttendanceTab($attendrecord, true, true);        
+        //$attendtab = infox_project::generateAttendanceTab($attendrecord, true, true);        
+        $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, true, $siteid, $monthstr, $workerid);        
         $tabs[] = $attendtab;
 
         return $tabs;
     }
 
-    private function calcMonthSummary($worker=null, $attendance)
+    private function calcMonthSummary($worker=null, $attendance, $rate, $otrate)
     {
         $summay = array();
         if(!$attendance)
@@ -388,7 +400,6 @@ class Project_AttendanceController extends Zend_Controller_Action
         $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
         $result = $this->_em->createQuery($query)->getResult();
         //print_r($result);
-
         
         $totaldays = 0;
         $normalhours = 0;
@@ -427,6 +438,9 @@ class Project_AttendanceController extends Zend_Controller_Action
                 }
             }
         }
+        
+        $normalsalary = $normalhours * $rate;
+        $otsalary = $othours * $otrate;
         
         $summary["totaldays"] = $totaldays;
         $summary["normalhours"] = $normalhours;

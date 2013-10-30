@@ -62,8 +62,8 @@ $resignation="";
 $pic = "";
 $sheet="";
 $sheetarr=$this->sheetarr;
-
-$price="";
+$currentrate="";
+$monthrate="";
 
 if($this->mode == "Edit")
 {
@@ -118,7 +118,8 @@ $race=$worker->getRace();
 $resignation=$worker->getResignation();
 $resignation=$resignation ? $resignation->format('Y/m/d') : "";
 $sheet=$worker->getSheet();
-$price=$worker->getPrice();
+$currentrate=$worker->getCurrentrate();
+$monthrate=$worker->getMonthrate();
 }
 
 // custom info
@@ -331,13 +332,18 @@ echo $options;
 </div>
 <div data-role="fieldcontain">
     <label for="resignation">Resignation:</label>
-    <input data-mini="true" type="text" name="resignation" id="resignation" value="<?php echo $resignation; ?>" class="datepicker" />
+    <input data-mini="true" type="text" name="resignation" id="resignation" value="<?php echo $resignation; ?>" class="datepicker" 
+    placeholder="工人离职日期" />
+</div>
+<div data-role="fieldcontain">
+    <label for="currentrate">计时工资:</label>
+    <input data-mini="true" type="text" name="currentrate" id="currentrate" value="<?php echo $currentrate; ?>" class="" placeholder="填写工人小时计时工资，比如5.5，6" />
+</div>
+<div data-role="fieldcontain">
+    <label for="monthrate">计件工资:</label>
+    <input data-mini="true" type="text" name="monthrate" id="monthrate" value="<?php echo $monthrate; ?>" class="" placeholder="填写工人小时计件工资，比如1800" />
 </div>
 
-<div data-role="fieldcontain">
-    <label for="price">单价:</label>
-    <input data-mini="true" type="text" name="price" id="price" value="<?php echo $price; ?>" class="" placeholder="填写工人小时单价，比如5.5，6" />
-</div>
 
 <fieldset>
 <legend>自定义信息</legend>

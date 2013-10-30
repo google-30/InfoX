@@ -35,9 +35,20 @@ function openpage(datestr)
 $siteid=$this->siteid;
 $sites=$this->sites;
 $workingmonths=$this->workingmonths;
+
+$style="";
+if($this->error!="")
+{
+    $style = "display:none;";
+}
 ?>
 
 <input type="hidden" id="siteid" value="<? echo $siteid; ?>">
+
+<div id="error">
+<?=$this->error?>
+</div>
+
 <select id="sites" data-mini="true">
 <option value=0>请选择工地</option>
 <?php

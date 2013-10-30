@@ -232,7 +232,6 @@ class infox_project
         $today = $nowdate->format("d");
         $todaystyle= $highlight ? "background:#ff5c5c;" : "";        
 
-
         $attendtab = "<table>";
         $tds="";
         for($i=0; $i<31; $i++)
@@ -248,7 +247,13 @@ class infox_project
 
         if($attendbtn)
         {
-            $attendbtntd = '<td rowspan=3><button data-mini="true" data-theme="b">考勤</td>';
+            if($attendrecord)
+            {
+            $worker = 
+            $url = "/project/attendance/attendialog?" . "sid=$siteid&month=$monthstr&wid=$workerid";   
+            $dialog = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a>';                
+            $attendbtntd = "<td rowspan=3>$dialog</td>";
+            }
         }
         else
         {
@@ -256,6 +261,64 @@ class infox_project
         }
         $tr .= $attendbtntd . "</tr>";
 
+        $attendtab .= $tr;            
+
+        $tds = "";    
+        for($i=0; $i<31; $i++)
+        {
+            $j = $i + 1;
+            $value = $attendresult[0][$i];
+
+            $td = "<td>$value</td>";
+            $tds .= $td;
+        }
+        $tr = "<tr><td>工时</td>$tds</tr>
+";          
+        $attendtab .= $tr;
+
+        $tds = "";    
+        for($i=0; $i<31; $i++)
+        {
+            $j = $i +1;
+            $value = $attendresult[1][$i];
+
+            $td = "<td>$value</td>";
+            $tds .= $td;
+        }
+        $tr = "<tr><td>伙食</td>$tds</tr>
+";            
+        $attendtab .= $tr;
+        $attendtab .= "</table>";
+
+        return $attendtab;                 
+    }
+
+    public static function generateAttendanceTabWbtn($attendrecord, $highlight=false, $siteid, $monthstr, $workerid)
+    {
+        self::getRepos();
+        $attendresult = self::getAttendFoodData($attendrecord);
+
+        $nowdate = new Datetime("");
+        $today = $nowdate->format("d");
+        $todaystyle= $highlight ? "background:#ff5c5c;" : "";        
+
+        $attendtab = "<table>";
+        $tds="";
+        for($i=0; $i<31; $i++)
+        {
+            $j = $i+1;
+            $value = ($j<10) ? "0$j" : $j;
+
+            $td = ($j == $today) ? '<td style="' . $todaystyle .'">' . $value . '</td>' : "<td>$value</td>";
+            //$td = "<td>$value</td>";
+            $tds .= $td;
+        }
+        $tr = '<tr><td class="fixwidthcol">日期</td>' . $tds;
+
+        $url = "/project/attendance/attendialog?" . "sid=$siteid&month=$monthstr&wid=$workerid";   
+        $dialog = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a>';                
+        $attendbtntd = "<td rowspan=3>$dialog</td>";
+        $tr .= $attendbtntd . "</tr>";
         $attendtab .= $tr;            
 
         $tds = "";    

@@ -14,8 +14,6 @@ class infox_common
         $helper->viewRenderer->setNoRender(TRUE);        
     }
 
-
-
     public static function getSerializeArrayValueByKey($array, $key)
     {
 /*
@@ -60,5 +58,24 @@ array(1) {
                     
         return "";
     }
+    
+    public static function setErrorOutput($errstr)
+    {
+        $error = '<span style="color:red;font-weight:bold">ERROR:' . $errstr . '</span><br>';
+        return $error;
+    }
+    
+    public static function getUsername()
+    {  
+        $username = "UserXXX";
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $username = $auth->getIdentity()->username;
+            //echo "username=$username<br>";                        
+        }
+
+        return $username;
+    }
+    
 }
 
