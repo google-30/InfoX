@@ -3,6 +3,7 @@ include 'InfoX/infox_common.php';
 include 'InfoX/infox_project.php';
 include 'InfoX/infox_user.php';
 include 'InfoX/infox_worker.php';
+include 'InfoX/infox_salary.php';
 
 class Worker_SalaryController extends Zend_Controller_Action
 {
@@ -50,7 +51,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         //infox_worker::createSalaryRecordsByMonthSheet($monthstr, $sheet);
 
         // get all records in this month
-        $salaryrecords = infox_worker::getSalaryRecordsByMonthSheet($month, $sheet);
+        $salaryrecords = infox_salary::getSalaryRecordsByMonthSheet($month, $sheet);
 
         $attendarr = infox_project::getAttendanceByMonthSheet($monthstr, $sheet);
         //$this->view->attendarr = $attendarr;

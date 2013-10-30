@@ -185,8 +185,8 @@ class GridHelper_Workeronsite extends Grid_Helper_Abstract
     protected function td_workername($field, $row) 
     {
         $workerobj = $row['worker'];
-        $longname = $workerobj->getNamechs() . "/" . $workerobj->getNameeng();
-
+        $namechs = $workerobj->getNamechs();
+        $longname = $namechs ? $namechs : $workerobj->getNameeng();       
         return $longname;
     } 
 

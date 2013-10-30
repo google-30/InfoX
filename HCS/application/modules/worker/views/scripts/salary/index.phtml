@@ -44,6 +44,8 @@ $lastmonth1=date('Ym', strtotime("last month"));
 $thismonthurl="/worker/salary/salarybymonth?sheet=$sheet&month=$thismonth";
 $lastmonthurl="/worker/salary/salarybymonth?sheet=$sheet&month=$lastmonth"; 
 
+$lastmonthpayslipsurl="/worker/salary/";
+$thismonthpayslipsurl="/worker/salary/";
 $options="";
 foreach($sheetarr as $tmp)
 {
@@ -100,7 +102,7 @@ $wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
 $wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
 //$wdtab=$wdtab->helper(new GridHelper_Worker());
 $wdtab=$wdtab->data($maindata)->action(':action', '工资', array( 'url'=>array('action'=>'personalsalary')));
-$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+//$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 echo $wdtab;
 ?>
 <br><br>
