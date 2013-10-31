@@ -403,7 +403,7 @@ class infox_project
             }
             
             $newresult = array($attendarr, $foodarr);
-            //print_r($newresult);
+            //echo print_r($newresult) . "<br>";
         }
 
         return $newresult;

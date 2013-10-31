@@ -47,17 +47,23 @@ class Worker_SalaryController extends Zend_Controller_Action
         $month = new Datetime($monthstr);        
         $this->view->monthstr = $monthstr;
 
-        // create records first 
-        //infox_worker::createSalaryRecordsByMonthSheet($monthstr, $sheet);
-
-        // get all records in this month
+        $workerarr = infox_worker::getworkerlistbysheet($sheet);        
+        // get all records in this month        
         $salaryrecords = infox_salary::getSalaryRecordsByMonthSheet($month, $sheet);
-
+        
+        if(count($salaryrecords) < count($workerarr))
+        {
+            // create records first 
+            infox_salary::createSalaryRecordsByMonthSheet($monthstr, $sheet);            
+        }
+        
+        // get all records in this month        
+        $salaryrecords = infox_salary::getSalaryRecordsByMonthSheet($month, $sheet);       
         $attendarr = infox_project::getAttendanceByMonthSheet($monthstr, $sheet);
         //$this->view->attendarr = $attendarr;
+        $salaryrecords = infox_salary::updateSalaryRecordsByAttend($salaryrecords, $attendarr);
 
-        $salarytabs = $this->generateSalaryTabs($salaryrecords, $attendarr);
-    
+        $salarytabs = $this->generateSalaryTabs($salaryrecords, $attendarr);    
         $this->view->salarytabs = $salarytabs;
     }
    
@@ -111,7 +117,7 @@ class Worker_SalaryController extends Zend_Controller_Action
 
         $wpno = $worker->getWpno();
         $eeeno = $worker->getEeeno();
-        $price = $worker->getPrice();
+        $price = $worker->getCurrentrate();
         $type = $worker->getWorktype();
 
         $tab = '<table class="workerinfo">';

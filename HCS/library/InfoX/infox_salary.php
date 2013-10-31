@@ -80,7 +80,7 @@ class infox_salary
     public static function createSalaryRecordsByMonthSheet($monthstr, $sheet="HC.C")
     {
         self::getRepos();
-        $workerarr = self::getworkerlistbysheet($sheet);
+        $workerarr = infox_worker::getworkerlistbysheet($sheet);
         $salaryrepos = self::getReposBySheet($sheet);
 
         $month = new Datetime($monthstr . "-01");
@@ -121,7 +121,7 @@ class infox_salary
     public static function createSalaryRecordsByMonthSheet1($monthstr, $sheet="HC.C")
     {
         self::getRepos();
-        $workerarr = self::getworkerlistbysheet($sheet);
+        $workerarr = infox_worker::getworkerlistbysheet($sheet);
         $salaryrepos = self::getReposBySheet($sheet);
 
         $month = new Datetime($monthstr . "-01");
@@ -242,5 +242,34 @@ class infox_salary
                 continue;
             }            
         }        
-    }    
+    }
+    
+    public static function calcMonthSummaryByWorkerAttendRate($worker, $attend, $currentrate, $otrate)
+    {
+        
+    }   
+    
+    public static function updateSalaryRecordsByAttend($salaryrecords, $attendarr)
+    {
+        $updatearr = array();
+        $recordOne = null;
+        $attendOne = null;
+       
+        foreach($salaryrecords as $record)
+        {
+            $flag = false;
+            $salaryworker = $record->getWorker();
+            foreach($attendarr as $attendance)
+            {
+                $attendworker = $attendance->getWorker();
+                if($attendworker->getId() == $salaryworker->getId() )
+                {
+                    $flag = true;
+                    
+                    
+                    break;
+                }
+            }
+        }
+    }
 }
