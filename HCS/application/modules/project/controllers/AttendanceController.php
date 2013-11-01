@@ -134,7 +134,8 @@ class Project_AttendanceController extends Zend_Controller_Action
         $date = new Datetime($monthstr."01");
         $this->view->date=$date;
         
-        $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
+        //$workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
+        $workerarr = infox_worker::getworkerlistbysiteobj($siteobj);
         $this->view->workerarr = $workerarr;
         if(0)
         {

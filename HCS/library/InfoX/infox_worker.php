@@ -9,7 +9,8 @@ class infox_worker
     public static $_salaryhcb;    
     public static $_salaryhtc;    
     public static $_salaryhtb;
-
+    public static $_workeronsite;
+    
     public static function getRepos()
     {
         //echo "infox_worker::getRepos";
@@ -21,6 +22,8 @@ class infox_worker
         self::$_salaryhcb = self::$_em->getRepository('Synrgic\Infox\Workersalaryhcb');
         self::$_salaryhtc = self::$_em->getRepository('Synrgic\Infox\Workersalaryhtc');
         self::$_salaryhtb = self::$_em->getRepository('Synrgic\Infox\Workersalaryhtb');
+        
+        self::$_workeronsite = self::$_em->getRepository('Synrgic\Infox\Workeronsite');
     }  
 
     public static function getSheetarr()
@@ -139,6 +142,22 @@ class infox_worker
         }
         
         return $workerarr;    
+    }
+
+    public static function getworkerlistbysiteobj($siteobj)
+    {
+        self::getRepos();
+        $_workeronsite = self::$_workeronsite;
+        $records = $_workeronsite->findBy(array("site"=>$siteobj));
+        
+        $workerarr= array();
+        foreach($records as $tmp)
+        {
+            $worker = $tmp->getWorker();
+            $workerarr[] = $worker;
+        }
+        
+        return $workerarr;            
     }
 
     public static function getWorkerdetailsById($wid)

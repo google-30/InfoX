@@ -61,7 +61,8 @@ class Worker_SalaryController extends Zend_Controller_Action
         $salaryrecords = infox_salary::getSalaryRecordsByMonthSheet($month, $sheet);       
         $attendarr = infox_project::getAttendanceByMonthSheet($monthstr, $sheet);
         //$this->view->attendarr = $attendarr;
-        $salaryrecords = infox_salary::updateSalaryRecordsByAttend($salaryrecords, $attendarr);
+        //$salaryrecords = 
+        infox_salary::updateSalaryRecordsByAttend($salaryrecords, $attendarr);
 
         $salarytabs = $this->generateSalaryTabs($salaryrecords, $attendarr);    
         $this->view->salarytabs = $salarytabs;

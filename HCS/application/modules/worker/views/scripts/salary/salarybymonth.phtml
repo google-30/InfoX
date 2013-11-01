@@ -191,7 +191,10 @@ foreach($salarytabs as $tmp)
     $tab0 = $tmp[0]; // worker
     $tab1 = $tmp[1]; // salary
     $tab2 = $tmp[2]; // attend
-    $alltabs .= "$tab0$tab1$tab2<br>";
+    $alltabs .= $tab0;
+    $alltabs .= $tab1;
+    $alltabs .= $tab2;
+    $alltabs .= "<br>";
 }
 
 echo $alltabs;

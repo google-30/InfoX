@@ -246,11 +246,160 @@ class infox_salary
     
     public static function calcMonthSummaryByWorkerAttendRate($worker, $attend, $currentrate, $otrate)
     {
+        $summay = array();
+        if(!$attendance)
+        {
+        $summary["totaldays"] = "";
+        $summary["normalhours"] = "";
+        $summary["normalsalary"] = "";
+        $summary["othours"] = "";
+        $summary["otsalary"] = "";
+        $summary["totalhours"] = "";
+        $summary["totalsalary"] = "";
+        $summary["fooddays"] = "";        
+        }
+        else
+        {
+        $wid = $attendance->getWorker()->getId();
+        $month = $attendance->getMonth()->format("Y-m-d");;
+
+        $days = "";
+        for($i=1; $i<=31; $i++)
+        {            
+            $day = "s.day$i";            
+            if($i != 31)
+            {
+                $day .= ",";
+            }
+
+            $days .= $day;
+        }
+
+        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+        $result = $this->_em->createQuery($query)->getResult();
+        //print_r($result);
         
-    }   
+        $totaldays = 0;
+        $normalhours = 0;
+        $normalsalary = 0;
+        $othours = 0;
+        $otsalary = 0;    
+        $fooddays = 0;    
+        foreach($result[0] as $tmp)
+        {
+            if($tmp)
+            {
+                $totaldays++;
+
+                // normal work
+                $tmparr = explode(";", $tmp);
+                if(array_key_exists(0, $tmparr))
+                {
+                    $workhours = $tmparr[0];
+                    if($workhours >= 8)
+                    {
+                        $normalhours += 8;
+                        $othours += ($workhours - 8);
+                    }   
+                    else
+                    {
+                        $normalhours += $workhours;                        
+                    }
+                }
+
+                if(array_key_exists(1, $tmparr))
+                {
+                    $food = $tmparr[1];
+                    $fooddays += ($food==="1") ? 1 : 0;
+                    
+                }
+            }
+        }
+        
+        $normalsalary = $normalhours * $rate;
+        $otsalary = $othours * $otrate;
+        
+        $summary["totaldays"] = $totaldays;
+        $summary["normalhours"] = $normalhours;
+        $summary["normalsalary"] = $normalsalary;
+        $summary["othours"] = $othours;
+        $summary["otsalary"] = $otsalary;
+        $summary["totalhours"] = $othours + $normalhours;
+        $summary["totalsalary"] = $otsalary + $normalsalary;
+        $summary["fooddays"] = $fooddays;
+        }
+        
+        return $summary;        
+    }
+       
+    public static function updateOneSalaryRecordByAttend($salaryrecord, $attendarr)
+    {
+        $worker = $salaryrecord->getWorker();
+        $currentrate = $worker->getCurrentrate();
+        $otrate = infox_worker::getWorkerOtRate($worker);
+        
+        $wid = $worker->getId();
+        $month = $attendance->getMonth()->format("Y-m-d");;
+
+        $days = "";
+        for($i=1; $i<=31; $i++)
+        {            
+            $day = "s.day$i";            
+            if($i != 31)
+            {
+                $day .= ",";
+            }
+
+            $days .= $day;
+        }
+
+        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month' limit 1";
+        $result = $this->_em->createQuery($query)->getResult();
+                
+        $totaldays = 0;
+        $normalhours = 0;
+        $normalsalary = 0;
+        $othours = 0;
+        $otsalary = 0;    
+        $fooddays = 0;    
+        foreach($result[0] as $tmp)
+        {
+            if($tmp)
+            {
+                $totaldays++;
+
+                // normal work
+                $tmparr = explode(";", $tmp);
+                if(array_key_exists(0, $tmparr))
+                {
+                    $workhours = $tmparr[0];
+                    if($workhours >= 8)
+                    {
+                        $normalhours += 8;
+                        $othours += ($workhours - 8);
+                    }   
+                    else
+                    {
+                        $normalhours += $workhours;                        
+                    }
+                }
+
+                if(array_key_exists(1, $tmparr))
+                {
+                    $food = $tmparr[1];
+                    $fooddays += ($food==="1") ? 1 : 0;
+                    
+                }
+            }
+        }
+        
+        echo "normalhours=$normalhours<br>";
+        $salaryrecord->setNormalhours($normalhours);
+    }
     
     public static function updateSalaryRecordsByAttend($salaryrecords, $attendarr)
     {
+        echo "updateSalaryRecordsByAttend<br>";
         $updatearr = array();
         $recordOne = null;
         $attendOne = null;
@@ -266,7 +415,7 @@ class infox_salary
                 {
                     $flag = true;
                     
-                    
+                    self::updateOneSalaryRecordByAttend($record, $attendance);
                     break;
                 }
             }
