@@ -10,6 +10,7 @@ class infox_worker
     public static $_salaryhtc;    
     public static $_salaryhtb;
     public static $_workeronsite;
+    public static $_setting;
     
     public static function getRepos()
     {
@@ -24,6 +25,7 @@ class infox_worker
         self::$_salaryhtb = self::$_em->getRepository('Synrgic\Infox\Workersalaryhtb');
         
         self::$_workeronsite = self::$_em->getRepository('Synrgic\Infox\Workeronsite');
+        self::$_setting = self::$_em->getRepository('Synrgic\Infox\Setting');        
     }  
 
     public static function getSheetarr()
@@ -31,45 +33,6 @@ class infox_worker
         $sheetarr = array("HC.C","HT.C","HC.B","HT.B",);
         return $sheetarr;        
     }    
-
-    /*
-    public static function getworkerlist()
-    {
-        $_em = Zend_Registry::get('em');
-        $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
-
-        $workerarr = array();
-        $allworkers = $_workerdetails->findAll();
-        foreach($allworkers as $tmp)
-        {
-            $sheet = $tmp->getSheet();
-            if($sheet != $requestsheet)
-            {
-                continue;
-            }
-
-            $date = $tmp->getResignation();
-            workerresigned($date);
-
-            $now = new DateTime("now");
-            
-            if(!$date)
-            {//no date = still on duty
-                $workerarr[] = $tmp; 
-                continue;
-            }
-
-            $interval = $date->diff($now);
-            $invert = $interval->invert;
-            if($invert)
-            {
-                $workerarr[] = $tmp; 
-            }         
-        }
-
-        return $workerarr;
-    }
-    */
 
     public static function getworkerlistbysheet($sheet)
     {
@@ -220,16 +183,23 @@ class infox_worker
 
     public static function getWorkerOtRate($worker)
     {
+        self::getRepos();
+        
         $race = self::getWorkerRace($worker);
         $rate = $worker->getCurrentrate();
+        $_setting = self::$_setting;        
         $otrate = 0;
         switch($race)
         {
             case 0:
-                $otrate = $rate;
+                //$otrate = $rate;
+                $setting = $_setting->findOneBy(array("name"=>"cotmultiple"));
+                $otrate = $rate * $setting->getValue();
                 break;
             case 1:
-                $otrate = $rate * 1.5;
+                //$otrate = $rate * 1.5;
+                $setting = $_setting->findOneBy(array("name"=>"botmultiple"));
+                $otrate = $rate * $setting->getValue();                
                 break;
         }
         

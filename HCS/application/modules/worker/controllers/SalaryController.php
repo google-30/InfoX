@@ -141,12 +141,12 @@ class Worker_SalaryController extends Zend_Controller_Action
         $allhours = $record->getAllhours();
         $allpay = $record->getAllpay();
 
-        $attenddays = "xx";
+        $attenddays = $record->getAttenddays();
         $absencedays = "xx";
         $absencefines = "xx";
         $projectpay = "xx";
-        $fooddays = "fd";
-        $foodpay = "fp";
+        $fooddays = $record->getFooddays();
+        $foodpay = "-" . $record->getFoodpay();
 
         $rtmonthpay = $record->getRtmonthpay();
         $rtmonths = $record->getRtmonths();
@@ -159,8 +159,13 @@ class Worker_SalaryController extends Zend_Controller_Action
         $netpay = $record->getNetpay();
 
         $tab = "<table>";
+        /*
         $tab .= "<tr><td colspan=2>正常工作</td><td colspan=3>加班工作</td><td colspan=2>总工作</td>"
                 . "<td rowspan=2>考勤天数</td><td colspan=2>缺勤罚款</td><td rowspan=2>项目总工资</td>";
+        */
+        $tab .= "<tr><td colspan=2>正常工作</td><td colspan=3>加班工作</td><td colspan=2>总工作</td>"
+                . "<td rowspan=2>考勤天数</td><td colspan=2>缺勤罚款</td>";
+        
         $tab .= "<td colspan=2>伙食费</td><td colspan=3>预扣税</td><td colspan=2>水电费</td>"
                 . "<td rowspan=2>其他补扣</td><td rowspan=2>提前结帐</td><td rowspan=2>当月净工资</td>"
                 . '<td rowspan=3><button data-mini="true" data-theme="b">输入</button></td></tr>';
@@ -176,7 +181,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         $tab .= "<td>$otprice</td><td>$othours</td><td>$otpay</td>";
         $tab .= "<td>$allhours</td><td>$allpay</td><td>$attenddays</td>";
         $tab .= "<td>$absencedays</td><td>$absencefines</td>";
-        $tab .= "<td>$projectpay</td>";
+        //$tab .= "<td>$projectpay</td>";
         $tab .= "<td>$fooddays</td><td>$foodpay</td>";
         $tab .= "<td>$rtmonthpay</td><td>$rtmonths</td><td>$rtall</td>";        
         $tab .= "<td>$utfee</td><td>$utallowance</td>";

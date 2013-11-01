@@ -332,7 +332,7 @@ class infox_salary
         return $summary;        
     }
        
-    public static function updateOneSalaryRecordByAttend($salaryrecord, $attendarr)
+    public static function updateOneSalaryRecordByAttend($salaryrecord, $attendance)
     {
         $worker = $salaryrecord->getWorker();
         $currentrate = $worker->getCurrentrate();
@@ -353,8 +353,8 @@ class infox_salary
             $days .= $day;
         }
 
-        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month' limit 1";
-        $result = $this->_em->createQuery($query)->getResult();
+        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+        $result = self::$_em->createQuery($query)->getResult();
                 
         $totaldays = 0;
         $normalhours = 0;
@@ -393,13 +393,44 @@ class infox_salary
             }
         }
         
-        echo "normalhours=$normalhours<br>";
-        $salaryrecord->setNormalhours($normalhours);
+        //echo "normalhours=$normalhours<br>";
+        $normalpay = $currentrate * $normalhours;
+        $otpay = $otrate * $othours;
+        $allhours = $normalhours + $othours;
+        $allpay = $normalpay + $otpay;
+                
+        $salaryrecord->setNormalhours($normalhours);        
+        $salaryrecord->setNormalpay($normalpay);
+        
+        $salaryrecord->setOthours($othours);                
+        $salaryrecord->setOtprice($otrate);
+        $salaryrecord->setOtpay($otpay);
+        
+        $salaryrecord->setAllhours($allhours);
+        $salaryrecord->setAllpay($allpay);
+        
+        $salaryrecord->setAttenddays($totaldays);
+        
+        // food
+        $setting = self::$_setting->findOneBy(array('name'=>'workerfood'));
+        $workfood = $setting->getValue();
+        $foodpay = $workfood * $fooddays;
+        $salaryrecord->setFooddays($fooddays);
+        $salaryrecord->setFoodpay($foodpay);
+
+        self::$_em->persist($salaryrecord);                 
+        try {
+            self::$_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }   
+                
     }
     
     public static function updateSalaryRecordsByAttend($salaryrecords, $attendarr)
     {
-        echo "updateSalaryRecordsByAttend<br>";
+        //echo "updateSalaryRecordsByAttend<br>";
         $updatearr = array();
         $recordOne = null;
         $attendOne = null;
