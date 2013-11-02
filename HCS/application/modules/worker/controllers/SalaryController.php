@@ -131,6 +131,10 @@ class Worker_SalaryController extends Zend_Controller_Action
 
     private function generatePaymentTab($record)
     {
+        $worker = $record->getWorker();
+        $wid = $worker->getId();
+        $monthstr = $record->getMonth()->format("Y-m");;
+    
         $normalhours = $record->getNormalhours();
         $normalpay = $record->getNormalpay();
 
@@ -142,11 +146,11 @@ class Worker_SalaryController extends Zend_Controller_Action
         $allpay = $record->getAllpay();
 
         $attenddays = $record->getAttenddays();
-        $absencedays = "xx";
-        $absencefines = "xx";
-        $projectpay = "xx";
+        $absencedays = $record->getAbsencedays();
+        $absencefines = $record->getAbsencefines();
+        //$projectpay = "xx";
         $fooddays = $record->getFooddays();
-        $foodpay = "-" . $record->getFoodpay();
+        $foodpay = $record->getFoodpay() ? "-" . $record->getFoodpay() : "&nbsp;";
 
         $rtmonthpay = $record->getRtmonthpay();
         $rtmonths = $record->getRtmonths();
@@ -167,8 +171,12 @@ class Worker_SalaryController extends Zend_Controller_Action
                 . "<td rowspan=2>考勤天数</td><td colspan=2>缺勤罚款</td>";
         
         $tab .= "<td colspan=2>伙食费</td><td colspan=3>预扣税</td><td colspan=2>水电费</td>"
-                . "<td rowspan=2>其他补扣</td><td rowspan=2>提前结帐</td><td rowspan=2>当月净工资</td>"
-                . '<td rowspan=3><button data-mini="true" data-theme="b">输入</button></td></tr>';
+                . "<td rowspan=2>其他补扣</td><td rowspan=2>提前结帐</td><td rowspan=2>当月净工资</td>";
+                
+        $url = "/worker/salary/datainput?wid=$wid&month=$monthstr";        
+        $tab .= '<td rowspan=3><a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">输入</a></td>';
+        $tab .= '</tr>';
+        
         $tab .= "<tr><td>小时</td><td>金额</td><td>单价</td><td>小时</td><td>金额</td><td>小时</td>"
                 . "<td>金额</td><td>天数</td><td>金额</td>";
         $tab .= "<td>天数</td><td>金额</td>";
@@ -177,15 +185,16 @@ class Worker_SalaryController extends Zend_Controller_Action
         $tab .= "</tr>";
 
         // insert value
-        $tab .= "<tr><td>$normalhours</td><td>$normalpay</td>";
-        $tab .= "<td>$otprice</td><td>$othours</td><td>$otpay</td>";
-        $tab .= "<td>$allhours</td><td>$allpay</td><td>$attenddays</td>";
-        $tab .= "<td>$absencedays</td><td>$absencefines</td>";
+        $tdclass = 'class="workerpay"';
+        $tab .= "<tr><td $tdclass>$normalhours</td><td $tdclass>$normalpay</td>";
+        $tab .= "<td $tdclass>$otprice</td><td $tdclass>$othours</td><td $tdclass>$otpay</td>";
+        $tab .= "<td $tdclass>$allhours</td><td $tdclass>$allpay</td><td $tdclass>$attenddays</td>";
+        $tab .= "<td $tdclass>$absencedays</td><td $tdclass>$absencefines</td>";
         //$tab .= "<td>$projectpay</td>";
-        $tab .= "<td>$fooddays</td><td>$foodpay</td>";
-        $tab .= "<td>$rtmonthpay</td><td>$rtmonths</td><td>$rtall</td>";        
-        $tab .= "<td>$utfee</td><td>$utallowance</td>";
-        $tab .= "<td>$otherfee</td><td>$inadvance</td><td>$salary</td>";
+        $tab .= "<td $tdclass>$fooddays</td><td $tdclass>$foodpay</td>";
+        $tab .= "<td $tdclass>$rtmonthpay</td><td $tdclass>$rtmonths</td><td $tdclass>$rtall</td>";        
+        $tab .= "<td $tdclass>$utfee</td><td $tdclass>$utallowance</td>";
+        $tab .= "<td $tdclass>$otherfee</td><td $tdclass>$inadvance</td><td $tdclass>$salary</td>";
         $tab .= "</tr>";
 
         $tab .= "</table>";                
@@ -203,5 +212,11 @@ class Worker_SalaryController extends Zend_Controller_Action
         infox_worker::createSalaryRecordsByMonthSheet($monthstr, $sheet);
 
 
+    }
+    
+    public function datainputAction()
+    {
+        infox_common::turnoffLayout($this->_helper);
+        
     }
 }
