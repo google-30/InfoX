@@ -12,6 +12,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         $this->_em = Zend_Registry::get('em');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
+        $this->_siteattendance = $this->_em->getRepository('Synrgic\Infox\Siteattendance');
     }
 
     public function indexAction()
@@ -217,6 +218,50 @@ class Worker_SalaryController extends Zend_Controller_Action
     public function datainputAction()
     {
         infox_common::turnoffLayout($this->_helper);
+        $wid = $this->getParam("wid", 0);
+        $monthstr = $this->getParam("month", "");
+
+        /*
+            $tab = $this->generateWorkerTab($worker, $sno);
+            $tmparr[] = $tab;
+
+            $tab = $this->generatePaymentTab($record);
+            $tmparr[] = $tab;
+
+            $attendrecord = null;
+            foreach($attendarr as $attend)
+            {
+                $attendworker = $attend->getWorker();
+
+                if($attendworker->getId() == $worker->getId())
+                {
+                    $attendrecord = $attend;
+                    break;
+                }
+            }
+            //$tab = $this->generateAttendanceTab($attendrecord);
+            $tab = infox_project::generateAttendanceTab($attendrecord, false);        
+        */
+        $tmparr = array();
+        $worker = $this->_workerdetails->findOneBy(array("id"=>$wid));
+        if(!$worker)
+        {
+            return;
+        }        
+                    
+        $tab = $this->generateWorkerTab($worker, $wid);
+        $tmparr[] = $tab;
+   
+        $month = new Datetime($monthstr . "-01");
+        $salaryrepo = infox_worker::getSalaryRepoByWorker($worker);
+        $salaryrecord = $salaryrepo->findOneBy(array("worker"=>$worker, "month"=>$month));
+        $tab = infox_salary::generatePaymentTabByRecord($salaryrecord, false);
+        $tmparr[] = $tab;
         
+        $attendance = $this->_siteattendance->findOneBy(array("worker"=>$worker, "month"=>$month));
+        $tab = infox_project::generateAttendanceTab($attendance, false);
+        $tmparr[] = $tab;
+        
+        $this->view->alltabs = $tmparr;
     }
 }

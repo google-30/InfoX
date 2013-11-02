@@ -204,5 +204,30 @@ class infox_worker
         }
         
         return $otrate;
-    }        
+    } 
+    
+    public static function getSalaryRepoByWorker($worker)
+    {
+        self::getRepos();
+        $retrepo = null;
+        $sheet = $worker->getSheet();
+        
+        switch ($sheet)
+        {
+            case "HC.C":
+                $retrepo = self::$_salaryhcc;
+                break;
+            case "HC.B":
+                $retrepo = self::$_salaryhcb;
+                break;
+            case "HT.C":
+                $retrepo = self::$_salaryhtc;
+                break;
+            case "HT.B":
+                $retrepo = self::$_salaryhtb;
+                break;                    
+        }
+        
+        return $retrepo;
+    }       
 }
