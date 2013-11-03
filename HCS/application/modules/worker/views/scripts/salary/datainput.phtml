@@ -32,6 +32,7 @@ table td, table th { text-align:center; border:1px solid gray; }
 	position: relative;
 	top: -15px;
 }
+.noborder td { border:0px; }
 </style>	
 <script>
 
@@ -66,19 +67,35 @@ foreach($alltabs as $tab)
 }
 echo $tabs;
 ?>
-
-    <div style="float:left;">&nbsp;</div>
-
-    <!--<div style="margin: 10px auto 15px auto; max-width:65%;">-->
-    <div style="float:left; width:65%;">
 <form action="/project/attendance/quicksubmit" method="post" name="quickform" id="quickform">
-</form>
-<button onclick="quicksubmit()">提交考勤</button>
-<br>
-<input type="button" value="关闭本页" onclick="attendialogclose()">
-    </div>
 
-	</div>
+<table class="noborder">
+<tr>
+<td>工作单价:</td><td><input type="text" name="rate" id="rate" value="" data-mini="true" /></td>
+<td>其他补扣:</td><td><input type="text" name="otherfee" id="otherfee" value="" data-mini="true" /></td>
+<td>提前结帐:</td><td><input type="text" name="inadvance" id="inadvance" value="" data-mini="true" /></td>
+</tr>
+<tr>
+<td>缺勤天数:</td><td><input type="text" id="absencedays" name="absencedays" value=""></td>
+<td>缺勤金额:</td><td><input type="text" id="absencefines" name="absencefines" value=""></td>
+</tr>
+<tr>
+<td>预扣税当月:</td><td><input type="text" id="rtmonthpay" name="rtmonthpay" value=""></td>
+<td>预扣税月数:</td><td><input type="text" id="rtmonths" name="rtmonths" value=""></td>
+<td>预扣税累计:</td><td><input type="text" id="rtall" name="rtall" value=""></td>
+</tr>
+<tr>
+<td>水电费扣款:</td><td><input type="text" id="utfee" name="utfee" value=""></td>
+<td>水电费补助:</td><td><input type="text" id="utallowance" name="utallowance" value=""></td>
+</tr>
+</table>
+</form>
+
+<div class="ui-grid-a">
+	<div class="ui-block-a"><button onclick="quicksubmit()">提交数据</button></div>
+	<div class="ui-block-b"><input type="button" value="关闭本页" onclick="attendialogclose()"></div>
+</div><!-- /grid-a -->
+
 	</div> <!-- dialog -->
 
 </body>
