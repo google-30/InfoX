@@ -44,8 +44,8 @@ $lastmonth1=date('Ym', strtotime("last month"));
 $thismonthurl="/worker/salary/salarybymonth?sheet=$sheet&month=$thismonth";
 $lastmonthurl="/worker/salary/salarybymonth?sheet=$sheet&month=$lastmonth"; 
 
-$lastmonthpayslipsurl="/worker/salary/";
-$thismonthpayslipsurl="/worker/salary/";
+$lastmonthpayslipsurl="/worker/salary/salaryreceipts?sheet=$sheet&month=$lastmonth";
+$thismonthpayslipsurl="/worker/salary/salaryreceipts?sheet=$sheet&month=$thismonth";
 $options="";
 foreach($sheetarr as $tmp)
 {
@@ -67,25 +67,25 @@ echo $selects;
 
 ?>
 
-<div class="ui-grid-b">
-	<div class="ui-block-a">
+<div class="ui-grid-a">
+	<!--<div class="ui-block-a">
         <button data-mini="true" data-theme="a" onclick="gensalarydata(<?=$lastmonth1?>)">生成工资数据(<?=$lastmonth?>)</button>
-    </div>
-	<div class="ui-block-b"><a href="<?=$lastmonthurl?>" target="_blank">
+    </div>-->
+	<div class="ui-block-a"><a href="<?=$lastmonthurl?>" target="_blank">
 <button data-mini="true" data-theme="a">查看详细工资(<?=$lastmonth?>)</button></a></div>
-	<div class="ui-block-c"><a href="<?=$lastmonthpayslipsurl?>" target="_blank">
+	<div class="ui-block-b"><a href="<?=$lastmonthpayslipsurl?>" target="_blank">
 <button data-mini="true" data-theme="a">查看工资单(<?=$lastmonth?>)</button></a></div>
 
-	<div class="ui-block-a"><a href="<?=$genthismonthurl?>" target="_blank">
-<button data-mini="true" data-theme="a">生成工资数据(<?=$thismonth?>)</button></a></div>
-	<div class="ui-block-b"><a href="<?=$thismonthurl?>" target="_blank">
+	<!--<div class="ui-block-a"><a href="<?=$genthismonthurl?>" target="_blank">
+<button data-mini="true" data-theme="a">生成工资数据(<?=$thismonth?>)</button></a></div>-->
+	<div class="ui-block-a"><a href="<?=$thismonthurl?>" target="_blank">
 <button data-mini="true" data-theme="a">查看详细工资(<?=$thismonth?>)</button></a></div>
-	<div class="ui-block-c"><a href="<?=$thismonthpayslipsurl?>" target="_blank">
+	<div class="ui-block-b"><a href="<?=$thismonthpayslipsurl?>" target="_blank">
 <button data-mini="true" data-theme="a">查看工资单(<?=$thismonth?>)</button></a></div>
 
-	<div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="a">&nbsp;</button></a></div>
-	<div class="ui-block-b"><a href="#"><button data-mini="true" data-theme="a">查看详细工资历史</button></a></div>
-	<div class="ui-block-c"><a href="#"><button data-mini="true" data-theme="a">查看工资单历史</button></a></div>
+	<!--<div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="a">&nbsp;</button></a></div>-->
+	<div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="a">查看详细工资历史</button></a></div>
+	<div class="ui-block-b"><a href="#"><button data-mini="true" data-theme="a">查看工资单历史</button></a></div>
 </div>
 
 <?php

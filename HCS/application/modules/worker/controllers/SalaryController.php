@@ -374,4 +374,30 @@ class Worker_SalaryController extends Zend_Controller_Action
         $this->view->alltabs = $tmparr; 
         $this->view->month = $month;         
     }
+    
+    public function salaryreceiptsAction()
+    {
+        infox_common::turnoffLayout($this->_helper);
+
+        $monthstr = $this->getParam("month", "now");        
+        if("now" == $monthstr)
+        {
+            return;
+        }
+        $monthobj = new Datetime($monthstr . "-01");        
+        
+        $sheet = $this->getParam("sheet", "HC.C");
+        //$this->view->sheet = $sheet;
+        //$this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+        $salaryrepo = infox_salary::getReposBySheet($sheet);                       
+        $records = $salaryrepo->findBy(array("month"=>$monthobj));
+        
+        
+
+    }
+    
+    private function getReceiptsByRecords($records)
+    {
+        
+    }
 }

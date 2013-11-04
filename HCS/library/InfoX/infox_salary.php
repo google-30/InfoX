@@ -56,7 +56,7 @@ class infox_salary
 
     public static function getReposBySheet($sheet="HC.C")
     {
-        //self::getRepos();
+        self::getRepos();
         $repos = null;
         switch($sheet)
         {
@@ -675,4 +675,6 @@ class infox_salary
         
         return $otrate;
     } 
+    
+    
 }
