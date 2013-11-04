@@ -424,6 +424,111 @@ class infox_salary
         } catch (Exception $e) {
             var_dump($e);
             return;
+        }                   
+    }
+    
+    public static function updateOneSalaryRecord($salaryrecord)
+    {
+        $worker = $salaryrecord->getWorker();
+        $currentrate = self::getWorkerRate($salaryrecord);//$worker->getCurrentrate();
+        $otrate = self::getWorkerOtRate($salaryrecord);//infox_worker::getWorkerOtRate($worker);
+        
+        $wid = $worker->getId();
+        $month = $salaryrecord->getMonth()->format("Y-m-d");;
+
+        $days = "";
+        for($i=1; $i<=31; $i++)
+        {            
+            $day = "s.day$i";            
+            if($i != 31)
+            {
+                $day .= ",";
+            }
+
+            $days .= $day;
+        }
+
+        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+        $result = self::$_em->createQuery($query)->getResult();
+                
+        $totaldays = 0;
+        $normalhours = 0;
+        $normalsalary = 0;
+        $othours = 0;
+        $otsalary = 0;    
+        $fooddays = 0;    
+        foreach($result[0] as $tmp)
+        {
+            if($tmp)
+            {
+                $totaldays++;
+
+                // normal work
+                $tmparr = explode(";", $tmp);
+                if(array_key_exists(0, $tmparr))
+                {
+                    $workhours = $tmparr[0];
+                    if($workhours >= 8)
+                    {
+                        $normalhours += 8;
+                        $othours += ($workhours - 8);
+                    }   
+                    else
+                    {
+                        $normalhours += $workhours;                        
+                    }
+                }
+
+                if(array_key_exists(1, $tmparr))
+                {
+                    $food = $tmparr[1];
+                    $fooddays += ($food==="1") ? 1 : 0;
+                    
+                }
+            }
+        }
+        
+        //echo "normalhours=$normalhours<br>";
+        $normalpay = $currentrate * $normalhours;
+        $otpay = $otrate * $othours;
+        $allhours = $normalhours + $othours;
+        $allpay = $normalpay + $otpay;
+                
+        $salaryrecord->setNormalhours($normalhours);        
+        $salaryrecord->setNormalpay($normalpay);
+        
+        $salaryrecord->setOthours($othours);                
+        $salaryrecord->setOtprice($otrate);
+        $salaryrecord->setOtpay($otpay);
+        
+        $salaryrecord->setAllhours($allhours);
+        $salaryrecord->setAllpay($allpay);
+        
+        $salaryrecord->setAttenddays($totaldays);
+        
+        // food
+        $setting = self::$_setting->findOneBy(array('name'=>'workerfood'));
+        $workfood = $setting->getValue();
+        $foodpay = $workfood * $fooddays;
+        $salaryrecord->setFooddays($fooddays);
+        $salaryrecord->setFoodpay($foodpay);
+        
+        $otherfee = $salaryrecord->getOtherfee();
+        $absencefines = $salaryrecord->getAbsencefines();
+        $rtmonthpay = $salaryrecord->getRtmonthpay();
+        $utfee = $salaryrecord->getUtfee();
+        $utallowance = $salaryrecord->getUtallowance();
+        
+        $finalsalary = $normalpay + $otpay - abs($foodpay) - abs($absencefines) 
+        - abs($rtmonthpay) - abs($utfee) + abs($utallowance) + $otherfee;
+        $salaryrecord->setSalary($finalsalary);
+
+        self::$_em->persist($salaryrecord);                 
+        try {
+            self::$_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
         }   
                 
     }
@@ -446,7 +551,8 @@ class infox_salary
                 {
                     $flag = true;
                     
-                    self::updateOneSalaryRecordByAttend($record, $attendance);
+                    //self::updateOneSalaryRecordByAttend($record, $attendance);
+                    self::updateOneSalaryRecord($record);
                     break;
                 }
             }

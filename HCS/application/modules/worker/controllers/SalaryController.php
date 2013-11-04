@@ -303,6 +303,19 @@ class Worker_SalaryController extends Zend_Controller_Action
     public function salarysheetAction()
     {
         infox_common::turnoffLayout($this->_helper);
+        
+        $wid = $this->getParam("wid", 0);
+        $monthstr = $this->getParam("month", "");
+        $worker = $this->_workerdetails->findOneBy(array("id"=>$wid));
+        if(!$worker)
+        {
+            return;
+        }                               
+        $month = new Datetime($monthstr . "-01");
+        $salaryrepo = infox_worker::getSalaryRepoByWorker($worker);
+        $salaryrecord = $salaryrepo->findOneBy(array("worker"=>$worker, "month"=>$month));
+        infox_salary::updateOneSalaryRecord($salaryrecord);
+        
         $this->getSalarytabs();
     }
 
