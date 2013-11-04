@@ -146,5 +146,10 @@ class Workersalary extends \Synrgic_Models_Entity {
      */
     protected $netpay;
 
+    /**
+     * rate for this month
+     * @Column(type="float", nullable=true)
+     */
+    protected $rate;
 
 }

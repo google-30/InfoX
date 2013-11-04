@@ -263,5 +263,17 @@ class Worker_SalaryController extends Zend_Controller_Action
         $tmparr[] = $tab;
         
         $this->view->alltabs = $tmparr;
+        $this->view->worker= $worker;
+        $this->view->month = $month;
+    }
+    
+    public function datapostAction()
+    {
+        infox_common::turnoffView($this->_helper);
+        
+        $requests = $this->getRequest()->getPost();
+        if(1) { var_dump($requests); return; }
+        
+        
     }
 }

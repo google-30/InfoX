@@ -35,27 +35,54 @@ table td, table th { text-align:center; border:1px solid gray; }
 .noborder td { border:0px; }
 </style>	
 <script>
+function datapost()
+{
+    //alert("datapost");
 
+    var rate=$('#rate').val();
+    var otherfee = $('#otherfee').val();
+    var inadvance = $('#inadvance').val();
+    var absencedays = $('#absencedays').val();        
+    var absencefines = $('#absencefines').val();        
+    var rtmonthpay = $('#rtmonthpay').val();        
+    var rtmonths = $('#rtmonths').val();        
+    var rtall = $('#rtall').val();        
+    var utfee = $('#utfee').val();
+    var utallowance = $('#utallowance').val();
+
+    var wid=$('#wid').val();
+    var month=$('#month').val();
+    
+    $.post("/worker/salary/datapost", 
+    { wid:wid, month:month, rate:rate, otherfee:otherfee, inadvance:inadvance, 
+    absencedays:absencedays, absencefines:absencefines, rtmonthpay:rtmonthpay, 
+    rtmonths:rtmonths, rtall:rtall, utfee:utfee, utallowance:utallowance,}, 
+    function(data) {
+        console.log(data);
+        //$('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month + "&sid="+siteid);
+        alert("提交成功");
+        //window.location.reload();
+    })            
+}
 </script>
 <?php
-//$site=$this->site;
-//$sitename=$site->getName();
-//$siteid=$site->getId();
- 
+$worker=$this->worker;
+$wid=$worker?$worker->getId():"&nbsp;"; 
+
+$month=$this->month;
+$monthstr=$month?$month->format("Y-m"):"&nbsp;"; 
+
 $attendance=$this->attendance;
-
 $date=$this->date;
-$monthstr=$this->monthstr;
-
+//$monthstr=$this->monthstr;
 $workerarr=$this->workerarr;
 $attendancearr=$this->attendancearr;
-
 $alltabs=$this->alltabs;
 ?>
 
 <div data-role="dialog">
     <div data-role="header" data-theme="d">
-	    <h1>输入相关数据以计算工资</h1>
+	    <h1>输入相关数据以计算工资&nbsp;<?=$monthstr ?></h1>
     </div>
 
     <div data-role="content" data-theme="c">
@@ -67,11 +94,15 @@ foreach($alltabs as $tab)
 }
 echo $tabs;
 ?>
-<form action="/project/attendance/quicksubmit" method="post" name="quickform" id="quickform">
+
+<!--<form action="/project/attendance/quicksubmit" method="post" name="quickform" id="quickform">-->
+<form>
+<input type="hidden" id="wid" name="wid" value="<?=$wid?>">
+<input type="hidden" id="month" name="month" value="<?=$monthstr?>">
 
 <table class="noborder">
 <tr>
-<td>工作单价:</td><td><input type="text" name="rate" id="rate" value="" data-mini="true" /></td>
+<td>工作单价:</td><td><input type="text" name="xxxrate" id="xxxrate" value="" data-mini="true"></td>
 <td>其他补扣:</td><td><input type="text" name="otherfee" id="otherfee" value="" data-mini="true" /></td>
 <td>提前结帐:</td><td><input type="text" name="inadvance" id="inadvance" value="" data-mini="true" /></td>
 </tr>
@@ -92,10 +123,11 @@ echo $tabs;
 </form>
 
 <div class="ui-grid-a">
-	<div class="ui-block-a"><button onclick="quicksubmit()">提交数据</button></div>
+	<div class="ui-block-a"><button onclick="datapost()">提交数据</button></div>
 	<div class="ui-block-b"><input type="button" value="关闭本页" onclick="attendialogclose()"></div>
 </div><!-- /grid-a -->
 
+    </div>
 	</div> <!-- dialog -->
 
 </body>
