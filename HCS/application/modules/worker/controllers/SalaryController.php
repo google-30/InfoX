@@ -72,37 +72,17 @@ class Worker_SalaryController extends Zend_Controller_Action
     private function generateSalaryTabs($salaryrecords, $attendarr)
     {
         $salarytabs = array();
-        $sno = 0;
+        $sno = 0;        
+        $monthstr = $salaryrecords[0]->getMonth()->format("Y-m");
+        
         foreach($salaryrecords as $record)
         {
             $tmparr = array();
-
             $workertab = "";
-            $worker = $record->getWorker();
-            
+            $worker = $record->getWorker();            
             $sno++;
-            $tab = $this->generateWorkerTab($worker, $sno);
-            $tmparr[] = $tab;
-
-            $tab = $this->generatePaymentTab($record);
-            $tmparr[] = $tab;
-
-            $attendrecord = null;
-            foreach($attendarr as $attend)
-            {
-                $attendworker = $attend->getWorker();
-
-                if($attendworker->getId() == $worker->getId())
-                {
-                    $attendrecord = $attend;
-                    break;
-                }
-            }
-            //$tab = $this->generateAttendanceTab($attendrecord);
-            $tab = infox_project::generateAttendanceTab($attendrecord, false);
-
-            $tmparr[] = $tab;
-
+            $wid = $worker->getId();
+            $tmparr = $this->getSalarytabsByWidMonthstr($wid, $monthstr);
             $salarytabs[] = $tmparr;   
         }
 
@@ -120,7 +100,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         $wpno = $worker->getWpno();
         $eeeno = $worker->getEeeno();
         $price = $worker->getCurrentrate();
-        $type = $worker->getWorktype();
+        $type = $worker->getWorktype();                
 
         $tab = '<table class="workerinfo">';
         $tab .= "<tr><th rowspan=1>序号</th><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
@@ -129,6 +109,35 @@ class Worker_SalaryController extends Zend_Controller_Action
         
         return $tab;
     }   
+    
+    private function generateWorkerTabBySalary($salaryrecord)
+    {
+        $sr = $salaryrecord;
+        $worker = $sr->getWorker();                   
+        $name = $worker->getNamechs();
+        if(!$name || $name == "")
+        {
+            $name = $worker->getNameeng();
+        }
+        $sno = $wid = $worker->getId();
+        $wpno = $worker->getWpno();
+        $eeeno = $worker->getEeeno();
+        $price = $worker->getCurrentrate();
+        $type = $worker->getWorktype();                
+
+        $rate = $sr->getRate();
+        /*echo "rate=$rate";
+        echo $rate!="";
+        echo $rate!=0;*/
+        $actualrate = ($rate!="" && $rate!=0) ? $rate : $price;
+
+        $tab = '<table class="workerinfo">';
+        $tab .= "<tr><th rowspan=1>序号</th><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
+        $tab .= "<tr><td>$sno</td><td>$wpno</td><td>$eeeno</td><td>$name</td><td>$actualrate</td><td>$type</td></tr>";
+        $tab .= "</table>";
+        
+        return $tab;
+    }     
 
     private function generatePaymentTab($record)
     {
@@ -141,7 +150,8 @@ class Worker_SalaryController extends Zend_Controller_Action
 
         $othours = $record->getOthours();
         $otpay = $record->getOtpay();
-        $otprice = $record->getOtprice();
+        //$otprice = $record->getOtprice();
+        $otprice = infox_salary::getWorkerOtRate($record);
 
         $allhours = $record->getAllhours();
         $allpay = $record->getAllpay();
@@ -211,8 +221,6 @@ class Worker_SalaryController extends Zend_Controller_Action
         $monthstr = $date->format("Y-m");
         
         infox_worker::createSalaryRecordsByMonthSheet($monthstr, $sheet);
-
-
     }
     
     public function datainputAction()
@@ -221,50 +229,16 @@ class Worker_SalaryController extends Zend_Controller_Action
         $wid = $this->getParam("wid", 0);
         $monthstr = $this->getParam("month", "");
 
-        /*
-            $tab = $this->generateWorkerTab($worker, $sno);
-            $tmparr[] = $tab;
-
-            $tab = $this->generatePaymentTab($record);
-            $tmparr[] = $tab;
-
-            $attendrecord = null;
-            foreach($attendarr as $attend)
-            {
-                $attendworker = $attend->getWorker();
-
-                if($attendworker->getId() == $worker->getId())
-                {
-                    $attendrecord = $attend;
-                    break;
-                }
-            }
-            //$tab = $this->generateAttendanceTab($attendrecord);
-            $tab = infox_project::generateAttendanceTab($attendrecord, false);        
-        */
         $tmparr = array();
         $worker = $this->_workerdetails->findOneBy(array("id"=>$wid));
         if(!$worker)
         {
             return;
         }        
-                    
-        $tab = $this->generateWorkerTab($worker, $wid);
-        $tmparr[] = $tab;
-   
-        $month = new Datetime($monthstr . "-01");
-        $salaryrepo = infox_worker::getSalaryRepoByWorker($worker);
-        $salaryrecord = $salaryrepo->findOneBy(array("worker"=>$worker, "month"=>$month));
-        $tab = infox_salary::generatePaymentTabByRecord($salaryrecord, false);
-        $tmparr[] = $tab;
-        
-        $attendance = $this->_siteattendance->findOneBy(array("worker"=>$worker, "month"=>$month));
-        $tab = infox_project::generateAttendanceTab($attendance, false);
-        $tmparr[] = $tab;
-        
-        $this->view->alltabs = $tmparr;
+
+        $this->getSalarytabs();        
         $this->view->worker= $worker;
-        $this->view->month = $month;
+        //$this->view->month = $month;
     }
     
     public function datapostAction()
@@ -272,8 +246,119 @@ class Worker_SalaryController extends Zend_Controller_Action
         infox_common::turnoffView($this->_helper);
         
         $requests = $this->getRequest()->getPost();
-        if(1) { var_dump($requests); return; }
+        if(0) { var_dump($requests); return; }
         
+        $rate = trim($this->getParam("rate", ""));
+        $otherfee = trim($this->getParam("otherfee", ""));
+        $inadvance = trim($this->getParam("inadvance", ""));
+        $absencedays = trim($this->getParam("absencedays", ""));
+        $absencefines = trim($this->getParam("absencefines", ""));
+        $rtmonthpay = trim($this->getParam("rtmonthpay", ""));
+        $rtmonths = trim($this->getParam("rtmonths", ""));
+        $rtall = trim($this->getParam("rtall", ""));
+        $utfee = trim($this->getParam("utfee", ""));
+        $utallowance = trim($this->getParam("utallowance", ""));  
         
+        $wid = $this->getParam("wid", "");  
+        $month = $this->getParam("month", "");  
+        
+        $worker = $this->_workerdetails->findOneBy(array('id'=>$wid));
+        if(!$worker)
+        {
+            echo "no worker found for these data post";
+            return;
+        }
+        $salaryrepo = infox_worker::getSalaryRepoByWorker($worker);
+        $monthobj = new Datetime("$month-01");
+        $salaryrecord = $salaryrepo->findOneBy(array("worker"=>$worker, "month"=>$monthobj));
+        if(!$salaryrecord)
+        {
+            echo "no record found for these data post";
+            return;
+        }
+        
+        $sr = $salaryrecord;        
+        if($rate != "") $sr->setRate((float) $rate);
+        if($otherfee!="") $sr->setOtherfee((float) $otherfee);
+        if($inadvance!="") $sr->setinadvance((float) $inadvance);
+        if($absencedays!="") $sr->setAbsencedays((float)$absencedays);
+        if($absencefines!="") $sr->setAbsencefines((float)$absencefines);
+        if($rtmonthpay!="") $sr->setRtmonthpay((float)$rtmonthpay);
+        if($rtmonths!="") $sr->setRtmonths((int)$rtmonths);
+        if($rtall!="") $sr->setRtall((float)$rtall);
+        if($utfee!="") $sr->setUtfee((float)$utfee);
+        if($utallowance!="") $sr->setUtallowance((float)$utallowance);
+                                                        
+        $this->_em->persist($sr);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }                      
+        
+        echo "提交成功";                                        
+    }
+    
+    public function salarysheetAction()
+    {
+        infox_common::turnoffLayout($this->_helper);
+        $this->getSalarytabs();
+    }
+
+    private function getSalarytabsByWidMonthstr($wid, $monthstr)
+    {
+        $tmparr = array();
+        $worker = $this->_workerdetails->findOneBy(array("id"=>$wid));
+        if(!$worker)
+        {
+            return;
+        }        
+                       
+        $month = new Datetime($monthstr . "-01");
+        $salaryrepo = infox_worker::getSalaryRepoByWorker($worker);
+        $salaryrecord = $salaryrepo->findOneBy(array("worker"=>$worker, "month"=>$month));
+        
+        $tab = $this->generateWorkerTabBySalary($salaryrecord);
+        $tmparr[] = $tab;
+        
+        $tab = infox_salary::generatePaymentTabByRecord($salaryrecord, true);
+        $tmparr[] = $tab;
+        
+        $attendance = $this->_siteattendance->findOneBy(array("worker"=>$worker, "month"=>$month));
+        $tab = infox_project::generateAttendanceTab($attendance, false);
+        $tmparr[] = $tab;
+                
+        return $tmparr;          
+    }
+            
+    private function getSalarytabs()
+    {
+        $wid = $this->getParam("wid", 0);
+        $monthstr = $this->getParam("month", "");
+
+        $tmparr = array();
+        $worker = $this->_workerdetails->findOneBy(array("id"=>$wid));
+        if(!$worker)
+        {
+            return;
+        }        
+                       
+        $month = new Datetime($monthstr . "-01");
+        $salaryrepo = infox_worker::getSalaryRepoByWorker($worker);
+        $salaryrecord = $salaryrepo->findOneBy(array("worker"=>$worker, "month"=>$month));
+        
+        $tab = $this->generateWorkerTabBySalary($salaryrecord);
+        $tmparr[] = $tab;
+        
+        $tab = infox_salary::generatePaymentTabByRecord($salaryrecord, false);
+        $tmparr[] = $tab;
+        
+        $attendance = $this->_siteattendance->findOneBy(array("worker"=>$worker, "month"=>$month));
+        $tab = infox_project::generateAttendanceTab($attendance, false);
+        $tmparr[] = $tab;
+        
+        $this->view->alltabs = $tmparr; 
+        $this->view->month = $month;         
     }
 }

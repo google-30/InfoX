@@ -7,17 +7,6 @@
 	<link rel="stylesheet"  href="/common/css/jquery.mobile-1.2.0.css" />  
 	<script src="/common/js/jquery-1.8.2.min.js"></script>
 	<script src="/common/js/jquery.mobile-1.2.0.min.js"></script>
-    <!--
-    <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
-    <script src="/common/js/jQuery.ui.datepicker.js"></script>
-    <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
-	<script>
-		//reset type=date inputs to text
-		$( document ).bind( "mobileinit", function(){
-			$.mobile.page.prototype.options.degradeInputs.date = true;
-		});	
-	</script>
-	-->
     </head> 
 <body> 
 
@@ -38,7 +27,6 @@ table td, table th { text-align:center; border:1px solid gray; }
 function datapost()
 {
     //alert("datapost");
-
     var rate=$('#rate').val();
     var otherfee = $('#otherfee').val();
     var inadvance = $('#inadvance').val();
@@ -59,8 +47,8 @@ function datapost()
     rtmonths:rtmonths, rtall:rtall, utfee:utfee, utallowance:utallowance,}, 
     function(data) {
         console.log(data);
-        //$('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month + "&sid="+siteid);
-        alert("提交成功");
+        $('#salarysheet').load("/worker/salary/salarysheet?wid=" + wid + "&month="+month);
+        alert(data);
         //window.location.reload();
     })            
 }
@@ -86,6 +74,7 @@ $alltabs=$this->alltabs;
     </div>
 
     <div data-role="content" data-theme="c">
+<div id="salarysheet">    
 <?
 $tabs="";
 foreach($alltabs as $tab)
@@ -94,7 +83,7 @@ foreach($alltabs as $tab)
 }
 echo $tabs;
 ?>
-
+</div>
 <!--<form action="/project/attendance/quicksubmit" method="post" name="quickform" id="quickform">-->
 <form>
 <input type="hidden" id="wid" name="wid" value="<?=$wid?>">
@@ -102,7 +91,7 @@ echo $tabs;
 
 <table class="noborder">
 <tr>
-<td>工作单价:</td><td><input type="text" name="xxxrate" id="xxxrate" value="" data-mini="true"></td>
+<td>工作单价:</td><td><input type="text" name="rate" id="rate" value="" data-mini="true"></td>
 <td>其他补扣:</td><td><input type="text" name="otherfee" id="otherfee" value="" data-mini="true" /></td>
 <td>提前结帐:</td><td><input type="text" name="inadvance" id="inadvance" value="" data-mini="true" /></td>
 </tr>
@@ -124,7 +113,7 @@ echo $tabs;
 
 <div class="ui-grid-a">
 	<div class="ui-block-a"><button onclick="datapost()">提交数据</button></div>
-	<div class="ui-block-b"><input type="button" value="关闭本页" onclick="attendialogclose()"></div>
+	<div class="ui-block-b"><input type="button" value="关闭本页" onclick="salarydialogclose()"></div>
 </div><!-- /grid-a -->
 
     </div>

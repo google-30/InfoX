@@ -335,8 +335,8 @@ class infox_salary
     public static function updateOneSalaryRecordByAttend($salaryrecord, $attendance)
     {
         $worker = $salaryrecord->getWorker();
-        $currentrate = $worker->getCurrentrate();
-        $otrate = infox_worker::getWorkerOtRate($worker);
+        $currentrate = self::getWorkerRate($salaryrecord);//$worker->getCurrentrate();
+        $otrate = self::getWorkerOtRate($salaryrecord);//infox_worker::getWorkerOtRate($worker);
         
         $wid = $worker->getId();
         $month = $attendance->getMonth()->format("Y-m-d");;
@@ -464,8 +464,9 @@ class infox_salary
 
         $othours = $record->getOthours();
         $otpay = $record->getOtpay();
-        $otprice = $record->getOtprice();
-
+        //$otprice = $record->getOtprice();
+        $otprice = infox_salary::getWorkerOtRate($record);
+        
         $allhours = $record->getAllhours();
         $allpay = $record->getAllpay();
 
@@ -526,5 +527,46 @@ class infox_salary
         $tab .= "</table>";                
         return $tab;
     }
+
+    public static function getWorkerRate($salaryrecord)
+    {
+        self::getRepos();
+        $sr = $salaryrecord;
+        $worker = $sr->getWorker();                        
+        $currentrate = $worker->getCurrentrate();
+        $inputrate = $sr->getRate();        
+        $actualrate = ($inputrate!="" && $inputrate!=0) ? $inputrate : $currentrate;        
+        return $actualrate;
+    }
     
+    public static function getWorkerOtRate($salaryrecord)
+    {
+        self::getRepos();
+
+        $sr = $salaryrecord;
+        $worker = $sr->getWorker();        
+        $race = infox_worker::getWorkerRace($worker);
+                
+        $currentrate = $worker->getCurrentrate();
+        $inputrate = $sr->getRate();        
+        $actualrate = ($inputrate!="" && $inputrate!=0) ? $inputrate : $currentrate;        
+        
+        $_setting = self::$_setting;        
+        $otrate = 0;
+        switch($race)
+        {
+            case 0:
+                //$otrate = $rate;
+                $setting = $_setting->findOneBy(array("name"=>"cotmultiple"));
+                $otrate = $actualrate * $setting->getValue();
+                break;
+            case 1:
+                //$otrate = $rate * 1.5;
+                $setting = $_setting->findOneBy(array("name"=>"botmultiple"));
+                $otrate = $actualrate * $setting->getValue();                
+                break;
+        }
+        
+        return $otrate;
+    } 
 }
