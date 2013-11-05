@@ -392,7 +392,8 @@ class Worker_SalaryController extends Zend_Controller_Action
         $salaryrepo = infox_salary::getReposBySheet($sheet);                       
         $records = $salaryrepo->findBy(array("month"=>$monthobj));
         
-        
+        $this->view->salaryrecords = $records;
+        $this->view->monthobj = $monthobj;
 
     }
     

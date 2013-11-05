@@ -66,11 +66,11 @@ $stop = "";
 $leader="";
 $manager="";
 $workerno=0;
-
 $fullnamechs="";
 $fullnameeng="";
-
 $postring="";
+$logopic="";
+
 if($this->mode == "Edit")
 {
 $data = $this->maindata;
@@ -111,18 +111,19 @@ else
 <table class="grid">
 <thead></thead>
 <tbody>
+<tr><td><strong>公司logo:</strong></td><td>logo</td></tr>
 <tr>
-<td style="width:20%"><strong>公司中文名:</strong></td>
-<td style="width:30%"><input type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" data-mini="true" /></td>
-<td style="width:20%"><strong>公司中文全名:</strong></td>
-<td style="width:30%"><input type="text" name="fullnamechs" id="fullnamechs" value="<?php echo $fullnamechs; ?>" data-mini="true" /></td>
+<td style="width:20%"><strong>公司中文名(短):</strong></td>
+<td style="width:30%"><input type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" data-mini="true" placeholder="用于网页显示，比如华城，或者华城建筑"/></td>
+<td style="width:20%"><strong>公司中文全名(长):</strong></td>
+<td style="width:30%"><input type="text" name="fullnamechs" id="fullnamechs" value="<?php echo $fullnamechs; ?>" data-mini="true" placeholder="用于打印和预览，比如华腾发展有限公司"/></td>
 </tr>
 
 <tr>
-<td style="width:20%"><strong>公司英文名:</strong></td>
-<td style="width:30%"><input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true" /></td>
-<td style="width:20%"><strong>公司英文全名:</strong></td>
-<td style="width:30%"><input type="text" name="fullnameeng" id="fullnameeng" value="<?php echo $fullnameeng; ?>" data-mini="true" /></td>
+<td style="width:20%"><strong>公司英文名(短):</strong></td>
+<td style="width:30%"><input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true" placeholder="用于网页显示，比如Hwa Cheng"/></td>
+<td style="width:20%"><strong>公司英文全名(长):</strong></td>
+<td style="width:30%"><input type="text" name="fullnameeng" id="fullnameeng" value="<?php echo $fullnameeng; ?>" data-mini="true" placeholder="用于打印和预览，比如HWA CHENG DEVELOPMENT PTE LTD"/></td>
 </tr>
 
 <tr>
@@ -149,8 +150,8 @@ else
 <tr>
 <td><strong>公司PO字串:</strong></td>
 <td><input type="text" name="postring" id="postring" value="<?php echo $postring; ?>" data-mini="true" /></td>
-<td></td>
-<td></td>
+<td><strong>工人列表前缀:</strong></td>
+<td><input type="text" name="sheetprefix" id="sheetprefix" value="<?=$postring?>" data-mini="true" placeholder="HC代表华城，HT代表华腾，用于区分工人所在列表"/></td>
 </tr>
 
 </tbody>
@@ -161,4 +162,5 @@ else
 		<div class="ui-block-a"><button type="submit" data-theme="a" onclick="submit()" data-mini="true">提交</button></div>
 		<div class="ui-block-b"><input type="button" onclick="cancel()" value="取消" data-mini="true"></div>
 </div>
+<br><br>
 

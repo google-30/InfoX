@@ -2,14 +2,23 @@
 <html>
 <?php
 $monthstr=$this->monthstr;
+$monthobj=$this->monthobj;
+
 $sheet=$this->sheet;
 $sheetarr=$this->sheetarr;
-$salarytabs= $this->salarytabs;
+//$salarytabs= $this->salarytabs;
+$salaryrecords=$this->salaryrecords;
+
+$year=$monthobj->format('Y');
+$month1=$monthobj->format('m');
+$month2=$monthobj->format('M');
+$nowobj=new Datetime("now");
+$nowdatestr=$nowobj->format("d/m/Y");
 ?>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>详细工资表<? echo $monthstr; ?></title> 
+	<title>Salary Receipts/工资收据<? echo $monthstr; ?></title> 
 	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
     <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
     <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
@@ -32,6 +41,10 @@ $salarytabs= $this->salarytabs;
 
 <body> 
 <style>
+.tabheader { table-layout: fixed; width:100%; }
+.tdstayright { text-align: right; }
+.tdstayleft { text-align: left; }
+.tdstaycenter { text-align: center; }
 </style>
 <script>
 </script>
@@ -44,7 +57,38 @@ $salarytabs= $this->salarytabs;
 <div id="error">
 <?=$this->error?>
 </div>
+<?php
+$srs=$salaryrecords;
+$datestr='月份/Mth:' . $year . "年". $month1 . "月/" . $month2 . "-" . $year;
+$header='<div style="float:left">HWA CHENG DEVELOPMENT PTE LTD<br>华城发展有限公司</div>';
+$header.='<div style="float:right">' . "$datestr</div>";
+$header.="<br><br>";
+$header.='<div style="margin:auto">Salary Receipt/工资收据</div>';
 
+
+$header1='<table class="tabheader"><tr><td class="tdstayleft">HWA CHENG DEVELOPMENT PTE LTD<br>华城发展有限公司</td>' .
+'<td></td><td class="tdstayright">' . $datestr . "</td></tr>";
+$header1.='<tr><td></td><td class="tdstaycenter">Salary Receipt/工资收据</td><td></td></tr>';
+//$header1.="</table>";
+$tabhtml=$header1;
+foreach($srs as $tmp)
+{
+    $worker = $tmp->getWorker();
+    $namechs = $worker->getNamechs();
+    $nameeng = $worker->getNameeng();
+    $eeeno = $worker->getEeeno();
+    
+    $tr= "<tr>"; 
+    $tdname='<td class="tdstayleft">工人姓名/Name<u>' . "&nbsp;$namechs&nbsp;&nbsp;$nameeng&nbsp;" . '</u></td>';
+    $tdeeeno= '<td class="tdstaycenter">' . $eeeno . '</td>';
+    $tddate= '<td class="tdstayright">' . $nowdatestr . '</td>';
+    $tr .= $tdname. $tdeeeno. $tddate;
+    $tr .= "</tr>";
+    $tabhtml .= $tr;
+}
+$tabhtml.="</table>";
+echo $tabhtml;
+?>
 
 	</div><!-- /content -->
 	
