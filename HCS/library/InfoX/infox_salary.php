@@ -456,7 +456,9 @@ class infox_salary
         $normalsalary = 0;
         $othours = 0;
         $otsalary = 0;    
-        $fooddays = 0;    
+        $fooddays = 0;
+        if(array_key_exists(0, $result))
+        {    
         foreach($result[0] as $tmp)
         {
             if($tmp)
@@ -487,7 +489,7 @@ class infox_salary
                 }
             }
         }
-        
+        }
         //echo "normalhours=$normalhours<br>";
         $normalpay = $currentrate * $normalhours;
         $otpay = $otrate * $othours;
