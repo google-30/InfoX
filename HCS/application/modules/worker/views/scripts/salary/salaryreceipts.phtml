@@ -41,69 +41,107 @@ $nowdatestr=$nowobj->format("d/m/Y");
 
 <body> 
 <style>
-.tabsalary1 { table-layout: fixed; width:100%; }
-.tabsalary2 { table-layout: fixed; width:100%; border-collapse:collapse; }
-.tabsalary2 td { text-align:center; border:1px solid black; }
+.tabsalary1 { table-layout: fixed; width:100%; font-size:x-small;}
+.tabsalary2 { 
+    table-layout: fixed; 
+    width:100%; 
+    border-collapse:collapse;     
+    font-size:xx-small;
+    margin: 5px;
+}
+.tabsalary2 td { text-align:center; border:1px solid black; padding:5px; }
+.tabsalary3 { width:100%; font-size:x-small;}
 
 .tdstayright { text-align: right; }
 .tdstayleft { text-align: left; }
 .tdstaycenter { text-align: center; }
+
+@media all {
+	.page-break	{ display: none; }
+}
+
+@media print {
+	.page-break	{ display: block; page-break-before: always; }
+}
 </style>
 <script>
 </script>
 <div data-role="page">
-
+<!--
 	<div data-role="header" data-theme="b">
-	</div><!-- /header -->
+	</div> /header -->
 
 	<div data-role="content">
 <div id="error">
 <?=$this->error?>
 </div>
 <?php
+$counter=0;
 $srs=$salaryrecords;
 $datestr='月份/Mth:' . $year . "年". $month1 . "月/" . $month2 . "-" . $year;
-$header='<div style="float:left">HWA CHENG DEVELOPMENT PTE LTD<br>华城发展有限公司</div>';
-$header.='<div style="float:right">' . "$datestr</div>";
-$header.="<br><br>";
-$header.='<div style="margin:auto">Salary Receipt/工资收据</div>';
-
-
-$header1='<table class="tabsalary1"><tr><td class="tdstayleft">HWA CHENG DEVELOPMENT PTE LTD<br>华城发展有限公司</td>' .
+$header='<table class="tabsalary1"><tr><td class="tdstayleft">HWA CHENG DEVELOPMENT PTE LTD<br>华城发展有限公司</td>' .
 '<td></td><td class="tdstayright">' . $datestr . "</td></tr>";
-$header1.='<tr><td></td><td class="tdstaycenter">Salary Receipt/工资收据</td><td></td></tr>';
-//$header1.="</table>";
+$header.='<tr><td></td><td class="tdstaycenter">Salary Receipt/工资收据</td><td></td></tr>';
 $tabhtml="";
 foreach($srs as $tmp)
 {
+    $counter++;
+    
     $worker = $tmp->getWorker();
     $namechs = $worker->getNamechs();
     $nameeng = $worker->getNameeng();
     $eeeno = $worker->getEeeno();
     
     $normalpay = $tmp->getNormalpay();
-    $otpay = $tmp->getNormalpay();
+    $otpay = $tmp->getOtpay();
     $salary = $tmp->getSalary();
+    $allowance = "???";
+    $totalsalary = $normalpay +$otpay;
+    $fullmth = "???";
+    $foodpay = $tmp->getFoodpay();
+    $rtmonthpay = $tmp->getRtmonthpay();
+    $utfee = $tmp->getUtfee();
+    $utallowance = $tmp->getUtallowance();
+    $otherfee = $tmp->getOtherfee();
+    $netpay = $tmp->getSalary();
+    
     $tr= "<tr>"; 
-    $tdname='<td class="tdstayleft">工人姓名/Name:<u>' . "&nbsp;$namechs&nbsp;&nbsp;$nameeng&nbsp;" . '</u></td>';
-    $tdeeeno= '<td class="tdstaycenter">公司编号:' . $eeeno . '</td>';
-    $tddate= '<td class="tdstayright">日期/Date:' . $nowdatestr . '</td>';
+    $tdname='<td class="tdstayleft">工人姓名/Name:&nbsp;<u>' . "&nbsp;$namechs&nbsp;&nbsp;$nameeng&nbsp;" . '</u></td>';
+    $tdeeeno= '<td class="tdstaycenter">公司编号:&nbsp;' . $eeeno . '</td>';
+    $tddate= '<td class="tdstayright">日期/Date:&nbsp;' . $nowdatestr . '</td>';
     $tr .= $tdname. $tdeeeno. $tddate;
     $tr .= "</tr>";
     //$tabhtml .= $tr;
-    $tabhtml.=$header1 . $tr . "</table>";
+    $tabhtml.=$header . $tr . "</table>";
     
     $tds = "<td>基本工资<br>Basic Salary</td><td>加班工资<br>OT Salary</td>
     <td>补贴<br>Allowance</td><td>工资总计<br>Total Salary</td>
-    <td>满勤奖<br>Full Mth Attendance</td><td>扣" . $month1 . "餐费<br>Less Meal Fee</td>
+    <td>满勤奖<br>Full Mth Attendance</td><td>扣" . $month1 . "月餐费<br>Less Meal Fee</td>
     <td>预扣税<br>Advance Less Tax</td><td>水电生活费<br>Living Fee</td>
     <td>水电生活补贴<br>Allowance For Living</td><td>其他补扣费用<br>Other Addition or Deduction</td>
     <td>" . $month1 . "月实发工资<br>Net Pay for " . $month2 . "</td><td>工人确认签字<br>Signature Confirmed</td>";    
-    $tddata = "<td>$normalpay</td><td>$otpay</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>$salary</td><td></td>";
+    
+    $tddata = "<td>$". "$normalpay</td><td>$" . "$otpay</td><td>$" . "$allowance</td><td>$" . "$totalsalary</td><td>$"
+    . "$fullmth</td><td>$" . "$foodpay</td><td>$" . "$rtmonthpay</td><td>$" 
+    . "$utfee</td><td>$" . "$utallowance</td><td>$" . "$otherfee</td><td>$" . "$salary</td><td></td>";
     $trs = "<tr>$tds</tr><tr>$tddata</tr>";
     $datatab = '<table class="tabsalary2">' . $trs . "</table>";    
     
-    $tabhtml .= $datatab. "<hr><br>";    
+    $trs = '<tr><td style="width:15%">其他费用补扣说明：</td><td></td></tr>';
+    $trs.= '<tr><td>备注：</td><td>本人同意并已领取该月工资。如该月工资有问题，本人会在领取工资后的两个月之内及时与公司核查。超过两个月后，本人不再追讨任何工资纠纷。</td></tr>';
+    $trs.= "<tr><td>Remark：</td><td>I have agreed and received the abovesaid salary. If any discrepancy on the abovesaid salary, I shall immediately check with the company within two months from date of receipt. Any time elapsing two months, I shall never ask more any additional amount.</td></tr>";
+    $extratab = '<table class="tabsalary3">' . $trs . '</table>';
+
+    if($counter==3)
+    {
+        $breaker = '<div class="page-break"></div>';
+        $counter = 0;
+    }
+    else
+    {
+        $breaker = "";    
+    }
+    $tabhtml .= $datatab. $extratab . "<hr><br>$breaker";    
 }
 
 echo $tabhtml;
