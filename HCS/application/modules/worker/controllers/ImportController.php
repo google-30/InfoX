@@ -153,7 +153,7 @@ class Worker_ImportController extends Zend_Controller_Action
 
     private function storeDetails($sheetname, $objWorksheet)
     {
-        $datecolumns = array(6,7,8,11,12,16,18,19,20,);
+        $datecolumns = array(6,7,8,11,12,15, 16,17,19,);
 
         $i=0;
         $j=0;
@@ -244,67 +244,75 @@ class Worker_ImportController extends Zend_Controller_Action
                     break;
                 case 14:
                     //echo "pano=" . $value . "<br>";
-                    $obj->setPano($value);
-                    break;
-                case 15:
-                    $obj->setSbno($value);
-                    break;
-                case 16:
-                    $obj->setSecurityexp($value);
-                    break;
-                case 17:
+                    //$obj->setPano($value);
                     $obj->setWorktype($value);
                     break;
-                case 18:
-                    $obj->setArrivaldate($value);
+                case 15:
+                    //$obj->setSbno($value);
+                    $obj->setArrivaldate($value);                    
                     break;
-                case 19:
-                    $obj->setMedicaldate($value);
+                case 16:
+                    $obj->setMedicaldate($value);                
+                    
                     break;
-                case 20:
+                case 17:
                     $obj->setCsoc($value);
                     break;
-                case 21:
+                case 18:
                     $obj->setMedicalinsurance($value);
                     break;
-                case 22:
+                case 19:
+                    $obj->setSecurityexp($value);
+                    break;
+                case 20:
                     $obj->setWorkingsite($value);
                     break;
-                case 23:
+                case 21:
                     $obj->setDormitory($value);
                     break;
-                case 24:
-                    $obj->setHometown($value);
-                    break;
-                case 25:
-                    $obj->setEducation($value);
-                    break;
-                case 26:
-                    $obj->setAge($value);
-                    break;
-                case 27:
-                    $obj->setMarital($value);
-                    break;
-                case 28:
-                    $obj->setConstructionworker($value);
-                    break;
-                case 29:
-                    $obj->setApplyfor($value);
-                    break;
-                case 30:
+                case 22:
                     $obj->setGoodat($value);
                     break;
-                case 31:
+                case 23:
                     $obj->setContactno1($value);
                     break;
-                case 32:
+                case 24:
+                    //
                     $obj->setContactno2($value);
                     break;
-                case 33:
+                case 25:
                     $obj->setCertificate($value);
+                    //
+                    break;
+                case 26:
+                    $obj->setAgent($value);
+                    break;
+                case 27:
+                    $obj->setRemarks($value);
+                    //
+                    break;
+                case 28:
+                    $obj->setHometown($value);
+                    //
+                    break;
+                case 29:
+                    $obj->setEducation($value);
+                    //
+                    break;
+                case 30:
+                    $obj->setAge($value);
+                    break;
+                case 31:
+                    $obj->setMarital($value);
+                    break;
+                case 32:
+                    $obj->setConstructionworker($value);
+                    break;
+                case 33:
+                    $obj->setApplyfor($value);
                     break;
                 case 34:
-                    $obj->setRemarks($value);
+                    
                     break;
                 }
             }
