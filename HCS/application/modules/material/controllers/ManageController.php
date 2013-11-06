@@ -326,6 +326,16 @@ class Material_ManageController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->getmateriallist();
     }
+    
+    public function supplypriceAction()
+    {
+        $id = $this->_getParam("id");
+        $material = $this->_material->findOneBy(array('id' => $id));
+
+        $this->view->maindata = $material;
+        $this->getTypes();
+        $this->view->supplypricearr = $supplypricearr = infox_material::getSupplypricesByMaterial($material);        
+    }
 }
 
 

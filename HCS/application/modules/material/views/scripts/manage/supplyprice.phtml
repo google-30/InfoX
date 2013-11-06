@@ -1,0 +1,113 @@
+<?php
+$data=$this->maindata;
+$supplypricearr=$this->supplypricearr;
+$defsupplierid=0;
+$defsupplier=$data->getSupplyprice();
+if($defsupplier)
+{
+    $defsupplierid=$defsupplier->getId(); 
+}
+
+
+?>
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+<div data-role="collapsible" data-collapsed="true">
+<h3>添加价格信息</h3>
+</div>
+<div data-role="collapsible" data-collapsed="true">
+<h3>选择优先供应商</h3>
+</div>
+</div>
+
+<fieldset>
+<legend><strong>供应商价格信息</strong></legend>
+<table class="grid">
+<thead><tr><th>抉择</th><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th><th>Amount</th></tr></thead>
+<tbody>
+<?php
+$tabrows="";
+foreach($supplypricearr as $tmp)
+{
+    $id = $tmp->getId();
+    $supplier = $tmp->getSupplier();
+    $suppliername = $supplier ? $supplier->getName() : "&nbsp;";
+    $unit = $tmp->getUnit();
+    $rate = $tmp->getRate();
+    $quantity = $tmp->getQuantity();
+    $dodate = $tmp->getUpdate();
+    $dodatestr = $dodate ? $dodate->format("Y-m-d") : "&nbsp;";    
+
+    $row = "";    
+
+    if($id == $defsupplierid)
+    {
+        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked data-role="none"/></td>';        
+    }
+    else
+    {
+        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" data-role="none"/></td>';    
+    }
+
+    $tdsupplier = "<td>$suppliername</td>";
+    $tdunit = "<td>$unit</td>";
+    //$tdupdate = "<td>$dodatestr</td>";
+    //$tdrate = "<td>$rate</td>";
+    $tdquantity = "<td>$quantity</td>";
+    $tdamount = "<td>" . $quantity*$rate . "</td>";
+
+    $tdrate = '<td><input type="text" value="'. $rate .'" name="rate' . $id . '" id="rate' . $id .'" placeholder="0"></td>';
+    $tdupdate = '<td><input type="text" class="classupdate" value="'. $dodatestr .'" name="update' . $id . '" id="update' . $id .'"></td>';
+    $row .= "<tr>" . $tdradio . $tdsupplier . $tdunit. $tdupdate . $tdrate . $tdquantity . $tdamount ."</tr>";    
+
+    $tabrows .= $row;    
+}
+echo $tabrows;
+
+if(0)
+{
+$suppliers= $this->suppliers;
+$supplyprice = $this->supplyprice;
+foreach($suppliers as $tmp)
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+   
+    $price = 0;
+    $update = "";
+
+    if(count($supplyprice))
+    {
+        foreach($supplyprice as $sprice)
+        {
+            $sid = $sprice->getSupplier()->getId();
+            if($sid==$id)
+            {
+                $price = $sprice->getPrice();
+                $update = $sprice->getUpdate()->format("Y/m/d");
+            }        
+        }
+    }
+
+    $row = "";
+
+    if($id == $defsupplierid)
+    {
+        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked/></td>';        
+    }
+    else
+    {
+        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" /></td>';    
+    }
+    $tdname = "<td>$name</td>";
+    $tdprice = '<td><input type="text" value="'. $price .'" name="price' . $id . '" id="price' . $id .'" placeholder="0"></td>';
+    $tdupdate = '<td><input type="text" class="classupdate" value="'. $update .'" name="update' . $id . '" id="update' . $id .'"></td>';
+    $row .= "<tr>" . $tdradio . $tdname . $tdprice . $tdupdate . "</tr>";
+    echo $row;
+}
+}
+?>
+</tbody>
+</table>
+</form> <!-- dataform -->
+</fieldset>
+
