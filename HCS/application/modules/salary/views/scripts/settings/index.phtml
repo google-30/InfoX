@@ -7,6 +7,8 @@ $absencedays="";
 $absencelow="";
 $absencehigh="";
 $absencetotal="";
+$cbasic="";
+$bbasic="";
 
 $cotmultiple=$this->cotmultiple;
 $botmultiple=$this->botmultiple;
@@ -16,7 +18,8 @@ $absencedays=$this->absencedays;
 $absencelow=$this->absencelow;
 $absencehigh=$this->absencehigh;
 $absencetotal=$this->absencetotal;
-
+$cbasic=$this->cbasic;
+$bbasic=$this->bbasic;
 ?>
 <form method="post" action="/salary/settings/submit">
 <div data-role="fieldcontain">
@@ -57,6 +60,16 @@ $absencetotal=$this->absencetotal;
 <div data-role="fieldcontain">
     <label for="absencetotal">扣款上限:</label>
     <input data-mini="true" type="text" name="absencetotal" id="absencetotal" value="<?php echo $absencetotal; ?>" class=""/>
+</div>
+
+<div data-role="fieldcontain">
+    <label for="cbasic">华人基本工资:</label>
+    <input data-mini="true" type="text" name="cbasic" id="cbasic" value="<?=$cbasic?>" class=""/>
+</div>
+
+<div data-role="fieldcontain">
+    <label for="bbasic">孟加拉人基本工资:</label>
+    <input data-mini="true" type="text" name="bbasic" id="bbasic" value="<?=$bbasic?>" class=""/>
 </div>
 <input type="submit" value="提交" data-mini="true" data-theme="a">
 

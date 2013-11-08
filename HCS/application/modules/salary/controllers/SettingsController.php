@@ -56,6 +56,15 @@ class Salary_SettingsController extends Zend_Controller_Action
                     $value = infox_salary::getSettingBySectionName("salary", "absencetotal");
                     $this->view->absencetotal = $value;
                     break;
+                case "cbasic";
+                    $value = infox_salary::getSettingBySectionName("salary", "cbasic");
+                    $this->view->cbasic = $value;
+                    break;
+                case "bbasic";
+                    $value = infox_salary::getSettingBySectionName("salary", "bbasic");
+                    $this->view->bbasic = $value;
+                    break;
+                    
                 }
         }
     }

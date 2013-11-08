@@ -28,7 +28,8 @@ class infox_salary
     public static function getSettingArray()
     {
         $settingnames = array("cotmultiple", "botmultiple", "workerfood", "leaderfood", 
-                    "absencedays", "absencelow", "absencehigh", "absencetotal");
+                    "absencedays", "absencelow", "absencehigh", "absencetotal", 
+                    'bbasic', 'cbasic');
         return $settingnames;        
     }
 
