@@ -394,7 +394,6 @@ class Worker_SalaryController extends Zend_Controller_Action
         
         $this->view->salaryrecords = $records;
         $this->view->monthobj = $monthobj;
-
     }
     
     private function getReceiptsByRecords($records)

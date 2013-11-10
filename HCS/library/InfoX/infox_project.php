@@ -232,9 +232,16 @@ class infox_project
         $today = $nowdate->format("d");
         $todaystyle= $highlight ? "background:#ff5c5c;" : "";        
 
+        /*
+        $attendDate = $attendrecord->getMonth();
+        $attendmonth = $attendDate->format("m");
+        $attendyear = $attendDate->format("Y");
+        $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear); 
+        */
+        
         $attendtab = "<table>";
         $tds="";
-        for($i=0; $i<31; $i++)
+        for($i=0; $i<$daysinmonth; $i++)
         {
             $j = $i+1;
             $value = ($j<10) ? "0$j" : $j;
@@ -264,7 +271,7 @@ class infox_project
         $attendtab .= $tr;            
 
         $tds = "";    
-        for($i=0; $i<31; $i++)
+        for($i=0; $i<$daysinmonth; $i++)
         {
             $j = $i + 1;
             $value = $attendresult[0][$i];
@@ -277,7 +284,7 @@ class infox_project
         $attendtab .= $tr;
 
         $tds = "";    
-        for($i=0; $i<31; $i++)
+        for($i=0; $i<$daysinmonth; $i++)
         {
             $j = $i +1;
             $value = $attendresult[1][$i];
@@ -299,12 +306,19 @@ class infox_project
         $attendresult = self::getAttendFoodData($attendrecord);
 
         $nowdate = new Datetime("");
+        $nowmonthstr = $nowdate->format("Ym"); 
+        $highlight = ($nowmonthstr == $monthstr) ? true :false;        
         $today = $nowdate->format("d");
         $todaystyle= $highlight ? "background:#ff5c5c;" : "";        
-
+        
+        $attendDate = new Datetime($monthstr . "01"); 
+        $attendmonth = $attendDate->format("m");
+        $attendyear = $attendDate->format("Y");
+        $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear); 
+        
         $attendtab = "<table>";
         $tds="";
-        for($i=0; $i<31; $i++)
+        for($i=0; $i<$daysinmonth; $i++)
         {
             $j = $i+1;
             $value = ($j<10) ? "0$j" : $j;
@@ -322,7 +336,7 @@ class infox_project
         $attendtab .= $tr;            
 
         $tds = "";    
-        for($i=0; $i<31; $i++)
+        for($i=0; $i<$daysinmonth; $i++)
         {
             $j = $i + 1;
             $value = $attendresult[0][$i];
@@ -335,7 +349,7 @@ class infox_project
         $attendtab .= $tr;
 
         $tds = "";    
-        for($i=0; $i<31; $i++)
+        for($i=0; $i<$daysinmonth; $i++)
         {
             $j = $i +1;
             $value = $attendresult[1][$i];
