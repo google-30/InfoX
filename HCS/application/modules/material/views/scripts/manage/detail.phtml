@@ -42,14 +42,15 @@ $nameeng="";
 $description="";
 $supplier="";
 $date="";
-$suppliers=$this->suppliers;
 $pic="";
 $usage="";
 $typeid=0;
 $defsupplierid=0;
-
+$supplypricearr=array();
 //$units=$this->units;
 //$unit="";
+$suppliers=$this->suppliers;
+$spareahide="display:none;";
 
 if($mode==="Edit")
 {
@@ -71,6 +72,7 @@ if($defsupplier)
 }
 
 $supplypricearr=$this->supplypricearr;
+$spareahide="";
 }
 ?>
 
@@ -87,7 +89,7 @@ $supplypricearr=$this->supplypricearr;
 <div data-role="fieldcontain">
     <label for="file" class="ui-input-text">材料照片:</label>
     <input type="file" name="file" id="file">
-    <img src="<?php echo $pic; ?>" alt="" width="40%"  id="pic" name="pic">
+    <img src="<?=$pic ?>" alt="" width="100%  id="pic" name="pic">
 </div>
 </td>
 <td>
@@ -152,19 +154,42 @@ echo $options;
 </table>
 </fieldset>
 
+<fieldset id="supplypricearea" style="<?=$spareahide ?>">
+<legend><strong>供应商价格信息</strong></legend>
+
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 <div data-role="collapsible" data-collapsed="true">
 <h3>添加价格信息</h3>
+<?php
+$selecthtml="";
+if(!count($suppliers))
+{
+$selecthtml="<strong>请导入材料列表或者手动添加供应商数据</strong>";
+}
+else
+{
+$options="";
+foreach($suppliers as $tmp) 
+{
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+    $options .= '<option value="' . $id . '">' . $name . '</option>';
+}
+$selecthtml.= '<select data-mini="true">' . $options. "</select>";
+}
+echo $selecthtml;
+?>
+<hr>
+</div>
+</div>
 
-</div>
-</div>
-<fieldset>
-<legend><strong>供应商价格信息</strong></legend>
 <table class="grid">
 <thead><tr><th>抉择</th><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th><th>Amount</th></tr></thead>
 <tbody>
 <?php
 $tabrows="";
+if(count($supplypricearr))
+{
 foreach($supplypricearr as $tmp)
 {
     $id = $tmp->getId();
@@ -199,6 +224,7 @@ foreach($supplypricearr as $tmp)
     $row .= "<tr>" . $tdradio . $tdsupplier . $tdunit. $tdupdate . $tdrate . $tdquantity . $tdamount ."</tr>";    
 
     $tabrows .= $row;    
+}
 }
 echo $tabrows;
 

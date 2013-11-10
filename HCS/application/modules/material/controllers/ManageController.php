@@ -78,12 +78,11 @@ class Material_ManageController extends Zend_Controller_Action
         $material = $this->_material->findOneBy(array('id' => $id));
 
         $this->view->maindata = $material;
-        /*
-        $this->getSuppliers();
+        /*        
         $this->getSupplyprice($id);
         $this->getUnits();
         */
-
+        $this->getSuppliers();
         $this->getTypes();
         $this->view->supplypricearr = $supplypricearr = infox_material::getSupplypricesByMaterial($material);
     }
@@ -109,8 +108,7 @@ class Material_ManageController extends Zend_Controller_Action
         if(0)
         {    
             $requests = $this->getRequest()->getPost();
-            var_dump($requests);
-            return;
+            var_dump($requests); return;
         }   
 
         $mode = $this->getParam("mode", "Create");
@@ -244,10 +242,11 @@ class Material_ManageController extends Zend_Controller_Action
         $types = $this->_materialtype->findAll();
         $this->view->types = $types;
     }
+    
     private function storePic($id)
-    {// http://www.w3schools.com/php/php_file_upload.asp
+    {// http://www.w3schools.com/php/php_file_upload.asp        
+        echo "<br>Store Material Pic ... " .  $_FILES["file"]["name"] . "<br>";
         
-        echo "<br>";
         $newfile = "";   
         $uploadpath = UPLOAD_PATH;
         $allowedExts = array("gif", "jpeg", "jpg", "png");
@@ -258,7 +257,7 @@ class Material_ManageController extends Zend_Controller_Action
                 || ($_FILES["file"]["type"] == "image/pjpeg")
                 || ($_FILES["file"]["type"] == "image/x-png")
                 || ($_FILES["file"]["type"] == "image/png"))
-                && ($_FILES["file"]["size"] < 100000)
+                //&& ($_FILES["file"]["size"] < 100000)
                 && in_array($extension, $allowedExts))
         {
             if ($_FILES["file"]["error"] > 0)

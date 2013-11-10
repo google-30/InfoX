@@ -1,5 +1,6 @@
 <style>
 #uploaddiv { display: none; }
+#Materials { font-size:medium;}
 </style>
 <script>
 $(document).on("click", ".show-page-loading-msg", function() {
@@ -206,7 +207,7 @@ echo $this->grid("Materials", true)
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Material())
           ->data($maindata)
-          ->action(':action', '价格管理', array( 'url'=>array('action'=>'supplyprice')))          
+          //->action(':action', '价格管理', array( 'url'=>array('action'=>'supplyprice')))          
           ->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
           ->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
 ?>
