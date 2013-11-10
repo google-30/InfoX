@@ -124,8 +124,10 @@ foreach($types as $tmp)
     $id = $tmp->getId();
     $main = $tmp->getMain();
     $maintypechs = $main->getTypechs();
+    $maintypeeng = $main->getTypeeng();    
     $typechs = $tmp->getTypechs();
-    $typestr = $maintypechs . "::" . $typechs;
+    $typeeng = $tmp->getTypeeng();    
+    $typestr = "$maintypeeng($maintypechs)::$typeeng($typechs)";
 
     if($id == $typeid)
     {

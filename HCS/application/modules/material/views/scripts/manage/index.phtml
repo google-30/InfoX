@@ -169,7 +169,7 @@ $maindata=$this->maindata;
 </div>
 
 <div data-role="collapsible" data-collapsed="true">
-<h3>列表操作</h3>
+<h3>表格操作</h3>
 <button data-theme="a" data-mini="true" onclick="previewlist()">预览打印</button>
 </div>
 <hr>
@@ -195,13 +195,14 @@ echo $selects;
 
 echo $this->grid("Materials", true)
           //->field('type', '分类')
-          ->field('nameeng', '英文名称')
-          ->field('name','中文名称')
-          ->field('description', '规格')          
-          ->field('supplier', '优先供应商')
-          ->field('unit', '单位')
-          ->field('price', '价格')  
-          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->field('nameeng', 'Name Eng')
+          ->field('name','Name Chs')
+          ->field('description', 'Description ')          
+          ->field('unit', 'Unit')
+          ->field('rate', 'Rate')
+          ->field('quantity', 'Quantity ')          
+          ->field('supplier', 'Supplier')  
+          ->actionField(':action', "Action", '&nbsp;|&nbsp;')
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Material())

@@ -4,9 +4,30 @@ class GridHelper_Material extends Grid_Helper_Abstract
 {
     protected function td_supplier($field, $row) 
     {
-        return $row->$field ? $row->$field->getName() : "&nbsp;";   
+        //return $row->$field ? $row->$field->getName() : "&nbsp;";   
+        $supplier = $row['supplyprice'] ? $row['supplyprice']->getSupplier(): null;
+        return $supplier ? $supplier->getName() : "&nbsp;";   
     }
 
+    protected function td_rate($field, $row) 
+    {
+        //return $row->$field ? $row->$field->getName() : "&nbsp;";   
+        $rate = $row['supplyprice'] ? $row['supplyprice']->getRate(): "&nbsp;";
+        return $rate;   
+    }
+
+    protected function td_unit($field, $row) 
+    {
+        $unit = $row['supplyprice'] ? $row['supplyprice']->getUnit(): "&nbsp;";
+        return $unit;   
+    }
+
+    protected function td_quantity($field, $row) 
+    {
+        $data = $row['supplyprice'] ? $row['supplyprice']->getQuantity(): "&nbsp;";
+        return $data;   
+    }
+    
     protected function td_supplier1($field, $row) 
     {
         $em = Zend_Registry::get('em');

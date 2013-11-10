@@ -37,43 +37,23 @@ class Material_ManageController extends Zend_Controller_Action
         $maintype = $this->_materialtype->findBy(array("typeeng"=>$requestsheet));
         $subtypes = $this->_materialtype->findBy(array("main"=>$maintype));
         $typestr = "";
+        $typesarr = array();
         foreach($subtypes as $type)
         {
             $typeid = $type->getId();
             $typestr .= $typeid . ",";
+            $typesarr[] = $typeid;
         }
         $typestr .="0";
-        echo "typestr=$typestr";
+        //echo "typestr=$typestr";
         
         $query = $this->_em->createQuery(
-        "select m from Synrgic\Infox\Material m where m.id in ($typestr)");        
+        "select m from Synrgic\Infox\Material m where m.type in ($typestr)");        
         $result = $query->getResult();
         $this->view->maindata = $result;
+        //echo "result count=" . count($result);
         $this->view->sheetarr = $sheetarr;
         $this->view->sheet = $requestsheet;        
-        /*
-        $dataarr = array();                    
-        if(!in_array($requestsheet, $sheetarr))
-        {
-            $alldata = $this->_material->findAll();
-            foreach($alldata as $tmp)
-            {
-                $sheet = $tmp->getSheet();
-                if(!in_array($sheet, $sheetarr))
-                {
-                    $dataarr[] = $tmp;
-                }
-            }            
-        }
-        else
-        {
-            $dataarr = $this->_material->findBy(array('sheet'=>$requestsheet));
-        }
-
-        $this->view->sheet = $requestsheet;        
-        $this->view->sheetarr = $sheetarr;
-        $this->view->maindata = $dataarr;
-        */
     }
 
     private function getmateriallist()
@@ -372,7 +352,7 @@ class Material_ManageController extends Zend_Controller_Action
     public function previewlistAction()
     {
         $this->_helper->layout->disableLayout();
-        $this->getmateriallist();
+        $this->getmateriallistNew();
     }
     
     public function supplypriceAction()

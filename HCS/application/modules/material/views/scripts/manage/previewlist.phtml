@@ -27,9 +27,16 @@ $(function() {
         "bInfo": false,
         "bSort": true,
     });
+    
+$("#sheetselect").change(function() {
+    var sheetname = $(this).val();
+    var url = "/material/manage/previewlist?sheet=" + sheetname;
+    redirect(url);
+});    
 });
 
 $("#sheetselect").change(function() {
+alert("change");
     var sheetname = $(this).val();
     var url = "/material/manage/previewlist?sheet=" + sheetname;
     redirect(url);
@@ -65,7 +72,7 @@ $selects='<select data-mini="true" id="sheetselect">';
 $selects.=$options;
 $selects.='</select><br>';
 echo $selects;
-
+/*
 echo $this->grid("Materials", true)
           ->field('nameeng', '英文名称')
           ->field('name','中文名称')
@@ -74,6 +81,21 @@ echo $this->grid("Materials", true)
           ->field('supplier', '优先供应商')
           ->field('price', '价格')  
           ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+          ->setSorting(false)  
+          ->paginatorEnabled(false)
+          ->helper(new GridHelper_Material())
+          ->data($maindata);
+*/          
+echo $this->grid("Materials", true)
+          //->field('type', '分类')
+          ->field('nameeng', 'Name Eng')
+          ->field('name','Name Chs')
+          ->field('description', 'Description ')          
+          ->field('unit', 'Unit')
+          ->field('rate', 'Rate')
+          ->field('quantity', 'Quantity ')          
+          ->field('supplier', 'Supplier')  
+          ->actionField(':action', "Action", '&nbsp;|&nbsp;')
           ->setSorting(false)  
           ->paginatorEnabled(false)
           ->helper(new GridHelper_Material())
