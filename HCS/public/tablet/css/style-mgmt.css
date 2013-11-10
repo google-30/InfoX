@@ -35,7 +35,7 @@ table.grid th {
 table.grid td {
     border-right: 0px solid #c1dad7;
     border-bottom: 0px solid #c1dad7;
-    padding: 10px 20px 10px 20px;
+    /*padding: 10px 20px 10px 20px;*/
     text-align: center;
 }
 
