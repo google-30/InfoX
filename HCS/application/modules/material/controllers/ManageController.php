@@ -25,7 +25,55 @@ class Material_ManageController extends Zend_Controller_Action
 
     public function indexAction()
     {   
-        $this->getmateriallist();
+        $this->getmateriallistNew();
+    }
+
+    private function getmateriallistNew()
+    {
+        $sheetarr =  array("safety material","formwork","concrete", "rebar",
+        "equipment","electrical","worker domitory","logistics", "water pipe","spare parts","scaffolding", );
+
+        $requestsheet = $this->getParam("sheet", $sheetarr[0]);     
+        $maintype = $this->_materialtype->findBy(array("typeeng"=>$requestsheet));
+        $subtypes = $this->_materialtype->findBy(array("main"=>$maintype));
+        $typestr = "";
+        foreach($subtypes as $type)
+        {
+            $typeid = $type->getId();
+            $typestr .= $typeid . ",";
+        }
+        $typestr .="0";
+        echo "typestr=$typestr";
+        
+        $query = $this->_em->createQuery(
+        "select m from Synrgic\Infox\Material m where m.id in ($typestr)");        
+        $result = $query->getResult();
+        $this->view->maindata = $result;
+        $this->view->sheetarr = $sheetarr;
+        $this->view->sheet = $requestsheet;        
+        /*
+        $dataarr = array();                    
+        if(!in_array($requestsheet, $sheetarr))
+        {
+            $alldata = $this->_material->findAll();
+            foreach($alldata as $tmp)
+            {
+                $sheet = $tmp->getSheet();
+                if(!in_array($sheet, $sheetarr))
+                {
+                    $dataarr[] = $tmp;
+                }
+            }            
+        }
+        else
+        {
+            $dataarr = $this->_material->findBy(array('sheet'=>$requestsheet));
+        }
+
+        $this->view->sheet = $requestsheet;        
+        $this->view->sheetarr = $sheetarr;
+        $this->view->maindata = $dataarr;
+        */
     }
 
     private function getmateriallist()
@@ -157,7 +205,7 @@ class Material_ManageController extends Zend_Controller_Action
             return;
         }        
 
-        $id = $material->getId();
+        $materialid = $id = $material->getId();
 
         // upload pic
         $this->storePic($id);
@@ -215,7 +263,8 @@ class Material_ManageController extends Zend_Controller_Action
             return;
         }        
 
-        //$this->_redirect("material/manage");
+        $url ="/material/manage/edit/id/$materialid";
+        $this->_redirect($url);
     }    
 
     private function getSuppliers()
@@ -334,6 +383,47 @@ class Material_ManageController extends Zend_Controller_Action
         $this->view->maindata = $material;
         $this->getTypes();
         $this->view->supplypricearr = $supplypricearr = infox_material::getSupplypricesByMaterial($material);        
+    }
+    
+    public function postsupplypriceAction()
+    {
+        infox_common::turnoffView($this->_helper);
+        if(0)
+        {    
+            $requests = $this->getRequest()->getPost();
+            var_dump($requests); return;
+        }           
+        
+        $supplierid = $this->getParam("supplier", 0);
+        $unit = $this->getParam("unit", "");
+        $rate = $this->getParam("rate", 0);
+        $quantity = $this->getParam("quantity", 0);
+        $dodate = $this->getParam("dodate", "now");
+        $materialid = $this->getParam("material", 0);
+        
+        if($supplierid=="" || $supplierid==0 || $unit=="" || $rate==0 || $quantity==0)
+        {
+            echo "提交失败，请提供合理价格数据";
+            return;
+        }
+        
+        $spobj = new \Synrgic\Infox\Supplyprice(); 
+        $supplier = $this->_supplier->findOneBy(array("id"=>$supplierid));
+        $spobj->setSupplier($supplier);
+        $material = $this->_material->findOneBy(array("id"=>$materialid));
+        $spobj->setMaterial($material);
+        $spobj->setUnit($unit);
+        $spobj->setRate($rate);
+        $spobj->setQuantity($quantity);
+        $spobj->setUpdate(new Datetime($dodate));
+        $this->_em->persist($spobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }          
+        echo "提交成功";
     }
 }
 

@@ -32,6 +32,25 @@ $(function() {
     });
 });
 
+function supplypricenew()
+{
+    //alert("supplypricenew");
+    var supplier = $("#suppliernew").val();
+    var unit = $("#unitnew").val();
+    var dodate = $("#dodatenew").val();
+    var rate = $("#ratenew").val();
+    var quantity = $("#quantitynew").val();    
+    var material = $("#id").val();
+    
+    $.post("/material/manage/postsupplyprice", { supplier:supplier, unit:unit, 
+    dodate:dodate, rate:rate, quantity:quantity, material:material }, 
+    function(data) {
+        //console.log(data);
+        alert(data);        
+        window.location.reload();
+    })      
+}
+
 </script>
 <?php
 $data=$this->maindata;
@@ -62,7 +81,7 @@ if($data->getSupplier()){ $supplier=$data->getSupplier()->getName(); }
 $date=$data->getUpdate();
 $date= $date ? $date->format('Y/m/d') : "";
 $pic=$data->getPic();
-$usage="";
+$usage=$data->getUsage();
 $typeobj=$data->getType();
 if($typeobj) { $typeid=$typeobj->getId(); } 
 $defsupplier=$data->getSupplyprice();
@@ -76,9 +95,9 @@ $spareahide="";
 }
 ?>
 
+<form id="dataform" enctype="multipart/form-data" method="post" action="/material/manage/submit">
 <fieldset>
 <legend><strong>材料信息</strong></legend>
-<form id="dataform" enctype="multipart/form-data" method="post" action="/material/manage/submit">
 <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
 <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 <input type="hidden" id="defsupplierid" name="defsupplierid" value="<?php echo $defsupplierid; ?>">
@@ -89,7 +108,7 @@ $spareahide="";
 <div data-role="fieldcontain">
     <label for="file" class="ui-input-text">材料照片:</label>
     <input type="file" name="file" id="file">
-    <img src="<?=$pic ?>" alt="" width="100%  id="pic" name="pic">
+    <img src="<?=$pic ?>" alt="" width="100%"  id="pic" name="pic">
 </div>
 </td>
 <td>
@@ -140,9 +159,8 @@ echo $options;
 <label for="description">材料规格:</label>
 <input type="text" name="description" id="description" value="<?php echo $description; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
 </div>
-</td><td>
-
-</td></tr>
+</td>
+</tr>
 <tr>
 <td>
 <div data-role="fieldcontain">
@@ -155,7 +173,7 @@ echo $options;
 </fieldset>
 
 <fieldset id="supplypricearea" style="<?=$spareahide ?>">
-<legend><strong>供应商价格信息</strong></legend>
+<legend><strong>价格信息</strong></legend>
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 <div data-role="collapsible" data-collapsed="true">
@@ -168,21 +186,32 @@ $selecthtml="<strong>请导入材料列表或者手动添加供应商数据</str
 }
 else
 {
-$options="";
+$options='<option value="0">选择供应商</option>';
 foreach($suppliers as $tmp) 
 {
     $id = $tmp->getId();
     $name = $tmp->getName();
     $options .= '<option value="' . $id . '">' . $name . '</option>';
 }
-$selecthtml.= '<select data-mini="true">' . $options. "</select>";
+$selecthtml.= '<select data-mini="true" id="suppliernew">' . $options. "</select>";
 }
-echo $selecthtml;
+
+$unittd='<td><input type="text" value="" id="unitnew" placeholder="单位，比如pair, box, etc."></td>';
+$dodatetd='<td><input type="text" value="" id="dodatenew" class="classupdate" placeholder="点击选择Do date"></td>';
+$ratetd='<td><input type="text" value="" id="ratenew" placeholder="rate, 比如5，表示5新元"></td>';
+$quantitytd='<td><input type="text" value="" id="quantitynew" placeholder="Quantity, 比如5,表示5个unit的material"></td>';
+$tr="<tr><td>$selecthtml</td> $unittd $dodatetd $ratetd $quantitytd</tr>";
+$inputtab='<table class="grid">
+<thead><tr><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th></tr></thead>
+<tbody>' . $tr . "</tbody></table>";
+
+echo $inputtab;
 ?>
-<hr>
-</div>
+<input type="button" value="添加价格信息" onclick="supplypricenew()" data-mini="true" data-theme="a">
 </div>
 
+<div data-role="collapsible" data-collapsed="true">
+<h3>已有价格信息</h3>
 <table class="grid">
 <thead><tr><th>抉择</th><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th><th>Amount</th></tr></thead>
 <tbody>
@@ -273,8 +302,11 @@ foreach($suppliers as $tmp)
 ?>
 </tbody>
 </table>
-</form> <!-- dataform -->
+</div>
+</div>
+
 </fieldset>
+</form> <!-- dataform -->
 
 <button type="button" id="submitbutton" name="submitbutton" onclick="submitform()" data-theme="a" data-mini="true">提交</button>
 <br>

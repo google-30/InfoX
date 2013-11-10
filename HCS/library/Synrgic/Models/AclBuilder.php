@@ -140,7 +140,8 @@ class Synrgic_Models_AclBuilder {
             'datainput', 'datapost', 'salarysheet','salaryreceipts'),
             'salary:settings'=>array('view', 'submit'),
 
-            'material:manage'=>array('view','add','edit','delete','submit','importmaterials', 'previewlist','supplyprice'),
+            'material:manage'=>array('view','add','edit','delete','submit',
+            'importmaterials', 'previewlist','supplyprice', 'postsupplyprice'),
             'material:apply'=>array('view','postdata', 'applymaterials', 'getselections', 'delselection','submitselections', 'applist', 'appedit','appmatdel'),
             'material:appmanage'=>array('view','appedit','appdel','appmatdel','appdetail','updatematapp',
 'submitmatapps','reviewmatapps','rejectmatapps','previewform','previeworder'),
