@@ -17,7 +17,9 @@ body
 #header 
 {
 	height: 90px;
-    background: linear-gradient(#c4c4c4, #a4a4a4) repeat scroll 0 0 #a4a4a4;
+    /*background: linear-gradient(#c4c4c4, #a4a4a4) repeat scroll 0 0 #a4a4a4;*/
+    /*background: url("/images/wrapper-header_90.png") repeat-x scroll 0 0 #F0F0F0;    */
+    background: linear-gradient(#4EB7C1, #309EAD) repeat scroll 0 0 #309EAD;
 	background-color: #a4a4a4;
 	color:#555252;
 	position:relative;
@@ -41,29 +43,34 @@ body
 #title 
 {
 	float:left;
-	height:70px;
-	line-height:70px;
+	/*height:70px;*/
+	/*line-height:70px;*/
     font-size:35px;
     font-weight:normal;
 	position: relative;
-	top: 10px;
+	top: 26px;
+	color: #FFFFFF;	
 }
 
 #logout
 {
 	float:right;
 	font-size:1.1em;
-	height:70px;
-	line-height:70px;
+	/*height:70px;*/
+	/*line-height:70px;*/
 	margin-right: 0.8em;
 	/*margin-top: 45px;*/
 	position: relative;
-	top: 10px;
+	top: 35px;
 }
 
 #header
 {
     border-bottom: 0px solid #4f6b72;
+}
+
+#header .ui-link {
+    color: #FFFFFF;
 }
 
 #footer
@@ -133,7 +140,7 @@ body
 #content
 {
     /*margin-left: 180px;*/
-    padding-top: 30px;
+    padding-top: 12px;
 }
 
 #content-box {

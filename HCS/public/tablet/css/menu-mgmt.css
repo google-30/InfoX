@@ -1,4 +1,6 @@
 @CHARSET "UTF-8";
+#menu { top:10px; }
+
 #menu * {
 	margin:0px;
 	padding:0px;
@@ -23,7 +25,7 @@
 #menu a.topmenu + ul > li > a {
     border-bottom:#3d8d95 solid;
     border-width:1px;
-    height:40px;
+    height:30px;
     font-size: 16px;
     display:table-cell;
     vertical-align:middle;
@@ -33,7 +35,7 @@
 }
 
 #menu a.topmenu + ul > li > a.dashboard {
-    height: 70px;
+    height: 40px;
     font-size:1.2em;
 	/*background: linear-gradient(#797979, #868686) repeat scroll 0 0 #868686; background-color: #868686;*/
 }
