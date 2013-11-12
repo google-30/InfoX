@@ -339,7 +339,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         $tmparr[] = $tab;
         
         $attendance = $this->_siteattendance->findOneBy(array("worker"=>$worker, "month"=>$month));
-        $tab = infox_project::generateAttendanceTab($attendance, false);
+        $tab = infox_project::generateAttendanceTab($attendance, $monthstr, false);
         $tmparr[] = $tab;
                 
         return $tmparr;          
@@ -368,7 +368,7 @@ class Worker_SalaryController extends Zend_Controller_Action
         $tmparr[] = $tab;
         
         $attendance = $this->_siteattendance->findOneBy(array("worker"=>$worker, "month"=>$month));
-        $tab = infox_project::generateAttendanceTab($attendance, false);
+        $tab = infox_project::generateAttendanceTab($attendance, $monthstr, false);
         $tmparr[] = $tab;
         
         $this->view->alltabs = $tmparr; 

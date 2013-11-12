@@ -16,6 +16,8 @@ array( "absencetotal", "350", "salary", "扣款上限" ),
 
 array( "cbasic", "600", "salary", "华人基本工资" ),
 array( "bbasic", "400", "salary", "孟加拉人基本工资" ),
+
+array( "fullmonaward", "30", "salary", "满勤奖金" ),
 	);
 
 foreach( $tuples as $tuple ){

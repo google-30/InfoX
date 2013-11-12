@@ -64,6 +64,10 @@ class Salary_SettingsController extends Zend_Controller_Action
                     $value = infox_salary::getSettingBySectionName("salary", "bbasic");
                     $this->view->bbasic = $value;
                     break;
+                case "fullmonaward";
+                    $value = infox_salary::getSettingBySectionName("salary", "fullmonaward");
+                    $this->view->fullmonaward = $value;
+                    break;
                     
                 }
         }

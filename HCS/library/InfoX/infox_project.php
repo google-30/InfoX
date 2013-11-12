@@ -223,7 +223,7 @@ class infox_project
         return $attendarr;
     }
 
-    public static function generateAttendanceTab($attendrecord, $attendbtn=false, $highlight=false)
+    public static function generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
     {
         self::getRepos();
         $attendresult = self::getAttendFoodData($attendrecord);
@@ -232,12 +232,10 @@ class infox_project
         $today = $nowdate->format("d");
         $todaystyle= $highlight ? "background:#ff5c5c;" : "";        
 
-        /*
-        $attendDate = $attendrecord->getMonth();
+        $attendDate = new Datetime($monthstr . "-01");;
         $attendmonth = $attendDate->format("m");
         $attendyear = $attendDate->format("Y");
         $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear); 
-        */
         
         $attendtab = "<table>";
         $tds="";

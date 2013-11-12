@@ -9,6 +9,7 @@ $absencehigh="";
 $absencetotal="";
 $cbasic="";
 $bbasic="";
+$fullmonaward="";
 
 $cotmultiple=$this->cotmultiple;
 $botmultiple=$this->botmultiple;
@@ -20,6 +21,7 @@ $absencehigh=$this->absencehigh;
 $absencetotal=$this->absencetotal;
 $cbasic=$this->cbasic;
 $bbasic=$this->bbasic;
+$fullmonaward=$this->fullmonaward;
 ?>
 <form method="post" action="/salary/settings/submit">
 <div data-role="fieldcontain">
@@ -71,6 +73,12 @@ $bbasic=$this->bbasic;
     <label for="bbasic">孟加拉人基本工资:</label>
     <input data-mini="true" type="text" name="bbasic" id="bbasic" value="<?=$bbasic?>" class=""/>
 </div>
+
+<div data-role="fieldcontain">
+    <label for="fullmonaward">全勤奖金:</label>
+    <input data-mini="true" type="text" name="fullmonaward" id="fullmonaward" value="<?=$fullmonaward?>" class=""/>
+</div>
+
 <input type="submit" value="提交" data-mini="true" data-theme="a">
 
 

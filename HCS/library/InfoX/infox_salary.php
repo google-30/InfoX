@@ -29,7 +29,7 @@ class infox_salary
     {
         $settingnames = array("cotmultiple", "botmultiple", "workerfood", "leaderfood", 
                     "absencedays", "absencelow", "absencehigh", "absencetotal", 
-                    'bbasic', 'cbasic');
+                    'bbasic', 'cbasic', 'fullmonaward');
         return $settingnames;        
     }
 
