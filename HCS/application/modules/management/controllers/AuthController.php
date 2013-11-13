@@ -85,11 +85,11 @@ class Management_AuthController extends Zend_Controller_Action
     {	
 	$form = new Synrgic_Models_Form();
 	$username = new Zend_Form_Element_Text('username');  
-	$username->setLabel('Username/用户名:')  
+	$username->setLabel('Username/用户名')  
 	    ->setRequired(true);  
 
 	$password = new Zend_Form_Element_Password('password');  
-	$password->setLabel('Password/密码:')  
+	$password->setLabel('Password/密码')  
 	    ->setRequired(true);  
 
 	$last = new Zend_Form_Element_Hidden('return');
@@ -100,7 +100,8 @@ class Management_AuthController extends Zend_Controller_Action
 	    ->addElement($username)  
 	    ->addElement($password)  
 	    ->addElement($last)
-	    ->addSubmitButton('Login','Login/登录');
+	    ->addSubmitButton('Login','Login/登录')
+	    ->setAttrib('id', 'loginform');;
 
 	return $form;
     }

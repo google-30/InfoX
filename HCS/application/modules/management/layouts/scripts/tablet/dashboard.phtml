@@ -52,12 +52,14 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
             <span id="logo">
                 <a href='/management/dashboard'>
                     <!--<img src='<?php echo $path; ?>'/>-->
-                    <img src='/example/images/ted_logo_small.png'/>
+                    <img src='/images/gssvgabstract234.png'/>
                 </a>
             </span>
             <span id='title'>
                 <!--<?php echo sprintf($this->translate('%s Hotel Suite Management Portal'), $settings->General->HotelName->Value);?>-->
-                <?php echo "InfoX Portal";?>
+                <a href='/management/dashboard'>
+                    InfoX Portal                    
+                </a>                
             </span>
             <span id='logout'>
                 <a href='<?php echo $this->url(array("module"=>"management", "controller"=>"auth", "action"=>"logout"));?>'>

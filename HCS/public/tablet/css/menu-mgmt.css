@@ -8,8 +8,8 @@
 }
 
 #menu li {
-    background: linear-gradient(#4EB7C1, #309EAD) repeat scroll 0 0 #309EAD;
-	background-color:#309EAD;
+    /*background: linear-gradient(#4EB7C1, #309EAD) repeat scroll 0 0 #309EAD;*/
+	/*background-color:#309EAD;*/
     list-style: none outside none;
 	}
 #menu ul.navigation {background: linear-gradient(#C4C4C4, #A4A4A4) repeat scroll 0 0 #C4C4C4; padding: 0px; background-color: #A4A4A4;}
@@ -31,6 +31,9 @@
     vertical-align:middle;
     text-align:center;
 	padding: 10px 0;
+	
+	box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.6);
+	/*text-shadow: 0 1px #FFFFFF;*/
 
 }
 
