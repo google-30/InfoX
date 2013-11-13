@@ -9,6 +9,9 @@ class Supplier_ManageController extends Zend_Controller_Action
     {
         $this->_em = Zend_Registry::get('em');        
         $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
+        $this->_supplyprice = $this->_em->getRepository('Synrgic\Infox\Supplyprice');        
+        $this->_matappdata = $this->_em->getRepository('Synrgic\Infox\Matappdata');        
+        $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');                
     }
 
     public function indexAction()
@@ -33,10 +36,32 @@ class Supplier_ManageController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();   
         $this->_helper->viewRenderer->setNoRender(TRUE);
-
+       
         $id = $this->getParam("id");
-        $data = $this->_supplier->findOneBy(array("id"=>$id));
-    	$this->_em->remove($data);
+        $supplier = $this->_supplier->findOneBy(array("id"=>$id));
+        
+        $materialarr = $this->_material->findBy(array("supplier"=>$supplier));
+        foreach($materialarr as $tmp)
+        {
+            $tmp->setSupplier(null);
+            $this->_em->persist($tmp);            
+        }
+
+        $matappdataarr = $this->_matappdata->findBy(array("supplier"=>$supplier));
+        foreach($matappdataarr as $tmp)
+        {
+            $tmp->setSupplier(null);
+            $this->_em->persist($tmp);            
+        }
+
+        $supplypricearr = $this->_supplyprice->findBy(array("supplier"=>$supplier));
+        foreach($supplypricearr as $tmp)
+        {
+            $tmp->setSupplier(null);
+            $this->_em->persist($tmp);            
+        }
+
+    	$this->_em->remove($supplier);
         $this->_em->flush();        
 
         $this->_redirect("supplier/manage");    
