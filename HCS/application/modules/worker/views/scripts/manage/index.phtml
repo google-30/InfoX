@@ -313,7 +313,8 @@ $wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
 $wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
 $wdtab=$wdtab->helper(new GridHelper_Workerdetails());
 $wdtab=$wdtab->data($maindata)->action(':action', '编辑', array( 'url'=>array('action'=>'edit')));
-$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+//$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+$wdtab=$wdtab->action(':action', '离职', array( 'url'=>array('action'=>'resign')));
 if(count($maindata))
 {
 echo $wdtab;

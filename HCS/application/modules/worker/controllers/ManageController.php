@@ -957,4 +957,23 @@ class Worker_ManageController extends Zend_Controller_Action
         $this->view->worktypes = explode(";", $values);
     }
 
+    public function resignAction()
+    {
+        infox_common::turnoffView($this->_helper);
+        $id = $this->getParam("id", 0);
+        if($id)
+        {
+            $worker = $this->_workerdetails->findOneBy(array("id"=>$id));
+            $worker->setResignation(new Datetime("now"));
+            $this->_em->persist($worker);
+            try {
+                $this->_em->flush();
+            } catch (Exception $e) {
+                var_dump($e);
+                return;
+            }
+            
+            $this->redirect("/worker/manage/");
+        }
+    }
 }
