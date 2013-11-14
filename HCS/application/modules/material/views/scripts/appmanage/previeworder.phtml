@@ -65,6 +65,10 @@ border:1px solid #000000;
 padding:3px 7px 2px 7px;
 width:50%;
 }
+
+.smallfont {
+    font-size:small;
+}
 </style>
 <?php
 $jmtheme="c";
@@ -85,6 +89,7 @@ $sitename=$this->sitename;
 $siteleaders=$this->siteleaders;
 $siteleadersphones=$this->siteleadersphones;
 $siteaddress=$this->siteaddress;
+$site=$this->site;
 
 // materials
 $matapps=$this->matapps;
@@ -98,7 +103,7 @@ $supfax=$this->supfax;
 $supattn=$this->supattn;
 $supattnphone=$this->supattnphone;
 
-$PONO="&nbsp;&nbsp;". $cmypostring . "/???/" . $suppostring . "-???" . "&nbsp;&nbsp;";
+$PONO="&nbsp;&nbsp;". $cmypostring . "/" . $site->getPostr() ."/" . $suppostring . "-???" . "&nbsp;&nbsp;";
 
 $date=$this->date;
 $date=new Datetime("now");
@@ -120,7 +125,7 @@ $materialrepo=$this->materialrepo;
 		
         <div class="stayright">PO NO:&nbsp;<u><?php echo $PONO; ?></u></div><br><br>
 
-<table id="contacttab">
+<table id="contacttab" class="smallfont">
 <tr>
 <td><strong>To:&nbsp;</strong><?php echo $supfullname; ?></td>
 <td><strong>Attn:&nbsp;</strong><?php echo $supattn . "&nbsp;".$supattnphone;?></td>
@@ -153,7 +158,7 @@ $materialrepo=$this->materialrepo;
 
 <p class="stayleft"><strong>Please Supply in accordance to the instructions hereunder:</strong></p>
 
-<table id="previewtab">
+<table id="previewtab" class="smallfont">
 <tr><th>Item No.</th><th colspan=2 style="width:50%;">Description</th><th>Unit</th><th>Qty</th><th>Unit Price S$</th><th>Amount S$</tr>
 <?php
 $count=0;
@@ -193,6 +198,7 @@ echo $trs;
 <td colspan=3 style="text-align:left">For office use: Remarks approved by:</td><td>Site RF:</td><td></td><td>Total S$:</td><td><?php echo $totalprice; ?></td>
 </table>
 <br>
+<div class="smallfont">
 <div class="stayleft" style="text-align:left">
 <strong>General Instructions:</strong><br>
 1. Delivery should be made to the above address or any other address specified by us.<br>
@@ -208,7 +214,7 @@ Prepared by:<u><?php echo "____________"; ?></u>
 </div>
 Checked by:<u><?php echo "____________"; ?></u>
 <div class="stayright">Approved by:<u><?php echo "____________"; ?></u></div><br><br>		
-
+</div>
 </div><!-- /content -->
 </div><!-- /page -->
 

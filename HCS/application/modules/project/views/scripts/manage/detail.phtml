@@ -117,6 +117,7 @@ $permission1arr=$this->permission1arr;
 
 $status="";
 $phone="";
+$postr="";
 
 if($this->mode == "Edit")
 {
@@ -148,6 +149,7 @@ if($this->mode == "Edit")
     $selleaders = explode(";", $selLeadersStr);  
 
     $permission1 = $data->getPermission1() ? 1 : 0;
+    $postr=$data->getPostr();
 }
 ?>
 <?php
@@ -362,7 +364,10 @@ if(isset($siteproperties))
     <label for="workerno">工人数量:</label>
  	<input type="range" name="workerno" id="workerno" value="<?php echo $workerno; ?>" min="0" max="200" data-highlight="true" data-mini="true">
 </div></td>-->
-<td></td>
+<td><div data-role="fieldcontain">
+    <label for="postr">工地PO字串:</label>
+    <input type="text" name="postr" id="postr" value="<?php echo $postr; ?>" data-mini="true">
+</div></td>
 <td></td>
 </tr>
 </table>

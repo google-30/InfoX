@@ -109,4 +109,11 @@ class Site extends \Synrgic_Models_Entity {
      */
     protected $status;
 
+    /**
+     * site purchase order(po) string
+     * for example: tampines condo = tc
+     *    
+     * @Column(type="string", nullable=true)
+     */
+    protected $postr;
 }

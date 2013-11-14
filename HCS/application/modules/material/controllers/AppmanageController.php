@@ -465,13 +465,16 @@ class Material_AppmanageController extends Zend_Controller_Action
         // site
         $siteobj = $appobj->getSite();
         $this->getSiteinfo($siteobj);
-
-        // staff
-        $staffobj = $this->_humanresource->findOneBy(array("id"=>3));
-        if($staffobj)
-        {
-            $this->view->staffname = $staffobj->getNameeng();
-            $this->view->staffphone = $staffobj->getPhone1();
+        $this->view->site = $siteobj;
+        
+        $user = Zend_Auth::getInstance();
+        if(isset($user) && $user->hasIdentity()) {
+            $username = $user->getIdentity()->getName();            
+            $userobj = $this->_user->findOneBy(array("username"=>$username));
+            $staffobj = $user->getIdentity()->getHumanresource();
+            
+            $this->view->staffname = $staffobj ? $staffobj->getNameeng() : "";
+            $this->view->staffphone = $staffobj ? $staffobj->getPhone1() : "";            
         }
         
         $this->view->materialrepo = $this->_material;

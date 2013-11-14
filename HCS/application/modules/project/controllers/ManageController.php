@@ -131,6 +131,9 @@ class Project_ManageController extends Zend_Controller_Action
         $bPermission1 = ($permission1=="0") ? false : true;
         $data->setPermission1($bPermission1);
 
+        $postr = $this->getParam("postr", "");
+        $data->setPostr($postr);
+
         $this->_em->persist($data);
         try {
             $this->_em->flush();
