@@ -21,7 +21,7 @@ class Humanresource_ManageController extends Zend_Controller_Action
 
     public function addAction()
     {
-        $this->view->roles = $this->_role->findAll();
+        $this->view->roles = $this->_role->findAll();        
     } 
 
     public function editAction()
@@ -31,7 +31,7 @@ class Humanresource_ManageController extends Zend_Controller_Action
         $maindata = $this->_humanres->findOneBy(array("id"=>$id));
         $this->view->maindata = $maindata;
 
-        $this->view->roles = $this->_role->findAll();
+        $this->view->roles = $this->_role->findAll();                
     } 
 
     public function deleteAction()
@@ -110,8 +110,8 @@ class Humanresource_ManageController extends Zend_Controller_Action
             var_dump($e);
             return;
         }        
-
-        // TODO: sync these with user table
+        
+        // sync data with user table
         if($username!="" && $password!="")
         {
             if($mode == "Create")
@@ -120,7 +120,7 @@ class Humanresource_ManageController extends Zend_Controller_Action
             }
             else
             {
-                $user = $this->_users->findOneBy(array("name"=>$name));
+                $user = $this->_users->findOneBy(array("humanresource"=>$data));
                 if(is_null($user))
                 {
                     $user = new \Synrgic\User();    
