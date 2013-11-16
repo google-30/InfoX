@@ -14,6 +14,7 @@
 	}
 #menu ul.navigation {/*background: linear-gradient(#C4C4C4, #A4A4A4) repeat scroll 0 0 #C4C4C4;*/ padding: 0px; /*background-color: #A4A4A4; */}
 #menu ul a.topmenu {display:none;}
+#menu .active .active a { color: #24B9FF; }
 
 #menu a {
 	color:#333333;
