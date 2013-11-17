@@ -37,17 +37,19 @@ function datapost()
     var rtall = $('#rtall').val();        
     var utfee = $('#utfee').val();
     var utallowance = $('#utallowance').val();
-
+    var fullmonaward = $('#fullmonaward').val();
+    
     var wid=$('#wid').val();
     var month=$('#month').val();
     
-    $.post("/worker/salary/datapost", 
+    $.post("/salary/salary/datapost", 
     { wid:wid, month:month, rate:rate, otherfee:otherfee, inadvance:inadvance, 
     absencedays:absencedays, absencefines:absencefines, rtmonthpay:rtmonthpay, 
-    rtmonths:rtmonths, rtall:rtall, utfee:utfee, utallowance:utallowance,}, 
+    rtmonths:rtmonths, rtall:rtall, utfee:utfee, utallowance:utallowance, 
+    fullmonaward:fullmonaward}, 
     function(data) {
         console.log(data);
-        $('#salarysheet').load("/worker/salary/salarysheet?wid=" + wid + "&month="+month);
+        $('#salarysheet').load("/salary/salary/salarysheet?wid=" + wid + "&month="+month);
         alert(data);
         //window.location.reload();
     })            

@@ -258,7 +258,8 @@ class Salary_SalaryController extends Zend_Controller_Action
         $rtmonths = trim($this->getParam("rtmonths", ""));
         $rtall = trim($this->getParam("rtall", ""));
         $utfee = trim($this->getParam("utfee", ""));
-        $utallowance = trim($this->getParam("utallowance", ""));  
+        $utallowance = trim($this->getParam("utallowance", ""));
+        $fullmonaward = trim($this->getParam("fullmonaward", ""));  
         
         $wid = $this->getParam("wid", "");  
         $month = $this->getParam("month", "");  
@@ -289,7 +290,8 @@ class Salary_SalaryController extends Zend_Controller_Action
         if($rtall!="") $sr->setRtall((float)$rtall);
         if($utfee!="") $sr->setUtfee((float)$utfee);
         if($utallowance!="") $sr->setUtallowance((float)$utallowance);
-                                                        
+        if($fullmonaward!="") $sr->setFullmonaward((float)$fullmonaward);                                                        
+        
         $this->_em->persist($sr);
         try {
             $this->_em->flush();

@@ -107,6 +107,21 @@ class infox_worker
         return $workerarr;    
     }
 
+    public static function sortWorkersById($workerarr)
+    {
+        usort($workerarr, function($a, $b)
+        {
+        $aid= $a->getId();
+        $bid= $b->getId();
+        if ($aid == $bid) {
+            return 0;
+        }
+        return ($aid < $bid) ? -1 : 1;            
+        } );
+        
+        return $workerarr;          
+    }
+
     public static function getworkerlistbysiteobj($siteobj)
     {
         self::getRepos();
@@ -119,8 +134,9 @@ class infox_worker
             $worker = $tmp->getWorker();
             $workerarr[] = $worker;
         }
-        
-        return $workerarr;            
+                        
+        //return $workerarr; 
+        return self::sortWorkersById($workerarr);           
     }
 
     public static function getWorkerdetailsById($wid)

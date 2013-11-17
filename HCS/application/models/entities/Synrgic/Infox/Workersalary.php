@@ -156,6 +156,6 @@ class Workersalary extends \Synrgic_Models_Entity {
      * full attendance for this month
      * @Column(type="float", nullable=true)
      */
-    protected $fullmonreward;
+    protected $fullmonaward;
 
 }
