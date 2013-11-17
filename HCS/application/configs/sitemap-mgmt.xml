@@ -84,10 +84,10 @@
 	    <pages>
             <workersalary>
 		    <label>工人工资管理</label>
-		    <module>worker</module>
+		    <module>salary</module>
 		    <controller>salary</controller>
 		    <action>index</action>
-		    <resource>worker:salary</resource>
+		    <resource>salary:salary</resource>
 		    <privilege>view</privilege>
 	        </workersalary>
 

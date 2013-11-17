@@ -225,6 +225,17 @@ class infox_salary
         self::getRepos();
         $salaryrepos = self::getReposBySheet($sheet);
         $records = $salaryrepos->findBy(array("month"=>$month));
+       
+        usort($records, function($a, $b)
+        {
+        $aid= $a->getWorker()->getId();
+        $bid= $b->getWorker()->getId();
+        if ($aid == $bid) {
+            return 0;
+        }
+        return ($aid < $bid) ? -1 : 1;            
+        } );       
+       
         return $records;
     }
 
@@ -429,6 +440,133 @@ class infox_salary
     }
     
     public static function updateOneSalaryRecord($salaryrecord)
+    {
+        $worker = $salaryrecord->getWorker();
+        $currentrate = self::getWorkerRate($salaryrecord);//$worker->getCurrentrate();
+        $otrate = self::getWorkerOtRate($salaryrecord);//infox_worker::getWorkerOtRate($worker);
+        
+        $wid = $worker->getId();
+        $monthobj = $salaryrecord->getMonth();
+        $month = $monthobj->format("Y-m-d");;        
+        $attendmonth = $monthobj->format("m");
+        $attendyear = $monthobj->format("Y");
+        $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear); 
+        
+        $days = "";
+        for($i=1; $i<=$daysinmonth; $i++)
+        {            
+            $day = "s.day$i";            
+            if($i != $daysinmonth)
+            {
+                $day .= ",";
+            }
+
+            $days .= $day;
+        }
+
+        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+        $result = self::$_em->createQuery($query)->getResult();
+                
+        $totaldays = 0;
+        $normalhours = 0;
+        $normalsalary = 0;
+        $othours = 0;
+        $otsalary = 0;    
+        $fooddays = 0;
+        
+        $daydata=0;
+        $daypay=0;
+        if(array_key_exists(0, $result))
+        {    
+        foreach($result[0] as $tmp)
+        {
+            if($tmp)
+            {
+                $totaldays++;
+
+                // normal work
+                $tmparr = explode(";", $tmp);
+                if(array_key_exists(0, $tmparr))
+                {
+                    $daydata = $tmparr[0];
+                    // this '20' needs to be confirmed
+                    // > 20, this data is pay for whole day
+                    // <=20, this is working hours
+                    if($daydata > 20)
+                    {
+                        $daypay = $daydata;
+                        //$normalhours += 8;
+                        $normalpay += $daypay;
+                    }
+                    else
+                    {
+                        if($daydata>8)
+                        {
+                            $normalhours += 8;
+                            $othours += ($daydata - 8);
+                        }
+                        else
+                        {
+                            $normalhours += $daydata;
+                        }
+                    }                    
+                }
+
+                if(array_key_exists(1, $tmparr))
+                {
+                    $food = $tmparr[1];
+                    $fooddays += ($food==="1") ? 1 : 0;
+                    
+                }
+            }
+        }
+        }
+        //echo "normalhours=$normalhours<br>";
+        $normalpay += $currentrate * $normalhours;        
+        $otpay = $otrate * $othours;
+        $allhours = $normalhours + $othours;
+        $allpay = $normalpay + $otpay;
+                
+        $salaryrecord->setNormalhours($normalhours);        
+        $salaryrecord->setNormalpay($normalpay);
+        
+        $salaryrecord->setOthours($othours);                
+        $salaryrecord->setOtprice($otrate);
+        $salaryrecord->setOtpay($otpay);
+        
+        $salaryrecord->setAllhours($allhours);
+        $salaryrecord->setAllpay($allpay);
+        
+        $salaryrecord->setAttenddays($totaldays);
+        
+        // food
+        $setting = self::$_setting->findOneBy(array('name'=>'workerfood'));
+        $workfood = $setting->getValue();
+        $foodpay = $workfood * $fooddays;
+        $salaryrecord->setFooddays($fooddays);
+        $salaryrecord->setFoodpay($foodpay);
+        
+        $otherfee = $salaryrecord->getOtherfee();
+        $absencefines = $salaryrecord->getAbsencefines();
+        $rtmonthpay = $salaryrecord->getRtmonthpay();
+        $utfee = $salaryrecord->getUtfee();
+        $utallowance = $salaryrecord->getUtallowance();
+        
+        $finalsalary = $normalpay + $otpay - abs($foodpay) - abs($absencefines) 
+        - abs($rtmonthpay) - abs($utfee) + abs($utallowance) + $otherfee;
+        $salaryrecord->setSalary($finalsalary);
+
+        self::$_em->persist($salaryrecord);                 
+        try {
+            self::$_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }   
+                
+    }    
+    
+    public static function updateOneSalaryRecord11111111($salaryrecord)
     {
         $worker = $salaryrecord->getWorker();
         $currentrate = self::getWorkerRate($salaryrecord);//$worker->getCurrentrate();

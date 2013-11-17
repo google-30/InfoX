@@ -137,7 +137,7 @@ class Synrgic_Models_AclBuilder {
             'worker:custominfo'=>array('view', 'postinfo'),
             'worker:import'=>array('view', 'submit','truncateworkerdetails'),
             'worker:archive'=>array('view', 'edit', 'previewlist'),
-            'worker:salary'=>array('view', 'personalsalary', 'salarybymonth', 'gensalaryrecords', 
+            'salary:salary'=>array('view', 'personalsalary', 'salarybymonth', 'gensalaryrecords', 
             'datainput', 'datapost', 'salarysheet','salaryreceipts'),
             'salary:settings'=>array('view', 'submit'),
 

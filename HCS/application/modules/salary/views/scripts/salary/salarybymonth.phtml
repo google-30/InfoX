@@ -5,6 +5,7 @@ $monthstr=$this->monthstr;
 $sheet=$this->sheet;
 $sheetarr=$this->sheetarr;
 $salarytabs= $this->salarytabs;
+$username=$this->username;
 ?>
 <head>
 	<meta charset="utf-8">
@@ -112,12 +113,12 @@ function salarydialogclose()
 </script>
 <div data-role="page">
 
-	<div data-role="header" data-theme="b">
+	<div data-role="header" >
 		<!--<h1>Single page</h1>-->
 <table style="table-layout:fixed;" id="headertab">
 <tr>
 <td><? echo "月份: " . $monthstr; ?></td>
-<td><? echo "工资负责人: " . ""; ?></td>
+<td style="text-align:right;">工资负责人:&nbsp;<?=$username?></td>
 </tr>
 </table>
 	</div><!-- /header -->
@@ -127,7 +128,7 @@ function salarydialogclose()
 <?=$this->error?>
 </div>
 
-<div class="ui-grid-b">
+<!--<div class="ui-grid-b">
 	<div class="ui-block-a">
 <?
 $options="";
@@ -152,13 +153,18 @@ echo $selects;
     </div>
 	<div class="ui-block-b"><input data-mini="true" type="text" name="month" id="month" value="<?=$monthstr?>" class="datepicker" /></div>
 	<div class="ui-block-c"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button">预览工资单</a></div>
-</div>
+</div>-->
+
 <div>
 <?php
 $url = "xxx"; //"/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
 $ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">批量输入</a>';    
 echo $ahref;
 ?>
+</div>
+<div class="ui-grid-a">
+<div class="ui-block-a"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">预览</a></div>
+<div class="ui-block-b"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">导出</a></div>
 </div>
 <?php
 $alltabs="";

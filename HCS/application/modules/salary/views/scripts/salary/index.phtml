@@ -8,7 +8,7 @@ $(function() {
 
 $("#sheetselect").change(function() {
     var sheetname = $(this).val();
-    var url = "/worker/salary?sheet=" + sheetname;
+    var url = "/salary/salary?sheet=" + sheetname;
     redirect(url);
 });
 
@@ -21,7 +21,7 @@ function gensalarydata(month)
     //alert(month);
 
     var sheet = $("#sheetselect").val();
-    $.post("/worker/salary/gensalaryrecords", { sheet:sheet, month:month }, 
+    $.post("/salary/salary/gensalaryrecords", { sheet:sheet, month:month }, 
     function(data) {
         alert("工资数据已生成");
         //console.log(data);
@@ -41,11 +41,11 @@ $thismonth1=$nowdate->format("Ym");
 $lastmonth=date('Y-m', strtotime("last month"));
 $lastmonth1=date('Ym', strtotime("last month"));
 
-$thismonthurl="/worker/salary/salarybymonth?sheet=$sheet&month=$thismonth";
-$lastmonthurl="/worker/salary/salarybymonth?sheet=$sheet&month=$lastmonth"; 
+$thismonthurl="/salary/salary/salarybymonth?sheet=$sheet&month=$thismonth";
+$lastmonthurl="/salary/salary/salarybymonth?sheet=$sheet&month=$lastmonth"; 
 
-$lastmonthpayslipsurl="/worker/salary/salaryreceipts?sheet=$sheet&month=$lastmonth";
-$thismonthpayslipsurl="/worker/salary/salaryreceipts?sheet=$sheet&month=$thismonth";
+$lastmonthpayslipsurl="/salary/salary/salaryreceipts?sheet=$sheet&month=$lastmonth";
+$thismonthpayslipsurl="/salary/salary/salaryreceipts?sheet=$sheet&month=$thismonth";
 $options="";
 foreach($sheetarr as $tmp)
 {
