@@ -154,137 +154,6 @@ class Project_AttendanceController extends Zend_Controller_Action
         $this->view->username = infox_common::getUsername();
     }
 
-    private function genWorkerHtmls111($workerarr, $attendancearr, $siteid, $monthstr)
-    {
-        $tablearr = array(); 
-        $table ="";
-        $sno = 0;
-        foreach($workerarr as $tmp)
-        {
-            $tabs = array();
-
-            $sno++;
-           
-            $table = '<table class="attendsum">';    
-            // worker info and month summary
-            $tr = "";
-            $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>'; 
-            $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>
-';
-            $table .= $tr;
-            $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
-            $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
-            $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
-';
-            $table .= $tr;
-            
-            $workerid = $tmp->getId();
-            $wpno = $tmp->getWpno();
-            $name=$tmp->getNamechs();
-            if(!$name || $name=="")
-            {
-                $name = $tmp->getNameeng();
-            }
-            //$td="<td>$name</td>";
-            //$tr .= $td;
-            $price = "75"; //$tmp->getPrice();
-
-            $worktype=$tmp->getWorktype();
-            $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
-
-            $tr .= "<td></td><td></td><td></td><td></td><td></td><td></td>";
-            $tr .= "<td></td><td></td><td></td><td></td><td></td><td></td><td></td>";            
-
-            $table .= $tr;
-            $table .= "</table>";
-            $tabs[] = $table;
-
-            // attendance and food
-            $attendrecord = null;
-            foreach($attendancearr as $attendtmp)
-            {
-                $wid = $attendtmp->getWorker()->getId();
-                if($wid == $tmp->getId())
-                {
-                    $attendrecord = $attendtmp;
-                    break;
-                }
-            }
-
-            if(!$attendrecord)
-            {
-                continue;
-            }
-            //var_dump($attendrecord);            
-            $attendresult = $this->getAttendFoodData($attendrecord);
-
-            $attendtab = "<table>";
-/*
-            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th><th rowspan=4><button data-mini="true" data-theme="b">考勤</button></th></tr>
-';            
-*/
-            $url = "/project/attendance/attendialog?" . "&sid=$siteid&month=$monthstr&wid=$workerid";   
-            $personattendth = '<th rowspan=4><a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a></th>';
-            $tr = '<tr><th rowspan=2 class="fixwidthcol"></th><th colspan=31>日期</th>' . $personattendth . '</tr>
-';                        
-
-            $attendtab .= $tr;
-            
-            $ths="";
-            for($i=0; $i<31; $i++)
-            {
-                $j = $i+1;
-                if($j<10)
-                {
-                    $th = "<th>0$j</th>";
-                }
-                else
-                {
-                    $th = "<th>$j</th>";
-                }
-                $ths .= $th;
-            }
-            $tr = "<tr>$ths</tr>";
-            $attendtab .= $tr;            
-
-            $tds = "";    
-            for($i=0; $i<31; $i++)
-            {
-                $j = $i + 1;
-                $attend = $attendresult[0][$i];
-
-                $td = "<td>$attend</td>";
-                $tds .= $td;
-            }
-            //$tr = "<tr><td>工时</td>$tds" . '<td rowspan=2><button data-mini="true" data-theme="b">考勤</button></td></tr>
-//';            
-            $tr = "<tr><td>工时</td>$tds</tr>
-";          
-            $attendtab .= $tr;
-
-            $tds = "";    
-            for($i=0; $i<31; $i++)
-            {
-                //$j = $i +1;
-                $food = $attendresult[1][$i];
-                $td = "<td>$food</td>";
-                $tds .= $td;
-            }
-            $tr = "<tr><td>伙食</td>$tds</tr>
-";            
-            $attendtab .= $tr;
-
-            $attendtab .= "</table>";
-            
-
-            $tabs[] = $attendtab;
-
-            $tablearr[] = $tabs;            
-        }
-
-        return $tablearr;
-    }
-
     private function genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr)
     {
         $tablearr = array(); 
@@ -360,8 +229,15 @@ class Project_AttendanceController extends Zend_Controller_Action
         $table .= "</table>";
         $tabs[] = $table;
 
-        //$attendtab = infox_project::generateAttendanceTab($attendrecord, true, true);        
-        $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, true, $siteid, $monthstr, $workerid);        
+        //$attendtab = infox_project::generateAttendanceTab($attendrecord, true, true); 
+        if($nobtn)
+        {//generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
+            $attendtab = infox_project::generateAttendanceTab($attendrecord, $monthstr, false, true);
+        }
+        else
+        {       
+            $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, true, $siteid, $monthstr, $workerid);        
+        }
         $tabs[] = $attendtab;
 
         return $tabs;

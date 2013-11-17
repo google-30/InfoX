@@ -277,7 +277,7 @@ class infox_project
             $td = "<td>$value</td>";
             $tds .= $td;
         }
-        $tr = "<tr><td>工时</td>$tds</tr>
+        $tr = "<tr><td>计时/计件</td>$tds</tr>
 ";          
         $attendtab .= $tr;
 
@@ -342,7 +342,7 @@ class infox_project
             $td = "<td>$value</td>";
             $tds .= $td;
         }
-        $tr = "<tr><td>工时</td>$tds</tr>
+        $tr = "<tr><td>计时 计件</td>$tds</tr>
 ";          
         $attendtab .= $tr;
 

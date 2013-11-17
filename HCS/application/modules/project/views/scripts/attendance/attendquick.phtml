@@ -5,8 +5,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	<title>工人考勤</title> 
 	<link rel="stylesheet"  href="/common/css/jquery.mobile-1.2.0.css" />  
+	<link rel="stylesheet"  href="/common/datebox/jqm-datebox-1.1.0.css" />  
+	
 	<script src="/common/js/jquery-1.8.2.min.js"></script>
 	<script src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+
+	<script src="/common/databox/jqm-datebox-1.1.0.core.js"></script>
+	<script src="/common/datebox/jqm-datebox-1.1.0.mode.calbox.js"></script>
 
     <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
     <script src="/common/js/jQuery.ui.datepicker.js"></script>
@@ -33,65 +38,6 @@ table td, table th { text-align:center; border:1px solid gray; }
 }
 </style>	
 <script>
-/*
-function post()
-{
-    var date = $("#date").val();
-    //alert(date);
-    var wid = $("#wid").val();
-    //console.log(wid);
-    var salary = $("#salary").val();
-    var remark = $("#remark").val();
-    var month = $("#month").val();
-
-    $.post("/project/attendance/postsalary", { wid:wid, date:date, salary:salary, remark:remark, month:month }, 
-    function(data) {
-        console.log(data);
-        //alert(data);        
-        //window.location.reload();
-    })  
-    
-}
-
-$(function() { 
-    var date = $("#date").val();
-    //alert(date);
-    var wid = $("#wid").val();
-    //console.log(wid);
-    var salary = $("#salary").val();
-    var remark = $("#remark").val();
-    var month = $("#month").val();
-
-    $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
-});
-*/
-/*
-
-$("#date").change(function() {
-  alert( "Handler for .change() called." );
-});
-
-
-$( "input[type='date']" ).change(function() {
-  // Check input( $( this ).val() ) for validity here
-    alert("date change");
-});
-
-$( ".ui-btn" ).click(function() {
-    alert("clicked");
-});
-
-
-
-$(function() { 
-$( ".ui-body-c" ).click(function() {
-    var date= $("#date").val();    
-    alert(date);    
-});
-
-});
-*/
-
 </script>
 <?php
 $site=$this->site;
@@ -114,21 +60,24 @@ $attendancearr=$this->attendancearr;
     </div>
 
     <div data-role="content" data-theme="c">
-
+    <!--
     <div style="float:left;max-width:500px;min-width:400px;">
     <input type="date" name="date" id="date" value=""  />	
     </div>
     <div style="float:left;">&nbsp;</div>
-
-    <!--<div style="margin: 10px auto 15px auto; max-width:65%;">-->
-    <div style="float:left; width:65%;">
+    -->
+    <!--<div style="margin: 10px auto 15px auto; max-width:65%;">
+    <div style="float:left; width:65%;">-->
+    <div>
 <form action="/project/attendance/quicksubmit" method="post" name="quickform" id="quickform">
 <input type="hidden" name="quickdate" id="quickdate" value="">
 <input type="hidden" name="sid" id="sid" value="<? echo $siteid; ?>">
+<input name="mydate" id="mydate" type="date" data-role="datebox" data-options='{"mode": "calbox"}' data-mini="true" placeholder="点击按钮，选择日期->">
 <table style="width:100%;margin-top:10px;">
-<tr>
+<!--<tr>
 <th rowspan="2">序号</th><th colspan=4>工人信息</th><th rowspan=2 class="tdattendfood">工作小时</th><th rowspan=2 class="tdattendfood">伙食</th></tr>
-<tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th></tr>
+<tr><th>准证</th><th>姓名</th><th>单价</th><th>工种</th></tr>-->
+<tr><th>序号</th><th>准证</th><th>姓名</th><th>单价</th><th>工种</th><th class="tdattendfood">计时/计件</th><th class="tdattendfood">伙食</th></tr>
 <?php
 $attendoptions="";
 $attendoptions=getAttendoptions();
@@ -153,8 +102,8 @@ foreach($workerarr as $tmp)
     $td="<td>$name</td>";
     $tr .= $td;
 
-    $price = 75;
-    $td="<td>$price</td>";
+    $rate = $tmp->getRate();
+    $td="<td>$rate</td>";
     $tr .= $td;
     
     $worktype=$tmp->getWorktype();
@@ -188,9 +137,12 @@ function getAttendoptions()
 function getAttenTds($attendancearr, $workerid, $attendoptions)
 {
     //echo $options;
+    /*
     $attend = '<td><select name="attend' . $workerid .'" id="attend' . $workerid . '" data-theme="b" data-mini="true">'
                 . $attendoptions .'</select></td>';
-
+    */
+    $attend = '<td><input name="attend' . $workerid .'" id="attend' . $workerid . '" data-theme="b" data-mini="true"></td>';
+    
     $food = '<td><select name="food' . $workerid .'" id="food' . $workerid . '" data-role="slider" data-theme="b">
 				<option value="1">有</option>
 				<option value="0">无</option>
@@ -232,7 +184,6 @@ echo "$trs";
 </table>
 </form>
 <button onclick="quicksubmit()">提交考勤</button>
-<br>
 <input type="button" value="关闭本页" onclick="attendialogclose()">
     </div>
 

@@ -99,16 +99,17 @@ $workerattendtabs=$this->workerattendtabs;
 <div id="attensheet">
 <? echo $workerattendtabs[0] . $workerattendtabs[1]; ?>
 </div>
-
-    <div style="float:left;width:43%;">
-    <!--<label for="date">Date Input:</label>-->
-    <input type="date" name="date" id="date" value=""  />	
-    </div>
-
-    <div style="float:right;width:53%;">
+    <div>
+    <!--<label for="date">Date Input:</label>
+    <input type="date" name="date" id="date" value=""  />	-->
 	    <div data-role="fieldcontain">
-     	    <label for="attend">工时:</label>
-            <select name="attend" id="attend" data-theme="b" >
+     	    <label for="mydate">选择日期:</label>
+            <input name="mydate" id="mydate" type="date" data-role="datebox" data-options='{"mode": "calbox"}' data-mini="true" placeholder="点击按钮，选择日期->">      
+        </div>	
+
+	    <div data-role="fieldcontain">
+     	    <label for="attend">计时/计件:</label>
+            <!--<select name="attend" id="attend" data-theme="b" >
 <?php
 //$hours=array("");
 //$hours=0;
@@ -125,25 +126,25 @@ for($count=0;$count<29;$count++)
 }
 echo $options;
 ?>
-    	</select>
+    	</select>-->
+    	<input type="text" name="attend" id="attend" data-theme="b" data-mini="true" placeholder="填写工人当天计时或者计件" >
 	    </div>	
 	    <div data-role="fieldcontain">
      	    <label for="food">伙食:</label>
             <!--<select name="food" id="food" data-role="slider" data-theme="b" style="width:100%">-->
-            <select name="food" id="food" data-theme="b" >
+            <select name="food" id="food" data-theme="b" data-mini="true" >
 				<option value="1">有</option>
 				<option value="0">无</option>
 			</select>	    
         </div>	
 
-	    <div data-role="fieldcontain">
+	    <!--<div data-role="fieldcontain">
      	    <label for="remark">备注:</label>
      	    <input type="text" name="remark" id="remark" value="" placeholder="请假缺勤信息等" />
-	    </div>	
+	    </div>	-->
         <input type="hidden" name="wid" id="wid" value="<? echo $wid; ?>">
         <input type="hidden" name="month" id="month" value="<? echo $monthstr; ?>">
         <input type="button" value="提交考勤" onclick="attendialogpost()">
-        <br>
         <input type="button" value="关闭本页" onclick="attendialogclose()">
     </div>
 

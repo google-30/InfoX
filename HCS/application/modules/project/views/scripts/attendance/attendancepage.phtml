@@ -27,7 +27,7 @@ $username=$this->username;
     <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
     <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
 
-    <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
+    <!--<link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
     <script src="/common/js/jQuery.ui.datepicker.js"></script>
     <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
 	<script>
@@ -35,7 +35,12 @@ $username=$this->username;
 		$( document ).bind( "mobileinit", function(){
 			$.mobile.page.prototype.options.degradeInputs.date = true;
 		});	
-	</script>
+	</script>-->
+
+	<link rel="stylesheet"  href="/common/datebox/jqm-datebox-1.1.0.css" /> 
+	<script src="/common/datebox/jqm-datebox-1.1.0.core.js"></script>
+	<script src="/common/datebox/jqm-datebox-1.1.0.mode.calbox.js"></script>
+		    
 </head> 
 
 <body> 
@@ -45,7 +50,7 @@ table td, table th { text-align:center; border:1px solid black; }
 .ui-dialog-contain {
 	width: 92.5%;
 	max-width: 2500px;
-	margin: 3% auto 15px auto;
+	margin: 2% auto 15px auto;
 	padding: 0;
 	position: relative;
 	top: -15px;
@@ -59,8 +64,14 @@ table td, table th { text-align:center; border:1px solid black; }
 function quicksubmit()
 {
     //alert("quicksubmit");
-    var date = $("#date").val();
+    var date = $("#mydate").val();
     //alert("date="+date);
+    if(date == "")
+    {
+        alert("请选择日期，再提交考勤");
+        return;
+    }
+    
     var r=confirm("日期:"+date+"\n确认提交该天的考勤吗？");
     if (r==false)
     {
@@ -83,11 +94,22 @@ function quicksubmit()
 
 function attendialogpost()
 {
-    var date = $("#date").val();
-    //alert(date); return;    
+    var date = $("#mydate").val();
+    //alert(date); return;
+    if(date == "")
+    {
+        alert("请选择日期，再提交考勤");
+        return;
+    }        
     var wid = $("#wid").val();
     //console.log(wid); return;
     var attend = $("#attend").val();
+    if(attend == "")
+    {
+        alert("请填写工人当日计时或者计件，再提交考勤");
+        return;
+    }        
+    
     var food = $("#food").val();
     var remark = $("#remark").val();
     var month = $("#month").val();
