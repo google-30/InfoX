@@ -16,13 +16,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initDefines()
     {
-	define('SYNRGIC_SESSION','Synrgic');
-	define('SYNRGIC_LOCALE_DEFAULT', 'en_US');
-	define('DEVICE_PERSIST_COOKIE','SynrgicHCS'); // XXX This should be configurable per hotel
-	define('DOCTRINE_LIB_PATH', APPLICATION_PATH.'/../library/Doctrine/lib');
-	define('DOCTRINE_COMMON_LIB_PATH', DOCTRINE_LIB_PATH.'/vendor/doctrine-common/lib');
-	define('DOCTRINE_DBAL_LIB_PATH', DOCTRINE_LIB_PATH.'/vendor/doctrine-dbal/lib');
-
+	    define('SYNRGIC_SESSION','Synrgic');
+	    define('SYNRGIC_LOCALE_DEFAULT', 'en_US');
+	    define('DEVICE_PERSIST_COOKIE','SynrgicHCS'); // XXX This should be configurable per hotel
+	    define('DOCTRINE_LIB_PATH', APPLICATION_PATH.'/../library/Doctrine/lib');
+	    define('DOCTRINE_COMMON_LIB_PATH', DOCTRINE_LIB_PATH.'/vendor/doctrine-common/lib');
+	    define('DOCTRINE_DBAL_LIB_PATH', DOCTRINE_LIB_PATH.'/vendor/doctrine-dbal/lib');
     }
 
     /**
@@ -124,90 +123,90 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initAuthentication()
     {
-	$auth = Zend_Auth::getInstance();
-	$auth->setStorage(new Zend_Auth_Storage_Session());
+        $auth = Zend_Auth::getInstance();
+        $auth->setStorage(new Zend_Auth_Storage_Session());
 
-	$acl = new Zend_Acl();
-	
-	Synrgic_Models_AclBuilder::buildAcl($acl);
+        $acl = new Zend_Acl();
 
-	Zend_Registry::set('acl', $acl);
+        Synrgic_Models_AclBuilder::buildAcl($acl);
+
+        Zend_Registry::set('acl', $acl);
     }
 
     /**
      * Doctrine and Doctrine entity manager init
      */
     protected function _initDoctrine() {
-	$this->bootstrap('defines'); // make sure Defines there 
-	// include and register Doctrine's class loader
-	require_once(DOCTRINE_COMMON_LIB_PATH.'/Doctrine/Common/ClassLoader.php');
-	$classLoader = new \Doctrine\Common\ClassLoader( 'Doctrine\Common', DOCTRINE_COMMON_LIB_PATH);
-	$classLoader->register();
+        $this->bootstrap('defines'); // make sure Defines there 
+        // include and register Doctrine's class loader
+        require_once(DOCTRINE_COMMON_LIB_PATH.'/Doctrine/Common/ClassLoader.php');
+        $classLoader = new \Doctrine\Common\ClassLoader( 'Doctrine\Common', DOCTRINE_COMMON_LIB_PATH);
+        $classLoader->register();
 
-	$classLoader = new \Doctrine\Common\ClassLoader('Doctrine\DBAL', DOCTRINE_DBAL_LIB_PATH);
-	$classLoader->register();
+        $classLoader = new \Doctrine\Common\ClassLoader('Doctrine\DBAL', DOCTRINE_DBAL_LIB_PATH);
+        $classLoader->register();
 
-	$classLoader = new \Doctrine\Common\ClassLoader('Doctrine\ORM', DOCTRINE_LIB_PATH);
-	$classLoader->register();
+        $classLoader = new \Doctrine\Common\ClassLoader('Doctrine\ORM', DOCTRINE_LIB_PATH);
+        $classLoader->register();
 
-	// get doctrine configuration
-	$options = $this->getOption('doctrine');
+        // get doctrine configuration
+        $options = $this->getOption('doctrine');
 
-	// create the Doctrine configuration
-	$config = new \Doctrine\ORM\Configuration();
+        // create the Doctrine configuration
+        $config = new \Doctrine\ORM\Configuration();
 
-	// set the proxy dir and set some options
-	$config->setProxyDir($options['proxiesPath']);
-	$config->setProxyNamespace('Synrgic\Proxies');
-	\Doctrine\ORM\Proxy\Autoloader::register($options['proxiesPath'],'Synrgic\Proxies');
+        // set the proxy dir and set some options
+        $config->setProxyDir($options['proxiesPath']);
+        $config->setProxyNamespace('Synrgic\Proxies');
+        \Doctrine\ORM\Proxy\Autoloader::register($options['proxiesPath'],'Synrgic\Proxies');
 
-	// Set arraycache during development but as per
-	// the doctrine manual, this is not recommended during
-	// production.
-	if( APPLICATION_ENV == 'development' ) {
-	    $cache = new \Doctrine\Common\Cache\ArrayCache;
-	    $config->setAutoGenerateProxyClasses(true);
-	} else {
-	    $cache = new \Doctrine\Common\Cache\ApcCache;
-	    $config->setAutoGenerateProxyClasses(false);
-	}
+        // Set arraycache during development but as per
+        // the doctrine manual, this is not recommended during
+        // production.
+        if( APPLICATION_ENV == 'development' ) {
+            $cache = new \Doctrine\Common\Cache\ArrayCache;
+            $config->setAutoGenerateProxyClasses(true);
+        } else {
+            $cache = new \Doctrine\Common\Cache\ApcCache;
+            $config->setAutoGenerateProxyClasses(false);
+        }
 
-	$config->setMetadataCacheImpl($cache);
-	$config->setQueryCacheImpl($cache);
-	$config->setResultCacheImpl($cache);
+        $config->setMetadataCacheImpl($cache);
+        $config->setQueryCacheImpl($cache);
+        $config->setResultCacheImpl($cache);
 
-	// choosing the driver for our database schema
-	// we'll use annotations
-	$driver = $config->newDefaultAnnotationDriver(
-	    $options['entitiesPath']
-	    );
-	$config->setMetadataDriverImpl($driver);
+        // choosing the driver for our database schema
+        // we'll use annotations
+        $driver = $config->newDefaultAnnotationDriver(
+            $options['entitiesPath']
+            );
+        $config->setMetadataDriverImpl($driver);
 
-	// now create the entity manager and use the connection
-	// settings we defined in our application.ini
-	$conn = array(
-	    'driver'    => $options['driver'],
-	    'user'      => $options['user'],
-	    'password'  => $options['password'],
-	    'dbname'    => $options['dbname'],
-	    'host'      => $options['host'],
-	    'charset'   => $options['charset'],
-	    );
+        // now create the entity manager and use the connection
+        // settings we defined in our application.ini
+        $conn = array(
+            'driver'    => $options['driver'],
+            'user'      => $options['user'],
+            'password'  => $options['password'],
+            'dbname'    => $options['dbname'],
+            'host'      => $options['host'],
+            'charset'   => $options['charset'],
+            );
 
-	$entityManager = \Doctrine\ORM\EntityManager::create($conn, $config);
+        $entityManager = \Doctrine\ORM\EntityManager::create($conn, $config);
 
-	// push the entity manager into our registry for later use
-	Zend_Registry::set("em", $entityManager);
-	
-	Zend_Registry::set("cachedriver", $cache);
+        // push the entity manager into our registry for later use
+        Zend_Registry::set("em", $entityManager);
 
-	// register entity namespace
-	// make sure namespace work
-	// Synrgic\
-	$classLoader = new \Doctrine\Common\ClassLoader('Synrgic', $options['entitiesPath']);
-	$classLoader->register();
-    
-	return $entityManager;
+        Zend_Registry::set("cachedriver", $cache);
+
+        // register entity namespace
+        // make sure namespace work
+        // Synrgic\
+        $classLoader = new \Doctrine\Common\ClassLoader('Synrgic', $options['entitiesPath']);
+        $classLoader->register();
+
+        return $entityManager;
     }
 
     /**
@@ -248,7 +247,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			Zend_Controller_Action_HelperBroker::addHelper($helper);
 		
 			$view = new Zend_View();
-			$view->doctype('XHTML1_TRANSITIONAL');
+			//$view->doctype('XHTML1_TRANSITIONAL');
+                        $view->doctype('HTML5');
 			$view->setEncoding('UTF-8');
 			$viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer();
 			$view->addHelperPath('ZendX/JQuery/View/Helper/', 'ZendX_JQuery_View_Helper');
@@ -291,29 +291,31 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $config = new Zend_Config_Xml(APPLICATION_PATH.'/configs/sitemap-mgmt.xml');
         $navigationmgmt = new Zend_Navigation($config);
         Zend_Registry::set('navigation', $navigationmgmt);
+        /*
         $config = new Zend_Config_Xml(APPLICATION_PATH.'/configs/sitemap-guest.xml');
         $navigation = new Zend_Navigation($config);
         Zend_Registry::set('navigation-guest', $navigation);
+        */
         $auth = Zend_Auth::getInstance();
-	if($auth->hasIdentity()){
-	    $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
-	    $view = $viewRenderer->view;
-	    $acl = Zend_Registry::get('acl');
-	    $user = $auth->getIdentity();
-	    $view->navigation()->setAcl($acl)
-		->setRole($user->role);
+	    if($auth->hasIdentity()){
+	        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
+	        $view = $viewRenderer->view;
+	        $acl = Zend_Registry::get('acl');
+	        $user = $auth->getIdentity();
+	        $view->navigation()->setAcl($acl)->setRole($user->role);
 
-/*
+            /*
             $page = $navigation->findByLabel("Services");
             $this->addServices($page);
 
             $page = $navigationmgmt->findByLabel("Manage Services");
             $this->addServices($page,true);
-*/
-	}
+            */
+	    }
         
     }
     
+    /*
     public function _initMail()
     {
     	// get hotel email configuration
@@ -334,7 +336,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         }
     }
-
+    */
 
     private function addServices($parentPage, $isManagement=false)
     {
