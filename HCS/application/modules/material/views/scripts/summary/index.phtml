@@ -1,0 +1,56 @@
+<style>
+#uploaddiv { display: none; }
+</style>
+<script>
+$(function() {
+    $('#Maindata').dataTable({ 
+        "iDisplayLength": 50,
+        "bRetrieve": true,
+    });
+} );
+
+function showhideupload()
+{
+    var div = $("#uploaddiv");    
+    var display = div.css("display");
+    (display == "none") ? div.show() : div.hide();
+}
+
+function clearalldata()
+{
+    alert("清除所有数据，尚未实现, please hold on...");
+}
+</script>
+<button data-mini="true" data-theme="a" onclick="showhideupload()">导入订购材料汇总</button>
+<div id="uploaddiv">
+<fieldset>
+<form action="/material/summary/submit" method="post" enctype="multipart/form-data">
+<label for="file" class="ui-input-text">上传材料数据文件(MS Excel file)：</label>
+<input data-mini="true" type="file" name="file" id="file">
+<input type="submit" value="上传" data-mini="true" data-theme="a">
+</form>
+</fieldset>
+</div>
+<button data-mini="true" data-theme="a" onclick="clearalldata()">清空材料数据</button>
+<?
+echo $this->grid("Maindata", true)
+          //->field('sn','S/N')
+          ->field('nameeng','Title')
+          ->field('name','Title')
+          ->field('description','Description ')
+          ->field('unit','Unit')
+          ->field('dono','DO No.')
+          ->field('dodate','DO Date')
+          ->field('rate','Rate')
+          ->field('quantity', 'Quantity ')
+          ->field('amount', 'Amount ')  
+          ->field('suppliers', 'Suppliers')           
+          ->actionField(':action', "", '&nbsp;|&nbsp;')
+          ->paginatorEnabled(false)
+          ->setSorting(false)  
+          ->helper(new GridHelper_Material())
+          ->data($this->maindata)
+          ->action(':action', '工地记录', array( 'url'=>array('action'=>'onsiterecord')))
+          ->action(':action', '考勤记录', array( 'url'=>array('action'=>'attendancerecord')));
+?>
+<br><br>

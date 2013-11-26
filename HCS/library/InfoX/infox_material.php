@@ -23,4 +23,11 @@ class infox_material
         $prices = self::$_supplyprice->findBy(array("material"=>$material));
         return $prices;
     }
+    
+    public static function getSummarySheets()
+    {
+        $sheets = array("Punggol", "Singapore Poly", "Orchard", "Feng Shan",
+            "Gan Eng Seng", "Townsville", "Jurong Point");
+        return $sheets;
+    }
 }

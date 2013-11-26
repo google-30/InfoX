@@ -168,6 +168,15 @@
 		    <resource>material:appmanage</resource>
 		    <privilege>view</privilege>
 	        </applicationmanagement>
+
+	        <applymaterialsummary>
+		    <label>订购材料汇总</label>
+		    <module>material</module>
+		    <controller>summary</controller>
+		    <action>index</action>
+		    <resource>material:summary</resource>
+		    <privilege>view</privilege>
+	        </applymaterialsummary>	        
     	</pages>
         </applicationmodules>
 

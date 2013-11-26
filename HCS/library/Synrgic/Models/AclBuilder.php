@@ -148,6 +148,7 @@ class Synrgic_Models_AclBuilder {
 'submitmatapps','reviewmatapps','rejectmatapps','previewform','previeworder'),
             'material:emachinery'=>array('view','add','edit','delete','submit','onsiterecord','addrecord','updaterecord', 'deleterecord',),
             'material:import'=>array('view', 'submit', 'truncateall'),
+            'material:summary'=>array('view', 'submit', 'truncateall'),
 
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit', 
 'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery','applist','allmaterials','siteinfo'),
