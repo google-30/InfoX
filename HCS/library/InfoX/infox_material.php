@@ -6,6 +6,7 @@ class infox_material
     public static $_material;
     public static $_supplyprice;
     public static $_materialtype;
+    public static $_Ordermaterialsummaryraw;
     
     public static function getRepos()
     {
@@ -14,7 +15,7 @@ class infox_material
         self::$_material = self::$_em->getRepository('Synrgic\Infox\Material');
         self::$_supplyprice = self::$_em->getRepository('Synrgic\Infox\Supplyprice');
         self::$_materialtype = self::$_em->getRepository('Synrgic\Infox\Materialtype');
-
+        self::$_Ordermaterialsummaryraw = self::$_em->getRepository('Synrgic\Infox\Ordermaterialsummaryraw');
     }
 
     public static function getSupplypricesByMaterial($material)
@@ -29,5 +30,11 @@ class infox_material
         $sheets = array("Punggol", "Singapore Poly", "Orchard", "Feng Shan",
             "Gan Eng Seng", "Townsville", "Jurong Point");
         return $sheets;
+    }
+    
+    public static function getMaterialsBySheet($sheet)
+    {
+        self::getRepos();
+        return self::$_Ordermaterialsummaryraw->findBy(array("sheet"=>$sheet));
     }
 }

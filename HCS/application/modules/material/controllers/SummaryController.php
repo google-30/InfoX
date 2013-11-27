@@ -18,6 +18,10 @@ class Material_SummaryController extends Zend_Controller_Action {
 
     public function indexAction() {
         
+        $this->view->sheetarr = $sheetarr = infox_material::getSummarySheets();
+        $this->view->sheet = $sheet = $this->getParam("sheet", $sheetarr[0]) ;
+        
+        $this->view->maindata = infox_material::getMaterialsBySheet($sheet);
     }
 
     public function submitAction() {
@@ -99,17 +103,22 @@ class Material_SummaryController extends Zend_Controller_Action {
             if (++$i == 1) {   // ignore the first row
                 continue;
             }
-
-            $record = new \Synrgic\Infox\Ordermaterialsummary_orig();
+            
+            $record = new \Synrgic\Infox\Ordermaterialsummaryraw();
 
             $cell = $objWorksheet->getCell("A" . $i);
-            $value = $cell->getFormattedvalue();
+            $valuea = $value = $cell->getFormattedvalue();
             $record->setSn(trim($value));
 
             $cell = $objWorksheet->getCell("B" . $i);
-            $value = $cell->getFormattedvalue();
+            $valueb = $value = $cell->getFormattedvalue();
             $record->setCatalog(trim($value));
 
+            if($valuea=="" && $valueb=="")
+            {// blank row
+                breaK;
+            }
+            
             $cell = $objWorksheet->getCell("C" . $i);
             $value = $cell->getFormattedvalue();
             $record->setItemc(trim($value));
@@ -132,7 +141,7 @@ class Material_SummaryController extends Zend_Controller_Action {
 
             $cell = $objWorksheet->getCell("H" . $i);
             $value = $cell->getFormattedvalue();            
-            $record->setOrderdate(date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP(trim($value))));
+            $record->setOrderdate(new Datetime(date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP(trim($value)))));
 
             $cell = $objWorksheet->getCell("I" . $i);
             $value = $cell->getFormattedvalue();
@@ -150,6 +159,8 @@ class Material_SummaryController extends Zend_Controller_Action {
             $value = $cell->getFormattedvalue();
             $record->setRemark(trim($value));
 
+            $record->setSheet($sheetname);
+            
             $this->_em->persist($record);
         }
 

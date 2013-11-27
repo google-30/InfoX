@@ -3,9 +3,9 @@
 namespace Synrgic\Infox;
 /**
  * @Entity
- * @Table(name="infox_ordermaterialsummary_orig")
+ * @Table(name="infox_ordermaterialsummaryraw")
  */
-class Ordermaterialsummary_orig extends \Synrgic_Models_Entity {
+class Ordermaterialsummaryraw extends \Synrgic_Models_Entity {
     /**
      * @Id
      * @GeneratedValue(strategy="AUTO")
@@ -49,7 +49,7 @@ class Ordermaterialsummary_orig extends \Synrgic_Models_Entity {
     protected $price;
     
     /**
-     * @Column(type="string", nullable=true)
+     * @Column(type="date", nullable=true)
      */
     protected $orderdate;
     
@@ -72,5 +72,10 @@ class Ordermaterialsummary_orig extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $remark;
+    
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $sheet;    
     
 }
