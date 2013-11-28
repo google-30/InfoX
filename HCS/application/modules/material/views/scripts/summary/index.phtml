@@ -18,7 +18,19 @@
 
     function clearalldata()
     {
-        alert("清除所有数据，尚未实现, please hold on...");
+                var r = confirm("确认删除数据?");
+        if (r == false)
+        {
+            return false;
+        }
+
+        $.post("/material/summary/truncateall", {},
+                function(data) {
+                    //console.log(data);
+                    //$('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month + "&sid="+siteid);
+                    alert("删除成功");
+                    window.location.reload();
+                })
     }
 
     $('#selsheet').change(function() {

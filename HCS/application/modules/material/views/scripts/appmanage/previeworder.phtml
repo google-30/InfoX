@@ -1,222 +1,220 @@
 <!DOCTYPE html> 
 <html>
 
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>PURCHASE ORDER</title> 
-	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
-    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
-</head> 
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title>PURCHASE ORDER</title> 
+        <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+        <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+    </head> 
 
-<body> 
-<style>
-.previewcontent { text-align: center; }
-.stayleft { float:left; }
-.stayright { float:right; }
-#previewtab
-{
-/*font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;*/
-width:100%;
-border-collapse:collapse;
-}
-#previewtab td, #previewtab th 
-{
-/*font-size:1.2em;*/
-border:1px solid #98bf21;
-padding:3px 7px 2px 7px;
-}
-#previewtab th 
-{
-/*font-size:1.4em;*/
-text-align:center;
-padding-top:5px;
-padding-bottom:4px;
-/*background-color:#A7C942;*/
-/*color:#fff;*/
-}
-#previewtab tr.alt td 
-{
-color:#000;
-/*background-color:#EAF2D3;*/
-background-color:white;
-}
+    <body> 
+        <style>
+            .previewcontent { text-align: center; }
+            .stayleft { float:left; }
+            .stayright { float:right; }
+            #previewtab
+            {
+                /*font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;*/
+                width:100%;
+                border-collapse:collapse;
+            }
+            #previewtab td, #previewtab th 
+            {
+                /*font-size:1.2em;*/
+                border:1px solid #98bf21;
+                padding:3px 7px 2px 7px;
+            }
+            #previewtab th 
+            {
+                /*font-size:1.4em;*/
+                text-align:center;
+                padding-top:5px;
+                padding-bottom:4px;
+                /*background-color:#A7C942;*/
+                /*color:#fff;*/
+            }
+            #previewtab tr.alt td 
+            {
+                color:#000;
+                /*background-color:#EAF2D3;*/
+                background-color:white;
+            }
 
-#previewtab td, #previewtab th 
-{
-/*font-size:1.2em;*/
-border:1px /*solid #98bf21;*/
-padding:3px 7px 2px 7px;
-}
+            #previewtab td, #previewtab th 
+            {
+                /*font-size:1.2em;*/
+                border:1px /*solid #98bf21;*/;
+                padding:3px 7px 2px 7px;
+            }
 
-#contacttab
-{
-/*font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;*/
-width:100%;
-border-collapse:collapse;
-text-align:left;
-}
+            #contacttab
+            {
+                /*font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;*/
+                width:100%;
+                border-collapse:collapse;
+                text-align:left;
+            }
 
-#contacttab td
-{
-/*font-size:1.2em;*/
-border:1px solid #000000;
-padding:3px 7px 2px 7px;
-width:50%;
-}
+            #contacttab td
+            {
+                /*font-size:1.2em;*/
+                border:1px solid #000000;
+                padding:3px 7px 2px 7px;
+                width:50%;
+            }
 
-.smallfont {
-    font-size:small;
-}
-</style>
-<?php
-$jmtheme="c";
+            .smallfont {
+                font-size:small;
+            }
+        </style>
+        <?php
+        $jmtheme = "c";
 
-$cmyfullnameeng=$this->cmyfullnameeng;
-$cmyaddr=$this->cmyaddr;
-$cmyphone=$this->cmyphone;
-$cmyfax=$this->cmyfax;
-$cmyemail=$this->cmyemail;
-$cmycontact=$this->cmycontact;
-$cmypostring=$this->cmypostring;
+        $cmyfullnameeng = $this->cmyfullnameeng;
+        $cmyaddr = $this->cmyaddr;
+        $cmyphone = $this->cmyphone;
+        $cmyfax = $this->cmyfax;
+        $cmyemail = $this->cmyemail;
+        $cmycontact = $this->cmycontact;
+        $cmypostring = $this->cmypostring;
 
-$formnameeng="PURCHASE ORDER";
+        $formnameeng = "PURCHASE ORDER";
 //$formnamechs="材料申请单";
-
 // site
-$sitename=$this->sitename;
-$siteleaders=$this->siteleaders;
-$siteleadersphones=$this->siteleadersphones;
-$siteaddress=$this->siteaddress;
-$site=$this->site;
+        $sitename = $this->sitename;
+        $siteleaders = $this->siteleaders;
+        $siteleadersphones = $this->siteleadersphones;
+        $siteaddress = $this->siteaddress;
+        $site = $this->site;
 
 // materials
-$matapps=$this->matapps;
+        $matapps = $this->matapps;
 
 // supplier
-$supplier=$this->supplier;
-$suppostring=$this->suppostring;
-$supfullname=$this->supfullname;
-$supofficephone=$this->supofficephone;
-$supfax=$this->supfax;
-$supattn=$this->supattn;
-$supattnphone=$this->supattnphone;
+        $supplier = $this->supplier;
+        $suppostring = $this->suppostring;
+        $supfullname = $this->supfullname;
+        $supofficephone = $this->supofficephone;
+        $supfax = $this->supfax;
+        $supattn = $this->supattn;
+        $supattnphone = $this->supattnphone;
 
-$PONO="&nbsp;&nbsp;". $cmypostring . "/" . $site->getPostr() ."/" . $suppostring . "-???" . "&nbsp;&nbsp;";
+        $PONO = "&nbsp;&nbsp;" . $cmypostring . "/" . $site->getPostr() . "/" . $suppostring . "-???" . "&nbsp;&nbsp;";
 
-$date=$this->date;
-$date=new Datetime("now");
-$datestr=$date->format("Y/m/d");
-$nextdatestr=date( "Y/m/d", strtotime("tomorrow"));
+        $date = $this->date;
+        $date = new Datetime("now");
+        $datestr = $date->format("Y/m/d");
+        $nextdatestr = date("Y/m/d", strtotime("tomorrow"));
 
 // staff
-$staffname=$this->staffname;
-$staffphone=$this->staffphone;
+        $staffname = $this->staffname;
+        $staffphone = $this->staffphone;
 
-$materialrepo=$this->materialrepo;
-?>
-<div data-role="page" data-theme="<?php echo $jmtheme; ?>" style="page-break-after:always">
-	<div data-role="content" class="previewcontent">	
-		<strong><?php echo $cmyfullnameeng; ?></strong><br>
-        <?php echo $cmyaddr; ?><br>
-        <?php echo $cmycontact; ?><br><br>
-		<strong><?php echo $formnameeng; ?></strong><br>
-		
-        <div class="stayright">PO NO:&nbsp;<u><?php echo $PONO; ?></u></div><br><br>
+        $materialrepo = $this->materialrepo;
+        ?>
+        <div data-role="page" data-theme="<?php echo $jmtheme; ?>" style="page-break-after:always">
+            <div data-role="content" class="previewcontent">	
+                <strong><?php echo $cmyfullnameeng; ?></strong><br>
+                <?php echo $cmyaddr; ?><br>
+                <?php echo $cmycontact; ?><br><br>
+                <strong><?php echo $formnameeng; ?></strong><br>
 
-<table id="contacttab" class="smallfont">
-<tr>
-<td><strong>To:&nbsp;</strong><?php echo $supfullname; ?></td>
-<td><strong>Attn:&nbsp;</strong><?php echo $supattn . "&nbsp;".$supattnphone;?></td>
-</tr>
-<tr>
-<td><strong>Date:&nbsp;</strong><?php echo $datestr; ?></td>
-<td><strong>Date of Delivery:&nbsp;</strong><?php echo $nextdatestr; ?></td>
-</tr>
-<tr>
-<td><strong>Tel No:&nbsp;</strong><?php echo $supofficephone; ?>&nbsp;&nbsp;<strong>Fax No:&nbsp;</strong><?php echo $supfax; ?></td>
-<td><strong>Time of Delivery:&nbsp;</strong><?php echo "&nbsp;"; ?></td>
-</tr>
-<tr>
-<td><strong>Terms of Payment:&nbsp;</strong><?php echo "30 days"; ?></td>
-<td></td>
-</tr>
-<tr>
-<td><strong>Delivery Location:&nbsp;</strong><?php echo $siteaddress; ?></td>
-<td></td>
-</tr>
-<tr>
-<td><strong>Site Personnel In-Charge:&nbsp;</strong><?php echo $siteleaders; ?></td>
-<td><strong>Site Tel./HP:&nbsp;</strong><?php echo $siteleadersphones; ?></td>
-</tr>
-<tr>
-<td><strong>Office Personnel In-Charge:&nbsp;</strong><?php echo $staffname; ?></td>
-<td><strong>Contact No:&nbsp;</strong><?php echo $staffphone; ?></td>
-</tr>
-</table>
+                <div class="stayright">PO NO:&nbsp;<u><?php echo $PONO; ?></u></div><br><br>
 
-<p class="stayleft"><strong>Please Supply in accordance to the instructions hereunder:</strong></p>
+                <table id="contacttab" class="smallfont">
+                    <tr>
+                        <td><strong>To:&nbsp;</strong><?php echo $supfullname; ?></td>
+                        <td><strong>Attn:&nbsp;</strong><?php echo $supattn . "&nbsp;" . $supattnphone; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date:&nbsp;</strong><?php echo $datestr; ?></td>
+                        <td><strong>Date of Delivery:&nbsp;</strong><?php echo $nextdatestr; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tel No:&nbsp;</strong><?php echo $supofficephone; ?>&nbsp;&nbsp;<strong>Fax No:&nbsp;</strong><?php echo $supfax; ?></td>
+                        <td><strong>Time of Delivery:&nbsp;</strong><?php echo "&nbsp;"; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Terms of Payment:&nbsp;</strong><?php echo "30 days"; ?></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Delivery Location:&nbsp;</strong><?php echo $siteaddress; ?></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Site Personnel In-Charge:&nbsp;</strong><?php echo $siteleaders; ?></td>
+                        <td><strong>Site Tel./HP:&nbsp;</strong><?php echo $siteleadersphones; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Office Personnel In-Charge:&nbsp;</strong><?php echo $staffname; ?></td>
+                        <td><strong>Contact No:&nbsp;</strong><?php echo $staffphone; ?></td>
+                    </tr>
+                </table>
 
-<table id="previewtab" class="smallfont">
-<tr><th>Item No.</th><th colspan=2 style="width:50%;">Description</th><th>Unit</th><th>Qty</th><th>Unit Price S$</th><th>Amount S$</tr>
-<?php
-$count=0;
-$trs="";
-$totalprice=0.0;
-foreach($matapps as $tmp)
-{
-    $count++;
-    $longname = $tmp->getLongname();
-    $amount = $tmp->getAmount();
-    $rate = $tmp->getRate();
-    $quantity = $tmp->getQuantity();
-    $total = $amount * $rate * $quantity; 
-    $unitprice = $rate * $quantity; 
-    
-    $unit = $tmp->getUnit();
-    $matid = $tmp->getMaterialid();
-    $matobj = $materialrepo->findOneBy(array("id"=>$matid));    
-    $description = $matobj ? $matobj->getDescription(): "&nbsp;";
-    
-    $totalprice += $total;
-    
-    $tdno = "<td>$count</td>";
-    $tdname = '<td style="width:25%">' . $longname . '</td>';
-    $tdspec = "<td>$description</td>";
-    $tdunit = "<td>$unit</td>";   
-    $tdamount = "<td>$amount</td>";
-    $tdunitprice = "<td>$unitprice</td>";  
-    $tdtotal = "<td>$total</td>";  
+                <p class="stayleft"><strong>Please Supply in accordance to the instructions hereunder:</strong></p>
 
-    $tr = "<tr>" . $tdno . $tdname . $tdspec . $tdunit . $tdamount . $tdunitprice. $tdtotal . "</tr>";
-    $trs .= $tr;
-}
+                <table id="previewtab" class="smallfont">
+                    <tr><th>Item No.</th><th colspan=2 style="width:50%;">Description</th><th>Unit</th><th>Qty</th><th>Unit Price S$</th><th>Amount S$</tr>
+                    <?php
+                    $count = 0;
+                    $trs = "";
+                    $totalprice = 0.0;
+                    foreach ($matapps as $tmp) {
+                        $count++;
+                        $longname = $tmp->getLongname();
+                        $amount = $tmp->getAmount();
+                        $rate = $tmp->getRate();
+                        $quantity = $tmp->getQuantity();
+                        $total = $amount * $rate * $quantity;
+                        $unitprice = $rate * $quantity;
 
-echo $trs;
-?>
-<td colspan=3 style="text-align:left">For office use: Remarks approved by:</td><td>Site RF:</td><td></td><td>Total S$:</td><td><?php echo $totalprice; ?></td>
-</table>
-<br>
-<div class="smallfont">
-<div class="stayleft" style="text-align:left">
-<strong>General Instructions:</strong><br>
-1. Delivery should be made to the above address or any other address specified by us.<br>
-2. Supply shall be in accordance with instructions, no substitute parts will be accepted without prior approval.<br>
-3. Delivery shall be on or before the delivery date stipulated above.<br>
-4. The supplier shall inform us immediatedly, if for any reason, he is unable to adhere to these instructions.<br><br>
-Supplier (By Fax transmission)<br>
-Distribution: Original = Accounts&nbsp;&nbsp;&nbsp;&nbsp;Duplicate = Purchasing & Contract<br>
-</div>
-<br><br><br><br><br><br><br><br><br><br>
-<div class="stayleft">
-Prepared by:<u><?php echo "____________"; ?></u> 
-</div>
-Checked by:<u><?php echo "____________"; ?></u>
-<div class="stayright">Approved by:<u><?php echo "____________"; ?></u></div><br><br>		
-</div>
-</div><!-- /content -->
-</div><!-- /page -->
+                        $unit = $tmp->getUnit();
+                        $matid = $tmp->getMaterialid();
+                        $matobj = $materialrepo->findOneBy(array("id" => $matid));
+                        $description = $matobj ? $matobj->getDescription() : "&nbsp;";
 
-</body>
+                        $totalprice += $total;
+
+                        $tdno = "<td>$count</td>";
+                        $tdname = '<td style="width:25%">' . $longname . '</td>';
+                        $tdspec = "<td>$description</td>";
+                        $tdunit = "<td>$unit</td>";
+                        $tdamount = "<td>$amount</td>";
+                        $tdunitprice = "<td>$unitprice</td>";
+                        $tdtotal = "<td>$total</td>";
+
+                        $tr = "<tr>" . $tdno . $tdname . $tdspec . $tdunit . $tdamount . $tdunitprice . $tdtotal . "</tr>";
+                        $trs .= $tr;
+                    }
+
+                    echo $trs;
+                    ?>
+                    <td colspan=3 style="text-align:left">For office use: Remarks approved by:</td><td>Site RF:</td><td></td><td>Total S$:</td><td><?php echo $totalprice; ?></td>
+                </table>
+                <br>
+                <div class="smallfont">
+                    <div class="stayleft" style="text-align:left">
+                        <strong>General Instructions:</strong><br>
+                        1. Delivery should be made to the above address or any other address specified by us.<br>
+                        2. Supply shall be in accordance with instructions, no substitute parts will be accepted without prior approval.<br>
+                        3. Delivery shall be on or before the delivery date stipulated above.<br>
+                        4. The supplier shall inform us immediately, if for any reason, he is unable to adhere to these instructions.<br><br>
+                        Supplier (By Fax transmission)<br>
+                        Distribution: Original = Accounts&nbsp;&nbsp;&nbsp;&nbsp;Duplicate = Purchasing & Contract<br>
+                    </div>
+                    <br><br><br><br><br><br><br><br><br><br>
+                    <div class="stayleft">
+                        Prepared by:<u><?php echo "____________"; ?></u> 
+                    </div>
+                    Checked by:<u><?php echo "____________"; ?></u>
+                    <div class="stayright">Approved by:<u><?php echo "____________"; ?></u></div><br><br>		
+                </div>
+            </div><!-- /content -->
+        </div><!-- /page -->
+
+    </body>
 </html>

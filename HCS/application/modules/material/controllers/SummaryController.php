@@ -17,10 +17,10 @@ class Material_SummaryController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        
+
         $this->view->sheetarr = $sheetarr = infox_material::getSummarySheets();
-        $this->view->sheet = $sheet = $this->getParam("sheet", $sheetarr[0]) ;
-        
+        $this->view->sheet = $sheet = $this->getParam("sheet", $sheetarr[0]);
+
         $this->view->maindata = infox_material::getMaterialsBySheet($sheet);
     }
 
@@ -103,7 +103,7 @@ class Material_SummaryController extends Zend_Controller_Action {
             if (++$i == 1) {   // ignore the first row
                 continue;
             }
-            
+
             $record = new \Synrgic\Infox\Ordermaterialsummaryraw();
 
             $cell = $objWorksheet->getCell("A" . $i);
@@ -114,11 +114,10 @@ class Material_SummaryController extends Zend_Controller_Action {
             $valueb = $value = $cell->getFormattedvalue();
             $record->setCatalog(trim($value));
 
-            if($valuea=="" && $valueb=="")
-            {// blank row
+            if ($valuea == "" && $valueb == "") {// blank row
                 breaK;
             }
-            
+
             $cell = $objWorksheet->getCell("C" . $i);
             $value = $cell->getFormattedvalue();
             $record->setItemc(trim($value));
@@ -140,7 +139,7 @@ class Material_SummaryController extends Zend_Controller_Action {
             $record->setPrice(trim($value));
 
             $cell = $objWorksheet->getCell("H" . $i);
-            $value = $cell->getFormattedvalue();            
+            $value = $cell->getFormattedvalue();
             $record->setOrderdate(new Datetime(date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP(trim($value)))));
 
             $cell = $objWorksheet->getCell("I" . $i);
@@ -160,7 +159,7 @@ class Material_SummaryController extends Zend_Controller_Action {
             $record->setRemark(trim($value));
 
             $record->setSheet($sheetname);
-            
+
             $this->_em->persist($record);
         }
 
@@ -364,7 +363,7 @@ class Material_SummaryController extends Zend_Controller_Action {
           return;
           } */
     }
-    
+
     private function storeSupplier($objWorksheet) {
         // step1 - supplier    
         $i = 0;
@@ -402,7 +401,6 @@ class Material_SummaryController extends Zend_Controller_Action {
         //return;
         // supplier done    
     }
-    
 
     private function storeMaterials($materialarr) {
         foreach ($materialarr as $tmp) {
@@ -570,7 +568,7 @@ class Material_SummaryController extends Zend_Controller_Action {
         // http://stackoverflow.com/questions/9686888/how-to-truncate-a-table-using-doctrine-2
         // http://stackoverflow.com/questions/5301285/explicitly-set-id-with-doctrine-when-using-auto-strategy
         // put it here to reset id generator
-        $data = new \Synrgic\Infox\Material();
+        $data = new \Synrgic\Infox\Ordermaterialsummaryraw();
         $cmd = $this->_em->getClassMetadata(get_class($data));
         $connection = $this->_em->getConnection();
         $dbPlatform = $connection->getDatabasePlatform();
@@ -587,12 +585,6 @@ class Material_SummaryController extends Zend_Controller_Action {
             return;
         }
 
-        $this->redirect("/material/manage");
-
-        /*
-          $this->_em->remove($data);
-          $this->_em->flush();
-         */
+        $this->redirect("/material/summary");
     }
-
 }
