@@ -5,12 +5,14 @@ class infox_project
     public static $_em;
     public static $_siteatten;
     public static $_workerdetails;
-    
+    public static $_site;
+
     public static function getRepos()
     {
         self::$_em = Zend_Registry::get('em');
         self::$_siteatten = self::$_em->getRepository('Synrgic\Infox\Siteattendance');
         self::$_workerdetails = self::$_em->getRepository('Synrgic\Infox\Workerdetails');
+        self::$_site = self::$_em->getRepository('Synrgic\Infox\Site');
     }    
 
     public static function getAttendanceByWorkerMonth($workerarr, $month)
@@ -421,9 +423,29 @@ class infox_project
         return $newresult;
     } 
 
-    public static function calcAttendancePay()
+    public static function createSiteByName($name)
     {
+        self::getRepos();
+        $_site = self::$_site;
+                
+        $data = $_site->findOneBy(array("name"=>$name));
+        if($data)
+        {
+            return $data->getId();
+        }
+        
+        $data = new \Synrgic\Infox\Site();
+        $data->setName($name);
 
+        self::$_em->persist($data);
+        try {
+            self::$_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        } 
+        
+        return $data->getId();
     }  
     
 }

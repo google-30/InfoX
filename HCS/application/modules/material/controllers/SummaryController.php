@@ -3,6 +3,7 @@
 set_time_limit(0);
 include 'InfoX/infox_common.php';
 include 'InfoX/infox_material.php';
+include 'InfoX/infox_project.php';
 
 class Material_SummaryController extends Zend_Controller_Action {
 
@@ -87,6 +88,9 @@ class Material_SummaryController extends Zend_Controller_Action {
         echo '<hr />';
 
         foreach ($sheetarr as $sheetname) {
+            $siteid = infox_project::createSiteByName($sheetname);
+            echo $siteid . "--"; continue; 
+            
             $objWorksheet = $objPHPExcel->setActiveSheetIndexByName($sheetname);
             if ($objWorksheet) {
                 $this->storeDetails($sheetname, $objWorksheet);
