@@ -1,5 +1,9 @@
 <style>
     #uploaddiv { display: none; }
+    #Maindata { 
+        font-size:medium; 
+        text-shadow: 0 1px #FFFFFF;               
+    }    
 </style>
 <script>
     $(function() {
@@ -54,7 +58,7 @@ $sheet = $this->sheet;
         <button data-mini="true" data-theme="a" onclick="showhideupload()">导入订购材料汇总</button>
     </div>
     <div class="ui-block-b">
-        <button data-mini="true" data-theme="a" onclick="clearalldata()">清空材料数据</button>
+        <button data-mini="true" data-theme="a" onclick="clearalldata()">清空订购材料汇总</button>
     </div>
 </div><!-- /grid-a -->
 <div id="uploaddiv">
@@ -82,12 +86,13 @@ $sheet = $this->sheet;
 </select>
 <?
 echo $this->grid("Maindata", true)
-->field('sn','SN')
+->field('id','ID')
 ->field('catalog','Catalog')
 ->field('itemc','Item-C')
 ->field('iteme','Item-E')
 ->field('unit','Unit')
 ->field('qty','Qty')
+->field('price','Price')
 ->field('orderdate','Order Date')
 ->field('supplier', 'Supplier')
 ->field('totalamount', 'Total Amount')  
@@ -96,7 +101,7 @@ echo $this->grid("Maindata", true)
 ->actionField(':action', "", '&nbsp;|&nbsp;')
 ->paginatorEnabled(false)
 ->setSorting(false)  
-//->helper(new GridHelper_Material())
+->helper(new GridHelper_Summary())
 ->data($this->maindata);
 ?>
 <br><br>
