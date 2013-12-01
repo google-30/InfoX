@@ -3,10 +3,15 @@
     #datatable { text-align:center; display:none; }
     #Workersdata {  /*font: 80%/0.8em "Lucida Grande",Verdana,Arial,Helvetica,sans-serif; */
         font-size:small; 
-        text-shadow: 0 1px #FFFFFF;               
+        text-shadow: 0 1px #FFFFFF;                       
     }
+    #Workersdata, thead, tr {
+        font-size:small; 
+        text-shadow: 0 1px #FFFFFF;                       
+    }    
     #uploaddiv { display: none; }
     /*#featuresdiv { display: none; }*/
+    
 </style>
 <script>
     $(document).ready(function() {
@@ -19,6 +24,11 @@
         $('#Workersdata').dataTable({
             "iDisplayLength": 50,
             "bRetrieve": true,
+            "sScrollX": "100%",
+            /*
+             "sScrollXInner": "100%",
+            "bScrollCollapse": true,            
+             */
         });
 
         fnHideColumns();
@@ -120,6 +130,19 @@
                     window.location.reload();
                 })
     }
+    
+    function fnShowHideAll()
+    {
+        
+        alert("fnShowHideAll");
+        var oTable = $('#Workersdata').dataTable();
+
+        for(var i=0; i<34; i++)
+        {
+        var bVis = oTable.fnSettings().aoColumns[i].bVisible;
+        oTable.fnSetColumnVis(i, true);        
+    }
+    }
 </script>
 
 <?php
@@ -160,6 +183,8 @@ $maindata = $this->maindata;
         <h3>工人列表操作</h3>
         <button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
         <div id="infoswitches">
+            <button onclick="fnShowHideAll()" data-mini="true">Show All Data</button>
+            <hr>
             <div class="ui-grid-d">
                 <?php
                 $onswitches = array(
@@ -300,7 +325,7 @@ foreach ($onswitches as $key => $value) {
 foreach ($offswitches as $key => $value) {
     $wdtab = $wdtab->field($key, $value);
 }
-$wdtab = $wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+$wdtab = $wdtab->actionField(':action', "Action", '&nbsp;|&nbsp;');
 $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
 $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
 $wdtab = $wdtab->data($maindata)->action(':action', '编辑', array('url' => array('action' => 'edit')));
@@ -312,63 +337,5 @@ if (count($maindata)) {
     echo "<strong>没有记录，请导入或者编辑工人数据</strong>";
 }
 ?>
+    
 <br><br>
-
-<!--
-<table id="datatable">
-<thead><tr>
-<th>序号</th>
-<th>服务公司</th>
-<th>所在工地</th>
-<th>中文名</th>
-<th>英文名</th>
-<th>准证号码</th>
-<th>工种</th>
-<th>业务水平</th>
-<th>小时工资</th>
-</tr></thead>
-<tbody> 
-<?php
-/*
-  $rows="";
-  foreach($this->result as $tmp)
-  {
-  // worker
-  $id = $tmp[0]['id'];
-  $namechs = $tmp[0]['namechs'];
-  $nameeng = $tmp[0]['nameeng'];;
-  $fin = $tmp[0]['fin'];;
-
-  // skills
-  $worktype = $tmp["worktype"];
-  $level = $tmp["worklevel"];
-  // company
-  $company = $tmp["companyname"];
-  $site = $tmp["sitename"];
-  $hrwage = $tmp["hwage"];
-
-  $row = "<tr>";
-  //$row .= '<td><a data-role="button" data-theme="a" data-mini="true" href="/worker/manage/edit?id=' . $id . '">' . $id . '</a></td>' ;
-  $row .= '<td><a href="/worker/manage/edit?id=' . $id . '"><button data-mini="true" data-theme="a">' . $id . '</button></a></td>' ;
-
-  $row .= "<td>$company</td>";
-  //$row .= "<td>$site</td>" ;
-  $row .= "<td>$namechs</td>";
-  $row .= "<td>$nameeng</td>";
-  $row .= "<td>$fin</td>";
-  $row .= "<td>$worktype</td>";
-  $row .= "<td>$level</td>";
-  //$row .= "<td>$hrwage</td>";
-  $row .= "</tr>";
-
-  $rows .= $row;
-  }
-  echo $rows;
- */
-?>
-</tbody> 
-</table>
-<br><br>
--->
-
-
