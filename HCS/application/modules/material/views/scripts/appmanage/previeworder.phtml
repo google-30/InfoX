@@ -103,7 +103,8 @@
         $supattn = $this->supattn;
         $supattnphone = $this->supattnphone;
 
-        $PONO = "&nbsp;&nbsp;" . $cmypostring . "/" . $site->getPostr() . "/" . $suppostring . "-" . "&nbsp;&nbsp;";
+        $PONO = "&nbsp;&nbsp;" . $cmypostring . "/" . $site->getPostr() . "/" 
+                . $suppostring . "-" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
         $date = $this->date;
         $date = new Datetime("now");
@@ -170,8 +171,8 @@
                         $amount = $tmp->getAmount();
                         $rate = $tmp->getRate();
                         $quantity = $tmp->getQuantity();
-                        $total = $amount * $rate * $quantity;
-                        $unitprice = $rate * $quantity;
+                        $total = round($amount * $rate * $quantity, 2);
+                        $unitprice = round($rate * $quantity,2);
 
                         $unit = $tmp->getUnit();
                         $matid = $tmp->getMaterialid();

@@ -169,6 +169,15 @@
 		    <privilege>view</privilege>
 	        </applicationmanagement>
 
+	        <pomanagement>
+		    <label>PO管理</label>
+		    <module>material</module>
+		    <controller>appmanage</controller>
+		    <action>index</action>
+		    <resource>material:appmanage</resource>
+		    <privilege>view</privilege>
+	        </pomanagement>
+
 	        <applymaterialsummary>
 		    <label>订购材料汇总</label>
 		    <module>material</module>
