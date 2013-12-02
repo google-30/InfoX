@@ -172,9 +172,9 @@
 	        <pomanagement>
 		    <label>PO管理</label>
 		    <module>material</module>
-		    <controller>appmanage</controller>
+		    <controller>po</controller>
 		    <action>index</action>
-		    <resource>material:appmanage</resource>
+		    <resource>material:po</resource>
 		    <privilege>view</privilege>
 	        </pomanagement>
 

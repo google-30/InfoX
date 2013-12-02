@@ -1,32 +1,67 @@
 <script>
-$(document).ready(function() {
-    $('#Applications').dataTable({
-        "iDisplayLength": 50,
-        "bRetrieve": true,
+    $(document).ready(function() {
+        $('#Applications').dataTable({
+            "iDisplayLength": 50,
+            "bRetrieve": true,
+        });
+        
+
     });
-} );
 </script>
+<div data-role="collapsible-set" data-mini="true" data-theme="a">
+    <div data-role="collapsible" data-collapsed="false">
+    <h3>当前申请</h3>
 <?
 echo $this->grid("Applications", true)
-          ->field('updatedate','更新时间')
-          ->field('site','工地')
-          //->field('id','申请单号')
-          ->field('applicant','申请人')
-          ->field('materials','Materials')
-          ->field('amount','Amount')
-          //->field('createdate','创建日期')          
-          //->field('status0', '申请状态')
-          //->field('status1', '办公人员评估')
-          //->field('status2', '负责经理评估')  
-          ->actionField(':action', "", '&nbsp;|&nbsp;')
-          ->setSorting(false) 
-          ->itemCountPerPage(30)
-          ->paginatorEnabled(false)
-          ->helper(new GridHelper_Application())
-          ->data($this->maindata)
-          ->action(':action', '详情', array( 'url'=>array('action'=>'appdetail')))
-          ->action(':action', '更新', array( 'url'=>array('action'=>'appedit')))
-          ->action(':action', '删除申请', array( 'url'=>array('action'=>'appdel')));
+->field('site','工地')
+->field('updatedate','更新时间')
+//->field('id','申请单号')
+->field('applicant','申请人')
+->field('materials','Materials')
+//->field('amount','Amount')
+//->field('createdate','创建日期')          
+//->field('status0', '申请状态')
+//->field('status1', '办公人员评估')
+//->field('status2', '负责经理评估')  
+->actionField(':action', "", '&nbsp;|&nbsp;')
+->setSorting(false) 
+->itemCountPerPage(30)
+->paginatorEnabled(false)
+->helper(new GridHelper_Application())
+->data($this->maindata)
+->action(':action', 'PO', array( 'url'=>array('action'=>'polist')))
+->action(':action', '详情', array( 'url'=>array('action'=>'appdetail')))
+->action(':action', '更新', array( 'url'=>array('action'=>'appedit')))
+->action(':action', '成功申请', array( 'url'=>array('action'=>'appapprove')));
 ?>
-<br><br>
+<br>
+    </div>
 
+    <div data-role="collapsible" data-collapsed="true">
+    <h3>成功申请</h3>
+<?
+echo $this->grid("Applications", true)
+->field('site','工地')
+->field('updatedate','更新时间')
+//->field('id','申请单号')
+->field('applicant','申请人')
+//->field('materials','Materials')
+//->field('amount','Amount')
+//->field('createdate','创建日期')          
+//->field('status0', '申请状态')
+//->field('status1', '办公人员评估')
+//->field('status2', '负责经理评估')  
+->actionField(':action', "", '&nbsp;|&nbsp;')
+->setSorting(false) 
+->itemCountPerPage(30)
+->paginatorEnabled(false)
+->helper(new GridHelper_Application())
+->data($this->maindata)
+->action(':action', 'PO', array( 'url'=>array('action'=>'appdetail')))
+->action(':action', '详情', array( 'url'=>array('action'=>'appdetail')))
+->action(':action', '更新', array( 'url'=>array('action'=>'appedit')))
+->action(':action', '成功申请', array( 'url'=>array('action'=>'appdel')));
+?>     
+   </div>
+</div>
+<br><br>
