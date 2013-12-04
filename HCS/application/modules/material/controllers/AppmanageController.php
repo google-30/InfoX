@@ -23,6 +23,31 @@ class Material_AppmanageController extends Zend_Controller_Action {
     public function indexAction() {
         $maindata = $this->_application->findAll();
         $this->view->maindata = $maindata;
+        
+        $pendingapps = array();
+        $approvedapps = array();
+        $giveupapps = array();
+        
+        foreach($maindata as $appobj)
+        {
+            $state = $appobj->getState();
+            if($state == 1)
+            {
+                $approvedapps[] = $appobj;
+            }
+            else if($state == 2)
+            {
+                $giveupapps[] = $appobj;
+            }
+            else
+            {
+                $pendingapps[] = $appobj;
+            }
+        }
+        
+        $this->view->pendingapps = $pendingapps;
+        $this->view->approvedapps = $approvedapps;
+        $this->view->giveupapps = $giveupapps;
     }
 
     public function appdetailAction() {
@@ -576,6 +601,40 @@ class Material_AppmanageController extends Zend_Controller_Action {
 
     public function appapproveAction() {
         infox_common::turnoffView($this->_helper);
+
+        $id = $this->getParam("id", 0);
+        $application = $this->_application->findOneBy(array("id" => $id));
+        $state = 1;
+        $this->changeAppState($id, $state);
+
+        $this->redirect("/material/appmanage/");
+    }
+
+    public function appgiveupAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $id = $this->getParam("id", 0);
+        $state = 2;
+        $this->changeAppState($id, $state);
+        $this->redirect("/material/appmanage/");
+    }
+
+    public function apppendingAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $id = $this->getParam("id", 0);
+        $state = 0;
+        $this->changeAppState($id, $state);
+        $this->redirect("/material/appmanage/");
+    }    
+    
+    private function changeAppState($id, $state) {
+        $application = $this->_application->findOneBy(array("id" => $id));
+        $application->setState($state);
+        $this->_em->persist($application);
+        $this->_em->flush();
+
+        $this->redirect("/material/appmanage/");
     }
 
     // for PO

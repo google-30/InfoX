@@ -1,0 +1,128 @@
+<style>
+    #appinfotab { width:100%; }
+    #totalprice { width:98%; text-align: right; }
+</style>
+<script>
+    $(document).ready(function() {
+        $('#matapps').dataTable({
+            "iDisplayLength": 50,
+            "bRetrieve": true,
+        });
+    });
+</script>
+<?php
+$appobj = $this->application;
+$appid = $appobj->getId();
+$create = $appobj->getCreatedate()->format("Y-m-d H:i:s");
+$update = $appobj->getUpdatedate()->format("Y-m-d H:i:s");
+$applicant = $appobj->getApplicant();
+$applicantname = "";
+$applicantid = 0;
+if ($applicant) {
+    $applicantname = $applicant->getName();
+    $applicantid = $applicant->getId();
+}
+
+$sitename = $this->sitename;
+$siteid = $this->siteid;
+
+$sites = $this->sites;
+$humanres = $this->humanres;
+
+$role = $this->role;
+$displayblk = ($role == "manager") ? 1 : 0;
+
+$matapps = $this->matapps;
+$totalprice = $this->totalprice ? $this->totalprice : 0;
+
+$company = $this->company;
+$cmyname = $this->cmyname;
+
+// TODO: group by(sql) supplier id to get all suppliers
+// for convenient
+$suppliers = array();
+foreach ($matapps as $tmp) {
+    $supplierobj = $tmp->getSupplier();
+    $supplierid = $supplierobj ? $supplierobj->getId() : 0;
+    $suppliername = $supplierobj ? $supplierobj->getName() : "";
+
+    if ($supplierid && !in_array($supplierid, $suppliers)) {
+        $suppliers[$supplierid] = $suppliername;
+    }
+}
+?>
+
+<!--<h3>申请单详细信息</h3>-->
+<input type="hidden" id="appid" value="<?php echo $appid; ?>">
+<table class="" id="appinfotab">
+    <tbody>
+        <tr>
+            <td><strong>申请工地:</strong></td><td><strong><?php echo $sitename; ?></strong></td>
+            <td><strong>承包公司:</strong></td><td><strong><?php echo $cmyname; ?></strong></td>
+        </tr>
+        <tr>
+            <td><strong>申请人员:</strong></td><td><strong><?php echo $applicantname; ?></strong></td>
+            <td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
+        </tr>
+        <tr>
+            <td><strong>申请总价:</strong></td><td><strong><?php echo $totalprice; ?></strong></td>
+            <td><strong>申请单号:</strong></td><td><strong><?php echo $appid; ?></strong></td>
+        </tr>
+    </tbody>
+</table>
+<hr>
+<?php
+echo $this->grid("matapps", true)
+        ->field('supplier', '供应商')
+        ->field('longname', '材料名称')
+        //->field('spec','型号规格')
+        ->field('description', '描述')
+        ->field('amount', '申请数量')
+        ->field('unit', '单位')
+        ->field('rate', '单价')
+        ->field('quantity', '数量')
+        ->field('total', '总价')
+        ->field('sitepart', '工程部位')
+        //->field('remark','补充说明')
+        ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+        ->itemCountPerPage(30)
+        ->paginatorEnabled(false)
+        ->setSorting(false)
+        ->helper(new GridHelper_Appdetail())
+        ->data($matapps);
+?>
+<br><hr>
+
+<table class="grid">
+    <thead><tr><th>Supplier</th><th>PO No.</th><th>Contact</th><th>Phone</th><th>Action</th></tr></thead>
+    <tbody>
+        <?php
+        if (count($suppliers)) {
+            $trs = "";
+            foreach ($suppliers as $key => $value) {
+                $supplierid = $key;
+                $suppliername = $value;
+                $tr="";
+                $td = "<td>$suppliername</td>";
+                $tr .= $td;
+                $td = "<td>$suppliername</td>";
+                $tr .= $td;
+                $td = "<td>$suppliername</td>";
+                $tr .= $td;
+                $td = "<td>$suppliername</td>";
+                $tr .= $td;
+                
+                $btns = '<button data-mini="true">Settings</button>'
+                        . '<button data-mini="true">Preview</button>';
+                $td = "<td>$btns</td>";
+                $tr .= $td;
+
+                $trs .= "<tr>" . $tr . "</tr>";
+            }
+            echo $trs;
+        } 
+        ?>
+    </tbody>
+</table>
+
+<br><br>

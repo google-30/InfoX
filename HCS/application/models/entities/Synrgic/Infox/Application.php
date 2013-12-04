@@ -64,5 +64,10 @@ class Application extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $remark;
+
+    /**
+     * @Column(type="integer", nullable=true)
+     */
+    protected $state=0;    
     
 }

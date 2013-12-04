@@ -144,8 +144,10 @@ class Synrgic_Models_AclBuilder {
             'material:manage'=>array('view','add','edit','delete','submit',
             'importmaterials', 'previewlist','supplyprice', 'postsupplyprice'),
             'material:apply'=>array('view','postdata', 'applymaterials', 'getselections', 'delselection','submitselections', 'applist', 'appedit','appmatdel'),
-            'material:appmanage'=>array('view','appedit','appdel','appmatdel','appdetail','updatematapp',
-'submitmatapps','reviewmatapps','rejectmatapps','previewform','previeworder', 'polist', 'appapprove'),
+            'material:appmanage'=>array('view','appedit','appdel','appmatdel',
+            'appdetail','updatematapp','submitmatapps','reviewmatapps','rejectmatapps',
+            'previewform','previeworder', 'polist', 'appapprove', 'appgiveup', 'apppending'),
+            
             'material:emachinery'=>array('view','add','edit','delete','submit','onsiterecord','addrecord','updaterecord', 'deleterecord',),
             'material:import'=>array('view', 'submit', 'truncateall'),
             'material:summary'=>array('view', 'submit', 'truncateall'),
