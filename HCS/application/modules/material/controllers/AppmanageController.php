@@ -641,7 +641,7 @@ class Material_AppmanageController extends Zend_Controller_Action {
     public function polistAction() {
         infox_common::turnoffView($this->_helper);
         $appid = $this->getParam("id");
-        $url = "/material/po?appid=$appid";
+        $url = "/material/po/podetails?appid=$appid";
         $this->redirect($url);
     }
 

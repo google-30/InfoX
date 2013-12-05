@@ -26,19 +26,23 @@ class Material_PoController extends Zend_Controller_Action {
         $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_humanresource = $this->_em->getRepository('Synrgic\Infox\Humanresource');
-        
+        $this->_matpodata = $this->_em->getRepository('Synrgic\Infox\Matpodata');
     }
 
     public function indexAction() {
+        $maindata = $this->_matpodata->findAll();
+        $this->view->maindata = $maindata;
+    }
+
+    public function podetailsAction() {
         $appid = $this->getParam("appid", 0);
-        if($appid == 0)
-        {
-            echo "please check app id or report to philip.zhou.2009@gmail.com";            
+        if ($appid == 0) {
+            echo "please check app id or report to philip.zhou.2009@gmail.com";
         }
-        
-        $appobj = $this->_application->findOneBy(array("id"=>$appid));
+
+        $appobj = $this->_application->findOneBy(array("id" => $appid));
         $this->view->application = $appobj;
-        
+
         $matapps = $this->_matappdata->findBy(array("application" => $appobj));
         $this->view->matapps = $matapps;
         $this->view->role = infox_common::getUsername(); //$this->getUserRole();
@@ -70,7 +74,31 @@ class Material_PoController extends Zend_Controller_Action {
                 $cmyname = $cmynamechs . "/" . $cmynameeng;
                 $this->view->cmyname = $cmyname;
             }
-        }        
+        }
+
+        $suppliers = array();
+        foreach ($matapps as $tmp) {
+            $supplierobj = $tmp->getSupplier();
+            $supplierid = $supplierobj ? $supplierobj->getId() : 0;
+            $suppliername = $supplierobj ? $supplierobj->getName() : "";
+
+            if ($supplierid && !in_array($supplierid, $suppliers)) {
+                $suppliers[$supplierid] = $suppliername;
+
+                // check if PO already there
+                $poobj = $this->_matpodata->findOneBy(array("supplier" => $supplierobj, "application" => $appobj));
+                if (!$poobj) {
+                    // persist in db
+                    $poobj = new \Synrgic\Infox\Matpodata();
+                    $poobj->setApplication($appobj);
+                    $poobj->setSupplier($supplierobj);
+                    $this->_em->persist($poobj);
+                }
+            }
+        }
+        $this->view->suppliers = $suppliers;
+
+        $this->_em->flush();
     }
 
 }
