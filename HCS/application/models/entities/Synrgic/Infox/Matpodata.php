@@ -47,5 +47,13 @@ class Matpodata extends \Synrgic_Models_Entity {
      * @ManyToOne(targetEntity="Synrgic\Infox\Supplier")
      */
     protected $supplier;
+
+    /**
+     * po state
+     *   
+     * @Column(type="integer",nullable=true)
+     */
+    protected $state;
+    
     
 }

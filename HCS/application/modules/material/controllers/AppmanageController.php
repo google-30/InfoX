@@ -18,33 +18,28 @@ class Material_AppmanageController extends Zend_Controller_Action {
         $this->_materialtype = $this->_em->getRepository('Synrgic\Infox\Materialtype');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_humanresource = $this->_em->getRepository('Synrgic\Infox\Humanresource');
+        $this->_matpodata = $this->_em->getRepository('Synrgic\Infox\Matpodata');
     }
 
     public function indexAction() {
         $maindata = $this->_application->findAll();
         $this->view->maindata = $maindata;
-        
+
         $pendingapps = array();
         $approvedapps = array();
         $giveupapps = array();
-        
-        foreach($maindata as $appobj)
-        {
+
+        foreach ($maindata as $appobj) {
             $state = $appobj->getState();
-            if($state == 1)
-            {
+            if ($state == 1) {
                 $approvedapps[] = $appobj;
-            }
-            else if($state == 2)
-            {
+            } else if ($state == 2) {
                 $giveupapps[] = $appobj;
-            }
-            else
-            {
+            } else {
                 $pendingapps[] = $appobj;
             }
         }
-        
+
         $this->view->pendingapps = $pendingapps;
         $this->view->approvedapps = $approvedapps;
         $this->view->giveupapps = $giveupapps;
@@ -471,6 +466,12 @@ class Material_AppmanageController extends Zend_Controller_Action {
         }
 
         $this->view->materialrepo = $this->_material;
+
+        $poid = $this->getParam("poid", 0);
+        $poobj = $this->_matpodata->findOneBy(array("id" => $poid));
+        if ($poobj) {
+            $this->view->poobj = $poobj;
+        }
     }
 
     private function getSiteinfo($obj) {
@@ -626,8 +627,8 @@ class Material_AppmanageController extends Zend_Controller_Action {
         $state = 0;
         $this->changeAppState($id, $state);
         $this->redirect("/material/appmanage/");
-    }    
-    
+    }
+
     private function changeAppState($id, $state) {
         $application = $this->_application->findOneBy(array("id" => $id));
         $application->setState($state);

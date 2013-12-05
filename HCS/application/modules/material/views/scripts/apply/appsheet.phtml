@@ -1,4 +1,6 @@
 <style>
+    #typetab { table-layout: fixed; }
+    #typetab td { text-align: right; }
 </style>
 <script>
 $(function() { });
@@ -311,7 +313,7 @@ echo $options;
 <div data-role="collapsible" data-collapsed="<?php if($open==2) echo "false"; else {echo "true";} ?>" >
 <h3>第二步：分类选择材料</h3>
 <div id="typechooser">
-<table class="grid">
+<table class="grid" id="typetab">
 <tr>
 <td>选择主要类型:</td>
 <td>

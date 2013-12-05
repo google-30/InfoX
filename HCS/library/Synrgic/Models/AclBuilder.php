@@ -151,7 +151,7 @@ class Synrgic_Models_AclBuilder {
             'material:emachinery'=>array('view','add','edit','delete','submit','onsiterecord','addrecord','updaterecord', 'deleterecord',),
             'material:import'=>array('view', 'submit', 'truncateall'),
             'material:summary'=>array('view', 'submit', 'truncateall'),
-            'material:po'=>array('view', 'submit', 'podetails'),            
+            'material:po'=>array('view', 'submit', 'podetails', 'posettings'),            
 
             'project:manage'=>array('view','add', 'edit', 'delete', 'submit', 
 'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery','applist','allmaterials','siteinfo'),

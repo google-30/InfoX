@@ -89,7 +89,7 @@ class Material_SummaryController extends Zend_Controller_Action {
 
         foreach ($sheetarr as $sheetname) {
             $siteid = infox_project::createSiteByName($sheetname);
-            echo $siteid . "--"; continue; 
+            echo $siteid . "--"; //continue; 
             
             $objWorksheet = $objPHPExcel->setActiveSheetIndexByName($sheetname);
             if ($objWorksheet) {
@@ -97,7 +97,7 @@ class Material_SummaryController extends Zend_Controller_Action {
             }
         }
 
-        //$this->redirect("/material/summary/");
+        $this->redirect("/material/summary/");
     }
 
     private function storeDetails($sheetname, $objWorksheet) {

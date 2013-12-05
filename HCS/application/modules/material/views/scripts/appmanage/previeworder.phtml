@@ -103,8 +103,16 @@
         $supattn = $this->supattn;
         $supattnphone = $this->supattnphone;
 
+        $poobj = $this->poobj;
+        $pono = $poobj->getPono();
+        $pocontact = $poobj->getContact();
+        $pophone = $poobj->getPhone();
+        
+        $sitecontact = $pocontact ? $pocontact : $siteleaders;
+        $sitephone = $pophone ? $pophone : $siteleadersphones;
+        
         $PONO = "&nbsp;&nbsp;" . $cmypostring . "/" . $site->getPostr() . "/" 
-                . $suppostring . "-" . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                . $suppostring . "-" . $pono .  "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
         $date = $this->date;
         $date = new Datetime("now");
@@ -116,6 +124,7 @@
         $staffphone = $this->staffphone;
 
         $materialrepo = $this->materialrepo;
+        
         ?>
         <div data-role="page" data-theme="<?php echo $jmtheme; ?>" style="page-break-after:always">
             <div data-role="content" class="previewcontent">	
@@ -148,8 +157,8 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td><strong>Site Personnel In-Charge:&nbsp;</strong><?php echo $siteleaders; ?></td>
-                        <td><strong>Site Tel./HP:&nbsp;</strong><?php echo $siteleadersphones; ?></td>
+                        <td><strong>Site Personnel In-Charge:&nbsp;</strong><?php echo $sitecontact; ?></td>
+                        <td><strong>Site Tel./HP:&nbsp;</strong><?php echo $sitephone; ?></td>
                     </tr>
                     <tr>
                         <td><strong>Office Personnel In-Charge:&nbsp;</strong><?php echo $staffname; ?></td>

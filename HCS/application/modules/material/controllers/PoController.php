@@ -77,6 +77,7 @@ class Material_PoController extends Zend_Controller_Action {
         }
 
         $suppliers = array();
+        $poarr = array();
         foreach ($matapps as $tmp) {
             $supplierobj = $tmp->getSupplier();
             $supplierid = $supplierobj ? $supplierobj->getId() : 0;
@@ -93,12 +94,47 @@ class Material_PoController extends Zend_Controller_Action {
                     $poobj->setApplication($appobj);
                     $poobj->setSupplier($supplierobj);
                     $this->_em->persist($poobj);
+                    
                 }
+                $poarr[] = $poobj;
             }
         }
         $this->view->suppliers = $suppliers;
+        $this->view->poarr = $poarr;
 
         $this->_em->flush();
     }
 
+    public function posettingsAction()
+    {
+        infox_common::turnoffView($this->_helper);
+        if(1)
+        {
+            $requests = $this->getRequest()->getPost();            
+            var_dump($requests);
+        }
+        
+        $poid = $this->getParam("poid", 0);
+        $pono = $this->getParam("pono", 0);
+        $contact = $this->getParam("contact", "");
+        $phone = $this->getParam("phone", "");
+        
+        $poobj = $this->_matpodata->findOneBy(array("id"=>$poid));
+        if($poobj)
+        {
+            $poobj->setPono($pono);
+            $poobj->setContact($contact);
+            $poobj->setPhone($phone);
+            $this->_em->persist($poobj);
+            $this->_em->flush();
+            $url = "/material/po/podetails?appid=" . $poobj->getApplication()->getId();
+        }
+        else
+        {
+            $url = "/material/po/";
+            
+        }
+        
+        $this->redirect($url);
+    }
 }

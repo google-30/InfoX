@@ -9,6 +9,13 @@
             "bRetrieve": true,
         });
     });
+
+    $('.settings').on("click", function() {
+        //alert("settings click");
+        var poid = $(this).attr("poid");
+        //alert("poid="+poid);
+        $("#poid").val(poid);
+    });
 </script>
 <?php
 $appobj = $this->application;
@@ -38,22 +45,8 @@ $totalprice = $this->totalprice ? $this->totalprice : 0;
 $company = $this->company;
 $cmyname = $this->cmyname;
 
-// TODO: group by(sql) supplier id to get all suppliers
-// for convenient
-/*
-  $suppliers = array();
-  foreach ($matapps as $tmp) {
-  $supplierobj = $tmp->getSupplier();
-  $supplierid = $supplierobj ? $supplierobj->getId() : 0;
-  $suppliername = $supplierobj ? $supplierobj->getName() : "";
-
-  if ($supplierid && !in_array($supplierid, $suppliers)) {
-  $suppliers[$supplierid] = $suppliername;
-  }
-  }
-
- */
 $suppliers = $this->suppliers;
+$poarr = $this->poarr;
 ?>
 
 <!--<h3>申请单详细信息</h3>-->
@@ -101,32 +94,41 @@ echo $this->grid("matapps", true)
     <thead><tr><th>Supplier</th><th>PO No.</th><th>Contact</th><th>Phone</th><th>Action</th></tr></thead>
     <tbody>
         <?php
-        if (count($suppliers)) {
+        if (count($poarr)) {
             $trs = "";
-            foreach ($suppliers as $key => $value) {
-                $supplierid = $key;
-                $suppliername = $value;
+            foreach ($poarr as $tmp) {
+                $supplierid = $tmp->getSupplier()->getId();
+                $suppliername = $tmp->getSupplier()->getName();
+                $poid = $tmp->getId();
+                $appid = $tmp->getApplication()->getId();
+
+                $pono = $tmp->getPono();
+                $contact = $tmp->getContact();
+                $phone = $tmp->getPhone();
                 $tr = "";
                 $td = "<td>$suppliername</td>";
                 $tr .= $td;
-                $td = "<td>$suppliername</td>";
+                $td = "<td>$pono</td>";
                 $tr .= $td;
-                $td = "<td>$suppliername</td>";
+                $td = "<td>$contact</td>";
                 $tr .= $td;
-                $td = "<td>$suppliername</td>";
+                $td = "<td>$phone</td>";
                 $tr .= $td;
 
                 $btnsettings = '<a href="#popupLogin" data-rel="popup" data-position-to="window" '
-                        . 'data-role="button" data-inline="true" data-mini="true">Settings</a>';
-                $btnpreview = '<a href="#popupLogin" data-rel="popup" data-position-to="window" '
-                        . 'data-role="button" data-inline="true" data-mini="true">Preview</a>';
+                        . 'data-role="button" data-inline="true" data-mini="true"'
+                        . 'poid="' . $poid . '" class="settings">Settings</a>';
+
+                $url = '/material/appmanage/previeworder?id=' . $appid
+                        . "&supplier=" . $supplierid
+                        . "&poid=$poid";
+                $btnpreview = '<a href="' . $url . '" target="_blank" '
+                        . 'data-mini="true" data-role="button">Preview</a>';
                 $btnsdiv = '<div class="ui-grid-a">
                     <div class="ui-block-a">' . $btnsettings . '</div>'
                         . '<div class="ui-block-b">' . $btnpreview . '</div>
                             </div>';
 
-                $btns = '<button data-mini="true">Settings</button>'
-                        . '<button data-mini="true">Preview</button>';
 
                 $td = "<td>$btnsdiv</td>";
                 $tr .= $td;
@@ -140,7 +142,9 @@ echo $this->grid("matapps", true)
 </table>
 
 <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
-    <form>
+    <form method="post" action="/material/po/posettings">
+        <input type="hidden" name="poid" id="poid" value="0">
+
         <div style="padding:10px 20px;">
             <h3>Purchase Order Settings</h3>
             <label for="un" class="ui-hidden-accessible">Username:</label>
@@ -148,7 +152,7 @@ echo $this->grid("matapps", true)
 
             <label for="un" class="ui-hidden-accessible">Username:</label>
             <input type="text" name="contact" id="contact" value="" placeholder="Contact" data-theme="a" />            
-            
+
             <label for="un" class="ui-hidden-accessible">Username:</label>
             <input type="text" name="phone" id="phone" value="" placeholder="Phone" data-theme="a" />            
 
