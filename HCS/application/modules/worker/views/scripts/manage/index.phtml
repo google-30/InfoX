@@ -3,36 +3,52 @@
     #datatable { text-align:center; display:none; }
     #Workersdata {  /*font: 80%/0.8em "Lucida Grande",Verdana,Arial,Helvetica,sans-serif; */
         font-size:small; 
-        text-shadow: 0 1px #FFFFFF;                       
+        text-shadow: 0 1px #FFFFFF;
     }
     #Workersdata, thead, tr {
         font-size:small; 
         text-shadow: 0 1px #FFFFFF;                       
-    }    
-    #uploaddiv { display: none; }
-    /*#featuresdiv { display: none; }*/
+    }
     
+    #Workersdata tr.row_selected td {
+        background-color: #FFBED9;
+    }
+
+    table.grid tr.odd {
+        color: #000000;
+    }    
+
+    table.grid tr.even {
+        color: #000000;
+    } 
+    
+    #uploaddiv { display: none; }
+
 </style>
 <script>
+    var oTable;
     $(document).ready(function() {
-        /*
-         $('#datatable').dataTable({ 
-         "iDisplayLength": 50,
-         "bRetrieve": true,
-         });
-         */
-        $('#Workersdata').dataTable({
-            "iDisplayLength": 50,
+        oTable = $('#Workersdata').dataTable({
+            "iDisplayLength": 100,
             "bRetrieve": true,
             "sScrollX": "100%",
+            "sScrollXInner": "100%",
             /*
              "sScrollXInner": "100%",
-            "bScrollCollapse": true,            
+             "bScrollCollapse": true,            
              */
         });
 
         fnHideColumns();
         resizetable();
+    });
+
+    $("#Workersdata tbody").click(function(event) {
+        //alert("click");
+        $(oTable.fnSettings().aoData).each(function() {
+            $(this.nTr).removeClass('row_selected');
+        });
+        $(event.target.parentNode).addClass('row_selected');
     });
 
     function resizetable()
@@ -130,18 +146,16 @@
                     window.location.reload();
                 })
     }
-    
+
     function fnShowHideAll()
     {
-        
-        alert("fnShowHideAll");
+        //alert("fnShowHideAll");
         var oTable = $('#Workersdata').dataTable();
-
-        for(var i=0; i<34; i++)
+        for (var i = 0; i < 34; i++)
         {
-        var bVis = oTable.fnSettings().aoColumns[i].bVisible;
-        oTable.fnSetColumnVis(i, true);        
-    }
+            var bVis = oTable.fnSettings().aoColumns[i].bVisible;
+            oTable.fnSetColumnVis(i, true);
+        }
     }
 </script>
 
@@ -337,5 +351,4 @@ if (count($maindata)) {
     echo "<strong>没有记录，请导入或者编辑工人数据</strong>";
 }
 ?>
-    
 <br><br>
