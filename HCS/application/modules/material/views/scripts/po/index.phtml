@@ -1,7 +1,39 @@
+
+<a href="/material/po/podetails?appid=<? echo $appid; ?>" 
+   data-role="button" data-theme="a" data-mini="true" target="_blank">历史PO清单</a>
+
+<div data-role="collapsible-set" data-mini="true" data-theme="">
 <?php
-echo $this->grid("matpodata", true)
+$maindata=$this->maindata;
+$siteoobjs=$this->siteobjs;
+$sitedivs="";
+foreach($siteoobjs as $site)
+{
+    $sitename = $site->getName();
+    $sitediv = '<div data-role="collapsible" data-collapsed="ture">';
+    $sitediv .= "<h3>$sitename</h3>";
+    
+    // TODO: get po tab
+    foreach($maindata as $poobj)
+    {
+        
+    }        
+    $sitediv .= "</div>";            
+    $sitedivs .= $sitediv;
+}
+//echo $sitedivs;
+$sitedivs="";
+$sitepoobjs=$this->sitepoobjs;
+foreach($sitepoobjs as $key => $value)
+{
+    $sitename = $key;
+    $sitediv = '<div data-role="collapsible" data-collapsed="ture">';
+    $sitediv .= "<h3>$sitename</h3>"; 
+    
+    $poobjs = $value;
+    $potab = $this->grid("matpodata", true)
         //->field('supplier', '供应商')
-        ->field('id', 'ID')        
+        ->field('id', 'ID')
         ->field('pono', 'PO No.')
         ->field('contact', 'Contact')
         ->field('phone', 'Phone')
@@ -10,5 +42,34 @@ echo $this->grid("matpodata", true)
         ->paginatorEnabled(false)
         ->setSorting(false)
         //->helper(new GridHelper_Appdetail())
-        ->data($this->maindata);
+        ->data($poobjs)
+        ->action(':action', '编辑', array('url' => array('action' => 'edit')))
+        ->action(':action', '删除', array('url' => array('action' => 'delete')));
+    
+    $sitediv .= $potab; 
+    $sitediv .= "</div>";            
+    $sitedivs .= $sitediv;
+}
+echo $sitedivs;
+
+?>
+</div>
+<?php
+/*
+echo $this->grid("matpodata", true)
+        //->field('supplier', '供应商')
+        ->field('id', 'ID')
+        ->field('pono', 'PO No.')
+        ->field('contact', 'Contact')
+        ->field('phone', 'Phone')
+        ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+        ->itemCountPerPage(30)
+        ->paginatorEnabled(false)
+        ->setSorting(false)
+        //->helper(new GridHelper_Appdetail())
+        ->data($this->maindata)
+        ->action(':action', '编辑', array('url' => array('action' => 'edit')))
+        ->action(':action', '删除', array('url' => array('action' => 'delete')));
+ * 
+ */
 ?>

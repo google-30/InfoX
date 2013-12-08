@@ -32,6 +32,28 @@ class Material_PoController extends Zend_Controller_Action {
     public function indexAction() {
         $maindata = $this->_matpodata->findAll();
         $this->view->maindata = $maindata;
+
+        //$siteobjs = $this->_site->findAll();        
+        $siteobjs = array();
+        $sitepoobjs = array();
+        foreach ($maindata as $poobj) {
+            $appobj = $poobj->getApplication();
+            $siteobj = $appobj->getSite();
+            if (!in_array($siteobj, $siteobjs)) {
+                $siteobjs[] = $siteobj;
+            }
+            
+            $sitename = $siteobj->getName();
+            if (key_exists($sitename, $sitepoobjs)) {
+                $sitepoobjs[$sitename][] = $poobj;
+            } else {
+                $sitepoobjs[$sitename] = array();
+                $sitepoobjs[$sitename][] = $poobj;
+            }
+
+        }
+        $this->view->siteobjs = $siteobjs;
+        $this->view->sitepoobjs = $sitepoobjs;
     }
 
     public function podetailsAction() {
@@ -94,7 +116,6 @@ class Material_PoController extends Zend_Controller_Action {
                     $poobj->setApplication($appobj);
                     $poobj->setSupplier($supplierobj);
                     $this->_em->persist($poobj);
-                    
                 }
                 $poarr[] = $poobj;
             }
@@ -105,36 +126,31 @@ class Material_PoController extends Zend_Controller_Action {
         $this->_em->flush();
     }
 
-    public function posettingsAction()
-    {
+    public function posettingsAction() {
         infox_common::turnoffView($this->_helper);
-        if(1)
-        {
-            $requests = $this->getRequest()->getPost();            
+        if (1) {
+            $requests = $this->getRequest()->getPost();
             var_dump($requests);
         }
-        
+
         $poid = $this->getParam("poid", 0);
         $pono = $this->getParam("pono", 0);
         $contact = $this->getParam("contact", "");
         $phone = $this->getParam("phone", "");
-        
-        $poobj = $this->_matpodata->findOneBy(array("id"=>$poid));
-        if($poobj)
-        {
+
+        $poobj = $this->_matpodata->findOneBy(array("id" => $poid));
+        if ($poobj) {
             $poobj->setPono($pono);
             $poobj->setContact($contact);
             $poobj->setPhone($phone);
             $this->_em->persist($poobj);
             $this->_em->flush();
             $url = "/material/po/podetails?appid=" . $poobj->getApplication()->getId();
-        }
-        else
-        {
+        } else {
             $url = "/material/po/";
-            
         }
-        
+
         $this->redirect($url);
     }
+
 }

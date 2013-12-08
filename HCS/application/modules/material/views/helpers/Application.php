@@ -30,6 +30,24 @@ class GridHelper_Application extends Grid_Helper_Abstract
         return $html;
     }    
 
+    protected function td_materials($field, $row) 
+    {
+        //return "xxx";
+        $em = Zend_Registry::get('em');
+        $appRepo = $em->getRepository('Synrgic\Infox\Application');        
+        $matappdataRepo = $em->getRepository('Synrgic\Infox\Matappdata');        
+        $appid = $row['id'];
+        $appobj = $appRepo->findOneBy(array("id"=>$appid));
+        $matappobjs = $matappdataRepo->findBy(array("application"=>$appobj));
+        $matappstr = "";
+        foreach($matappobjs as $mat)
+        {
+            $longname = $mat->getLongname() . "&nbsp;--&nbsp;";
+            $matappstr .= $longname;
+        }
+        
+        return $matappstr;
+    }
 }
 
 ?>
