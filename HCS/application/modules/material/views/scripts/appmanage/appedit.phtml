@@ -169,7 +169,8 @@ echo $options;
 <tr>
 <td><strong>申请人:</strong></td>
 <!--<td><strong><?php echo $applicantname; ?></strong></td>-->
-<td><select id="applicant" data-mini="true">
+<td>
+    <select id="applicant" data-mini="true">
 <option value="0">未指定申请人</option>
 <?php
 $options="";
@@ -190,7 +191,8 @@ foreach($humanres as $tmp)
 }
 echo $options;
 ?>
-</select></td>
+</select>
+</td>
 <td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
 </tr>
 </tbody>
@@ -242,7 +244,7 @@ echo $this->grid("matappsNotInSys", true)
 $html="";
 if($displayblk==0)
 {
-    $html = '<input type="button" value="更新以上信息" onclick="submitmatapps()" data-theme="a" data-mini="true">';
+    $html = '<input type="button" value="提交以上信息" onclick="submitmatapps()" data-theme="a" data-mini="true">';
     //$html.= '<input type="button" value="取消提交审核" onclick="reviewmatapps()" data-theme="a" data-mini="true">';
     //$html.= '<input type="button" value="申请退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
 }
@@ -253,6 +255,8 @@ else if($displayblk==1)
 }
 echo $html;
 ?>
+<a href="/material/po/podetails?appid=<? echo $appid; ?>" 
+   data-role="button" data-theme="a" data-mini="true" target="_blank">PO处理</a>
 <br><br>
 
 

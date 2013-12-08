@@ -1,49 +1,46 @@
 <style>
-#appinfotab { width:100%; }
-#totalprice { width:98%; text-align: right; }
+    #appinfotab { width:100%; }
+    #totalprice { width:98%; text-align: right; }
 </style>
 <script>
 </script>
 <?php
 $appobj = $this->application;
-$appid=$appobj->getId();
+$appid = $appobj->getId();
 $create = $appobj->getCreatedate()->format("Y-m-d H:i:s");
 $update = $appobj->getUpdatedate()->format("Y-m-d H:i:s");
 $applicant = $appobj->getApplicant();
 $applicantname = "";
-$applicantid =0;
-if($applicant)
-{
+$applicantid = 0;
+if ($applicant) {
     $applicantname = $applicant->getName();
     $applicantid = $applicant->getId();
 }
 
-$sitename=$this->sitename;
-$siteid=$this->siteid;
+$sitename = $this->sitename;
+$siteid = $this->siteid;
 
-$sites=$this->sites;
+$sites = $this->sites;
 $humanres = $this->humanres;
 
 $role = $this->role;
-$displayblk = ($role=="manager") ? 1 : 0;   
+$displayblk = ($role == "manager") ? 1 : 0;
 
 $matapps = $this->matapps;
-$totalprice= $this->totalprice ? $this->totalprice : 0;
+$totalprice = $this->totalprice ? $this->totalprice : 0;
 
-$company=$this->company;
-$cmyname=$this->cmyname;
+$company = $this->company;
+$cmyname = $this->cmyname;
 
 // TODO: group by(sql) supplier id to get all suppliers
 // for convenient
-$suppliers=array();
-foreach($matapps as $tmp)
-{
+$suppliers = array();
+foreach ($matapps as $tmp) {
     $supplierobj = $tmp->getSupplier();
-    $supplierid = $supplierobj ? $supplierobj->getId(): 0;
-    $suppliername = $supplierobj ? $supplierobj->getName(): "";
+    $supplierid = $supplierobj ? $supplierobj->getId() : 0;
+    $suppliername = $supplierobj ? $supplierobj->getName() : "";
 
-    if($supplierid && !in_array($supplierid, $suppliers))
-    {
+    if ($supplierid && !in_array($supplierid, $suppliers)) {
         $suppliers[$supplierid] = $suppliername;
     }
 }
@@ -53,22 +50,26 @@ foreach($matapps as $tmp)
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
 <hr>
 <table class="" id="appinfotab"><tbody>
-<tr>
-<td><strong>申请工地:</strong></td><td><strong><?php echo $sitename; ?></strong></td>
-<!--<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>-->
-<td><strong>承包公司:</strong></td><td><strong><?php echo $cmyname; ?></strong></td>
-</tr>
-<tr>
-<td><strong>申请人员:</strong></td><td><strong><?php echo $applicantname; ?></strong></td>
-<td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
-</tr>
-<tr>
-<td><strong>申请总价:</strong></td><td><strong><?php echo $totalprice; ?></strong></td>
-<td><strong>申请单号:</strong></td><td><strong><?php echo $appid; ?></strong></td>
-</tr>
-</tbody></table>
+        <tr>
+            <td><strong>申请工地:</strong></td><td><strong><?php echo $sitename; ?></strong></td>
+            <!--<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>-->
+            <td><strong>承包公司:</strong></td><td><strong><?php echo $cmyname; ?></strong></td>
+        </tr>
+        <tr>
+            <td><strong>申请人员:</strong></td><td><strong><?php echo $applicantname; ?></strong></td>
+            <td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
+        </tr>
+        <tr>
+            <td><strong>申请总价:</strong></td><td><strong><?php echo $totalprice; ?></strong></td>
+            <td><strong>申请单号:</strong></td><td><strong><?php echo $appid; ?></strong></td>
+        </tr>
+    </tbody></table>
 <hr>
-<div data-role="collapsible-set" data-mini="true" data-theme="c">
+<a href="/material/appmanage/previewform?&id=<?php echo $appid; ?>" target="_blank">
+    <input type="button" value="预览材料申请单" data-theme="a" data-mini="true">
+</a> 
+
+<!--<div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
     <h3>预览和打印材料申请单</h3>
     <a href="/material/appmanage/previewform?&id=<?php echo $appid; ?>" target="_blank"><input type="button" value="预览和打印材料申请单" data-theme="a" data-mini="true"></a> 
@@ -77,22 +78,18 @@ foreach($matapps as $tmp)
     <div data-role="collapsible" data-collapsed="true">
     <h3>预览和打印Purchase Order</h3>
 <?php
-if(count($suppliers))
-{
+if (count($suppliers)) {
 
-$buttons="";
-foreach($suppliers as $key => $value)
-{
-    $supplierid = $key;
-    $suppliername = $value;
+    $buttons = "";
+    foreach ($suppliers as $key => $value) {
+        $supplierid = $key;
+        $suppliername = $value;
 
-    $button = '<a href="/material/appmanage/previeworder?&id=' . $appid . "&supplier=" . $supplierid . '" target="_blank"><input type="button" value="' . $suppliername .'" data-theme="a" data-mini="true"></a>'; 
-    $buttons .= $button; 
-}    
-echo $buttons;
-}
-else
-{
+        $button = '<a href="/material/appmanage/previeworder?&id=' . $appid . "&supplier=" . $supplierid . '" target="_blank"><input type="button" value="' . $suppliername . '" data-theme="a" data-mini="true"></a>';
+        $buttons .= $button;
+    }
+    echo $buttons;
+} else {
     echo "请更新所申请材料的供应商，以打印PO单";
 }
 ?>
@@ -102,27 +99,27 @@ else
     <h3>PO Settings</h3>
     <a href="/material/appmanage/previewform?&id=<?php echo $appid; ?>" target="_blank"><input type="button" value="预览和打印材料申请单" data-theme="a" data-mini="true"></a> 
     </div>    
-</div>
+</div>-->
 <hr>
 <?php
 echo $this->grid("matapps", true)
-          ->field('longname','材料名称')
-          //->field('spec','型号规格')
-          ->field('description','描述')          
-          ->field('amount','申请数量')
-          ->field('unit','单位')
-          ->field('rate', '单价')
-          ->field('quantity', '数量')
-          ->field('total', '总价')          
-          ->field('supplier', '供应商')          
-          ->field('sitepart', '工程部位')            
-          //->field('remark','补充说明')
-          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
-          ->itemCountPerPage(30)
-          ->paginatorEnabled(false)
-          ->setSorting(false)  
-          ->helper(new GridHelper_Appdetail())
-          ->data($matapps);          
+        ->field('longname', '材料名称')
+        //->field('spec','型号规格')
+        ->field('description', '描述')
+        ->field('amount', '申请数量')
+        ->field('unit', '单位')
+        ->field('rate', '单价')
+        ->field('quantity', '数量')
+        ->field('total', '总价')
+        ->field('supplier', '供应商')
+        ->field('sitepart', '工程部位')
+        //->field('remark','补充说明')
+        ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+        ->itemCountPerPage(30)
+        ->paginatorEnabled(false)
+        ->setSorting(false)
+        ->helper(new GridHelper_Appdetail())
+        ->data($matapps);
 ?>
 <!--
 <div id="totalprice"><strong>申请总价: <?php echo $totalprice; ?></strong></div>
