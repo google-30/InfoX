@@ -30,11 +30,12 @@ class Project_AttendanceController extends Zend_Controller_Action
         {
             $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
             $startdate = $siteobj->getStart();
-            $stopdate = $siteobj->getStop();
+            //$stopdate = $siteobj->getStop();
+            $stopdate = new Datetime("now");
             $months = $this->getMonths($startdate, $stopdate);
             if(!$months)
             {
-                $error .= infox_common::setErrorOutput("请在工地管理指定开始和结束日期");
+                $error .= infox_common::setErrorOutput("请在工地管理指定开始日期");
             }
         }
 
