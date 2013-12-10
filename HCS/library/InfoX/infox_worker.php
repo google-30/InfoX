@@ -30,7 +30,7 @@ class infox_worker
 
     public static function getSheetarr()
     {
-        $sheetarr = array("HC.C","HT.C","HC.B","HT.B",);
+        $sheetarr = array("HC.C","HT.C","HC.B","HT.B", "Others");
         return $sheetarr;        
     }    
 

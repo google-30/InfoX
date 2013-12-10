@@ -1,178 +1,196 @@
 <!DOCTYPE html> 
 <html>
 
-<?php
-$date=$this->date;
-$monthstr=$date->format("Y-m");
+    <?php
+    $date = $this->date;
+    $monthstr = $date->format("Y-m");
 
-$site=$this->site;
-$sitename=$site->getName();
-$siteid=$this->siteid;
+    $site = $this->site;
+    $sitename = $site->getName();
+    $siteid = $this->siteid;
 
-$workerarr=$this->workerarr;
-$attendancearr=$this->attendancearr;
+    $workerarr = $this->workerarr;
+    $attendancearr = $this->attendancearr;
 
-$workerhtmls=$this->workerhtmls;
+    $workerhtmls = $this->workerhtmls;
 
-$username=$this->username;
-?>
+    $username = $this->username;
 
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title><?=$sitename?>&nbsp;<? echo $monthstr; ?></title> 
-	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
-    <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
-    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
-    <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+    $url = "/project/attendance/attendquick?" . "sid=$siteid&amp;month=$monthstr";
+    $attendquickbtn = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">快速考勤</a>';
 
-    <!--<link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
-    <script src="/common/js/jQuery.ui.datepicker.js"></script>
-    <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
-	<script>
-		//reset type=date inputs to text
-		$( document ).bind( "mobileinit", function(){
-			$.mobile.page.prototype.options.degradeInputs.date = true;
-		});	
-	</script>-->
-
-	<link rel="stylesheet"  href="/common/datebox/jqm-datebox-1.1.0.css" /> 
-	<script src="/common/datebox/jqm-datebox-1.1.0.core.js"></script>
-	<script src="/common/datebox/jqm-datebox-1.1.0.mode.calbox.js"></script>
-		    
-</head> 
-
-<body> 
-<style>
-table { width: 100%; border-collapse:collapse; }
-table td, table th { text-align:center; border:1px solid black; }
-.ui-dialog-contain {
-	width: 92.5%;
-	max-width: 2500px;
-	margin: 2% auto 15px auto;
-	padding: 0;
-	position: relative;
-	top: -15px;
-}
-
-.attendsum  { background-color:#D0D0D0; }
-.fixwidthcol { width:45px; }
-.tdattendfood { width:150px; }
-</style>
-<script>
-function quicksubmit()
-{
-    //alert("quicksubmit");
-    var date = $("#mydate").val();
-    //alert("date="+date);
-    if(date == "")
-    {
-        alert("请选择日期，再提交考勤");
-        return;
+    $options = "";
+    foreach ($workerarr as $worker) {
+        $wid = $worker->getId();
+        $namechs = $worker->getNamechs();
+        $nameeng = $worker->getNameeng();
+        $option = '<option value="' . $wid . '">' . $namechs. $nameeng . "</option>";
+        $options .= $option;
     }
     
-    var r=confirm("日期:"+date+"\n确认提交该天的考勤吗？");
-    if (r==false)
-    {
+    $workersel = '<select id ="workersel" data-mini="true" data-theme="b" >' . $options . "</select>";
+    ?>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width = device-width, initial-scale = 1"> 
+        <title><?= $sitename ?>&nbsp;<? echo $monthstr; ?></title> 
+        <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+        <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+        <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+        <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+
+        <!--<link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
+        <script src="/common/js/jQuery.ui.datepicker.js"></script>
+        <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
+            <script>
+                    //reset type=date inputs to text
+                    $( document ).bind( "mobileinit", function(){
+                            $.mobile.page.prototype.options.degradeInputs.date = true;
+                    });	
+            </script>-->
+
+        <link rel="stylesheet"  href="/common/datebox/jqm-datebox-1.1.0.css" /> 
+        <script src="/common/datebox/jqm-datebox-1.1.0.core.js"></script>
+        <script src="/common/datebox/jqm-datebox-1.1.0.mode.calbox.js"></script>
+
+    </head> 
+
+    <body> 
+        <style>
+            table { width: 100%; border-collapse:collapse; }
+            table td, table th { text-align:center; border:1px solid black; }
+            .ui-dialog-contain {
+                width: 92.5%;
+                max-width: 2500px;
+                margin: 2% auto 15px auto;
+                padding: 0;
+                position: relative;
+                top: -15px;
+            }
+
+            .attendsum  { background-color:#D0D0D0; }
+            .fixwidthcol { width:45px; }
+            .tdattendfood { width:150px; }
+        </style>
+        <script>
+            function quicksubmit()
+            {
+                //alert("quicksubmit");
+                var date = $("#mydate").val();
+        //alert("date="+date);
+        if (date == "")
+        {
+        alert("请选择日期，再提交考勤");
+        return;
+        }
+
+        var r = confirm("日期:" + date + "\n确认提交该天的考勤吗？");
+        if (r == false)
+        {
         return false;
-    }
+        }
 
-    $("#quickdate").val(date);
+        $("#quickdate").val(date);
 
-    $.ajax({
-     type: "POST",
-     url: "/project/attendance/quicksubmit",
-     data: {'form': $("#quickform").serializeArray(), /*'other': extra_data*/},
-     success: function(msg) {
+        $.ajax({
+        type: "POST",
+        url: "/project/attendance/quicksubmit",
+        data: {'form': $("#quickform").serializeArray(), /* 'other': extra_data */},
+        success: function(msg) {
         //alert("Form Submitted: " + msg);
         alert("提交成功，请继续考勤");
         //console.log(msg);
-     }
-    });    
-}
+        }
+        });
+        }
 
-function attendialogpost()
-{
-    var date = $("#mydate").val();
-    //alert(date); return;
-    if(date == "")
-    {
+        function attendialogpost()
+        {
+        var date = $("#mydate").val();
+        //alert(date); return;
+        if (date == "")
+        {
         alert("请选择日期，再提交考勤");
         return;
-    }        
-    var wid = $("#wid").val();
-    //console.log(wid); return;
-    var attend = $("#attend").val();
-    if(attend == "")
-    {
+        }
+        var wid = $("#wid").val();
+        //console.log(wid); return;
+        var attend = $("#attend").val();
+        if (attend == "")
+        {
         alert("请填写工人当日计时或者计件，再提交考勤");
         return;
-    }        
-    
-    var food = $("#food").val();
-    var remark = $("#remark").val();
-    var month = $("#month").val();
-    var siteid = $("#siteid").val();
+        }
 
-    $.post("/project/attendance/postattend", { wid:wid, date:date, attend:attend, remark:remark, month:month, food:food }, 
-    function(data) {
+        var food = $("#food").val();
+        var remark = $("#remark").val();
+        var month = $("#month").val();
+        var siteid = $("#siteid").val();
+
+        $.post("/project/attendance/postattend", {wid: wid, date: date, attend: attend, remark: remark, month: month, food: food},
+        function(data) {
         //console.log(data);
-        $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month + "&sid="+siteid);
+        $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month=" + month + "&sid=" + siteid);
         alert("提交成功，请继续考勤");
         //window.location.reload();
-    })     
-}
+        })
+    }
 
-function attendialogclose()
-{
-    //alert(attendialogclose);
-    //alert("attendialogclose");
+    function attendialogclose() {
+        //alert(attendialogclose);
+        //alert("attendialogclose");
+        // refresh this page to reload data
+        document . location . reload();
+    }
 
-    // refresh this page to reload data
-    document.location.reload();
-}
-</script>
+    </script>
 <div data-role="page">
 
-	<div data-role="header">
-		<!--<h1>Single page</h1>-->
-<table style="table-layout:fixed;">
-<tr>
-<td><? echo "工地名称: " . $sitename; ?></td>
-<td><? echo "月份: " . $monthstr; ?></td>
-<td>工资负责人:&nbsp;<?=$username?></td>
-</tr>
-</table>
-	</div><!-- /header -->
+    <div data-role="header">
+        <!--<h1>Single page</h1>-->
+        <table style="table-layout:fixed;">
+            <tr>
+                <td><? echo "工地名称: " . $sitename; ?></td>
+                <td><? echo "月份: " . $monthstr; ?></td>
+                <td>工资负责人:&nbsp;<?= $username ?></td>
+            </tr>
+        </table>
+    </div><!-- /header -->
 
-	<div data-role="content">
-<!--<div style="float:right;">-->
-<input type="hidden" id="siteid" name="siteid" value="<? echo $siteid; ?>">
-<div>
+    <div data-role="content">
+        <!--<div style="float:right;">-->
+        <input type="hidden" id="siteid" name="siteid" value="<? echo $siteid; ?>">
+
+        <div class="ui-grid-a">
+            <div class="ui-block-a"><?=$workersel ?></div>
+            <div class="ui-block-b"><?= $attendquickbtn ?></div>
+        </div><!-- /grid-a -->                
+
+        <!--<div>
 <?php
-$url = "/project/attendance/attendquick?" . "sid=$siteid&amp;month=$monthstr";   
-$ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" >快速考勤</a>';    
+$url = "/project/attendance/attendquick?" . "sid=$siteid&amp;month=$monthstr";
+$ahref = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" >快速考勤</a>';
 echo $ahref;
 ?>
-</div>
+        </div>-->
 
-<?php
-foreach($workerhtmls as $tmp)
-{
-    //echo $tmp . "<br>";    
-    $tab1 = $tmp[0];
-    $tab2 = $tmp[1];
+        <?php
+        foreach ($workerhtmls as $tmp) {
+            //echo $tmp . "<br>";    
+            $tab1 = $tmp[0];
+            $tab2 = $tmp[1];
 
-    echo $tab1. $tab2 . "<br>";
-}
-?>
-	</div><!-- /content -->
-	
-	<div data-role="footer">
-		<!--<h4>Footer content</h4>-->
-	</div><!-- /footer -->
-	
+            echo $tab1 . $tab2 . "<br>";
+        }
+        ?>
+    </div><!-- /content -->
+
+    <div data-role="footer">
+        <!--<h4>Footer content</h4>-->
+    </div><!-- /footer -->
+
 </div><!-- /page -->
 
 </body>
