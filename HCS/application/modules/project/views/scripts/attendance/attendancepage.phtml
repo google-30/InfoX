@@ -1,6 +1,5 @@
 <!DOCTYPE html> 
 <html>
-
     <?php
     $date = $this->date;
     $monthstr = $date->format("Y-m");
@@ -20,14 +19,16 @@
     $attendquickbtn = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">快速考勤</a>';
 
     $options = "";
+    $wid = 0;
     foreach ($workerarr as $worker) {
-        $wid = $worker->getId();
+        //$wid = $worker->getId();
         $namechs = $worker->getNamechs();
         $nameeng = $worker->getNameeng();
-        $option = '<option value="' . $wid . '">' . $namechs. $nameeng . "</option>";
+        $wid++;
+        $option = '<option value="' . $wid . '">' . $namechs . $nameeng . "</option>";
         $options .= $option;
     }
-    
+
     $workersel = '<select id ="workersel" data-mini="true" data-theme="b" >' . $options . "</select>";
     ?>
 
@@ -75,124 +76,146 @@
             .tdattendfood { width:150px; }
         </style>
         <script>
+            $(function() {
+                $("#workersel").on("change", function() {
+                    //alert("change");
+                    var workersel = $(this).val();
+                    $(window).scrollTop($('#worker'+ workersel).offset().top);
+                });
+
+            });
+
+
             function quicksubmit()
             {
                 //alert("quicksubmit");
                 var date = $("#mydate").val();
-        //alert("date="+date);
-        if (date == "")
-        {
-        alert("请选择日期，再提交考勤");
-        return;
-        }
+                //alert("date="+date);
+                if (date == "")
+                {
+                    alert("请选择日期，再提交考勤");
+                    return;
+                }
 
-        var r = confirm("日期:" + date + "\n确认提交该天的考勤吗？");
-        if (r == false)
-        {
-        return false;
-        }
+                var r = confirm("日期:" + date + "\n确认提交该天的考勤吗？");
+                if (r == false)
+                {
+                    return false;
+                }
 
-        $("#quickdate").val(date);
+                $("#quickdate").val(date);
 
-        $.ajax({
-        type: "POST",
-        url: "/project/attendance/quicksubmit",
-        data: {'form': $("#quickform").serializeArray(), /* 'other': extra_data */},
-        success: function(msg) {
-        //alert("Form Submitted: " + msg);
-        alert("提交成功，请继续考勤");
-        //console.log(msg);
-        }
-        });
-        }
+                $.ajax({
+                    type: "POST",
+                    url: "/project/attendance/quicksubmit",
+                    data: {'form': $("#quickform").serializeArray(), /* 'other': extra_data */},
+                    success: function(msg) {
+                        //alert("Form Submitted: " + msg);
+                        alert("提交成功，请继续考勤");
+                        //console.log(msg);
+                    }
+                });
+            }
 
-        function attendialogpost()
-        {
-        var date = $("#mydate").val();
-        //alert(date); return;
-        if (date == "")
-        {
-        alert("请选择日期，再提交考勤");
-        return;
-        }
-        var wid = $("#wid").val();
-        //console.log(wid); return;
-        var attend = $("#attend").val();
-        if (attend == "")
-        {
-        alert("请填写工人当日计时或者计件，再提交考勤");
-        return;
-        }
+            function attendialogpost()
+            {
+                var date = $("#mydate").val();
+                //alert(date); return;
+                if (date == "")
+                {
+                    alert("请选择日期，再提交考勤");
+                    return;
+                }
+                var wid = $("#wid").val();
+                //console.log(wid); return;
+                var attend = $("#attend").val();
+                if (attend == "")
+                {
+                    alert("请填写工人当日计时或者计件，再提交考勤");
+                    return;
+                }
 
-        var food = $("#food").val();
-        var remark = $("#remark").val();
-        var month = $("#month").val();
-        var siteid = $("#siteid").val();
+                var food = $("#food").val();
+                var remark = $("#remark").val();
+                var month = $("#month").val();
+                var siteid = $("#siteid").val();
 
-        $.post("/project/attendance/postattend", {wid: wid, date: date, attend: attend, remark: remark, month: month, food: food},
-        function(data) {
-        //console.log(data);
-        $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month=" + month + "&sid=" + siteid);
-        alert("提交成功，请继续考勤");
-        //window.location.reload();
-        })
-    }
+                $.post("/project/attendance/postattend", {wid: wid, date: date, attend: attend, remark: remark, month: month, food: food},
+                function(data) {
+                    //console.log(data);
+                    $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month=" + month + "&sid=" + siteid);
+                    alert("提交成功，请继续考勤");
+                    //window.location.reload();
+                })
+            }
 
-    function attendialogclose() {
-        //alert(attendialogclose);
-        //alert("attendialogclose");
-        // refresh this page to reload data
-        document . location . reload();
-    }
+            function attendialogclose() {
+                //alert(attendialogclose);
+                //alert("attendialogclose");
+                // refresh this page to reload data
+                document.location.reload();
+            }
 
-    </script>
-<div data-role="page">
 
-    <div data-role="header">
-        <!--<h1>Single page</h1>-->
-        <table style="table-layout:fixed;">
-            <tr>
-                <td><? echo "工地名称: " . $sitename; ?></td>
-                <td><? echo "月份: " . $monthstr; ?></td>
-                <td>工资负责人:&nbsp;<?= $username ?></td>
-            </tr>
-        </table>
-    </div><!-- /header -->
 
-    <div data-role="content">
-        <!--<div style="float:right;">-->
-        <input type="hidden" id="siteid" name="siteid" value="<? echo $siteid; ?>">
+        </script>
+        <div data-role="page">
 
-        <div class="ui-grid-a">
-            <div class="ui-block-a"><?=$workersel ?></div>
-            <div class="ui-block-b"><?= $attendquickbtn ?></div>
-        </div><!-- /grid-a -->                
+            <div data-role="header">
+                <!--<h1>Single page</h1>-->
+                <table style="table-layout:fixed;">
+                    <tr>
+                        <td><? echo "工地名称: " . $sitename; ?></td>
+                        <td><? echo "月份: " . $monthstr; ?></td>
+                        <td>工资负责人:&nbsp;<?= $username ?></td>
+                    </tr>
+                </table>
+            </div><!-- /header -->
 
-        <!--<div>
-<?php
-$url = "/project/attendance/attendquick?" . "sid=$siteid&amp;month=$monthstr";
-$ahref = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" >快速考勤</a>';
-echo $ahref;
-?>
-        </div>-->
+            <div data-role="content">
+                <!--<div style="float:right;">-->
+                <input type="hidden" id="siteid" name="siteid" value="<? echo $siteid; ?>">
 
-        <?php
-        foreach ($workerhtmls as $tmp) {
-            //echo $tmp . "<br>";    
-            $tab1 = $tmp[0];
-            $tab2 = $tmp[1];
+                <div class="ui-grid-a">
+                    <div class="ui-block-a"><?= $workersel ?></div>
+                    <div class="ui-block-b"><?= $attendquickbtn ?></div>
+                </div><!-- /grid-a -->                
 
-            echo $tab1 . $tab2 . "<br>";
-        }
-        ?>
-    </div><!-- /content -->
+                <!--<div>
+                <?php
+                $url = "/project/attendance/attendquick?" . "sid=$siteid&amp;month=$monthstr";
+                $ahref = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" >快速考勤</a>';
+                echo $ahref;
+                ?>
+                </div>-->
 
-    <div data-role="footer">
-        <!--<h4>Footer content</h4>-->
-    </div><!-- /footer -->
+                <?php
+                $divno = 0;
+                /*
+                  foreach ($workerhtmls as $tmp) {
+                  //echo $tmp . "<br>";
+                  $tab1 = $tmp[0];
+                  $tab2 = $tmp[1];
 
-</div><!-- /page -->
+                  echo $tab1 . $tab2 . "<br>";
+                  } */
+                foreach ($workerhtmls as $tmp) {
+                    //echo $tmp . "<br>";    
+                    $tab1 = $tmp[0];
+                    $tab2 = $tmp[1];
 
-</body>
+                    $divno++;
+                    echo "<div id=worker$divno>" . $tab1 . $tab2 . "</div><br>";
+                }
+                ?>
+            </div><!-- /content -->
+
+            <div data-role="footer">
+                <!--<h4>Footer content</h4>-->
+            </div><!-- /footer -->
+
+        </div><!-- /page -->
+
+    </body>
 </html>
 

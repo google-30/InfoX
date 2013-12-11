@@ -75,7 +75,7 @@
 	    <class>popup</class>
 	    <pages>
 	        <workeronsite>
-		    <label>工人在岗管理</label>
+		    <label>工地记录</label>
 		    <module>worker</module>
 		    <controller>onsite</controller>
 		    <action>index</action>
@@ -84,7 +84,7 @@
 	        </workeronsite>	    
 
 	        <attendance>
-		    <label>工地考勤</label>
+		    <label>工人考勤</label>
 		    <module>project</module>
 		    <controller>attendance</controller>
 		    <action>index</action>
@@ -93,7 +93,7 @@
 	        </attendance>
 	    
             <workersalary>
-		    <label>工人工资管理</label>
+		    <label>工资记录</label>
 		    <module>salary</module>
 		    <controller>salary</controller>
 		    <action>index</action>
