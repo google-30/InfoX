@@ -1,78 +1,77 @@
+<style>
+    #Workersdata { table-layout: fixed; }
+</style>
 <script>
-$(function() {
-    $('#Workersdata').dataTable({ 
-        "iDisplayLength": 50,
-        "bRetrieve": true,
+    $(function() {
+        $('#Workersdata').dataTable({
+            "iDisplayLength": 100,
+            "bRetrieve": true,
+            "aaSorting": [[ 0, "desc" ]],
+        });
     });
-} );
 
-$( "#sheetselect" ).change(function() {
-    var sheetname = $(this).val();
-    var url = "/worker/onsite?sheet=" + sheetname;
-    redirect(url);
-});
+    $("#sheetselect").change(function() {
+        var sheetname = $(this).val();
+        var url = "/worker/onsite?sheet=" + sheetname;
+        redirect(url);
+    });
 
-function redirect(url) {
-    window.location = url;
-}
-</script>
-<?
-$sheet=$this->sheet;
-$sheetarr=$this->sheetarr;
-$maindata=$this->maindata;
-
-$options="";
-foreach($sheetarr as $tmp)
-{
-    if($sheet == $tmp)
-    {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    function redirect(url) {
+        window.location = url;
     }
-    else
-    {
+</script>
+<?php
+$sheet = $this->sheet;
+$sheetarr = $this->sheetarr;
+$maindata = $this->maindata;
+
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    } else {
         $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
     }
 
     $options .= $option;
 }
-$selects='<select data-mini="true" id="sheetselect">';
+$selects = '<select data-mini="true" id="sheetselect">';
 $selects.=$options;
 $selects.='</select>';
 echo $selects;
 
-$onswitches=array(
-"sn"=>"S/N","eeeno"=>"E'ee No.","namechs"=>"Name","nameeng"=>"Name Eng","wpno"=>"WP No.", 
-"ppno"=>"PP No.", "rate"=>"RATE",);
+$onswitches = array(
+    "site" => "Site", "eeeno" => "E'ee No.", "namechs" => "Name", "nameeng" => "Name ", "wpno" => "WP No.",
+    "ppno" => "PP No.", /*"rate" => "RATE",*/);
 
-$wdtab=$this->grid("Workersdata", true);
-foreach($onswitches as $key=>$value)
-{
-    $wdtab=$wdtab->field($key,$value);
+$wdtab = $this->grid("Workersdata", true);
+foreach ($onswitches as $key => $value) {
+    $wdtab = $wdtab->field($key, $value);
 }
-$wdtab=$wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
-$wdtab=$wdtab->paginatorEnabled(false)->setSorting(false);
-//$wdtab=$wdtab->helper(new GridHelper_Worker());
-$wdtab=$wdtab->data($maindata)->action(':action', '工地记录', array( 'url'=>array('action'=>'onsiterecord')));
-$wdtab=$wdtab->action(':action', '考勤记录', array( 'url'=>array('action'=>'attendancerecord')));
+$wdtab = $wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+$wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+$wdtab = $wdtab->helper(new GridHelper_Workerdetails());
+$wdtab = $wdtab->data($maindata)->action(':action', '工地', array('url' => array('action' => 'onsiterecord')));
+$wdtab = $wdtab->action(':action', '考勤', array('url' => array('action' => 'attendancerecord')));
 echo $wdtab;
 
 /*
-echo $this->grid("Workersdata", true)
-          ->field('id','编号')
-          ->field('nameeng','英名字')
-          ->field('namechs','中文名')
-          ->field('fin','准证号码')
-          //->field('company', '所在公司')
-          ->field('site', '所在工地')  
-          //->field('passexp', '准证到期') 
-          //->field('securityexp', '安全证到期')  
-          ->actionField(':action', "", '&nbsp;|&nbsp;')
-          ->paginatorEnabled(false)
-          ->setSorting(false)  
-          ->helper(new GridHelper_Worker())
-          ->data($this->workersdata)
-          ->action(':action', '工地记录', array( 'url'=>array('action'=>'onsiterecord')))
-          ->action(':action', '考勤记录', array( 'url'=>array('action'=>'attendancerecord')));
-*/
+  echo $this->grid("Workersdata", true)
+  ->field('id','编号')
+  ->field('nameeng','英名字')
+  ->field('namechs','中文名')
+  ->field('fin','准证号码')
+  //->field('company', '所在公司')
+  ->field('site', '所在工地')
+  //->field('passexp', '准证到期')
+  //->field('securityexp', '安全证到期')
+  ->actionField(':action', "", '&nbsp;|&nbsp;')
+  ->paginatorEnabled(false)
+  ->setSorting(false)
+  ->helper(new GridHelper_Worker())
+  ->data($this->workersdata)
+  ->action(':action', '工地记录', array( 'url'=>array('action'=>'onsiterecord')))
+  ->action(':action', '考勤记录', array( 'url'=>array('action'=>'attendancerecord')));
+ */
 ?>
 <br><br>

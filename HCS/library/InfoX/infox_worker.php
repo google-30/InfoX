@@ -57,6 +57,29 @@ class infox_worker
         return $workerarr;
     }
 
+    public static function getAllworkers()
+    {
+        $_em = Zend_Registry::get('em');
+        $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
+
+        $workerarr = array();
+        $allworkers = $_workerdetails->findAll();
+        foreach($allworkers as $tmp)
+        {
+            $date = $tmp->getResignation();
+            if(self::workerresigned($date))
+            {
+                continue;
+            }
+            else
+            {
+                $workerarr[] = $tmp; 
+            }         
+        }
+
+        return $workerarr;
+    }    
+    
     private function workerresigned($date)
     {         
         if(!$date)
