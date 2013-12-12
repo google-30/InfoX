@@ -1,52 +1,46 @@
 <?php
+
 include 'InfoX/infox_common.php';
 include 'InfoX/infox_project.php';
 include 'InfoX/infox_user.php';
 include 'InfoX/infox_worker.php';
 
-class Project_AttendanceController extends Zend_Controller_Action
-{
+class Project_AttendanceController extends Zend_Controller_Action {
 
-    public function init()
-    {
-        $this->_em = Zend_Registry::get('em');        
+    public function init() {
+        $this->_em = Zend_Registry::get('em');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         //$this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
     }
 
-    public function indexAction()
-    {
+    public function indexAction() {
         $error = "";
-        
+
         $sites = infox_user::getUserSites();
         $this->view->sites = $sites;
 
         $siteid = $this->getParam("siteid", 0);
         $this->view->siteid = $siteid;
-        
-        $months=null;
+
+        $months = null;
         // get construction time 
-        if($siteid)
-        {
-            $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+        if ($siteid) {
+            $siteobj = $this->_site->findOneBy(array("id" => $siteid));
             $startdate = $siteobj->getStart();
             //$stopdate = $siteobj->getStop();
             $stopdate = new Datetime("now");
             $months = $this->getMonths($startdate, $stopdate);
-            if(!$months)
-            {
+            if (!$months) {
                 $error .= infox_common::setErrorOutput("请在工地管理指定开始日期");
             }
         }
 
-        $this->view->workingmonths=$months;
+        $this->view->workingmonths = $months;
         $this->view->error = $error;
     }
 
-    private function getMonths($start, $stop)
-    {
-        if(!$start || !$stop)
-        {
+    private function getMonths($start, $stop) {
+        if (!$start || !$stop) {
             return null;
         }
         $startyear = $start->format("Y");
@@ -59,41 +53,34 @@ class Project_AttendanceController extends Zend_Controller_Action
         //echo "startmonth=$startmonth<br>";        
         $stopmonth = $stop->format("m");
         //echo "stopmonth=$stopmonth<br>";
-        
+
         $dateArr = array();
 
-        if($deltayear==0)
-        {// same year 
-            $deltamonth = $stopmonth - $startmonth;
+        if ($deltayear == 0) {// same year 
+            $deltamonth = $stopmonth - $startmonth + 1;
             //echo "deltamonth=$deltamonth<br>";
-            for($i=0; $i<$deltamonth; $i++)
-            {
-                $year = $startyear;    
+            for ($i = 0; $i < $deltamonth; $i++) {
+                $year = $startyear;
                 $month = $startmonth + $i;
                 $date = new Datetime("$year-$month");
                 $dateArr[] = $date;
             }
-        }
-        else
-        {
+        } else {
             // first year
-            $deltamonth = 12 - $startmonth +1;
+            $deltamonth = 12 - $startmonth + 1;
             $i = 0;
-            for($i=0; $i<$deltamonth; $i++)
-            {
-                $year = $startyear;    
+            for ($i = 0; $i < $deltamonth; $i++) {
+                $year = $startyear;
                 $month = $startmonth + $i;
                 $date = new Datetime("$year-$month");
                 $dateArr[] = $date;
             }
 
             // years
-            for($i=0; $i<$deltayear-1; $i++)
-            {
+            for ($i = 0; $i < $deltayear - 1; $i++) {
                 $year = $startyear + $i + 1;
-                for($j=0; $j<12; $j++)
-                {
-                    $month = $j+1;
+                for ($j = 0; $j < 12; $j++) {
+                    $month = $j + 1;
                     $date = new Datetime("$year-$month");
                     $dateArr[] = $date;
                 }
@@ -101,81 +88,72 @@ class Project_AttendanceController extends Zend_Controller_Action
 
             // last year
             $deltamonth = $stopmonth;
-            for($i=0; $i<$deltamonth; $i++)
-            {
-                $month = $i+1;
+            for ($i = 0; $i < $deltamonth; $i++) {
+                $month = $i + 1;
                 $year = $stopyear;
                 $date = new Datetime("$year-$month");
                 $dateArr[] = $date;
-
-            }            
+            }
         }
 
         /*
-        foreach($dateArr as $tmp)
-        {
-            echo $tmp->format("Y-m") . "<br>";
-        }
-        */
+          foreach($dateArr as $tmp)
+          {
+          echo $tmp->format("Y-m") . "<br>";
+          }
+         */
 
         return $dateArr;
     }
 
-    public function attendancepageAction()
-    {
+    public function attendancepageAction() {
         infox_common::turnoffLayout($this->_helper);
 
         $siteid = $this->getParam("siteid", 0);
-        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+        $siteobj = $this->_site->findOneBy(array("id" => $siteid));
         $this->view->site = $siteobj;
         $this->view->siteid = $siteid;
 
         $monthstr = $this->getParam("month", "");
         // 20131001
-        $date = new Datetime($monthstr."01");
-        $this->view->date=$date;
-        
+        $date = new Datetime($monthstr . "01");
+        $this->view->date = $date;
+
         //$workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
         $workerarr = infox_worker::getworkerlistbysiteobj($siteobj);
         $this->view->workerarr = $workerarr;
-        if(0)
-        {
-            foreach($workerarr as $tmp)
-            {
+        if (0) {
+            foreach ($workerarr as $tmp) {
                 echo "getNamechs=" . $tmp->getNamechs();
             }
         }
-        
-        $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
+
+        $attendancearr = infox_project::getAttendanceByWorkerMonth($workerarr, $date);
         $this->view->attendancearr = $attendancearr;
         //echo "count=" . count($attendancearr);
 
         $this->view->workerhtmls = $this->genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr);
-        
+
         $this->view->username = infox_common::getUsername();
     }
 
-    private function genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr)
-    {
-        $tablearr = array(); 
-        $table ="";
+    private function genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr) {
+        $tablearr = array();
+        $table = "";
         $sno = 0;
-        foreach($workerarr as $tmp)
-        {
+        foreach ($workerarr as $tmp) {
             $sno++;
             $workerid = $tmp->getId();
 
             $attendrecord = null;
-            foreach($attendancearr as $attendtmp)
-            {
+            foreach ($attendancearr as $attendtmp) {
                 $wid = $attendtmp->getWorker()->getId();
-                if($wid == $workerid)
-                {
+                if ($wid == $workerid) {
                     $attendrecord = $attendtmp;
                     break;
                 }
             }
-            
+
             $tabs = $this->getWorkerMonthAttendHtml($sno, $tmp, $attendrecord, $siteid, $monthstr);
             $tablearr[] = $tabs;
         }
@@ -183,23 +161,21 @@ class Project_AttendanceController extends Zend_Controller_Action
         return $tablearr;
     }
 
-    private function getWorkerMonthAttendHtml($sno, $worker, $attendrecord, $siteid, $monthstr, $nobtn=false)
-    {
+    private function getWorkerMonthAttendHtml($sno, $worker, $attendrecord, $siteid, $monthstr, $nobtn = false) {
         $workerid = $worker->getId();
         $wpno = $worker->getWpno();
-        $name=$worker->getNamechs();
-        if(!$name || $name=="")
-        {
+        $name = $worker->getNamechs();
+        if (!$name || $name == "") {
             $name = $worker->getNameeng();
         }
-        $worktype=$worker->getWorktype();
+        $worktype = $worker->getWorktype();
 
         // TODO: rate can be defined by staff
         // if 计时，currentrate; if 计件， monthrate
         $currentrate = $price = $worker->getCurrentrate();
         $otrate = infox_worker::getWorkerOtRate($worker);
-        
-        $summary = $this->calcMonthSummary($worker, $attendrecord, $currentrate, $otrate);        
+
+        $summary = $this->calcMonthSummary($worker, $attendrecord, $currentrate, $otrate);
         $totaldays = $summary['totaldays'];
         $normalhours = $summary["normalhours"];
         $othours = $summary["othours"];
@@ -209,10 +185,10 @@ class Project_AttendanceController extends Zend_Controller_Action
         $totalsalary = $summary["totalsalary"];
         $fooddays = $summary["fooddays"];
 
-        $table = '<table class="attendsum">';    
+        $table = '<table class="attendsum">';
         // worker info and month summary
         $tr = "";
-        $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>'; 
+        $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>';
         $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>
 ';
         $table .= $tr;
@@ -220,146 +196,126 @@ class Project_AttendanceController extends Zend_Controller_Action
         $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
         $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
 ';
-        $table .= $tr;       
+        $table .= $tr;
 
         $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
         $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
-        $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";            
+        $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";
 
         $table .= $tr;
         $table .= "</table>";
         $tabs[] = $table;
 
         //$attendtab = infox_project::generateAttendanceTab($attendrecord, true, true); 
-        if($nobtn)
-        {//generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
-            $attendtab = infox_project::generateAttendanceTab($attendrecord, $monthstr, false, true);
-        }
-        else
-        {       
-            $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, true, $siteid, $monthstr, $workerid);        
+        if ($nobtn) {//generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
+            $attendtab = infox_project::generateAttendanceTab($attendrecord, $monthstr, false, false);
+        } else {
+            $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, true, $siteid, $monthstr, $workerid);
         }
         $tabs[] = $attendtab;
 
         return $tabs;
     }
 
-    private function calcMonthSummary($worker=null, $attendance, $rate, $otrate)
-    {
+    private function calcMonthSummary($worker = null, $attendance, $rate, $otrate) {
         $summay = array();
-        if(!$attendance)
-        {
-        $summary["totaldays"] = "";
-        $summary["normalhours"] = "";
-        $summary["normalsalary"] = "";
-        $summary["othours"] = "";
-        $summary["otsalary"] = "";
-        $summary["totalhours"] = "";
-        $summary["totalsalary"] = "";
-        $summary["fooddays"] = "";        
-        }
-        else
-        {
-        $wid = $attendance->getWorker()->getId();
-        $month = $attendance->getMonth()->format("Y-m-d");;
+        if (!$attendance) {
+            $summary["totaldays"] = "";
+            $summary["normalhours"] = "";
+            $summary["normalsalary"] = "";
+            $summary["othours"] = "";
+            $summary["otsalary"] = "";
+            $summary["totalhours"] = "";
+            $summary["totalsalary"] = "";
+            $summary["fooddays"] = "";
+        } else {
+            $wid = $attendance->getWorker()->getId();
+            $month = $attendance->getMonth()->format("Y-m-d");
+            ;
 
-        $days = "";
-        for($i=1; $i<=31; $i++)
-        {            
-            $day = "s.day$i";            
-            if($i != 31)
-            {
-                $day .= ",";
+            $days = "";
+            for ($i = 1; $i <= 31; $i++) {
+                $day = "s.day$i";
+                if ($i != 31) {
+                    $day .= ",";
+                }
+
+                $days .= $day;
             }
 
-            $days .= $day;
-        }
+            $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+            $result = $this->_em->createQuery($query)->getResult();
+            //print_r($result);
 
-        $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
-        $result = $this->_em->createQuery($query)->getResult();
-        //print_r($result);
-        
-        $totaldays = 0;
-        $normalhours = 0;
-        $normalsalary = 0;
-        $othours = 0;
-        $otsalary = 0;    
+            $totaldays = 0;
+            $normalhours = 0;
+            $normalsalary = 0;
+            $othours = 0;
+            $otsalary = 0;
 
-        $fooddays = 0;    
-        foreach($result[0] as $tmp)
-        {
-            if($tmp)
-            {
-                $totaldays++;
+            $fooddays = 0;
+            foreach ($result[0] as $tmp) {
+                if ($tmp) {
+                    $totaldays++;
 
-                // normal work
-                $tmparr = explode(";", $tmp);
-                if(array_key_exists(0, $tmparr))
-                {
-                    $workhours = $tmparr[0];
-                    if($workhours >= 8)
-                    {
-                        $normalhours += 8;
-                        $othours += ($workhours - 8);
-                    }   
-                    else
-                    {
-                        $normalhours += $workhours;                        
+                    // normal work
+                    $tmparr = explode(";", $tmp);
+                    if (array_key_exists(0, $tmparr)) {
+                        $workhours = $tmparr[0];
+                        if ($workhours >= 8) {
+                            $normalhours += 8;
+                            $othours += ($workhours - 8);
+                        } else {
+                            $normalhours += $workhours;
+                        }
+                    }
+
+                    if (array_key_exists(1, $tmparr)) {
+                        $food = $tmparr[1];
+                        $fooddays += ($food === "1") ? 1 : 0;
                     }
                 }
-
-                if(array_key_exists(1, $tmparr))
-                {
-                    $food = $tmparr[1];
-                    $fooddays += ($food==="1") ? 1 : 0;
-                    
-                }
             }
+
+            $normalsalary = $normalhours * $rate;
+            $otsalary = $othours * $otrate;
+
+            $summary["totaldays"] = $totaldays;
+            $summary["normalhours"] = $normalhours;
+            $summary["normalsalary"] = $normalsalary;
+            $summary["othours"] = $othours;
+            $summary["otsalary"] = $otsalary;
+            $summary["totalhours"] = $othours + $normalhours;
+            $summary["totalsalary"] = $otsalary + $normalsalary;
+            $summary["fooddays"] = $fooddays;
         }
-        
-        $normalsalary = $normalhours * $rate;
-        $otsalary = $othours * $otrate;
-        
-        $summary["totaldays"] = $totaldays;
-        $summary["normalhours"] = $normalhours;
-        $summary["normalsalary"] = $normalsalary;
-        $summary["othours"] = $othours;
-        $summary["otsalary"] = $otsalary;
-        $summary["totalhours"] = $othours + $normalhours;
-        $summary["totalsalary"] = $otsalary + $normalsalary;
-        $summary["fooddays"] = $fooddays;
-        }
-        
+
         return $summary;
     }
 
-    private function calcNormalWork($worker=null, $attendance)
-    {
+    private function calcNormalWork($worker = null, $attendance) {
         
     }
 
     // data format: 
     //  "8;1", means work 8 hours, and 1 means had food also
     //  "9;0", means work 8 hours, and ot 1 hour, and 0 means no food
-    private function getAttendFoodData($record)
-    {
+    private function getAttendFoodData($record) {
         /*
-        $query = "SELECT s FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
-        //echo $query;
-        $query = $this->_em->createQuery($query);
-        $result = $query->getResult();          
-        */
+          $query = "SELECT s FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+          //echo $query;
+          $query = $this->_em->createQuery($query);
+          $result = $query->getResult();
+         */
 
         $wid = $record->getWorker()->getId();
         $month = $record->getMonth()->format("Y-m-01");
 
         $days = "";
-        for($i=1; $i<=31; $i++)
-        {
-            
-            $day = "s.day$i";            
-            if($i != 31)
-            {
+        for ($i = 1; $i <= 31; $i++) {
+
+            $day = "s.day$i";
+            if ($i != 31) {
                 $day .= ",";
             }
 
@@ -377,30 +333,28 @@ class Project_AttendanceController extends Zend_Controller_Action
         $foodarr = array();
 
         $tmparr = $result[0];
-        foreach($tmparr as $tmp)
-        {
+        foreach ($tmparr as $tmp) {
             $arr = explode(";", $tmp);
-            
+
             $attendarr[] = array_key_exists(0, $arr) ? $arr[0] : "&nbsp;";
             $foodarr[] = array_key_exists(1, $arr) ? $arr[1] : "&nbsp;";
         }
-        
+
         $newresult = array($attendarr, $foodarr);
         //print_r($newresult);
 
         return $newresult;
     }
 
-    public function attendialogAction()
-    {
+    public function attendialogAction() {
         infox_common::turnoffLayout($this->_helper);
 
         // date        
         $monthstr = $this->getParam("month", "");
         $date = new Datetime($monthstr . "01");
-        $this->view->date=$date;
-        $this->view->monthstr=$monthstr;
-        
+        $this->view->date = $date;
+        $this->view->monthstr = $monthstr;
+
         // worker info
         $wid = $this->getParam("wid", 0);
         $worker = infox_worker::getWorkerdetailsById($wid);
@@ -415,62 +369,75 @@ class Project_AttendanceController extends Zend_Controller_Action
         // worker atten
         $record = infox_project::getAttendanceByIdMonth($wid, $date);
         //if(!$record) { echo "xxxxx"; }
-        $this->view->attendance = $record;        
+        $this->view->attendance = $record;
 
         $workerarr = infox_worker::getworkerlistbysitedateobj($site, $date);
         $sno = 0;
-        foreach($workerarr as $tmp)
-        {
+        foreach ($workerarr as $tmp) {
             $sno++;
-            if($tmp->getId() == $wid)
-            {
+            if ($tmp->getId() == $wid) {
                 $tabs = $this->getWorkerMonthAttendHtml($sno, $worker, $record, $siteid, $monthstr, true);
                 break;
             }
         }
         $this->view->workerattendtabs = $tabs;
+
+        // create tab just like datepicker
+        $dayinmonth = $date->format("Y-m-d");
+        $dayofweek = date('w', strtotime($dayinmonth));
+        $attendmonth = $date->format("m");
+        $attendyear = $date->format("Y");
+        $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear);
+        echo "dayinmonth=$dayinmonth, dayofweek=$dayofweek,daysinmonth=$daysinmonth";
+
+        $datetab = "<table><thead>            
+                    <tr><th>Sunday</th><th>Monday</th><th>Thursday</th><th>Wednesday</th>
+                        <th>Tuesday</th><th>Friday</th><th>Saturday</th>
+                    </tr>
+                    </thead>
+                </table>";
     }
 
-    public function postattendAction()
-    {
+    public function postattendAction() {
         infox_common::turnoffView($this->_helper);
 
         $requests = $this->getRequest()->getPost();
-        if(0) { var_dump($requests); return; }        
-        
+        if (0) {
+            var_dump($requests);
+            return;
+        }
+
         $wid = $this->getParam("wid", 0);
         $date = $this->getParam("date", "");
         $dateobj = new Datetime($date);
         //$month = $this->getParam("month", 0);                
         //$monthobj = new Datetime($month);
-        $month = $dateobj->format("Y-m-01");        
+        $month = $dateobj->format("Y-m-01");
         $monthobj = new Datetime($month);
 
         $attend = $this->getParam("attend", 0);
         $food = $this->getParam("food", 1);
-        $remark = $this->getParam("remark", 0);                
-        
+        $remark = $this->getParam("remark", 0);
+
         $record = infox_project::getWorkerAtten($wid, $monthobj);
-        if(!$record)
-        {// create atten
-            infox_project::createWorkerAtten($wid, $monthobj);              
-        }   
+        if (!$record) {// create atten
+            infox_project::createWorkerAtten($wid, $monthobj);
+        }
         // update atten
         $dateobj = new Datetime($date);
         //infox_project::updateWorkerAtten($record, $dateobj, $salary);
-        infox_project::updateWorkerAtten($wid, $dateobj, $attend, $food);       
+        infox_project::updateWorkerAtten($wid, $dateobj, $attend, $food);
     }
 
-    public function attendsheetAction()
-    {
+    public function attendsheetAction() {
         infox_common::turnoffLayout($this->_helper);
 
         // date        
         $monthstr = $this->getParam("month", "");
         $date = new Datetime($monthstr . "01");
-        $this->view->date=$date;
-        $this->view->monthstr=$monthstr;
-        
+        $this->view->date = $date;
+        $this->view->monthstr = $monthstr;
+
         // worker info
         $wid = $this->getParam("wid", 0);
         $worker = infox_worker::getWorkerdetailsById($wid);
@@ -485,32 +452,28 @@ class Project_AttendanceController extends Zend_Controller_Action
         // worker atten
         $record = infox_project::getAttendanceByIdMonth($wid, $date);
         //if(!$record) { echo "xxxxx"; }
-        $this->view->attendance = $record;        
+        $this->view->attendance = $record;
 
         $workerarr = infox_worker::getworkerlistbysitedateobj($site, $date);
         $sno = 0;
-        foreach($workerarr as $tmp)
-        {
+        foreach ($workerarr as $tmp) {
             $sno++;
-            if($tmp->getId() == $wid)
-            {
+            if ($tmp->getId() == $wid) {
                 $tabs = $this->getWorkerMonthAttendHtml($sno, $worker, $record, $siteid, $monthstr, true);
                 break;
             }
         }
         $this->view->workerattendtabs = $tabs;
-
     }
 
-    public function attendsheetAction1()
-    {
-        infox_common::turnoffLayout($this->_helper);        
+    public function attendsheetAction1() {
+        infox_common::turnoffLayout($this->_helper);
 
         // date        
         $monthstr = $this->getParam("month", "");
         $date = new Datetime($monthstr);
-        $this->view->date=$date;
-        $this->view->monthstr=$monthstr;
+        $this->view->date = $date;
+        $this->view->monthstr = $monthstr;
         $month = $date->format("Y-m-01");
 
         // worker info
@@ -520,97 +483,94 @@ class Project_AttendanceController extends Zend_Controller_Action
 
         // site info
         /*
-        $siteid = $this->getParam("sid", 0);
-        $this->view->siteid = $siteid;
-        $site = infox_project::getSiteById($siteid);
-        $this->view->site = $site;
-        */
+          $siteid = $this->getParam("sid", 0);
+          $this->view->siteid = $siteid;
+          $site = infox_project::getSiteById($siteid);
+          $this->view->site = $site;
+         */
 
         // worker atten
         $record = infox_project::getAttendanceByIdMonth($wid, $date);
-        $this->view->attendance = $record;        
+        $this->view->attendance = $record;
 
         /*
-        $query = "SELECT s FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
-        //echo $query;
-        $query = $this->_em->createQuery($query);
-        $result = $query->getResult();                
-        echo $result[0]->getDay28();
-        */
+          $query = "SELECT s FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+          //echo $query;
+          $query = $this->_em->createQuery($query);
+          $result = $query->getResult();
+          echo $result[0]->getDay28();
+         */
 
         $days = "";
-        for($i=0; $i<31; $i++)
-        {
-            $j = $i+1;                        
-            $days .= "s.day" . $j;            
-            if($i!=30)
-            {
+        for ($i = 0; $i < 31; $i++) {
+            $j = $i + 1;
+            $days .= "s.day" . $j;
+            if ($i != 30) {
                 $days .=",";
-            }            
+            }
         }
 
         $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
         echo $query;
         $query = $this->_em->createQuery($query);
-        $result = $query->getResult();        
+        $result = $query->getResult();
 
         //var_dump($result);        
     }
 
-    public function attendquickAction()
-    {
+    public function attendquickAction() {
         infox_common::turnoffLayout($this->_helper);
 
         // date     
         $monthstr = $this->getParam("month", "");
         $date = new Datetime($monthstr);
-        $this->view->date=$date;
-        $this->view->monthstr=$monthstr;
+        $this->view->date = $date;
+        $this->view->monthstr = $monthstr;
         $month = $date->format("Y-m-01");
 
         $siteid = $this->getParam("sid", 0);
-        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+        $siteobj = $this->_site->findOneBy(array("id" => $siteid));
         $this->view->site = $siteobj;
         $this->view->siteid = $siteid;
 
         $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
         $this->view->workerarr = $workerarr;
         //echo "workers=" . count($workerarr);
-        $attendancearr=infox_project::getAttendanceByWorkerMonth($workerarr, $date);
+        $attendancearr = infox_project::getAttendanceByWorkerMonth($workerarr, $date);
         $this->view->attendancearr = $attendancearr;
-        
     }
 
-    public function quicksubmitAction1()
-    {
+    public function quicksubmitAction1() {
         infox_common::turnoffView($this->_helper);
         //infox_common::turnoffLayout($this->_helper);
         $requests = $this->getRequest()->getPost();
-        if(0) { var_dump($requests); return; }        
+        if (0) {
+            var_dump($requests);
+            return;
+        }
 
         $quickdate = $this->getParam("quickdate", "");
-        echo "quickdate=$quickdate"; return;
+        echo "quickdate=$quickdate";
+        return;
 
         $date = new Datetime($quickdate);
-        $month = $date->format("Y-m-01");        
+        $month = $date->format("Y-m-01");
         $monthobj = new Datetime($month);
         $siteid = $this->getParam("sid", 0);
-        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+        $siteobj = $this->_site->findOneBy(array("id" => $siteid));
 
         $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
 
-        foreach($workerarr as $tmp) 
-        {
+        foreach ($workerarr as $tmp) {
             $wid = $tmp->getId();
             $attend = $this->getParam("attend$wid", "");
             $food = $this->getParam("food$wid", "");
 
             //$record = $this->_siteattendance->findOneBy();
             $record = infox_project::getWorkerAtten($wid, $monthobj);
-            if(!$record)
-            {// create atten
-                infox_project::createWorkerAtten($wid, $monthobj);              
-            }   
+            if (!$record) {// create atten
+                infox_project::createWorkerAtten($wid, $monthobj);
+            }
             // update atten
             infox_project::updateWorkerAtten($wid, $date, $attend, $food);
         }
@@ -620,38 +580,39 @@ class Project_AttendanceController extends Zend_Controller_Action
         //$this->_redirect($url);
     }
 
-    public function quicksubmitAction()
-    {
+    public function quicksubmitAction() {
         infox_common::turnoffView($this->_helper);
         //infox_common::turnoffLayout($this->_helper);
         $requests = $this->getRequest()->getPost();
-        if(0) { var_dump($requests); return; }        
+        if (0) {
+            var_dump($requests);
+            return;
+        }
 
-       
+
         $quickdate = infox_common::getSerializeArrayValueByKey($requests, "quickdate");
         //echo "quickdate=$quickdate"; return;
         $date = new Datetime($quickdate);
-        $month = $date->format("Y-m-01");        
+        $month = $date->format("Y-m-01");
         $monthobj = new Datetime($month);
         $siteid = infox_common::getSerializeArrayValueByKey($requests, "sid");
-        $siteobj = $this->_site->findOneBy(array("id"=>$siteid));        
+        $siteobj = $this->_site->findOneBy(array("id" => $siteid));
 
         $workerarr = infox_worker::getworkerlistbysitedateobj($siteobj, $date);
 
-        foreach($workerarr as $tmp) 
-        {
+        foreach ($workerarr as $tmp) {
             $wid = $tmp->getId();
             $attend = infox_common::getSerializeArrayValueByKey($requests, "attend$wid");
             $food = infox_common::getSerializeArrayValueByKey($requests, "food$wid");
 
             //$record = $this->_siteattendance->findOneBy();
             $record = infox_project::getWorkerAtten($wid, $monthobj);
-            if(!$record)
-            {// create atten
-                infox_project::createWorkerAtten($wid, $monthobj);              
-            }   
+            if (!$record) {// create atten
+                infox_project::createWorkerAtten($wid, $monthobj);
+            }
             // update atten
             infox_project::updateWorkerAtten($wid, $date, $attend, $food);
         }
     }
+
 }

@@ -80,7 +80,7 @@
                 $("#workersel").on("change", function() {
                     //alert("change");
                     var workersel = $(this).val();
-                    $(window).scrollTop($('#worker'+ workersel).offset().top);
+                    $(window).scrollTop($('#worker' + workersel).offset().top);
                 });
 
             });
@@ -205,7 +205,9 @@
                     $tab2 = $tmp[1];
 
                     $divno++;
-                    echo "<div id=worker$divno>" . $tab1 . $tab2 . "</div><br>";
+                    echo "<div id=worker$divno>
+                            " . $tab1 . $tab2 . "</div><br>
+                            ";
                 }
                 ?>
             </div><!-- /content -->

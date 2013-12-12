@@ -1,31 +1,27 @@
 <?php
 
-class infox_project
-{
+class infox_project {
+
     public static $_em;
     public static $_siteatten;
     public static $_workerdetails;
     public static $_site;
 
-    public static function getRepos()
-    {
+    public static function getRepos() {
         self::$_em = Zend_Registry::get('em');
         self::$_siteatten = self::$_em->getRepository('Synrgic\Infox\Siteattendance');
         self::$_workerdetails = self::$_em->getRepository('Synrgic\Infox\Workerdetails');
         self::$_site = self::$_em->getRepository('Synrgic\Infox\Site');
-    }    
+    }
 
-    public static function getAttendanceByWorkerMonth($workerarr, $month)
-    {
+    public static function getAttendanceByWorkerMonth($workerarr, $month) {
         $_em = Zend_Registry::get('em');
         $_siteatten = $_em->getRepository('Synrgic\Infox\Siteattendance');
 
         $attenarr = array();
-        foreach($workerarr as $tmp)
-        {
-            $record = $_siteatten->findOneBy(array("worker"=>$tmp, "month"=>$month));
-            if($record)
-            {
+        foreach ($workerarr as $tmp) {
+            $record = $_siteatten->findOneBy(array("worker" => $tmp, "month" => $month));
+            if ($record) {
                 $attenarr[] = $record;
             }
         }
@@ -33,86 +29,68 @@ class infox_project
         return $attenarr;
     }
 
-    public static function getAttendanceByIdMonth($wid, $month)
-    {
+    public static function getAttendanceByIdMonth($wid, $month) {
         $_em = Zend_Registry::get('em');
         $_siteatten = $_em->getRepository('Synrgic\Infox\Siteattendance');
         $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
 
         $record = null;
-        $worker = $_workerdetails->findOneBy(array("id"=>$wid));
-        if($worker)
-        {        
-            $record = $_siteatten->findOneBy(array("worker"=>$worker, "month"=>$month));
+        $worker = $_workerdetails->findOneBy(array("id" => $wid));
+        if ($worker) {
+            $record = $_siteatten->findOneBy(array("worker" => $worker, "month" => $month));
         }
 
         return $record;
     }
 
-    public static function getSiteById($id)
-    {
+    public static function getSiteById($id) {
         $_em = Zend_Registry::get('em');
         $_repo = $_em->getRepository('Synrgic\Infox\Site');
-        return $_repo->findOneBy(array("id"=>$id));
+        return $_repo->findOneBy(array("id" => $id));
     }
 
-    public static function checkWorkerAtten($wid, $month)
-    {
+    public static function checkWorkerAtten($wid, $month) {
         $_em = Zend_Registry::get('em');
         $_siteatten = $_em->getRepository('Synrgic\Infox\Siteattendance');
         $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
 
-        $worker = $_workerdetails->findOneBy(array("id"=>$wid));
-        if(!$worker)
-        {
+        $worker = $_workerdetails->findOneBy(array("id" => $wid));
+        if (!$worker) {
             return false;
-        }        
-        else
-        {
-            $record = $_siteatten->findOneBy(array("worker"=>$worker, 'month'=>$month));
-            if(!$record)
-            {
+        } else {
+            $record = $_siteatten->findOneBy(array("worker" => $worker, 'month' => $month));
+            if (!$record) {
                 return false;
-            }
-            else
-            {
+            } else {
                 return true;
             }
-        }        
+        }
     }
 
-    public static function getWorkerAtten($wid, $month)
-    {
+    public static function getWorkerAtten($wid, $month) {
         self::getRepos();
         $_workerdetails = self::$_workerdetails;
         $_siteatten = self::$_siteatten;
 
-        $worker = $_workerdetails->findOneBy(array("id"=>$wid));
-        if(!$worker)
-        {
+        $worker = $_workerdetails->findOneBy(array("id" => $wid));
+        if (!$worker) {
             return null;
-        }        
-        else
-        {
-            $record = $_siteatten->findOneBy(array("worker"=>$worker, 'month'=>$month));
-            if(!$record)
-            {
+        } else {
+            $record = $_siteatten->findOneBy(array("worker" => $worker, 'month' => $month));
+            if (!$record) {
                 return null;
-            }
-            else
-            {
+            } else {
                 return $record;
             }
-        }        
+        }
     }
 
-    public static function createWorkerAtten($wid, $month)
-    {
+    public static function createWorkerAtten($wid, $month) {
         self::getRepos();
 
-        $worker = self::$_workerdetails->findOneBy(array("id"=>$wid));
+        $worker = self::$_workerdetails->findOneBy(array("id" => $wid));
         $data = new \Synrgic\Infox\Siteattendance();
-        $data->setWorker($worker); 
+        $data->setWorker($worker);
         $data->setMonth($month);
 
         $em = self::$_em;
@@ -122,64 +100,61 @@ class infox_project
         } catch (Exception $e) {
             var_dump($e);
             return;
-        }                
+        }
     }
 
-    public static function updateWorkerAtten1($wid, $date, $salary)
-    {
+    public static function updateWorkerAtten1($wid, $date, $salary) {
         self::getRepos();
         $_em = self::$_em;
         $_workerdetails = self::$_workerdetails;
         $_siteatten = self::$_siteatten;
-        
-        // get column
+
+// get column
         $day = $date->format("d");
         $day = intval($day);
-        //echo $day;
+//echo $day;
         $month = $date->format("Y-m-01");
-        //echo $month;
+//echo $month;
 
         $query = "UPDATE Synrgic\Infox\Siteattendance s SET s.day$day = '$salary' WHERE s.worker=$wid and s.month='$month'";
         $query = $_em->createQuery($query);
         $result = $query->getResult();
     }
 
-    public static function updateWorkerAtten($wid, $date, $attend, $food)
-    {
+    public static function updateWorkerAtten($wid, $date, $attend, $food) {
         self::getRepos();
         $_em = self::$_em;
         $_workerdetails = self::$_workerdetails;
         $_siteatten = self::$_siteatten;
-        
-        // get column
+
+// get column
         $day = $date->format("d");
         $day = intval($day);
-        //echo $day;
+//echo $day;
         $month = $date->format("Y-m-01");
-        //echo $month;
+//echo $month;
 
-        $dayvalue= $attend . ";" . $food;
+        $dayvalue = $attend . ";" . $food;
         $query = "UPDATE Synrgic\Infox\Siteattendance s SET s.day$day = '$dayvalue' WHERE s.worker=$wid and s.month='$month'";
         $query = $_em->createQuery($query);
         $result = $query->getResult();
     }
 
-    public static function updateWorkerAtten2($record, $date, $salary)
-    {
+    public static function updateWorkerAtten2($record, $date, $salary) {
         self::getRepos();
         $_em = self::$_em;
         $_workerdetails = self::$_workerdetails;
         $_siteatten = self::$_siteatten;
         /*
-        $query = $em->createQuery('UPDATE MyProject\Model\User u SET u.password = 'new' WHERE u.id IN (1, 2, 3)');
-        $users = $query->getResult();        
-        */
-        
-        // get column
+          $query = $em->createQuery('UPDATE MyProject\Model\User u SET u.password = 'new' WHERE u.id IN (1, 2, 3)');
+          $users = $query->getResult();
+         */
+
+// get column
         $day = $date->format("d");
-        //echo $day;
+//echo $day;
         $month = $date->format("Y-m-01");
-        //echo $month;
+//echo $month;
 
         $worker = $record->getWorker();
         $wid = $worker->getId();
@@ -188,91 +163,79 @@ class infox_project
         $result = $query->getResult();
     }
 
-    // monthstr format is "2013-10"
-    public static function getAttendanceByMonth($monthstr)
-    {
+// monthstr format is "2013-10"
+    public static function getAttendanceByMonth($monthstr) {
         self::getRepos();
         $_workerdetails = self::$_workerdetails;
         $_siteatten = self::$_siteatten;
-        
+
         $month = new Datetime($monthstr . "-01");
-        $records = $_siteatten->findBy(array("month"=>$month));                
+        $records = $_siteatten->findBy(array("month" => $month));
 
         return $records;
     }
 
-    public static function getAttendanceByMonthSheet($monthstr, $sheet)
-    {
+    public static function getAttendanceByMonthSheet($monthstr, $sheet) {
         self::getRepos();
         $_workerdetails = self::$_workerdetails;
         $_siteatten = self::$_siteatten;
-        
+
         $month = new Datetime($monthstr . "-01");
-        $records = $_siteatten->findBy(array("month"=>$month));       
+        $records = $_siteatten->findBy(array("month" => $month));
 
         $attendarr = array();
-        foreach($records as $tmp)
-        {
+        foreach ($records as $tmp) {
             $worker = $tmp->getWorker();
 
-            if($worker->getSheet() == $sheet)
-            {
+            if ($worker->getSheet() == $sheet) {
                 $attendarr[] = $tmp;
             }
-
-        }         
+        }
 
         return $attendarr;
     }
 
-    public static function generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
-    {
+    public static function generateAttendanceTab($attendrecord, $monthstr, $attendbtn = false, $highlight = false) {
         self::getRepos();
         $attendresult = self::getAttendFoodData($attendrecord);
 
         $nowdate = new Datetime("");
         $today = $nowdate->format("d");
-        $todaystyle= $highlight ? "background:#ff5c5c;" : "";        
+        $todaystyle = $highlight ? "background:#ff5c5c;" : "";
 
-        $attendDate = new Datetime($monthstr . "-01");;
+        $attendDate = new Datetime($monthstr . "-01");
+        ;
         $attendmonth = $attendDate->format("m");
         $attendyear = $attendDate->format("Y");
-        $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear); 
-        
-        $attendtab = "<table>";
-        $tds="";
-        for($i=0; $i<$daysinmonth; $i++)
-        {
-            $j = $i+1;
-            $value = ($j<10) ? "0$j" : $j;
+        $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear);
 
-            $td = ($j == $today) ? '<td style="' . $todaystyle .'">' . $value . '</td>' : "<td>$value</td>";
-            //$td = "<td>$value</td>";
+        $attendtab = "<table>";
+        $tds = "";
+        for ($i = 0; $i < $daysinmonth; $i++) {
+            $j = $i + 1;
+            $value = ($j < 10) ? "0$j" : $j;
+
+            $td = ($j == $today) ? '<td style="' . $todaystyle . '">' . $value . '</td>' : "<td>$value</td>";
+//$td = "<td>$value</td>";
             $tds .= $td;
         }
         $tr = '<tr><td class="fixwidthcol">日期</td>' . $tds;
 
-        if($attendbtn)
-        {
-            if($attendrecord)
-            {
-            $worker = 
-            $url = "/project/attendance/attendialog?" . "sid=$siteid&month=$monthstr&wid=$workerid";   
-            $dialog = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a>';                
-            $attendbtntd = "<td rowspan=3>$dialog</td>";
+        if ($attendbtn) {
+            if ($attendrecord) {
+                $worker = $url = "/project/attendance/attendialog?" . "sid=$siteid&month=$monthstr&wid=$workerid";
+                $dialog = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a>';
+                $attendbtntd = "<td rowspan=3>$dialog</td>";
             }
-        }
-        else
-        {
+        } else {
             $attendbtntd = '';
         }
         $tr .= $attendbtntd . "</tr>";
 
-        $attendtab .= $tr;            
+        $attendtab .= $tr;
 
-        $tds = "";    
-        for($i=0; $i<$daysinmonth; $i++)
-        {
+        $tds = "";
+        for ($i = 0; $i < $daysinmonth; $i++) {
             $j = $i + 1;
             $value = $attendresult[0][$i];
 
@@ -280,64 +243,64 @@ class infox_project
             $tds .= $td;
         }
         $tr = "<tr><td>计时 计件</td>$tds</tr>
-";          
+";
         $attendtab .= $tr;
 
-        $tds = "";    
-        for($i=0; $i<$daysinmonth; $i++)
-        {
-            $j = $i +1;
+        /*
+        $tds = "";
+        for ($i = 0; $i < $daysinmonth; $i++) {
+            $j = $i + 1;
             $value = $attendresult[1][$i];
 
             $td = "<td>$value</td>";
             $tds .= $td;
         }
         $tr = "<tr><td>伙食</td>$tds</tr>
-";            
+";
         $attendtab .= $tr;
+         * 
+         */
         $attendtab .= "</table>";
 
-        return $attendtab;                 
+        return $attendtab;
     }
 
-    public static function generateAttendanceTabWbtn($attendrecord, $highlight=false, $siteid, $monthstr, $workerid)
-    {
+    public static function generateAttendanceTabWbtn($attendrecord, $highlight = false, $siteid, $monthstr, $workerid) {
         self::getRepos();
         $attendresult = self::getAttendFoodData($attendrecord);
 
         $nowdate = new Datetime("");
-        $nowmonthstr = $nowdate->format("Ym"); 
-        $highlight = ($nowmonthstr == $monthstr) ? true :false;        
+        $nowmonthstr = $nowdate->format("Ym");
+        $highlight = ($nowmonthstr == $monthstr) ? true : false;
         $today = $nowdate->format("d");
-        $todaystyle= $highlight ? "background:#ff5c5c;" : "";        
-        
-        $attendDate = new Datetime($monthstr . "01"); 
+        $todaystyle = $highlight ? "background:#ff5c5c;" : "";
+
+        $attendDate = new Datetime($monthstr . "01");
         $attendmonth = $attendDate->format("m");
         $attendyear = $attendDate->format("Y");
-        $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear); 
-        
-        $attendtab = "<table>";
-        $tds="";
-        for($i=0; $i<$daysinmonth; $i++)
-        {
-            $j = $i+1;
-            $value = ($j<10) ? "0$j" : $j;
+        $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear);
 
-            $td = ($j == $today) ? '<td style="' . $todaystyle .'">' . $value . '</td>' : "<td>$value</td>";
-            //$td = "<td>$value</td>";
+        $attendtab = "<table>";
+        $tds = "";
+        for ($i = 0; $i < $daysinmonth; $i++) {
+            $j = $i + 1;
+            $value = ($j < 10) ? "0$j" : $j;
+
+            $td = ($j == $today) ? '<td style="' . $todaystyle . '">' . $value . '</td>' : "<td>$value</td>";
+//$td = "<td>$value</td>";
             $tds .= $td;
         }
         $tr = '<tr><td class="fixwidthcol">日期</td>' . $tds;
 
-        $url = "/project/attendance/attendialog?" . "sid=$siteid&month=$monthstr&wid=$workerid";   
-        $dialog = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a>';                
-        $attendbtntd = "<td rowspan=3>$dialog</td>";
-        $tr .= $attendbtntd . "</tr>";
-        $attendtab .= $tr;            
+        $url = "/project/attendance/attendialog?" . "sid=$siteid&month=$monthstr&wid=$workerid";
+        $dialog = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a>';
+        $attendbtntd = "<td rowspan=2>$dialog</td>";
+        $tr .= $attendbtntd . "</tr>"
+                . "";
+        $attendtab .= $tr;
 
-        $tds = "";    
-        for($i=0; $i<$daysinmonth; $i++)
-        {
+        $tds = "";
+        for ($i = 0; $i < $daysinmonth; $i++) {
             $j = $i + 1;
             $value = $attendresult[0][$i];
 
@@ -345,95 +308,94 @@ class infox_project
             $tds .= $td;
         }
         $tr = "<tr><td>计时 计件</td>$tds</tr>
-";          
+";
         $attendtab .= $tr;
 
-        $tds = "";    
-        for($i=0; $i<$daysinmonth; $i++)
-        {
-            $j = $i +1;
-            $value = $attendresult[1][$i];
+        /*
+          $tds = "";
+          for($i=0; $i<$daysinmonth; $i++)
+          {
+          $j = $i +1;
+          $value = $attendresult[1][$i];
 
-            $td = "<td>$value</td>";
-            $tds .= $td;
-        }
-        $tr = "<tr><td>伙食</td>$tds</tr>
-";            
-        $attendtab .= $tr;
-        $attendtab .= "</table>";
+          $td = "<td>$value</td>";
+          $tds .= $td;
+          }
+          $tr = "<tr><td>伙食</td>$tds</tr>
+          ";
+          $attendtab .= $tr;
+         * 
+         */
+        $attendtab .= "</table>
+                ";
 
-        return $attendtab;                 
+        return $attendtab;
     }
 
-    public static function getAttendFoodData($record)
-    {
-        if(!$record)
-        {
+    public static function getAttendFoodData($record) {
+        if (!$record) {
             $attendarr = array();
             $foodarr = array();
 
-            for($i=1; $i<=31; $i++)
-            {                
-                $attendarr[] = "&nbsp;";
-                $foodarr[] = "&nbsp;";
+            for ($i = 1; $i <= 31; $i++) {
+                $attendarr[] = "&nbsp;
+";
+                $foodarr[] = "&nbsp;
+";
             }
-            
-            $newresult = array($attendarr, $foodarr);            
-        }
-        else
-        {
+
+            $newresult = array($attendarr, $foodarr);
+        } else {
             $wid = $record->getWorker()->getId();
             $month = $record->getMonth()->format("Y-m-01");
 
             $days = "";
-            for($i=1; $i<=31; $i++)
-            {            
-                $day = "s.day$i";            
-                if($i != 31)
-                {
-                    $day .= ",";
+            for ($i = 1; $i <= 31; $i++) {
+                $day = "s.day$i";
+                if ($i != 31) {
+                    $day .= ", ";
                 }
 
                 $days .= $day;
             }
 
-            $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+            $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker = $wid and s.month = '$month'";
             //echo $query; return;
             $query = self::$_em->createQuery($query);
             $result = $query->getResult();
-            //echo "result="; var_dump($result);
+            //echo "result = "; var_dump($result);
             //return $result;
 
             $attendarr = array();
             $foodarr = array();
 
             $tmparr = $result[0];
-            foreach($tmparr as $tmp)
-            {
-                $arr = explode(";", $tmp);
-                
-                $attendarr[] = array_key_exists(0, $arr) ? $arr[0] : "&nbsp;";
-                $foodarr[] = array_key_exists(1, $arr) ? $arr[1] : "&nbsp;";
+            foreach ($tmparr as $tmp) {
+                $arr = explode(";
+", $tmp);
+
+                $attendarr[] = array_key_exists(0, $arr) ? $arr[0] : "&nbsp;
+";
+                $foodarr[] = array_key_exists(1, $arr) ? $arr[1] : "&nbsp;
+";
             }
-            
+
             $newresult = array($attendarr, $foodarr);
             //echo print_r($newresult) . "<br>";
         }
 
         return $newresult;
-    } 
+    }
 
-    public static function createSiteByName($name)
-    {
+    public static function createSiteByName($name) {
         self::getRepos();
         $_site = self::$_site;
-                
-        $data = $_site->findOneBy(array("name"=>$name));
-        if($data)
-        {
+
+        $data = $_site->findOneBy(array("name" => $name));
+        if ($data) {
             return $data->getId();
         }
-        
+
         $data = new \Synrgic\Infox\Site();
         $data->setName($name);
 
@@ -443,9 +405,9 @@ class infox_project
         } catch (Exception $e) {
             var_dump($e);
             return;
-        } 
-        
+        }
+
         return $data->getId();
-    }  
-    
+    }
+
 }
