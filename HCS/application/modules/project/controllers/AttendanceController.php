@@ -388,14 +388,49 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $attendmonth = $date->format("m");
         $attendyear = $date->format("Y");
         $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear);
-        echo "dayinmonth=$dayinmonth, dayofweek=$dayofweek,daysinmonth=$daysinmonth";
+        //echo "dayinmonth=$dayinmonth, dayofweek=$dayofweek,daysinmonth=$daysinmonth";
 
-        $datetab = "<table><thead>            
+        $datetab = '<table id="datetab"><thead>            
                     <tr><th>Sunday</th><th>Monday</th><th>Thursday</th><th>Wednesday</th>
                         <th>Tuesday</th><th>Friday</th><th>Saturday</th>
                     </tr>
-                    </thead>
-                </table>";
+                    </thead>';
+
+        $daycount = 0;
+        $trs = "";
+        for ($i = 0; $i < 6; $i++) {
+            $tr = "";
+            $tds = "";
+            if ($i == 0) {
+                for ($j = 0; $j < $dayofweek; $j++) {
+                    $tds .= "<td></td>";
+                }
+                for ($k = 0; $k < 7 - $dayofweek; $k++) {
+                    $daycount++;
+                    $daystr = "<div>$daycount</div>";
+                    $daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" >';
+                    $tds .= "<td>$daystr</td>";
+                }
+            } else {
+                for ($j = 0; $j < 7; $j++) {
+                    $daycount++;
+                    $daystr = $daycount;
+                    if ($daycount > (int) $daysinmonth) {
+                        $daystr = "&nbsp;";
+                    } else {
+                        $daystr = "<div>$daycount</div>";
+                        $daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" >';
+                    }
+
+                    $tds .="<td>$daystr</td>";
+                }
+            }
+            $tr = "<tr>$tds</tr>";
+            $trs.=$tr;
+        }
+        //echo "trs=" . htmlspecialchars($trs);
+        $datetab .= "<tbody>$trs</tbody></table>";
+        $this->view->datetab = $datetab;
     }
 
     public function postattendAction() {

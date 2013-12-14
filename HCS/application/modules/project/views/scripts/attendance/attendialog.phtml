@@ -8,9 +8,9 @@
         <script src="/common/js/jquery-1.8.2.min.js"></script>
         <script src="/common/js/jquery.mobile-1.2.0.min.js"></script>
 
-        <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
+        <!--<link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
         <script src="/common/js/jQuery.ui.datepicker.js"></script>
-        <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
+        <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>-->
         <script>
             //reset type=date inputs to text
             $(document).bind("mobileinit", function() {
@@ -31,8 +31,19 @@
                 position: relative;
                 top: -15px;
             }
+
+            #datetab { table-layout: fixed;
+            }
         </style>	
         <script>
+            $(function() {
+                $(".dayvalue").blur(function() {
+                    //alert("Handler for .blur() called.");
+                    // post data to attend
+                    
+                });
+            });
+
             function post()
             {
                 var date = $("#date").val();
@@ -69,6 +80,8 @@
              $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
              });
              */
+
+
         </script>
         <?php
         $worker = $this->workerdetails;
@@ -88,6 +101,8 @@
         $monthstr = $this->monthstr;
 
         $workerattendtabs = $this->workerattendtabs;
+
+        $datetab = $this->datetab;
         ?>
 
         <div data-role="dialog">
@@ -99,59 +114,16 @@
                 <div id="attensheet">
                     <? echo $workerattendtabs[0] . $workerattendtabs[1]; ?>
                 </div>
+                <br>
                 <div>
-                    <!--<label for="date">Date Input:</label>
-                    <input type="date" name="date" id="date" value=""  />	-->
-                    <div data-role="fieldcontain">
-                        <label for="mydate">选择日期:</label>
-                        <input name="mydate" id="mydate" type="date" data-role="datebox" data-options='{"mode": "calbox"}' data-mini="true" placeholder="点击按钮，选择日期->">      
-                    </div>	
+                    <?= $datetab ?>
+                    <input type="hidden" name="wid" id="wid" value="<?= $wid ?>">
+                    <input type="hidden" name="month" id="month" value="<?= $monthstr ?>">
 
-                    <div data-role="fieldcontain">
-                        <label for="attend">计时/计件:</label>
-                        <!--<select name="attend" id="attend" data-theme="b" >
-                        <?php
-//$hours=array("");
-//$hours=0;
-                        $options = "";
-                        for ($count = 0; $count < 29; $count++) {
-                            $hours = 2 + $count * 0.5;
-                            $option = "<option value=$hours>$hours" . "小时</option>";
-                            if ($hours == 8) {
-                                $option = "<option value=$hours selected>$hours" . "小时</option>";
-                            }
-                            $options .= $option;
-                        }
-                        echo $options;
-                        ?>
-                    </select>-->
-                        <input type="text" name="attend" id="attend" data-theme="b" data-mini="true" placeholder="填写工人当天计时或者计件" >
-                    </div>	
-                    <!--<div data-role="fieldcontain">
-                        <label for="food">伙食:</label>                        
-                        <select name="food" id="food" data-theme="b" data-mini="true" >
-                            <option value="1">有</option>
-                            <option value="0">无</option>
-                        </select>	    
-                    </div>-->	
-
-                    <!--<div data-role="fieldcontain">
-                    <label for="remark">备注:</label>
-                    <input type="text" name="remark" id="remark" value="" placeholder="请假缺勤信息等" />
-                    </div>	-->
-                    <input type="hidden" name="wid" id="wid" value="<? echo $wid; ?>">
-                    <input type="hidden" name="month" id="month" value="<? echo $monthstr; ?>">
                     <input type="button" value="提交考勤" onclick="attendialogpost()">
                     <input type="button" value="关闭本页" onclick="attendialogclose()">
-                </div>
+                </div>                           
 
-                <table>
-                    <tr><th>Sunday</th><th>Monday</th><th>Thursday</th><th>Wednesday</th>
-                        <th>Tuesday</th><th>Friday</th><th>Saturday</th>
-                    </tr>
-                    
-                </table>
-                
             </div>
         </div> <!-- dialog -->
 
