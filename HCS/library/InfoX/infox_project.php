@@ -410,4 +410,23 @@ class infox_project {
         return $data->getId();
     }
 
+    public static function savedailyAttend($requests)
+    {
+        self::getRepos();
+
+        $data = $requests['data'];
+        if(!$data)
+        {
+            //echo "";
+            return;
+        }
+        $wid = $requests['wid'];
+        $month = $requests['month'];
+        $id = $requests['id'];
+        
+        $workerobj = self::$_workerdetails;
+        $monthobj = new DateTime($month . "01");
+        $_siteatten = self::$_siteatten;
+        //$attendobj = $_siteatten->findOneBy(array());
+    }
 }

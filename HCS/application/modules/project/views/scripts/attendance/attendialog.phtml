@@ -40,7 +40,15 @@
                 $(".dayvalue").blur(function() {
                     //alert("Handler for .blur() called.");
                     // post data to attend
+                    var wid = $("#wid").val();
+                    var month = $("#month").val();
+                    var id = $(this).attr("id");
+                    var data = $(this).val();
                     
+                    var url = "/project/attendance/savedailyinput";
+                    $.post(url, {wid:wid, month:month, id:id, data:data}, function(data) {
+                        console.log(data);
+                    })
                 });
             });
 
@@ -64,23 +72,6 @@
                 })
 
             }
-
-            /*
-             $(function() { 
-             alert("xxxxx");
-             
-             var date = $("#date").val();
-             //alert(date);
-             var wid = $("#wid").val();
-             //console.log(wid);
-             var salary = $("#salary").val();
-             var remark = $("#remark").val();
-             var month = $("#month").val();
-             
-             $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month);
-             });
-             */
-
 
         </script>
         <?php

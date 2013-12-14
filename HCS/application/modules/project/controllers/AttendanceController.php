@@ -433,6 +433,26 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $this->view->datetab = $datetab;
     }
 
+    public function savedailyinputAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $requests = $this->getRequest()->getPost();
+        if (1) {
+            var_dump($requests);
+            return;
+        }
+        
+        $data = $requests['data'];
+        if(!$data)
+        {
+            //echo "";
+            return;
+        }
+        infox_project::savedailyAttend($requests);
+        
+        
+    }
+
     public function postattendAction() {
         infox_common::turnoffView($this->_helper);
 
