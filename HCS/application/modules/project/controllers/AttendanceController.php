@@ -4,6 +4,7 @@ include 'InfoX/infox_common.php';
 include 'InfoX/infox_project.php';
 include 'InfoX/infox_user.php';
 include 'InfoX/infox_worker.php';
+include 'InfoX/infox_salary.php';
 
 class Project_AttendanceController extends Zend_Controller_Action {
 
@@ -11,6 +12,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $this->_em = Zend_Registry::get('em');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_siteattendance = $this->_em->getRepository('Synrgic\Infox\Siteattendance');
+        $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
     }
 
     public function indexAction() {
@@ -372,12 +374,14 @@ class Project_AttendanceController extends Zend_Controller_Action {
         foreach ($workerarr as $tmp) {
             $sno++;
             if ($tmp->getId() == $wid) {
-                $tabs = $this->getWorkerMonthAttendHtml($sno, $worker, $record, $siteid, $monthstr, true);
+                //$tabs = $this->getWorkerMonthAttendHtml($sno, $worker, $record, $siteid, $monthstr, true);                
+                //$this->view->workerattendtabs = $tabs;
+                $tab = infox_salary::getWorkerSummaryTab($worker, $date);
+                $this->view->workersummarytab = $tab;
                 break;
             }
         }
-        $this->view->workerattendtabs = $tabs;
-
+        
         // create tab just like datepicker
         $dayinmonth = $date->format("Y-m-d");
         $dayofweek = date('w', strtotime($dayinmonth));
@@ -466,7 +470,15 @@ class Project_AttendanceController extends Zend_Controller_Action {
             return;
         }
         
-        infox_project::savemonthAttend($requests);
+        $wid = $requests['wid'];
+        $workerobj = $this->_workerdetails->findOneBy(array('id'=>$wid));
+
+        $month = $requests['month'];
+        $monthobj = new DateTime($month . "01");
+        $monthstr = $monthobj->format("Y-m-d");        
+        
+        infox_project::saveMonthAttend($requests);
+        infox_salary::saveMonthSalary($workerobj, $monthobj);
     }
 
     public function postattendAction() {
@@ -501,46 +513,24 @@ class Project_AttendanceController extends Zend_Controller_Action {
     }
 
     public function attendsheetAction() {
-        infox_common::turnoffLayout($this->_helper);
-
+        infox_common::turnoffView($this->_helper);
+        
         // date        
         $monthstr = $this->getParam("month", "");
-        $date = new Datetime($monthstr . "01");
+        $dateobj = $date = new Datetime($monthstr . "01");
         $this->view->date = $date;
         $this->view->monthstr = $monthstr;
 
         // worker info
         $wid = $this->getParam("wid", 0);
-        $worker = infox_worker::getWorkerdetailsById($wid);
+        $workerobj = $worker = infox_worker::getWorkerdetailsById($wid);
         $this->view->workerdetails = $worker;
 
-        // worker atten
-        //$record = infox_project::getAttendanceByIdMonth($wid, $date);
-        //if(!$record) { echo "xxxxx"; }
-        //$this->view->attendance = $record;
-
-        $tab = infox_project::generateAttendanceSummaryTab($worker, $date);
-        
-        
-        // site info
-        $siteid = $this->getParam("sid", 0);
-        $this->view->siteid = $siteid;
-        $site = infox_project::getSiteById($siteid);
-        $this->view->site = $site;        
-        
-        $workerarr = infox_worker::getworkerlistbysitedateobj($site, $date);
-        $sno = 0;
-        foreach ($workerarr as $tmp) {
-            $sno++;
-            if ($tmp->getId() == $wid) {
-                $tabs = $this->getWorkerMonthAttendHtml($sno, $worker, $record, $siteid, $monthstr, true);
-                break;
-            }
-        }
-        $this->view->workerattendtabs = $tabs;
+        $tab = infox_salary::getWorkerSummaryTab($workerobj, $dateobj);
+        echo $tab;
+        return;
     }
-    
-    
+        
     public function attendsheetAction1() {
         infox_common::turnoffLayout($this->_helper);
 

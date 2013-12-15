@@ -450,7 +450,11 @@ class infox_project {
         }
     }
 
-    public static function savemonthAttend($requests) {
+    public static function saveMonthAttend1($requests) {
+        
+    }
+    
+    public static function saveMonthAttend($requests) {
         self::getRepos();
 
         /*

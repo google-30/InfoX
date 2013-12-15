@@ -23,8 +23,13 @@ class Workersalary extends \Synrgic_Models_Entity {
     /**
      * @Column(type="float", nullable=true)
      */
-    protected $normalpay;
+    protected $normalsalary;
 
+    /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $normalrate;
+    
     /**
      * @Column(type="float", nullable=true)
      */
@@ -33,23 +38,23 @@ class Workersalary extends \Synrgic_Models_Entity {
     /**
      * @Column(type="float", nullable=true)
      */
-    protected $otpay;
+    protected $otsalary;
 
     /**
      * @Column(type="float", nullable=true)
      */
-    protected $otprice;
+    protected $otrate;
 
     /**
      * @Column(type="float", nullable=true)
      */
-    protected $allhours;
+    protected $totalhours;
 
     /**
      * 总工作 金额   
      * @Column(type="float", nullable=true)
      */
-    protected $allpay;
+    protected $totalsalary;
 
     /**
      * 考勤天数
