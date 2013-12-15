@@ -204,7 +204,6 @@ class infox_project {
         $todaystyle = $highlight ? "background:#ff5c5c;" : "";
 
         $attendDate = new Datetime($monthstr . "-01");
-        ;
         $attendmonth = $attendDate->format("m");
         $attendyear = $attendDate->format("Y");
         $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear);
@@ -247,17 +246,17 @@ class infox_project {
         $attendtab .= $tr;
 
         /*
-        $tds = "";
-        for ($i = 0; $i < $daysinmonth; $i++) {
-            $j = $i + 1;
-            $value = $attendresult[1][$i];
+          $tds = "";
+          for ($i = 0; $i < $daysinmonth; $i++) {
+          $j = $i + 1;
+          $value = $attendresult[1][$i];
 
-            $td = "<td>$value</td>";
-            $tds .= $td;
-        }
-        $tr = "<tr><td>伙食</td>$tds</tr>
-";
-        $attendtab .= $tr;
+          $td = "<td>$value</td>";
+          $tds .= $td;
+          }
+          $tr = "<tr><td>伙食</td>$tds</tr>
+          ";
+          $attendtab .= $tr;
          * 
          */
         $attendtab .= "</table>";
@@ -410,23 +409,229 @@ class infox_project {
         return $data->getId();
     }
 
-    public static function savedailyAttend($requests)
-    {
+    public static function savedailyAttend($requests) {
         self::getRepos();
 
         $data = $requests['data'];
-        if(!$data)
-        {
+        if (!$data) {
             //echo "";
             return;
         }
-        $wid = $requests['wid'];
+        $wid = (int) $requests['wid'];
         $month = $requests['month'];
         $id = $requests['id'];
-        
-        $workerobj = self::$_workerdetails;
+        $day = substr($id, 4);
+
+        $workerobj = self::$_workerdetails->findOneBy(array('id'=>$wid));
         $monthobj = new DateTime($month . "01");
+        $monthstr = $monthobj->format("Y-m-d");
         $_siteatten = self::$_siteatten;
-        //$attendobj = $_siteatten->findOneBy(array());
+        $attendobj = $_siteatten->findOneBy(array("worker" => $workerobj, 'month' => $monthobj));
+        
+        if ($attendobj) {
+            
+        } else {
+            $attendobj = new Synrgic\Infox\Siteattendance();
+            $attendobj->setWorker($workerobj);
+            $attendobj->setMonth($monthobj);
+            self::$_em->persist($attendobj);
+            self::$_em->flush();
+        }
+
+        //return;        
+        try {
+            $query = "UPDATE Synrgic\Infox\Siteattendance s SET s.day$day = '$data' "
+                    . "WHERE s.worker=$wid and s.month='$monthstr'";
+            $query = self::$_em->createQuery($query);
+            $result = $query->getResult();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+    }
+
+    public static function savemonthAttend($requests) {
+        self::getRepos();
+
+        /*
+        $data = $requests['data'];
+        if (!$data) {
+            //echo "";
+            return;
+        }*/
+        $wid = (int) $requests['wid'];
+        $workerobj = self::$_workerdetails->findOneBy(array('id'=>$wid));
+
+        $month = $requests['month'];
+        $monthobj = new DateTime($month . "01");
+        $monthstr = $monthobj->format("Y-m-d");
+        
+        $_siteatten = self::$_siteatten;
+        $attendobj = $_siteatten->findOneBy(array("worker" => $workerobj, 'month' => $monthobj));
+        
+        if (!$attendobj) {
+            $attendobj = new Synrgic\Infox\Siteattendance();
+            $attendobj->setWorker($workerobj);
+            $attendobj->setMonth($monthobj);
+            self::$_em->persist($attendobj);
+            self::$_em->flush();
+        }
+
+        //return;        
+        
+        //$id = $requests['id'];
+        //$day = substr($id, 4);
+        $updatestr = "";
+        for($i=1; $i<= 31; $i++)
+        {
+            
+            //$daily = $requests['date' . $i];
+             
+            if(key_exists("date$i", $requests))
+            {
+                $daily = $requests["date$i"];
+                //$daily = ($daily == "") 
+                $updatestr .= "s.day$i='$daily',"; 
+            }
+                    
+            
+        }
+        $updatestr = substr($updatestr, 0, strlen($updatestr)-1);
+        //echo $updatestr;        return;
+        try {
+            $query = "UPDATE Synrgic\Infox\Siteattendance s SET $updatestr "
+                    . "WHERE s.worker=$wid and s.month='$monthstr'";
+            $query = self::$_em->createQuery($query);
+            $result = $query->getResult();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+    } 
+    
+    public static function generateAttendanceSummaryTab($worker, $date)
+    {
+        $workerid = $worker->getId();
+        $wpno = $worker->getWpno();
+        $name = $worker->getNamechs();
+        if (!$name || $name == "") {
+            $name = $worker->getNameeng();
+        }
+        $worktype = $worker->getWorktype();
+
+        // TODO: rate can be defined by staff
+        // if 计时，currentrate; if 计件， monthrate
+        //$currentrate = $price = $worker->getCurrentrate();
+        //$otrate = infox_worker::getWorkerOtRate($worker);
+        //$summary = $this->calcMonthSummary($worker, $attendrecord, $currentrate, $otrate);
+        $summary = self::calcAttendanceSummary();
+        $totaldays = $summary['totaldays'];
+        $normalhours = $summary["normalhours"];
+        $othours = $summary["othours"];
+        $totalhours = $summary["totalhours"];
+        $normalsalary = $summary["normalsalary"];
+        $otsalary = $summary["otsalary"];
+        $totalsalary = $summary["totalsalary"];
+        $fooddays = $summary["fooddays"];
+
+        $table = '<table class="attendsum">';
+        // worker info and month summary
+        $tr = "";
+        $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>';
+        $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>
+';
+        $table .= $tr;
+        $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
+        $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
+        $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
+';
+        $table .= $tr;
+
+        $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
+        $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
+        $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";
+        $tr .= "</tr>";
+        
+        $table .= $tr;
+        $table .= "</table>";
+        //$tabs[] = $table;
+        return $table;
+    }
+    
+    public static function calcAttendanceSummary()
+    {
+        $summay = array();
+        if (!$attendance) {
+            $summary["totaldays"] = "";
+            $summary["normalhours"] = "";
+            $summary["normalsalary"] = "";
+            $summary["othours"] = "";
+            $summary["otsalary"] = "";
+            $summary["totalhours"] = "";
+            $summary["totalsalary"] = "";
+            $summary["fooddays"] = "";
+        } else {
+            $wid = $attendance->getWorker()->getId();
+            $month = $attendance->getMonth()->format("Y-m-d");
+
+            $days = "";
+            for ($i = 1; $i <= 31; $i++) {
+                $day = "s.day$i";
+                if ($i != 31) {
+                    $day .= ",";
+                }
+
+                $days .= $day;
+            }
+
+            $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+            $result = $this->_em->createQuery($query)->getResult();
+            //print_r($result);
+
+            $totaldays = 0;
+            $normalhours = 0;
+            $normalsalary = 0;
+            $othours = 0;
+            $otsalary = 0;
+
+            $fooddays = 0;
+            foreach ($result[0] as $tmp) {
+                if ($tmp) {
+                    $totaldays++;
+
+                    // normal work
+                    $tmparr = explode(";", $tmp);
+                    if (array_key_exists(0, $tmparr)) {
+                        $workhours = $tmparr[0];
+                        if ($workhours >= 8) {
+                            $normalhours += 8;
+                            $othours += ($workhours - 8);
+                        } else {
+                            $normalhours += $workhours;
+                        }
+                    }
+
+                    if (array_key_exists(1, $tmparr)) {
+                        $food = $tmparr[1];
+                        $fooddays += ($food === "1") ? 1 : 0;
+                    }
+                }
+            }
+
+            $normalsalary = $normalhours * $rate;
+            $otsalary = $othours * $otrate;
+
+            $summary["totaldays"] = $totaldays;
+            $summary["normalhours"] = $normalhours;
+            $summary["normalsalary"] = $normalsalary;
+            $summary["othours"] = $othours;
+            $summary["otsalary"] = $otsalary;
+            $summary["totalhours"] = $othours + $normalhours;
+            $summary["totalsalary"] = $otsalary + $normalsalary;
+            $summary["fooddays"] = $fooddays;
+        }
+
+        return $summary;
+        
     }
 }

@@ -10,7 +10,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
     public function init() {
         $this->_em = Zend_Registry::get('em');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
-        //$this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
+        $this->_siteattendance = $this->_em->getRepository('Synrgic\Infox\Siteattendance');
     }
 
     public function indexAction() {
@@ -206,14 +206,14 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $table .= "</table>";
         $tabs[] = $table;
 
-        //$attendtab = infox_project::generateAttendanceTab($attendrecord, true, true); 
-        if ($nobtn) {//generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
-            $attendtab = infox_project::generateAttendanceTab($attendrecord, $monthstr, false, false);
-        } else {
-            $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, true, $siteid, $monthstr, $workerid);
-        }
-        $tabs[] = $attendtab;
-
+        /*
+          if ($nobtn) {//generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
+          $attendtab = infox_project::generateAttendanceTab($attendrecord, $monthstr, false, false);
+          } else {
+          $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, true, $siteid, $monthstr, $workerid);
+          }
+          $tabs[] = $attendtab;
+         */
         return $tabs;
     }
 
@@ -292,11 +292,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
 
         return $summary;
     }
-
-    private function calcNormalWork($worker = null, $attendance) {
-        
-    }
-
+    
     // data format: 
     //  "8;1", means work 8 hours, and 1 means had food also
     //  "9;0", means work 8 hours, and ot 1 hour, and 0 means no food
@@ -389,6 +385,10 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $attendyear = $date->format("Y");
         $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear);
         //echo "dayinmonth=$dayinmonth, dayofweek=$dayofweek,daysinmonth=$daysinmonth";
+        // find attend record
+        $attendobj = $this->_siteattendance->findOneBy(array('worker' => $worker, 'month' => $date));
+        //print_r($attendobj);
+        //echo "day20 =" . $attendobj['day20'];
 
         $datetab = '<table id="datetab"><thead>            
                     <tr><th>Sunday</th><th>Monday</th><th>Thursday</th><th>Wednesday</th>
@@ -408,7 +408,9 @@ class Project_AttendanceController extends Zend_Controller_Action {
                 for ($k = 0; $k < 7 - $dayofweek; $k++) {
                     $daycount++;
                     $daystr = "<div>$daycount</div>";
-                    $daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" >';
+                    $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
+                    $daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" '
+                            . 'name="date' . $daycount . '" value="' . $daydata . '">';
                     $tds .= "<td>$daystr</td>";
                 }
             } else {
@@ -419,17 +421,22 @@ class Project_AttendanceController extends Zend_Controller_Action {
                         $daystr = "&nbsp;";
                     } else {
                         $daystr = "<div>$daycount</div>";
-                        $daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" >';
+                        //$daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" >';
+                        $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
+                        $daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" '
+                                . 'name="date' . $daycount . '" value="' . $daydata . '">';
                     }
 
                     $tds .="<td>$daystr</td>";
                 }
             }
-            $tr = "<tr>$tds</tr>";
+            $tr = "<tr>$tds</tr>
+                    ";
             $trs.=$tr;
         }
         //echo "trs=" . htmlspecialchars($trs);
-        $datetab .= "<tbody>$trs</tbody></table>";
+        $datetab .= "<tbody>$trs</tbody>
+                </table>";
         $this->view->datetab = $datetab;
     }
 
@@ -437,20 +444,29 @@ class Project_AttendanceController extends Zend_Controller_Action {
         infox_common::turnoffView($this->_helper);
 
         $requests = $this->getRequest()->getPost();
-        if (1) {
+        if (0) {
             var_dump($requests);
             return;
         }
-        
+
         $data = $requests['data'];
-        if(!$data)
-        {
+        if (!$data) {
             //echo "";
             return;
         }
         infox_project::savedailyAttend($requests);
+    }
+
+    public function postattendmonthAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $requests = $this->getRequest()->getPost();
+        if (0) {
+            var_dump($requests);
+            return;
+        }
         
-        
+        infox_project::savemonthAttend($requests);
     }
 
     public function postattendAction() {
@@ -498,6 +514,47 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $worker = infox_worker::getWorkerdetailsById($wid);
         $this->view->workerdetails = $worker;
 
+        // worker atten
+        //$record = infox_project::getAttendanceByIdMonth($wid, $date);
+        //if(!$record) { echo "xxxxx"; }
+        //$this->view->attendance = $record;
+
+        $tab = infox_project::generateAttendanceSummaryTab($worker, $date);
+        
+        
+        // site info
+        $siteid = $this->getParam("sid", 0);
+        $this->view->siteid = $siteid;
+        $site = infox_project::getSiteById($siteid);
+        $this->view->site = $site;        
+        
+        $workerarr = infox_worker::getworkerlistbysitedateobj($site, $date);
+        $sno = 0;
+        foreach ($workerarr as $tmp) {
+            $sno++;
+            if ($tmp->getId() == $wid) {
+                $tabs = $this->getWorkerMonthAttendHtml($sno, $worker, $record, $siteid, $monthstr, true);
+                break;
+            }
+        }
+        $this->view->workerattendtabs = $tabs;
+    }
+    
+    
+    public function attendsheetAction1() {
+        infox_common::turnoffLayout($this->_helper);
+
+        // date        
+        $monthstr = $this->getParam("month", "");
+        $date = new Datetime($monthstr . "01");
+        $this->view->date = $date;
+        $this->view->monthstr = $monthstr;
+
+        // worker info
+        $wid = $this->getParam("wid", 0);
+        $worker = infox_worker::getWorkerdetailsById($wid);
+        $this->view->workerdetails = $worker;
+
         // site info
         $siteid = $this->getParam("sid", 0);
         $this->view->siteid = $siteid;
@@ -521,7 +578,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $this->view->workerattendtabs = $tabs;
     }
 
-    public function attendsheetAction1() {
+    public function attendsheetAction2() {
         infox_common::turnoffLayout($this->_helper);
 
         // date        

@@ -36,22 +36,23 @@
             }
         </style>	
         <script>
-            $(function() {
-                $(".dayvalue").blur(function() {
-                    //alert("Handler for .blur() called.");
-                    // post data to attend
-                    var wid = $("#wid").val();
-                    var month = $("#month").val();
-                    var id = $(this).attr("id");
-                    var data = $(this).val();
-                    
-                    var url = "/project/attendance/savedailyinput";
-                    $.post(url, {wid:wid, month:month, id:id, data:data}, function(data) {
-                        console.log(data);
-                    })
-                });
-            });
-
+            /*
+             $(function() {
+             $(".dayvalue").blur(function() {
+             //alert("Handler for .blur() called.");
+             // post data to attend
+             var wid = $("#wid").val();
+             var month = $("#month").val();
+             var id = $(this).attr("id");
+             var data = $(this).val();
+             
+             var url = "/project/attendance/savedailyinput";
+             $.post(url, {wid:wid, month:month, id:id, data:data}, function(data) {
+             console.log(data);
+             })
+             });
+             });
+             */
             function post()
             {
                 var date = $("#date").val();
@@ -71,6 +72,18 @@
                     //window.location.reload();
                 })
 
+            }
+            
+            function attendialogpost()
+            {
+                var form = $('#attendform').serialize();
+                console.log(form);
+                var url = "/project/attendance/postattendmonth";
+                $.post(url, form, function(data){
+                    console.log(data);
+                    $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month=" + month + "&sid=" + siteid);
+                    alert("提交成功，请继续考勤");                    
+                });
             }
 
         </script>
@@ -103,14 +116,15 @@
 
             <div data-role="content" data-theme="c">
                 <div id="attensheet">
-                    <? echo $workerattendtabs[0] . $workerattendtabs[1]; ?>
+                    <?= $workerattendtabs[0] ?>
                 </div>
                 <br>
                 <div>
-                    <?= $datetab ?>
+                    <form id="attendform">                    
                     <input type="hidden" name="wid" id="wid" value="<?= $wid ?>">
                     <input type="hidden" name="month" id="month" value="<?= $monthstr ?>">
-
+                    <?= $datetab ?>
+                    </form>
                     <input type="button" value="提交考勤" onclick="attendialogpost()">
                     <input type="button" value="关闭本页" onclick="attendialogclose()">
                 </div>                           
