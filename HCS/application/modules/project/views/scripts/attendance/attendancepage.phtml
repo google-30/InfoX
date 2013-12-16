@@ -74,6 +74,17 @@
             .attendsum  { background-color:#D0D0D0; }
             .fixwidthcol { width:45px; }
             .tdattendfood { width:150px; }
+
+            #datetab { table-layout: fixed;
+            }
+            input{
+                text-align:center;
+            }
+
+            input.ui-input-text 
+            {
+                color: red;
+            }
         </style>
         <script>
             $(function() {
@@ -84,7 +95,6 @@
                 });
 
             });
-
 
             function quicksubmit()
             {
@@ -117,7 +127,7 @@
                 });
             }
 
-            function attendialogpost()
+            function attendialogpost1()
             {
                 var date = $("#mydate").val();
                 //alert(date); return;
@@ -156,7 +166,19 @@
                 document.location.reload();
             }
 
-
+            function attendialogpost()
+            {
+                var form = $('#attendform').serialize();
+                console.log(form);
+                var wid = $("#wid").val();
+                var month = $("#month").val();
+                var url = "/project/attendance/postattendmonth";
+                $.post(url, form, function(data) {
+                    console.log(data);
+                    $('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month=" + month);
+                    alert("提交成功，请继续考勤");
+                });
+            }
 
         </script>
         <div data-role="page">

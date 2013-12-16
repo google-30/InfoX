@@ -134,12 +134,17 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $this->view->attendancearr = $attendancearr;
         //echo "count=" . count($attendancearr);
 
-        $this->view->workerhtmls = $this->genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr);
+        $this->view->workerhtmls = $this->genWorkerHtmls($workerarr, $attendancearr, $siteid, $date);
+        //$this->view->workerhtmls = $this->genWorkerAttendTabs($workerarr, $attendancearr, $siteid, $date);
 
         $this->view->username = infox_common::getUsername();
     }
 
-    private function genWorkerHtmls($workerarr, $attendancearr, $siteid, $monthstr) {
+    private function genWorkerAttendTabs($workerarr, $attendancearr, $siteid, $dateobj) {
+        
+    }
+
+    private function genWorkerHtmls($workerarr, $attendancearr, $siteid, $dateobj) {
         $tablearr = array();
         $table = "";
         $sno = 0;
@@ -156,14 +161,29 @@ class Project_AttendanceController extends Zend_Controller_Action {
                 }
             }
 
-            $tabs = $this->getWorkerMonthAttendHtml($sno, $tmp, $attendrecord, $siteid, $monthstr);
+            $tabs = $this->getWorkerMonthAttendHtml($sno, $tmp, $attendrecord, $siteid, $dateobj);
             $tablearr[] = $tabs;
         }
 
         return $tablearr;
     }
 
-    private function getWorkerMonthAttendHtml($sno, $worker, $attendrecord, $siteid, $monthstr, $nobtn = false) {
+    private function getWorkerMonthAttendHtml($sno, $worker, $attendrecord, $siteid, $dateobj, $nobtn = false) {
+        $tabs = array();
+        
+        $tab = infox_salary::getWorkerSummaryTab($worker, $dateobj, $sno);
+        $tabs[] = $tab;
+        if ($nobtn) {//generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
+            $attendtab = infox_project::generateAttendanceTab($attendrecord, $dateobj, false, false);
+        } else {
+            $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, false, $siteid, $dateobj, $worker->getId());
+        }
+        $tabs[] = $attendtab;
+        
+        return $tabs;
+    }
+
+    private function getWorkerMonthAttendHtml1($sno, $worker, $attendrecord, $siteid, $monthstr, $nobtn = false) {
         $workerid = $worker->getId();
         $wpno = $worker->getWpno();
         $name = $worker->getNamechs();
@@ -294,7 +314,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
 
         return $summary;
     }
-    
+
     // data format: 
     //  "8;1", means work 8 hours, and 1 means had food also
     //  "9;0", means work 8 hours, and ot 1 hour, and 0 means no food
@@ -381,7 +401,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
                 break;
             }
         }
-        
+
         // create tab just like datepicker
         $dayinmonth = $date->format("Y-m-d");
         $dayofweek = date('w', strtotime($dayinmonth));
@@ -469,14 +489,14 @@ class Project_AttendanceController extends Zend_Controller_Action {
             var_dump($requests);
             return;
         }
-        
+
         $wid = $requests['wid'];
-        $workerobj = $this->_workerdetails->findOneBy(array('id'=>$wid));
+        $workerobj = $this->_workerdetails->findOneBy(array('id' => $wid));
 
         $month = $requests['month'];
         $monthobj = new DateTime($month . "01");
-        $monthstr = $monthobj->format("Y-m-d");        
-        
+        $monthstr = $monthobj->format("Y-m-d");
+
         infox_project::saveMonthAttend($requests);
         infox_salary::saveMonthSalary($workerobj, $monthobj);
     }
@@ -514,7 +534,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
 
     public function attendsheetAction() {
         infox_common::turnoffView($this->_helper);
-        
+
         // date        
         $monthstr = $this->getParam("month", "");
         $dateobj = $date = new Datetime($monthstr . "01");
@@ -526,11 +546,11 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $workerobj = $worker = infox_worker::getWorkerdetailsById($wid);
         $this->view->workerdetails = $worker;
 
-        $tab = infox_salary::getWorkerSummaryTab($workerobj, $dateobj);
+        $tab = infox_salary::getWorkerSummaryTab($workerobj, $dateobj, 0);
         echo $tab;
         return;
     }
-        
+
     public function attendsheetAction1() {
         infox_common::turnoffLayout($this->_helper);
 

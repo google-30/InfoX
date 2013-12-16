@@ -217,9 +217,21 @@ class infox_salary {
     // sheet, month, workers not resigned    
     public static function getSalaryRecordsByMonthSheet($month, $sheet = "HC.C") {
         self::getRepos();
-        $salaryrepos = self::getReposBySheet($sheet);
-        $records = $salaryrepos->findBy(array("month" => $month));
-
+        //$salaryrepos = self::getReposBySheet($sheet);
+        $_salaryall = self::$_salaryall;
+        
+        $result = $_salaryall->findBy(array("month" => $month));
+        $records = array();
+        foreach ($result as $tmp)
+        {
+            $worker = $tmp->getWorker();
+            $workersheet = $worker->getSheet();
+            if($workersheet == $sheet)
+            {
+                $records[] = $tmp;
+            }
+        }
+        
         usort($records, function($a, $b) {
             $aid = $a->getWorker()->getId();
             $bid = $b->getWorker()->getId();
@@ -628,18 +640,17 @@ class infox_salary {
         $worker = $record->getWorker();
         $wid = $worker->getId();
         $monthstr = $record->getMonth()->format("Y-m");
-        ;
 
         $normalhours = $record->getNormalhours();
-        $normalpay = $record->getNormalpay();
+        $normalpay = $record->getNormalsalary();
 
         $othours = $record->getOthours();
-        $otpay = $record->getOtpay();
+        $otpay = $record->getOtsalary();
         //$otprice = $record->getOtprice();
         $otprice = infox_salary::getWorkerOtRate($record);
 
-        $allhours = $record->getAllhours();
-        $allpay = $record->getAllpay();
+        $allhours = $record->getTotalhours();
+        $allpay = 0; //$record->getAllpay();
 
         $attenddays = $record->getAttenddays();
         $absencedays = $record->getAbsencedays();
@@ -796,9 +807,9 @@ class infox_salary {
         self::$_em->flush();
     }
 
-    public static function getWorkerSummaryTab($workerobj, $dateobj) {
+    public static function getWorkerSummaryTab($workerobj, $dateobj, $sno) {
         self::getRepos();
-        
+
         $workerid = $workerobj->getId();
         $wpno = $workerobj->getWpno();
         $name = $workerobj->getNamechs();
@@ -806,23 +817,33 @@ class infox_salary {
             $name = $workerobj->getNameeng();
         }
         $worktype = $workerobj->getWorktype();
-        
-        $salaryrecord = self::$_salaryall->findOneBy(array("worker" => $workerobj, "month" => $dateobj));        
+
+        $salaryrecord = self::$_salaryall->findOneBy(array("worker" => $workerobj, "month" => $dateobj));
         $summary = array();
-        $totaldays = $summary["totaldays"] = $salaryrecord->getAttenddays();
-        $normalhours = $summary["normalhours"] = $salaryrecord->getNormalhours();
-        $normalsalary = $summary["normalsalary"] = $salaryrecord->getNormalsalary();
-        $othours = $summary["othours"] = $salaryrecord->getOthours();
-        $otsalary = $summary["otsalary"] = $salaryrecord->getOtsalary();
-        $totalhours = $summary["totalhours"] = $salaryrecord->getTotalhours();
-        $totalsalary = $summary["totalsalary"] = $salaryrecord->getTotalsalary();
-        $otrate = $salaryrecord->getOtrate();
-        $rate = $salaryrecord->getRate();
-        //$summary["fooddays"] = ""; 
-        
-        $sno = "";
+        $totaldays = "";
+        $normalhours = "";
+        $normalsalary = "";
+        $othours = "";
+        $otsalary = "";
+        $totalhours = "";
+        $totalsalary = "";
+        $otrate = "";
+        $rate = "";
+        if ($salaryrecord) {
+            $totaldays = $summary["totaldays"] = $salaryrecord->getAttenddays();
+            $normalhours = $summary["normalhours"] = $salaryrecord->getNormalhours();
+            $normalsalary = $summary["normalsalary"] = $salaryrecord->getNormalsalary();
+            $othours = $summary["othours"] = $salaryrecord->getOthours();
+            $otsalary = $summary["otsalary"] = $salaryrecord->getOtsalary();
+            $totalhours = $summary["totalhours"] = $salaryrecord->getTotalhours();
+            $totalsalary = $summary["totalsalary"] = $salaryrecord->getTotalsalary();
+            $otrate = $salaryrecord->getOtrate();
+            $rate = $salaryrecord->getRate();
+            //$summary["fooddays"] = ""; 
+        }
+        //$sno = "";
         $fooddays = "";
-        
+
         $table = '<table class="attendsum">';
         // worker info and month summary
         $tr = "";
@@ -840,7 +861,7 @@ class infox_salary {
         $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
         $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";
         $tr .= "</tr>";
-        
+
         $table .= $tr;
         $table .= "</table>";
         return $table;

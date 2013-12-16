@@ -264,13 +264,15 @@ class infox_project {
         return $attendtab;
     }
 
-    public static function generateAttendanceTabWbtn($attendrecord, $highlight = false, $siteid, $monthstr, $workerid) {
+    //public static function generateAttendanceTabWbtn($attendrecord, $highlight = false, $siteid, $monthstr, $workerid) {
+        public static function generateAttendanceTabWbtn($attendrecord, $highlight = false, $siteid, $dateobj, $workerid) {
         self::getRepos();
         $attendresult = self::getAttendFoodData($attendrecord);
 
+        $monthstr = $dateobj->format("Ym");
         $nowdate = new Datetime("");
         $nowmonthstr = $nowdate->format("Ym");
-        $highlight = ($nowmonthstr == $monthstr) ? true : false;
+        //$highlight = ($nowmonthstr == $monthstr) ? true : false;
         $today = $nowdate->format("d");
         $todaystyle = $highlight ? "background:#ff5c5c;" : "";
 
@@ -306,7 +308,7 @@ class infox_project {
             $td = "<td>$value</td>";
             $tds .= $td;
         }
-        $tr = "<tr><td>计时 计件</td>$tds</tr>
+        $tr = "<tr><td>数据</td>$tds</tr>
 ";
         $attendtab .= $tr;
 

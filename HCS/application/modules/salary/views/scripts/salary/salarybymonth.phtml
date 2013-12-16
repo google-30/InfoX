@@ -1,198 +1,197 @@
 <!DOCTYPE html> 
 <html>
-<?php
-$monthstr=$this->monthstr;
-$sheet=$this->sheet;
-$sheetarr=$this->sheetarr;
-$salarytabs= $this->salarytabs;
-$username=$this->username;
-?>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>详细工资表<? echo $monthstr; ?></title> 
-	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
-    <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
-    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
-    <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+    <?php
+    $monthstr = $this->monthstr;
+    $sheet = $this->sheet;
+    $sheetarr = $this->sheetarr;
+    $salarytabs = $this->salarytabs;
+    $username = $this->username;
+    ?>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title>详细工资表<? echo $monthstr; ?></title> 
+        <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+        <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+        <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+        <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
 
-    <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
-    <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
+        <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
+        <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
-    <script src="/common/js/jQuery.ui.datepicker.js"></script>
-    <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
-	<script>
-		//reset type=date inputs to text
-		$( document ).bind( "mobileinit", function(){
-			$.mobile.page.prototype.options.degradeInputs.date = true;
-		});	
-	</script>
-</head> 
+        <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
+        <script src="/common/js/jQuery.ui.datepicker.js"></script>
+        <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
+        <script>
+            //reset type=date inputs to text
+            $(document).bind("mobileinit", function() {
+                $.mobile.page.prototype.options.degradeInputs.date = true;
+            });
+        </script>
+    </head> 
 
-<body> 
-<style>
-#headertab { width: 100%;}
-#headertab td, table th { text-align:left; border:0px solid black; }
-table { width: 100%; border-collapse:collapse; /*table-layout:fixed;*/}
-table td, table th { text-align:center; border:1px solid black; }
+    <body> 
+        <style>
+            #headertab { width: 100%;}
+            #headertab td, table th { text-align:left; border:0px solid black; }
+            table { width: 100%; border-collapse:collapse; /*table-layout:fixed;*/}
+            table td, table th { text-align:center; border:1px solid black; }
 
-.ui-dialog-contain {
-	width: 92.5%;
-	max-width: 2500px;
-	margin: 3% auto 15px auto;
-	padding: 0;
-	position: relative;
-	top: -15px;
-}
+            .ui-dialog-contain {
+                width: 92.5%;
+                max-width: 2500px;
+                margin: 3% auto 15px auto;
+                padding: 0;
+                position: relative;
+                top: -15px;
+            }
 
-.attendsum  { background-color:#D0D0D0; }
-.fixwidthcol { width:45px; }
-.tdattendfood { width:150px; }
-.workerinfo { background: #D0D0D0 /*#6FACD5*/; 
-            /*linear-gradient(#6FACD5, #497BAE) repeat scroll 0 0 #5E87B0;*/
-            /*linear-gradient(#5F9CC5, #396B9E) repeat scroll 0 0 #396B9E*/ 
-            table-layout:fixed;
-}
+            .attendsum  { background-color:#D0D0D0; }
+            .fixwidthcol { width:45px; }
+            .tdattendfood { width:150px; }
+            .workerinfo { background: #D0D0D0 /*#6FACD5*/; 
+                          /*linear-gradient(#6FACD5, #497BAE) repeat scroll 0 0 #5E87B0;*/
+                          /*linear-gradient(#5F9CC5, #396B9E) repeat scroll 0 0 #396B9E*/ 
+                          table-layout:fixed;
+            }
 
-.workerpay { /*background: #ff5555; */
-    background: linear-gradient(#6FACD5, #497BAE) repeat scroll 0 0 #5E87B0;
-    border: 1px solid #456F9A;
-    color: #FFFFFF;
-    font-weight: bold;
-    text-shadow: 0 1px 1px #3E6790;
- }
- 
-.noborder td { border:0px; } 
-</style>
-<script>
-$(function () {
-    $('.datepicker').mobiscroll().date({
-        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm', dateFormat: 'yy-mm',
-        endYear: 2050,
-    }); 
-});
+            .workerpay { /*background: #ff5555; */
+                background: linear-gradient(#6FACD5, #497BAE) repeat scroll 0 0 #5E87B0;
+                border: 1px solid #456F9A;
+                color: #FFFFFF;
+                font-weight: bold;
+                text-shadow: 0 1px 1px #3E6790;
+            }
 
-function datapost()
-{
-    //alert("datapost");
-    var rate=$('#rate').val();
-    var otherfee = $('#otherfee').val();
-    var inadvance = $('#inadvance').val();
-    var absencedays = $('#absencedays').val();        
-    var absencefines = $('#absencefines').val();        
-    var rtmonthpay = $('#rtmonthpay').val();        
-    var rtmonths = $('#rtmonths').val();        
-    var rtall = $('#rtall').val();        
-    var utfee = $('#utfee').val();
-    var utallowance = $('#utallowance').val();
-    var fullmonaward = $('#fullmonaward').val();
-    
-    var wid=$('#wid').val();
-    var month=$('#month').val();
-    
-    $.post("/salary/salary/datapost", 
-    { 
-    wid:wid, month:month, rate:rate, otherfee:otherfee, inadvance:inadvance, 
-    absencedays:absencedays, absencefines:absencefines, rtmonthpay:rtmonthpay, 
-    rtmonths:rtmonths, rtall:rtall, utfee:utfee, utallowance:utallowance,
-    fullmonaward:fullmonaward
-    }, 
-    function(data) {
-        console.log(data);
-        $('#salarysheet').load("/salary/salary/salarysheet?wid=" + wid + "&month="+month);
-        alert(data);
-        //window.location.reload();
-    })            
-}
+            .noborder td { border:0px; } 
+        </style>
+        <script>
+            $(function() {
+                $('.datepicker').mobiscroll().date({
+                    theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm', dateFormat: 'yy-mm',
+                    endYear: 2050,
+                });
+            });
 
-function salarydialogclose()
-{
-    //alert(attendialogclose);
-    //alert("attendialogclose");
-    // refresh this page to reload data
-    document.location.reload();
-}
-</script>
-<div data-role="page">
+            function datapost()
+            {
+                //alert("datapost");
+                var rate = $('#rate').val();
+                var otherfee = $('#otherfee').val();
+                var inadvance = $('#inadvance').val();
+                var absencedays = $('#absencedays').val();
+                var absencefines = $('#absencefines').val();
+                var rtmonthpay = $('#rtmonthpay').val();
+                var rtmonths = $('#rtmonths').val();
+                var rtall = $('#rtall').val();
+                var utfee = $('#utfee').val();
+                var utallowance = $('#utallowance').val();
+                var fullmonaward = $('#fullmonaward').val();
 
-	<div data-role="header" >
-		<!--<h1>Single page</h1>-->
-<table style="table-layout:fixed;" id="headertab">
-<tr>
-<td><? echo "月份: " . $monthstr; ?></td>
-<td style="text-align:right;">工资负责人:&nbsp;<?=$username?></td>
-</tr>
-</table>
-	</div><!-- /header -->
+                var wid = $('#wid').val();
+                var month = $('#month').val();
 
-	<div data-role="content">
-<div id="error">
-<?=$this->error?>
-</div>
+                $.post("/salary/salary/datapost",
+                        {
+                            wid: wid, month: month, rate: rate, otherfee: otherfee, inadvance: inadvance,
+                            absencedays: absencedays, absencefines: absencefines, rtmonthpay: rtmonthpay,
+                            rtmonths: rtmonths, rtall: rtall, utfee: utfee, utallowance: utallowance,
+                            fullmonaward: fullmonaward
+                        },
+                function(data) {
+                    console.log(data);
+                    $('#salarysheet').load("/salary/salary/salarysheet?wid=" + wid + "&month=" + month);
+                    alert(data);
+                    //window.location.reload();
+                })
+            }
 
-<!--<div class="ui-grid-b">
-	<div class="ui-block-a">
-<?
-$options="";
-foreach($sheetarr as $tmp)
-{
-    if($sheet == $tmp)
-    {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    }
-    else
-    {
-        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
-    }
+            function salarydialogclose()
+            {
+                //alert(attendialogclose);
+                //alert("attendialogclose");
+                // refresh this page to reload data
+                document.location.reload();
+            }
+        </script>
+        <div data-role="page">
 
-    $options .= $option;
-}
-$selects='<select data-mini="true" id="sheetselect">';
-$selects.=$options;
-$selects.='</select>';
-echo $selects;
-?>
-    </div>
-	<div class="ui-block-b"><input data-mini="true" type="text" name="month" id="month" value="<?=$monthstr?>" class="datepicker" /></div>
-	<div class="ui-block-c"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button">预览工资单</a></div>
-</div>-->
+            <div data-role="header" >
+                <!--<h1>Single page</h1>-->
+                <table style="table-layout:fixed;" id="headertab">
+                    <tr>
+                        <td><? echo "月份: " . $monthstr; ?></td>
+                        <td style="text-align:right;">工资负责人:&nbsp;<?= $username ?></td>
+                    </tr>
+                </table>
+            </div><!-- /header -->
 
-<div>
-<?php
-$url = "xxx"; //"/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
-$ahref= '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">批量输入</a>';    
-echo $ahref;
-?>
-</div>
-<div class="ui-grid-a">
-<div class="ui-block-a"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">预览</a></div>
-<div class="ui-block-b"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">导出</a></div>
-</div>
-<?php
-$alltabs="";
-foreach($salarytabs as $tmp)
-{
-    $tab0 = $tmp[0]; // worker
-    $tab1 = $tmp[1]; // salary
-    $tab2 = $tmp[2]; // attend
-    $alltabs .= $tab0;
-    $alltabs .= $tab1;
-    $alltabs .= $tab2;
-    $alltabs .= "<br>";
-}
+            <div data-role="content">
+                <div id="error">
+                    <?= $this->error ?>
+                </div>
 
-echo $alltabs;
-?>
-	</div><!-- /content -->
-	
-	<div data-role="footer">
-		<!--<h4>Footer content</h4>-->
-	</div><!-- /footer -->
-	
-</div><!-- /page -->
+                <!--<div class="ui-grid-b">
+                        <div class="ui-block-a">
+                <?
+                $options="";
+                foreach($sheetarr as $tmp)
+                {
+                    if($sheet == $tmp)
+                    {
+                        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+                    }
+                    else
+                    {
+                        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+                    }
+                
+                    $options .= $option;
+                }
+                $selects='<select data-mini="true" id="sheetselect">';
+                $selects.=$options;
+                $selects.='</select>';
+                echo $selects;
+                ?>
+                    </div>
+                        <div class="ui-block-b"><input data-mini="true" type="text" name="month" id="month" value="<?= $monthstr ?>" class="datepicker" /></div>
+                        <div class="ui-block-c"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button">预览工资单</a></div>
+                </div>-->
 
-</body>
+                <div>
+                    <?php
+                    $url = "xxx"; //"/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
+                    $ahref = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">批量输入</a>';
+                    echo $ahref;
+                    ?>
+                </div>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">预览</a></div>
+                    <div class="ui-block-b"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">导出</a></div>
+                </div>
+                <?php
+                $alltabs = "";
+                foreach ($salarytabs as $tmp) {
+                    $tab0 = $tmp[0]; // worker
+                    $tab1 = $tmp[1]; // salary
+                    $tab2 = $tmp[2]; // attend
+                    $alltabs .= $tab0;
+                    $alltabs .= $tab1;
+                    $alltabs .= $tab2;
+                    $alltabs .= "<br>";
+                }
+
+                echo $alltabs;
+                ?>
+            </div><!-- /content -->
+
+            <div data-role="footer">
+                <!--<h4>Footer content</h4>-->
+            </div><!-- /footer -->
+
+        </div><!-- /page -->
+
+    </body>
 </html>
 
