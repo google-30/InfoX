@@ -68,6 +68,20 @@ $date=$this->date;
 $workerarr=$this->workerarr;
 $attendancearr=$this->attendancearr;
 $alltabs=$this->alltabs;
+$salaryrecord=$this->salaryrecord;
+$rate=$salaryrecord->getRate();
+$otherfee=$salaryrecord->getOtherfee();
+$remark= $salaryrecord->getRemark();
+$absencedays=$salaryrecord->getAbsencedays();
+$absencefines=$salaryrecord->getAbsencefines();
+$fullmonaward=$salaryrecord->getFullmonaward();
+$rtmonthpay=$salaryrecord->getRtmonthpay();
+$rtmonths=$salaryrecord->getRtmonths();
+$rtall=$salaryrecord->getRtall();
+$utfee=$salaryrecord->getUtfee();
+$utallowance=$salaryrecord->getUtallowance();
+$foodpay=$salaryrecord->getFoodpay();
+$inadvance=$salaryrecord->getInadvance();
 ?>
 
 <div data-role="dialog">
@@ -93,23 +107,27 @@ echo $tabs;
 
 <table class="noborder">
 <tr>
-<td>工作单价:</td><td><input type="text" name="rate" id="rate" value="" data-mini="true"></td>
-<td>其他补扣:</td><td><input type="text" name="otherfee" id="otherfee" value="" data-mini="true" /></td>
-<td>提前结帐:</td><td><input type="text" name="inadvance" id="inadvance" value="" data-mini="true" /></td>
+    <td>工作单价:</td><td><input type="text" name="rate" id="rate" value="<?=$rate ?>" data-mini="true"></td>
+<td>其他补扣:</td><td><input type="text" name="otherfee" id="otherfee" value="<?=$rate ?>" data-mini="true" /></td>
+<td>备注:</td><td><input type="text" id="remark" name="remark" value="<?=$remark ?>"></td>
 </tr>
 <tr>
-<td>缺勤天数:</td><td><input type="text" id="absencedays" name="absencedays" value=""></td>
-<td>缺勤金额:</td><td><input type="text" id="absencefines" name="absencefines" value=""></td>
-<td>全勤奖金:</td><td><input type="text" id="fullmonaward" name="fullmonaward" value=""></td>
+<td>缺勤天数:</td><td><input type="text" id="absencedays" name="absencedays" value="<?=$absencedays ?>"></td>
+<td>缺勤金额:</td><td><input type="text" id="absencefines" name="absencefines" value="<?=$absencefines ?>"></td>
+<td>满勤奖金:</td><td><input type="text" id="fullmonaward" name="fullmonaward" value="<?=$fullmonaward ?>"></td>
 </tr>
 <tr>
-<td>预扣税当月:</td><td><input type="text" id="rtmonthpay" name="rtmonthpay" value=""></td>
-<td>预扣税月数:</td><td><input type="text" id="rtmonths" name="rtmonths" value=""></td>
-<td>预扣税累计:</td><td><input type="text" id="rtall" name="rtall" value=""></td>
+<td>预扣税当月:</td><td><input type="text" id="rtmonthpay" name="rtmonthpay" value="<?=$rtmonthpay ?>"></td>
+<td>预扣税月数:</td><td><input type="text" id="rtmonths" name="rtmonths" value="<?=$rtmonths ?>"></td>
+<td>预扣税累计:</td><td><input type="text" id="rtall" name="rtall" value="<?=$rtall ?>"></td>
 </tr>
 <tr>
-<td>水电费扣款:</td><td><input type="text" id="utfee" name="utfee" value=""></td>
-<td>水电费补助:</td><td><input type="text" id="utallowance" name="utallowance" value=""></td>
+<td>水电费扣款:</td><td><input type="text" id="utfee" name="utfee" value="<?=$utfee ?>"></td>
+<td>水电费补助:</td><td><input type="text" id="utallowance" name="utallowance" value="<?=$utallowance ?>"></td>
+</tr>
+<tr>
+<td>伙食费扣款:</td><td><input type="text" id="foodpay" name="foodpay" value="<?=$foodpay ?>"></td>
+<td>提前结帐:</td><td><input type="text" id="inadvance" name="inadvance" value="<?=$inadvance ?>" data-mini="true" /></td>
 </tr>
 </table>
 </form>
