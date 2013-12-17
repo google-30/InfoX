@@ -203,6 +203,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
     public function datainputAction() {
         infox_common::turnoffLayout($this->_helper);
+        
         $wid = $this->getParam("wid", 0);
         $monthstr = $this->getParam("month", "");
         $monthobj = new Datetime($monthstr . "-01");
@@ -284,7 +285,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         if ($fullmonaward != "")
             $sr->setFullmonaward((float) $fullmonaward);
         if ($foodpay != "") {
-            $sr->setFoodpay((float) $foodpay);
+            $sr->setFoodpay((float) abs($foodpay));
         }
         if ($remark != "") {
             $sr->setRemark($remark);
@@ -300,7 +301,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
         //$salaryrepo = infox_worker::getSalaryRepoByWorker($worker);
         //$salaryrecord = $salaryrepo->findOneBy(array("worker" => $worker, "month" => $monthobj));
-        //infox_salary::updateOneSalaryRecord($salaryrecord);
+        infox_salary::updateOneSalaryRecord($salaryrecord);
 
         echo "提交成功";
     }
@@ -320,7 +321,8 @@ class Salary_SalaryController extends Zend_Controller_Action {
         //infox_salary::updateOneSalaryRecord($salaryrecord);
 
         $tabarr = $this->getSalarytabs();
-        echo $tabarr;
+        //echo $tabarr;
+        $this->alltabs = $tabarr;
     }
 
     private function getSalarytabsByWidMonthstr($wid, $monthstr) {
@@ -361,7 +363,6 @@ class Salary_SalaryController extends Zend_Controller_Action {
         if (1) {
             $tmparr = $this->getAllTabsByWorkerMonth($worker, $month);
         } else {
-
             $salaryrepo = infox_worker::getSalaryRepoByWorker($worker);
             $salaryrecord = $salaryrepo->findOneBy(array("worker" => $worker, "month" => $month));
 

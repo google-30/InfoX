@@ -422,11 +422,13 @@ class infox_salary {
         $result = self::$_em->createQuery($query)->getResult();
 
         $totaldays = 0;
-        $normalhours = 0;
-        $normalpay = 0;
-        $othours = 0;
-        $otsalary = 0;
+        $normalhours = $salaryrecord->getNormalhours();
+        $normalsalary = $salaryrecord->getNormalsalary();
+        $othours = $salaryrecord->getOthours();;
+        $otsalary = $salaryrecord->getOtsalary();
         $fooddays = 0;
+        $totalsalary = $salaryrecord->getTotalsalary();
+        /*
         foreach ($result[0] as $tmp) {
             if ($tmp) {
                 $totaldays++;
@@ -449,13 +451,16 @@ class infox_salary {
                 }
             }
         }
-
+        */
         //echo "normalhours=$normalhours<br>";
-        $normalpay = $currentrate * $normalhours;
-        $otpay = $otrate * $othours;
-        $allhours = $normalhours + $othours;
-        $allpay = $normalpay + $otpay;
+        //$normalpay = $currentrate * $normalhours;
+        //$otpay = $otrate * $othours;
+        //$allhours = $normalhours + $othours;
+        //$allpay = $normalpay + $otpay;
 
+        $totalsalary += $currentrate * $normalhours + $otrate * $othours;
+        
+        
         $salaryrecord->setNormalhours($normalhours);
         $salaryrecord->setNormalpay($normalpay);
 
@@ -486,8 +491,8 @@ class infox_salary {
     
     public static function updateOneSalaryRecord($salaryrecord) {
         $worker = $salaryrecord->getWorker();
-        $currentrate = self::getWorkerRate($salaryrecord); //$worker->getCurrentrate();
-        $otrate = self::getWorkerOtRate($salaryrecord); //infox_worker::getWorkerOtRate($worker);
+        $currentrate = self::getWorkerRate($salaryrecord); 
+        $otrate = self::getWorkerOtRate($salaryrecord); 
 
         $wid = $worker->getId();
         $monthobj = $salaryrecord->getMonth();
@@ -521,6 +526,15 @@ class infox_salary {
         $daypay = 0;
         $salarybydaycount = 0; // 计件日期
         $salarybyday = 0;
+       
+        $totaldays = 0;
+        $normalhours = $salaryrecord->getNormalhours();
+        $normalsalary = $salaryrecord->getNormalsalary();
+        $othours = $salaryrecord->getOthours();;
+        $otsalary = $salaryrecord->getOtsalary();
+        $fooddays = 0;
+        $totalsalary = $salaryrecord->getTotalsalary();        
+        /*
         if (array_key_exists(0, $result)) {
             foreach ($result[0] as $tmp) {
                 if ($tmp) {
@@ -556,6 +570,8 @@ class infox_salary {
                 }
             }
         }
+         * 
+         */
         //echo "normalhours=$normalhours<br>";
         $workersheet = $worker->getSheet();
         $basicsalary = 500;
@@ -565,20 +581,25 @@ class infox_salary {
             $basicsalary = self::getSettingBySectionName("salary", "bbasic");
         }
 
+        $totalsalary += $currentrate * $normalhours + $otrate * $othours;
+        $normalsalary = ($totalsalary > $basicsalary) ? $basicsalary : $totalsalary;
+        $otsalary = $totalsalary - $normalsalary;
+        
+                
         //$normalpay += $currentrate * $normalhours;        
-        $normalpay = $basicsalary;
+        //$normalpay = $basicsalary;
         //$otpay = $otrate * $othours;
-        $otpay = $otrate * $othours - $basicsalary * $salarybydaycount / $daysinmonth + $salarybyday;
-        $otpay = round($otpay, 2);
-        $allhours = $normalhours + $othours;
-        $allpay = $normalpay + $otpay;
+        //$otpay = $otrate * $othours - $basicsalary * $salarybydaycount / $daysinmonth + $salarybyday;
+        //$otpay = round($otpay, 2);
+        //$allhours = $normalhours + $othours;
+        //$allpay = $normalpay + $otpay;
 
         //$salaryrecord->setNormalhours($normalhours);
-        $salaryrecord->setNormalsalary($normalpay);
+        $salaryrecord->setNormalsalary($normalsalary);
 
         //$salaryrecord->setOthours($othours);
         //$salaryrecord->setOtprice($otrate);
-        $salaryrecord->setOtsalary($otpay);
+        $salaryrecord->setOtsalary($otsalary);
 
         //$salaryrecord->setAllhours($allhours);
         //$salaryrecord->setAllpay($allpay);
@@ -598,8 +619,10 @@ class infox_salary {
         $utfee = $salaryrecord->getUtfee();
         $utallowance = $salaryrecord->getUtallowance();
         $fullmonaward = $salaryrecord->getFullmonaward();
-
-        $finalsalary = $normalpay + $otpay - abs($foodpay) - abs($absencefines) - abs($rtmonthpay) - abs($utfee) + abs($utallowance) + $otherfee + abs($fullmonaward);
+        $foodpay = $salaryrecord->getFoodpay();
+        
+        $finalsalary = $totalsalary - abs($foodpay) - abs($absencefines) - abs($rtmonthpay) - abs($utfee) 
+                + abs($utallowance) + $otherfee + abs($fullmonaward);
         $salaryrecord->setSalary($finalsalary);
 
         self::$_em->persist($salaryrecord);
