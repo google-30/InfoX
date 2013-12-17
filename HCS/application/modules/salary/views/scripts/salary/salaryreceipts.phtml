@@ -92,18 +92,27 @@ foreach($srs as $tmp)
     $nameeng = $worker->getNameeng();
     $eeeno = $worker->getEeeno();
     
-    $normalpay = $tmp->getNormalpay();
-    $otpay = $tmp->getOtpay();
+    $normalpay = $tmp->getNormalsalary();
+    $otpay = $tmp->getOtsalary();
     $salary = $tmp->getSalary();
-    $allowance = "???";
+    $allowance = "";
     $totalsalary = $normalpay +$otpay;
-    $fullmth = "???";
-    $foodpay = $tmp->getFoodpay();
+    $fullmth = $tmp->getFullmonaward() ? "$" . $tmp->getFullmonaward() : "" ;
+    $foodpay=$tmp->getFoodpay(); 
+    $foodpaystr = $foodpay ? "$(" . $foodpay . ")" : "" ;
     $rtmonthpay = $tmp->getRtmonthpay();
+    $rtmonthpaystr= $rtmonthpay ? "$(" . $rtmonthpay . ")" : "" ;
     $utfee = $tmp->getUtfee();
+    $utfeestr = $utfee ? "$($utfee)" : "";
     $utallowance = $tmp->getUtallowance();
+    $utallowancestr=$utallowance ? "$$utallowance" : "";
     $otherfee = $tmp->getOtherfee();
+    //echo ((float)$otherfee) . "&nbsp;";
+    $otherfeestr = substr($otherfee, 0, 1)=="-" ? "$(" . substr($otherfee, 1) . ")" : $otherfee;
+    //$otherfeestr = (floatval($otherfee))>0 ? "$$otherfee" : "$($otherfee)";
+    $otherfeestr = $otherfee ? $otherfeestr : "";
     $netpay = $tmp->getSalary();
+    $remark = $tmp->getRemark();
     
     $tr= "<tr>"; 
     $tdname='<td class="tdstayleft">工人姓名/Name:&nbsp;<u>' . "&nbsp;$namechs&nbsp;&nbsp;$nameeng&nbsp;" . '</u></td>';
@@ -121,13 +130,13 @@ foreach($srs as $tmp)
     <td>水电生活补贴<br>Allowance For Living</td><td>其他补扣费用<br>Other Addition or Deduction</td>
     <td>" . $month1 . "月实发工资<br>Net Pay for " . $month2 . "</td><td>工人确认签字<br>Signature Confirmed</td>";    
     
-    $tddata = "<td>$". "$normalpay</td><td>$" . "$otpay</td><td>$" . "$allowance</td><td>$" . "$totalsalary</td><td>$"
-    . "$fullmth</td><td>$" . "$foodpay</td><td>$" . "$rtmonthpay</td><td>$" 
-    . "$utfee</td><td>$" . "$utallowance</td><td>$" . "$otherfee</td><td>$" . "$salary</td><td></td>";
+    $tddata = "<td>$". "$normalpay</td><td>$" . "$otpay</td><td>" . "$allowance</td><td>$" . "$totalsalary</td><td>"
+    . "$fullmth</td><td>" . "$foodpaystr</td><td>" . "$rtmonthpaystr</td><td>" 
+    . "$utfeestr</td><td>" . "$utallowancestr</td><td>" . "$otherfeestr</td><td>$" . "$salary</td><td></td>";
     $trs = "<tr>$tds</tr><tr>$tddata</tr>";
     $datatab = '<table class="tabsalary2">' . $trs . "</table>";    
     
-    $trs = '<tr><td style="width:15%">其他费用补扣说明：</td><td></td></tr>';
+    $trs = '<tr><td style="width:15%">其他费用补扣说明：</td><td>'.  $remark . "</td></tr>";
     $trs.= '<tr><td>备注：</td><td>本人同意并已领取该月工资。如该月工资有问题，本人会在领取工资后的两个月之内及时与公司核查。超过两个月后，本人不再追讨任何工资纠纷。</td></tr>';
     $trs.= "<tr><td>Remark：</td><td>I have agreed and received the abovesaid salary. If any discrepancy on the abovesaid salary, I shall immediately check with the company within two months from date of receipt. Any time elapsing two months, I shall never ask more any additional amount.</td></tr>";
     $extratab = '<table class="tabsalary3">' . $trs . '</table>';

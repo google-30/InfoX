@@ -534,44 +534,7 @@ class infox_salary {
         $otsalary = $salaryrecord->getOtsalary();
         $fooddays = 0;
         $totalsalary = $salaryrecord->getTotalsalary();        
-        /*
-        if (array_key_exists(0, $result)) {
-            foreach ($result[0] as $tmp) {
-                if ($tmp) {
-                    $totaldays++;
 
-                    // normal work
-                    $tmparr = explode(";", $tmp);
-                    if (array_key_exists(0, $tmparr)) {
-                        $daydata = $tmparr[0];
-                        // this '20' needs to be confirmed
-                        // > 20, this data is pay for whole day
-                        // <=20, this is working hours
-                        if ($daydata > 20) {
-                            $daypay = $daydata;
-                            //$normalhours += 8;
-                            $normalpay += $daypay;
-                            $salarybydaycount++;
-                            $salarybyday += $daydata;
-                        } else {
-                            if ($daydata > 8) {
-                                $normalhours += 8;
-                                $othours += ($daydata - 8);
-                            } else {
-                                $normalhours += $daydata;
-                            }
-                        }
-                    }
-
-                    if (array_key_exists(1, $tmparr)) {
-                        $food = $tmparr[1];
-                        $fooddays += ($food === "1") ? 1 : 0;
-                    }
-                }
-            }
-        }
-         * 
-         */
         //echo "normalhours=$normalhours<br>";
         $workersheet = $worker->getSheet();
         $basicsalary = 500;
