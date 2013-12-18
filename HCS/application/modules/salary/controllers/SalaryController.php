@@ -22,7 +22,11 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->view->workerarr = infox_worker::getworkerlistbysheet($requestsheet);
     }
 
-    public function personalsalaryAction() {
+    public function personalAction() {
+        infox_common::turnoffLayout($this->_helper);
+        
+        $wid = $this->getParam("id", 0);
+        $monthstr = $this->getParam("month", "now");
         
     }
 
@@ -50,13 +54,19 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
         $salarytabs = $this->generateSalaryTabs($salaryrecords, $attendarr);
         $this->view->salarytabs = $salarytabs;
-
+        $this->view->salaryrecords=$salaryrecords;
         $this->view->username = infox_common::getUsername();
     }
 
     private function generateSalaryTabs($salaryrecords, $attendarr) {
         $salarytabs = array();
         $sno = 0;
+        
+        if(!count($salaryrecords))
+        {
+            echo "No salary records in db, please check.";
+            return;
+        }
         $monthstr = $salaryrecords[0]->getMonth()->format("Y-m");
 
         foreach ($salaryrecords as $record) {

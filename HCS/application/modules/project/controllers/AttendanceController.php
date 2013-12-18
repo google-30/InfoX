@@ -13,6 +13,8 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_siteattendance = $this->_em->getRepository('Synrgic\Infox\Siteattendance');
         $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
+        $this->_workeronsite = $this->_em->getRepository('Synrgic\Infox\Workeronsite');
+        
     }
 
     public function indexAction() {
@@ -35,6 +37,10 @@ class Project_AttendanceController extends Zend_Controller_Action {
             if (!$months) {
                 $error .= infox_common::setErrorOutput("请在工地管理指定开始日期");
             }
+            
+            // TODO:
+            $workersonsite = $this->_workeronsite->findBy(array('site'=>$siteobj));
+            $this->view->workersonsite = $workersonsite;
         }
 
         $this->view->workingmonths = $months;

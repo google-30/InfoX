@@ -6,6 +6,20 @@
     $sheetarr = $this->sheetarr;
     $salarytabs = $this->salarytabs;
     $username = $this->username;
+    $salaryrecords = $this->salaryrecords;
+
+    $options = "";
+    $count = 0;
+    foreach ($salaryrecords as $record) {
+        $count++;
+        $name = $record->getWorker()->getNamechs();
+        $name = (!$name || $name == "") ? $record->getWorker()->getNameeng() : $name;
+        $option = "<option value=$count>" . $name . "</option>";
+        $options .= $option;
+    }
+    $workerselect = '<select id="workersel" data-theme="b" data-mini="true">' . $options . "</select>";
+
+    $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
     ?>
     <head>
         <meta charset="utf-8">
@@ -71,6 +85,12 @@
                 $('.datepicker').mobiscroll().date({
                     theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm', dateFormat: 'yy-mm',
                     endYear: 2050,
+                });
+
+                $("#workersel").on("change", function() {
+                    //alert("change");
+                    var workersel = $(this).val();
+                    $(window).scrollTop($('#worker' + workersel).offset().top);
                 });
             });
 
@@ -161,29 +181,44 @@
                 </div>
 
                 <div>
-                    <?php
-                    $url = "xxx"; //"/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
-                    $ahref = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">批量输入</a>';
-                    echo $ahref;
-                    ?>
+                <?php
+                $url = "xxx"; //"/project/attendance/attendquick?" . "&sid=$siteid&month=$monthstr";   
+                $ahref = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">批量输入</a>';
+                echo $ahref;
+                ?>
                 </div>-->
                 <div class="ui-grid-a">
-                    <div class="ui-block-a"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">预览</a></div>
-                    <div class="ui-block-b"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">导出</a></div>
+                    <div class="ui-block-a"><?= $workerselect ?></div>
+                    <div class="ui-block-b">
+                        <a href="<?= $salaryreceiptsurl ?>" data-mini="true" data-role="button" data-theme="b" target="_blank">
+                            预览
+                        </a>
+                    </div>
+                    <!--<div class="ui-block-b"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" 
+                    value="" data-role="button" data-theme="b">导出</a></div>-->
                 </div>
                 <?php
+                $divno = 0;
                 $alltabs = "";
-                foreach ($salarytabs as $tmp) {
-                    $tab0 = $tmp[0]; // worker
-                    $tab1 = $tmp[1]; // salary
-                    $tab2 = $tmp[2]; // attend
-                    $alltabs .= $tab0;
-                    $alltabs .= $tab1;
-                    $alltabs .= $tab2;
-                    $alltabs .= "<br>";
-                }
+                if (count($salarytabs)) {
+                    foreach ($salarytabs as $tmp) {
+                        $alltabs = "";
 
-                echo $alltabs;
+                        $tab0 = $tmp[0]; // worker
+                        $tab1 = $tmp[1]; // salary
+                        $tab2 = $tmp[2]; // attend
+                        $alltabs .= $tab0;
+                        $alltabs .= $tab1;
+                        $alltabs .= $tab2;
+                        //$alltabs .= "<br>";
+
+                        $divno++;
+                        echo "<div id=worker$divno>
+                            " . $alltabs . "</div><br>
+                            ";
+                    }
+                }
+                //echo $alltabs;
                 ?>
             </div><!-- /content -->
 
