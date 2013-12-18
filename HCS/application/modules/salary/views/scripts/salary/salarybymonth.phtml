@@ -10,7 +10,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"> 
-        <title>详细工资表<? echo $monthstr; ?></title> 
+        <title>工资表<? echo $monthstr; ?></title> 
         <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
         <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
         <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
@@ -33,8 +33,8 @@
 
     <body> 
         <style>
-            #headertab { width: 100%;}
-            #headertab td, table th { text-align:left; border:0px solid black; }
+            #headertab { width: 100%; table-layout:fixed; }
+            #headertab td, table th { text-align:left; border:0px solid black; text-align: center; }
             table { width: 100%; border-collapse:collapse; /*table-layout:fixed;*/}
             table td, table th { text-align:center; border:1px solid black; }
 
@@ -120,11 +120,10 @@
         <div data-role="page">
 
             <div data-role="header" >
-                <!--<h1>Single page</h1>-->
-                <table style="table-layout:fixed;" id="headertab">
+                <table id="headertab">
                     <tr>
                         <td><? echo "月份: " . $monthstr; ?></td>
-                        <td style="text-align:right;">工资负责人:&nbsp;<?= $username ?></td>
+                        <td>工资负责人:&nbsp;<?= $username ?></td>
                     </tr>
                 </table>
             </div><!-- /header -->
@@ -159,7 +158,7 @@
                     </div>
                         <div class="ui-block-b"><input data-mini="true" type="text" name="month" id="month" value="<?= $monthstr ?>" class="datepicker" /></div>
                         <div class="ui-block-c"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button">预览工资单</a></div>
-                </div>-->
+                </div>
 
                 <div>
                     <?php
@@ -167,7 +166,7 @@
                     $ahref = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">批量输入</a>';
                     echo $ahref;
                     ?>
-                </div>
+                </div>-->
                 <div class="ui-grid-a">
                     <div class="ui-block-a"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">预览</a></div>
                     <div class="ui-block-b"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" value="" data-role="button" data-theme="b">导出</a></div>
