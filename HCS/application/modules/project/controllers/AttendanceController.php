@@ -14,7 +14,6 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $this->_siteattendance = $this->_em->getRepository('Synrgic\Infox\Siteattendance');
         $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
         $this->_workeronsite = $this->_em->getRepository('Synrgic\Infox\Workeronsite');
-        
     }
 
     public function indexAction() {
@@ -37,12 +36,11 @@ class Project_AttendanceController extends Zend_Controller_Action {
             if (!$months) {
                 $error .= infox_common::setErrorOutput("请在工地管理指定开始日期");
             }
-            
+
             // TODO:
-            $result = $this->_workeronsite->findBy(array('site'=>$siteobj));
-            $workersonsite = array(); 
-            foreach($result as $tmp)
-            {
+            $result = $this->_workeronsite->findBy(array('site' => $siteobj));
+            $workersonsite = array();
+            foreach ($result as $tmp) {
                 $workersonsite[] = $tmp->getWorker();
             }
             $this->view->workersonsite = $workersonsite;
@@ -181,7 +179,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
 
     private function getWorkerMonthAttendHtml($sno, $worker, $attendrecord, $siteid, $dateobj, $nobtn = false) {
         $tabs = array();
-        
+
         $tab = infox_salary::getWorkerSummaryTab($worker, $dateobj, $sno);
         $tabs[] = $tab;
         if ($nobtn) {//generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
@@ -190,7 +188,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
             $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, false, $siteid, $dateobj, $worker->getId());
         }
         $tabs[] = $attendtab;
-        
+
         return $tabs;
     }
 
@@ -433,42 +431,56 @@ class Project_AttendanceController extends Zend_Controller_Action {
 
         $daycount = 0;
         $trs = "";
+
         for ($i = 0; $i < 6; $i++) {
             $tr = "";
             $tds = "";
+
+            $dayofweek = ($i == 0) ? $dayofweek : 0;
+
             if ($i == 0) {
                 for ($j = 0; $j < $dayofweek; $j++) {
                     $tds .= "<td></td>";
                 }
-                for ($k = 0; $k < 7 - $dayofweek; $k++) {
-                    $daycount++;
-                    $daystr = "<div>$daycount</div>";
-                    $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
-                    $daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" '
-                            . 'name="date' . $daycount . '" value="' . $daydata . '">';
-                    $tds .= "<td>$daystr</td>";
-                }
-            } else {
-                for ($j = 0; $j < 7; $j++) {
-                    $daycount++;
-                    $daystr = $daycount;
-                    if ($daycount > (int) $daysinmonth) {
-                        $daystr = "&nbsp;";
-                    } else {
-                        $daystr = "<div>$daycount</div>";
-                        //$daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" >';
-                        $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
-                        $daystr .= '<input type="text" class="dayvalue" id="date' . $daycount . '" '
-                                . 'name="date' . $daycount . '" value="' . $daydata . '">';
-                    }
-
-                    $tds .="<td>$daystr</td>";
-                }
             }
+            for ($k = 0; $k < 7 - $dayofweek; $k++) {
+                $daycount++;
+                if($daycount > $daysinmonth)
+                {
+                    break;
+                }
+                    
+                $daystr = "<div>$daycount</div>";
+                $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
+
+                $tmparr = explode(";", $daydata);
+                //$tmpvalue = key_exists(0, $tmparr) ? $tmparr[0] : "";
+                //$tmptype = key_exists(1, $tmparr) ? $tmparr[1] : "";
+
+                $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : ""; 
+                $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+
+                $input1 = '<input type="text" class="dayvalue" id="date' . $daycount . '" '
+                        . 'name="date' . $daycount . '" value="' . $hoursdata . '" placeholder="">';
+                $input2 = '<input type="text" class="dayvalue" id="piece' . $daycount . '" '
+                        . 'name="piece' . $daycount . '" value="' . $piecedata . '" placeholder="">';
+
+                $divinputs = '<div class="ui-grid-a">'
+                        . '<div class="ui-block-a">' . $input1 . '</div>'
+                        . '<div class="ui-block-b">' . $input2 . '</div>'
+                        . '</div>';
+
+                $daystr .= $divinputs;
+                $tds .= "<td>$daystr</td>";
+                
+                
+            }
+
             $tr = "<tr>$tds</tr>
                     ";
             $trs.=$tr;
         }
+
         //echo "trs=" . htmlspecialchars($trs);
         $datetab .= "<tbody>$trs</tbody>
                 </table>";

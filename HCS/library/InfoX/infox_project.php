@@ -215,7 +215,6 @@ class infox_project {
             $value = ($j < 10) ? "0$j" : $j;
 
             $td = ($j == $today) ? '<td style="' . $todaystyle . '">' . $value . '</td>' : "<td>$value</td>";
-//$td = "<td>$value</td>";
             $tds .= $td;
         }
         $tr = '<tr><td class="fixwidthcol">日期</td>' . $tds;
@@ -237,6 +236,11 @@ class infox_project {
         for ($i = 0; $i < $daysinmonth; $i++) {
             $j = $i + 1;
             $value = $attendresult[0][$i];
+
+            $tmparr = explode(";", $value);
+            $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+            $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+            $value = $hoursdata != "" ? $hoursdata : $piecedata;
 
             $td = "<td>$value</td>";
             $tds .= $td;
@@ -265,7 +269,7 @@ class infox_project {
     }
 
     //public static function generateAttendanceTabWbtn($attendrecord, $highlight = false, $siteid, $monthstr, $workerid) {
-        public static function generateAttendanceTabWbtn($attendrecord, $highlight = false, $siteid, $dateobj, $workerid) {
+    public static function generateAttendanceTabWbtn($attendrecord, $highlight = false, $siteid, $dateobj, $workerid) {
         self::getRepos();
         $attendresult = self::getAttendFoodData($attendrecord);
 
@@ -304,7 +308,12 @@ class infox_project {
         for ($i = 0; $i < $daysinmonth; $i++) {
             $j = $i + 1;
             $value = $attendresult[0][$i];
-
+            
+            $tmparr = explode(";", $value);
+            $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+            $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+            $value = $hoursdata != "" ? $hoursdata : $piecedata;
+            
             $td = "<td>$value</td>";
             $tds .= $td;
         }
@@ -424,12 +433,12 @@ class infox_project {
         $id = $requests['id'];
         $day = substr($id, 4);
 
-        $workerobj = self::$_workerdetails->findOneBy(array('id'=>$wid));
+        $workerobj = self::$_workerdetails->findOneBy(array('id' => $wid));
         $monthobj = new DateTime($month . "01");
         $monthstr = $monthobj->format("Y-m-d");
         $_siteatten = self::$_siteatten;
         $attendobj = $_siteatten->findOneBy(array("worker" => $workerobj, 'month' => $monthobj));
-        
+
         if ($attendobj) {
             
         } else {
@@ -452,29 +461,19 @@ class infox_project {
         }
     }
 
-    public static function saveMonthAttend1($requests) {
-        
-    }
-    
     public static function saveMonthAttend($requests) {
         self::getRepos();
 
-        /*
-        $data = $requests['data'];
-        if (!$data) {
-            //echo "";
-            return;
-        }*/
         $wid = (int) $requests['wid'];
-        $workerobj = self::$_workerdetails->findOneBy(array('id'=>$wid));
+        $workerobj = self::$_workerdetails->findOneBy(array('id' => $wid));
 
         $month = $requests['month'];
         $monthobj = new DateTime($month . "01");
         $monthstr = $monthobj->format("Y-m-d");
-        
+
         $_siteatten = self::$_siteatten;
         $attendobj = $_siteatten->findOneBy(array("worker" => $workerobj, 'month' => $monthobj));
-        
+
         if (!$attendobj) {
             $attendobj = new Synrgic\Infox\Siteattendance();
             $attendobj->setWorker($workerobj);
@@ -484,25 +483,21 @@ class infox_project {
         }
 
         //return;        
-        
         //$id = $requests['id'];
         //$day = substr($id, 4);
         $updatestr = "";
-        for($i=1; $i<= 31; $i++)
-        {
-            
-            //$daily = $requests['date' . $i];
-             
-            if(key_exists("date$i", $requests))
-            {
-                $daily = $requests["date$i"];
+        for ($i = 1; $i <= 31; $i++) {
+            if (key_exists("date$i", $requests)) {
+                $hour = $requests["date$i"];
+                $piece = $requests["piece$i"];
+
+                $value = implode(";", array($hour, $piece));
                 //$daily = ($daily == "") 
-                $updatestr .= "s.day$i='$daily',"; 
+                $updatestr .= "s.day$i='$value',";
             }
-                    
-            
         }
-        $updatestr = substr($updatestr, 0, strlen($updatestr)-1);
+
+        $updatestr = substr($updatestr, 0, strlen($updatestr) - 1);
         //echo $updatestr;        return;
         try {
             $query = "UPDATE Synrgic\Infox\Siteattendance s SET $updatestr "
@@ -513,10 +508,9 @@ class infox_project {
             var_dump($e);
             return;
         }
-    } 
-    
-    public static function generateAttendanceSummaryTab($worker, $date)
-    {
+    }
+
+    public static function generateAttendanceSummaryTab($worker, $date) {
         $workerid = $worker->getId();
         $wpno = $worker->getWpno();
         $name = $worker->getNamechs();
@@ -557,15 +551,14 @@ class infox_project {
         $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
         $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";
         $tr .= "</tr>";
-        
+
         $table .= $tr;
         $table .= "</table>";
         //$tabs[] = $table;
         return $table;
     }
-    
-    public static function calcAttendanceSummary()
-    {
+
+    public static function calcAttendanceSummary() {
         $summay = array();
         if (!$attendance) {
             $summary["totaldays"] = "";
@@ -638,6 +631,6 @@ class infox_project {
         }
 
         return $summary;
-        
     }
+
 }

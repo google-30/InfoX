@@ -24,10 +24,9 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
     public function personalAction() {
         infox_common::turnoffLayout($this->_helper);
-        
+
         $wid = $this->getParam("id", 0);
         $monthstr = $this->getParam("month", "now");
-        
     }
 
     public function salarybymonthAction() {
@@ -54,16 +53,15 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
         $salarytabs = $this->generateSalaryTabs($salaryrecords, $attendarr);
         $this->view->salarytabs = $salarytabs;
-        $this->view->salaryrecords=$salaryrecords;
+        $this->view->salaryrecords = $salaryrecords;
         $this->view->username = infox_common::getUsername();
     }
 
     private function generateSalaryTabs($salaryrecords, $attendarr) {
         $salarytabs = array();
         $sno = 0;
-        
-        if(!count($salaryrecords))
-        {
+
+        if (!count($salaryrecords)) {
             echo "No salary records in db, please check.";
             return;
         }
@@ -122,7 +120,8 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
         $tab = '<table class="workerinfo">';
         $tab .= "<tr><th rowspan=1>序号</th><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
-        $tab .= "<tr><td>$sno</td><td>$wpno</td><td>$eeeno</td><td>$name</td><td>$actualrate</td><td>$type</td></tr>";
+        $tab .= "<tr><td>$sno</td><td>$wpno</td><td>$eeeno</td>"
+                . '<td><strong style="color:red;"> ' . $name . "</strong></td><td>$actualrate</td><td>$type</td></tr>";
         $tab .= "</table>";
 
         return $tab;
@@ -213,7 +212,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
     public function datainputAction() {
         infox_common::turnoffLayout($this->_helper);
-        
+
         $wid = $this->getParam("wid", 0);
         $monthstr = $this->getParam("month", "");
         $monthobj = new Datetime($monthstr . "-01");
@@ -272,34 +271,39 @@ class Salary_SalaryController extends Zend_Controller_Action {
         }
 
         $sr = $salaryrecord;
-        if ($rate != "")
-            $sr->setRate((float) $rate);
-        if ($otherfee != "")
-            $sr->setOtherfee((float) $otherfee);
-        if ($inadvance != "")
-            $sr->setinadvance((float) $inadvance);
-        if ($absencedays != "")
-            $sr->setAbsencedays((float) $absencedays);
-        if ($absencefines != "")
-            $sr->setAbsencefines((float) $absencefines);
-        if ($rtmonthpay != "")
-            $sr->setRtmonthpay((float) $rtmonthpay);
-        if ($rtmonths != "")
-            $sr->setRtmonths((int) $rtmonths);
-        if ($rtall != "")
-            $sr->setRtall((float) $rtall);
-        if ($utfee != "")
-            $sr->setUtfee((float) $utfee);
-        if ($utallowance != "")
-            $sr->setUtallowance((float) $utallowance);
-        if ($fullmonaward != "")
-            $sr->setFullmonaward((float) $fullmonaward);
-        if ($foodpay != "") {
-            $sr->setFoodpay((float) abs($foodpay));
-        }
-        if ($remark != "") {
-            $sr->setRemark($remark);
-        }
+        $rate = ($rate != "") ? abs(floatval($rate)) : 0;
+
+        $sr->setRate((float) $rate);
+
+        $otherfee = ($otherfee != "") ? floatval($otherfee) : 0;
+        $sr->setOtherfee((float) $otherfee);
+
+        $inadvance = ($inadvance != "") ? "-" . abs(floatval($inadvance)) : 0;
+        $sr->setinadvance((float) $inadvance);
+
+        $otherfee = ($absencedays != "") ? floatval($absencedays) : 0;
+        $sr->setAbsencedays((float) $absencedays);
+
+        $absencefines = ($absencefines != "") ? "-" . abs(floatval($absencefines)) : 0;
+        $sr->setAbsencefines((float) $absencefines);
+
+        $rtmonthpay = ($rtmonthpay != "") ? "-" . abs(floatval($rtmonthpay)) : 0;
+        $sr->setRtmonthpay((float) $rtmonthpay);
+
+        $sr->setRtmonths((int) $rtmonths);
+        $sr->setRtall((float) $rtall);
+
+        $utfee = ($utfee != "") ? "-" . abs(floatval($utfee)) : 0;
+        $sr->setUtfee((float) $utfee);
+
+        $utallowance = ($utallowance != "") ? abs(floatval($utallowance)) : 0;
+        $sr->setUtallowance((float) $utallowance);
+
+        $fullmonaward = ($fullmonaward != "") ? abs(floatval($fullmonaward)) : 0;
+        $sr->setFullmonaward($fullmonaward);
+
+        $sr->setFoodpay((float) abs($foodpay));
+        $sr->setRemark($remark);
 
         $this->_em->persist($sr);
         try {
@@ -309,8 +313,6 @@ class Salary_SalaryController extends Zend_Controller_Action {
             return;
         }
 
-        //$salaryrepo = infox_worker::getSalaryRepoByWorker($worker);
-        //$salaryrecord = $salaryrepo->findOneBy(array("worker" => $worker, "month" => $monthobj));
         infox_salary::updateOneSalaryRecord($salaryrecord);
 
         echo "提交成功";
