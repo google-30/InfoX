@@ -1,135 +1,149 @@
 <style>
-.wizard { text-align:center; }
+    .wizard { text-align:center; }
 </style>
 <script>
-$('#sites').change(siteReload);
-function siteReload()
-{
-    var siteid = $("#sites").val();    
+    $(function() {
+        $('#Workersonsite').dataTable({
+            "iDisplayLength": 100,
+            "bRetrieve": true,
+        });
+    });
 
-    var url = "/project/attendance?";
-    url += "&siteid=" + siteid;
-    //alert(url);
-    redirect(url);
-}
+    $('#sites').change(siteReload);
+    function siteReload()
+    {
+        var siteid = $("#sites").val();
 
-function redirect(url) 
-{
-	window.location = url;
-}
+        var url = "/project/attendance?";
+        url += "&siteid=" + siteid;
+        //alert(url);
+        redirect(url);
+    }
 
-function openpage(datestr)
-{    
-    $siteid = $("#siteid").val();
+    function redirect(url)
+    {
+        window.location = url;
+    }
 
-    var url = "/project/attendance/attendancepage?";
-    url += "&siteid=" + $siteid;
-    url += "&month=" + datestr; 
-    //alert(url);
+    function openpage(datestr)
+    {
+        $siteid = $("#siteid").val();
 
-    window.open(url);
-}
+        var url = "/project/attendance/attendancepage?";
+        url += "&siteid=" + $siteid;
+        url += "&month=" + datestr;
+        //alert(url);
+
+        window.open(url);
+    }
 </script>
 <?php
 //$siteid=0;
-$siteid=$this->siteid;
-$sites=$this->sites;
-$workingmonths=$this->workingmonths;
+$siteid = $this->siteid;
+$sites = $this->sites;
+$workingmonths = $this->workingmonths;
 
-$style="";
-if($this->error!="")
-{
+$style = "";
+if ($this->error != "") {
     $style = "display:none;";
 }
+
+$workersonsite = $this->workersonsite;
 ?>
 
 <input type="hidden" id="siteid" value="<? echo $siteid; ?>">
 
 <div id="error">
-<?=$this->error?>
+    <?= $this->error ?>
 </div>
 
 <select id="sites" data-mini="true">
-<option value=0>请选择工地</option>
-<?php
-$options = '';
-foreach($sites as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
+    <option value=0>请选择工地</option>
+    <?php
+    $options = '';
+    foreach ($sites as $tmp) {
+        $id = $tmp->getId();
+        $name = $tmp->getName();
 
-    if($siteid == $id)
-    {
-        echo '<option value="' . $id . '" selected>' . $name . "</option>";
+        if ($siteid == $id) {
+            echo '<option value="' . $id . '" selected>' . $name . "</option>";
+        } else {
+            echo '<option value="' . $id . '" >' . $name . "</option>";
+        }
     }
-    else
-    {
-        echo '<option value="' . $id . '" >' . $name . "</option>";
-    }
-}
-echo $options;
-?>
+    echo $options;
+    ?>
 </select>
 
 <fieldset>
-<legend>选择月份</legend>
-<div class="ui-grid-d">
-<?php
-$nowdate=new Datetime("now");
-$currentmonth=$nowdate->format("m");
-$currentyear=$nowdate->format("Y");
-$count=0;
-$grids="";
-if(count($workingmonths))
-{
-foreach($workingmonths as $tmp)
-{
-    //$oncount++;
-    $count++;
-    $block="a";
-    switch ($count) {
-        case 1:
-            $block = "a";
-            break;
-        case 2:
-            $block = "b";
-            break;
-        case 3:
-            $block = "c";
-            break;
-        case 4:
-            $block = "d";
-            break;
-        case 5:
-            $block = "e";
-            $count = 0;
-            break;
-    }
+    <legend>选择月份</legend>
+    <div class="ui-grid-d">
+        <?php
+        $nowdate = new Datetime("now");
+        $currentmonth = $nowdate->format("m");
+        $currentyear = $nowdate->format("Y");
+        $count = 0;
+        $grids = "";
+        if (count($workingmonths)) {
+            foreach ($workingmonths as $tmp) {
+                //$oncount++;
+                $count++;
+                $block = "a";
+                switch ($count) {
+                    case 1:
+                        $block = "a";
+                        break;
+                    case 2:
+                        $block = "b";
+                        break;
+                    case 3:
+                        $block = "c";
+                        break;
+                    case 4:
+                        $block = "d";
+                        break;
+                    case 5:
+                        $block = "e";
+                        $count = 0;
+                        break;
+                }
 
-    $datestr = $tmp->format("Y-m");    
-    $datestr1 = $tmp->format("Ym");    
+                $datestr = $tmp->format("Y-m");
+                $datestr1 = $tmp->format("Ym");
 
-    $year = $tmp->format("Y");
-    $month = $tmp->format("m");
-    if($year==$currentyear && $month==$currentmonth)
-    {
-        $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')" data-theme="a">'. $datestr . "</button>";        
-    }
-    else
-    {
-        $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')">'. $datestr . "</button>";
-    }
+                $year = $tmp->format("Y");
+                $month = $tmp->format("m");
+                if ($year == $currentyear && $month == $currentmonth) {
+                    $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')" data-theme="a">' . $datestr . "</button>";
+                } else {
+                    $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')">' . $datestr . "</button>";
+                }
 
-    $grid = '<div class="ui-block-' . $block . '">' . $button . "</div>\n";
-    $grids .= $grid;      
-}
-}
-echo $grids;
-?>
-</div>
+                $grid = '<div class="ui-block-' . $block . '">' . $button . "</div>\n";
+                $grids .= $grid;
+            }
+        }
+        echo $grids;
+        ?>
+    </div>
 </fieldset>
+<h3>工人列表</h3>
 <?php
-//echo 
+//echo 'workers no=' . count($workersonsite);
+echo $this->grid("Workersonsite", true)
+        //->field('sn', 'SN')
+        ->field('eeeno', 'Eee No')
+        ->field('namechs', 'Name Chs')
+        ->field('nameeng', 'Name Eng')
+        ->field('wpno', 'Wpno')
+        //->field('enddate1','结束日期')
+        //->field('site1', '所在工地') 
+        //->field('payment1', '考勤方式')  
+        //->actionField(':action', "", '&nbsp;|&nbsp;')
+        ->paginatorEnabled(false)
+        ->setSorting(false)
+        //->helper(new GridHelper_Workeronsite())
+        ->data($workersonsite);
 ?>
 <br>
 

@@ -39,7 +39,12 @@ class Project_AttendanceController extends Zend_Controller_Action {
             }
             
             // TODO:
-            $workersonsite = $this->_workeronsite->findBy(array('site'=>$siteobj));
+            $result = $this->_workeronsite->findBy(array('site'=>$siteobj));
+            $workersonsite = array(); 
+            foreach($result as $tmp)
+            {
+                $workersonsite[] = $tmp->getWorker();
+            }
             $this->view->workersonsite = $workersonsite;
         }
 
