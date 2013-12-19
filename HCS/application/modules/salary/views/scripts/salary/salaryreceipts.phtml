@@ -1,169 +1,172 @@
 <!DOCTYPE html> 
 <html>
-<?php
-$monthstr=$this->monthstr;
-$monthobj=$this->monthobj;
+    <?php
+    $monthstr = $this->monthstr;
+    $monthobj = $this->monthobj;
 
-$sheet=$this->sheet;
-$sheetarr=$this->sheetarr;
-//$salarytabs= $this->salarytabs;
-$salaryrecords=$this->salaryrecords;
+    $sheet = $this->sheet;
+    $sheetarr = $this->sheetarr;
+    $salaryrecords = $this->salaryrecords;
 
-$year=$monthobj->format('Y');
-$month1=$monthobj->format('m');
-$month2=$monthobj->format('M');
-$nowobj=new Datetime("now");
-$nowdatestr=$nowobj->format("d/m/Y");
-?>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>Salary Receipts/工资收据<? echo $monthstr; ?></title> 
-	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
-    <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
-    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
-    <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+    $year = $monthobj->format('Y');
+    $month1 = $monthobj->format('m');
+    $month2 = $monthobj->format('M');
+    $nowobj = new Datetime("now");
+    $nowdatestr = $nowobj->format("d/m/Y");
+    ?>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title>Salary Receipts/工资收据<? echo $monthstr; ?></title> 
+        <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+        <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+        <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+        <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
 
-    <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
-    <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
+        <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
+        <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
-    <script src="/common/js/jQuery.ui.datepicker.js"></script>
-    <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
-	<script>
-		//reset type=date inputs to text
-		$( document ).bind( "mobileinit", function(){
-			$.mobile.page.prototype.options.degradeInputs.date = true;
-		});	
-	</script>
-</head> 
+        <!--<link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
+        <script src="/common/js/jQuery.ui.datepicker.js"></script>
+        <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
+        <script>
+            //reset type=date inputs to text
+            $(document).bind("mobileinit", function() {
+                $.mobile.page.prototype.options.degradeInputs.date = true;
+            });
+        </script>-->
+    </head> 
 
-<body> 
-<style>
-.tabsalary1 { table-layout: fixed; width:100%; font-size:x-small;}
-.tabsalary2 { 
-    table-layout: fixed; 
-    width:100%; 
-    border-collapse:collapse;     
-    font-size:xx-small;
-    margin: 5px;
-}
-.tabsalary2 td { text-align:center; border:1px solid black; padding:5px; }
-.tabsalary3 { width:100%; font-size:x-small;}
+    <body> 
+        <style>
+            .tabsalary1 { table-layout: fixed; width:100%; font-size:x-small;}
+            .tabsalary2 { 
+                table-layout: fixed; 
+                width:100%; 
+                border-collapse:collapse;     
+                font-size:xx-small;
+                margin: 5px;
+            }
+            .tabsalary2 td { text-align:center; border:1px solid black; padding:5px; }
+            .tabsalary3 { width:100%; font-size:x-small;}
 
-.tdstayright { text-align: right; }
-.tdstayleft { text-align: left; }
-.tdstaycenter { text-align: center; }
+            .tdstayright { text-align: right; }
+            .tdstayleft { text-align: left; }
+            .tdstaycenter { text-align: center; }
 
-@media all {
-	.page-break	{ display: none; }
-}
+            @media all {
+                .page-break	{ display: none; }
+            }
 
-@media print {
-	.page-break	{ display: block; page-break-before: always; }
-}
-</style>
-<script>
-</script>
-<div data-role="page">
-<!--
-	<div data-role="header" data-theme="b">
-	</div> /header -->
+            @media print {
+                .page-break	{ display: block; page-break-before: always; }
+            }
+        </style>
+        <script>
+            $(function() {
+                //alert("scroller");
+                $('.datepicker').mobiscroll().date({
+                    theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+                    endYear: 2050,
+                });
+            });
+        </script>
+        <div data-role="page">
+            <div data-role="header" data-theme="b">
+                <input type="text" name="begin" id="begin" class="datepicker" value="" data-mini="true" placeholder="点击选择日期"/>
+            </div>
 
-	<div data-role="content">
-<div id="error">
-<?=$this->error?>
-</div>
-<?php
-$counter=0;
-$srs=$salaryrecords;
-$datestr='月份/Mth:' . $year . "年". $month1 . "月/" . $month2 . "-" . $year;
-$header='<table class="tabsalary1"><tr><td class="tdstayleft">HWA CHENG DEVELOPMENT PTE LTD<br>华城发展有限公司</td>' .
-'<td></td><td class="tdstayright">' . $datestr . "</td></tr>";
-$header.='<tr><td></td><td class="tdstaycenter">Salary Receipt/工资收据</td><td></td></tr>';
-$tabhtml="";
-foreach($srs as $tmp)
-{
-    $counter++;
-    
-    $worker = $tmp->getWorker();
-    $namechs = $worker->getNamechs();
-    $nameeng = $worker->getNameeng();
-    $eeeno = $worker->getEeeno();
-    
-    $normalpay = $tmp->getNormalsalary();
-    $otpay = $tmp->getOtsalary();
-    $salary = $tmp->getSalary();
-    $allowance = "";
-    $totalsalary = $normalpay +$otpay;
-    $fullmth = $tmp->getFullmonaward() ? "$" . $tmp->getFullmonaward() : "" ;
-    $foodpay=$tmp->getFoodpay(); 
-    $foodpaystr = $foodpay ? "$(" . $foodpay . ")" : "" ;
-    $rtmonthpay = $tmp->getRtmonthpay();
-    $rtmonthpaystr= $rtmonthpay ? "$(" . $rtmonthpay . ")" : "" ;
-    $utfee = $tmp->getUtfee();
-    $utfeestr = $utfee ? "$($utfee)" : "";
-    $utallowance = $tmp->getUtallowance();
-    $utallowancestr=$utallowance ? "$$utallowance" : "";
-    $otherfee = $tmp->getOtherfee();
-    //echo ((float)$otherfee) . "&nbsp;";
-    $otherfeestr = substr($otherfee, 0, 1)=="-" ? "$(" . substr($otherfee, 1) . ")" : $otherfee;
-    //$otherfeestr = (floatval($otherfee))>0 ? "$$otherfee" : "$($otherfee)";
-    $otherfeestr = $otherfee ? $otherfeestr : "";
-    $netpay = $tmp->getSalary();
-    $remark = $tmp->getRemark();
-    
-    $tr= "<tr>"; 
-    $tdname='<td class="tdstayleft">工人姓名/Name:&nbsp;<u>' . "&nbsp;$namechs&nbsp;&nbsp;$nameeng&nbsp;" . '</u></td>';
-    $tdeeeno= '<td class="tdstaycenter">公司编号:&nbsp;' . $eeeno . '</td>';
-    $tddate= '<td class="tdstayright">日期/Date:&nbsp;' . $nowdatestr . '</td>';
-    $tr .= $tdname. $tdeeeno. $tddate;
-    $tr .= "</tr>";
-    //$tabhtml .= $tr;
-    $tabhtml.=$header . $tr . "</table>";
-    
-    $tds = "<td>基本工资<br>Basic Salary</td><td>加班工资<br>OT Salary</td>
+            <div data-role="content">
+                <div id="error">
+                    <?= $this->error ?>
+                </div>
+                <?php
+                $counter = 0;
+                $srs = $salaryrecords;
+                $datestr = '月份/Mth:' . $year . "年" . $month1 . "月/" . $month2 . "-" . $year;
+                $header = '<table class="tabsalary1"><tr><td class="tdstayleft">HWA CHENG DEVELOPMENT PTE LTD<br>华城发展有限公司</td>' .
+                        '<td></td><td class="tdstayright">' . $datestr . "</td></tr>";
+                $header.='<tr><td></td><td class="tdstaycenter">Salary Receipt/工资收据</td><td></td></tr>';
+                $tabhtml = "";
+                foreach ($srs as $tmp) {
+                    $counter++;
+
+                    $worker = $tmp->getWorker();
+                    $namechs = $worker->getNamechs();
+                    $nameeng = $worker->getNameeng();
+                    $eeeno = $worker->getEeeno();
+
+                    $normalpay = $tmp->getNormalsalary();
+                    $otpay = $tmp->getOtsalary();
+                    $salary = $tmp->getSalary();
+                    $allowance = "";
+                    $totalsalary = $normalpay + $otpay;
+                    $fullmth = $tmp->getFullmonaward() ? "$" . $tmp->getFullmonaward() : "";
+                    $foodpay = $tmp->getFoodpay();
+                    $foodpaystr = $foodpay ? "$(" . abs($foodpay) . ")" : "";
+                    $rtmonthpay = $tmp->getRtmonthpay();
+                    $rtmonthpaystr = $rtmonthpay ? "$(" . abs($rtmonthpay) . ")" : "";
+                    $utfee = $tmp->getUtfee();
+                    $utfeestr = $utfee ? "$(" . abs($utfee) . ")" : "";
+                    $utallowance = $tmp->getUtallowance();
+                    $utallowancestr = $utallowance ? "$$utallowance" : "";
+                    $otherfee = $tmp->getOtherfee();
+                    //echo ((float)$otherfee) . "&nbsp;";
+                    $otherfeestr = substr($otherfee, 0, 1) == "-" ? "$(" . substr($otherfee, 1) . ")" : $otherfee;
+                    //$otherfeestr = (floatval($otherfee))>0 ? "$$otherfee" : "$($otherfee)";
+                    $otherfeestr = $otherfee ? $otherfeestr : "";
+                    $netpay = $tmp->getSalary();
+                    $remark = $tmp->getRemark();
+                    $inadvance = $tmp->getInadvance();
+                    $inadvancestr = $utfee ? "$(" . abs($inadvance) . ")" : "";
+                    $tr = "<tr>";
+                    $tdname = '<td class="tdstayleft">工人姓名/Name:&nbsp;<u>' . "&nbsp;$namechs&nbsp;&nbsp;$nameeng&nbsp;" . '</u></td>';
+                    $tdeeeno = '<td class="tdstaycenter">公司编号:&nbsp;' . $eeeno . '</td>';
+                    $tddate = '<td class="tdstayright">日期/Date:&nbsp;' . $nowdatestr . '</td>';
+                    $tr .= $tdname . $tdeeeno . $tddate;
+                    $tr .= "</tr>";
+                    //$tabhtml .= $tr;
+                    $tabhtml.=$header . $tr . "</table>";
+
+                    $tds = "<td>基本工资<br>Basic Salary</td><td>加班工资<br>OT Salary</td>
     <td>补贴<br>Allowance</td><td>工资总计<br>Total Salary</td>
     <td>满勤奖<br>Full Mth Attendance</td><td>扣" . $month1 . "月餐费<br>Less Meal Fee</td>
     <td>预扣税<br>Advance Less Tax</td><td>水电生活费<br>Living Fee</td>
     <td>水电生活补贴<br>Allowance For Living</td><td>其他补扣费用<br>Other Addition or Deduction</td>
-    <td>" . $month1 . "月实发工资<br>Net Pay for " . $month2 . "</td><td>工人确认签字<br>Signature Confirmed</td>";    
-    
-    $tddata = "<td>$". "$normalpay</td><td>$" . "$otpay</td><td>" . "$allowance</td><td>$" . "$totalsalary</td><td>"
-    . "$fullmth</td><td>" . "$foodpaystr</td><td>" . "$rtmonthpaystr</td><td>" 
-    . "$utfeestr</td><td>" . "$utallowancestr</td><td>" . "$otherfeestr</td><td>$" . "$salary</td><td></td>";
-    $trs = "<tr>$tds</tr><tr>$tddata</tr>";
-    $datatab = '<table class="tabsalary2">' . $trs . "</table>";    
-    
-    $trs = '<tr><td style="width:15%">其他费用补扣说明：</td><td>'.  $remark . "</td></tr>";
-    $trs.= '<tr><td>备注：</td><td>本人同意并已领取该月工资。如该月工资有问题，本人会在领取工资后的两个月之内及时与公司核查。超过两个月后，本人不再追讨任何工资纠纷。</td></tr>';
-    $trs.= "<tr><td>Remark：</td><td>I have agreed and received the abovesaid salary. If any discrepancy on the abovesaid salary, I shall immediately check with the company within two months from date of receipt. Any time elapsing two months, I shall never ask more any additional amount.</td></tr>";
-    $extratab = '<table class="tabsalary3">' . $trs . '</table>';
+    <td>" . $month1 . "月实发工资<br>Net Pay for " . $month2 . "</td><td>工人确认签字<br>Signature Confirmed</td>";
 
-    if($counter==3)
-    {
-        $breaker = '<div class="page-break"></div>';
-        $counter = 0;
-    }
-    else
-    {
-        $breaker = "";    
-    }
-    $tabhtml .= $datatab. $extratab . "<hr><br>$breaker";    
-}
+                    $tddata = "<td>$" . "$normalpay</td><td>$" . "$otpay</td><td>" . "$allowance</td><td>$" . "$totalsalary</td><td>"
+                            . "$fullmth</td><td>" . "$foodpaystr</td><td>" . "$rtmonthpaystr</td><td>"
+                            . "$utfeestr</td><td>" . "$utallowancestr</td><td>" . "$otherfeestr</td><td>$" . "$salary</td><td></td>";
+                    $trs = "<tr>$tds</tr><tr>$tddata</tr>";
+                    $datatab = '<table class="tabsalary2">' . $trs . "</table>";
 
-echo $tabhtml;
-?>
+                    $trs = '<tr><td style="width:17%">其他费用补扣说明：</td><td>' . $remark . "</td></tr>";
+                    $trs.= '<tr><td>备注：</td><td>本人同意并已领取该月工资。如该月工资有问题，本人会在领取工资后的两个月之内及时与公司核查。超过两个月后，本人不再追讨任何工资纠纷。</td></tr>';
+                    $trs.= "<tr><td>Remark：</td><td>I have agreed and received the abovesaid salary. If any discrepancy on the abovesaid salary, I shall immediately check with the company within two months from date of receipt. Any time elapsing two months, I shall never ask more any additional amount.</td></tr>";
+                    $extratab = '<table class="tabsalary3">' . $trs . '</table>';
 
-	</div><!-- /content -->
-	
-	<div data-role="footer">
-		<!--<h4>Footer content</h4>-->
-	</div><!-- /footer -->
-	
-</div><!-- /page -->
+                    if ($counter == 3) {
+                        $breaker = '<div class="page-break"></div>';
+                        $counter = 0;
+                    } else {
+                        $breaker = "";
+                    }
+                    $tabhtml .= $datatab . $extratab . "<hr><br>$breaker";
+                }
 
-</body>
+                echo $tabhtml;
+                ?>
+
+            </div><!-- /content -->
+
+            <div data-role="footer">
+                <!--<h4>Footer content</h4>-->
+            </div><!-- /footer -->
+
+        </div><!-- /page -->
+
+    </body>
 </html>
 
