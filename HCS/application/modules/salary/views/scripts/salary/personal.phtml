@@ -1,48 +1,51 @@
 <!DOCTYPE html> 
 <html>
     <?php
-    $monthstr = $this->monthstr;
-    $sheet = $this->sheet;
-    $sheetarr = $this->sheetarr;
-    $salarytabs = $this->salarytabs;
-    $username = $this->username;
-    $salaryrecords = $this->salaryrecords;
+    /*
+      $monthstr = $this->monthstr;
+      $sheet = $this->sheet;
+      $sheetarr = $this->sheetarr;
+      $salarytabs = $this->salarytabs;
+      $username = $this->username;
+      $salaryrecords = $this->salaryrecords;
 
-    $options = "";
-    $count = 0;
-    foreach ($salaryrecords as $record) {
-        $count++;
-        $name = $record->getWorker()->getNamechs();
-        $name = (!$name || $name == "") ? $record->getWorker()->getNameeng() : $name;
-        $option = "<option value=$count>" . $name . "</option>";
+      $options = "";
+      $count = 0;
+      foreach ($salaryrecords as $record) {
+      $count++;
+      $name = $record->getWorker()->getNamechs();
+      $name = (!$name || $name == "") ? $record->getWorker()->getNameeng() : $name;
+      $option = "<option value=$count>" . $name . "</option>";
+      $options .= $option;
+      }
+      $workerselect = '<select id="workersel" data-theme="b" data-mini="true">' . $options . "</select>";
+      $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
+     */
+
+    $yearsarr = $this->yearsarr;
+    $options = '<option value="all">All</options>';
+    foreach ($yearsarr as $year) {       
+        $option = "<option value=$year>" . $year . "</option>";
         $options .= $option;
     }
-    $workerselect = '<select id="workersel" data-theme="b" data-mini="true">' . $options . "</select>";
+    $yearsel = '<select id="yearsel" data-theme="b" data-mini="true">' . $options . "</select>";
 
-    $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
+    $worker = $this->worker;
+    $workername = ($worker->getNamechs() == "") ? $worker->getNameeng() : $worker->getNamechs();
+    $records = $this->recordsbyyear;
     ?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"> 
-        <title>工资表<? echo $monthstr; ?></title> 
+        <title>历史工资列表-<?= $workername ?></title> 
         <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
         <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
         <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
         <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
         <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
 
-        <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
-        <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
-
-        <!--<link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
-        <script src="/common/js/jQuery.ui.datepicker.js"></script>
-        <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
-        <script>
-            //reset type=date inputs to text
-            $(document).bind("mobileinit", function() {
-                $.mobile.page.prototype.options.degradeInputs.date = true;
-            });
-        </script>-->
+        <!--<link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
+        <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>-->
     </head> 
 
     <body> 
@@ -142,9 +145,8 @@
             <div data-role="header" >
                 <table id="headertab">
                     <tr>
-                        <td>公司:&nbsp;<?= $sheet ?></td>
-                        <td>月份:&nbsp;<?= $monthstr ?></td>
-                        <td>工资负责人:&nbsp;<?= $username ?></td>
+                        <td>历史工资列表</td>
+                        <td>工人:&nbsp;<?= $workername ?></td>                        
                     </tr>
                 </table>
             </div><!-- /header -->
@@ -156,13 +158,13 @@
 
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
-                        <?= $workerselect ?>
+                        <?= $yearsel ?>
                     </div>
-                    <div class="ui-block-b">
+                    <!--<div class="ui-block-b">
                         <a href="<?= $salaryreceiptsurl ?>" data-mini="true" data-role="button" data-theme="b" target="_blank">
                             预览
                         </a>
-                    </div>
+                    </div>-->
                     <!--<div class="ui-block-b"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" 
                     value="" data-role="button" data-theme="b">导出</a></div>-->
                 </div>

@@ -438,38 +438,8 @@ class infox_salary {
         $otsalary = $salaryrecord->getOtsalary();
         $fooddays = 0;
         $totalsalary = $salaryrecord->getTotalsalary();
-        /*
-          foreach ($result[0] as $tmp) {
-          if ($tmp) {
-          $totaldays++;
-
-          // normal work
-          $tmparr = explode(";", $tmp);
-          if (array_key_exists(0, $tmparr)) {
-          $workhours = $tmparr[0];
-          if ($workhours >= 8) {
-          $normalhours += 8;
-          $othours += ($workhours - 8);
-          } else {
-          $normalhours += $workhours;
-          }
-          }
-
-          if (array_key_exists(1, $tmparr)) {
-          $food = $tmparr[1];
-          $fooddays += ($food === "1") ? 1 : 0;
-          }
-          }
-          }
-         */
-        //echo "normalhours=$normalhours<br>";
-        //$normalpay = $currentrate * $normalhours;
-        //$otpay = $otrate * $othours;
-        //$allhours = $normalhours + $othours;
-        //$allpay = $normalpay + $otpay;
 
         $totalsalary += $currentrate * $normalhours + $otrate * $othours;
-
 
         $salaryrecord->setNormalhours($normalhours);
         $salaryrecord->setNormalpay($normalpay);

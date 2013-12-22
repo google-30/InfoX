@@ -25,8 +25,42 @@ class Salary_SalaryController extends Zend_Controller_Action {
     public function personalAction() {
         infox_common::turnoffLayout($this->_helper);
 
-        $wid = $this->getParam("id", 0);
-        $monthstr = $this->getParam("month", "now");
+        $wid_req = $this->getParam("id", 0);                
+        $workerobj = $this->_workerdetails->findOneBy(array('id'=>$wid_req));
+        if(!$workerobj)
+        {
+            return;
+        }
+        
+        $year_req = $this->getParam("year", "all");
+        
+        $records = $this->_salaryall->findBy(array('worker'=>$workerobj));
+        
+        $recordsbyyear = array();
+        $yearsarr = array();
+        foreach ($records as $tmp)
+        {
+            $date = $tmp->getMonth();
+            $year = $date->format("Y");
+            if(in_array($year, $yearsarr))
+            {
+                continue;
+            }
+            else
+            {
+                $yearsarr[] = $year;
+            }
+            
+            if($year == $year_req)
+            {
+                $recordsbyyear[] = $tmp;
+            }
+        }
+        
+        sort($yearsarr);
+        $this->view->worker = $workerobj;
+        $this->view->yearsarr = $yearsarr;
+        $this->view->recordsbyyear = ($year_req == "all") ? $records : $recordsbyyear;
     }
 
     public function salarybymonthAction() {
