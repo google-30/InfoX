@@ -900,6 +900,7 @@ class infox_salary {
         $totalsalary = "";
         $otrate = "";
         $rate = "";
+        $piecesalary = "";
         if ($salaryrecord) {
             $totaldays = $summary["totaldays"] = $salaryrecord->getAttenddays();
             $normalhours = $summary["normalhours"] = $salaryrecord->getNormalhours();

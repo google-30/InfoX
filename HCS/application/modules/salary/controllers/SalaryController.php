@@ -31,7 +31,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $wid_req = $this->getParam("id", 0);
         $workerobj = null;
         $workerarr = array();
-        
+                
         if ($wid_req == 0) { // change sheet
             $sheet_req = $this->getParam("sheet", "HC.C");
         } else {
@@ -58,11 +58,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
                 }
             }
         }
-        //$workerobj = count($workerarr) ? array_pop($workerarr) : null;
-        //$workerobj = count($workerarr) ? reset($workerarr) : null;
-
-        //$this->view->sheet = $workerobj ? $workerobj->getSheet() : $sheet_req;
-
+        
         if ($wid_req == 0) { // change sheet
             $workerobj = reset($workerarr);
         }
@@ -77,11 +73,9 @@ class Salary_SalaryController extends Zend_Controller_Action {
         foreach ($records as $tmp) {
             $date = $tmp->getMonth();
             $year = $date->format("Y");
-            if (in_array($year, $yearsarr)) {
-                continue;
-            } else {
+            if (!in_array($year, $yearsarr)) {
                 $yearsarr[] = $year;
-            }
+            } 
 
             if ($year == $year_req) {
                 $recordsbyyear[] = $tmp;
@@ -97,12 +91,22 @@ class Salary_SalaryController extends Zend_Controller_Action {
         sort($yearsarr);
         $this->view->worker = $workerobj;
         $this->view->yearsarr = $yearsarr;
-        $this->view->recordsbyyear = ($year_req == "all") ? $records : $recordsbyyear;
+        $recordsall = ($year_req == "all") ? $records : $recordsbyyear;
+        $salaryall = 0;
+        foreach ($recordsall as $record)
+        {
+            $salary = $record->getSalary();
+            $salaryall += $salary;
+        }
+        $this->view->salaryall = $salaryall;
+        setlocale(LC_MONETARY, 'en_US');
+        $salaryallformat = money_format('%i', $salaryall) ;
+        $this->view->salaryallformat = $salaryallformat;
+        $this->view->recordsbyyear = $recordsall;
         $this->view->workerarr = $workerarr;
 
-        $salarytabs = $this->generateSalaryTabs($records, false);
+        $salarytabs = $this->generateSalaryTabs($recordsall, false);
         $this->view->salarytabs = $salarytabs;
-
 
         $options = '';
         foreach ($sheetarr as $tmp) {
@@ -182,7 +186,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
             echo "No salary records in db, please check.";
             return;
         }
-        $monthstr = $salaryrecords[0]->getMonth()->format("Y-m");
+        //$monthstr = $salaryrecords[0]->getMonth()->format("Y-m");
 
         foreach ($salaryrecords as $record) {
             $tmparr = array();
@@ -190,6 +194,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
             $worker = $record->getWorker();
             $sno++;
             $wid = $worker->getId();
+            $monthstr = $record->getMonth()->format("Y-m");
             $tmparr = $this->getSalarytabsByWidMonthstr($wid, $monthstr, $inputbtn);
             $salarytabs[] = $tmparr;
         }
@@ -230,14 +235,13 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $type = $worker->getWorktype();
 
         $rate = $sr->getRate();
-        /* echo "rate=$rate";
-          echo $rate!="";
-          echo $rate!=0; */
         $actualrate = ($rate != "" && $rate != 0) ? $rate : $price;
 
+        $monthobj = $salaryrecord->getMonth();
+        $monthstr = $monthobj->format("Y-m");
         $tab = '<table class="workerinfo">';
-        $tab .= "<tr><th rowspan=1>序号</th><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
-        $tab .= "<tr><td>$sno</td><td>$wpno</td><td>$eeeno</td>"
+        $tab .= "<tr><th>年月</th><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
+        $tab .= "<tr><td>$monthstr</td><td>$wpno</td><td>$eeeno</td>"
                 . '<td><strong style="color:red;"> ' . $name . "</strong></td><td>$actualrate</td><td>$type</td></tr>";
         $tab .= "</table>";
 
@@ -548,9 +552,4 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->view->salaryrecords = $records;
         $this->view->monthobj = $monthobj;
     }
-
-    private function getReceiptsByRecords($records) {
-        
-    }
-
 }

@@ -14,6 +14,8 @@
     $records = $this->recordsbyyear;
 
     $salarytabs = $this->salarytabs;
+    $salaryall = $this->salaryall;
+    $salaryallformat= $this->salaryallformat;
     ?>
     <head>
         <meta charset="utf-8">
@@ -115,6 +117,9 @@
                     <div class="ui-block-b"><?= $workersel ?></div>                    
                     <div class="ui-block-c"><?= $yearsel ?></div>
                 </div>
+                <hr>
+                <span>总工资:&nbsp; <strong><?= $salaryallformat ?></strong></span>
+                <hr>
                 <?php
                 $divno = 0;
                 $alltabs = "";
@@ -139,9 +144,9 @@
                 ?>
             </div><!-- /content -->
 
-            <div data-role="footer">
-                <!--<h4>Footer content</h4>-->
-            </div><!-- /footer -->
+            <!--<div data-role="footer">
+                <h4>Footer content</h4>
+            </div>--><!-- /footer -->
 
         </div><!-- /page -->
 
