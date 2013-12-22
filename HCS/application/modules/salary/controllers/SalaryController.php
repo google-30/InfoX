@@ -25,42 +25,124 @@ class Salary_SalaryController extends Zend_Controller_Action {
     public function personalAction() {
         infox_common::turnoffLayout($this->_helper);
 
-        $wid_req = $this->getParam("id", 0);                
-        $workerobj = $this->_workerdetails->findOneBy(array('id'=>$wid_req));
-        if(!$workerobj)
-        {
+        $sheetarr = infox_worker::getSheetarr();
+        $this->view->sheetarr = $sheetarr;
+
+        $wid_req = $this->getParam("id", 0);
+        $workerobj = null;
+        $workerarr = array();
+        
+        if ($wid_req == 0) { // change sheet
+            $sheet_req = $this->getParam("sheet", "HC.C");
+        } else {
+            $workerobj = $this->_workerdetails->findOneBy(array('id' => $wid_req));
+            if (!$workerobj) {
+                return;
+            }
+
+            $sheet_req = $workerobj->getSheet();
+        }
+
+        $salaryrecords = $this->_salaryall->findAll();
+        if (!count($salaryrecords)) {
             return;
         }
-        
-        $year_req = $this->getParam("year", "all");
-        
-        $records = $this->_salaryall->findBy(array('worker'=>$workerobj));
-        
-        $recordsbyyear = array();
-        $yearsarr = array();
-        foreach ($records as $tmp)
-        {
-            $date = $tmp->getMonth();
-            $year = $date->format("Y");
-            if(in_array($year, $yearsarr))
-            {
-                continue;
-            }
-            else
-            {
-                $yearsarr[] = $year;
-            }
-            
-            if($year == $year_req)
-            {
-                $recordsbyyear[] = $tmp;
+
+        foreach ($salaryrecords as $tmp) {
+            $workertmp = $tmp->getWorker();
+            $sheettmp = $workertmp->getSheet();
+            $widtmp = $workertmp->getId();
+            if ($sheettmp == $sheet_req) {
+                if (!key_exists($widtmp, $workerarr)) {
+                    $workerarr[$widtmp] = $workertmp;
+                }
             }
         }
-        
+        //$workerobj = count($workerarr) ? array_pop($workerarr) : null;
+        //$workerobj = count($workerarr) ? reset($workerarr) : null;
+
+        //$this->view->sheet = $workerobj ? $workerobj->getSheet() : $sheet_req;
+
+        if ($wid_req == 0) { // change sheet
+            $workerobj = reset($workerarr);
+        }
+
+        $year_req = $this->getParam("year", "all");
+
+        $records = $this->_salaryall->findBy(array('worker' => $workerobj));
+
+        $recordsbyyear = array();
+        $yearsarr = array();
+
+        foreach ($records as $tmp) {
+            $date = $tmp->getMonth();
+            $year = $date->format("Y");
+            if (in_array($year, $yearsarr)) {
+                continue;
+            } else {
+                $yearsarr[] = $year;
+            }
+
+            if ($year == $year_req) {
+                $recordsbyyear[] = $tmp;
+            }
+
+            $worker = $tmp->getWorker();
+            $wid = $worker->getId();
+            if (!key_exists($wid, $workerarr)) {
+                $workerarr[$wid] = $worker;
+            }
+        }
+
         sort($yearsarr);
         $this->view->worker = $workerobj;
         $this->view->yearsarr = $yearsarr;
         $this->view->recordsbyyear = ($year_req == "all") ? $records : $recordsbyyear;
+        $this->view->workerarr = $workerarr;
+
+        $salarytabs = $this->generateSalaryTabs($records, false);
+        $this->view->salarytabs = $salarytabs;
+
+
+        $options = '';
+        foreach ($sheetarr as $tmp) {
+            if ($tmp == $sheet_req) {
+                $option = "<option value=$tmp selected>" . $tmp . "</option>";
+            } else {
+                $option = "<option value=$tmp>" . $tmp . "</option>";
+            }
+            $options .= $option;
+        }
+        $sheetsel = '<select id="sheetsel" data-theme="b" data-mini="true">' . $options . "</select>";
+
+        $options = '';
+        foreach ($workerarr as $tmp) {
+            $wid = $tmp->getId();
+            $name = ($tmp->getNamechs() == "" || !$tmp->getNamechs()) ? $tmp->getNameeng : $tmp->getNamechs();
+
+            if ($workerobj->getId() == $wid) {
+                $option = "<option value=$wid selected>" . $name . "</option>";
+            } else {
+                $option = "<option value=$wid>" . $name . "</option>";
+            }
+            $options .= $option;
+        }
+        $workersel = '<select id="workersel" data-theme="b" data-mini="true">' . $options . "</select>";
+
+        $options = '<option value="all">All</options>';
+        foreach ($yearsarr as $year) {
+            if ($year_req == $year) {
+                $option = "<option value=$year selected>" . $year . "</option>";
+            } else {
+                $option = "<option value=$year>" . $year . "</option>";
+            }
+            $options .= $option;
+        }
+        $yearsel = '<select id="yearsel" data-theme="b" data-mini="true">' . $options . "</select>";
+
+        $this->view->sheetsel = $sheetsel;
+        $this->view->workersel = $workersel;
+        $this->view->yearsel = $yearsel;
     }
 
     public function salarybymonthAction() {
@@ -83,15 +165,16 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
         // get all records in this month        
         $salaryrecords = infox_salary::getSalaryRecordsByMonthSheet($month, $sheet);
-        $attendarr = infox_project::getAttendanceByMonthSheet($monthstr, $sheet);
-
-        $salarytabs = $this->generateSalaryTabs($salaryrecords, $attendarr);
+        //$attendarr = infox_project::getAttendanceByMonthSheet($monthstr, $sheet);
+        //$salarytabs = $this->generateSalaryTabs($salaryrecords, $attendarr);
+        $inputbtn = true;
+        $salarytabs = $this->generateSalaryTabs($salaryrecords, $inputbtn);
         $this->view->salarytabs = $salarytabs;
         $this->view->salaryrecords = $salaryrecords;
         $this->view->username = infox_common::getUsername();
     }
 
-    private function generateSalaryTabs($salaryrecords, $attendarr) {
+    private function generateSalaryTabs($salaryrecords, $inputbtn) {
         $salarytabs = array();
         $sno = 0;
 
@@ -107,7 +190,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
             $worker = $record->getWorker();
             $sno++;
             $wid = $worker->getId();
-            $tmparr = $this->getSalarytabsByWidMonthstr($wid, $monthstr);
+            $tmparr = $this->getSalarytabsByWidMonthstr($wid, $monthstr, $inputbtn);
             $salarytabs[] = $tmparr;
         }
 
@@ -371,7 +454,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->alltabs = $tabarr;
     }
 
-    private function getSalarytabsByWidMonthstr($wid, $monthstr) {
+    private function getSalarytabsByWidMonthstr($wid, $monthstr, $inputbtn) {
         $tmparr = array();
         $worker = $this->_workerdetails->findOneBy(array("id" => $wid));
         if (!$worker) {
@@ -385,7 +468,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $tab = $this->generateWorkerTabBySalary($salaryrecord);
         $tmparr[] = $tab;
 
-        $tab = infox_salary::generatePaymentTabByRecord($salaryrecord, true);
+        $tab = infox_salary::generatePaymentTabByRecord($salaryrecord, $inputbtn);
         $tmparr[] = $tab;
 
         $attendance = $this->_siteattendance->findOneBy(array("worker" => $worker, "month" => $month));

@@ -1,43 +1,24 @@
 <!DOCTYPE html> 
 <html>
     <?php
-    /*
-      $monthstr = $this->monthstr;
-      $sheet = $this->sheet;
-      $sheetarr = $this->sheetarr;
-      $salarytabs = $this->salarytabs;
-      $username = $this->username;
-      $salaryrecords = $this->salaryrecords;
-
-      $options = "";
-      $count = 0;
-      foreach ($salaryrecords as $record) {
-      $count++;
-      $name = $record->getWorker()->getNamechs();
-      $name = (!$name || $name == "") ? $record->getWorker()->getNameeng() : $name;
-      $option = "<option value=$count>" . $name . "</option>";
-      $options .= $option;
-      }
-      $workerselect = '<select id="workersel" data-theme="b" data-mini="true">' . $options . "</select>";
-      $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
-     */
-
-    $yearsarr = $this->yearsarr;
-    $options = '<option value="all">All</options>';
-    foreach ($yearsarr as $year) {       
-        $option = "<option value=$year>" . $year . "</option>";
-        $options .= $option;
-    }
-    $yearsel = '<select id="yearsel" data-theme="b" data-mini="true">' . $options . "</select>";
+    $sheetsel = $this->sheetsel;
+    $yearsel = $this->yearsel;
+    $workersel = $this->workersel;
 
     $worker = $this->worker;
-    $workername = ($worker->getNamechs() == "") ? $worker->getNameeng() : $worker->getNamechs();
+    if ($worker) {
+        $workername = ($worker->getNamechs() == "") ? $worker->getNameeng() : $worker->getNamechs();
+    } else {
+        $workername = "";
+    }
     $records = $this->recordsbyyear;
+
+    $salarytabs = $this->salarytabs;
     ?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"> 
-        <title>历史工资列表-<?= $workername ?></title> 
+        <title>历史工资列表<?php if ($workername !== "") echo "-" . $workername; ?></title> 
         <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
         <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
         <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
@@ -85,59 +66,34 @@
         </style>
         <script>
             $(function() {
-                $('.datepicker').mobiscroll().date({
-                    theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm', dateFormat: 'yy-mm',
-                    endYear: 2050,
+                $("#sheetsel").on("change", function() {
+                    //alert("sheet change");
+                    var sheetname = $(this).val();
+                    var url = "/salary/salary/personal?sheet=" + sheetname;
+                    redirect(url);
                 });
 
                 $("#workersel").on("change", function() {
                     //alert("change");
-                    var workersel = $(this).val();
-                    $(window).scrollTop($('#worker' + workersel).offset().top);
+                    var id = $(this).val();
+                    var url = "/salary/salary/personal?";
+                    url += "id=" + id;
+                    redirect(url);
+                });
+
+                $("#yearsel").on("change", function() {
+                    //alert("year change");
+                    var id = $("#workersel").val();
+                    var year = $(this).val();
+                    var url = "/salary/salary/personal?";
+                    url += "id=" + id;
+                    url += "&year=" + year;
+                    redirect(url);
                 });
             });
 
-            function datapost()
-            {
-                //alert("datapost");
-                var rate = $('#rate').val();
-                var otherfee = $('#otherfee').val();
-                var inadvance = $('#inadvance').val();
-                var absencedays = $('#absencedays').val();
-                var absencefines = $('#absencefines').val();
-                var rtmonthpay = $('#rtmonthpay').val();
-                var rtmonths = $('#rtmonths').val();
-                var rtall = $('#rtall').val();
-                var utfee = $('#utfee').val();
-                var utallowance = $('#utallowance').val();
-                var fullmonaward = $('#fullmonaward').val();
-                var foodpay = $('#foodpay').val();
-                var remark = $('#remark').val();
-
-                var wid = $('#wid').val();
-                var month = $('#month').val();
-
-                $.post("/salary/salary/datapost",
-                        {
-                            wid: wid, month: month, rate: rate, otherfee: otherfee, inadvance: inadvance,
-                            absencedays: absencedays, absencefines: absencefines, rtmonthpay: rtmonthpay,
-                            rtmonths: rtmonths, rtall: rtall, utfee: utfee, utallowance: utallowance,
-                            fullmonaward: fullmonaward, foodpay: foodpay, remark: remark,
-                        },
-                        function(data) {
-                            console.log(data);
-                            $('#salarysheet').load("/salary/salary/salarysheet?wid=" + wid + "&month=" + month);
-                            alert(data);
-                            //window.location.reload();
-                        })
-            }
-
-            function salarydialogclose()
-            {
-                //alert(attendialogclose);
-                //alert("attendialogclose");
-                // refresh this page to reload data
-                document.location.reload();
+            function redirect(url) {
+                window.location = url;
             }
         </script>
         <div data-role="page">
@@ -146,27 +102,18 @@
                 <table id="headertab">
                     <tr>
                         <td>历史工资列表</td>
-                        <td>工人:&nbsp;<?= $workername ?></td>                        
+                        <!--<td>工人:&nbsp;<?= $workername ?></td>-->
                     </tr>
                 </table>
             </div><!-- /header -->
 
             <div data-role="content">
-                <div id="error">
-                    <?= $this->error ?>
-                </div>
+                <div id="error"><?= $this->error ?></div>
 
-                <div class="ui-grid-a">
-                    <div class="ui-block-a">
-                        <?= $yearsel ?>
-                    </div>
-                    <!--<div class="ui-block-b">
-                        <a href="<?= $salaryreceiptsurl ?>" data-mini="true" data-role="button" data-theme="b" target="_blank">
-                            预览
-                        </a>
-                    </div>-->
-                    <!--<div class="ui-block-b"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" 
-                    value="" data-role="button" data-theme="b">导出</a></div>-->
+                <div class="ui-grid-b">
+                    <div class="ui-block-a"><?= $sheetsel ?></div>
+                    <div class="ui-block-b"><?= $workersel ?></div>                    
+                    <div class="ui-block-c"><?= $yearsel ?></div>
                 </div>
                 <?php
                 $divno = 0;
@@ -189,7 +136,6 @@
                             ";
                     }
                 }
-                //echo $alltabs;
                 ?>
             </div><!-- /content -->
 
