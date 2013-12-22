@@ -144,13 +144,8 @@ class Project_AttendanceController extends Zend_Controller_Action {
         //echo "count=" . count($attendancearr);
 
         $this->view->workerhtmls = $this->genWorkerHtmls($workerarr, $attendancearr, $siteid, $date);
-        //$this->view->workerhtmls = $this->genWorkerAttendTabs($workerarr, $attendancearr, $siteid, $date);
 
         $this->view->username = infox_common::getUsername();
-    }
-
-    private function genWorkerAttendTabs($workerarr, $attendancearr, $siteid, $dateobj) {
-        
     }
 
     private function genWorkerHtmls($workerarr, $attendancearr, $siteid, $dateobj) {
@@ -182,69 +177,14 @@ class Project_AttendanceController extends Zend_Controller_Action {
 
         $tab = infox_salary::getWorkerSummaryTab($worker, $dateobj, $sno);
         $tabs[] = $tab;
-        if ($nobtn) {//generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
+        
+        if ($nobtn) {
             $attendtab = infox_project::generateAttendanceTab($attendrecord, $dateobj, false, false);
         } else {
             $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, false, $siteid, $dateobj, $worker->getId());
         }
         $tabs[] = $attendtab;
 
-        return $tabs;
-    }
-
-    private function getWorkerMonthAttendHtml1($sno, $worker, $attendrecord, $siteid, $monthstr, $nobtn = false) {
-        $workerid = $worker->getId();
-        $wpno = $worker->getWpno();
-        $name = $worker->getNamechs();
-        if (!$name || $name == "") {
-            $name = $worker->getNameeng();
-        }
-        $worktype = $worker->getWorktype();
-
-        // TODO: rate can be defined by staff
-        // if 计时，currentrate; if 计件， monthrate
-        $currentrate = $price = $worker->getCurrentrate();
-        $otrate = infox_worker::getWorkerOtRate($worker);
-
-        $summary = $this->calcMonthSummary($worker, $attendrecord, $currentrate, $otrate);
-        $totaldays = $summary['totaldays'];
-        $normalhours = $summary["normalhours"];
-        $othours = $summary["othours"];
-        $totalhours = $summary["totalhours"];
-        $normalsalary = $summary["normalsalary"];
-        $otsalary = $summary["otsalary"];
-        $totalsalary = $summary["totalsalary"];
-        $fooddays = $summary["fooddays"];
-
-        $table = '<table class="attendsum">';
-        // worker info and month summary
-        $tr = "";
-        $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>';
-        $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>
-';
-        $table .= $tr;
-        $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
-        $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
-        $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
-';
-        $table .= $tr;
-
-        $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$price</td><td>$worktype</td>";
-        $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
-        $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";
-
-        $table .= $tr;
-        $table .= "</table>";
-        $tabs[] = $table;
-
-        /*
-          if ($nobtn) {//generateAttendanceTab($attendrecord, $monthstr, $attendbtn=false, $highlight=false)
-          $attendtab = infox_project::generateAttendanceTab($attendrecord, $monthstr, false, false);
-          } else {
-          $attendtab = infox_project::generateAttendanceTabWbtn($attendrecord, true, $siteid, $monthstr, $workerid);
-          }
-          $tabs[] = $attendtab;
-         */
         return $tabs;
     }
 
@@ -445,11 +385,10 @@ class Project_AttendanceController extends Zend_Controller_Action {
             }
             for ($k = 0; $k < 7 - $dayofweek; $k++) {
                 $daycount++;
-                if($daycount > $daysinmonth)
-                {
+                if ($daycount > $daysinmonth) {
                     break;
                 }
-                    
+
                 $daystr = "<div>$daycount</div>";
                 $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
 
@@ -457,7 +396,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
                 //$tmpvalue = key_exists(0, $tmparr) ? $tmparr[0] : "";
                 //$tmptype = key_exists(1, $tmparr) ? $tmparr[1] : "";
 
-                $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : ""; 
+                $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
                 $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
 
                 $input1 = '<input type="text" class="dayvalue" id="date' . $daycount . '" '
@@ -472,8 +411,6 @@ class Project_AttendanceController extends Zend_Controller_Action {
 
                 $daystr .= $divinputs;
                 $tds .= "<td>$daystr</td>";
-                
-                
             }
 
             $tr = "<tr>$tds</tr>

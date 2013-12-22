@@ -365,6 +365,7 @@ class infox_salary {
             $otsalary = 0;
             $fooddays = 0;
             $totalsalary = 0;
+            $piecesalary = 0;
             foreach ($result[0] as $tmp) {
                 if ($tmp) {
                     //$totaldays++;
@@ -382,17 +383,8 @@ class infox_salary {
                         $othours += ($hoursdata > 8) ? ($hoursdata - 8) : 0;
                     } else {
                         $totalsalary += $piecedata;
+                        $piecesalary += $piecedata;
                     }
-
-                    /*
-                      if ($tmp <= 16) {
-                      $normalhours += ($tmp <= 8) ? $tmp : 8;
-                      $othours += ($tmp > 8) ? ($tmp - 8) : 0;
-                      } else {
-                      $totalsalary += $tmp;
-                      }
-                     * 
-                     */
                 }
             }
 
@@ -410,6 +402,7 @@ class infox_salary {
             $summary["totalhours"] = $othours + $normalhours;
             $summary["totalsalary"] = $totalsalary;
             //$summary["fooddays"] = $fooddays;
+            $summary["piecesalary"] = $piecesalary;
         }
 
         return $summary;
@@ -551,7 +544,7 @@ class infox_salary {
         $otsalary = $salaryrecord->getOtsalary();
         $fooddays = 0;
         $totalsalary = $salaryrecord->getTotalsalary();
-
+        $piecesalary = $salaryrecord->getPiecesalary();
         $inadvance = $salaryrecord->getInadvance();
 
         $workersheet = $worker->getSheet();
@@ -562,14 +555,14 @@ class infox_salary {
             $basicsalary = self::getSettingBySectionName("salary", "bbasic");
         }
 
-        $totalsalary += $currentrate * $normalhours + $otrate * $othours;
+        $totalsalary = $piecesalary + $currentrate * $normalhours + $otrate * $othours;
         $normalsalary = ($totalsalary > $basicsalary) ? $basicsalary : $totalsalary;
         $otsalary = $totalsalary - $normalsalary;
 
         $salaryrecord->setNormalsalary($normalsalary);
         $salaryrecord->setOtsalary($otsalary);
         $salaryrecord->setTotalsalary($totalsalary);
-        
+
         $otherfee = $salaryrecord->getOtherfee();
         $absencefines = $salaryrecord->getAbsencefines();
         $rtmonthpay = $salaryrecord->getRtmonthpay();
@@ -771,7 +764,7 @@ class infox_salary {
         $inadvance = $record->getInadvance();
         $salary = $record->getSalary();
         $netpay = $record->getNetpay();
-
+        $piecesalary = $record->getPiecesalary();
         $fullmonaward = $record->getFullmonaward();
 
         $workersheet = $worker->getSheet();
@@ -796,10 +789,10 @@ class infox_salary {
           $tab .= "<tr><td colspan=2>正常工作</td><td colspan=3>加班工作</td><td colspan=2>总工作</td>"
           . "<td rowspan=2>考勤天数</td><td colspan=2>缺勤罚款</td><td rowspan=2>项目总工资</td>";
          */
-        $tab .= "<tr><td colspan=2>正常工作</td><td colspan=3>加班工作</td><td colspan=2>总工作</td>"
+        $tab .= "<tr><td colspan=2>正常工作</td><td colspan=3>加班工作</td><td colspan=3>总工作</td>"
                 . "<td rowspan=2>考勤天数</td><td colspan=2>缺勤罚款</td>";
         $tab .="<td rowspan=2>满勤奖</td>";
-        $tab .= "<td colspan=2>伙食费</td><td colspan=3>预扣税</td><td colspan=2>水电费</td>"
+        $tab .= "<td rowspan=2>伙食费</td><td colspan=3>预扣税</td><td colspan=2>水电费</td>"
                 . "<td rowspan=2>其他补扣</td><td rowspan=2>提前结帐</td><td rowspan=2>当月净工资</td>";
 
         if ($inputbtn) {
@@ -807,10 +800,13 @@ class infox_salary {
             $tab .= '<td rowspan=3><a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">输入</a></td>';
         }
         $tab .= '</tr>';
-        $tab .= "<tr><td>小时</td><td>金额</td><td>单价</td><td>小时</td><td>金额</td><td>小时</td>"
-                . "<td>金额</td><td>天数</td><td>金额</td>";
+        $tab .= "<tr><td>小时</td><td>金额</td>"
+                . "<td>单价</td><td>小时</td><td>金额</td>"
+                . "<td>计时工时</td><td>计件工资</td><td>金额</td>"
+                . "<td>天数</td><td>金额</td>";
 
-        $tab .= "<td>天数</td><td>金额</td>";
+        // food
+        //$tab .= "<td>天数</td><td>金额</td>";
         $tab .= "<td>当月</td><td>月数</td><td>累计</td>";
         $tab .= "<td>扣款</td><td>补助</td>";
         $tab .= "</tr>";
@@ -819,11 +815,12 @@ class infox_salary {
         $tdclass = 'class="workerpay"';
         $tab .= "<tr><td $tdclass>$normalhours</td><td $tdclass>$normalpay</td>";
         $tab .= "<td $tdclass>$otprice</td><td $tdclass>$othours</td><td $tdclass>$otpay</td>";
-        $tab .= "<td $tdclass>$allhours</td><td $tdclass>$allpay</td><td $tdclass>$attenddays</td>";
+        $tab .= "<td $tdclass>$allhours</td><td $tdclass>$piecesalary</td><td $tdclass>$allpay</td>"
+                . "<td $tdclass>$attenddays</td>";
         $tab .= "<td $tdclass>$absencedays</td><td $tdclass>$absencefines</td>";
         $tab .= "<td $tdclass>$fullmonaward</td>";
         //$tab .= "<td>$projectpay</td>";
-        $tab .= "<td $tdclass>$fooddays</td><td $tdclass>$foodpay</td>";
+        $tab .= "<td $tdclass>$foodpay</td>";
         $tab .= "<td $tdclass>$rtmonthpay</td><td $tdclass>$rtmonths</td><td $tdclass>$rtall</td>";
         $tab .= "<td $tdclass>$utfee</td><td $tdclass>$utallowance</td>";
         $tab .= "<td $tdclass>$otherfee</td><td $tdclass>$inadvance</td><td $tdclass>$salary</td>";
@@ -905,6 +902,7 @@ class infox_salary {
         $salaryrecord->setOtsalary($summary['otsalary']);
         $salaryrecord->setTotalhours($summary['totalhours']);
         $salaryrecord->setTotalsalary($summary["totalsalary"]);
+        $salaryrecord->setPiecesalary($summary["piecesalary"]);
 
         self::$_em->persist($salaryrecord);
         self::$_em->flush();
@@ -943,6 +941,7 @@ class infox_salary {
             $otrate = $salaryrecord->getOtrate();
             $rate = $salaryrecord->getRate();
             //$summary["fooddays"] = ""; 
+            $piecesalary = $salaryrecord->getPiecesalary();
         }
         //$sno = "";
         $fooddays = "";
@@ -951,18 +950,27 @@ class infox_salary {
         // worker info and month summary
         $tr = "";
         $tr .= '<tr><th rowspan="2" class="fixwidthcol">序号</th><th colspan=4>工人信息</th>';
-        $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=2>总工作</th><th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th><th colspan="2">伙食费</th></tr>
+        /*
+          $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=3>总工作</th>
+          <th rowspan=2>考勤天数</th><th colspan=2>缺勤罚款</th><th rowspan="2">项目总工资</th>
+          <th rowspan="2">伙食费</th></tr>
+          ';
+         * 
+         */
+        $tr .= '<th colspan=2>正常工作</th><th colspan=3>加班工作</th><th colspan=3>总工作</th>
+            <th rowspan=2>考勤天数</th></tr>
 ';
         $table .= $tr;
         $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
         $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
-        $tr .= '<th>小时</th><th>金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>
-';
+        //$tr .= '<th>计时工时</th><th>计件工资</th><th>总金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>';
+        $tr .= '<th>计时工时</th><th>计件工资</th><th>总金额</th></tr>';
         $table .= $tr;
 
         $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$rate</td><td>$worktype</td>";
-        $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td><td>$totalhours</td>";
-        $tr .= "<td>$totalsalary</td><td>$totaldays</td><td></td><td></td><td></td><td>$fooddays</td><td></td>";
+        $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td>"
+                . "<td>$totalhours</td><td>$piecesalary</td>";
+        $tr .= "<td>$totalsalary</td><td>$totaldays</td>";
         $tr .= "</tr>";
 
         $table .= $tr;

@@ -163,4 +163,9 @@ class Workersalary extends \Synrgic_Models_Entity {
      */
     protected $fullmonaward;
 
+    /**
+     * piecesalary is for whole day salary
+     * @Column(type="float", nullable=true)
+     */
+    protected $piecesalary;    
 }

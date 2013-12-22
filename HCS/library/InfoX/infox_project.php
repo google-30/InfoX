@@ -268,7 +268,6 @@ class infox_project {
         return $attendtab;
     }
 
-    //public static function generateAttendanceTabWbtn($attendrecord, $highlight = false, $siteid, $monthstr, $workerid) {
     public static function generateAttendanceTabWbtn($attendrecord, $highlight = false, $siteid, $dateobj, $workerid) {
         self::getRepos();
         $attendresult = self::getAttendFoodData($attendrecord);

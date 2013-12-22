@@ -7,6 +7,12 @@
             "iDisplayLength": 100,
             "bRetrieve": true,
         });
+        
+        var siteid = $("#sites").val();
+        if(siteid==0)
+        {
+            $("#contentdiv").hide();
+        }
     });
 
     $('#sites').change(siteReload);
@@ -38,7 +44,6 @@
     }
 </script>
 <?php
-//$siteid=0;
 $siteid = $this->siteid;
 $sites = $this->sites;
 $workingmonths = $this->workingmonths;
@@ -75,6 +80,7 @@ $workersonsite = $this->workersonsite;
     ?>
 </select>
 
+<div id="contentdiv">
 <fieldset>
     <legend>选择月份</legend>
     <div class="ui-grid-d">
@@ -145,5 +151,6 @@ echo $this->grid("Workersonsite", true)
         //->helper(new GridHelper_Workeronsite())
         ->data($workersonsite);
 ?>
+</div>
 <br>
 
