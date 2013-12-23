@@ -1,7 +1,8 @@
 <?php
 
 set_time_limit(0);
-include 'InfoX/infox_common.php';
+include_once 'InfoX/infox_common.php';
+include_once "InfoX/infox_material.php";
 
 class Material_ImportController extends Zend_Controller_Action {
 
@@ -76,9 +77,7 @@ class Material_ImportController extends Zend_Controller_Action {
         $objReader->setReadDataOnly(true);
 
         if (1) {
-            $sheetarr = array("safety material", "formwork", "concrete", "concrete",
-                "rebar", "equipment", "electrical", "worker domitory", "logistics",
-                "water pipe", "spare parts", "scaffolding",);
+            $sheetarr = infox_material::getMaterialListSheets();
         } else {
             //$sheetarr =  array("safety material",);
             $sheetarr = array("scaffolding",);
@@ -198,7 +197,7 @@ class Material_ImportController extends Zend_Controller_Action {
               $cell = $objWorksheet->getCell("I".$i);
               $valuei = trim($cell->getFormattedvalue());
              */
-            
+
             //if($valueb!="" && $valuec!="")
             if ($valueb != "") {// materials from a new subtype
                 $nameenglast = $typeeng = trim($valueb);
@@ -246,7 +245,7 @@ class Material_ImportController extends Zend_Controller_Action {
         $this->storeMaterials($materialArr);
 
         // import supplyprice
-        //$this->storeSupplyprice($objWorksheet);
+        $this->storeSupplyprice($objWorksheet);
 
         /*
           try {
@@ -266,10 +265,11 @@ class Material_ImportController extends Zend_Controller_Action {
                 continue;
             }
 
-            $cell = $objWorksheet->getCell("K" . $i);
-            $valuek = $cell->getFormattedvalue();
-            if ($valuek != "") {
-                $name = trim($valuek);
+            $cell = $objWorksheet->getCell("G" . $i);
+            $value = $cell->getFormattedvalue();
+            if ($value != "") {
+                $name = ucwords(trim($value));
+
                 $supplier = $this->_supplier->findOneBy(array("name" => $name));
                 if ($supplier) {
                     //echo "supplier already there.<br>";
@@ -331,7 +331,6 @@ class Material_ImportController extends Zend_Controller_Action {
         $subtype = null;
         $subtypeflag = false;
 
-        $indexarr = array("B", "C", "D", "E", "F", "G", "H", "I", "J", "K",);
         $nameenglast = "";
         $namelast = "";
         $supplypriceArr = array();
@@ -346,22 +345,33 @@ class Material_ImportController extends Zend_Controller_Action {
                 continue;
             }
 
+            // eng
             $cell = $objWorksheet->getCell("B" . $i);
             $valueb = trim($cell->getFormattedvalue());
+            // chs
             $cell = $objWorksheet->getCell("C" . $i);
             $valuec = trim($cell->getFormattedvalue());
+            // descritption
             $cell = $objWorksheet->getCell("D" . $i);
             $valued = trim($cell->getFormattedvalue());
+
+            // unit
             $cell = $objWorksheet->getCell("E" . $i);
             $valuee = trim($cell->getFormattedvalue());
+
+            // rate
+            $cell = $objWorksheet->getCell("F" . $i);
+            $valuef = trim($cell->getFormattedvalue());
+
+            // supplier
             $cell = $objWorksheet->getCell("G" . $i);
             $valueg = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("H" . $i);
-            $valueh = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("I" . $i);
-            $valuei = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("K" . $i);
-            $valuek = trim($cell->getFormattedvalue());
+            //$cell = $objWorksheet->getCell("H" . $i);
+            //$valueh = trim($cell->getFormattedvalue());
+            //$cell = $objWorksheet->getCell("I" . $i);
+            //$valuei = trim($cell->getFormattedvalue());
+            //$cell = $objWorksheet->getCell("K" . $i);
+            //$valuek = trim($cell->getFormattedvalue());
 
             if ($valueb != "") {
                 $nameeng = $valueb;
@@ -384,18 +394,20 @@ class Material_ImportController extends Zend_Controller_Action {
             }
 
 
-            if ($valuee != "" && $valueg != "" && $valueh != "" && $valuei != "") {//in this case, store the supplyprice
+            if ($valuef != "" && $valueg != "" /* && $valueh != "" && $valuei != "" */) {
+                //in this case, store the supplyprice
                 $tmparr = array();
                 $tmparr[] = trim($namechs);
                 $tmparr[] = trim($nameeng);
                 $tmparr[] = trim($description);
 
-                $tmparr[] = trim($valuek);
-
-                $tmparr[] = trim($valuee);
-                $tmparr[] = date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP($valueg)); //trim($valueg);                
-                $tmparr[] = trim($valueh);
-                $tmparr[] = trim($valuei);
+                $tmparr[] = trim($valuee); // unit
+                $tmparr[] = trim($valuef); // rate
+                $tmparr[] = trim($valueg); // supplier
+                //
+                //$tmparr[] = date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP($valueg)); //trim($valueg);                
+                //$tmparr[] = trim($valueh);
+                //$tmparr[] = trim($valuei);
 
                 $supplypricearr[] = $tmparr;
 
@@ -426,11 +438,12 @@ class Material_ImportController extends Zend_Controller_Action {
         $mname = $dataarr[0];
         $mnameeng = $dataarr[1];
         $mdescription = $dataarr[2];
-        $sname = $dataarr[3];
-        $unit = $dataarr[4];
-        $update = $dataarr[5];
-        $rate = $dataarr[6];
-        $quantity = $dataarr[7];
+        $unit = $dataarr[3];
+        $rate = $dataarr[4];
+        $sname = $dataarr[5];
+        
+        //$update = $dataarr[5];        
+        //$quantity = $dataarr[7];
 
         $material = $this->_material->findOneBy(array("name" => $mname, "nameeng" => $mnameeng, "description" => $mdescription));
         if (!$material) {
@@ -446,9 +459,9 @@ class Material_ImportController extends Zend_Controller_Action {
         $supplyprice->setMaterial($material);
         $supplyprice->setSupplier($supplier);
         $supplyprice->setUnit($unit);
-        $supplyprice->setUpdate(new Datetime($update));
+        //$supplyprice->setUpdate(new Datetime($update));
         $supplyprice->setRate($rate);
-        $supplyprice->setQuantity($quantity);
+        //$supplyprice->setQuantity($quantity);
 
         $this->_em->persist($supplyprice);
     }

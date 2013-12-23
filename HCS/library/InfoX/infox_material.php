@@ -37,4 +37,11 @@ class infox_material
         self::getRepos();
         return self::$_Ordermaterialsummaryraw->findBy(array("sheet"=>$sheet));
     }
+    
+    public static function getMaterialListSheets()
+    {
+        $sheetarr =  array("safety material","Formwork","concrete", "rebar",
+        "equipment","electrical","worker domitory","Logistic", "water pipe","spare parts",); 
+        return $sheetarr;
+    }
 }

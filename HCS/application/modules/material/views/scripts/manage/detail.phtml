@@ -1,313 +1,294 @@
 <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
 <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
 <script>
-$(function () {
-    //alert("scroller");
-    $('.classupdate').mobiscroll().date({
-        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
-        endYear: 2050,
-    });  
-});
-
-function submitform()
-{
-    //alert("submitform");    
-    $("#dataform").submit();
-}
-
-function redirect(url) {
-    window.location = url;
-}
-
-$('.defsupplier').change( function() {
-    var id = $(this).attr("id");
-    //alert("defsupplier id="+id);
-    $("#defsupplierid").val(id);
-});
-
-$(function() {
-    $('#Materials').dataTable({
-        "iDisplayLength": 50,
-        "bRetrieve": true,
+    $(function() {
+        //alert("scroller");
+        $('.classupdate').mobiscroll().date({
+            theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
+            endYear: 2050,
+        });
     });
-});
 
-function supplypricenew()
-{
-    //alert("supplypricenew");
-    var supplier = $("#suppliernew").val();
-    var unit = $("#unitnew").val();
-    var dodate = $("#dodatenew").val();
-    var rate = $("#ratenew").val();
-    var quantity = $("#quantitynew").val();    
-    var material = $("#id").val();
-    
-    $.post("/material/manage/postsupplyprice", { supplier:supplier, unit:unit, 
-    dodate:dodate, rate:rate, quantity:quantity, material:material }, 
-    function(data) {
-        //console.log(data);
-        alert(data);        
-        window.location.reload();
-    })      
-}
+    function submitform()
+    {
+        //alert("submitform");    
+        $("#dataform").submit();
+    }
+
+    function redirect(url) {
+        window.location = url;
+    }
+
+    $('.defsupplier').change(function() {
+        var id = $(this).attr("id");
+        //alert("defsupplier id="+id);
+        $("#defsupplierid").val(id);
+    });
+
+    $(function() {
+        $('#Materials').dataTable({
+            "iDisplayLength": 50,
+            "bRetrieve": true,
+        });
+    });
+
+    function supplypricenew()
+    {
+        //alert("supplypricenew");
+        var supplier = $("#suppliernew").val();
+        var unit = $("#unitnew").val();
+        var dodate = $("#dodatenew").val();
+        var rate = $("#ratenew").val();
+        var quantity = $("#quantitynew").val();
+        var material = $("#id").val();
+
+        $.post("/material/manage/postsupplyprice", {supplier: supplier, unit: unit,
+            dodate: dodate, rate: rate, quantity: quantity, material: material},
+        function(data) {
+            //console.log(data);
+            alert(data);
+            window.location.reload();
+        })
+    }
 
 </script>
 <?php
-$data=$this->maindata;
-$mode=$this->mode;//"Create";
-$id=0;
-$name="";
-$nameeng="";
-$description="";
-$supplier="";
-$date="";
-$pic="";
-$usage="";
-$typeid=0;
-$defsupplierid=0;
-$supplypricearr=array();
+$data = $this->maindata;
+$mode = $this->mode; //"Create";
+$id = 0;
+$name = "";
+$nameeng = "";
+$description = "";
+$supplier = "";
+$date = "";
+$pic = "";
+$usage = "";
+$typeid = 0;
+$defsupplierid = 0;
+$supplypricearr = array();
 //$units=$this->units;
 //$unit="";
-$suppliers=$this->suppliers;
-$spareahide="display:none;";
+$suppliers = $this->suppliers;
+$spareahide = "display:none;";
 
-if($mode==="Edit")
-{
-$id=$data->getId();
-$name=$data->getName();
-$nameeng=$data->getNameeng();
-$description=$data->getDescription();
-if($data->getSupplier()){ $supplier=$data->getSupplier()->getName(); }
-$date=$data->getUpdate();
-$date= $date ? $date->format('Y/m/d') : "";
-$pic=$data->getPic();
-$usage=$data->getUsage();
-$typeobj=$data->getType();
-if($typeobj) { $typeid=$typeobj->getId(); } 
-$defsupplier=$data->getSupplyprice();
-if($defsupplier)
-{
-    $defsupplierid=$defsupplier->getId(); 
-}
+if ($mode === "Edit") {
+    $id = $data->getId();
+    $name = $data->getName();
+    $nameeng = $data->getNameeng();
+    $description = $data->getDescription();
+    if ($data->getSupplier()) {
+        $supplier = $data->getSupplier()->getName();
+    }
+    $date = $data->getUpdate();
+    $date = $date ? $date->format('Y/m/d') : "";
+    $pic = $data->getPic();
+    $usage = $data->getUsage();
+    $typeobj = $data->getType();
+    if ($typeobj) {
+        $typeid = $typeobj->getId();
+    }
+    $defsupplier = $data->getSupplyprice();
+    if ($defsupplier) {
+        $defsupplierid = $defsupplier->getId();
+    }
 
-$supplypricearr=$this->supplypricearr;
-$spareahide="";
+    $supplypricearr = $this->supplypricearr;
+    $spareahide = "";
 }
 ?>
 
 <form id="dataform" enctype="multipart/form-data" method="post" action="/material/manage/submit">
-<fieldset>
-<legend><strong>材料信息</strong></legend>
-<input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
-<input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
-<input type="hidden" id="defsupplierid" name="defsupplierid" value="<?php echo $defsupplierid; ?>">
+    <fieldset>
+        <legend><strong>材料信息</strong></legend>
+        <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
+        <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+        <input type="hidden" id="defsupplierid" name="defsupplierid" value="<?php echo $defsupplierid; ?>">
 
-<table class="grid" id="supplypricetab">
-<tr>
-<td rowspan="5" style="width:50%">
-<div data-role="fieldcontain">
-    <label for="file" class="ui-input-text">材料照片:</label>
-    <input type="file" name="file" id="file">
-    <img src="<?=$pic ?>" alt="" width="100%"  id="pic" name="pic">
-</div>
-</td>
-<td>
-<div data-role="fieldcontain">
-<label for="type">分类:</label>
-<select name="type" id="type" data-mini="true">
-<option value="0"></option>
+        <table class="grid" id="supplypricetab">
+            <tr>
+                <td rowspan="5" style="width:50%">
+                    <div data-role="fieldcontain">
+                        <label for="file" class="ui-input-text">材料照片:</label>
+                        <input type="file" name="file" id="file">
+                        <img src="<?= $pic ?>" alt="" width="100%"  id="pic" name="pic">
+                    </div>
+                </td>
+                <td>
+                    <div data-role="fieldcontain">
+                        <label for="type">分类:</label>
+                        <select name="type" id="type" data-mini="true">
+                            <option value="0"></option>
+                            <?php
+                            $types = $this->types;
+                            $options = "";
+                            foreach ($types as $tmp) {
+                                $id = $tmp->getId();
+                                $main = $tmp->getMain();
+                                $maintypechs = $main->getTypechs();
+                                $maintypeeng = $main->getTypeeng();
+                                $typechs = $tmp->getTypechs();
+                                $typeeng = $tmp->getTypeeng();
+                                $typestr = "$maintypeeng($maintypechs)::$typeeng($typechs)";
+
+                                if ($id == $typeid) {
+                                    $options .= '<option value="' . $id . '" selected>' . $typestr . '</option>';
+                                } else {
+                                    $options .= '<option value="' . $id . '">' . $typestr . '</option>';
+                                }
+                            }
+                            echo $options;
+                            ?>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr><td>
+                    <div data-role="fieldcontain">
+                        <label for="name">中文名:</label>
+                        <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div data-role="fieldcontain">
+                        <label for="name">英文名:</label>
+                        <input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
+                    </div>
+                </td></tr>
+            <tr><td>
+                    <div data-role="fieldcontain">
+                        <label for="description">材料规格:</label>
+                        <input type="text" name="description" id="description" value="<?php echo $description; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div data-role="fieldcontain">
+                        <label for="usage">材料用途:</label>
+                        <input type="text" name="usage" id="usage" value="<?php echo $usage; ?>" data-mini="true" placeholder="材料用途，比如木类，金属类等">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+
+    <fieldset id="supplypricearea" style="<?= $spareahide ?>">
+        <legend><strong>价格信息</strong></legend>
+
+        <div data-role="collapsible-set" data-mini="true" data-theme="c">
+            <div data-role="collapsible" data-collapsed="true">
+                <h3>添加价格信息</h3>
 <?php
-$types=$this->types;
-$options = "";
-foreach($types as $tmp)
-{
-    $id = $tmp->getId();
-    $main = $tmp->getMain();
-    $maintypechs = $main->getTypechs();
-    $maintypeeng = $main->getTypeeng();    
-    $typechs = $tmp->getTypechs();
-    $typeeng = $tmp->getTypeeng();    
-    $typestr = "$maintypeeng($maintypechs)::$typeeng($typechs)";
-
-    if($id == $typeid)
-    {
-        $options .= '<option value="' . $id . '" selected>' . $typestr . '</option>';
+$selecthtml = "";
+if (!count($suppliers)) {
+    $selecthtml = "<strong>请导入材料列表或者手动添加供应商数据</strong>";
+} else {
+    $options = '<option value="0">选择供应商</option>';
+    foreach ($suppliers as $tmp) {
+        $id = $tmp->getId();
+        $name = $tmp->getName();
+        $options .= '<option value="' . $id . '">' . $name . '</option>';
     }
-    else
-    {
-        $options .= '<option value="' . $id . '">' . $typestr . '</option>';
-    }
-}
-echo $options;
-?>
-</select>
-</div>
-</td>
-</tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="name">中文名:</label>
-<input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
-</div>
-</td></tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="name">英文名:</label>
-<input type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" data-mini="true">
-</div>
-</td></tr>
-<tr><td>
-<div data-role="fieldcontain">
-<label for="description">材料规格:</label>
-<input type="text" name="description" id="description" value="<?php echo $description; ?>" data-mini="true" placeholder="规格，5寸，10公斤等">
-</div>
-</td>
-</tr>
-<tr>
-<td>
-<div data-role="fieldcontain">
-<label for="usage">材料用途:</label>
-<input type="text" name="usage" id="usage" value="<?php echo $usage; ?>" data-mini="true" placeholder="材料用途，比如木类，金属类等">
-</div>
-</td>
-</tr>
-</table>
-</fieldset>
-
-<fieldset id="supplypricearea" style="<?=$spareahide ?>">
-<legend><strong>价格信息</strong></legend>
-
-<div data-role="collapsible-set" data-mini="true" data-theme="c">
-<div data-role="collapsible" data-collapsed="true">
-<h3>添加价格信息</h3>
-<?php
-$selecthtml="";
-if(!count($suppliers))
-{
-$selecthtml="<strong>请导入材料列表或者手动添加供应商数据</strong>";
-}
-else
-{
-$options='<option value="0">选择供应商</option>';
-foreach($suppliers as $tmp) 
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
-    $options .= '<option value="' . $id . '">' . $name . '</option>';
-}
-$selecthtml.= '<select data-mini="true" id="suppliernew">' . $options. "</select>";
+    $selecthtml.= '<select data-mini="true" id="suppliernew">' . $options . "</select>";
 }
 
-$unittd='<td><input type="text" value="" id="unitnew" placeholder="单位，比如pair, box, etc."></td>';
-$dodatetd='<td><input type="text" value="" id="dodatenew" class="classupdate" placeholder="点击选择Do date"></td>';
-$ratetd='<td><input type="text" value="" id="ratenew" placeholder="rate, 比如5，表示5新元"></td>';
-$quantitytd='<td><input type="text" value="" id="quantitynew" placeholder="Quantity, 比如5,表示5个unit的material"></td>';
-$tr="<tr><td>$selecthtml</td> $unittd $dodatetd $ratetd $quantitytd</tr>";
-$inputtab='<table class="grid">
+$unittd = '<td><input type="text" value="" id="unitnew" placeholder="单位，比如pair, box, etc."></td>';
+$dodatetd = '<td><input type="text" value="" id="dodatenew" class="classupdate" placeholder="点击选择Do date"></td>';
+$ratetd = '<td><input type="text" value="" id="ratenew" placeholder="rate, 比如5，表示5新元"></td>';
+$quantitytd = '<td><input type="text" value="" id="quantitynew" placeholder="Quantity, 比如5,表示5个unit的material"></td>';
+$tr = "<tr><td>$selecthtml</td> $unittd $dodatetd $ratetd $quantitytd</tr>";
+$inputtab = '<table class="grid">
 <thead><tr><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th></tr></thead>
 <tbody>' . $tr . "</tbody></table>";
 
 echo $inputtab;
 ?>
-<input type="button" value="添加价格信息" onclick="supplypricenew()" data-mini="true" data-theme="a">
-</div>
+                <input type="button" value="添加价格信息" onclick="supplypricenew()" data-mini="true" data-theme="a">
+            </div>
 
-<div data-role="collapsible" data-collapsed="true">
-<h3>已有价格信息</h3>
-<table class="grid">
-<thead><tr><th>抉择</th><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th><th>Amount</th></tr></thead>
-<tbody>
+            <div data-role="collapsible" data-collapsed="true">
+                <h3>已有价格信息</h3>
+                <table class="grid">
+                    <thead><tr><th>抉择</th><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th><th>Amount</th></tr></thead>
+                    <tbody>
 <?php
-$tabrows="";
-if(count($supplypricearr))
-{
-foreach($supplypricearr as $tmp)
-{
-    $id = $tmp->getId();
-    $supplier = $tmp->getSupplier();
-    $suppliername = $supplier ? $supplier->getName() : "&nbsp;";
-    $unit = $tmp->getUnit();
-    $rate = $tmp->getRate();
-    $quantity = $tmp->getQuantity();
-    $dodate = $tmp->getUpdate();
-    $dodatestr = $dodate ? $dodate->format("Y-m-d") : "&nbsp;";    
+$tabrows = "";
+if (count($supplypricearr)) {
+    foreach ($supplypricearr as $tmp) {
+        $id = $tmp->getId();
+        $supplier = $tmp->getSupplier();
+        $suppliername = $supplier ? $supplier->getName() : "&nbsp;";
+        $unit = $tmp->getUnit();
+        $rate = $tmp->getRate();
+        $quantity = $tmp->getQuantity();
+        $dodate = $tmp->getUpdate();
+        $dodatestr = $dodate ? $dodate->format("Y-m-d") : "&nbsp;";
 
-    $row = "";    
+        $row = "";
 
-    if($id == $defsupplierid)
-    {
-        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked data-role="none"/></td>';        
+        if ($id == $defsupplierid) {
+            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked data-role="none"/></td>';
+        } else {
+            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" data-role="none"/></td>';
+        }
+
+        $tdsupplier = "<td>$suppliername</td>";
+        $tdunit = "<td>$unit</td>";
+        //$tdupdate = "<td>$dodatestr</td>";
+        //$tdrate = "<td>$rate</td>";
+        $tdquantity = "<td>$quantity</td>";
+        $tdamount = "<td>" . $quantity * $rate . "</td>";
+
+        $tdrate = '<td><input type="text" value="' . $rate . '" name="rate' . $id . '" id="rate' . $id . '" placeholder="0"></td>';
+        $tdupdate = '<td><input type="text" class="classupdate" value="' . $dodatestr . '" name="update' . $id . '" id="update' . $id . '"></td>';
+        $row .= "<tr>" . $tdradio . $tdsupplier . $tdunit . $tdupdate . $tdrate . $tdquantity . $tdamount . "</tr>";
+
+        $tabrows .= $row;
     }
-    else
-    {
-        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" data-role="none"/></td>';    
-    }
-
-    $tdsupplier = "<td>$suppliername</td>";
-    $tdunit = "<td>$unit</td>";
-    //$tdupdate = "<td>$dodatestr</td>";
-    //$tdrate = "<td>$rate</td>";
-    $tdquantity = "<td>$quantity</td>";
-    $tdamount = "<td>" . $quantity*$rate . "</td>";
-
-    $tdrate = '<td><input type="text" value="'. $rate .'" name="rate' . $id . '" id="rate' . $id .'" placeholder="0"></td>';
-    $tdupdate = '<td><input type="text" class="classupdate" value="'. $dodatestr .'" name="update' . $id . '" id="update' . $id .'"></td>';
-    $row .= "<tr>" . $tdradio . $tdsupplier . $tdunit. $tdupdate . $tdrate . $tdquantity . $tdamount ."</tr>";    
-
-    $tabrows .= $row;    
-}
 }
 echo $tabrows;
 
-if(0)
-{
-$suppliers= $this->suppliers;
-$supplyprice = $this->supplyprice;
-foreach($suppliers as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
-   
-    $price = 0;
-    $update = "";
+if (0) {
+    $suppliers = $this->suppliers;
+    $supplyprice = $this->supplyprice;
+    foreach ($suppliers as $tmp) {
+        $id = $tmp->getId();
+        $name = $tmp->getName();
 
-    if(count($supplyprice))
-    {
-        foreach($supplyprice as $sprice)
-        {
-            $sid = $sprice->getSupplier()->getId();
-            if($sid==$id)
-            {
-                $price = $sprice->getPrice();
-                $update = $sprice->getUpdate()->format("Y/m/d");
-            }        
+        $price = 0;
+        $update = "";
+
+        if (count($supplyprice)) {
+            foreach ($supplyprice as $sprice) {
+                $sid = $sprice->getSupplier()->getId();
+                if ($sid == $id) {
+                    $price = $sprice->getPrice();
+                    $update = $sprice->getUpdate()->format("Y/m/d");
+                }
+            }
         }
-    }
 
-    $row = "";
+        $row = "";
 
-    if($id == $defsupplierid)
-    {
-        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked/></td>';        
+        if ($id == $defsupplierid) {
+            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked/></td>';
+        } else {
+            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" /></td>';
+        }
+        $tdname = "<td>$name</td>";
+        $tdprice = '<td><input type="text" value="' . $price . '" name="price' . $id . '" id="price' . $id . '" placeholder="0"></td>';
+        $tdupdate = '<td><input type="text" class="classupdate" value="' . $update . '" name="update' . $id . '" id="update' . $id . '"></td>';
+        $row .= "<tr>" . $tdradio . $tdname . $tdprice . $tdupdate . "</tr>";
+        echo $row;
     }
-    else
-    {
-        $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" /></td>';    
-    }
-    $tdname = "<td>$name</td>";
-    $tdprice = '<td><input type="text" value="'. $price .'" name="price' . $id . '" id="price' . $id .'" placeholder="0"></td>';
-    $tdupdate = '<td><input type="text" class="classupdate" value="'. $update .'" name="update' . $id . '" id="update' . $id .'"></td>';
-    $row .= "<tr>" . $tdradio . $tdname . $tdprice . $tdupdate . "</tr>";
-    echo $row;
-}
 }
 ?>
-</tbody>
-</table>
-</div>
-</div>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-</fieldset>
+    </fieldset>
 </form> <!-- dataform -->
 
 <button type="button" id="submitbutton" name="submitbutton" onclick="submitform()" data-theme="a" data-mini="true">提交</button>

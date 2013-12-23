@@ -159,7 +159,7 @@ class Synrgic_Models_AclBuilder {
 'postattend', 'attendsheet', 'attendquick', 'quicksubmit', 'savedailyinput', 'postattendmonth'),
 
             'archive:manage'=>array('view','add', 'edit', 'delete', 'submit'),
-            'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit'),  
+            'supplier:manage'=>array('view','add', 'edit', 'delete', 'submit', 'truncate'),  
             'humanresource:manage'=>array('view','add', 'edit', 'delete', 'submit'),
             'material:type'=>array('view','add', 'edit', 'delete', 'submit','posttype'),
             'company:info'=>array('view','add', 'edit', 'delete', 'submit'),

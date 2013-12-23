@@ -25,13 +25,20 @@ class Material_ManageController extends Zend_Controller_Action
 
     public function indexAction()
     {   
-        $this->getmateriallistNew();
+        //$this->getmateriallistNew();
+        $sheetarr = infox_material::getMaterialListSheets();
+
+        $requestsheet = $this->getParam("sheet", $sheetarr[0]);    
+        $materialarr = $this->_material->findBy(array("sheet"=>$requestsheet));
+                
+        $this->view->maindata = $materialarr;
+        $this->view->sheetarr = $sheetarr;
+        $this->view->sheet = $requestsheet;                  
     }
 
     private function getmateriallistNew()
     {
-        $sheetarr =  array("safety material","formwork","concrete", "rebar",
-        "equipment","electrical","worker domitory","logistics", "water pipe","spare parts","scaffolding", );
+        $sheetarr = infox_material::getMaterialListSheets();
 
         $requestsheet = $this->getParam("sheet", $sheetarr[0]);     
         $maintype = $this->_materialtype->findBy(array("typeeng"=>$requestsheet));

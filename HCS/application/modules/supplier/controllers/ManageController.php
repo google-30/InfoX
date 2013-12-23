@@ -1,4 +1,5 @@
 <?php
+include_once 'InfoX/infox_common.php';
 
 class Supplier_ManageController extends Zend_Controller_Action
 {
@@ -139,5 +140,29 @@ class Supplier_ManageController extends Zend_Controller_Action
         $this->_redirect("supplier/manage");
     } 
     
+    public function truncateAction() {
+        infox_common::turnoffView($this->_helper);
 
+        // http://stackoverflow.com/questions/9686888/how-to-truncate-a-table-using-doctrine-2
+        // http://stackoverflow.com/questions/5301285/explicitly-set-id-with-doctrine-when-using-auto-strategy
+        // put it here to reset id generator
+        $data = new \Synrgic\Infox\Supplier();
+        $cmd = $this->_em->getClassMetadata(get_class($data));
+        $connection = $this->_em->getConnection();
+        $dbPlatform = $connection->getDatabasePlatform();
+        $connection->beginTransaction();
+        try {
+            //$connection->query('SET FOREIGN_KEY_CHECKS=0');
+            $q = $dbPlatform->getTruncateTableSql($cmd->getTableName(), true);
+            $connection->executeUpdate($q);
+            //$connection->query('SET FOREIGN_KEY_CHECKS=1');
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollback();
+            var_dump($e);
+            return;
+        }
+
+        $this->redirect("/supplier/manage");
+    }
 }
