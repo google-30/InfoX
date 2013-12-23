@@ -384,13 +384,14 @@
 }
 
 .ui-body-c .ui-link {
-    color: #ffffff /*{c-body-link-color}*/;
+    /*color: #ffffff {c-body-link-color}*/;
+    color: #0F8792;
     font-weight: normal;
     text-decoration: none;
 }
 
 .ui-body-c .ui-link:visited {
-    color: #ffffff /*{c-body-link-visited}*/;
+    /*color: #ffffff ;*//*{c-body-link-visited}*/
 }
 
 .ui-body-c .ui-link:hover {
