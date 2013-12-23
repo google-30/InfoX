@@ -1,13 +1,13 @@
 <?php
+
 set_time_limit(0);
 include 'InfoX/infox_common.php';
 
-class Material_ImportController extends Zend_Controller_Action
-{
+class Material_ImportController extends Zend_Controller_Action {
+
     private $_files;
 
-    public function init()
-    {
+    public function init() {
         $this->_em = Zend_Registry::get('em');
         $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');
         $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
@@ -15,55 +15,49 @@ class Material_ImportController extends Zend_Controller_Action
         $this->_supplyprice = $this->_em->getRepository('Synrgic\Infox\Supplyprice');
     }
 
-    public function indexAction()
-    {
+    public function indexAction() {
+        
     }
 
-    private function turnoffview()
-    {
+    private function turnoffview() {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(TRUE);
     }
 
-    public function submitAction()
-    {
+    public function submitAction() {
         infox_common::turnoffView($this->_helper);
 
         $requests = $this->getRequest()->getPost();
-        if(0) { var_dump($requests); return; }
+        if (0) {
+            var_dump($requests);
+            return;
+        }
 
         // upload excel
-        define('UPLOAD_TMP_PATH', APPLICATION_PATH. '/data/uploads/');
+        define('UPLOAD_TMP_PATH', APPLICATION_PATH . '/data/uploads/');
         $uploadpath = UPLOAD_TMP_PATH;
         $filepath = "";
         $allowedExts = array("xls", "xlsx");
         $extension = end(explode(".", $_FILES["file"]["name"]));
-        if (in_array($extension, $allowedExts))
-        {
-            if ($_FILES["file"]["error"] > 0)
-            {
+        if (in_array($extension, $allowedExts)) {
+            if ($_FILES["file"]["error"] > 0) {
                 echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
                 return;
-            }
-            else
-            {
+            } else {
                 echo "Upload: " . $_FILES["file"]["name"] . "<br>";
                 echo "Type: " . $_FILES["file"]["type"] . "<br>";
                 echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
                 echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
 
-                if (file_exists($uploadpath . $_FILES["file"]["name"]))
-                {
+                if (file_exists($uploadpath . $_FILES["file"]["name"])) {
                     echo $_FILES["file"]["name"] . " already exists.<br>";
                 }
 
                 $filepath = $uploadpath . $_FILES["file"]["name"];
-                move_uploaded_file($_FILES["file"]["tmp_name"],  $filepath);
+                move_uploaded_file($_FILES["file"]["tmp_name"], $filepath);
                 echo "Stored in:$filepath<br>";
             }
-        }
-        else
-        {
+        } else {
             echo "Error: Invalid file, 请上传xls, xlsx后缀文件<br>";
             return;
         }
@@ -72,211 +66,70 @@ class Material_ImportController extends Zend_Controller_Action
         include 'PHPExcel/IOFactory.php';
 
         $inputFileName = $filepath;
-        echo 'Loading file ',pathinfo($inputFileName,PATHINFO_BASENAME),' using IOFactory to identify the format<br>';
+        echo 'Loading file ', pathinfo($inputFileName, PATHINFO_BASENAME), ' using IOFactory to identify the format<br>';
         //$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 
         $inputFileType = 'Excel5';
-        /**  Create a new Reader of the type defined in $inputFileType  **/
+        /**  Create a new Reader of the type defined in $inputFileType  * */
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         /* reduce memory consumption */
         $objReader->setReadDataOnly(true);
-        
-        if(1)
-        {
-        $sheetarr =  array("safety material","formwork","concrete", "concrete",
-                            "rebar","equipment","electrical","worker domitory","logistics",
-                            "water pipe","spare parts","scaffolding", );
-        }
-        else
-        {
-        //$sheetarr =  array("safety material",);
-        $sheetarr =  array("scaffolding",);
+
+        if (1) {
+            $sheetarr = array("safety material", "formwork", "concrete", "concrete",
+                "rebar", "equipment", "electrical", "worker domitory", "logistics",
+                "water pipe", "spare parts", "scaffolding",);
+        } else {
+            //$sheetarr =  array("safety material",);
+            $sheetarr = array("scaffolding",);
         }
 
         $objWorksheet = $objReader->setLoadSheetsOnly($sheetarr);
-        /**  Load $inputFileName to a PHPExcel Object  **/
+        /**  Load $inputFileName to a PHPExcel Object  * */
         $objPHPExcel = $objReader->load($inputFileName);
         echo '<hr />';
 
-        foreach($sheetarr as $sheetname)
-        {
+        foreach ($sheetarr as $sheetname) {
             $objWorksheet = $objPHPExcel->setActiveSheetIndexByName($sheetname);
-            if($objWorksheet)
-            {
+            if ($objWorksheet) {
                 $this->storeDetails($sheetname, $objWorksheet);
             }
-
-        /*
-        foreach ($objWorksheet->getRowIterator() as $row)
-        {
-            if(++$i == 1)
-            {   // ignore the first row
-                continue;
-            }
-
-            $j=0;
-            $cellIterator = $row->getCellIterator();
-            $cellIterator->setIterateOnlyExistingCells(false);
-            foreach ($cellIterator as $cell)
-            {
-                $j++;
-                if(in_array($j, $datecolumns))
-                {
-                    $cellvalue = $cell->getValue();
-                    if($cellvalue == "" || !intval($cellvalue))
-                    {
-                        $value = "";
-                    }
-                    else
-                    {
-                        $value = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($cellvalue));
-                    }
-                }
-                else
-                {
-                    $value = $cell->getFormattedvalue();
-                }
-                echo $value . "||";
-            }
-
-            echo "<hr>";
         }
-        return;
-        */
 
-        }
-        
-       $this->redirect("/material/manage/");        
+        $this->redirect("/material/manage/");
     }
 
-    private function storeSupplier($objWorksheet)
-    { 
-        // step1 - supplier    
-        $i=0;
-        $supplierArr = array();       
-        foreach ($objWorksheet->getRowIterator() as $row)
-        {
-            if(++$i == 1)
-            {   // ignore the first row
-                continue;
-            }
-            
-            $cell = $objWorksheet->getCell("K".$i);
-            $valuek = $cell->getFormattedvalue();
-            if($valuek != "" )
-            {
-                $name = trim($valuek);
-                $supplier = $this->_supplier->findOneBy(array("name"=>$name));
-                if($supplier)
-                {
-                    //echo "supplier already there.<br>";
-                }
-                else if(!in_array($name, $supplierArr))
-                {
-                    $supplierArr[] = $name;
-                }
-            }        
-        }
-
-        foreach($supplierArr as $tmp)
-        {
-            $supplier = new \Synrgic\Infox\Supplier();
-            $supplier->setName($tmp);
-            $this->_em->persist($supplier);            
-        }
-
-        try {
-            $this->_em->flush();
-        } catch (Exception $e) {
-            var_dump($e);
-            return;
-        }
-        //return;
-        // supplier done    
-    }
-
-    private function storeDetails($sheetname, $objWorksheet)
-    {
+    private function storeDetails($sheetname, $objWorksheet) {
         //$datecolumns = array(7,);
+        // step1 - supplier  
 
         $this->storeSupplier($objWorksheet);
-        // step1 - supplier  
-        /*  
-        $i=0;
-        $supplierArr = array();       
-        foreach ($objWorksheet->getRowIterator() as $row)
-        {
-            if(++$i == 1)
-            {   // ignore the first row
-                continue;
-            }
-            
-            $cell = $objWorksheet->getCell("K".$i);
-            $valuek = $cell->getFormattedvalue();
-            if($valuek != "" )
-            {
-                $name = trim($valuek);
-                $supplier = $this->_supplier->findOneBy(array("name"=>$name));
-                if($supplier)
-                {
-                    //echo "supplier already there.<br>";
-                }
-                else if(!in_array($name, $supplierArr))
-                {
-                    $supplierArr[] = $name;
-                }
-            }        
-        }
-
-        foreach($supplierArr as $tmp)
-        {
-            $supplier = new \Synrgic\Infox\Supplier();
-            $supplier->setName($tmp);
-            $this->_em->persist($supplier);            
-        }
-
-        try {
-            $this->_em->flush();
-        } catch (Exception $e) {
-            var_dump($e);
-            return;
-        }
-        //return;
-        // supplier done    
-        */
 
         // sub type
-        $i=0;
+        $i = 0;
         $subtypeArr = array();
-        foreach ($objWorksheet->getRowIterator() as $row)
-        {
-            if(++$i == 1)
-            {   // ignore the first row
+        foreach ($objWorksheet->getRowIterator() as $row) {
+            if (++$i == 1) {   // ignore the first row
                 continue;
             }
 
-            $cell = $objWorksheet->getCell("B".$i);
+            $cell = $objWorksheet->getCell("B" . $i);
             $valueb = $cell->getFormattedvalue();
-            $cell = $objWorksheet->getCell("C".$i);
+            $cell = $objWorksheet->getCell("C" . $i);
             $valuec = $cell->getFormattedvalue();
 
             // this means a sub type
             //if($valueb!="" && $valuec!="")
-            if($valueb!="")
-            {                
+            if ($valueb != "") {
                 $typeeng = trim($valueb);
                 $typechs = trim($valuec);
-             
-                $typeobj = $this->_materialtype->findOneBy(array("typeeng"=>$typeeng, "typechs"=>$typechs));
-                if($typeobj)
-                {
+
+                $typeobj = $this->_materialtype->findOneBy(array("typeeng" => $typeeng, "typechs" => $typechs));
+                if ($typeobj) {
                     //echo "sub type already there.<br>";
-                }
-                else
-                {
+                } else {
                     $sub = array($typeeng, $typechs);
-                    if(!in_array($sub, $subtypeArr))
-                    {
+                    if (!in_array($sub, $subtypeArr)) {
                         $subtypeArr[] = $sub;
                     }
                 }
@@ -284,9 +137,8 @@ class Material_ImportController extends Zend_Controller_Action
             // sub type done            
         }
 
-        $maintype = $this->_materialtype->findOneBy(array("typeeng"=>$sheetname));
-        foreach($subtypeArr as $tmp)
-        {
+        $maintype = $this->_materialtype->findOneBy(array("typeeng" => $sheetname));
+        foreach ($subtypeArr as $tmp) {
             $typeeng = $tmp[0];
             $typechs = $tmp[1];
 
@@ -307,80 +159,76 @@ class Material_ImportController extends Zend_Controller_Action
 
         $subtype = null;
         $subtypeflag = false;  // subtype found
-        $indexarr = array("B","C","D","E","F","G","H","I","J","K",);
+        //$indexarr = array("B","C","D","E","F","G","H","I","J","K",);
+        $indexarr = array("B", "C", "D", "E", "F", "G",);
         $nameenglast = "";
         $namelast = "";
         $materialArr = array();
         $i = 0;
-        
-        foreach ($objWorksheet->getRowIterator() as $row)
-        {
-            if(++$i == 1)
-            {   // ignore the first row
+
+        foreach ($objWorksheet->getRowIterator() as $row) {
+            if (++$i == 1) {   // ignore the first row
                 continue;
             }
 
             // related to type
-            $cell = $objWorksheet->getCell("B".$i);
+            $cell = $objWorksheet->getCell("B" . $i);
             $valueb = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("C".$i);
+            $cell = $objWorksheet->getCell("C" . $i);
             $valuec = trim($cell->getFormattedvalue());
 
             // related to material description
-            $cell = $objWorksheet->getCell("D".$i);
+            $cell = $objWorksheet->getCell("D" . $i);
             $valued = trim($cell->getFormattedvalue());
 
             // unit
-            $cell = $objWorksheet->getCell("E".$i);
+            $cell = $objWorksheet->getCell("E" . $i);
             $valuee = trim($cell->getFormattedvalue());
-            // dodate/update
-            $cell = $objWorksheet->getCell("G".$i);
-            $valueg = trim($cell->getFormattedvalue());
+
             // rate
-            $cell = $objWorksheet->getCell("H".$i);
-            $valueh = trim($cell->getFormattedvalue());
-            // quantity
-            $cell = $objWorksheet->getCell("I".$i);
-            $valuei = trim($cell->getFormattedvalue());
-           
+            $cell = $objWorksheet->getCell("F" . $i);
+            $valuef = trim($cell->getFormattedvalue());
+
+            /*
+              // dodate/update
+              $cell = $objWorksheet->getCell("G".$i);
+              $valueg = trim($cell->getFormattedvalue());
+
+              // quantity
+              $cell = $objWorksheet->getCell("I".$i);
+              $valuei = trim($cell->getFormattedvalue());
+             */
+            
             //if($valueb!="" && $valuec!="")
-            if($valueb!="")
-            {// materials from a new subtype
+            if ($valueb != "") {// materials from a new subtype
                 $nameenglast = $typeeng = trim($valueb);
                 $namelast = $typechs = trim($valuec);
-                $typeobj = $this->_materialtype->findOneBy(array("typeeng"=>$typeeng, "typechs"=>$typechs));                
-                if($typeobj)
-                {
+                $typeobj = $this->_materialtype->findOneBy(array("typeeng" => $typeeng, "typechs" => $typechs));
+                if ($typeobj) {
                     $subtype = $typeobj;
                     $subtypeflag = true;
-                }
-                else
-                {
+                } else {
                     //echo "shit, what happened...";
                     continue;
                 }
             }
 
             $materialfound = false;
-            if(trim($valued) != "")
-            {// find material, store it in db
-                $materialfound = true;             
+            if (trim($valued) != "") {
+                // find material, store it in db
+                $materialfound = true;
                 $description = trim($valued);
-            }
-            else if($valuee!="" && $valueg!="" && $valueh!="" && $valuei!="" && ($subtypeflag || $valuec!=""))
-            {// another case: no description(spec), but it's still a material
-                $materialfound = true;             
-                $description = "NO DESCRIPTION";                    
-            }
-            else if($valuec!="")
-            {
+            } else if ($valuee != "" && $valuef != "" && ($subtypeflag || $valuec != "")) {
+                // another case: no description(spec), but it's still a material
+                $materialfound = true;
+                $description = "NO DESCRIPTION";
+            } else if ($valuec != "") {
                 $namelast = $valuec;
             }
 
-            if($materialfound)
-            {
-                $nameenglast = $nameeng = ($valueb=="") ? $nameenglast : $valueb;
-                $namelast = $namechs = ($valuec=="") ? $namelast : $valuec;
+            if ($materialfound) {
+                $nameenglast = $nameeng = ($valueb == "") ? $nameenglast : $valueb;
+                $namelast = $namechs = ($valuec == "") ? $namelast : $valuec;
 
                 $tmparr = array();
                 $tmparr['name'] = trim($namechs);
@@ -389,7 +237,7 @@ class Material_ImportController extends Zend_Controller_Action
                 $tmparr['type'] = $subtype;
                 $tmparr['sheet'] = $sheetname;
 
-                $materialArr[] = $tmparr; 
+                $materialArr[] = $tmparr;
                 $materialfound = false;
                 $subtypeflag = false;
             }
@@ -398,21 +246,55 @@ class Material_ImportController extends Zend_Controller_Action
         $this->storeMaterials($materialArr);
 
         // import supplyprice
-        $this->storeSupplyprice($objWorksheet);
+        //$this->storeSupplyprice($objWorksheet);
 
         /*
+          try {
+          $this->_em->flush();
+          } catch (Exception $e) {
+          var_dump($e);
+          return;
+          } */
+    }
+
+    private function storeSupplier($objWorksheet) {
+        // step1 - supplier    
+        $i = 0;
+        $supplierArr = array();
+        foreach ($objWorksheet->getRowIterator() as $row) {
+            if (++$i == 1) {   // ignore the first row
+                continue;
+            }
+
+            $cell = $objWorksheet->getCell("K" . $i);
+            $valuek = $cell->getFormattedvalue();
+            if ($valuek != "") {
+                $name = trim($valuek);
+                $supplier = $this->_supplier->findOneBy(array("name" => $name));
+                if ($supplier) {
+                    //echo "supplier already there.<br>";
+                } else if (!in_array($name, $supplierArr)) {
+                    $supplierArr[] = $name;
+                }
+            }
+        }
+
+        foreach ($supplierArr as $tmp) {
+            $supplier = new \Synrgic\Infox\Supplier();
+            $supplier->setName($tmp);
+            $this->_em->persist($supplier);
+        }
+
         try {
             $this->_em->flush();
         } catch (Exception $e) {
             var_dump($e);
             return;
-        }*/
+        }
     }
 
-    private function storeMaterials($materialarr)
-    {
-        foreach($materialarr as $tmp)
-        {
+    private function storeMaterials($materialarr) {
+        foreach ($materialarr as $tmp) {
             $name = $tmp['name'];
             $nameeng = $tmp['nameeng'];
             $description = $tmp['description'];
@@ -420,23 +302,19 @@ class Material_ImportController extends Zend_Controller_Action
             $sheet = $tmp['sheet'];
 
             $obj = $this->_material->findOneBy(
-                    array('name'=>$name,'nameeng'=>$nameeng, 'description'=>$description));
-            if($obj)
-            {
+                    array('name' => $name, 'nameeng' => $nameeng, 'description' => $description));
+            if ($obj) {
                 //echo "material already there.<br>";
-            }
-            else
-            {
+            } else {
                 $obj = new \Synrgic\Infox\Material();
                 $obj->setNameeng($nameeng);
                 $obj->setName($name);
                 $obj->setDescription($description);
                 $obj->setType($type);
                 //$obj->setUnit($unit);
-                $obj->setSheet($sheet);                      
-                $this->_em->persist($obj);          
-            } 
-
+                $obj->setSheet($sheet);
+                $this->_em->persist($obj);
+            }
         }
 
         try {
@@ -445,17 +323,15 @@ class Material_ImportController extends Zend_Controller_Action
             var_dump($e);
             return;
         }
-        
     }
 
-    private function storeSupplyprice($objWorksheet)
-    {
+    private function storeSupplyprice($objWorksheet) {
         //echo "storeSupplyprice<br>";
 
         $subtype = null;
         $subtypeflag = false;
 
-        $indexarr = array("B","C","D","E","F","G","H","I","J","K",);
+        $indexarr = array("B", "C", "D", "E", "F", "G", "H", "I", "J", "K",);
         $nameenglast = "";
         $namelast = "";
         $supplypriceArr = array();
@@ -465,61 +341,50 @@ class Material_ImportController extends Zend_Controller_Action
         $namechs = "";
         $description = "";
 
-        foreach ($objWorksheet->getRowIterator() as $row)
-        {
-            if(++$i == 1)
-            {   // ignore the first row
+        foreach ($objWorksheet->getRowIterator() as $row) {
+            if (++$i == 1) {   // ignore the first row
                 continue;
             }
 
-            $cell = $objWorksheet->getCell("B".$i);
+            $cell = $objWorksheet->getCell("B" . $i);
             $valueb = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("C".$i);
+            $cell = $objWorksheet->getCell("C" . $i);
             $valuec = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("D".$i);
+            $cell = $objWorksheet->getCell("D" . $i);
             $valued = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("E".$i);
+            $cell = $objWorksheet->getCell("E" . $i);
             $valuee = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("G".$i);
+            $cell = $objWorksheet->getCell("G" . $i);
             $valueg = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("H".$i);
+            $cell = $objWorksheet->getCell("H" . $i);
             $valueh = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("I".$i);
+            $cell = $objWorksheet->getCell("I" . $i);
             $valuei = trim($cell->getFormattedvalue());
-            $cell = $objWorksheet->getCell("K".$i);
+            $cell = $objWorksheet->getCell("K" . $i);
             $valuek = trim($cell->getFormattedvalue());
 
-            if($valueb != "")
-            {
+            if ($valueb != "") {
                 $nameeng = $valueb;
                 $namechs = $valuec;
                 $description = $valued;
                 $subtypeflag = true;
-            }        
+            }
 
-            if($valuec != "")
-            {
+            if ($valuec != "") {
                 $namechs = $valuec;
                 $description = $valued;
             }
 
-            if($valued != "")
-            {
+            if ($valued != "") {
                 $description = $valued;
-            }
-            else if($valued=="" && $subtypeflag)
-            {
+            } else if ($valued == "" && $subtypeflag) {
                 $description = "NO DESCRIPTION";
-            }
-            else if($valued=="" && $valuec!="")
-            {
+            } else if ($valued == "" && $valuec != "") {
                 $description = "NO DESCRIPTION";
             }
 
 
-            if($valuee != "" && $valueg != "" && $valueh != "" && $valuei != "")
-            {//in this case, store the supplyprice
-
+            if ($valuee != "" && $valueg != "" && $valueh != "" && $valuei != "") {//in this case, store the supplyprice
                 $tmparr = array();
                 $tmparr[] = trim($namechs);
                 $tmparr[] = trim($nameeng);
@@ -528,14 +393,14 @@ class Material_ImportController extends Zend_Controller_Action
                 $tmparr[] = trim($valuek);
 
                 $tmparr[] = trim($valuee);
-                $tmparr[] = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($valueg));//trim($valueg);                
+                $tmparr[] = date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP($valueg)); //trim($valueg);                
                 $tmparr[] = trim($valueh);
-                $tmparr[] = trim($valuei);   
+                $tmparr[] = trim($valuei);
 
                 $supplypricearr[] = $tmparr;
 
                 $subtypeflag = false;
-            }     
+            }
         }
 
         $this->persistAllSupplyPrices($supplypricearr);
@@ -548,19 +413,16 @@ class Material_ImportController extends Zend_Controller_Action
         }
     }
 
-    private function persistAllSupplyPrices($supplypricearr)
-    {
+    private function persistAllSupplyPrices($supplypricearr) {
         // debug, dump the array
         echo "supplypricearr count=" . count($supplypricearr) . "<br>";
-        foreach($supplypricearr as $tmp)
-        {
+        foreach ($supplypricearr as $tmp) {
             //print_r($tmp); echo "<br>";
             $this->persistSupplyprice($tmp);
         }
     }
 
-    private function persistSupplyprice($dataarr)
-    {// dataarr = { material name, material nameeng, material description, supplier name, unit, update, rate, quantity, }
+    private function persistSupplyprice($dataarr) {// dataarr = { material name, material nameeng, material description, supplier name, unit, update, rate, quantity, }
         $mname = $dataarr[0];
         $mnameeng = $dataarr[1];
         $mdescription = $dataarr[2];
@@ -570,30 +432,28 @@ class Material_ImportController extends Zend_Controller_Action
         $rate = $dataarr[6];
         $quantity = $dataarr[7];
 
-        $material = $this->_material->findOneBy(array("name"=>$mname, "nameeng"=>$mnameeng, "description"=>$mdescription));
-        if(!$material)
-        {
+        $material = $this->_material->findOneBy(array("name" => $mname, "nameeng" => $mnameeng, "description" => $mdescription));
+        if (!$material) {
             //print_r($dataarr); echo "<br>";
             echo "nameeng=$mnameeng,name=$mname,description=$mdescription<br>";
             //$obj = $this->_material->findOneBy(array("nameeng"=>$mnameeng));
             //echo $obj->getId() . "<br>";
         }
 
-        $supplier = $this->_supplier->findOneBy(array("name"=>$sname));
+        $supplier = $this->_supplier->findOneBy(array("name" => $sname));
 
         $supplyprice = new \Synrgic\Infox\Supplyprice();
         $supplyprice->setMaterial($material);
-        $supplyprice->setSupplier($supplier);        
-        $supplyprice->setUnit($unit);        
-        $supplyprice->setUpdate(new Datetime($update));        
-        $supplyprice->setRate($rate);        
+        $supplyprice->setSupplier($supplier);
+        $supplyprice->setUnit($unit);
+        $supplyprice->setUpdate(new Datetime($update));
+        $supplyprice->setRate($rate);
         $supplyprice->setQuantity($quantity);
-        
-        $this->_em->persist($supplyprice);        
+
+        $this->_em->persist($supplyprice);
     }
 
-    public function truncateallAction()
-    {
+    public function truncateallAction() {
         infox_common::turnoffView($this->_helper);
 
         // http://stackoverflow.com/questions/9686888/how-to-truncate-a-table-using-doctrine-2
@@ -610,18 +470,18 @@ class Material_ImportController extends Zend_Controller_Action
             $connection->executeUpdate($q);
             //$connection->query('SET FOREIGN_KEY_CHECKS=1');
             $connection->commit();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $connection->rollback();
             var_dump($e);
             return;
-        }        
+        }
 
         $this->redirect("/material/manage");
 
         /*
-        $this->_em->remove($data);
-        $this->_em->flush();
-        */
+          $this->_em->remove($data);
+          $this->_em->flush();
+         */
     }
+
 }
