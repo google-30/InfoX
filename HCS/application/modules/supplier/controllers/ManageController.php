@@ -11,7 +11,8 @@ class Supplier_ManageController extends Zend_Controller_Action
         $this->_supplier = $this->_em->getRepository('Synrgic\Infox\Supplier');
         $this->_supplyprice = $this->_em->getRepository('Synrgic\Infox\Supplyprice');        
         $this->_matappdata = $this->_em->getRepository('Synrgic\Infox\Matappdata');        
-        $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');                
+        $this->_material = $this->_em->getRepository('Synrgic\Infox\Material');    
+        $this->_matpodata = $this->_em->getRepository('Synrgic\Infox\Matpodata');
     }
 
     public function indexAction()
@@ -61,6 +62,13 @@ class Supplier_ManageController extends Zend_Controller_Action
             $this->_em->persist($tmp);            
         }
 
+        $poarr = $this->_matpodata->findBy(array("supplier"=>$supplier));
+        foreach($poarr as $tmp)
+        {
+            $tmp->setSupplier(null);
+            $this->_em->persist($tmp);            
+        }        
+        
     	$this->_em->remove($supplier);
         $this->_em->flush();        
 
