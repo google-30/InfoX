@@ -563,7 +563,8 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->_files = $_FILES;
     }
 
-    private function storePic($workerid) {// http://www.w3schools.com/php/php_file_upload.asp
+    private function storePic($workerid) {
+        // http://www.w3schools.com/php/php_file_upload.asp
         $files = $this->_files;
 
         echo "<br>";

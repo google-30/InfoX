@@ -13,24 +13,24 @@
     <div class="ui-block-b"><a href="/supplier/manage/truncate"><button data-mini="true" data-theme="a">清空供应商</button></a></div>                    
 
 </div>
-<?
+<?php
 echo $this->grid("Suppliers", true)
-->field('id', 'id')  
+        ->field('id', 'id')
 //->field('update','更新日期')
-->field('name', '名称')
+        ->field('name', '名称')
 //->field('business', '主营业务')
-->field('officephone', '电话')  
-->field('email', '电子邮件')         
+        ->field('officephone', '电话')
+        ->field('email', '电子邮件')
 //->field('fax', '传真')
-->field('attn', '联系人')
-->field('attnphone', '联系人电话')
-->field('postring', 'PO单字串')
-->actionField(':action', "操作", '&nbsp;|&nbsp;')
-->itemCountPerPage(30)
-->paginatorEnabled(false)
+        ->field('attn', '联系人')
+        ->field('attnphone', '联系人电话')
+        ->field('postring', 'PO单字串')
+        ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+        ->itemCountPerPage(30)
+        ->paginatorEnabled(false)
 //->helper(new GridHelper_Supplier())
-->data($this->suppliers)
-->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
-->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+        ->data($this->suppliers)
+        ->action(':action', '编辑', array('url' => array('action' => 'edit')))
+        ->action(':action', '删除', array('url' => array('action' => 'delete')));
 ?>
 <br><br>
