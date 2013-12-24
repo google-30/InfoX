@@ -1,8 +1,9 @@
 <!DOCTYPE html> 
 <html>
     <?php
-    $monthstr = $this->monthstr;
     $monthobj = $this->monthobj;
+    $monthstr = $monthobj->format("Y-m"); //$this->monthstr;
+
 
     $sheet = $this->sheet;
     $sheetarr = $this->sheetarr;
@@ -13,11 +14,22 @@
     $month2 = $monthobj->format('M');
     $nowobj = new Datetime("now");
     $nowdatestr = $nowobj->format("d/m/Y");
+
+    $logopath = "";
+    $cmyfullnamechs = "";
+    $cmyfullnameeng = "";
+
+    $company = $this->company;
+    if ($company) {
+        $logopath = "/uploads/" . $company->getLogo();
+        $cmyfullnamechs = $company->getFullnamechs();
+        $cmyfullnameeng = $company->getFullnameeng();
+    }
     ?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"> 
-        <title>Salary Receipts/工资收据<? echo $monthstr; ?></title> 
+        <title>工资收据&nbsp;<?= $monthstr ?></title> 
         <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
         <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
         <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
@@ -80,7 +92,7 @@
                  endYear: 2050,
                  });
                  */
-                
+
                 jQuery.extend(jQuery.mobile.datebox.prototype.options, {
                     'dateFormat': 'mm/dd/YYYY',
                     'headerFormat': 'mm/dd/YYYY',
@@ -98,7 +110,7 @@
         <div data-role="page">
             <div data-role="header" data-theme="b">
                 <!--<input type="text" name="begin" id="begin" class="datepicker" value="" data-mini="true" placeholder="点击选择日期"/>-->
-                <input name="mydate" id="mydate" type="date" data-role="datebox" data-options='{"mode": "calbox"}' data-mini="true" placeholder="点击按钮，选择日期->">
+                <!--<input name="mydate" id="mydate" type="date" data-role="datebox" data-options='{"mode": "calbox"}' data-mini="true" placeholder="点击按钮，选择日期->"> -->
 
             </div>
 
@@ -110,8 +122,17 @@
                 $counter = 0;
                 $srs = $salaryrecords;
                 $datestr = '月份/Mth:' . $year . "年" . $month1 . "月/" . $month2 . "-" . $year;
-                $header = '<table class="tabsalary1"><tr><td class="tdstayleft">HWA CHENG DEVELOPMENT PTE LTD<br>华城发展有限公司</td>' .
-                        '<td></td><td class="tdstayright">' . $datestr . "</td></tr>";
+                $header = '<table class="tabsalary1">'
+                        . '<tr>'
+                        . '<td class="tdstayleft">'
+                        . '<table>'
+                        . '<tr><td rowspan=2><img src="' . $logopath . '" alt="" class="logo" id="pic" name="pic" width="55"></td>'
+                        . "<td>$cmyfullnameeng</td></tr>"
+                        . "<tr><td>$cmyfullnamechs</td></tr>"
+                        . '</table>'
+                        . '</td>'
+                        . '<td></td><td class="tdstayright">' . $datestr . "</td>"
+                        . "</tr>";
                 $header.='<tr><td></td><td class="tdstaycenter">Salary Receipt/工资收据</td><td></td></tr>';
                 $tabhtml = "";
                 foreach ($srs as $tmp) {
@@ -155,11 +176,11 @@
                     $tabhtml.=$header . $tr . "</table>";
 
                     $tds = "<td>基本工资<br>Basic Salary</td><td>加班工资<br>OT Salary</td>
-    <td>补贴<br>Allowance</td><td>工资总计<br>Total Salary</td>
-    <td>满勤奖<br>Full Mth Attendance</td><td>扣" . $month1 . "月餐费<br>Less Meal Fee</td>
-    <td>预扣税<br>Advance Less Tax</td><td>水电生活费<br>Living Fee</td>
-    <td>水电生活补贴<br>Allowance For Living</td><td>其他补扣费用<br>Other Addition or Deduction</td>
-    <td>" . $month1 . "月实发工资<br>Net Pay for " . $month2 . "</td><td>工人确认签字<br>Signature Confirmed</td>";
+                        <td>补贴<br>Allowance</td><td>工资总计<br>Total Salary</td>
+                        <td>满勤奖<br>Full Mth Attendance</td><td>扣" . $month1 . "月餐费<br>Less Meal Fee</td>
+                            <td>预扣税<br>Advance Less Tax</td><td>水电生活费<br>Living Fee</td>
+                            <td>水电生活补贴<br>Allowance For Living</td><td>其他补扣费用<br>Other Addition or Deduction</td>
+                            <td>" . $month1 . "月实发工资<br>Net Pay for " . $month2 . "</td><td>工人确认签字<br>Signature Confirmed</td>";
 
                     $tddata = "<td>$" . "$normalpay</td><td>$" . "$otpay</td><td>" . "$allowance</td><td>$" . "$totalsalary</td><td>"
                             . "$fullmth</td><td>" . "$foodpaystr</td><td>" . "$rtmonthpaystr</td><td>"

@@ -14,6 +14,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
         $this->_siteattendance = $this->_em->getRepository('Synrgic\Infox\Siteattendance');
         $this->_salaryall = $this->_em->getRepository('Synrgic\Infox\Workersalaryall');
+        $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
     }
 
     public function indexAction() {
@@ -549,7 +550,22 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $salaryrepo = $this->_salaryall; //infox_salary::getReposBySheet($sheet);
         $records = $salaryrepo->findBy(array("month" => $monthobj));
 
-        $this->view->salaryrecords = $records;
+        $salaryrecords = array();
+        foreach($records as $tmp)
+        {
+            $worker = $tmp->getWorker();
+            if($sheet == $worker->getSheet())
+            {
+                $salaryrecords[] = $tmp;
+            }
+        }
+        
+        $this->view->salaryrecords = $salaryrecords;
         $this->view->monthobj = $monthobj;
+        
+        $tmparr = explode(".", $sheet);
+        $sheetprx = $tmparr[0];
+        $cmyobj = $this->_companyinfo->findOneBy(array("sheetprx"=>$sheetprx));
+        $this->view->company = $cmyobj;
     }
 }
