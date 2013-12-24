@@ -84,4 +84,9 @@ class Companyinfo extends \Synrgic_Models_Entity {
      */
     protected $postring;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $sheetprx;    
+    
 }

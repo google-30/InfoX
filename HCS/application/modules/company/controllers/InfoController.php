@@ -1,5 +1,7 @@
 <?php
 
+define('UPLOAD_PATH', APPLICATION_PATH . '/data/uploads/');
+
 class Company_InfoController extends Zend_Controller_Action
 {
     private $_em;
@@ -70,6 +72,7 @@ class Company_InfoController extends Zend_Controller_Action
         $fullnameeng = $this->getParam("fullnameeng", "");
 
         $postring = $this->getParam("postring", "");
+        $sheetprx = $this->getParam("sheetprx", "");
 
         if($mode == "Create")
         {
@@ -94,7 +97,8 @@ class Company_InfoController extends Zend_Controller_Action
         $data->setFullnameeng($fullnameeng);
 
         $data->setPostring($postring);
-
+        $data->setSheetprx($sheetprx);
+        
         $this->_em->persist($data);
         try {
             $this->_em->flush();
@@ -103,8 +107,61 @@ class Company_InfoController extends Zend_Controller_Action
             return;
         }        
 
+        $this->storePic($data->getId());
+        
         $this->_redirect("/company/info");
     } 
     
+    private function storePic($id) {
+        // http://www.w3schools.com/php/php_file_upload.asp
+        //$files = $this->_file;
 
+        echo "<br>";
+        $newfile = "";
+        $uploadpath = UPLOAD_PATH;
+        $allowedExts = array("gif", "jpeg", "jpg", "png");
+        $extension = end(explode(".", $_FILES["file"]["name"]));
+        if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/jpeg") 
+                || ($_FILES["file"]["type"] == "image/jpg") || ($_FILES["file"]["type"] == "image/pjpeg") 
+                || ($_FILES["file"]["type"] == "image/x-png") || ($_FILES["file"]["type"] == "image/png")) 
+                && ($_FILES["file"]["size"] < 100000) && in_array($extension, $allowedExts)) {
+            if ($_FILES["file"]["error"] > 0) {
+                echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
+            } else {
+                echo "Upload: " . $_FILES["file"]["name"] . "<br>";
+                echo "Type: " . $_FILES["file"]["type"] . "<br>";
+                echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
+                echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
+
+                /*
+                  if (file_exists($uploadpath . $_FILES["file"]["name"]))
+                  {
+                  echo $_FILES["file"]["name"] . " already exists. ";
+                  }
+                  else
+                 */ {
+                    $newfile = "companylogo" . $id . "." . $extension; 
+                    $picpath = $uploadpath .  $newfile;
+                    move_uploaded_file($_FILES["file"]["tmp_name"], $picpath);
+                    echo "Stored in: " . $picpath;
+                    
+                }
+            }
+        } else {
+            //echo "Invalid file";
+        }
+        echo "<br>";
+
+        if ($newfile != "") {
+            $cmyobj = $this->_companyinfo->findOneBy(array("id"=>$id));
+            $cmyobj->setLogo($newfile);
+            $this->_em->persist($cmyobj);
+            try {
+                $this->_em->flush();
+            } catch (Exception $e) {
+                var_dump($e);
+                return;
+            }
+        }
+    }
 }
