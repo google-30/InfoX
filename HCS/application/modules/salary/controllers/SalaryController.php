@@ -567,5 +567,20 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $sheetprx = $tmparr[0];
         $cmyobj = $this->_companyinfo->findOneBy(array("sheetprx"=>$sheetprx));
         $this->view->company = $cmyobj;
+        
+        $defaultdate = new Datetime("now");
+        $defaultdatestr = $defaultdate->format("d/m/Y");
+        
+        $date = $this->getParam("date", "");
+        if($date == "")
+        {
+            $receiptdate = $defaultdatestr;
+        }
+        else
+        {
+            $dateobj = new Datetime($date);
+            $receiptdate = $dateobj->format("d/m/Y");
+        }
+        $this->view->receiptdate = $receiptdate;
     }
 }

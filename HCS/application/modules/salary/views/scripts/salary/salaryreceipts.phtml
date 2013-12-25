@@ -25,6 +25,8 @@
         $cmyfullnamechs = $company->getFullnamechs();
         $cmyfullnameeng = $company->getFullnameeng();
     }
+    
+    $receiptdate=$this->receiptdate;
     ?>
     <head>
         <meta charset="utf-8">
@@ -147,7 +149,7 @@
 
                     $normalpay = $tmp->getNormalsalary();
                     $otpay = $tmp->getOtsalary();
-                    $salary = $tmp->getSalary();
+                    $salary = money_format('%i', $tmp->getSalary());
                     $allowance = "";
                     $totalsalary = $normalpay + $otpay;
                     $fullmth = $tmp->getFullmonaward() ? "$" . $tmp->getFullmonaward() : "";
@@ -171,7 +173,8 @@
                     $tr = "<tr>";
                     $tdname = '<td class="tdstayleft">工人姓名/Name:&nbsp;<u>' . "&nbsp;$namechs&nbsp;&nbsp;$nameeng&nbsp;" . '</u></td>';
                     $tdeeeno = '<td class="tdstaycenter">公司编号:&nbsp;' . $eeeno . '</td>';
-                    $tddate = '<td class="tdstayright">日期/Date:&nbsp;' . $nowdatestr . '</td>';
+                    //$tddate = '<td class="tdstayright">日期/Date:&nbsp;' . $nowdatestr . '</td>';
+                    $tddate = '<td class="tdstayright">日期/Date:&nbsp;' . $receiptdate . '</td>';
                     $tr .= $tdname . $tdeeeno . $tddate;
                     $tr .= "</tr>";
                     //$tabhtml .= $tr;

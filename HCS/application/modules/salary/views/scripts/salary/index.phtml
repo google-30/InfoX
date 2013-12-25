@@ -9,24 +9,56 @@
             "iDisplayLength": 50,
             "bRetrieve": true,
         });
-
-   
     });
 
-        $('#salarymonth').bind('datebox', function(e, passed) {
-            if (passed.method === 'close') {
-                //$('element').datebox('disable');
-                var val = $(this).val();
-                alert(val);
-            }
-        });
-        $('#receiptdate').bind('datebox', function(e, passed) {
-            if (passed.method === 'close') {
-                //$('element').datebox('disable');
-                var val = $(this).val();
-                alert(val);
-            }
-        });     
+    $('#salarymonth').bind('datebox', function(e, passed) {
+        if (passed.method === 'close') {
+            //$('element').datebox('disable');
+            var val = $(this).val();
+            //alert(val);
+            var res = val.substring(0, 7);
+            $("#salaryrecords").prev(".ui-btn-inner").children().text('详细工资 ' + res);
+        }
+    });
+    $('#receiptdate').bind('datebox', function(e, passed) {
+        if (passed.method === 'close') {
+            //$('element').datebox('disable');
+            var val = $(this).val();
+            //alert(val);
+            //var res = val.substring(0, 7);            
+            $("#salaryreceipts").prev(".ui-btn-inner").children().text('工资收据 ' + val);
+        }
+    });
+
+    function opensalaryrecords()
+    {
+        var date = $('#salarymonth').val();
+        var res = date.substring(0, 7);
+
+        var sheet = $("#sheetselect").val();
+        var url = "/salary/salary/salarybymonth?sheet=" + sheet;
+        url += "&month=" + res;
+        OpenInNewTab(url);
+    }
+
+    function opensalaryreceipts()
+    {
+        var date = $('#salarymonth').val();
+        var res = date.substring(0, 7);
+        var date = $('#receiptdate').val();
+
+        var sheet = $("#sheetselect").val();
+        var url = "/salary/salary/salaryreceipts?sheet=" + sheet;
+        url += "&month=" + res;
+        url += "&date=" + date;
+        OpenInNewTab(url);
+    }
+
+    function OpenInNewTab(url)
+    {
+        var win = window.open(url, '_blank');
+        win.focus();
+    }
 
     $("#sheetselect").change(function() {
         var sheetname = $(this).val();
@@ -38,18 +70,20 @@
         window.location = url;
     }
 
-    function gensalarydata(month)
-    {
-        //alert(month);
-
-        var sheet = $("#sheetselect").val();
-        $.post("/salary/salary/gensalaryrecords", {sheet: sheet, month: month},
-        function(data) {
-            alert("工资数据已生成");
-            //console.log(data);
-            //window.location.reload();
-        })
-    }
+    /*
+     function gensalarydata(month)
+     {
+     //alert(month);
+     
+     var sheet = $("#sheetselect").val();
+     $.post("/salary/salary/gensalaryrecords", {sheet: sheet, month: month},
+     function(data) {
+     alert("工资数据已生成");
+     //console.log(data);
+     //window.location.reload();
+     })
+     }
+     */
 </script>
 <?php
 $sheetarr = $this->sheetarr;
@@ -80,10 +114,14 @@ $thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thism
     </div>
 
     <div class="ui-block-a">
-        <button data-mini="true" data-theme="a">详细工资</button>            
+        <!--<button data-mini="true" data-theme="a" id="salaryrecords">详细工资</button>-->
+        <input type="button" id="salaryrecords" value="详细工资" data-mini="true" data-theme="a" 
+               onclick="opensalaryrecords()">
     </div>
     <div class="ui-block-b">        
-        <button data-mini="true" data-theme="a">工资收据</button>        
+        <!--<button data-mini="true" data-theme="a" id="salaryreceipts">工资收据</button>-->
+        <input type="button" id="salaryreceipts" value="工资收据" data-mini="true" data-theme="a" 
+               onclick="opensalaryreceipts()">        
     </div>
 
 </div>
