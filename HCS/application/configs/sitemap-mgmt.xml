@@ -30,7 +30,7 @@
 	        </worker>
 
             <workerexpire>
-		    <label>工人证件过期</label>
+		    <label>证件过期</label>
 		    <module>worker</module>
 		    <controller>manage</controller>
 		    <action>workerexpire</action>
@@ -38,18 +38,8 @@
 		    <privilege>view</privilege>
 	        </workerexpire>
 
-            <!--
-            <workersalary>
-		    <label>工人工资管理</label>
-		    <module>worker</module>
-		    <controller>salary</controller>
-		    <action>index</action>
-		    <resource>worker:salary</resource>
-		    <privilege>view</privilege>
-	        </workersalary>
-            -->
             <workerarchive>
-		    <label>存档工人信息</label>
+		    <label>存档信息</label>
 		    <module>worker</module>
 		    <controller>archive</controller>
 		    <action>index</action>
@@ -70,7 +60,7 @@
         </workermodules>
 
         <salarymodules>	
-	    <label>工资管理</label>
+	    <label>考勤工资</label>
 	    <uri>#salarymodules</uri>
 	    <class>popup</class>
 	    <pages>
@@ -93,7 +83,7 @@
 	        </attendance>
 	    
             <workersalary>
-		    <label>工资记录</label>
+		    <label>工资管理</label>
 		    <module>salary</module>
 		    <controller>salary</controller>
 		    <action>index</action>
@@ -128,7 +118,7 @@
 	        </material>
  
 	        <emachinery>
-		    <label>电动机具管理</label>
+		    <label>电机管理</label>
 		    <module>material</module>
 		    <controller>emachinery</controller>
 		    <action>index</action>
@@ -137,7 +127,7 @@
 	        </emachinery>
 
 	        <materialtype>
-		    <label>材料类型定义</label>
+		    <label>材料类型</label>
 		    <module>material</module>
 		    <controller>type</controller>
 		    <action>index</action>

@@ -1,10 +1,32 @@
+<link rel="stylesheet"  href="/common/datebox/jqm-datebox-1.1.0.css" /> 
+<script src="/common/datebox/jqm-datebox-1.1.0.core.js"></script>
+<script src="/common/datebox/jqm-datebox-1.1.0.mode.calbox.js"></script>
+<script src="/common/datebox/jqm-datebox-1.1.0.mode.datebox.js"></script>
+
 <script>
     $(function() {
         $('#Workersdata').dataTable({
             "iDisplayLength": 50,
             "bRetrieve": true,
         });
+
+   
     });
+
+        $('#salarymonth').bind('datebox', function(e, passed) {
+            if (passed.method === 'close') {
+                //$('element').datebox('disable');
+                var val = $(this).val();
+                alert(val);
+            }
+        });
+        $('#receiptdate').bind('datebox', function(e, passed) {
+            if (passed.method === 'close') {
+                //$('element').datebox('disable');
+                var val = $(this).val();
+                alert(val);
+            }
+        });     
 
     $("#sheetselect").change(function() {
         var sheetname = $(this).val();
@@ -27,7 +49,6 @@
             //console.log(data);
             //window.location.reload();
         })
-
     }
 </script>
 <?php
@@ -46,6 +67,28 @@ $lastmonthurl = "/salary/salary/salarybymonth?sheet=$sheet&month=$lastmonth";
 
 $lastmonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$lastmonth";
 $thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thismonth";
+?>
+
+<div class="ui-grid-a">
+    <div class="ui-block-a">
+        <input id="salarymonth" placeholder="选择详细工资输出月份" 
+               data-role="datebox" data-options='{"mode":"datebox"}'>
+    </div>
+    <div class="ui-block-b">
+        <input id="receiptdate" placeholder="选择工资收据生成日期" 
+               data-role="datebox" data-options='{"mode":"datebox"}'>
+    </div>
+
+    <div class="ui-block-a">
+        <button data-mini="true" data-theme="a">详细工资</button>            
+    </div>
+    <div class="ui-block-b">        
+        <button data-mini="true" data-theme="a">工资收据</button>        
+    </div>
+
+</div>
+<hr>
+<?php
 $options = "";
 foreach ($sheetarr as $tmp) {
     if ($sheet == $tmp) {
@@ -60,28 +103,7 @@ $selects = '<select data-mini="true" id="sheetselect">';
 $selects.=$options;
 $selects.='</select>';
 echo $selects;
-?>
 
-<div class="ui-grid-a">
-    <div class="ui-block-a"><a href="<?= $lastmonthurl ?>" target="_blank">
-            <button data-mini="true" data-theme="a">查看详细工资(<?= $lastmonth ?>)</button></a>
-    </div>
-    <div class="ui-block-b"><a href="<?= $lastmonthpayslipsurl ?>" target="_blank">
-            <button data-mini="true" data-theme="a">查看工资单(<?= $lastmonth ?>)</button></a>
-    </div>
-
-    <div class="ui-block-a"><a href="<?= $thismonthurl ?>" target="_blank">
-            <button data-mini="true" data-theme="a">查看详细工资(<?= $thismonth ?>)</button></a>
-    </div>
-    <div class="ui-block-b"><a href="<?= $thismonthpayslipsurl ?>" target="_blank">
-            <button data-mini="true" data-theme="a">查看工资单(<?= $thismonth ?>)</button></a>
-    </div>
-
-    <div class="ui-block-a"><a href="#"><button data-mini="true" data-theme="a">查看详细工资历史</button></a></div>
-    <div class="ui-block-b"><a href="#"><button data-mini="true" data-theme="a">查看工资单历史</button></a></div>
-</div>
-
-<?php
 $onswitches = array(
     "sn" => "S/N", "eeeno" => "E'ee No.", "namechs" => "Name Chs", "nameeng" => "Name Eng", "wpno" => "WP No.",
     "ppno" => "PP No.", "rate" => "RATE",);
