@@ -33,6 +33,12 @@
     function opensalaryrecords()
     {
         var date = $('#salarymonth').val();
+        if (date == "" || !date)
+        {
+            $('#salarymonth').datebox('open');
+            return;
+        }
+
         var res = date.substring(0, 7);
 
         var sheet = $("#sheetselect").val();
@@ -44,8 +50,20 @@
     function opensalaryreceipts()
     {
         var date = $('#salarymonth').val();
+        if (date == "" || !date)
+        {
+            alert("请选择工资月份和收据日期");
+            return;
+        }
+
         var res = date.substring(0, 7);
         var date = $('#receiptdate').val();
+        if (date == "" || !date)
+        {
+            alert("请选择工资月份和收据日期");
+            return;
+        }
+
 
         var sheet = $("#sheetselect").val();
         var url = "/salary/salary/salaryreceipts?sheet=" + sheet;

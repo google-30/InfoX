@@ -132,7 +132,8 @@ class Salary_SalaryController extends Zend_Controller_Action {
             }
             $options .= $option;
         }
-        $workersel = '<select id="workersel" data-theme="b" data-mini="true">' . $options . "</select>";
+        $workersel = '<select id="workersel" data-theme="b" data-mini="true">'
+                . '<option value=0>&nbsp;</option>' . $options . "</select>";
 
         $options = '<option value="all">All</options>';
         foreach ($yearsarr as $year) {

@@ -16,7 +16,7 @@
     $salarytabs = $this->salarytabs;
     $salaryall = $this->salaryall;
     $salaryallformat = $this->salaryallformat;
-    
+
     $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
     ?>
     <head>
@@ -99,6 +99,24 @@
             function redirect(url) {
                 window.location = url;
             }
+
+            function opensalaryreceipts()
+            {
+                var sheet = $("#sheetsel").val();
+                var year = $("#yearsel").val();
+                var worker = $("#workersel").val();
+                var url = "/salary/salary/salaryreceipts?sheet=" + sheet;                
+                url += "&year=" + year;
+                url += "&wid=" + worker;
+                //url += "&date=" + date;
+                OpenInNewTab(url);
+            }
+
+            function OpenInNewTab(url)
+            {
+                var win = window.open(url, '_blank');
+                win.focus();
+            }
         </script>
         <div data-role="page">
 
@@ -119,36 +137,38 @@
                     <div class="ui-block-b"><?= $workersel ?></div>                    
                     <div class="ui-block-c"><?= $yearsel ?></div>
                     <div class="ui-block-d">
-                        <a href="<?= $salaryreceiptsurl ?>" data-mini="true" data-role="button" data-theme="b" target="_blank">
+                        <!--<a href="<?= $salaryreceiptsurl ?>" data-mini="true" data-role="button" data-theme="b" target="_blank">
                             工资单
-                        </a>
+                        </a>-->
+                        <input type="button" value="工资收据" onclick="opensalaryreceipts()" 
+                               data-mini="true" data-theme="b">
                     </div>
                 </div>
                 <hr>
                 <span>总工资:&nbsp; <strong><?= $salaryallformat ?></strong></span>
                 <hr>
-<?php
-$divno = 0;
-$alltabs = "";
-if (count($salarytabs)) {
-    foreach ($salarytabs as $tmp) {
-        $alltabs = "";
+                <?php
+                $divno = 0;
+                $alltabs = "";
+                if (count($salarytabs)) {
+                    foreach ($salarytabs as $tmp) {
+                        $alltabs = "";
 
-        $tab0 = $tmp[0]; // worker
-        $tab1 = $tmp[1]; // salary
-        $tab2 = $tmp[2]; // attend
-        $alltabs .= $tab0;
-        $alltabs .= $tab1;
-        $alltabs .= $tab2;
-        //$alltabs .= "<br>";
+                        $tab0 = $tmp[0]; // worker
+                        $tab1 = $tmp[1]; // salary
+                        $tab2 = $tmp[2]; // attend
+                        $alltabs .= $tab0;
+                        $alltabs .= $tab1;
+                        $alltabs .= $tab2;
+                        //$alltabs .= "<br>";
 
-        $divno++;
-        echo "<div id=worker$divno>
+                        $divno++;
+                        echo "<div id=worker$divno>
                             " . $alltabs . "</div><br>
                             ";
-    }
-}
-?>
+                    }
+                }
+                ?>
             </div><!-- /content -->
 
             <!--<div data-role="footer">
