@@ -1,13 +1,16 @@
-<?
+<?php
 /**
  * Define some roles in infox, roles are related with AclBuilder.php
  */
 
 $tuples = array( 
     /* username, role, rolechs */
-	 array( "manager", "经理",),
+	 /*array( "manager", "经理",),
 	 array( "leader", "工长",),
-	 array( "staff", "管理人员"),
+	 array( "staff", "管理人员"),*/
+         array("admin", "admin"),
+         array("hr&payroll", "hr&payroll"),
+         array("material", "material"),
 	);
 
 foreach( $tuples as $tuple ){
@@ -19,5 +22,3 @@ foreach( $tuples as $tuple ){
 }
 
 $em->flush();
-
-?>
