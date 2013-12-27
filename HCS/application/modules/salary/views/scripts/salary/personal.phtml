@@ -105,10 +105,9 @@
                 var sheet = $("#sheetsel").val();
                 var year = $("#yearsel").val();
                 var worker = $("#workersel").val();
-                var url = "/salary/salary/salaryreceipts?sheet=" + sheet;                
+                var url = "/salary/salary/salaryreceiptsbyworker?";                
                 url += "&year=" + year;
-                url += "&wid=" + worker;
-                //url += "&date=" + date;
+                url += "&id=" + worker;                
                 OpenInNewTab(url);
             }
 
@@ -137,9 +136,6 @@
                     <div class="ui-block-b"><?= $workersel ?></div>                    
                     <div class="ui-block-c"><?= $yearsel ?></div>
                     <div class="ui-block-d">
-                        <!--<a href="<?= $salaryreceiptsurl ?>" data-mini="true" data-role="button" data-theme="b" target="_blank">
-                            工资单
-                        </a>-->
                         <input type="button" value="工资收据" onclick="opensalaryreceipts()" 
                                data-mini="true" data-theme="b">
                     </div>

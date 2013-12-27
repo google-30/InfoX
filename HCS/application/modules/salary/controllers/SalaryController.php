@@ -600,85 +600,58 @@ class Salary_SalaryController extends Zend_Controller_Action {
     public function salaryreceiptsbyworkerAction() {
         infox_common::turnoffLayout($this->_helper);
 
-        $sheetarr = infox_worker::getSheetarr();
-        $this->view->sheetarr = $sheetarr;
-
         $wid_req = $this->getParam("id", 0);
-        $workerobj = null;
-        $workerarr = array();
-
-        if ($wid_req == 0) { // change sheet
-            $sheet_req = $this->getParam("sheet", "HC.C");
-        } else {
-            $workerobj = $this->_workerdetails->findOneBy(array('id' => $wid_req));
-            if (!$workerobj) {
-                return;
-            }
-
-            $sheet_req = $workerobj->getSheet();
+        $workerobj = $this->_workerdetails->findOneBy(array('id' => $wid_req));
+        if (!$workerobj) {
+            return;
         }
-
-        $salaryrecords = $this->_salaryall->findAll();
+        $sheet = $workerobj->getSheet();
+        
+        $salaryrecords = $this->_salaryall->findBy(array("worker" => $workerobj));
         if (!count($salaryrecords)) {
             return;
         }
+        $year_req = $this->getParam("year", "all");
 
-        foreach ($salaryrecords as $tmp) {
-            $workertmp = $tmp->getWorker();
-            $sheettmp = $workertmp->getSheet();
-            $widtmp = $workertmp->getId();
-            if ($sheettmp == $sheet_req) {
-                if (!key_exists($widtmp, $workerarr)) {
-                    $workerarr[$widtmp] = $workertmp;
+        $workerrecords = array();
+        if ($year_req == "all") {
+            $workerrecords = $salaryrecords;
+        } else {
+            foreach ($salaryrecords as $tmp) {
+                $workertmp = $tmp->getWorker();
+                $monthobj = $tmp->getMonth();
+                $year = $monthobj->format("Y");
+                if ($year == $year_req) {
+                    $workerrecords[] = $tmp;
                 }
             }
         }
 
-        if ($wid_req == 0) { // change sheet
-            $workerobj = reset($workerarr);
-        }
-
-        $year_req = $this->getParam("year", "all");
-
-        $records = $this->_salaryall->findBy(array('worker' => $workerobj));
-
-        $recordsbyyear = array();
-        $yearsarr = array();
-
-        foreach ($records as $tmp) {
-            $date = $tmp->getMonth();
-            $year = $date->format("Y");
-            if (!in_array($year, $yearsarr)) {
-                $yearsarr[] = $year;
-            }
-
-            if ($year == $year_req) {
-                $recordsbyyear[] = $tmp;
-            }
-
-            $worker = $tmp->getWorker();
-            $wid = $worker->getId();
-            if (!key_exists($wid, $workerarr)) {
-                $workerarr[$wid] = $worker;
-            }
-        }
-
-        sort($yearsarr);
         $this->view->worker = $workerobj;
-        $this->view->yearsarr = $yearsarr;
-        $recordsall = ($year_req == "all") ? $records : $recordsbyyear;
-        $salaryall = 0;
-        foreach ($recordsall as $record) {
-            $salary = $record->getSalary();
-            $salaryall += $salary;
-        }
-        $this->view->salaryall = $salaryall;
-        setlocale(LC_MONETARY, 'en_US');
-        $salaryallformat = money_format('%i', $salaryall);
-        $this->view->salaryallformat = $salaryallformat;
-        $this->view->recordsbyyear = $recordsall;
-        $this->view->workerarr = $workerarr;
 
+        $tmparr = explode(".", $sheet);
+        $sheetprx = $tmparr[0];
+        $cmyobj = $this->_companyinfo->findOneBy(array("sheetprx" => $sheetprx));
+        $this->view->company = $cmyobj;
+
+        $workerrecordswdate = array();
+        foreach ($workerrecords as $tmp) {
+            $monthobj = $tmp->getMonth();
+            $receiptobj = $this->_salaryreceipt->findOneBy(array("month" => $monthobj));
+            $receiptdate = $receiptobj ? $receiptobj->getDate() : null;
+            $tmparr = array();
+            $tmparr["receiptdate"] = $receiptdate;
+            $tmparr["record"] = $tmp;
+
+            $workerrecordswdate[] = $tmparr;
+        }
+
+        usort($workerrecordswdate, $this->sortWorkerrecordswdate);
+        $this->view->salaryrecords = $workerrecordswdate;
+    }
+
+    private function sortWorkerrecordswdate($a, $b) {
+        return strcmp($a['record']->getMonth()->format("Y-m-d"), $b['record']->getMonth()->format("Y-m-d"));
     }
 
 }

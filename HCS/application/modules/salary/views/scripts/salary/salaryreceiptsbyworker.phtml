@@ -1,0 +1,190 @@
+<!DOCTYPE html> 
+<html>
+    <?php
+    $salaryrecords = $this->salaryrecords;
+    $logopath = "";
+    $cmyfullnamechs = "";
+    $cmyfullnameeng = "";
+
+    $company = $this->company;
+    if ($company) {
+        $logopath = "/uploads/" . $company->getLogo();
+        $cmyfullnamechs = $company->getFullnamechs();
+        $cmyfullnameeng = $company->getFullnameeng();
+    }
+
+    $worker = $this->worker;
+    if ($worker) {
+        $workername = $worker->getNamechs() ? $worker->getNamechs() : $worker->getNameeng();
+    }
+    ?>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title>工资收据&nbsp;-&nbsp;<?= $workername ?></title> 
+        <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+        <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+        <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+        <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+    </head> 
+
+    <body> 
+        <style>
+            body {
+                font-family:"楷体","楷体_GB2312","Times New Roman",Georgia,Serif;
+            }
+
+            .tabsalary1 { table-layout: fixed; width:100%; font-size:x-small;}
+            .tabsalary2 { 
+                table-layout: fixed; 
+                width:100%; 
+                border-collapse:collapse;     
+                font-size:xx-small;
+                margin: 5px;
+            }
+            .tabsalary2 td { text-align:center; border:1px solid black; padding:5px; }
+            .tabsalary3 { width:100%; font-size:x-small;}
+
+            .tdstayright { text-align: right; }
+            .tdstayleft { text-align: left; }
+            .tdstaycenter { text-align: center; }
+
+            @media all {
+                .page-break	{ display: none; }
+            }
+
+            @media print {
+                .page-break	{ display: block; page-break-before: always; }
+            }
+
+            .ui-footer .ui-btn-icon-notext, .ui-header .ui-btn-icon-notext {
+                top: 0px;
+            }
+        </style>
+        <script>
+            $(function() {
+            });
+        </script>
+        <div data-role="page">
+            <div data-role="header" data-theme="b">
+            </div>
+
+            <div data-role="content">
+                <div id="error">
+                    <?= $this->error ?>
+                </div>
+                <?php
+                $counter = 0;
+                $srs = $salaryrecords;
+                $tabhtml = "";
+                if (count($salaryrecords)) {
+
+                    foreach ($srs as $tmp) {
+                        $counter++;
+
+                        $receiptdate = $tmp['receiptdate'] ? $tmp['receiptdate']->format("m/d/Y") : "";
+                        $monthobj = $tmp["record"]->getMonth();
+                        $year = $monthobj->format('Y');
+                        $month1 = $monthobj->format('m');
+                        $month2 = $monthobj->format('M');
+                        $nowobj = new Datetime("now");
+                        $nowdatestr = $nowobj->format("d/m/Y");
+                        $datestr = '月份/Mth:' . $year . "年" . $month1 . "月/" . $month2 . "-" . $year;
+                        $header = '<table class="tabsalary1">'
+                                . '<tr>'
+                                . '<td class="tdstayleft">'
+                                . '<table>'
+                                . '<tr><td rowspan=2><img src="' . $logopath . '" alt="" class="logo" id="pic" name="pic" width="55"></td>'
+                                . "<td>$cmyfullnameeng</td></tr>"
+                                . "<tr><td>$cmyfullnamechs</td></tr>"
+                                . '</table>'
+                                . '</td>'
+                                . '<td></td><td class="tdstayright">' . $datestr . "</td>"
+                                . "</tr>";
+                        $header.='<tr><td></td><td class="tdstaycenter">Salary Receipt/工资收据</td><td></td></tr>';
+
+                        $record = $tmp["record"];
+                        $worker = $record->getWorker();
+                        $namechs = $worker->getNamechs();
+                        $nameeng = $worker->getNameeng();
+                        $eeeno = $worker->getEeeno();
+
+                        $normalpay = $record->getNormalsalary();
+                        $otpay = $record->getOtsalary();
+                        $salary = money_format('%i', $record->getSalary());
+                        $allowance = "";
+                        $totalsalary = $normalpay + $otpay;
+                        $fullmth = $record->getFullmonaward() ? "$" . $record->getFullmonaward() : "";
+                        $foodpay = $record->getFoodpay();
+                        $foodpaystr = $foodpay ? "$(" . abs($foodpay) . ")" : "";
+                        $rtmonthpay = $record->getRtmonthpay();
+                        $rtmonthpaystr = $rtmonthpay ? "$(" . abs($rtmonthpay) . ")" : "";
+                        $utfee = $record->getUtfee();
+                        $utfeestr = $utfee ? "$(" . abs($utfee) . ")" : "";
+                        $utallowance = $record->getUtallowance();
+                        $utallowancestr = $utallowance ? "$$utallowance" : "";
+                        $otherfee = $record->getOtherfee();
+                        //echo ((float)$otherfee) . "&nbsp;";
+                        $otherfeestr = substr($otherfee, 0, 1) == "-" ? "$(" . substr($otherfee, 1) . ")" : $otherfee;
+                        //$otherfeestr = (floatval($otherfee))>0 ? "$$otherfee" : "$($otherfee)";
+                        $otherfeestr = $otherfee ? $otherfeestr : "";
+                        $netpay = $record->getSalary();
+                        $remark = $record->getRemark();
+                        $inadvance = $record->getInadvance();
+                        $inadvancestr = $utfee ? "$(" . abs($inadvance) . ")" : "";
+                        $tr = "<tr>";
+                        $tdname = '<td class="tdstayleft">工人姓名/Name:&nbsp;<u>' . "&nbsp;$namechs&nbsp;&nbsp;$nameeng&nbsp;" . '</u></td>';
+                        $tdeeeno = '<td class="tdstaycenter">公司编号:&nbsp;' . $eeeno . '</td>';
+                        //$tddate = '<td class="tdstayright">日期/Date:&nbsp;' . $nowdatestr . '</td>';
+                        $tddate = '<td class="tdstayright">日期/Date:&nbsp;' . $receiptdate . '</td>';
+                        $tr .= $tdname . $tdeeeno . $tddate;
+                        $tr .= "</tr>";
+                        //$tabhtml .= $tr;
+                        $tabhtml.=$header . $tr . "</table>";
+
+                        $tds = "<td>基本工资<br>Basic Salary</td><td>加班工资<br>OT Salary</td>
+                        <td>补贴<br>Allowance</td><td>工资总计<br>Total Salary</td>
+                        <td>满勤奖<br>Full Mth Attendance</td><td>扣" . $month1 . "月餐费<br>Less Meal Fee</td>
+                            <td>预扣税<br>Advance Less Tax</td><td>水电生活费<br>Living Fee</td>
+                            <td>水电生活补贴<br>Allowance For Living</td><td>其他补扣费用<br>Other Addition or Deduction</td>
+                            <td>" . $month1 . "月实发工资<br>Net Pay for " . $month2 . "</td><td>工人确认签字<br>Signature Confirmed</td>";
+
+                        $tddata = "<td>$" . "$normalpay</td><td>$" . "$otpay</td><td>" . "$allowance</td><td>$" . "$totalsalary</td><td>"
+                                . "$fullmth</td><td>" . "$foodpaystr</td><td>" . "$rtmonthpaystr</td><td>"
+                                . "$utfeestr</td><td>" . "$utallowancestr</td><td>" . "$otherfeestr</td><td>$" . "$salary</td><td></td>";
+                        $trs = "<tr>$tds</tr><tr>$tddata</tr>";
+                        $datatab = '<table class="tabsalary2">' . $trs . "</table>";
+
+                        $trs = '<tr><td style="width:17%">其他费用补扣说明：</td><td>' . $remark . "</td></tr>";
+                        $trs.= '<tr><td>备注：</td><td>本人同意并已领取该月工资。如该月工资有问题，本人会在领取工资后的两个月之内及时与公司核查。超过两个月后，本人不再追讨任何工资纠纷。</td></tr>';
+                        $trs.= "<tr><td>Remark：</td><td>I have agreed and received the abovesaid salary. If any discrepancy on the abovesaid salary, I shall immediately check with the company within two months from date of receipt. Any time elapsing two months, I shall never ask more any additional amount.</td></tr>";
+                        $extratab = '<table class="tabsalary3">' . $trs . '</table>';
+
+                        if ($counter == 3) {
+                            $breaker = '<div class="page-break"></div>';
+                            $counter = 0;
+                        } else {
+                            $breaker = "";
+                        }
+                        $tabhtml .= $datatab . $extratab . "<hr><br>$breaker";
+                    }
+                }
+                else
+                {
+                    $tabhtml = "No records found in Database";
+                }
+                echo $tabhtml;
+                ?>
+
+            </div><!-- /content -->
+
+            <!--<div data-role="footer">
+                <h4>Footer content</h4>
+            </div>--><!-- /footer -->
+
+        </div><!-- /page -->
+
+    </body>
+</html>
+
