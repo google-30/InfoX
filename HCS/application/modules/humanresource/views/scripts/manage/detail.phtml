@@ -68,7 +68,8 @@ $othercontact=$maindata->getOthercontact();
 $remark=$maindata->getRemark();
 $username=$maindata->getUsername();
 $password=$maindata->getPassword();
-$roleid=$maindata->getRole()->getId();
+$role=$maindata->getRole(); 
+$roleid= $role ? $role->getId(): 0;
 }
      
 ?>

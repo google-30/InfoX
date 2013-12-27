@@ -15,6 +15,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->_siteattendance = $this->_em->getRepository('Synrgic\Infox\Siteattendance');
         $this->_salaryall = $this->_em->getRepository('Synrgic\Infox\Workersalaryall');
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
+        $this->_salaryreceipt = $this->_em->getRepository('Synrgic\Infox\Salaryreceipt');
     }
 
     public function indexAction() {
@@ -32,7 +33,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $wid_req = $this->getParam("id", 0);
         $workerobj = null;
         $workerarr = array();
-                
+
         if ($wid_req == 0) { // change sheet
             $sheet_req = $this->getParam("sheet", "HC.C");
         } else {
@@ -59,7 +60,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
                 }
             }
         }
-        
+
         if ($wid_req == 0) { // change sheet
             $workerobj = reset($workerarr);
         }
@@ -76,7 +77,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
             $year = $date->format("Y");
             if (!in_array($year, $yearsarr)) {
                 $yearsarr[] = $year;
-            } 
+            }
 
             if ($year == $year_req) {
                 $recordsbyyear[] = $tmp;
@@ -94,14 +95,13 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->view->yearsarr = $yearsarr;
         $recordsall = ($year_req == "all") ? $records : $recordsbyyear;
         $salaryall = 0;
-        foreach ($recordsall as $record)
-        {
+        foreach ($recordsall as $record) {
             $salary = $record->getSalary();
             $salaryall += $salary;
         }
         $this->view->salaryall = $salaryall;
         setlocale(LC_MONETARY, 'en_US');
-        $salaryallformat = money_format('%i', $salaryall) ;
+        $salaryallformat = money_format('%i', $salaryall);
         $this->view->salaryallformat = $salaryallformat;
         $this->view->recordsbyyear = $recordsall;
         $this->view->workerarr = $workerarr;
@@ -552,36 +552,133 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $records = $salaryrepo->findBy(array("month" => $monthobj));
 
         $salaryrecords = array();
-        foreach($records as $tmp)
-        {
+        foreach ($records as $tmp) {
             $worker = $tmp->getWorker();
-            if($sheet == $worker->getSheet())
-            {
+            if ($sheet == $worker->getSheet()) {
                 $salaryrecords[] = $tmp;
             }
         }
-        
+
         $this->view->salaryrecords = $salaryrecords;
         $this->view->monthobj = $monthobj;
-        
+
         $tmparr = explode(".", $sheet);
         $sheetprx = $tmparr[0];
-        $cmyobj = $this->_companyinfo->findOneBy(array("sheetprx"=>$sheetprx));
+        $cmyobj = $this->_companyinfo->findOneBy(array("sheetprx" => $sheetprx));
         $this->view->company = $cmyobj;
-        
+
         $defaultdate = new Datetime("now");
         $defaultdatestr = $defaultdate->format("d/m/Y");
-        
+
         $date = $this->getParam("date", "");
-        if($date == "")
-        {
+        if ($date == "") {
             $receiptdate = $defaultdatestr;
-        }
-        else
-        {
+            $receiptdateobj = $defaultdate;
+        } else {
             $dateobj = new Datetime($date);
             $receiptdate = $dateobj->format("d/m/Y");
+            $receiptdateobj = $dateobj;
         }
         $this->view->receiptdate = $receiptdate;
+
+        // store receipt date
+        $receiptobj = $this->_salaryreceipt->findOneBy(array("month" => $monthobj));
+        if (!$receiptobj) {
+            $receiptobj = new \Synrgic\Infox\Salaryreceipt();
+        }
+        $receiptobj->setDate($receiptdateobj);
+        $receiptobj->setMonth($monthobj);
+        $this->_em->persist($receiptobj);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
     }
+
+    public function salaryreceiptsbyworkerAction() {
+        infox_common::turnoffLayout($this->_helper);
+
+        $sheetarr = infox_worker::getSheetarr();
+        $this->view->sheetarr = $sheetarr;
+
+        $wid_req = $this->getParam("id", 0);
+        $workerobj = null;
+        $workerarr = array();
+
+        if ($wid_req == 0) { // change sheet
+            $sheet_req = $this->getParam("sheet", "HC.C");
+        } else {
+            $workerobj = $this->_workerdetails->findOneBy(array('id' => $wid_req));
+            if (!$workerobj) {
+                return;
+            }
+
+            $sheet_req = $workerobj->getSheet();
+        }
+
+        $salaryrecords = $this->_salaryall->findAll();
+        if (!count($salaryrecords)) {
+            return;
+        }
+
+        foreach ($salaryrecords as $tmp) {
+            $workertmp = $tmp->getWorker();
+            $sheettmp = $workertmp->getSheet();
+            $widtmp = $workertmp->getId();
+            if ($sheettmp == $sheet_req) {
+                if (!key_exists($widtmp, $workerarr)) {
+                    $workerarr[$widtmp] = $workertmp;
+                }
+            }
+        }
+
+        if ($wid_req == 0) { // change sheet
+            $workerobj = reset($workerarr);
+        }
+
+        $year_req = $this->getParam("year", "all");
+
+        $records = $this->_salaryall->findBy(array('worker' => $workerobj));
+
+        $recordsbyyear = array();
+        $yearsarr = array();
+
+        foreach ($records as $tmp) {
+            $date = $tmp->getMonth();
+            $year = $date->format("Y");
+            if (!in_array($year, $yearsarr)) {
+                $yearsarr[] = $year;
+            }
+
+            if ($year == $year_req) {
+                $recordsbyyear[] = $tmp;
+            }
+
+            $worker = $tmp->getWorker();
+            $wid = $worker->getId();
+            if (!key_exists($wid, $workerarr)) {
+                $workerarr[$wid] = $worker;
+            }
+        }
+
+        sort($yearsarr);
+        $this->view->worker = $workerobj;
+        $this->view->yearsarr = $yearsarr;
+        $recordsall = ($year_req == "all") ? $records : $recordsbyyear;
+        $salaryall = 0;
+        foreach ($recordsall as $record) {
+            $salary = $record->getSalary();
+            $salaryall += $salary;
+        }
+        $this->view->salaryall = $salaryall;
+        setlocale(LC_MONETARY, 'en_US');
+        $salaryallformat = money_format('%i', $salaryall);
+        $this->view->salaryallformat = $salaryallformat;
+        $this->view->recordsbyyear = $recordsall;
+        $this->view->workerarr = $workerarr;
+
+    }
+
 }
