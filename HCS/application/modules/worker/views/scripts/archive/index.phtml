@@ -104,16 +104,24 @@ $maindata = $this->maindata;
             <div class="ui-grid-d">
                 <?php
                 $onswitches = array(
-                    "eeeno" => "E'ee No.", "namechs" => "Name Chs", "nameeng" => "Name Eng", "wpno" => "WP No.",
-                    "ppno" => "PP No.", "resignation" => "Resignation");
+                    /* "namechs"=>"Name Chs","nameeng"=>"Name Eng", */ 
+                    "eeeno" => "E'ee No.", "name" => "Name ", "wpno" => "WP No.",
+                    "wpexpiry" => "WP Expiry", "doa" => "D.O.A", "issuedate" => "Date of Issue",
+                    "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B", 
+                    "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
 
                 $offswitches = array(
-                    "sn" => "S/N", "rate" => "RATE", "wpexpiry" => "WP Expiry", "doa" => "D.O.A", "issuedate" => "Date of Issue", "finno" => "Fin No.",
-                    "dob" => "D.O.B", "ppexpiry" => "PP Expiry", "pano" => "PA Reference  No.", "sbno" => "Security Bond No.",
-                    "securityexp" => "Security Exprity Date", "worktype" => "主要工种", "arrivaldate" => "Arrival Date", "medicaldate" => "Medical Date", "csoc" => "C.S.O.C", "medicalinsuranc" => "Medical Insurance", "workingsite" => "WORKING SITE", "dormitory" => "Dormitory",
-                    "hometown" => "区域", "education" => "教育程度", "age" => "年龄", "marital" => "婚姻状况",
-                    "constructionworker" => "建筑工", "applyfor" => "Apply For", "goodat" => "Good At", "contactno1" => "Contact No.1",
-                    "contactno2" => "Contact No.2", "remarks" => "Remarks(Agent)",);
+                    "worktype" => "主要工种", "arrivaldate" => "Arrival Date",
+                    "medicaldate" => "Medical Date", "medicalinsurance" => "Medical Insurance",
+                    "securityexp" => "Security Bond Expiry Date", "workingsite" => "Working Site",
+                    "dormitory" => "Dormitory", "goodat" => "Good At",
+                    "contactno1" => "Contact No.1", "contactno2" => "Contact No.2",
+                    "certificate" => "Certificate", "agent" => "Agent",
+                    "remarks" => "Remark", "hometown" => "区域",
+                    "education" => "教育程度", "age" => "年龄",
+                    "marital" => "婚姻状况", "constructionworker" => "建筑工",
+                    "applyfor" => "Apply For",
+                     );
 
                 $customtitles = $this->customtitles;
                 $offswitches["custom1"] = $customtitles[0];

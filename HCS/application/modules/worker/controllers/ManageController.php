@@ -79,8 +79,8 @@ class Worker_ManageController extends Zend_Controller_Action {
     public function workerexpireAction() {
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
         $this->view->sheet = $requestsheet = $this->getParam("sheet", $sheetarr[0]);
-        $this->view->paramarr = $paramarr = array("wpexpiry" => "Work Pass/工作准证到期",
-            "ppexpiry" => "Pass Port/护照到期", "csoc" => "Csoc/安全证到期", "securityexp" => "Security Bond Expiry",);
+        $this->view->paramarr = $paramarr = array("wpexpiry" => "Work Pass",
+            "ppexpiry" => "Pass Port", "csoc" => "Csoc", "securityexp" => "Security Bond Expiry Date",);
 
         $expiryarr = array();
 
@@ -268,17 +268,6 @@ class Worker_ManageController extends Zend_Controller_Action {
         return false;
     }
 
-    public function workerexpireAction1() {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('w', 'ws')
-                ->from('Synrgic\Infox\Worker', 'w')
-                ->leftJoin('w.workerskill', 'ws')
-                ->leftJoin('w.workercompanyinfo', 'wc');
-        $result = $qb->getQuery()->getResult();
-
-        $this->getSecurityexp($result);
-    }
-
     private function getSecurityexp($allworkers) {// get expired, 1 month, 2 monthes, worker list
         // http://stackoverflow.com/questions/10582108/how-can-i-compare-a-date-with-current-date-using-doctrine-2
         // $em->createQuery('SELECT d FROM test d WHERE d.expDate > CURRENT_DATE()');
@@ -382,19 +371,21 @@ class Worker_ManageController extends Zend_Controller_Action {
             return;
         }
 
-        $this->storeInfo($requests);
+        $wid = $this->storeInfo($requests);
         $this->_files = $_FILES;
 
-        $sheet = trim($this->getParam("sheet", ""));
-        $url = "/worker/manage?sheet=$sheet";
+        $this->storePic($wid);
+        
+        //$sheet = trim($this->getParam("sheet", ""));
+        //$url = "/worker/manage?sheet=$sheet";
+        $url = "/worker/manage/edit/id/" . $wid;
         $this->redirect($url);
     }
 
     private function storeInfo($requests) {
         $mode = $requests["mode"];
 
-        if ($mode == "Edit") {
-            //$workerid = $requests["workerid"];
+        if ($mode == "Edit") {            
             $workerid = $this->getParam("workerid", 0);
             $data = $this->_workerdetails->findOneBy(array('id' => $workerid));
 
@@ -408,7 +399,6 @@ class Worker_ManageController extends Zend_Controller_Action {
         }
 
         $sn = (int) $this->getParam("sn", "");
-        //echo "sn=$sn<br>"; return;        
         $eeeno = $this->getParam("eeeno", "");
         $nameeng = $this->getParam("nameeng", "");
         $namechs = $this->getParam("namechs", "");
@@ -426,8 +416,6 @@ class Worker_ManageController extends Zend_Controller_Action {
         $ppexpiry = $this->getParam("ppexpiry", "");
         $ppexpiry = ($ppexpiry == "") ? null : new Datetime($ppexpiry);
         $rate = $this->getParam("rate", "");
-        $pano = $this->getParam("pano", "");
-        $sbno = $this->getParam("sbno", "");
         $securityexp = $this->getParam("securityexp", "");
         $securityexp = ($securityexp == "") ? null : new Datetime($securityexp);
         $worktype = $this->getParam("worktype", "");
@@ -450,18 +438,21 @@ class Worker_ManageController extends Zend_Controller_Action {
         $contactno1 = $this->getParam("contactno1", "");
         $contactno2 = $this->getParam("contactno2", "");
         $certificate = $this->getParam("certificate", "");
-        $remarks = $this->getParam("remarks", "");
+        $remark = $this->getParam("remark", "");
+        $agent = $this->getParam("agent", "");
         $resignation = $this->getParam("resignation", "");
         $resignation = ($resignation == "") ? null : new Datetime($resignation);
         $sheet = trim($this->getParam("sheet", ""));
+        /*
         $currentrate = (float) $this->getParam("currentrate", 0);
         $monthrate = (float) $this->getParam("monthrate", 0);
+         * 
+         */
         /*
           $agent=$this->getParam("sn", "");
           $company=$this->getParam("sn", "");
           $race=$this->getParam("sn", "");
          */
-
 
         $data->setSn($sn);
         $data->setEeeno($eeeno);
@@ -476,8 +467,6 @@ class Worker_ManageController extends Zend_Controller_Action {
         $data->setDob($dob);
         $data->setPpexpiry($ppexpiry);
         $data->setRate($rate);
-        $data->setPano($pano);
-        $data->setSbno($sbno);
         $data->setSecurityexp($securityexp);
         $data->setWorktype($worktype);
         $data->setArrivaldate($arrivaldate);
@@ -496,11 +485,12 @@ class Worker_ManageController extends Zend_Controller_Action {
         $data->setContactno1($contactno1);
         $data->setContactno2($contactno2);
         $data->setCertificate($certificate);
-        $data->setRemarks($remarks);
+        $data->setRemark($remark);
+        $data->setAgent($agent);
         $data->setResignation($resignation);
         $data->setSheet($sheet);
-        $data->setCurrentrate($currentrate);
-        $data->setMonthrate($monthrate);
+        //$data->setCurrentrate($currentrate);
+        //$data->setMonthrate($monthrate);
 
         $this->_em->persist($data);
         try {
@@ -509,8 +499,67 @@ class Worker_ManageController extends Zend_Controller_Action {
             var_dump($e);
             return;
         }
+        
+        return $data->getId();
+    }
 
-        //$this->redirect("/worker/manage/");
+    private function storePic($workerid) {
+        // http://www.w3schools.com/php/php_file_upload.asp
+        $files = $this->_files;
+
+        echo "<br>";
+        $newfile = "";
+        $uploadpath = UPLOAD_WORKER;
+        $allowedExts = array("gif", "jpeg", "jpg", "png");
+        $extension = end(explode(".", $_FILES["file"]["name"]));
+        if ((($_FILES["file"]["type"] == "image/gif") 
+                || ($_FILES["file"]["type"] == "image/jpeg") 
+                || ($_FILES["file"]["type"] == "image/jpg") 
+                || ($_FILES["file"]["type"] == "image/pjpeg") 
+                || ($_FILES["file"]["type"] == "image/x-png") 
+                || ($_FILES["file"]["type"] == "image/png")) 
+                && ($_FILES["file"]["size"] < 10000000) 
+                //&& in_array($extension, $allowedExts)
+                ) {
+            if ($_FILES["file"]["error"] > 0) {
+                echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
+            } else {
+                echo "Upload: " . $_FILES["file"]["name"] . "<br>";
+                echo "Type: " . $_FILES["file"]["type"] . "<br>";
+                echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
+                echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
+
+                /*
+                  if (file_exists($uploadpath . $_FILES["file"]["name"]))
+                  {
+                  echo $_FILES["file"]["name"] . " already exists. ";
+                  }
+                  else
+                 */ {
+                    $picpath = $uploadpath . $workerid . "." . $extension;
+                    move_uploaded_file($_FILES["file"]["tmp_name"], $picpath);
+                    echo "Stored in: " . $picpath;
+                    $newfile = $workerid . "." . $extension;
+                }
+            }
+        } else {
+            //echo "Invalid file";
+        }
+        echo "<br>";
+
+        if ($newfile != "") {
+            $workerdata = $this->_workerdetails->findOneBy(array('id' => $workerid));
+            //$pic = '/data/uploads/workers/images/' . $newfile;
+            $pic = "/workers-pic/images/" . $newfile;
+            $workerdata->setPic($pic);
+            $this->_em->persist($workerdata);
+            try {
+                $this->_em->flush();
+            } catch (Exception $e) {
+                var_dump($e);
+                return;
+            }
+        }
     }
 
     public function add1Action() {
@@ -559,59 +608,8 @@ class Worker_ManageController extends Zend_Controller_Action {
 
         $this->storeInfo($requests);
         $this->_files = $_FILES;
-    }
-
-    private function storePic($workerid) {
-        // http://www.w3schools.com/php/php_file_upload.asp
-        $files = $this->_files;
-
-        echo "<br>";
-        $newfile = "";
-        $uploadpath = UPLOAD_WORKER;
-        $allowedExts = array("gif", "jpeg", "jpg", "png");
-        $extension = end(explode(".", $_FILES["file"]["name"]));
-        if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/jpg") || ($_FILES["file"]["type"] == "image/pjpeg") || ($_FILES["file"]["type"] == "image/x-png") || ($_FILES["file"]["type"] == "image/png")) && ($_FILES["file"]["size"] < 100000) && in_array($extension, $allowedExts)) {
-            if ($_FILES["file"]["error"] > 0) {
-                echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
-            } else {
-                echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-                echo "Type: " . $_FILES["file"]["type"] . "<br>";
-                echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-                echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
-
-                /*
-                  if (file_exists($uploadpath . $_FILES["file"]["name"]))
-                  {
-                  echo $_FILES["file"]["name"] . " already exists. ";
-                  }
-                  else
-                 */ {
-                    $picpath = $uploadpath . $workerid . "." . $extension;
-                    move_uploaded_file($_FILES["file"]["tmp_name"], $picpath);
-                    echo "Stored in: " . $picpath;
-                    $newfile = $workerid . "." . $extension;
-                }
-            }
-        } else {
-            //echo "Invalid file";
-        }
-        echo "<br>";
-
-        if ($newfile != "") {
-            $workerdata = $this->_worker->findOneBy(array('id' => $workerid));
-            //$pic = '/data/uploads/workers/images/' . $newfile;
-            $pic = "/workers-pic/images/" . $newfile;
-            $workerdata->setPic($pic);
-            $this->_em->persist($workerdata);
-            try {
-                $this->_em->flush();
-            } catch (Exception $e) {
-                var_dump($e);
-                return;
-            }
-        }
-    }
-
+    }    
+    
     private function storeInfo1($requests) {
         $mode = $requests["mode"];
 
@@ -879,8 +877,9 @@ class Worker_ManageController extends Zend_Controller_Action {
                 var_dump($e);
                 return;
             }
-
-            $this->redirect("/worker/manage/");
+            $sheet = $worker->getSheet();
+            $url = "/worker/manage?sheet=" . $sheet;  
+            $this->redirect($url);
         }
     }
 

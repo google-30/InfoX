@@ -51,6 +51,7 @@ $( "#sheetselect" ).change(function() {
 function redirect(url) {
     window.location = url;
 }
+
 </script>
 <?php
 $sheet=$this->sheet;
@@ -94,8 +95,6 @@ $grids="";
 $count=0;
 foreach($tmparr as $tmpkey => $tmpvalue)
 {
-
-    //$options.='<option value="' . $tmpkey .'">'. $tmpkey . '</option>';
     $options.='<option value="' . $count .'">'. $tmpkey . '</option>';
 
     $gridhtml=$this->grid($key, false)
