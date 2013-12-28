@@ -221,7 +221,7 @@
 	        </archive>
 
 	        <humanresource>
-		    <label>行政人员信息</label>
+		    <label>行政人员</label>
 		    <module>humanresource</module>
 		    <controller>manage</controller>
 		    <action>index</action>
@@ -251,12 +251,12 @@
         </othermodules>
 
         <sysmodules>	
-	    <label>InfoX系统</label>
+	    <label>系统功能</label>
 	    <uri>#sysmodules</uri>
 	    <class>popup</class>
 	    <pages>
 	        <manual>
-		    <label>系统使用说明</label>
+		    <label>使用手册</label>
 		    <module>infoxsys</module>
 		    <controller>manage</controller>
 		    <action>index</action>

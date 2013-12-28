@@ -2,93 +2,93 @@
 #menu { top:10px; }
 
 #menu * {
-	margin:0px;
-	padding:0px;
-	width: 160px;
+    margin:0px;
+    padding:0px;
+    width: 160px;
 }
 
 #menu li {
     /*background: linear-gradient(#4EB7C1, #309EAD) repeat scroll 0 0 #309EAD;*/
-	/*background-color:#309EAD;*/
+    /*background-color:#309EAD;*/
     list-style: none outside none;
-	}
+}
 #menu ul.navigation {/*background: linear-gradient(#C4C4C4, #A4A4A4) repeat scroll 0 0 #C4C4C4;*/ padding: 0px; /*background-color: #A4A4A4; */}
 #menu ul a.topmenu {display:none;}
-#menu .active .active a { color: #24B9FF; }
+#menu .active .active a { /*color: #24B9FF;*/ color: #0F8792; }
 
 #menu a {
-	color:#333333;
-	cursor:pointer;
-	display:block;
-	text-decoration:none;
-	text-shadow: 0 1px #FFFFFF;
+    color:#333333;
+    cursor:pointer;
+    display:block;
+    text-decoration:none;
+    text-shadow: 0 1px #FFFFFF;
 }
 
 #menu a.topmenu + ul > li > a {
     /*border-bottom:#3d8d95 solid;*/
-	box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.6);
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.6);
     border-width:1px;
     height:30px;
     font-size: 16px;
     display:table-cell;
     vertical-align:middle;
     text-align:center;
-	padding: 10px 0;
-	
-	box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.6);
-	/*text-shadow: 0 1px #FFFFFF;*/
+    padding: 10px 0;
+
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.6);
+    /*text-shadow: 0 1px #FFFFFF;*/
 
 }
 
 #menu a.topmenu + ul > li > a.dashboard {
     height: 40px;
     font-size:1.2em;
-	/*background: linear-gradient(#797979, #868686) repeat scroll 0 0 #868686; background-color: #868686;*/
+    /*background: linear-gradient(#797979, #868686) repeat scroll 0 0 #868686; background-color: #868686;*/
 }
 
 #menu a:hover {
-	/*text-decoration:underline;*/
+    /*text-decoration:underline;*/
 }
 
 #menu a.topmenu + ul li:hover {
-	background: #fad636;
-	position: relative;
+    background: #fad636;
+    position: relative;
 }
 
 #menu a.popup + ul {
-	display:none;
-	width: 200px;
+    display:none;
+    width: 200px;
 }
 
 #menu a.popup + ul li {
-	/*background: linear-gradient(#c4c4c4, #a4a4a4) repeat scroll 0 0 #a4a4a4;
-	background-color: #a4a4a4;*/
+    /*background: linear-gradient(#c4c4c4, #a4a4a4) repeat scroll 0 0 #a4a4a4;
+    background-color: #a4a4a4;*/
 }
 
 #menu li:hover > a.popup + ul {
-	padding:0px;
-	/*background: #999;*/
-	background: #D0D0D0;
-	border:#c4c4c4 solid;
-	border-width:1px;
-	overflow:visible;
+    padding:0px;
+    /*background: #999;*/
+    background: #D0D0D0;
+    border:#c4c4c4 solid;
+    border-width:1px;
+    overflow:visible;
     display:block;
-	position: absolute;
-	left: 80px;
-	top: 0px;
-	z-index:10001;
-	width: 160px;
-	
+    position: absolute;
+    left: 80px;
+    top: 0px;
+    z-index:10001;
+    width: 160px;
+
 }
 
 #menu a.topmenu + ul > li:hover > a.popup + ul {
-	left:160px;
+    left:160px;
 }
 
 #menu li:hover > a.popup + ul a {
     padding:10px;
-	/*border-bottom: 1px #c4c4c4 solid;*/
-	box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.6);
-	width: 140px;
+    /*border-bottom: 1px #c4c4c4 solid;*/
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.6);
+    width: 140px;
 }
 

@@ -1,4 +1,4 @@
-<?
+<?php
 // Global Defines for templates
 $settings = Zend_Registry::get('settings');
 
@@ -58,7 +58,7 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
             </span>
             <span id='title'>
                 <!--<?php echo sprintf('%s ' . $this->translate('Hotel Suite Management Portal'), $settings->General->HotelName->Value);?>-->
-                InfoX Portal
+                InfoX
             </span>
             <span id='logout'>
                 <a href='<?php echo $this->url(array("module"=>"management", "controller"=>"auth", "action"=>"logout"));?>'>
