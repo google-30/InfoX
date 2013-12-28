@@ -84,7 +84,6 @@
                     var workersel = $(this).val();
                     $(window).scrollTop($('#worker' + workersel).offset().top);
                 });
-
             });
 
             function quicksubmit()
@@ -189,10 +188,13 @@
                 <!--<div style="float:right;">-->
                 <input type="hidden" id="siteid" name="siteid" value="<? echo $siteid; ?>">
 
+                <div><?= $workersel ?></div>
+                <br>
+                <!--
                 <div class="ui-grid-a">
                     <div class="ui-block-a"><?= $workersel ?></div>
-                    <!--<div class="ui-block-b"><?= $attendquickbtn ?></div>-->                    
-                </div><!-- /grid-a -->                
+                    <div class="ui-block-b"><?= $attendquickbtn ?></div>
+                </div>--><!-- /grid-a -->                
 
                 <!--<div>
                 <?php
