@@ -112,48 +112,11 @@ class Worker_ImportController extends Zend_Controller_Action
 
         $this->redirect("/worker/manage/");
         return;
-
-        /*
-        foreach ($objWorksheet->getRowIterator() as $row)
-        {
-            if(++$i == 1)
-            {// ignore the first row
-                continue;
-            }
-
-            $j=0;
-          $cellIterator = $row->getCellIterator();
-          $cellIterator->setIterateOnlyExistingCells(false);
-          foreach ($cellIterator as $cell)
-          {
-            $j++;
-            if(in_array($j, $datecolumns))
-            {
-                $cellvalue = $cell->getValue();
-                if($cellvalue == "")
-                {
-                    $value = "";
-                }
-                else
-                {
-                    $value = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($cellvalue));
-                }
-            }
-            else
-            {
-                $value = $cell->getValue();
-            }
-            echo $value . "||";
-            }
-
-            echo "<hr>";
-        }
-        */
     }
 
     private function storeDetails($sheetname, $objWorksheet)
     {
-        $datecolumns = array(6,7,8,11,12,15, 16,17,19,);
+        $datecolumns = array(6,7,8,11,12,15,16,17,19,);
 
         $i=0;
         $j=0;
@@ -169,8 +132,12 @@ class Worker_ImportController extends Zend_Controller_Action
 
             $cell = $objWorksheet->getCell("A".$i);
             $sn = $cell->getValue();
-            if($sn=="" || !intval($sn))
-            {   // sn equal 0 means not a worker
+            
+            $cellb = $objWorksheet->getCell("B".$i);
+            $eeeno = trim($cellb->getValue());
+            
+            if($sn=="" || !intval($sn) || $eeeno=="")
+            {   // these mean it's not a worker row
                 continue;
             }
             else
@@ -182,6 +149,7 @@ class Worker_ImportController extends Zend_Controller_Action
             foreach ($cellIterator as $cell)
             {
                 $j++;
+                
                 $value = "";
                 if(in_array($j, $datecolumns))
                 {
@@ -243,22 +211,23 @@ class Worker_ImportController extends Zend_Controller_Action
                     $obj->setRate($value);
                     break;
                 case 14:
-                    //echo "pano=" . $value . "<br>";
-                    //$obj->setPano($value);
                     $obj->setWorktype($value);
                     break;
                 case 15:
-                    //$obj->setSbno($value);
                     $obj->setArrivaldate($value);                    
                     break;
                 case 16:
-                    $obj->setMedicaldate($value);                
-                    
+                    $obj->setMedicaldate($value);                                    
                     break;
                 case 17:
                     $obj->setCsoc($value);
                     break;
                 case 18:
+                    $intval = (int) $value;
+                    if($intval != 0 || $intval)
+                    {// date
+                        $value = date('d-m-Y',PHPExcel_Shared_Date::ExcelToPHP($value));
+                    }
                     $obj->setMedicalinsurance($value);
                     break;
                 case 19:
@@ -277,27 +246,22 @@ class Worker_ImportController extends Zend_Controller_Action
                     $obj->setContactno1($value);
                     break;
                 case 24:
-                    //
                     $obj->setContactno2($value);
                     break;
                 case 25:
                     $obj->setCertificate($value);
-                    //
                     break;
                 case 26:
                     $obj->setAgent($value);
                     break;
                 case 27:
-                    $obj->setRemarks($value);
-                    //
+                    $obj->setRemark($value);
                     break;
                 case 28:
                     $obj->setHometown($value);
-                    //
                     break;
                 case 29:
                     $obj->setEducation($value);
-                    //
                     break;
                 case 30:
                     $obj->setAge($value);
@@ -310,9 +274,6 @@ class Worker_ImportController extends Zend_Controller_Action
                     break;
                 case 33:
                     $obj->setApplyfor($value);
-                    break;
-                case 34:
-                    
                     break;
                 }
             }

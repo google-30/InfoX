@@ -89,22 +89,7 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $pano;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $sbno;
-
-    /**
-     * @Column(type="date", nullable=true)
-     */
-    protected $securityexp;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $worktype;
+    protected $worktype;    
 
     /**
      * @Column(type="date", nullable=true)
@@ -127,6 +112,11 @@ class Workerdetails extends \Synrgic_Models_Entity {
     protected $medicalinsurance;
 
     /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $securityexp;
+        
+    /**
      * @Column(type="string", nullable=true)
      */
     protected $workingsite;
@@ -139,8 +129,38 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $hometown;
+    protected $goodat;    
+    
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $contactno1;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $contactno2;
+    
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $certificate;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $agent;   
+    
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $remark;
+    
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $hometown;
+    
     /**
      * @Column(type="string", nullable=true)
      */
@@ -165,36 +185,6 @@ class Workerdetails extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $applyfor;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $goodat;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $contactno1;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $contactno2;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $certificate;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $agent;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $remarks;
 
     /**
      * sheet name in excel

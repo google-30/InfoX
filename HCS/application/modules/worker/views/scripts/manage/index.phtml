@@ -167,26 +167,23 @@ $maindata = $this->maindata;
 ?>
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
-
     <div data-role="collapsible" data-collapsed="true">
-        <h3>工人数据操作</h3>
+        <h3>数据操作</h3>
         <div class="ui-grid-b">
             <div class="ui-block-a">
-                <a href="/worker/manage/add"><button data-mini="true" data-theme="a">注册一个工人</button></a>
+                <a href="/worker/manage/add"><button data-mini="true" data-theme="a">注册工人</button></a>
             </div>
             <div class="ui-block-b">
-                <button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人数据</button>
+                <button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人列表Excel</button>
             </div>
-            <div class="ui-block-c">
-                <!--<a href="/worker/import/truncateworkerdetails"><button data-mini="true" data-theme="a" onclick>清空工人数据</button></a>-->
+            <div class="ui-block-c">                
                 <button data-mini="true" data-theme="a" onclick="clearworkerdetails()">清空工人数据</button>
             </div>
         </div><!-- /grid-b -->
         <div id="uploaddiv">
             <fieldset>
                 <form action="/worker/import/submit" method="post" enctype="multipart/form-data">
-                    上传工人列表(MS Excel file)：
-                    <!--<label for="file" class="ui-input-text">上传工人列表(MS Excel file)：</label>-->
+                    上传工人列表(MS Excel file)：                    
                     <input data-mini="true" type="file" name="file" id="file">
                     <input type="submit" value="上传" data-mini="true" data-theme="a">
                 </form>
@@ -195,7 +192,7 @@ $maindata = $this->maindata;
     </div>
 
     <div data-role="collapsible" data-collapsed="true">
-        <h3>工人列表操作</h3>
+        <h3>列表操作</h3>
         <button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
         <div id="infoswitches">
             <button onclick="fnShowHideAll()" data-mini="true">Show All Data</button>
@@ -203,30 +200,25 @@ $maindata = $this->maindata;
             <div class="ui-grid-d">
                 <?php
                 $onswitches = array(
-                    /* "namechs"=>"Name Chs","nameeng"=>"Name Eng", */ "eeeno" => "E'ee No.", "name" => "Name ", "wpno" => "WP No.",
+                    /* "namechs"=>"Name Chs","nameeng"=>"Name Eng", */ 
+                    "eeeno" => "E'ee No.", "name" => "Name ", "wpno" => "WP No.",
                     "wpexpiry" => "WP Expiry", "doa" => "D.O.A", "issuedate" => "Date of Issue",
-                    "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B", "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
+                    "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B", 
+                    "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
 
                 $offswitches = array(
-                    "pano" => "PA Reference  No.", "sbno" => "Security Bond No.",
-                    "securityexp" => "Security Expiry", "worktype" => "主要工种", "arrivaldate" => "Arrival Date", "medicaldate" => "Medical Date", "medicalinsuranc" => "Medical Insurance", "workingsite" => "WORKING SITE", "dormitory" => "Dormitory",
-                    "hometown" => "区域", "education" => "教育程度", "age" => "年龄", "marital" => "婚姻状况",
-                    "constructionworker" => "建筑工", "applyfor" => "Apply For", "goodat" => "Good At", "contactno1" => "Contact No.1",
-                    "contactno2" => "Contact No.2", "remarks" => "Remarks(Agent)",);
+                    "worktype" => "主要工种", "arrivaldate" => "Arrival Date",
+                    "medicaldate" => "Medical Date", "medicalinsurance" => "Medical Insurance",
+                    "securityexp" => "Security Bond Expiry Date", "workingsite" => "Working Site",
+                    "dormitory" => "Dormitory", "goodat" => "Good At",
+                    "contactno1" => "Contact No.1", "contactno2" => "Contact No.2",
+                    "certificate" => "Certificate", "agent" => "Agent",
+                    "remarks" => "Remark", "hometown" => "区域",
+                    "education" => "教育程度", "age" => "年龄",
+                    "marital" => "婚姻状况", "constructionworker" => "建筑工",
+                    "applyfor" => "Apply For",
+                     );
 
-                /*
-                  $onswitches=array(
-                  "sn"=>"S/N","eeeno"=>"E'ee No.","namechs"=>"Name Chs","nameeng"=>"Name Eng","wpno"=>"WP No.",
-                  "ppno"=>"PP No.", "rate"=>"RATE",);
-
-                  $offswitches=array(
-                  "wpexpiry"=>"WP Expiry","doa"=>"D.O.A","issuedate"=>"Date of Issue","finno"=>"Fin No.",
-                  "dob"=>"D.O.B","ppexpiry"=>"PP Expiry","pano"=>"PA Reference  No.", "sbno"=>"Security Bond No.",
-                  "securityexp"=>"Security Exprity Date", "worktype"=>"主要工种","arrivaldate"=>"Arrival Date","medicaldate"=>"Medical Date", "csoc"=>"C.S.O.C", "medicalinsuranc"=>"Medical Insurance", "workingsite"=>"WORKING SITE", "dormitory"=>"Dormitory",
-                  "hometown"=>"区域", "education"=>"教育程度", "age"=>"年龄", "marital"=>"婚姻状况",
-                  "constructionworker"=>"建筑工", "applyfor"=>"Apply For", "goodat"=>"Good At", "contactno1"=>"Contact No.1",
-                  "contactno2"=>"Contact No.2", "remarks"=>"Remarks(Agent)",);
-                 */
                 $customtitles = $this->customtitles;
                 $offswitches["custom1"] = $customtitles[0];
                 $offswitches["custom2"] = $customtitles[1];

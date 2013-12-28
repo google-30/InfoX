@@ -34,8 +34,8 @@ $ppno="";
 $dob="";
 $ppexpiry="";
 $rate="";
-$pano="";
-$sbno="";
+//$pano="";
+//$sbno="";
 $securityexp="";
 $worktype="";
 $arrivaldate="";
@@ -87,8 +87,8 @@ $dob=$dob? $dob->format("Y/m/d") : "";
 $ppexpiry=$worker->getPpexpiry();
 $ppexpiry=$ppexpiry? $ppexpiry->format("Y/m/d") : "";
 $rate=$worker->getRate();
-$pano=$worker->getPano();
-$sbno=$worker->getSbno();
+//$pano=$worker->getPano();
+//$sbno=$worker->getSbno();
 $securityexp=$worker->getSecurityexp();
 $securityexp=$securityexp? $securityexp->format("Y/m/d") : "";
 $worktype=$worker->getWorktype();
@@ -112,7 +112,7 @@ $contactno1=$worker->getContactno1();
 $contactno2=$worker->getContactno2();
 $certificate=$worker->getCertificate();
 $agent=$worker->getAgent();
-$remarks=$worker->getRemarks();
+$remark=$worker->getRemark();
 $company=$worker->getCompany();
 $race=$worker->getRace();
 $resignation=$worker->getResignation();
@@ -245,14 +245,14 @@ echo $options;
     <label for="rate">RATE:</label>
     <input data-mini="true" type="text" name="rate" id="rate" value="<?php echo $rate; ?>" />
 </div>
-<div data-role="fieldcontain">
+<!--<div data-role="fieldcontain">
     <label for="pano">PA Reference No.:</label>
     <input data-mini="true" type="text" name="pano" id="pano" value="<?php echo $pano; ?>" />
 </div>
 <div data-role="fieldcontain">
     <label for="sbno">Security Bond No.:</label>
     <input data-mini="true" type="text" name="sbno" id="sbno" value="<?php echo $sbno; ?>" />
-</div>
+</div>-->
 <div data-role="fieldcontain">
     <label for="securityexp">Security Exprity Date:</label>
     <input data-mini="true" type="text" name="securityexp" id="securityexp" value="<?php echo $securityexp; ?>" class="datepicker" />
@@ -327,7 +327,7 @@ echo $options;
 </div>
 <div data-role="fieldcontain">
     <label for="remarks">Remarks(Agent):</label>
-    <input data-mini="true" type="text" name="remarks" id="remarks" value="<?php echo $remarks; ?>" />
+    <input data-mini="true" type="text" name="remarks" id="remarks" value="<?php echo $remark; ?>" />
 </div>
 <div data-role="fieldcontain">
     <label for="resignation">Resignation:</label>

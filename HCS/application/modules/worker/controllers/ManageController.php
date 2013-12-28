@@ -93,8 +93,6 @@ class Worker_ManageController extends Zend_Controller_Action {
         }
 
         $this->view->expiryarr = $expiryarr;
-
-        //$this->getallexp();    
     }
 
     private function getExpiryArr($workerarr, $param) {
