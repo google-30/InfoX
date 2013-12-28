@@ -63,37 +63,6 @@ class Material_ManageController extends Zend_Controller_Action
         $this->view->sheet = $requestsheet;        
     }
 
-    private function getmateriallist()
-    {
-        $sheetarr =  array("safety material","formwork","concrete", "concrete",
-                            "rebar","equipment","electrical","worker domitory","logistics",
-                            "water pipe","spare parts","scaffolding", );
-
-        $requestsheet = $this->getParam("sheet", $sheetarr[0]);     
-
-        $dataarr = array();                    
-        if(!in_array($requestsheet, $sheetarr))
-        {
-            $alldata = $this->_material->findAll();
-            foreach($alldata as $tmp)
-            {
-                $sheet = $tmp->getSheet();
-                if(!in_array($sheet, $sheetarr))
-                {
-                    $dataarr[] = $tmp;
-                }
-            }            
-        }
-        else
-        {
-            $dataarr = $this->_material->findBy(array('sheet'=>$requestsheet));
-        }
-
-        $this->view->sheet = $requestsheet;        
-        $this->view->sheetarr = $sheetarr;
-        $this->view->maindata = $dataarr;
-    }
-
     public function addAction()
     {
         $this->getSuppliers();  
@@ -168,7 +137,7 @@ class Material_ManageController extends Zend_Controller_Action
                 
         $material->setName($name);
         $material->setNameeng($nameeng);
-        $material->setUpdate(new Datetime("now"));
+        //$material->setUpdate(new Datetime("now"));
         $material->setDescription($description);
         $material->setUsage($usage);
 
@@ -205,43 +174,13 @@ class Material_ManageController extends Zend_Controller_Action
             $rateid = "rate" . strval($id);
             $rate = $this->getParam($rateid, 0);
             
-            $updateid = "update" . strval($id);
-            $update = $this->getParam($updateid, "now");
+            //$updateid = "update" . strval($id);
+            //$update = $this->getParam($updateid, "now");
 
             $tmp->setRate($rate);
-            $tmp->setUpdate(new Datetime($update));
+            //$tmp->setUpdate(new Datetime($update));
             $this->_em->persist($tmp);     
         }
-
-        /*
-        $suppliers = $this->_supplier->findAll();
-        foreach($suppliers as $tmp)
-        {
-        
-            $id = $tmp->getId();
-            $priceid = "rate" . strval($id);
-            $price = $this->getParam($priceid, 0);
-            if($price==0)
-            {
-                continue;
-            }
-
-            $updateid = "update" . strval($id);
-            $update = $this->getParam($updateid, "now");
-
-            $priceobj = $this->_supplyprice->findOneBy(array("supplier"=>$tmp, "material"=>$material));
-            if(is_null($priceobj))
-            {
-                $priceobj = new \Synrgic\Infox\Supplyprice();
-            }
-            $priceobj->setMaterial($material);
-            $priceobj->setSupplier($tmp);
-            $priceobj->setPrice(floatval($price));
-            $priceobj->setUpdate(new Datetime($update));
-
-            $this->_em->persist($priceobj);  
-        }
-        */
 
         try {
             $this->_em->flush();

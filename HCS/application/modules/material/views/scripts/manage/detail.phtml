@@ -178,111 +178,112 @@ if ($mode === "Edit") {
         <div data-role="collapsible-set" data-mini="true" data-theme="c">
             <div data-role="collapsible" data-collapsed="true">
                 <h3>添加价格信息</h3>
-<?php
-$selecthtml = "";
-if (!count($suppliers)) {
-    $selecthtml = "<strong>请导入材料列表或者手动添加供应商数据</strong>";
-} else {
-    $options = '<option value="0">选择供应商</option>';
-    foreach ($suppliers as $tmp) {
-        $id = $tmp->getId();
-        $name = $tmp->getName();
-        $options .= '<option value="' . $id . '">' . $name . '</option>';
-    }
-    $selecthtml.= '<select data-mini="true" id="suppliernew">' . $options . "</select>";
-}
+                <?php
+                $selecthtml = "";
+                if (!count($suppliers)) {
+                    $selecthtml = "<strong>请导入材料列表或者手动添加供应商数据</strong>";
+                } else {
+                    $options = '<option value="0">选择供应商</option>';
+                    foreach ($suppliers as $tmp) {
+                        $id = $tmp->getId();
+                        $name = $tmp->getName();
+                        $options .= '<option value="' . $id . '">' . $name . '</option>';
+                    }
+                    $selecthtml.= '<select data-mini="true" id="suppliernew">' . $options . "</select>";
+                }
 
-$unittd = '<td><input type="text" value="" id="unitnew" placeholder="单位，比如pair, box, etc."></td>';
-$dodatetd = '<td><input type="text" value="" id="dodatenew" class="classupdate" placeholder="点击选择Do date"></td>';
-$ratetd = '<td><input type="text" value="" id="ratenew" placeholder="rate, 比如5，表示5新元"></td>';
-$quantitytd = '<td><input type="text" value="" id="quantitynew" placeholder="Quantity, 比如5,表示5个unit的material"></td>';
-$tr = "<tr><td>$selecthtml</td> $unittd $dodatetd $ratetd $quantitytd</tr>";
-$inputtab = '<table class="grid">
-<thead><tr><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th></tr></thead>
-<tbody>' . $tr . "</tbody></table>";
+                $unittd = '<td><input type="text" value="" id="unitnew" placeholder="单位，比如pair, box, etc."></td>';
+                //$dodatetd = '<td><input type="text" value="" id="dodatenew" class="classupdate" placeholder="点击选择Do date"></td>';
+                $ratetd = '<td><input type="text" value="" id="ratenew" placeholder="rate, 比如5，表示5新元"></td>';
+                //$quantitytd = '<td><input type="text" value="" id="quantitynew" placeholder="Quantity, 比如5,表示5个unit的material"></td>';
+                //$tr = "<tr><td>$selecthtml</td> $unittd $dodatetd $ratetd $quantitytd</tr>";
+                $tr = "<tr><td>$selecthtml</td> $unittd $ratetd </tr>";
+                $inputtab = '<table class="grid"><thead><tr><th>Supplier</th><th>Unit</th><th>Rate</th></tr></thead>'
+                        . '<tbody>' . $tr . "</tbody></table>";
 
-echo $inputtab;
-?>
+                echo $inputtab;
+                ?>
                 <input type="button" value="添加价格信息" onclick="supplypricenew()" data-mini="true" data-theme="a">
             </div>
 
             <div data-role="collapsible" data-collapsed="true">
                 <h3>已有价格信息</h3>
                 <table class="grid">
-                    <thead><tr><th>抉择</th><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th><th>Amount</th></tr></thead>
+                    <!--<thead><tr><th>抉择</th><th>Supplier</th><th>Unit</th><th>DO Date</th><th>Rate</th><th>Quantity</th><th>Amount</th></tr></thead>-->
+                    <thead><tr><th>抉择</th><th>Supplier</th><th>Unit</th><th>Rate</th></tr></thead>
                     <tbody>
-<?php
-$tabrows = "";
-if (count($supplypricearr)) {
-    foreach ($supplypricearr as $tmp) {
-        $id = $tmp->getId();
-        $supplier = $tmp->getSupplier();
-        $suppliername = $supplier ? $supplier->getName() : "&nbsp;";
-        $unit = $tmp->getUnit();
-        $rate = $tmp->getRate();
-        $quantity = $tmp->getQuantity();
-        $dodate = $tmp->getUpdate();
-        $dodatestr = $dodate ? $dodate->format("Y-m-d") : "&nbsp;";
+                        <?php
+                        $tabrows = "";
+                        if (count($supplypricearr)) {
+                            foreach ($supplypricearr as $tmp) {
+                                $id = $tmp->getId();
+                                $supplier = $tmp->getSupplier();
+                                $suppliername = $supplier ? $supplier->getName() : "&nbsp;";
+                                $unit = $tmp->getUnit();
+                                $rate = $tmp->getRate();
+                                $quantity = $tmp->getQuantity();
+                                $dodate = $tmp->getUpdate();
+                                $dodatestr = $dodate ? $dodate->format("Y-m-d") : "&nbsp;";
 
-        $row = "";
+                                $row = "";
 
-        if ($id == $defsupplierid) {
-            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked data-role="none"/></td>';
-        } else {
-            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" data-role="none"/></td>';
-        }
+                                if ($id == $defsupplierid) {
+                                    $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked data-role="none"/></td>';
+                                } else {
+                                    $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" data-role="none"/></td>';
+                                }
 
-        $tdsupplier = "<td>$suppliername</td>";
-        $tdunit = "<td>$unit</td>";
-        //$tdupdate = "<td>$dodatestr</td>";
-        //$tdrate = "<td>$rate</td>";
-        $tdquantity = "<td>$quantity</td>";
-        $tdamount = "<td>" . $quantity * $rate . "</td>";
+                                $tdsupplier = "<td>$suppliername</td>";
+                                $tdunit = "<td>$unit</td>";
+                                //$tdupdate = "<td>$dodatestr</td>";
+                                //$tdrate = "<td>$rate</td>";
+                                $tdquantity = "<td>$quantity</td>";
+                                $tdamount = "<td>" . $quantity * $rate . "</td>";
 
-        $tdrate = '<td><input type="text" value="' . $rate . '" name="rate' . $id . '" id="rate' . $id . '" placeholder="0"></td>';
-        $tdupdate = '<td><input type="text" class="classupdate" value="' . $dodatestr . '" name="update' . $id . '" id="update' . $id . '"></td>';
-        $row .= "<tr>" . $tdradio . $tdsupplier . $tdunit . $tdupdate . $tdrate . $tdquantity . $tdamount . "</tr>";
+                                $tdrate = '<td><input type="text" value="' . $rate . '" name="rate' . $id . '" id="rate' . $id . '" placeholder="0"></td>';
+                                $tdupdate = '<td><input type="text" class="classupdate" value="' . $dodatestr . '" name="update' . $id . '" id="update' . $id . '"></td>';
+                                //$row .= "<tr>" . $tdradio . $tdsupplier . $tdunit . $tdupdate . $tdrate . $tdquantity . $tdamount . "</tr>";
+                                $row .= "<tr>" . $tdradio . $tdsupplier . $tdunit . $tdrate  . "</tr>";
+                                $tabrows .= $row;
+                            }
+                        }
+                        echo $tabrows;
 
-        $tabrows .= $row;
-    }
-}
-echo $tabrows;
+                        if (0) {
+                            $suppliers = $this->suppliers;
+                            $supplyprice = $this->supplyprice;
+                            foreach ($suppliers as $tmp) {
+                                $id = $tmp->getId();
+                                $name = $tmp->getName();
 
-if (0) {
-    $suppliers = $this->suppliers;
-    $supplyprice = $this->supplyprice;
-    foreach ($suppliers as $tmp) {
-        $id = $tmp->getId();
-        $name = $tmp->getName();
+                                $price = 0;
+                                $update = "";
 
-        $price = 0;
-        $update = "";
+                                if (count($supplyprice)) {
+                                    foreach ($supplyprice as $sprice) {
+                                        $sid = $sprice->getSupplier()->getId();
+                                        if ($sid == $id) {
+                                            $price = $sprice->getPrice();
+                                            $update = $sprice->getUpdate()->format("Y/m/d");
+                                        }
+                                    }
+                                }
 
-        if (count($supplyprice)) {
-            foreach ($supplyprice as $sprice) {
-                $sid = $sprice->getSupplier()->getId();
-                if ($sid == $id) {
-                    $price = $sprice->getPrice();
-                    $update = $sprice->getUpdate()->format("Y/m/d");
-                }
-            }
-        }
+                                $row = "";
 
-        $row = "";
-
-        if ($id == $defsupplierid) {
-            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked/></td>';
-        } else {
-            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" /></td>';
-        }
-        $tdname = "<td>$name</td>";
-        $tdprice = '<td><input type="text" value="' . $price . '" name="price' . $id . '" id="price' . $id . '" placeholder="0"></td>';
-        $tdupdate = '<td><input type="text" class="classupdate" value="' . $update . '" name="update' . $id . '" id="update' . $id . '"></td>';
-        $row .= "<tr>" . $tdradio . $tdname . $tdprice . $tdupdate . "</tr>";
-        echo $row;
-    }
-}
-?>
+                                if ($id == $defsupplierid) {
+                                    $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked/></td>';
+                                } else {
+                                    $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" /></td>';
+                                }
+                                $tdname = "<td>$name</td>";
+                                $tdprice = '<td><input type="text" value="' . $price . '" name="price' . $id . '" id="price' . $id . '" placeholder="0"></td>';
+                                $tdupdate = '<td><input type="text" class="classupdate" value="' . $update . '" name="update' . $id . '" id="update' . $id . '"></td>';
+                                $row .= "<tr>" . $tdradio . $tdname . $tdprice . $tdupdate . "</tr>";
+                                echo $row;
+                            }
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
