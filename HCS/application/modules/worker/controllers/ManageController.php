@@ -80,7 +80,7 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
         $this->view->sheet = $requestsheet = $this->getParam("sheet", $sheetarr[0]);
         $this->view->paramarr = $paramarr = array("wpexpiry" => "Work Pass",
-            "ppexpiry" => "Pass Port", "csoc" => "Csoc", "securityexp" => "Security Bond Expiry Date",);
+            "ppexpiry" => "Passport", "csoc" => "Csoc", "securityexp" => "Security Bond Expiry Date",);
 
         $expiryarr = array();
 

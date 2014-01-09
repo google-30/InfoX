@@ -15,7 +15,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->_siteattendance = $this->_em->getRepository('Synrgic\Infox\Siteattendance');
         $this->_salaryall = $this->_em->getRepository('Synrgic\Infox\Workersalaryall');
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
-        $this->_salaryreceipt = $this->_em->getRepository('Synrgic\Infox\Salaryreceipt');
+        $this->_salarysummary = $this->_em->getRepository('Synrgic\Infox\Salarysummary');
     }
 
     public function indexAction() {
@@ -437,6 +437,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         }
 
         infox_salary::updateOneSalaryRecord($salaryrecord);
+        infox_salary::updateSalarySummaryBySalaryRecord($salaryrecord);
 
         echo "提交成功";
     }
@@ -582,9 +583,9 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->view->receiptdate = $receiptdate;
 
         // store receipt date
-        $receiptobj = $this->_salaryreceipt->findOneBy(array("month" => $monthobj));
+        $receiptobj = $this->_salarysummary->findOneBy(array("month" => $monthobj));
         if (!$receiptobj) {
-            $receiptobj = new \Synrgic\Infox\Salaryreceipt();
+            $receiptobj = new \Synrgic\Infox\Salarysummary();
         }
         $receiptobj->setDate($receiptdateobj);
         $receiptobj->setMonth($monthobj);
@@ -637,7 +638,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $workerrecordswdate = array();
         foreach ($workerrecords as $tmp) {
             $monthobj = $tmp->getMonth();
-            $receiptobj = $this->_salaryreceipt->findOneBy(array("month" => $monthobj));
+            $receiptobj = $this->_salarysummary->findOneBy(array("month" => $monthobj));
             $receiptdate = $receiptobj ? $receiptobj->getDate() : null;
             $tmparr = array();
             $tmparr["receiptdate"] = $receiptdate;

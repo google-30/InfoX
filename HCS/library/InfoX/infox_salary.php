@@ -13,6 +13,7 @@ class infox_salary {
     public static $_salaryhtb;
     public static $_setting;
     public static $_salaryall;
+    public static $_salarysummary;
 
     public static function getRepos() {
         self::$_em = Zend_Registry::get('em');
@@ -26,6 +27,8 @@ class infox_salary {
 
         self::$_salaryall = self::$_em->getRepository('Synrgic\Infox\Workersalaryall');
         self::$_setting = self::$_em->getRepository('Synrgic\Infox\Setting');
+
+        self::$_salarysummary = self::$_em->getRepository('Synrgic\Infox\Salarysummary');
     }
 
     public static function getSettingArray() {
@@ -947,6 +950,60 @@ class infox_salary {
         $table .= $tr;
         $table .= "</table>";
         return $table;
+    }
+
+    public static function updateSalarySummaryBySalaryRecord($salaryrecord) {
+        self::getRepos();
+        $worker = $salaryrecord->getWorker();
+        $sheet = $worker->getSheet();
+        $month = $salaryrecord->getMonth();
+
+        $_salarysummary = self::$_salarysummary;
+        $summaryrecord = $_salarysummary->findOneBy(array("month" => $month));
+        if(!$summaryrecord)
+        {
+            $summaryrecord = new \Synrgic\Infox\Salarysummary();
+        }
+        $_salaryall = self::$_salaryall;
+        $allrecords = $_salaryall->findBy(array("month" => $month));
+        $records = array();
+        $companysalary = 0;
+
+        foreach ($allrecords as $record) {
+            $tmpworker = $record->getWorker();
+            $tmpsheet = $tmpworker->getSheet();
+            if ($tmpsheet == $sheet) {
+                //$records[] = $record;
+                $salary = $record->getSalary();
+                $companysalary += $salary;
+            }
+        }
+
+        switch ($sheet) {
+            case "HC.C":
+                $summaryrecord->setHccsalary($companysalary);
+                break;
+            case "HC.B":
+                $summaryrecord->setHcbsalary($companysalary);
+                break;
+            case "HT.C":
+                $summaryrecord->setHtcsalary($companysalary);
+                break;
+            case "HT.B":
+                $summaryrecord->setHtbsalary($companysalary);
+                break;
+            case "Others":
+                $summaryrecord->setOtherssalary($companysalary);
+                break;
+            default:
+                break;
+        }
+        
+        $summaryrecord->setMonth($month);
+
+        $em = self::$_em;
+        $em->persist($summaryrecord);
+        $em->flush();
     }
 
 }
