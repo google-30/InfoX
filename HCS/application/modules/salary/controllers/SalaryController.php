@@ -659,6 +659,11 @@ class Salary_SalaryController extends Zend_Controller_Action {
     }
 
     public function summaryAction() {
+        infox_common::turnoffLayout($this->_helper);
+
+        $monthstr = $this->getParam("month", "");
+
+
         // default month should be last one
         $lastmonth = date('Y-m-01', strtotime("last month"));
         echo $lastmonth;
@@ -682,29 +687,104 @@ class Salary_SalaryController extends Zend_Controller_Action {
             $summaryrecords[$tmp] = $record;
         }
         $this->_em->flush();
-        
-        $allsalaryrecords = $this->_salaryall->findBy(array("month"=>$monthobj));
-        
-        $normalhours = 0;
-        $normalsalary = 0;
-        $othours = 0;
-        $otsalary = 0;
-        $totalhours = 0;
-        $piecesalary = 0;
-        $totalsalary = 0;
-        $attenddays = 0;
-        $absencefines = 0;
-        $foodpay = 0;
-        $rtmonthpay = 0;
-        $utfee = 0;
-        $utallowance = 0;
-        $otherfee = 0;
-        $inadvance =0;
-        $fullmonaward = 0;
-        $salary = 0;
+
+        $allsalaryrecords = $this->_salaryall->findBy(array("month" => $monthobj));
+
+        foreach ($summaryrecords as $key => $value) {
+            $normalhours = 0;
+            $normalsalary = 0;
+            $othours = 0;
+            $otsalary = 0;
+            $totalhours = 0;
+            $piecesalary = 0;
+            $totalsalary = 0;
+            $attenddays = 0;
+            $absencefines = 0;
+            $foodpay = 0;
+            $rtmonthpay = 0;
+            $utfee = 0;
+            $utallowance = 0;
+            $otherfee = 0;
+            $inadvance = 0;
+            $fullmonaward = 0;
+            $salary = 0;
+
+            foreach ($allsalaryrecords as $record) {
+                $worker = $record->getWorker();
+                $workersheet = $worker->getSheet();
+                if ($workersheet == $key) {
+                    $normalhours += $record->getNormalhours();
+                    $normalsalary += $record->getNormalsalary();
+                    $othours += $record->getOthours();
+                    $otsalary += $record->getOtsalary();
+                    $totalhours += $record->getTotalhours();
+                    $piecesalary += $record->getPiecesalary();
+                    $totalsalary += $record->getTotalsalary();
+                    $attenddays += $record->getAttenddays();
+                    $absencefines += $record->getAbsencefines();
+                    $foodpay += $record->getFoodpay();
+                    $rtmonthpay += $record->getRtmonthpay();
+                    $utfee += $record->getUtfee();
+                    $utallowance += $record->getUtallowance();
+                    $otherfee += $record->getOtherfee();
+                    $inadvance += $record->getInadvance();
+                    $fullmonaward += $record->getFullmonaward();
+                    $salary += $record->getSalary();
+                }
+            }
+
+            $value->setNormalhours($normalhours);
+            $value->setNormalsalary($normalsalary);
+            $value->setOthours($othours);
+            $value->setOtsalary($otsalary);
+            $value->setTotalhours($totalhours);
+            $value->setPiecesalary($piecesalary);
+            $value->setTotalsalary($totalsalary);
+            $value->setAttenddays($attenddays);
+            $value->setAbsencefines($absencefines);
+            $value->setFoodpay($foodpay);
+            $value->setRtmonthpay($rtmonthpay);
+            $value->setUtfee($utfee);
+            $value->setUtallowance($utallowance);
+            $value->setOtherfee($otherfee);
+            $value->setInadvance($inadvance);
+            $value->setFullmonaward($fullmonaward);
+            $value->setSalary($salary);
+
+            $this->_em->persist($value);
+        }
+
+        $this->_em->flush();
+
+        // store hc, ht, all
+        /*
+        $record = $this->_summarydetails->findOneBy(array("month" => $monthobj, "sheet" => "HC"));
+        if (!$record) {
+            $record = new \Synrgic\Infox\Salarysummarydetails();
+        }
+            $record->setNormalhours();
+            $record->setNormalsalary($normalsalary);
+            $record->setOthours($othours);
+            $record->setOtsalary($otsalary);
+            $record->setTotalhours($totalhours);
+            $record->setPiecesalary($piecesalary);
+            $record->setTotalsalary($totalsalary);
+            $record->setAttenddays($attenddays);
+            $record->setAbsencefines($absencefines);
+            $record->setFoodpay($foodpay);
+            $record->setRtmonthpay($rtmonthpay);
+            $record->setUtfee($utfee);
+            $record->setUtallowance($utallowance);
+            $record->setOtherfee($otherfee);
+            $record->setInadvance($inadvance);
+            $record->setFullmonaward($fullmonaward);
+            $record->setSalary($salary);
+        */
         
         // query from summarydetails
-        // 
+        $this->view->month = $monthobj;
+        $this->view->summaryrecords = $summaryrecords;
+        
     }
 
 }

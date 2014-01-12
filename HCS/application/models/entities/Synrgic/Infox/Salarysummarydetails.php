@@ -100,47 +100,47 @@ class Salarysummarydetails extends \Synrgic_Models_Entity {
 
     /**
      * 预扣税 =?= release tax(rt)? 
-     * @Column(type="string", nullable=true)
+     * @Column(type="float", nullable=true)
      */
     protected $rtmonthpay;
 
     /**
      * 
-     * @Column(type="string", nullable=true)
+     * @Column(type="integer", nullable=true)
      */
     protected $rtmonths;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @Column(type="float", nullable=true)
      */
     protected $rtall;
 
     /**
      * 水电生活费 utilities fee
-     * @Column(type="string", nullable=true)
+     * @Column(type="float", nullable=true)
      */
     protected $utfee;
 
     /**
      * 水电生活补贴 utilities allowance
-     * @Column(type="string", nullable=true)
+     * @Column(type="float", nullable=true)
      */
     protected $utallowance;
 
     /**
      * 
-     * @Column(type="string", nullable=true)
+     * @Column(type="float", nullable=true)
      */
     protected $otherfee;
     
     /**
      * 提前结帐
-     * @Column(type="string", nullable=true)
+     * @Column(type="float", nullable=true)
      */
     protected $inadvance;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @Column(type="float", nullable=true)
      */
     protected $salary;
 
