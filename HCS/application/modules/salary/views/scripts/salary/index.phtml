@@ -88,20 +88,23 @@
         window.location = url;
     }
 
-    /*
-     function gensalarydata(month)
-     {
-     //alert(month);
-     
-     var sheet = $("#sheetselect").val();
-     $.post("/salary/salary/gensalaryrecords", {sheet: sheet, month: month},
-     function(data) {
-     alert("工资数据已生成");
-     //console.log(data);
-     //window.location.reload();
-     })
-     }
-     */
+    function opensalarysummary()
+    {
+        /*
+        var date = $('#summarymonth').val();
+        if (date == "" || !date)
+        {
+            $('#summarymonth').datebox('open');
+            return;
+        }
+
+        var res = date.substring(0, 7);
+        */
+        var url = "/salary/salary/summary";
+        //url += "&month=" + res;
+
+        OpenInNewTab(url);
+    }
 </script>
 <?php
 $sheetarr = $this->sheetarr;
@@ -121,28 +124,54 @@ $lastmonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$lastm
 $thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thismonth";
 ?>
 
-<div class="ui-grid-a">
-    <div class="ui-block-a">
-        <input id="salarymonth" placeholder="选择详细工资输出月份" 
-               data-role="datebox" data-options='{"mode":"datebox"}'>
-    </div>
-    <div class="ui-block-b">
-        <input id="receiptdate" placeholder="选择工资收据生成日期" 
-               data-role="datebox" data-options='{"mode":"datebox"}'>
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+    <div data-role="collapsible" data-collapsed="true">
+        <h3>工资统计</h3>
+        <!--<div class="ui-grid-a">
+            <div class="ui-block-a">
+                <input id="summarymonth" placeholder="选择月份，查看工资统计" 
+                       data-role="datebox" data-options='{"mode":"datebox"}'>
+            </div>
+            <div class="ui-block-b">
+                <input type="button" id="salarysummary" value="查看工资统计" data-mini="true" data-theme="a" 
+                       onclick="opensalarysummary()">
+            </div>
+        </div>-->
+        <div>
+            <input type="button" id="salarysummary" value="查看工资统计" data-mini="true" data-theme="a" 
+                   onclick="opensalarysummary()">
+        </div>
     </div>
 
-    <div class="ui-block-a">
-        <!--<button data-mini="true" data-theme="a" id="salaryrecords">详细工资</button>-->
-        <input type="button" id="salaryrecords" value="详细工资" data-mini="true" data-theme="a" 
-               onclick="opensalaryrecords()">
-    </div>
-    <div class="ui-block-b">        
-        <!--<button data-mini="true" data-theme="a" id="salaryreceipts">工资收据</button>-->
-        <input type="button" id="salaryreceipts" value="工资收据" data-mini="true" data-theme="a" 
-               onclick="opensalaryreceipts()">        
+    <div data-role="collapsible" data-collapsed="true">
+        <h3>工资输入</h3>
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+                <input id="salarymonth" placeholder="选择详细工资输出月份" 
+                       data-role="datebox" data-options='{"mode":"datebox"}'>
+            </div>
+            <div class="ui-block-b">
+                <input id="receiptdate" placeholder="选择工资收据生成日期" 
+                       data-role="datebox" data-options='{"mode":"datebox"}'>
+            </div>
+
+            <div class="ui-block-a">
+                <input type="button" id="salaryrecords" value="详细工资" data-mini="true" data-theme="a" 
+                       onclick="opensalaryrecords()">
+            </div>
+            <div class="ui-block-b">        
+                <!--<button data-mini="true" data-theme="a" id="salaryreceipts">工资收据</button>-->
+                <input type="button" id="salaryreceipts" value="工资收据" data-mini="true" data-theme="a" 
+                       onclick="opensalaryreceipts()">        
+            </div>
+
+        </div>    
     </div>
 
 </div>
+
+
+
 <hr>
 <?php
 $options = "";

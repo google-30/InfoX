@@ -16,12 +16,15 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->_salaryall = $this->_em->getRepository('Synrgic\Infox\Workersalaryall');
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
         $this->_salarysummary = $this->_em->getRepository('Synrgic\Infox\Salarysummary');
+        $this->_summarydetails = $this->_em->getRepository('Synrgic\Infox\Salarysummarydetails');
     }
 
     public function indexAction() {
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
         $this->view->sheet = $requestsheet = $this->getParam("sheet", $sheetarr[0]);
         $this->view->workerarr = infox_worker::getworkerlistbysheet($requestsheet);
+
+        // retrieve salary summary
     }
 
     public function personalAction() {
@@ -607,7 +610,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
             return;
         }
         $sheet = $workerobj->getSheet();
-        
+
         $salaryrecords = $this->_salaryall->findBy(array("worker" => $workerobj));
         if (!count($salaryrecords)) {
             return;
@@ -653,6 +656,55 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
     private function sortWorkerrecordswdate($a, $b) {
         return strcmp($a['record']->getMonth()->format("Y-m-d"), $b['record']->getMonth()->format("Y-m-d"));
+    }
+
+    public function summaryAction() {
+        // default month should be last one
+        $lastmonth = date('Y-m-01', strtotime("last month"));
+        echo $lastmonth;
+        $monthobj = new DateTime($lastmonth);
+
+        // sheets
+        $sheets = infox_worker::getSheetarr();
+
+        // find and create records
+        $summaryrecords = array();
+        foreach ($sheets as $tmp) {
+            $record = $this->_summarydetails->findOneBy(array("month" => $monthobj, "sheet" => $tmp));
+            if (!$record) {// create
+                $record = new \Synrgic\Infox\Salarysummarydetails();
+            }
+
+            $record->setMonth($monthobj);
+            $record->setSheet($tmp);
+            $this->_em->persist($record);
+
+            $summaryrecords[$tmp] = $record;
+        }
+        $this->_em->flush();
+        
+        $allsalaryrecords = $this->_salaryall->findBy(array("month"=>$monthobj));
+        
+        $normalhours = 0;
+        $normalsalary = 0;
+        $othours = 0;
+        $otsalary = 0;
+        $totalhours = 0;
+        $piecesalary = 0;
+        $totalsalary = 0;
+        $attenddays = 0;
+        $absencefines = 0;
+        $foodpay = 0;
+        $rtmonthpay = 0;
+        $utfee = 0;
+        $utallowance = 0;
+        $otherfee = 0;
+        $inadvance =0;
+        $fullmonaward = 0;
+        $salary = 0;
+        
+        // query from summarydetails
+        // 
     }
 
 }
