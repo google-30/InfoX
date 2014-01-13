@@ -757,34 +757,174 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->_em->flush();
 
         // store hc, ht, all
-        /*
+
         $record = $this->_summarydetails->findOneBy(array("month" => $monthobj, "sheet" => "HC"));
         if (!$record) {
             $record = new \Synrgic\Infox\Salarysummarydetails();
         }
-            $record->setNormalhours();
-            $record->setNormalsalary($normalsalary);
-            $record->setOthours($othours);
-            $record->setOtsalary($otsalary);
-            $record->setTotalhours($totalhours);
-            $record->setPiecesalary($piecesalary);
-            $record->setTotalsalary($totalsalary);
-            $record->setAttenddays($attenddays);
-            $record->setAbsencefines($absencefines);
-            $record->setFoodpay($foodpay);
-            $record->setRtmonthpay($rtmonthpay);
-            $record->setUtfee($utfee);
-            $record->setUtallowance($utallowance);
-            $record->setOtherfee($otherfee);
-            $record->setInadvance($inadvance);
-            $record->setFullmonaward($fullmonaward);
-            $record->setSalary($salary);
-        */
+        $normalhours = $summaryrecords["HC.C"]->getNormalhours() + $summaryrecords["HC.B"]->getNormalhours();
+        $record->setNormalhours($normalhours);
+        $normalsalary = $summaryrecords["HC.C"]->getNormalsalary() + $summaryrecords["HC.B"]->getNormalsalary();
+        $record->setNormalsalary($normalsalary);
+        $othours = $summaryrecords["HC.C"]->getOthours() + $summaryrecords["HC.B"]->getOthours();
+        $record->setOthours($othours);
+        $otsalary = $summaryrecords["HC.C"]->getOtsalary() + $summaryrecords["HC.B"]->getOtsalary();
+        $record->setOtsalary($otsalary);
+        $totalhours = $summaryrecords["HC.C"]->getTotalhours() + $summaryrecords["HC.B"]->getTotalhours();
+        $record->setTotalhours($totalhours);
+
+        $piecesalary = $summaryrecords["HC.C"]->getPiecesalary() + $summaryrecords["HC.B"]->getPiecesalary();
+        $record->setPiecesalary($piecesalary);
+
+        $totalsalary = $summaryrecords["HC.C"]->getTotalsalary() + $summaryrecords["HC.B"]->getTotalsalary();
+        $record->setTotalsalary($totalsalary);
+
+        $attenddays = $summaryrecords["HC.C"]->getAttenddays() + $summaryrecords["HC.B"]->getAttenddays();
+        $record->setAttenddays($attenddays);
+
+        $absencefines = $summaryrecords["HC.C"]->getAbsencefines() + $summaryrecords["HC.B"]->getAbsencefines();
+        $record->setAbsencefines($absencefines);
+
+        $foodpay = $summaryrecords["HC.C"]->getFoodpay() + $summaryrecords["HC.B"]->getFoodpay();
+        $record->setFoodpay($foodpay);
+
+        $rtmonthpay = $summaryrecords["HC.C"]->getRtmonthpay() + $summaryrecords["HC.B"]->getRtmonthpay();
+        $record->setRtmonthpay($rtmonthpay);
+
+        $utfee = $summaryrecords["HC.C"]->getUtfee() + $summaryrecords["HC.B"]->getUtfee();
+        $record->setUtfee($utfee);
+
+        $utallowance = $summaryrecords["HC.C"]->getUtallowance() + $summaryrecords["HC.B"]->getUtallowance();
+        $record->setUtallowance($utallowance);
+
+        $otherfee = $summaryrecords["HC.C"]->getOtherfee() + $summaryrecords["HC.B"]->getOtherfee();
+        $record->setOtherfee($otherfee);
+
+        $inadvance = $summaryrecords["HC.C"]->getInadvance() + $summaryrecords["HC.B"]->getInadvance();
+        $record->setInadvance($inadvance);
+
+        $fullmonaward = $summaryrecords["HC.C"]->getFullmonaward() + $summaryrecords["HC.B"]->getFullmonaward();
+        $record->setFullmonaward($fullmonaward);
+
+        $salary = $summaryrecords["HC.C"]->getSalary() + $summaryrecords["HC.B"]->getSalary();
+        $record->setSalary($salary);
+
+        $record->setMonth($monthobj);
+        $record->setSheet("HC");
+        $this->_em->persist($record);
+        $summaryrecords["HC"] = $record;
+        // HT
+        $record = $this->_summarydetails->findOneBy(array("month" => $monthobj, "sheet" => "HT"));
+        if (!$record) {
+            $record = new \Synrgic\Infox\Salarysummarydetails();
+        }
+        $normalhours = $summaryrecords["HT.C"]->getNormalhours() + $summaryrecords["HT.B"]->getNormalhours();
+        $record->setNormalhours($normalhours);
+        $normalsalary = $summaryrecords["HT.C"]->getNormalsalary() + $summaryrecords["HT.B"]->getNormalsalary();
+        $record->setNormalsalary($normalsalary);
+        $othours = $summaryrecords["HT.C"]->getOthours() + $summaryrecords["HT.B"]->getOthours();
+        $record->setOthours($othours);
+        $otsalary = $summaryrecords["HT.C"]->getOtsalary() + $summaryrecords["HT.B"]->getOtsalary();
+        $record->setOtsalary($otsalary);
+        $totalhours = $summaryrecords["HT.C"]->getTotalhours() + $summaryrecords["HT.B"]->getTotalhours();
+        $record->setTotalhours($totalhours);
+        $piecesalary = $summaryrecords["HT.C"]->getPiecesalary() + $summaryrecords["HT.B"]->getPiecesalary();
+        $record->setPiecesalary($piecesalary);
+        $totalsalary = $summaryrecords["HT.C"]->getTotalsalary() + $summaryrecords["HT.B"]->getTotalsalary();
+        $record->setTotalsalary($totalsalary);
+        $attenddays = $summaryrecords["HT.C"]->getAttenddays() + $summaryrecords["HT.B"]->getAttenddays();
+        $record->setAttenddays($attenddays);
+        $absencefines = $summaryrecords["HT.C"]->getAbsencefines() + $summaryrecords["HT.B"]->getAbsencefines();
+        $record->setAbsencefines($absencefines);
+        $foodpay = $summaryrecords["HT.C"]->getFoodpay() + $summaryrecords["HT.B"]->getFoodpay();
+        $record->setFoodpay($foodpay);
+        $rtmonthpay = $summaryrecords["HT.C"]->getRtmonthpay() + $summaryrecords["HT.B"]->getRtmonthpay();
+        $record->setRtmonthpay($rtmonthpay);
+        $utfee = $summaryrecords["HT.C"]->getUtfee() + $summaryrecords["HT.B"]->getUtfee();
+        $record->setUtfee($utfee);
+        $utallowance = $summaryrecords["HT.C"]->getUtallowance() + $summaryrecords["HT.B"]->getUtallowance();
+        $record->setUtallowance($utallowance);
+        $otherfee = $summaryrecords["HT.C"]->getOtherfee() + $summaryrecords["HT.B"]->getOtherfee();
+        $record->setOtherfee($otherfee);
+        $inadvance = $summaryrecords["HT.C"]->getInadvance() + $summaryrecords["HT.B"]->getInadvance();
+        $record->setInadvance($inadvance);
+        $fullmonaward = $summaryrecords["HT.C"]->getFullmonaward() + $summaryrecords["HT.B"]->getFullmonaward();
+        $record->setFullmonaward($fullmonaward);
+        $salary = $summaryrecords["HT.C"]->getSalary() + $summaryrecords["HT.B"]->getSalary();
+        $record->setSalary($salary);
+
+        $record->setMonth($monthobj);
+        $record->setSheet("HT");
+        $this->_em->persist($record);
+        $summaryrecords["HT"] = $record;
+        
+        // ALL
+        $record = $this->_summarydetails->findOneBy(array("month" => $monthobj, "sheet" => "ALL"));
+        if (!$record) {
+            $record = new \Synrgic\Infox\Salarysummarydetails();
+        }
+        $normalhours = $summaryrecords["HC"]->getNormalhours() 
+                + $summaryrecords["HT"]->getNormalhours()+ $summaryrecords["Others"]->getNormalhours();;
+        $record->setNormalhours($normalhours);
+        $normalsalary = $summaryrecords["HC"]->getNormalsalary() 
+                + $summaryrecords["HT"]->getNormalsalary() + $summaryrecords["Others"]->getNormalsalary();
+        $record->setNormalsalary($normalsalary);
+        $othours = $summaryrecords["HC"]->getOthours() 
+                + $summaryrecords["HT"]->getOthours() + $summaryrecords["Others"]->getOthours();;
+        $record->setOthours($othours);
+        $otsalary = $summaryrecords["HC"]->getOtsalary() 
+                + $summaryrecords["HT"]->getOtsalary() + $summaryrecords["Others"]->getOtsalary();;
+        $record->setOtsalary($otsalary);
+        $totalhours = $summaryrecords["HC"]->getTotalhours() 
+                + $summaryrecords["HT"]->getTotalhours()+ $summaryrecords["Others"]->getTotalhours();
+        $record->setTotalhours($totalhours);
+        $piecesalary = $summaryrecords["HC"]->getPiecesalary() 
+                + $summaryrecords["HT"]->getPiecesalary()+ $summaryrecords["Others"]->getPiecesalary();
+        $record->setPiecesalary($piecesalary);
+        $totalsalary = $summaryrecords["HC"]->getTotalsalary()
+                + $summaryrecords["HT"]->getTotalsalary()+ $summaryrecords["Others"]->getTotalsalary();
+        $record->setTotalsalary($totalsalary);
+        $attenddays = $summaryrecords["HC"]->getAttenddays() 
+                + $summaryrecords["HT"]->getAttenddays()+ $summaryrecords["Others"]->getAttenddays();
+        $record->setAttenddays($attenddays);
+        $absencefines = $summaryrecords["HC"]->getAbsencefines() 
+                + $summaryrecords["HT"]->getAbsencefines()+ $summaryrecords["Others"]->getAbsencefines();
+        $record->setAbsencefines($absencefines);
+        $foodpay = $summaryrecords["HC"]->getFoodpay() 
+                + $summaryrecords["HT"]->getFoodpay()+ $summaryrecords["Others"]->getFoodpay();
+        $record->setFoodpay($foodpay);
+        $rtmonthpay = $summaryrecords["HC"]->getRtmonthpay()
+                + $summaryrecords["HT"]->getRtmonthpay()+ $summaryrecords["Others"]->getRtmonthpay();
+        $record->setRtmonthpay($rtmonthpay);
+        $utfee = $summaryrecords["HC"]->getUtfee() 
+                + $summaryrecords["HT"]->getUtfee()+ $summaryrecords["Others"]->getUtfee();
+        $record->setUtfee($utfee);
+        $utallowance = $summaryrecords["HC"]->getUtallowance()
+                + $summaryrecords["HT"]->getUtallowance()+ $summaryrecords["Others"]->getUtallowance();
+        $record->setUtallowance($utallowance);
+        $otherfee = $summaryrecords["HC"]->getOtherfee()
+                + $summaryrecords["HT"]->getOtherfee()+ $summaryrecords["Others"]->getOtherfee();
+        $record->setOtherfee($otherfee);
+        $inadvance = $summaryrecords["HC"]->getInadvance()
+                + $summaryrecords["HT"]->getInadvance()+ $summaryrecords["Others"]->getInadvance();
+        $record->setInadvance($inadvance);
+        $fullmonaward = $summaryrecords["HC"]->getFullmonaward()
+                + $summaryrecords["HT"]->getFullmonaward()+ $summaryrecords["Others"]->getFullmonaward();
+        $record->setFullmonaward($fullmonaward);
+        $salary = $summaryrecords["HC"]->getSalary()
+                + $summaryrecords["HT"]->getSalary()+ $summaryrecords["Others"]->getSalary();
+        $record->setSalary($salary);
+
+        $record->setMonth($monthobj);
+        $record->setSheet("ALL");
+        $this->_em->persist($record);        
+        
+        $this->_em->flush();
+        $summaryrecords["ALL"] = $record;
         
         // query from summarydetails
         $this->view->month = $monthobj;
         $this->view->summaryrecords = $summaryrecords;
-        
     }
 
 }
