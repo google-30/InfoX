@@ -28,12 +28,13 @@
         $tr = "<tr><td>$key</td><td>$normalhours</td><td>$othours</td><td>$piecesalary</td>"
                 . "<td>$totalsalary</td><td>$foodpay</td><td>$fullmonaward</td><td>$rtmonthpay</td>"
                 . "<td>$utfee</td><td>$utallowance</td>"
-                . "<td>$otherfee</td><td>$salary</td>";
+                . "<td>$otherfee</td><td>$salary</td><td>$salary</td>";
         $trs .= $tr;
     }
     $summarytab = "<table><tr><th></th><th>正常工时</th><th>加班工时</th><th>包工工资</th>"
             . "<th>Amount</th><th>伙食费</th><th>满勤奖</th><th>Less Tax<br>扣税</th>"
             . "<th>水电生活费</th><th>水电生活补贴</th><th>补扣工资</th><th>已发工资</th>"
+            . "<th>净工资</th>"
             . "</tr>";
     $summarytab .= $trs . "</table>";
 

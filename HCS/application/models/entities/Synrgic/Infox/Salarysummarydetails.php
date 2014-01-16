@@ -149,5 +149,10 @@ class Salarysummarydetails extends \Synrgic_Models_Entity {
      * @Column(type="float", nullable=true)
      */
     protected $fullmonaward;
-  
+
+    /**
+     * @Column(type="float", nullable=true)
+     */
+    protected $netpay;
+    
 }
