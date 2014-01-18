@@ -9,27 +9,39 @@
 
 </script>
 
-<a href="/project/manage/add"><button data-theme="a" data-mini="true">添加工地</button></a>
-<?
-echo $this->grid("Sites", true)
-->field('start', '开工日期')
-->field('name','工地名称')
-//->field('address', '地址')
-->field('company', '承包公司')
-->field('contractor', '总包公司')  
-->field('leaders', '工长')  
-//->field('workerno', '工人数')
-->field('stop', '竣工日期')
-->field('postr', 'PO字串')          
-->actionField(':action', "操作", '&nbsp;|&nbsp;')
-//->itemCountPerPage(30)
-->paginatorEnabled(false)
-->setSorting(false)
-->helper(new GridHelper_Project())
-->data($this->maindata)
-->action(':action', '详细', array( 'url'=>array('action'=>'sitedetail')))
-->action(':action', '编辑', array( 'url'=>array('action'=>'edit')))
-->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
-?>
 
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+    <div data-role="collapsible" data-collapsed="false">
+        <h3>工程工地</h3>
+        <div>
+            <a href="/project/manage/add"><button data-theme="a" data-mini="true">添加工地</button></a>
+            <?php
+            echo $this->grid("Sites", true)
+                    ->field('name', '工地名称')
+                    ->field('company', '承包公司')
+                    ->field('contractor', '总包公司')
+                    ->field('leaders', '工长')
+                    ->field('start', '开工日期')
+                    ->field('stop', '竣工日期')
+                    ->field('postr', 'PO字串')
+                    ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+                    ->paginatorEnabled(false)
+                    ->setSorting(false)
+                    ->helper(new GridHelper_Project())
+                    ->data($this->maindata)
+                    ->action(':action', '详细', array('url' => array('action' => 'sitedetail')))
+                    ->action(':action', '编辑', array('url' => array('action' => 'edit')))
+                    ->action(':action', '工程结束', array('url' => array('action' => 'completed')));
+                    //->action(':action', '删除', array('url' => array('action' => 'delete')));
+            ?>
+        </div>
+    </div>
 
+    <div data-role="collapsible" data-collapsed="true">
+        <h3>竣工工地</h3>
+        <div class="ui-grid-a">
+
+        </div>    
+    </div>
+
+</div>

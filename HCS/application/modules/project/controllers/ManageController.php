@@ -427,4 +427,9 @@ class Project_ManageController extends Zend_Controller_Action
         $this->turnofflayout();   
         $this->getSiteDetails();
     }
+    
+    public function completedAction()
+    {
+        
+    }
 }
