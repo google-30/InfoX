@@ -116,4 +116,12 @@ class Site extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $postr;
+    
+    /**
+     * completed     
+     *    
+     * @Column(type="boolean", nullable=true)
+     */
+    protected $completed = false;       
+    
 }
