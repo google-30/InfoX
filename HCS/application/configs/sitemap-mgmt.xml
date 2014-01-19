@@ -161,7 +161,7 @@
 	        </applymaterials>
 
 	        <applicationmanagement>
-		    <label>申请单管理</label>
+		    <label>申请管理</label>
 		    <module>material</module>
 		    <controller>appmanage</controller>
 		    <action>index</action>

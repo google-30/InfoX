@@ -403,9 +403,13 @@ class Project_ManageController extends Zend_Controller_Action {
             $siteobj = $this->_site->findOneBy(array("id" => $id));
             if ($siteobj) {
                 $completed = $siteobj->getCompleted();
-                echo 'completed=' . $completed ;
-                if ($completed) {
-                    $siteobj->setCompleted(!$completed);
+                echo 'completed=' . false . ",". !$completed ;
+                if (!$completed || $completed == FALSE) {
+                    $siteobj->setCompleted(TRUE);
+                }
+                else
+                {
+                    $siteobj->setCompleted(FALSE);
                 }
 
                 $this->_em->persist($siteobj);
@@ -413,7 +417,7 @@ class Project_ManageController extends Zend_Controller_Action {
             }
         }
 
-        //$this->redirect("/project/manage/");
+        $this->redirect("/project/manage/");
     }
 
 }
