@@ -4,14 +4,12 @@
             "iDisplayLength": 50,
             "bRetrieve": true,
         });
-
-
     });
 </script>
-<div data-role="collapsible-set" data-mini="true" data-theme="a">
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="false">
         <h3>当前申请</h3>
-        <?
+        <?php
         echo $this->grid("Applications", true)
         ->field('site','工地')
         ->field('updatedate','更新时间')
@@ -29,9 +27,9 @@
         ->paginatorEnabled(false)
         ->helper(new GridHelper_Application())
         ->data($this->pendingapps)
-        ->action(':action', 'POs', array( 'url'=>array('action'=>'polist')))
-        ->action(':action', '详情', array( 'url'=>array('action'=>'appdetail')))
+        //->action(':action', '详情', array( 'url'=>array('action'=>'appdetail')))
         ->action(':action', '更新', array( 'url'=>array('action'=>'appedit')))
+        ->action(':action', 'POs', array( 'url'=>array('action'=>'polist')))                
         ->action(':action', '成功', array( 'url'=>array('action'=>'appapprove')))
         ->action(':action', '放弃', array( 'url'=>array('action'=>'appgiveup')));
         ?>
@@ -40,7 +38,7 @@
 
     <div data-role="collapsible" data-collapsed="true">
         <h3>成功申请</h3>
-        <?
+        <?php
         echo $this->grid("Applications", true)
         ->field('site','工地')
         ->field('updatedate','更新时间')
@@ -68,7 +66,7 @@
 
     <div data-role="collapsible" data-collapsed="true">
         <h3>放弃申请</h3>
-        <?
+        <?php
         echo $this->grid("Applications", true)
         ->field('site','工地')
         ->field('updatedate','更新时间')

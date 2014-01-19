@@ -31,11 +31,13 @@ class GridHelper_Matapps extends Grid_Helper_Abstract
             $supname = $supplier->getName();
             $rate = $tmp->getRate();
             $unit = $tmp->getUnit();
-            $quantity = $tmp->getQuantity();
-            $amount = $rate * $quantity;
-            
+            //$quantity = $tmp->getQuantity();
+                        
             $value = $id;
-            $str = "$supname:$rate*$quantity($unit)=$amount"; 
+            //$str = "$supname:$rate*$quantity($unit)=$amount"; 
+            $appamount = $row["amount"];
+            $amount = $rate * $appamount;
+            $str = "$supname:$rate*$appamount($unit)=$amount"; 
             $option = "<option value=$value>$str</option>";
             $options.=$option;
         }

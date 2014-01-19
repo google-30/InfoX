@@ -190,6 +190,7 @@ class Material_AppmanageController extends Zend_Controller_Action {
         $matappobj->setQuantity($quantity);
         $matappobj->setUnit($unit);
         $matappobj->setSitepart($sitepart);
+        $matappobj->setTotal($amount * $rate);
         $this->_em->persist($matappobj);
 
         $appobj = $matappobj->getApplication();

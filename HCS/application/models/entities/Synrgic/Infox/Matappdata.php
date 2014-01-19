@@ -83,5 +83,9 @@ class Matappdata extends \Synrgic_Models_Entity {
      * @Column(type="float",nullable=true)
      */
     protected $quantity;
-    
+
+    /**
+     * @Column(type="float",nullable=true)
+     */
+    protected $total;    
 }

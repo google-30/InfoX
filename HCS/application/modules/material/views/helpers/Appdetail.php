@@ -71,6 +71,7 @@ class GridHelper_Appdetail extends Grid_Helper_Abstract
         return $return;    
     }      
    
+    /*
     protected function td_total($field, $row)     
     {
         $amount = $row['amount'];
@@ -80,6 +81,8 @@ class GridHelper_Appdetail extends Grid_Helper_Abstract
         
         return $total;
     }
+     * *
+     */
 }
 
 ?>

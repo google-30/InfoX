@@ -46,7 +46,7 @@ class GridHelper_Application extends Grid_Helper_Abstract
             $matappstr .= $longname;
         }
         
-        return $matappstr;
+        return substr($matappstr, 0, 50);
     }
 }
 

@@ -179,9 +179,9 @@
                         $longname = $tmp->getLongname();
                         $amount = $tmp->getAmount();
                         $rate = $tmp->getRate();
-                        $quantity = $tmp->getQuantity();
-                        $total = round($amount * $rate * $quantity, 2);
-                        $unitprice = round($rate * $quantity,2);
+                        //$quantity = $tmp->getQuantity();
+                        $total = $tmp->getTotal();//round($amount * $rate * $quantity, 2);
+                        $unitprice = $rate; //round($rate * $quantity,2);
 
                         $unit = $tmp->getUnit();
                         $matid = $tmp->getMaterialid();

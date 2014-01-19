@@ -77,7 +77,7 @@ echo $this->grid("matapps", true)
         ->field('amount', '申请数量')
         ->field('unit', '单位')
         ->field('rate', '单价')
-        ->field('quantity', '数量')
+        //->field('quantity', '数量')
         ->field('total', '总价')
         ->field('sitepart', '工程部位')
         //->field('remark','补充说明')
@@ -147,13 +147,13 @@ echo $this->grid("matapps", true)
 
         <div style="padding:10px 20px;">
             <h3>Purchase Order Settings</h3>
-            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <label for="un" class="ui-hidden-accessible">PO No.:</label>
             <input type="text" name="pono" id="pono" value="" placeholder="PO No." data-theme="a" />
 
-            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <label for="un" class="ui-hidden-accessible">Contact:</label>
             <input type="text" name="contact" id="contact" value="" placeholder="Contact" data-theme="a" />            
 
-            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <label for="un" class="ui-hidden-accessible">Phone:</label>
             <input type="text" name="phone" id="phone" value="" placeholder="Phone" data-theme="a" />            
 
             <button type="submit" data-theme="b">Submit</button>

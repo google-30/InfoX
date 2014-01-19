@@ -42,7 +42,7 @@ class Material_PoController extends Zend_Controller_Action {
             if (!in_array($siteobj, $siteobjs)) {
                 $siteobjs[] = $siteobj;
             }
-            
+
             $sitename = $siteobj->getName();
             if (key_exists($sitename, $sitepoobjs)) {
                 $sitepoobjs[$sitename][] = $poobj;
@@ -50,7 +50,6 @@ class Material_PoController extends Zend_Controller_Action {
                 $sitepoobjs[$sitename] = array();
                 $sitepoobjs[$sitename][] = $poobj;
             }
-
         }
         $this->view->siteobjs = $siteobjs;
         $this->view->sitepoobjs = $sitepoobjs;
@@ -59,7 +58,8 @@ class Material_PoController extends Zend_Controller_Action {
     public function podetailsAction() {
         $appid = $this->getParam("appid", 0);
         if ($appid == 0) {
-            echo "please check app id or report to philip.zhou.2009@gmail.com";
+            //echo "please check app id or report to philip.zhou.2009@gmail.com";
+            return;
         }
 
         $appobj = $this->_application->findOneBy(array("id" => $appid));
@@ -79,7 +79,7 @@ class Material_PoController extends Zend_Controller_Action {
 
             $amount = $amount ? $amount : 0;
             $rate = $rate ? $rate : 0;
-            $total += $amount * $rate * $quantity;
+            $total += $amount * $rate;
         }
         $this->view->totalprice = $total;
 
@@ -103,27 +103,27 @@ class Material_PoController extends Zend_Controller_Action {
         foreach ($matapps as $tmp) {
             $supplierobj = $tmp->getSupplier();
             $supplierid = $supplierobj ? $supplierobj->getId() : 0;
-            $suppliername = $supplierobj ? $supplierobj->getName() : "";
-
-            if ($supplierid && !in_array($supplierid, $suppliers)) {
-                $suppliers[$supplierid] = $suppliername;
-
-                // check if PO already there
-                $poobj = $this->_matpodata->findOneBy(array("supplier" => $supplierobj, "application" => $appobj));
-                if (!$poobj) {
-                    // persist in db
-                    $poobj = new \Synrgic\Infox\Matpodata();
-                    $poobj->setApplication($appobj);
-                    $poobj->setSupplier($supplierobj);
-                    $this->_em->persist($poobj);
-                }
-                $poarr[] = $poobj;
+            //$suppliername = $supplierobj ? $supplierobj->getName() : "";
+            if ($supplierid && !key_exists($supplierid, $suppliers)) {
+                $suppliers[$supplierid] = $supplierobj;
             }
         }
+
+        foreach ($suppliers as $supplierobj) {
+            $poobj = $this->_matpodata->findOneBy(array("supplier" => $supplierobj, "application" => $appobj));
+            if (!$poobj) {
+                // persist in db
+                $poobj = new \Synrgic\Infox\Matpodata();
+                $poobj->setApplication($appobj);
+                $poobj->setSupplier($supplierobj);
+                $this->_em->persist($poobj);
+            }
+            $poarr[] = $poobj;
+        }
+        $this->_em->flush();
+
         $this->view->suppliers = $suppliers;
         $this->view->poarr = $poarr;
-
-        $this->_em->flush();
     }
 
     public function posettingsAction() {
