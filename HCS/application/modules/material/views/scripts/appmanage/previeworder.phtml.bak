@@ -127,9 +127,112 @@ $materialrepo = $this->materialrepo;
                 font-size:small;
             }
         </style>
-        <div data-role="page" data-theme="c" style="page-break-after:always">
+
+        <div data-role="page" data-theme="<?php echo $jmtheme; ?>" style="page-break-after:always">
+            <div data-role="content" class="previewcontent">	
+                <strong><?php echo $cmyfullnameeng; ?></strong><br>
+                <?php echo $cmyaddr; ?><br>
+                <?php echo $cmycontact; ?><br><br>
+                <strong><?php echo $formnameeng; ?></strong><br>
+
+                <div class="stayright">PO NO:&nbsp;<u><?php echo $PONO; ?></u></div><br><br>
+
+                <table id="contacttab" class="smallfont">
+                    <tr>
+                        <td><strong>To:&nbsp;</strong><?php echo $supfullname; ?></td>
+                        <td><strong>Attn:&nbsp;</strong><?php echo $supattn . "&nbsp;" . $supattnphone; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date:&nbsp;</strong><?php echo $datestr; ?></td>
+                        <td><strong>Date of Delivery:&nbsp;</strong><?php echo $nextdatestr; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tel No:&nbsp;</strong><?php echo $supofficephone; ?>&nbsp;&nbsp;<strong>Fax No:&nbsp;</strong><?php echo $supfax; ?></td>
+                        <td><strong>Time of Delivery:&nbsp;</strong><?php echo "&nbsp;"; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Terms of Payment:&nbsp;</strong><?php echo "30 days"; ?></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Delivery Location:&nbsp;</strong><?php echo $siteaddress; ?></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Site Personnel In-Charge:&nbsp;</strong><?php echo $sitecontact; ?></td>
+                        <td><strong>Site Tel./HP:&nbsp;</strong><?php echo $sitephone; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Office Personnel In-Charge:&nbsp;</strong><?php echo $staffname; ?></td>
+                        <td><strong>Contact No:&nbsp;</strong><?php echo $staffphone; ?></td>
+                    </tr>
+                </table>
+
+                <p class="stayleft"><strong>Please Supply in accordance to the instructions hereunder:</strong></p>
+
+                <table id="previewtab" class="smallfont">
+                    <tr><th>Item No.</th><th colspan=2 style="width:50%;">Description</th><th>Unit</th><th>Qty</th><th>Unit Price S$</th><th>Amount S$</tr>
+                    <?php
+                    $count = 0;
+                    $trs = "";
+                    $totalprice = 0.0;
+                    foreach ($matapps as $tmp) {
+                        $count++;
+                        $longname = $tmp->getLongname();
+                        $amount = $tmp->getAmount();
+                        $rate = $tmp->getRate();
+                        //$quantity = $tmp->getQuantity();
+                        $total = $tmp->getTotal(); //round($amount * $rate * $quantity, 2);
+                        $unitprice = $rate; //round($rate * $quantity,2);
+
+                        $unit = $tmp->getUnit();
+                        $matid = $tmp->getMaterialid();
+                        $matobj = $materialrepo->findOneBy(array("id" => $matid));
+                        $description = $matobj ? $matobj->getDescription() : "&nbsp;";
+
+                        $totalprice += $total;
+
+                        $tdno = "<td>$count</td>";
+                        $tdname = '<td style="width:25%">' . $longname . '</td>';
+                        $tdspec = "<td>$description</td>";
+                        $tdunit = "<td>$unit</td>";
+                        $tdamount = "<td>$amount</td>";
+                        $tdunitprice = "<td>$unitprice</td>";
+                        $tdtotal = "<td>$total</td>";
+
+                        $tr = "<tr>" . $tdno . $tdname . $tdspec . $tdunit . $tdamount . $tdunitprice . $tdtotal . "</tr>";
+                        $trs .= $tr;
+                    }
+
+                    echo $trs;
+                    ?>
+                    <td colspan=3 style="text-align:left">For office use: Remarks approved by:</td><td>Site RF:</td><td></td><td>Total S$:</td><td><?php echo $totalprice; ?></td>
+                </table>
+                <br>
+                <div class="smallfont">
+                    <div class="stayleft" style="text-align:left">
+                        <strong>General Instructions:</strong><br>
+                        1. Delivery should be made to the above address or any other address specified by us.<br>
+                        2. Supply shall be in accordance with instructions, no substitute parts will be accepted without prior approval.<br>
+                        3. Delivery shall be on or before the delivery date stipulated above.<br>
+                        4. The supplier shall inform us immediately, if for any reason, he is unable to adhere to these instructions.<br><br>
+                        Supplier (By Fax transmission)<br>
+                        Distribution: Original = Accounts&nbsp;&nbsp;&nbsp;&nbsp;Duplicate = Purchasing & Contract<br>
+                    </div>
+                    <br><br><br><br><br><br><br><br><br><br>
+                    <div class="stayleft">
+                        Prepared by:<u><?php echo "____________"; ?></u> 
+                    </div>
+                    Checked by:<u><?php echo "____________"; ?></u>
+                    <div class="stayright">Approved by:<u><?php echo "____________"; ?></u></div><br><br>		
+                </div>
+            </div><!-- /content -->
+        </div><!-- /page -->
+
         <?php
-        $pagehtmlhead = '
+        $limit = 8;
+        $count = 0;
+        $pagehtmlhead = '<div data-role="page" data-theme="' . $jmtheme . '" style="page-break-after:always">
             <div data-role="content" class="previewcontent">	
                 <strong>' . $cmyfullnameeng . '</strong><br>' . $cmyaddr . '<br>'
                 . $cmycontact . '<br><br><strong>' . $formnameeng . '</strong><br>
@@ -172,18 +275,34 @@ $materialrepo = $this->materialrepo;
                     <tr><th>Item No.</th><th colspan=2 style="width:50%;">Description</th><th>Unit</th><th>Qty</th><th>Unit Price S$</th><th>Amount S$</tr>     
                 ';
 
-
+        $pagehtmlfoot = '<td colspan=3 style="text-align:left">For office use: Remarks approved by:</td><td>Site RF:</td><td></td><td>Total S$:</td><td>' . $totalprice . '</td>
+                </table>
+                <br>
+                <div class="smallfont">
+                    <div class="stayleft" style="text-align:left">
+                        <strong>General Instructions:</strong><br>
+                        1. Delivery should be made to the above address or any other address specified by us.<br>
+                        2. Supply shall be in accordance with instructions, no substitute parts will be accepted without prior approval.<br>
+                        3. Delivery shall be on or before the delivery date stipulated above.<br>
+                        4. The supplier shall inform us immediately, if for any reason, he is unable to adhere to these instructions.<br><br>
+                        Supplier (By Fax transmission)<br>
+                        Distribution: Original = Accounts&nbsp;&nbsp;&nbsp;&nbsp;Duplicate = Purchasing & Contract<br>
+                    </div>
+                    <br><br><br><br><br><br><br><br><br><br>
+                    <div class="stayleft">
+                        Prepared by:<u>____________</u> 
+                    </div>
+                    Checked by:<u>____________</u>
+                    <div class="stayright">Approved by:<u>____________</u></div><br><br>		
+                </div>
+            </div>
+        </div>';        
         
-        $limit = 8;
-        $totalcount = 0;
-        $count = 0;
         $pagehtmlbody = $trs = "";
         $totalprice = 0.0;
 
         foreach ($matapps as $tmp) {
             $count++;
-            $totalcount++;
-            
             $longname = $tmp->getLongname();
             $amount = $tmp->getAmount();
             $rate = $tmp->getRate();
@@ -208,41 +327,17 @@ $materialrepo = $this->materialrepo;
 
             $tr = "<tr>" . $tdno . $tdname . $tdspec . $tdunit . $tdamount . $tdunitprice . $tdtotal . "</tr>";
             $trs .= $tr;
-
-            if ($count == $limit || $totalcount == count($matapps)) {
-        $pagehtmlfoot = '<td colspan=3 style="text-align:left">For office use: Remarks approved by:</td><td>Site RF:</td><td></td><td>Total S$:</td><td>' . $totalprice . '</td>
-                </table>
-                <br>
-                <div class="smallfont">
-                    <div class="stayleft" style="text-align:left">
-                        <strong>General Instructions:</strong><br>
-                        1. Delivery should be made to the above address or any other address specified by us.<br>
-                        2. Supply shall be in accordance with instructions, no substitute parts will be accepted without prior approval.<br>
-                        3. Delivery shall be on or before the delivery date stipulated above.<br>
-                        4. The supplier shall inform us immediately, if for any reason, he is unable to adhere to these instructions.<br><br>
-                        Supplier (By Fax transmission)<br>
-                        Distribution: Original = Accounts&nbsp;&nbsp;&nbsp;&nbsp;Duplicate = Purchasing & Contract<br>
-                    </div>
-                    <br><br><br><br><br><br><br><br><br><br>
-                    <div class="stayleft">
-                        Prepared by:<u>____________</u> 
-                    </div>
-                    Checked by:<u>____________</u>
-                    <div class="stayright">Approved by:<u>____________</u></div><br><br>		
-                </div>
-            </div>
-        ';                
-                
-                $pagehtmlbody = $trs;
+            
+            if($count == $limit)
+            {
                 $pagehtml = $pagehtmlhead . $pagehtmlbody . $pagehtmlfoot;
                 echo $pagehtml;
                 $count = 0;
-                $trs = "";
             }
         }
-        // TODO: check this out, http://jsfiddle.net/2wk6Q/3/
+        
         ?>
-
-</div>
+        
+        
     </body>
 </html>
