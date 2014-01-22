@@ -17,6 +17,8 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->_companyinfo = $this->_em->getRepository('Synrgic\Infox\Companyinfo');
         $this->_salarysummary = $this->_em->getRepository('Synrgic\Infox\Salarysummary');
         $this->_summarydetails = $this->_em->getRepository('Synrgic\Infox\Salarysummarydetails');
+        $this->_summarybysite = $this->_em->getRepository('Synrgic\Infox\Salarysummarybysite');
+        $this->_workeronsite = $this->_em->getRepository('Synrgic\Infox\Workeronsite');
     }
 
     public function indexAction() {
@@ -915,4 +917,34 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->view->username = infox_common::getUsername();
     }
 
+    public function summarybysiteAction()
+    {
+        infox_common::turnoffLayout($this->_helper);
+        
+        $monthstr = $this->getParam("month", "");
+        if ($monthstr == "") {
+            // default month should be last one
+            $monthstr = $lastmonth = date('Y-m', strtotime("last month"));
+            //echo $lastmonth;
+        }
+        $monthobj = new DateTime($monthstr . "-01");        
+        
+        
+        // find active sites
+        $sites1 = $this->_site->findBy(array("completed"=>FALSE));
+        $sites2 = $this->_site->findBy(array("completed"=>NULL));
+        $sites = array_merge($sites1, $sites2);
+        foreach ($sites as $tmp)
+        {
+            echo $tmp->getName(). "<br>";
+            $onsiterecords = $this->_workeronsite->findBy(array("site"=>$tmp));
+            foreach($onsiterecords as $record)
+            {
+            $begindate = $record->getBegindate();
+            $enddate = $record->getEnddate();
+            infox_common::getDaysInBetween($begindate, $enddate, $monthobj);
+            }
+        }
+        
+    }
 }

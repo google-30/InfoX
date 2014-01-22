@@ -36,71 +36,9 @@ class Synrgic_Models_AclBuilder {
                  */
                 ),
             ),
-            /*
-              'guest'=>array(
-              'parent'=>'anonymous',
-              'acl'=>array(
-              'bill:index'=>array('view','billsheet','quickcheckout','terms','checkout'),
-              'browser:index'=>array('view'),
-              'gambling:index'=>array('view','login','blackjack', 'logout'),
-              'information:index'=>array('view','subcategory', 'searchresult', 'infodetail'),
-              'local:index'=>array('view', 'addattr', 'getattractions', 'mapview','listview','getsettings'),
-              'service:index'=>array('view','catalog','orderlist','taxi','order','other','cancel'),
-              'noticeboard:index'=>array('acknowledge','delete'),
-              // Non Module/controller based
-              'menu:services'=>array('view'),
-              'menu:entertainment'=>array('view')
-              )
 
-              ),
-              'guest-with-pin'=>array(
-              'parent'=>'guest',
-              'acl'=>array(
-              'gambling:index'=>array('view','logout','blackjack'),
-              )
-              ),
-              'staff'=> array(
-              'parent'=>null,
-              'acl'=>array(
-              'management:dashboard'=>array('view'),
-              'management:index'=>array('view'),
-              'worker:manage'=>array('view'),
-              'project:manage'=>array('view'),
-              'material:manage'=>array('view','add','edit','delete','savedetail'),
-              'management:auth'=>array('view','login','logout'),
-              )
-              ),
-              'admin'=> array (
-              'parent'=>'staff',
-              'acl'=>array(
-              'adverts:admin'=>array('edit','delete', 'add-adverts', 'edit-adverts', 'delete-adverts'),
-              'local:manage'=>array('view','addnew', 'edit', 'delete','uponeposition', 'downoneposition', 'uptotop', 'downtobottom', 'tinymcesubmit'),
-              'bill:manage'=>array('view','room','billspreview', 'expsubmit'),
-              'information:manage'=>array('view','pagemanage','addnew','edit', 'delete','tinymcesubmit','preview','addpage','deletepage','publishpage','pageedit'),
-              'management:accounts'=>array('view','add','edit','delete','resetpasswd'),
-              'management:devices'=>array('edit','delete','pairrequest', 'pair','reset', 'validateeditform'),
-              'management:guest'=>array('view','add','edit','delete'),
-              'management:room'=>array('view','add','list','delete','edit','cancel'),
-              'management:settings'=>array('view','general', 'section', 'savesetting', 'cancel'),
-              'management:language'=>array('view', 'add', 'edit', 'delete'),
-              'management:services'=>array('view','add-other','add-food','edit-food','edit-taxi','edit-services','delete'),
-              'room:manage'=>array('view'),
-              'management:room-service'=>array('view'),
-              'management:catalog'=>array('view','add','edit','delete','translate'),
-              'management:orders'=>array('add','add-detail','edit-detail','edit','delete','delete-detail','room-service','other-service','taxi-service'),
-              'management:provider'=>array('view','edit','delete'),
-              'management:detailstate'=>array('view'),
-              'management:operate-record'=>array('view'),
-              'management:charge-model'=>array('edit','delete'),
-              'management:charge-item'=>array('edit','delete'),
-              'management:translation'=>array('view', 'upload', 'download'),
-              'management:layout-test'=>array('view'),
-              'management:local'=>array('savesetting', 'cancel'),
-              'management:media'=>array('view'),
-              'management:cms'=>array('view','add','edit','delete')
-              )
-              ),
-             */
+            
+            
             'manager' => array(
                 'parent' => null,
                 'acl' => array(
@@ -177,7 +115,8 @@ class Synrgic_Models_AclBuilder {
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),
                     'worker:archive' => array('view', 'edit', 'previewlist'),
                     'salary:salary' => array('view', 'personal', 'salarybymonth', 'gensalaryrecords',
-                        'datainput', 'datapost', 'salarysheet', 'salaryreceipts'),
+                        'datainput', 'datapost', 'salarysheet', 'salaryreceipts', 
+                        'summary', 'summarybysite'),
                     'salary:settings' => array('view', 'submit'),
                     'material:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'importmaterials', 'previewlist', 'supplyprice', 'postsupplyprice'),
@@ -218,7 +157,8 @@ class Synrgic_Models_AclBuilder {
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),
                     'worker:archive' => array('view', 'edit', 'previewlist'),
                     'salary:salary' => array('view', 'personal', 'salarybymonth', 'gensalaryrecords',
-                        'datainput', 'datapost', 'salarysheet', 'salaryreceipts', 'salaryreceiptsbyworker', 'summary'),
+                        'datainput', 'datapost', 'salarysheet', 'salaryreceipts', 
+                        'salaryreceiptsbyworker', 'summary', 'summarybysite'),
                     'salary:settings' => array('view', 'submit'),
                     'project:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery', 'applist', 'allmaterials', 'siteinfo'),

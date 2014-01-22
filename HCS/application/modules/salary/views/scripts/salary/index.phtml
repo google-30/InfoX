@@ -91,18 +91,24 @@
     function opensalarysummary()
     {
         /*
-        var date = $('#summarymonth').val();
-        if (date == "" || !date)
-        {
-            $('#summarymonth').datebox('open');
-            return;
-        }
-
-        var res = date.substring(0, 7);
-        */
+         var date = $('#summarymonth').val();
+         if (date == "" || !date)
+         {
+         $('#summarymonth').datebox('open');
+         return;
+         }
+         
+         var res = date.substring(0, 7);
+         */
         var url = "/salary/salary/summary";
         //url += "&month=" + res;
 
+        OpenInNewTab(url);
+    }
+
+    function opensalarysummarybysite()
+    {
+        var url = "/salary/salary/summarybysite";
         OpenInNewTab(url);
     }
 </script>
@@ -127,19 +133,18 @@ $thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thism
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
         <h3>工资统计</h3>
-        <!--<div class="ui-grid-a">
+        <div class="ui-grid-a">
             <div class="ui-block-a">
-                <input id="summarymonth" placeholder="选择月份，查看工资统计" 
-                       data-role="datebox" data-options='{"mode":"datebox"}'>
-            </div>
-            <div class="ui-block-b">
-                <input type="button" id="salarysummary" value="查看工资统计" data-mini="true" data-theme="a" 
+                <input type="button" id="salarysummary" value="工资统计（公司）" data-mini="true" data-theme="a" 
                        onclick="opensalarysummary()">
             </div>
-        </div>-->
+            <div class="ui-block-b">
+                <input type="button" id="salarysummary" value="工资统计（工地）" data-mini="true" data-theme="a" 
+                       onclick="opensalarysummarybysite()">
+            </div>
+        </div>
         <div>
-            <input type="button" id="salarysummary" value="查看工资统计" data-mini="true" data-theme="a" 
-                   onclick="opensalarysummary()">
+
         </div>
     </div>
 
