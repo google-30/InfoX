@@ -1,39 +1,39 @@
+<?php
+$date = $this->date;
+$monthstr = $date->format("Y-m");
+
+$site = $this->site;
+$sitename = $site->getName();
+$siteid = $this->siteid;
+
+$workerarr = $this->workerarr;
+$attendancearr = $this->attendancearr;
+
+$workerhtmls = $this->workerhtmls;
+
+$username = $this->username;
+
+$url = "/project/attendance/attendquick?" . "sid=$siteid&amp;month=$monthstr";
+$attendquickbtn = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">快速考勤</a>';
+
+$options = "";
+$wid = 0;
+foreach ($workerarr as $worker) {
+    //$wid = $worker->getId();
+    $namechs = $worker->getNamechs();
+    $nameeng = $worker->getNameeng();
+    $wid++;
+    $option = '<option value="' . $wid . '">' . $namechs . $nameeng . "</option>";
+    $options .= $option;
+}
+
+$workersel = '<select id ="workersel" data-mini="true" data-theme="b" >' . $options . "</select>";
+
+$searchinput = '<input type="search" value="" placeholder="">';
+?>
+
 <!DOCTYPE html> 
 <html>
-    <?php
-    $date = $this->date;
-    $monthstr = $date->format("Y-m");
-
-    $site = $this->site;
-    $sitename = $site->getName();
-    $siteid = $this->siteid;
-
-    $workerarr = $this->workerarr;
-    $attendancearr = $this->attendancearr;
-
-    $workerhtmls = $this->workerhtmls;
-
-    $username = $this->username;
-
-    $url = "/project/attendance/attendquick?" . "sid=$siteid&amp;month=$monthstr";
-    $attendquickbtn = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-theme="b" data-mini="true">快速考勤</a>';
-
-    $options = "";
-    $wid = 0;
-    foreach ($workerarr as $worker) {
-        //$wid = $worker->getId();
-        $namechs = $worker->getNamechs();
-        $nameeng = $worker->getNameeng();
-        $wid++;
-        $option = '<option value="' . $wid . '">' . $namechs . $nameeng . "</option>";
-        $options .= $option;
-    }
-
-    $workersel = '<select id ="workersel" data-mini="true" data-theme="b" >' . $options . "</select>";
-    
-    $searchinput='<input type="search" value="" placeholder="">';
-    ?>
-
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width = device-width, initial-scale = 1"> 

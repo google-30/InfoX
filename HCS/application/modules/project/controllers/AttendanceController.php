@@ -177,7 +177,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
 
         $tab = infox_salary::getWorkerSummaryTab($worker, $dateobj, $sno);
         $tabs[] = $tab;
-        
+
         if ($nobtn) {
             $attendtab = infox_project::generateAttendanceTab($attendrecord, $dateobj, false, false);
         } else {
@@ -333,6 +333,22 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $site = infox_project::getSiteById($siteid);
         $this->view->site = $site;
 
+        // active sites
+        $sites1 = $this->_site->findBy(array("completed" => FALSE));
+        $sites2 = $this->_site->findBy(array("completed" => NULL));
+        $sites = array_merge($sites1, $sites2);
+
+        /*
+          $siteoptions = '<option value="0">选择工地</option>';
+          foreach ($sites as $tmp) {
+          $name = $tmp->getName();
+          $id = $tmp->getId();
+          $option = '<option value="' . $id . '">' . $name . '</option>';
+          $siteoptions .= $option;
+          }
+          $sitesel = '<select id="site" name="site" data-mini="true">' . $siteoptions . '</select>';
+         */
+
         // worker atten
         $record = infox_project::getAttendanceByIdMonth($wid, $date);
         //if(!$record) { echo "xxxxx"; }
@@ -371,7 +387,8 @@ class Project_AttendanceController extends Zend_Controller_Action {
 
         $daycount = 0;
         $trs = "";
-
+        $sitelatest = 0;
+        
         for ($i = 0; $i < 6; $i++) {
             $tr = "";
             $tds = "";
@@ -393,9 +410,6 @@ class Project_AttendanceController extends Zend_Controller_Action {
                 $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
 
                 $tmparr = explode(";", $daydata);
-                //$tmpvalue = key_exists(0, $tmparr) ? $tmparr[0] : "";
-                //$tmptype = key_exists(1, $tmparr) ? $tmparr[1] : "";
-
                 $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
                 $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
 
@@ -404,7 +418,25 @@ class Project_AttendanceController extends Zend_Controller_Action {
                 $input2 = '<input type="text" class="dayvalue" id="piece' . $daycount . '" '
                         . 'name="piece' . $daycount . '" value="' . $piecedata . '" placeholder="">';
 
-                $divinputs = '<div class="ui-grid-a">'
+                // site support
+                $sitedata = key_exists(2, $tmparr) ? $tmparr[2] : 0;                
+                //$sitelatest = $sitedata = ($sitedata != 0) ? $sitedata : $sitelatest;
+                        
+                $siteoptions = '<option value="0">选择工地</option>';
+                foreach ($sites as $tmp) {
+                    $name = $tmp->getName();
+                    $id = $tmp->getId();
+                    if ($sitedata == $id) {
+                        $option = '<option value="' . $id . '" selected>' . $name . '</option>';
+                    } else {
+                        $option = '<option value="' . $id . '" >' . $name . '</option>';
+                    }
+                    $siteoptions .= $option;
+                }
+
+                $sitesel = '<select id="site" name="site' . $daycount
+                        . '" data-mini="true">' . $siteoptions . '</select>';
+                $divinputs = $sitesel . '<div class="ui-grid-a">'
                         . '<div class="ui-block-a">' . $input1 . '</div>'
                         . '<div class="ui-block-b">' . $input2 . '</div>'
                         . '</div>';

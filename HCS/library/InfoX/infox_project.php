@@ -489,10 +489,13 @@ class infox_project {
             if (key_exists("date$i", $requests)) {
                 $hour = $requests["date$i"];
                 $piece = $requests["piece$i"];
-
-                $value = implode(";", array($hour, $piece));
+                // add site support
+                $site = $requests["site$i"];
+                
+                $value = implode(";", array($hour, $piece, $site));
                 //$daily = ($daily == "") 
-                $updatestr .= "s.day$i='$value',";
+                $updatestr .= "s.day$i='$value',";                
+                
             }
         }
 

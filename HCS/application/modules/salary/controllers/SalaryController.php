@@ -19,6 +19,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->_summarydetails = $this->_em->getRepository('Synrgic\Infox\Salarysummarydetails');
         $this->_summarybysite = $this->_em->getRepository('Synrgic\Infox\Salarysummarybysite');
         $this->_workeronsite = $this->_em->getRepository('Synrgic\Infox\Workeronsite');
+        $this->_setting = $this->_em->getRepository('Synrgic\Infox\Setting');
     }
 
     public function indexAction() {
@@ -917,34 +918,133 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $this->view->username = infox_common::getUsername();
     }
 
-    public function summarybysiteAction()
-    {
+    public function summarybysiteAction() {
         infox_common::turnoffLayout($this->_helper);
-        
+
         $monthstr = $this->getParam("month", "");
         if ($monthstr == "") {
             // default month should be last one
             $monthstr = $lastmonth = date('Y-m', strtotime("last month"));
             //echo $lastmonth;
         }
-        $monthobj = new DateTime($monthstr . "-01");        
-        
-        
+        $monthobj = new DateTime($monthstr . "-01");
+
         // find active sites
-        $sites1 = $this->_site->findBy(array("completed"=>FALSE));
-        $sites2 = $this->_site->findBy(array("completed"=>NULL));
+        $sites1 = $this->_site->findBy(array("completed" => FALSE));
+        $sites2 = $this->_site->findBy(array("completed" => NULL));
         $sites = array_merge($sites1, $sites2);
-        foreach ($sites as $tmp)
-        {
-            echo $tmp->getName(). "<br>";
-            $onsiterecords = $this->_workeronsite->findBy(array("site"=>$tmp));
-            foreach($onsiterecords as $record)
-            {
-            $begindate = $record->getBegindate();
-            $enddate = $record->getEnddate();
-            infox_common::getDaysInBetween($begindate, $enddate, $monthobj);
+        /*
+          foreach ($sites as $tmp)
+          {
+          echo $tmp->getName(). "<br>";
+          $onsiterecords = $this->_workeronsite->findBy(array("site"=>$tmp));
+          foreach($onsiterecords as $record)
+          {
+          $begindate = $record->getBegindate();
+          $enddate = $record->getEnddate();
+          infox_common::getDaysInBetween($begindate, $enddate, $monthobj);
+          }
+          }
+         * 
+         */
+        $summarybysite = array();
+        foreach ($sites as $site) {
+            $siteid = $site->getId();
+            if (!key_exists($siteid, $summarybysite)) {
+                $summarydata = array("attendance" => 0, "salary" => 0, "site"=>NULL);
+                $summarybysite[$siteid] = $summarydata;
             }
         }
+        //var_dump($summarybysite);            return;            
+
+        $records = $this->_salaryall->findBy(array("month" => $monthobj));
+        foreach ($records as $record) {
+            $rate = $record->getRate();
+            // TODO: ot rate multiple should store in db
+            $cotmultiple = $this->_setting->findOneBy(array("name" => "cotmultiple"));
+            $cotmultipleVal = $cotmultiple->getValue();
+            $botmultiple = $this->_setting->findOneBy(array("name" => "botmultiple"));
+            $botmultipleVal = $botmultiple->getValue();
+
+            $worker = $record->getWorker();
+            $wid = $worker->getId();
+            $month = $record->getMonth()->format("Y-m-d");
+
+            $days = "";
+            for ($i = 1; $i <= 31; $i++) {
+                $day = "s.day$i";
+                if ($i != 31) {
+                    $day .= ",";
+                }
+
+                $days .= $day;
+            }
+
+            $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
+            $result = $this->_em->createQuery($query)->getResult();
+            print_r($result);
+            
+            $totaldays = 0;
+            $sitelatest = 0;
+            foreach ($result[0] as $tmp) {
+                if ($tmp) {
+                    if ($tmp != ";" && $tmp != ";;0") {
+                        $totaldays++;
+                    }
+
+                    $tmparr = explode(";", $tmp);
+                    $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+                    $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+                    $sitedata = key_exists(2, $tmparr) ? $tmparr[2] : "";
+
+                    $sitelatest = $sitedata = ($sitedata == 0) ? $sitelatest : $sitedata;                    
+                    
+                    if (key_exists($sitedata, $summarybysite)) {
+                        $summarydata = $summarybysite[$sitedata];
+                    } else {
+                        continue;
+                    }
+
+                    $totalsalary = $summarydata['salary'];
+                    $totalattendance = $summarydata['attendance'];
+
+                    if ($hoursdata && $hoursdata != "") {
+                        $normalhours = ($hoursdata <= 8) ? $hoursdata : 8;
+                        $othours = ($hoursdata > 8) ? ($hoursdata - 8) : 0;
+                        $totalsalary += $normalhours * $rate + $othours * $cotmultipleVal * $rate;
+                    } else {
+                        $totalsalary += $piecedata;
+                    }
+
+                    $summarydata['salary'] = $totalsalary;
+                    $summarybysite[$sitedata] = $summarydata;
+                }
+            }
+        }
+
+        var_dump($summarybysite);   //return;
         
+        // write data into db
+        foreach($summarybysite as $siteid => $summary)
+        {
+            $siteobj = $this->_site->findOneBy(array("id"=>$siteid));
+            $summarybysite[$siteid]["site"] = $siteobj;
+            
+            $summaryrecord = $this->_summarybysite
+                    ->findOneBy(array("site"=>$siteobj, "month"=>$monthobj));
+            if(!$summaryrecord)
+            {
+                $summaryrecord = new \Synrgic\Infox\Salarysummarybysite();
+            }
+            $summaryrecord->setSite($siteobj);
+            $summaryrecord->setMonth($monthobj);
+            $summaryrecord->setTotalsalary($summary["salary"]);
+            $this->_em->persist($summaryrecord);
+        }
+        
+        $this->_em->flush();
+        
+        $this->view->summarybysite = $summarybysite;
     }
+
 }
