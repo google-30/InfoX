@@ -111,6 +111,11 @@
         var url = "/salary/salary/summarybysite";
         OpenInNewTab(url);
     }
+    
+    function opensalaryhistory()
+    {
+        alert("Only for history review, won't generate any data.");
+    }
 </script>
 <?php
 $sheetarr = $this->sheetarr;
@@ -135,12 +140,12 @@ $thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thism
         <h3>工资统计</h3>
         <div class="ui-grid-a">
             <div class="ui-block-a">
-                <input type="button" id="salarysummary" value="工资统计（公司）" data-mini="true" data-theme="a" 
+                <input type="button" id="salarysummary" value="工资统计" data-mini="true" data-theme="a" 
                        onclick="opensalarysummary()">
             </div>
             <div class="ui-block-b">
-                <input type="button" id="salarysummary" value="工资统计（工地）" data-mini="true" data-theme="a" 
-                       onclick="opensalarysummarybysite()">
+                <input type="button" id="salarysummary" value="历史统计" data-mini="true" data-theme="a" 
+                       onclick="opensalaryhistory()">
             </div>
         </div>
         <div>
