@@ -159,6 +159,8 @@ class Synrgic_Models_AclBuilder {
                     'salary:salary' => array('view', 'personal', 'salarybymonth', 'gensalaryrecords',
                         'datainput', 'datapost', 'salarysheet', 'salaryreceipts', 
                         'salaryreceiptsbyworker', 'summary', 'summarybysite'),
+                    'salary:worker' => array('view', 'personal', ''),
+                    
                     'salary:settings' => array('view', 'submit'),
                     'project:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery', 'applist', 'allmaterials', 'siteinfo'),

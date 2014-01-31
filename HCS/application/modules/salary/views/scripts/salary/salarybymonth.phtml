@@ -1,26 +1,26 @@
+<?php
+$monthstr = $this->monthstr;
+$sheet = $this->sheet;
+$sheetarr = $this->sheetarr;
+$salarytabs = $this->salarytabs;
+$username = $this->username;
+$salaryrecords = $this->salaryrecords;
+
+$options = "";
+$count = 0;
+foreach ($salaryrecords as $record) {
+    $count++;
+    $name = $record->getWorker()->getNamechs();
+    $name = (!$name || $name == "") ? $record->getWorker()->getNameeng() : $name;
+    $option = "<option value=$count>" . $name . "</option>";
+    $options .= $option;
+}
+$workerselect = '<select id="workersel" data-theme="b" data-mini="true">' . $options . "</select>";
+
+$salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
+?>
 <!DOCTYPE html> 
 <html>
-    <?php
-    $monthstr = $this->monthstr;
-    $sheet = $this->sheet;
-    $sheetarr = $this->sheetarr;
-    $salarytabs = $this->salarytabs;
-    $username = $this->username;
-    $salaryrecords = $this->salaryrecords;
-
-    $options = "";
-    $count = 0;
-    foreach ($salaryrecords as $record) {
-        $count++;
-        $name = $record->getWorker()->getNamechs();
-        $name = (!$name || $name == "") ? $record->getWorker()->getNameeng() : $name;
-        $option = "<option value=$count>" . $name . "</option>";
-        $options .= $option;
-    }
-    $workerselect = '<select id="workersel" data-theme="b" data-mini="true">' . $options . "</select>";
-
-    $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
-    ?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -166,6 +166,7 @@
                     <!--<div class="ui-block-b"><a data-mini="true" type="text" name="previewpayslips" id="previewpayslips" 
                     value="" data-role="button" data-theme="b">导出</a></div>-->
                 </div>
+                <br>
                 <?php
                 $divno = 0;
                 $alltabs = "";

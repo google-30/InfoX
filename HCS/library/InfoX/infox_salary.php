@@ -941,7 +941,9 @@ class infox_salary {
         $tr .= '<th>计时工时</th><th>计件工资</th><th>总金额</th></tr>';
         $table .= $tr;
 
-        $tr = "<tr><td>$sno</td><td>$wpno</td><td>$name</td><td>$rate</td><td>$worktype</td>";
+        $tr = "<tr><td>$sno</td><td>$wpno</td><td>"
+                . '<strong style="color:red;">' . $name . "</strong>"
+                . "</td><td>$rate</td><td>$worktype</td>";
         $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td>"
                 . "<td>$totalhours</td><td>$piecesalary</td>";
         $tr .= "<td>$totalsalary</td><td>$totaldays</td>";
