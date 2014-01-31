@@ -6,7 +6,7 @@
         $('#Workersdata').dataTable({
             "iDisplayLength": 100,
             "bRetrieve": true,
-            "aaSorting": [[ 0, "desc" ]],
+            "aaSorting": [[0, "desc"]],
         });
     });
 
@@ -35,14 +35,14 @@ foreach ($sheetarr as $tmp) {
 
     $options .= $option;
 }
-$selects = '<select data-mini="true" id="sheetselect">';
+$selects = '<select data-mini="true" id="sheetselect" data-theme="a">';
 $selects.=$options;
 $selects.='</select>';
 echo $selects;
 
 $onswitches = array(
     "site" => "Site", "eeeno" => "E'ee No.", "namechs" => "Name", "nameeng" => "Name ", "wpno" => "WP No.",
-    "ppno" => "PP No.", /*"rate" => "RATE",*/);
+    "ppno" => "PP No.", /* "rate" => "RATE", */);
 
 $wdtab = $this->grid("Workersdata", true);
 foreach ($onswitches as $key => $value) {
@@ -54,6 +54,5 @@ $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
 $wdtab = $wdtab->data($maindata)->action(':action', '工地', array('url' => array('action' => 'onsiterecord')));
 $wdtab = $wdtab->action(':action', '缺勤', array('url' => array('action' => 'attendancerecord')));
 echo $wdtab;
-
 ?>
 <br><br>

@@ -53,8 +53,6 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
     }
 
     protected function td_site($field, $row) {
-        //return "XXX";
-
         $wid = $row['id'];
         $em = Zend_Registry::get('em');
         $workerdetails = $em->getRepository('Synrgic\Infox\Workerdetails');
@@ -62,17 +60,21 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         $workerobj = $workerdetails->findOneBy(array("id" => $wid));
         $onsiterecords = $workeronsite->findBy(array("worker" => $workerobj));
         $sitenames = "";
+        $sitenameArr = array();
         foreach ($onsiterecords as $tmp) {
             $siteobj = $tmp->getSite();
 
             $sitename = $siteobj->getName();
-            $enddate = $tmp->getEnddate();
-            $nowdate = new DateTime("now");
-            if ($enddate > $nowdate || !$enddate) {
-                $sitenames .= $sitename . "&nbsp;";
-            }
+            //$enddate = $tmp->getEnddate();
+            //$nowdate = new DateTime("now");
+            //if ($enddate > $nowdate || !$enddate) 
+            if (!$siteobj->getCompleted() && !in_array($sitename, $sitenameArr)){
+                //$sitenames .= $sitename . "&nbsp;";
+                $sitenameArr[] = $sitename;                
+            }            
         }
-        return $sitenames;
+        //return $sitenames;
+        return implode("<br>", $sitenameArr);
     }
 
     protected function td_salary($field, $row) {        

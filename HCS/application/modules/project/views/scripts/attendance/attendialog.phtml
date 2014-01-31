@@ -1,3 +1,24 @@
+<?php
+$worker = $this->workerdetails;
+$wid = $worker->getId();
+$wpno = $worker->getWpno();
+$wname = $worker->getNamechs();
+if (!$wname || $wname == "") {
+    $wname = $worker->getNameeng();
+}
+
+$site = $this->site;
+$sitename = $site->getName();
+
+$attendance = $this->attendance;
+
+$date = $this->date;
+$monthstr = $this->monthstr;
+
+$workersummarytab = $this->workersummarytab;
+
+$datetab = $this->datetab;
+?>
 <!DOCTYPE html> 
 <html>
     <head>
@@ -97,36 +118,14 @@
             }
 
         </script>
-        <?php
-        $worker = $this->workerdetails;
-        $wid = $worker->getId();
-        $wpno = $worker->getWpno();
-        $wname = $worker->getNamechs();
-        if (!$wname || $wname == "") {
-            $wname = $worker->getNameeng();
-        }
-
-        $site = $this->site;
-        $sitename = $site->getName();
-
-        $attendance = $this->attendance;
-
-        $date = $this->date;
-        $monthstr = $this->monthstr;
-
-        $workersummarytab = $this->workersummarytab;
-
-        $datetab = $this->datetab;
-        ?>
-
         <div data-role="dialog">
             <div data-role="header" data-theme="d">
-                <h1><?= $sitename?>&nbsp;<?= $monthstr ?>&nbsp;考勤</h1>
+                <h1><?= "考勤 " . $sitename . " " . $monthstr ?></h1>
             </div>
 
             <div data-role="content" data-theme="c">
                 <div id="attensheet">
-                    <?=$workersummarytab ?>
+                    <?= $workersummarytab ?>
                 </div>
                 <br>
                 <div>

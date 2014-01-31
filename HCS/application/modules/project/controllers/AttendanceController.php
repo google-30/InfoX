@@ -19,7 +19,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
     public function indexAction() {
         $error = "";
 
-        $sites = infox_user::getUserSites();
+        $sites = infox_user::getActiveSites();
         $this->view->sites = $sites;
 
         $siteid = $this->getParam("siteid", 0);

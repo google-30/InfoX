@@ -7,9 +7,9 @@
             "iDisplayLength": 100,
             "bRetrieve": true,
         });
-        
+
         var siteid = $("#sites").val();
-        if(siteid==0)
+        if (siteid == 0)
         {
             $("#contentdiv").hide();
         }
@@ -62,8 +62,8 @@ $workersonsite = $this->workersonsite;
     <?= $this->error ?>
 </div>
 
-<select id="sites" data-mini="true">
-    <option value=0>请选择工地</option>
+<select id="sites" data-mini="true" data-theme="a">
+    <option value=0>选择工地进行考勤</option>
     <?php
     $options = '';
     foreach ($sites as $tmp) {
@@ -71,86 +71,89 @@ $workersonsite = $this->workersonsite;
         $name = $tmp->getName();
 
         if ($siteid == $id) {
-            echo '<option value="' . $id . '" selected>' . $name . "</option>";
+            $option = '<option value="' . $id . '" selected>' . $name . "</option>";
         } else {
-            echo '<option value="' . $id . '" >' . $name . "</option>";
+            $option = '<option value="' . $id . '" >' . $name . "</option>";
         }
+        $options .= $option;
     }
     echo $options;
     ?>
 </select>
 
 <div id="contentdiv">
-<fieldset>
-    <legend>选择月份</legend>
-    <div class="ui-grid-d">
-        <?php
-        $nowdate = new Datetime("now");
-        $currentmonth = $nowdate->format("m");
-        $currentyear = $nowdate->format("Y");
-        $count = 0;
-        $grids = "";
-        if (count($workingmonths)) {
-            foreach ($workingmonths as $tmp) {
-                //$oncount++;
-                $count++;
-                $block = "a";
-                switch ($count) {
-                    case 1:
-                        $block = "a";
-                        break;
-                    case 2:
-                        $block = "b";
-                        break;
-                    case 3:
-                        $block = "c";
-                        break;
-                    case 4:
-                        $block = "d";
-                        break;
-                    case 5:
-                        $block = "e";
-                        $count = 0;
-                        break;
+    <fieldset>
+        <legend>选择月份</legend>
+        <div class="ui-grid-d">
+            <?php
+            $nowdate = new Datetime("now");
+            $currentmonth = $nowdate->format("m");
+            $currentyear = $nowdate->format("Y");
+            $count = 0;
+            $grids = "";
+            if (count($workingmonths)) {
+                foreach ($workingmonths as $tmp) {
+                    //$oncount++;
+                    $count++;
+                    $block = "a";
+                    switch ($count) {
+                        case 1:
+                            $block = "a";
+                            break;
+                        case 2:
+                            $block = "b";
+                            break;
+                        case 3:
+                            $block = "c";
+                            break;
+                        case 4:
+                            $block = "d";
+                            break;
+                        case 5:
+                            $block = "e";
+                            $count = 0;
+                            break;
+                    }
+
+                    $datestr = $tmp->format("Y-m");
+                    $datestr1 = $tmp->format("Ym");
+
+                    $year = $tmp->format("Y");
+                    $month = $tmp->format("m");
+                    if ($year == $currentyear && $month == $currentmonth) {
+                        $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')" data-theme="a">' . $datestr . "</button>";
+                    } else {
+                        $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')">' . $datestr . "</button>";
+                    }
+
+                    $grid = '<div class="ui-block-' . $block . '">' . $button . "</div>\n";
+                    $grids .= $grid;
                 }
-
-                $datestr = $tmp->format("Y-m");
-                $datestr1 = $tmp->format("Ym");
-
-                $year = $tmp->format("Y");
-                $month = $tmp->format("m");
-                if ($year == $currentyear && $month == $currentmonth) {
-                    $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')" data-theme="a">' . $datestr . "</button>";
-                } else {
-                    $button = '<button data-mini="true" onclick="openpage(' . $datestr1 . ')">' . $datestr . "</button>";
-                }
-
-                $grid = '<div class="ui-block-' . $block . '">' . $button . "</div>\n";
-                $grids .= $grid;
             }
-        }
-        echo $grids;
-        ?>
-    </div>
-</fieldset>
-<h3>工人列表</h3>
-<?php
+            echo $grids;
+            ?>
+        </div>
+    </fieldset>
+    <h4>工人列表</h4>
+    <?php
 //echo 'workers no=' . count($workersonsite);
-echo $this->grid("Workersonsite", true)
-        //->field('sn', 'SN')
-        ->field('eeeno', 'Eee No')
-        ->field('namechs', 'Name Chs')
-        ->field('nameeng', 'Name Eng')
-        ->field('wpno', 'Wpno')
-        //->field('enddate1','结束日期')
-        //->field('site1', '所在工地') 
-        //->field('payment1', '考勤方式')  
-        //->actionField(':action', "", '&nbsp;|&nbsp;')
-        ->paginatorEnabled(false)
-        ->setSorting(false)
-        //->helper(new GridHelper_Workeronsite())
-        ->data($workersonsite);
-?>
+    echo $this->grid("Workersonsite", true)
+            //->field('sn', 'SN')
+            ->field('eeeno', 'Eee No')
+            ->field('namechs', 'Name Chs')
+            ->field('nameeng', 'Name Eng')
+            ->field('site', '所在工地')
+            //->field('wpno', 'Wpno')
+            //->field('enddate1','结束日期')
+            //->field('site1', '所在工地') 
+            //->field('payment1', '考勤方式')  
+            //->actionField(':action', "", '&nbsp;|&nbsp;')
+            ->paginatorEnabled(false)
+            ->setSorting(false)
+            //->helper(new GridHelper_Workeronsite())
+            ->helper(new GridHelper_Workerdetails())
+            ->data($workersonsite);
+    ?>
 </div>
 <br>
 

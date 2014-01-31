@@ -37,7 +37,7 @@ $searchinput = '<input type="search" value="" placeholder="">';
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width = device-width, initial-scale = 1"> 
-        <title>考勤&nbsp;<?= $sitename ?>&nbsp;<? echo $monthstr; ?></title>
+        <title><?= "考勤 " . $sitename . " " . $monthstr ?></title>
         <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
         <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
         <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
@@ -177,9 +177,9 @@ $searchinput = '<input type="search" value="" placeholder="">';
                 <!--<h1>Single page</h1>-->
                 <table style="table-layout:fixed;">
                     <tr>
-                        <td><? echo "工地名称: " . $sitename; ?></td>
-                        <td><? echo "月份: " . $monthstr; ?></td>
-                        <td>工资负责人:&nbsp;<?= $username ?></td>
+                        <td><?= "工地名称: " . $sitename; ?></td>
+                        <td><?= "月份: " . $monthstr; ?></td>
+                        <td>考勤负责人:&nbsp;<?= $username ?></td>
                     </tr>
                 </table>
             </div><!-- /header -->
@@ -206,19 +206,9 @@ $searchinput = '<input type="search" value="" placeholder="">';
 
                 <?php
                 $divno = 0;
-                /*
-                  foreach ($workerhtmls as $tmp) {
-                  //echo $tmp . "<br>";
-                  $tab1 = $tmp[0];
-                  $tab2 = $tmp[1];
-
-                  echo $tab1 . $tab2 . "<br>";
-                  } */
                 foreach ($workerhtmls as $tmp) {
-                    //echo $tmp . "<br>";    
                     $tab1 = $tmp[0];
                     $tab2 = $tmp[1];
-
                     $divno++;
                     echo "<div id=worker$divno>
                             " . $tab1 . $tab2 . "</div><br>
