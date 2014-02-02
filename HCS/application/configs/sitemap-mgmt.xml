@@ -100,6 +100,15 @@
                         <privilege>view</privilege>
                     </workersalary>
 
+                    <historysalary>
+                        <label>历史工资支出</label>
+                        <module>salary</module>
+                        <controller>history</controller>
+                        <action>index</action>
+                        <resource>salary:history</resource>
+                        <privilege>view</privilege>
+                    </historysalary>
+
                     <salarysettings>
                         <label>工资设定</label>
                         <module>salary</module>

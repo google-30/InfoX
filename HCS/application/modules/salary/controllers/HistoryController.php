@@ -1,6 +1,6 @@
 <?php
 /**
- * Description of WorkerController
+ * Description of Salary_HistoryController
  *
  * @author philip
  */
@@ -10,7 +10,7 @@ include 'InfoX/infox_user.php';
 include 'InfoX/infox_worker.php';
 include 'InfoX/infox_salary.php';
 
-class Salary_WorkerController extends Zend_Controller_Action {
+class Salary_HistoryController extends Zend_Controller_Action {
         public function init() {
         $this->_em = Zend_Registry::get('em');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');

@@ -1,28 +1,28 @@
+<?php
+$sheetsel = $this->sheetsel;
+$yearsel = $this->yearsel;
+$workersel = $this->workersel;
+
+$worker = $this->worker;
+if ($worker) {
+    $workername = ($worker->getNamechs() == "") ? $worker->getNameeng() : $worker->getNamechs();
+} else {
+    $workername = "";
+}
+$records = $this->recordsbyyear;
+
+$salarytabs = $this->salarytabs;
+$salaryall = $this->salaryall;
+$salaryallformat = $this->salaryallformat;
+
+//$salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
+?>
 <!DOCTYPE html> 
 <html>
-    <?php
-    $sheetsel = $this->sheetsel;
-    $yearsel = $this->yearsel;
-    $workersel = $this->workersel;
-
-    $worker = $this->worker;
-    if ($worker) {
-        $workername = ($worker->getNamechs() == "") ? $worker->getNameeng() : $worker->getNamechs();
-    } else {
-        $workername = "";
-    }
-    $records = $this->recordsbyyear;
-
-    $salarytabs = $this->salarytabs;
-    $salaryall = $this->salaryall;
-    $salaryallformat = $this->salaryallformat;
-
-    $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
-    ?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"> 
-        <title>历史工资列表<?php if ($workername !== "") echo "-" . $workername; ?></title> 
+        <title>工人历史工资列表</title> 
         <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
         <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
         <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
@@ -73,14 +73,14 @@
                 $("#sheetsel").on("change", function() {
                     //alert("sheet change");
                     var sheetname = $(this).val();
-                    var url = "/salary/salary/personal?sheet=" + sheetname;
+                    var url = "/salary/worker/personal?sheet=" + sheetname;
                     redirect(url);
                 });
 
                 $("#workersel").on("change", function() {
                     //alert("change");
                     var id = $(this).val();
-                    var url = "/salary/salary/personal?";
+                    var url = "/salary/worker/personal?";
                     url += "id=" + id;
                     redirect(url);
                 });
@@ -89,7 +89,7 @@
                     //alert("year change");
                     var id = $("#workersel").val();
                     var year = $(this).val();
-                    var url = "/salary/salary/personal?";
+                    var url = "/salary/worker/personal?";
                     url += "id=" + id;
                     url += "&year=" + year;
                     redirect(url);
@@ -105,9 +105,9 @@
                 var sheet = $("#sheetsel").val();
                 var year = $("#yearsel").val();
                 var worker = $("#workersel").val();
-                var url = "/salary/salary/salaryreceiptsbyworker?";                
+                var url = "/salary/salary/salaryreceiptsbyworker?";
                 url += "&year=" + year;
-                url += "&id=" + worker;                
+                url += "&id=" + worker;
                 OpenInNewTab(url);
             }
 
@@ -122,7 +122,7 @@
             <div data-role="header" >
                 <table id="headertab">
                     <tr>
-                        <td>历史工资列表</td>
+                        <td>工人历史工资列表<?php if ($workername !== "") echo "-" . $workername; ?></td>
                         <!--<td>工人:&nbsp;<?= $workername ?></td>-->
                     </tr>
                 </table>

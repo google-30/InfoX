@@ -29,6 +29,7 @@ class infox_salary {
         self::$_setting = self::$_em->getRepository('Synrgic\Infox\Setting');
 
         self::$_salarysummary = self::$_em->getRepository('Synrgic\Infox\Salarysummary');
+        
     }
 
     public static function getSettingArray() {
@@ -962,8 +963,7 @@ class infox_salary {
 
         $_salarysummary = self::$_salarysummary;
         $summaryrecord = $_salarysummary->findOneBy(array("month" => $month));
-        if(!$summaryrecord)
-        {
+        if (!$summaryrecord) {
             $summaryrecord = new \Synrgic\Infox\Salarysummary();
         }
         $_salaryall = self::$_salaryall;
@@ -1000,12 +1000,89 @@ class infox_salary {
             default:
                 break;
         }
-        
+
         $summaryrecord->setMonth($month);
 
         $em = self::$_em;
         $em->persist($summaryrecord);
         $em->flush();
+    }
+
+    public static function generateSalaryTabs($salaryrecords, $inputbtn) {
+        $salarytabs = array();
+        $sno = 0;
+
+        if (!count($salaryrecords)) {
+            echo "No salary records in db, please check.";
+            return;
+        }
+        //$monthstr = $salaryrecords[0]->getMonth()->format("Y-m");
+
+        foreach ($salaryrecords as $record) {
+            $tmparr = array();
+            $workertab = "";
+            $worker = $record->getWorker();
+            $sno++;
+            $wid = $worker->getId();
+            $monthstr = $record->getMonth()->format("Y-m");
+            $tmparr = self::getSalarytabsByWidMonthstr($wid, $monthstr, $inputbtn);
+            $salarytabs[] = $tmparr;
+        }
+
+        return $salarytabs;
+    }
+
+    public static function getSalarytabsByWidMonthstr($wid, $monthstr, $inputbtn) {
+        self::getRepos();
+
+        $tmparr = array();
+        $worker = self::$_workerdetails->findOneBy(array("id" => $wid));
+        if (!$worker) {
+            return;
+        }
+
+        $month = new Datetime($monthstr . "-01");
+        $salaryrepo = self::$_salaryall;
+        $salaryrecord = $salaryrepo->findOneBy(array("worker" => $worker, "month" => $month));
+
+        $tab = self::generateWorkerTabBySalary($salaryrecord);
+        $tmparr[] = $tab;
+
+        $tab = infox_salary::generatePaymentTabByRecord($salaryrecord, $inputbtn);
+        $tmparr[] = $tab;
+
+        $attendance = self::$_siteatten->findOneBy(array("worker" => $worker, "month" => $month));
+        $tab = infox_project::generateAttendanceTab($attendance, $monthstr, false);
+        $tmparr[] = $tab;
+
+        return $tmparr;
+    }
+
+    public static function generateWorkerTabBySalary($salaryrecord) {
+        $sr = $salaryrecord;
+        $worker = $sr->getWorker();
+        $name = $worker->getNamechs();
+        if (!$name || $name == "") {
+            $name = $worker->getNameeng();
+        }
+        $sno = $wid = $worker->getId();
+        $wpno = $worker->getWpno();
+        $eeeno = $worker->getEeeno();
+        $price = $worker->getCurrentrate();
+        $type = $worker->getWorktype();
+
+        $rate = $sr->getRate();
+        $actualrate = ($rate != "" && $rate != 0) ? $rate : $price;
+
+        $monthobj = $salaryrecord->getMonth();
+        $monthstr = $monthobj->format("Y-m");
+        $tab = '<table class="workerinfo">';
+        $tab .= "<tr><th>年月</th><th>准证号</th><th>编号</th><th>姓名</th><th>单价</th><th>工种</th></tr>";
+        $tab .= "<tr><td>$monthstr</td><td>$wpno</td><td>$eeeno</td>"
+                . '<td><strong style="color:red;"> ' . $name . "</strong></td><td>$actualrate</td><td>$type</td></tr>";
+        $tab .= "</table>";
+
+        return $tab;
     }
 
 }
