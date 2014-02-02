@@ -1,0 +1,174 @@
+<?php
+$sheetarr = $this->sheetarr;
+$sheet = $this->sheet;
+$maindata = $this->workerarr;
+
+$nowdate = new Datetime("now");
+$thismonth = $nowdate->format("Y-m");
+$thismonth1 = $nowdate->format("Ym");
+$lastmonth = date('Y-m', strtotime("last month"));
+$lastmonth1 = date('Ym', strtotime("last month"));
+
+$thismonthurl = "/salary/salary/salarybymonth?sheet=$sheet&month=$thismonth";
+$lastmonthurl = "/salary/salary/salarybymonth?sheet=$sheet&month=$lastmonth";
+
+$lastmonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$lastmonth";
+$thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thismonth";
+
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    } else {
+        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+    }
+
+    $options .= $option;
+}
+$selects = '<select data-mini="true" id="sheetselect" data-theme="a">' . $options . "</select>";
+//echo $selects . "<br>";
+
+$onswitches = array(
+    "sn" => "S/N", "eeeno" => "E'ee No.", "namechs" => "Name Chs", "nameeng" => "Name Eng", "wpno" => "WP No.",
+    "ppno" => "PP No.", "rate" => "RATE",);
+
+$wdtab = $this->grid("Workersdata", true);
+foreach ($onswitches as $key => $value) {
+    $wdtab = $wdtab->field($key, $value);
+}
+$wdtab = $wdtab->field("salary", "历史工资");
+$wdtab = $wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+$wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+$wdtab = $wdtab->helper(new GridHelper_Workerdetails());
+$wdtab = $wdtab->data($maindata);
+//$wdtab = $wdtab->action(':action', '工资', array('url' => array('action' => 'personal')));
+//$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+?>
+
+<link rel="stylesheet"  href="/common/datebox/jqm-datebox-1.1.0.css" /> 
+<script src="/common/datebox/jqm-datebox-1.1.0.core.js"></script>
+<script src="/common/datebox/jqm-datebox-1.1.0.mode.calbox.js"></script>
+<script src="/common/datebox/jqm-datebox-1.1.0.mode.datebox.js"></script>
+
+<script>
+    $(function() {
+        $('#Workersdata').dataTable({
+            "iDisplayLength": 50,
+            "bRetrieve": true,
+        });
+    });
+
+    $('#salarymonth').bind('datebox', function(e, passed) {
+        if (passed.method === 'close') {
+            //$('element').datebox('disable');
+            var val = $(this).val();
+            //alert(val);
+            var res = val.substring(0, 7);
+            $("#salaryrecords").prev(".ui-btn-inner").children().text('详细工资 ' + res);
+        }
+    });
+    $('#receiptdate').bind('datebox', function(e, passed) {
+        if (passed.method === 'close') {
+            //$('element').datebox('disable');
+            var val = $(this).val();
+            //alert(val);
+            //var res = val.substring(0, 7);            
+            $("#salaryreceipts").prev(".ui-btn-inner").children().text('工资收据 ' + val);
+        }
+    });
+
+    function opensalaryrecords()
+    {
+        var date = $('#salarymonth').val();
+        if (date == "" || !date)
+        {
+            $('#salarymonth').datebox('open');
+            return;
+        }
+
+        var res = date.substring(0, 7);
+
+        var sheet = $("#sheetselect").val();
+        var url = "/salary/salary/salarybymonth?sheet=" + sheet;
+        url += "&month=" + res;
+        OpenInNewTab(url);
+    }
+
+    function opensalaryreceipts()
+    {
+        var date = $('#salarymonth').val();
+        if (date == "" || !date)
+        {
+            alert("请选择工资月份和收据日期");
+            return;
+        }
+
+        var res = date.substring(0, 7);
+        var date = $('#receiptdate').val();
+        if (date == "" || !date)
+        {
+            alert("请选择工资月份和收据日期");
+            return;
+        }
+
+
+        var sheet = $("#sheetselect").val();
+        var url = "/salary/salary/salaryreceipts?sheet=" + sheet;
+        url += "&month=" + res;
+        url += "&date=" + date;
+        OpenInNewTab(url);
+    }
+
+    function OpenInNewTab(url)
+    {
+        var win = window.open(url, '_blank');
+        win.focus();
+    }
+
+    $("#sheetselect").change(function() {
+        var sheetname = $(this).val();
+        var url = "/salary/salary?sheet=" + sheetname;
+        redirect(url);
+    });
+
+    function redirect(url) {
+        window.location = url;
+    }
+
+    function opensalarysummary()
+    {
+        /*
+         var date = $('#summarymonth').val();
+         if (date == "" || !date)
+         {
+         $('#summarymonth').datebox('open');
+         return;
+         }
+         
+         var res = date.substring(0, 7);
+         */
+        var url = "/salary/salary/summary";
+        //url += "&month=" + res;
+
+        OpenInNewTab(url);
+    }
+
+    function opensalarysummarybysite()
+    {
+        var url = "/salary/salary/summarybysite";
+        OpenInNewTab(url);
+    }
+
+    function opensalaryhistory()
+    {
+        alert("Only for history review, won't generate any data.");
+    }
+</script>
+<input type="button" id="salarysummary" value="工地工资统计" data-mini="true" data-theme="a" 
+       onclick="opensalarysummary()">
+<input type="button" id="salarysummary" value="公司工资统计" data-mini="true" data-theme="a" 
+       onclick="opensalarysummary()">
+<?php
+//echo $wdtab;
+?>
+<br><br>

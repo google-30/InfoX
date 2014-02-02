@@ -107,17 +107,6 @@
 
         OpenInNewTab(url);
     }
-
-    function opensalarysummarybysite()
-    {
-        var url = "/salary/salary/summarybysite";
-        OpenInNewTab(url);
-    }
-
-    function opensalaryhistory()
-    {
-        alert("Only for history review, won't generate any data.");
-    }
 </script>
 <?php
 $sheetarr = $this->sheetarr;
@@ -151,9 +140,7 @@ $thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thism
   echo $wdtab;
  * 
  */
-?>
-<!--<h3>工资输入</h3>-->
-<?php
+
 $options = "";
 foreach ($sheetarr as $tmp) {
     if ($sheet == $tmp) {
