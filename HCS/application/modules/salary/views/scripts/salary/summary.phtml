@@ -38,22 +38,21 @@ $summarytab = '<table class="sumtab">' . "<tr><th></th><th>正常工时</th><th>
         . "</tr>";
 $summarytab .= $trs . "</table>";
 
-$totalsalary=0;
-$totalattendance=0;
+$totalsalary = 0;
+$totalattendance = 0;
 $summarybysite = $this->summarybysite;
-$trs="<tr><th>工地</th><th>考勤</th><th>工资</th></tr>";
-foreach($summarybysite as $tmp)
-{
+$trs = "<tr><th>工地</th><th>考勤</th><th>工资</th></tr>";
+foreach ($summarybysite as $tmp) {
     $salary = $tmp["salary"];
     $attendance = $tmp["attendance"];
     $siteobj = $tmp["site"];
     $sitename = $siteobj->getName();
-    
+
     $tr = "<tr><td>$sitename</td><td>$attendance</td><td>$salary</td></tr>";
     $trs .= $tr;
-    
+
     $totalsalary += $salary;
-    $totalattendance += $attendance;       
+    $totalattendance += $attendance;
 }
 $trs .= "<tr><th>总计</th><th>$totalattendance</th><th>$totalsalary</th></tr>";
 $siteSumTab = '<table class="sumtab">' . $trs . "</table>";

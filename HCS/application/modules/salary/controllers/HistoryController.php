@@ -26,11 +26,18 @@ class Salary_HistoryController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
-        $this->view->sheet = $requestsheet = $this->getParam("sheet", $sheetarr[0]);
-        $this->view->workerarr = infox_worker::getworkerlistbysheet($requestsheet);
+        //$this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+        //$this->view->sheet = $requestsheet = $this->getParam("sheet", $sheetarr[0]);
+        //$this->view->workerarr = infox_worker::getworkerlistbysheet($requestsheet);
+        
+    }
 
-        // retrieve salary summary
+    public function siteAction() {
+        infox_common::turnoffView($this->_helper);
+    }
+
+    public function companyAction() {
+        infox_common::turnoffView($this->_helper);
     }
 
     public function personalAction() {

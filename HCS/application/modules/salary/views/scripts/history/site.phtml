@@ -1,17 +1,142 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+<?php
+$username = $this->username;
+
+$month = $this->month;
+$monthstr = $month->format("Y-m");
+$monthstrymd = $month->format("Y-m-01");
+$summaryrecords = $this->summaryrecords;
+
+$trs = "";
+foreach ($summaryrecords as $key => $record) {
+    $normalhours = $record->getNormalhours();
+    $normalsalary = $record->getNormalsalary();
+    $othours = $record->getOthours();
+    $otsalary = $record->getOtsalary();
+    $totalhours = $record->getTotalhours();
+    $piecesalary = $record->getPiecesalary();
+    $totalsalary = $record->getTotalsalary();
+    $attenddays = $record->getAttenddays();
+    $absencefines = $record->getAbsencefines();
+    $foodpay = $record->getFoodpay();
+    $rtmonthpay = $record->getRtmonthpay();
+    $utfee = $record->getUtfee();
+    $utallowance = $record->getUtallowance();
+    $otherfee = $record->getOtherfee();
+    $inadvance = $record->getInadvance();
+    $fullmonaward = $record->getFullmonaward();
+    $salary = $record->getSalary();
+    $tr = "<tr><td>$key</td><td>$normalhours</td><td>$othours</td><td>$piecesalary</td>"
+            . "<td>$totalsalary</td><td>$foodpay</td><td>$fullmonaward</td><td>$rtmonthpay</td>"
+            . "<td>$utfee</td><td>$utallowance</td>"
+            . "<td>$otherfee</td><td>$salary</td><td>$salary</td>";
+    $trs .= $tr;
+}
+$summarytab = '<table class="sumtab">' . "<tr><th></th><th>正常工时</th><th>加班工时</th><th>包工工资</th>"
+        . "<th>Amount</th><th>伙食费</th><th>满勤奖</th><th>Less Tax<br>扣税</th>"
+        . "<th>水电生活费</th><th>水电生活补贴</th><th>补扣工资</th><th>已发工资</th>"
+        . "<th>净工资</th>"
+        . "</tr>";
+$summarytab .= $trs . "</table>";
+
+$totalsalary = 0;
+$totalattendance = 0;
+$summarybysite = $this->summarybysite;
+$trs = "<tr><th>工地</th><th>考勤</th><th>工资</th></tr>";
+foreach ($summarybysite as $tmp) {
+    $salary = $tmp["salary"];
+    $attendance = $tmp["attendance"];
+    $siteobj = $tmp["site"];
+    $sitename = $siteobj->getName();
+
+    $tr = "<tr><td>$sitename</td><td>$attendance</td><td>$salary</td></tr>";
+    $trs .= $tr;
+
+    $totalsalary += $salary;
+    $totalattendance += $attendance;
+}
+$trs .= "<tr><th>总计</th><th>$totalattendance</th><th>$totalsalary</th></tr>";
+$siteSumTab = '<table class="sumtab">' . $trs . "</table>";
+?>
+<!DOCTYPE html> 
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <?php
-        // put your code here
-        ?>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title>工地工资统计</title> 
+        <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+        <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+        <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+        <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet"  href="/common/datebox/jqm-datebox-1.1.0.css" /> 
+        <script src="/common/datebox/jqm-datebox-1.1.0.core.js"></script>
+        <script src="/common/datebox/jqm-datebox-1.1.0.mode.calbox.js"></script>
+        <script src="/common/datebox/jqm-datebox-1.1.0.mode.datebox.js"></script>
+    </head> 
+
+    <body> 
+        <style>
+            #headertab { width: 100%; table-layout:fixed; }
+            #headertab td, table th { text-align:left; border:0px solid black; text-align: center; }
+
+            table { width: 100%; border-collapse:collapse; /*table-layout:fixed;*/}
+            table td, table th { text-align:center; border:1px solid black; }
+            .sumtab { table-layout: fixed; }
+        </style>
+        <script>
+            $(function() {
+                $('#summarymonth').bind('datebox', function(e, passed) {
+                    if (passed.method === 'close') {
+                        var val = $(this).val();
+                        //alert(val);
+                        var res = val.substring(0, 7);
+                        var url = "/salary/salary/summary?month=" + res;
+
+                        redirect(url);
+                    }
+                });
+
+            });
+
+            function redirect(url) {
+                window.location = url;
+            }
+        </script>
+        <div data-role="page">
+
+            <div data-role="header" >
+                <table id="headertab">
+                    <tr>
+                        <td>工资统计</td>
+                        <!--<td>月份:&nbsp;<?= $monthstr ?></td>-->
+                        <td>工资负责人:&nbsp;<?= $username ?></td>
+                    </tr>
+                </table>
+            </div><!-- /header -->
+
+            <div style="margin-top: 10px;">
+                <input id="summarymonth" placeholder="<?= $monthstrymd ?>" 
+                       data-role="datebox" data-options='{"mode":"datebox"}'>
+            </div>                     
+
+            <div data-role="content">
+                <div id="error">
+                    <?= $this->error ?>
+                </div>
+
+                <?php
+                echo $summarytab;
+                echo "<hr>";
+                echo $siteSumTab;
+                ?>
+            </div><!-- /content -->
+            <br><br>
+            <div data-role="footer">
+                <!--<h4>Footer content</h4>-->
+            </div><!-- /footer -->
+
+        </div><!-- /page -->
+
     </body>
 </html>
+
