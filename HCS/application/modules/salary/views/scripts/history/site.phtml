@@ -1,9 +1,9 @@
 <?php
-$username = $this->username;
 
+/*
 $month = $this->month;
-$monthstr = $month->format("Y-m");
-$monthstrymd = $month->format("Y-m-01");
+//$monthstr = $month->format("Y-m");
+//$monthstrymd = $month->format("Y-m-01");
 $summaryrecords = $this->summaryrecords;
 
 $trs = "";
@@ -56,6 +56,29 @@ foreach ($summarybysite as $tmp) {
 }
 $trs .= "<tr><th>总计</th><th>$totalattendance</th><th>$totalsalary</th></tr>";
 $siteSumTab = '<table class="sumtab">' . $trs . "</table>";
+*/
+
+$username = $this->username;
+// sites
+$allsites=$this->allsites;
+$currentsite=$this->currentsite;
+
+$options="";
+foreach($allsites as $site)
+{
+    $sid = $site->getId();
+    $sname = $site->getName();
+    if($sid == $currentsite? $currentsite->getId(): 0)
+    {
+        $option = "<option value=$sid selected>$sname</option>" ;
+    }
+    else
+    {
+        $option = "<option value=$sid>$sname</option>" ;
+    }
+    $options .= $option;
+}
+$siteselects='<select id="site" data-mini="true" data-theme="b">' . $options . '</select>';
 ?>
 <!DOCTYPE html> 
 <html>
@@ -107,17 +130,27 @@ $siteSumTab = '<table class="sumtab">' . $trs . "</table>";
             <div data-role="header" >
                 <table id="headertab">
                     <tr>
-                        <td>工资统计</td>
+                        <td>工资统计:工地</td>
                         <!--<td>月份:&nbsp;<?= $monthstr ?></td>-->
                         <td>工资负责人:&nbsp;<?= $username ?></td>
                     </tr>
                 </table>
             </div><!-- /header -->
 
-            <div style="margin-top: 10px;">
-                <input id="summarymonth" placeholder="<?= $monthstrymd ?>" 
-                       data-role="datebox" data-options='{"mode":"datebox"}'>
-            </div>                     
+            <div class="ui-grid-b">
+                <div class="ui-block-a">
+                    <?=$siteselects ?>
+                </div>               
+                <div style="" class="ui-block-b">
+                    <input id="summarymonth" placeholder="<?= "开始月份" ?>" 
+                           data-role="datebox" data-options='{"mode":"datebox"}' data-mini="true">
+                </div>
+                <div style="" class="ui-block-c">
+                    <input id="summarymonth" placeholder="<?= "结束月份" ?>" 
+                           data-role="datebox" data-options='{"mode":"datebox"}' data-mini="true">
+                </div>               
+
+            </div>
 
             <div data-role="content">
                 <div id="error">
