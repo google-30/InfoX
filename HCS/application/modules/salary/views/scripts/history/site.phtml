@@ -1,84 +1,109 @@
 <?php
-
 /*
-$month = $this->month;
-//$monthstr = $month->format("Y-m");
-//$monthstrymd = $month->format("Y-m-01");
-$summaryrecords = $this->summaryrecords;
+  $month = $this->month;
+  //$monthstr = $month->format("Y-m");
+  //$monthstrymd = $month->format("Y-m-01");
+  $summaryrecords = $this->summaryrecords;
 
-$trs = "";
-foreach ($summaryrecords as $key => $record) {
-    $normalhours = $record->getNormalhours();
-    $normalsalary = $record->getNormalsalary();
-    $othours = $record->getOthours();
-    $otsalary = $record->getOtsalary();
-    $totalhours = $record->getTotalhours();
-    $piecesalary = $record->getPiecesalary();
-    $totalsalary = $record->getTotalsalary();
-    $attenddays = $record->getAttenddays();
-    $absencefines = $record->getAbsencefines();
-    $foodpay = $record->getFoodpay();
-    $rtmonthpay = $record->getRtmonthpay();
-    $utfee = $record->getUtfee();
-    $utallowance = $record->getUtallowance();
-    $otherfee = $record->getOtherfee();
-    $inadvance = $record->getInadvance();
-    $fullmonaward = $record->getFullmonaward();
-    $salary = $record->getSalary();
-    $tr = "<tr><td>$key</td><td>$normalhours</td><td>$othours</td><td>$piecesalary</td>"
-            . "<td>$totalsalary</td><td>$foodpay</td><td>$fullmonaward</td><td>$rtmonthpay</td>"
-            . "<td>$utfee</td><td>$utallowance</td>"
-            . "<td>$otherfee</td><td>$salary</td><td>$salary</td>";
-    $trs .= $tr;
-}
-$summarytab = '<table class="sumtab">' . "<tr><th></th><th>正常工时</th><th>加班工时</th><th>包工工资</th>"
-        . "<th>Amount</th><th>伙食费</th><th>满勤奖</th><th>Less Tax<br>扣税</th>"
-        . "<th>水电生活费</th><th>水电生活补贴</th><th>补扣工资</th><th>已发工资</th>"
-        . "<th>净工资</th>"
-        . "</tr>";
-$summarytab .= $trs . "</table>";
+  $trs = "";
+  foreach ($summaryrecords as $key => $record) {
+  $normalhours = $record->getNormalhours();
+  $normalsalary = $record->getNormalsalary();
+  $othours = $record->getOthours();
+  $otsalary = $record->getOtsalary();
+  $totalhours = $record->getTotalhours();
+  $piecesalary = $record->getPiecesalary();
+  $totalsalary = $record->getTotalsalary();
+  $attenddays = $record->getAttenddays();
+  $absencefines = $record->getAbsencefines();
+  $foodpay = $record->getFoodpay();
+  $rtmonthpay = $record->getRtmonthpay();
+  $utfee = $record->getUtfee();
+  $utallowance = $record->getUtallowance();
+  $otherfee = $record->getOtherfee();
+  $inadvance = $record->getInadvance();
+  $fullmonaward = $record->getFullmonaward();
+  $salary = $record->getSalary();
+  $tr = "<tr><td>$key</td><td>$normalhours</td><td>$othours</td><td>$piecesalary</td>"
+  . "<td>$totalsalary</td><td>$foodpay</td><td>$fullmonaward</td><td>$rtmonthpay</td>"
+  . "<td>$utfee</td><td>$utallowance</td>"
+  . "<td>$otherfee</td><td>$salary</td><td>$salary</td>";
+  $trs .= $tr;
+  }
+  $summarytab = '<table class="sumtab">' . "<tr><th></th><th>正常工时</th><th>加班工时</th><th>包工工资</th>"
+  . "<th>Amount</th><th>伙食费</th><th>满勤奖</th><th>Less Tax<br>扣税</th>"
+  . "<th>水电生活费</th><th>水电生活补贴</th><th>补扣工资</th><th>已发工资</th>"
+  . "<th>净工资</th>"
+  . "</tr>";
+  $summarytab .= $trs . "</table>";
 
-$totalsalary = 0;
-$totalattendance = 0;
-$summarybysite = $this->summarybysite;
-$trs = "<tr><th>工地</th><th>考勤</th><th>工资</th></tr>";
-foreach ($summarybysite as $tmp) {
-    $salary = $tmp["salary"];
-    $attendance = $tmp["attendance"];
-    $siteobj = $tmp["site"];
-    $sitename = $siteobj->getName();
+  $totalsalary = 0;
+  $totalattendance = 0;
+  $summarybysite = $this->summarybysite;
+  $trs = "<tr><th>工地</th><th>考勤</th><th>工资</th></tr>";
+  foreach ($summarybysite as $tmp) {
+  $salary = $tmp["salary"];
+  $attendance = $tmp["attendance"];
+  $siteobj = $tmp["site"];
+  $sitename = $siteobj->getName();
 
-    $tr = "<tr><td>$sitename</td><td>$attendance</td><td>$salary</td></tr>";
-    $trs .= $tr;
+  $tr = "<tr><td>$sitename</td><td>$attendance</td><td>$salary</td></tr>";
+  $trs .= $tr;
 
-    $totalsalary += $salary;
-    $totalattendance += $attendance;
-}
-$trs .= "<tr><th>总计</th><th>$totalattendance</th><th>$totalsalary</th></tr>";
-$siteSumTab = '<table class="sumtab">' . $trs . "</table>";
-*/
+  $totalsalary += $salary;
+  $totalattendance += $attendance;
+  }
+  $trs .= "<tr><th>总计</th><th>$totalattendance</th><th>$totalsalary</th></tr>";
+  $siteSumTab = '<table class="sumtab">' . $trs . "</table>";
+ */
 
 $username = $this->username;
 // sites
-$allsites=$this->allsites;
-$currentsite=$this->currentsite;
-
-$options="";
-foreach($allsites as $site)
-{
+$allsites = $this->allsites;
+$currentsite = $this->currentsite;
+$currentsiteid = ($currentsite != NULL) ? $currentsite->getId() : 0;
+$options = "";
+foreach ($allsites as $site) {
     $sid = $site->getId();
     $sname = $site->getName();
-    if($sid == $currentsite? $currentsite->getId(): 0)
-    {
-        $option = "<option value=$sid selected>$sname</option>" ;
-    }
-    else
-    {
-        $option = "<option value=$sid>$sname</option>" ;
+    if ($sid == $currentsiteid) {
+        $option = "<option value=$sid selected>$sname</option>
+                ";
+    } else {
+        $option = "<option value=$sid>$sname</option>
+                ";
     }
     $options .= $option;
 }
-$siteselects='<select id="site" data-mini="true" data-theme="b">' . $options . '</select>';
+$siteselects = '<select id="site" name="site" data-mini="true" data-theme="b">' . $options . '</select>';
+
+$sitesummary = $this->sitesummary;
+$trs = "";
+$sumAttend=0;
+$sumSalary=0;
+if(count($sitesummary))
+{
+foreach ($sitesummary as $tmp) {
+    $name = $tmp->getSite()->getName();
+    //echo $name;
+    $month = $tmp->getMonth()->format("Y-m-d");
+    $attendance = $tmp->getAttendance();
+    $totalsalary = $tmp->getTotalsalary();
+    $tr = "<tr><td>$month</td><td>$attendance</td><td>$totalsalary</td></tr>";
+    $trs .= $tr;
+    
+    $sumAttend += $attendance;
+    $sumSalary += $totalsalary;
+}
+}
+$summarytab = "<table><tr><th>月份</th><th>考勤</th><th>工资</th></tr>"
+        . "$trs" . "<tr><th>总计</th><th>$sumAttend</th><th>$sumSalary</th></tr>"
+        . "</table>";
+
+$monthfrom = $this->monthfrom;
+$monthfromstr = $monthfrom ? $monthfrom->format("Y-m-d") : "";
+$monthto = $this->monthto;
+$monthtostr = $monthto ? $monthto->format("Y-m-d") : "";
 ?>
 <!DOCTYPE html> 
 <html>
@@ -101,28 +126,38 @@ $siteselects='<select id="site" data-mini="true" data-theme="b">' . $options . '
         <style>
             #headertab { width: 100%; table-layout:fixed; }
             #headertab td, table th { text-align:left; border:0px solid black; text-align: center; }
-
-            table { width: 100%; border-collapse:collapse; /*table-layout:fixed;*/}
+            table { width: 100%; border-collapse:collapse; table-layout:fixed;}
             table td, table th { text-align:center; border:1px solid black; }
             .sumtab { table-layout: fixed; }
         </style>
         <script>
             $(function() {
-                $('#summarymonth').bind('datebox', function(e, passed) {
-                    if (passed.method === 'close') {
-                        var val = $(this).val();
-                        //alert(val);
-                        var res = val.substring(0, 7);
-                        var url = "/salary/salary/summary?month=" + res;
-
-                        redirect(url);
-                    }
-                });
-
             });
 
             function redirect(url) {
                 window.location = url;
+            }
+
+            function submitsitesummary() {
+                //alert("submitsitesummary");
+                //console.log($("#sitesummaryform"));
+                //$("#sitesummaryform").submit();
+                var siteid = $("#site").val();
+                var from = $("#monthfrom").val();
+                var to = $("#monthto").val();
+
+                var url = "/salary/history/site?";
+                url += "&site=" + siteid;
+                if (from)
+                {
+                    url += "&from=" + from;
+                }
+                if (to)
+                {
+                    url += "&to=" + to;
+                }
+                //alert(url);
+                redirect(url);
             }
         </script>
         <div data-role="page">
@@ -131,39 +166,41 @@ $siteselects='<select id="site" data-mini="true" data-theme="b">' . $options . '
                 <table id="headertab">
                     <tr>
                         <td>工资统计:工地</td>
-                        <!--<td>月份:&nbsp;<?= $monthstr ?></td>-->
                         <td>工资负责人:&nbsp;<?= $username ?></td>
                     </tr>
                 </table>
             </div><!-- /header -->
 
-            <div class="ui-grid-b">
-                <div class="ui-block-a">
-                    <?=$siteselects ?>
-                </div>               
-                <div style="" class="ui-block-b">
-                    <input id="summarymonth" placeholder="<?= "开始月份" ?>" 
-                           data-role="datebox" data-options='{"mode":"datebox"}' data-mini="true">
-                </div>
-                <div style="" class="ui-block-c">
-                    <input id="summarymonth" placeholder="<?= "结束月份" ?>" 
-                           data-role="datebox" data-options='{"mode":"datebox"}' data-mini="true">
-                </div>               
+            <form id="sitesummaryform" action="/salary/history/" method="post">
+                <div class="ui-grid-b">
+                    <div style="" class="ui-block-a">
+                        <input id="monthfrom" name="monthfrom" placeholder="<?= "开始月份" ?>" 
+                               data-role="datebox" data-options='{"mode":"datebox"}' data-mini="true" 
+                               value="<?= $monthfromstr ?>">
+                    </div>
+                    <div class="ui-block-b"><?= $siteselects ?></div>               
 
-            </div>
+                    <div style="" class="ui-block-c">
+                        <input id="monthto" name="monthto" placeholder="<?= "结束月份" ?>" 
+                               data-role="datebox" data-options='{"mode":"datebox"}' data-mini="true"
+                               value="<?= $monthtostr ?>">
+                    </div>               
+                    <div style="" class="ui-block-a">
+                    </div>
+                    <div class="ui-block-b">
+                        <input type="button" value="计算工资统计数据" data-mini="true" data-theme="b" onclick="submitsitesummary()">
+                    </div>
+                </div>
+
+            </form>
 
             <div data-role="content">
                 <div id="error">
                     <?= $this->error ?>
                 </div>
-
-                <?php
-                echo $summarytab;
-                echo "<hr>";
-                echo $siteSumTab;
-                ?>
+                <?= $summarytab ?>
             </div><!-- /content -->
-            <br><br>
+            
             <div data-role="footer">
                 <!--<h4>Footer content</h4>-->
             </div><!-- /footer -->

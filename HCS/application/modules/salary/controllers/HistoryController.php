@@ -31,159 +31,94 @@ class Salary_HistoryController extends Zend_Controller_Action {
         //$this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
         //$this->view->sheet = $requestsheet = $this->getParam("sheet", $sheetarr[0]);
         //$this->view->workerarr = infox_worker::getworkerlistbysheet($requestsheet);
+        $requests = $this->getRequest()->getPost();
+        if (0) {
+            echo "siteAction dump";
+            var_dump($requests);
+            //return;
+        }
     }
 
     public function siteAction() {
+        $requests = $this->getRequest()->getPost();
+        if (0) {            
+            var_dump($requests);
+            return;
+        }
+
         infox_common::turnoffLayout($this->_helper);
+        //infox_common::turnoffView($this->_helper);
+
         $this->view->username = infox_common::getUsername();
 
         // all sites
         $allsites = $this->_site->findAll();
         $this->view->allsites = $allsites;
 
-        $siteid = $this->getParam("siteid", 0);
+        $siteid = $this->getParam("site", 0);
         if (!$siteid) {
             return;
         }
-
         $siteobj = $this->_site->findOneBy(array("id" => $siteid));
         $this->view->currentsite = $siteobj ? $siteobj : NULL;
-        
+
         $datefrom = $this->getParam("from", "");
         $dateto = $this->getParam("to", "");
-        
-        
+        $fromobj = $datefrom == "" ? new DateTime("2010-01-01") : new DateTime(substr($datefrom, 0, 8) . "01");
+        $toobj = $dateto == "" ? new DateTime("2020-01-01") : new DateTime(substr($dateto, 0, 8) . "01");
+        $this->view->monthfrom = $fromobj;
+        $this->view->monthto = $toobj;
+
+        $siterecords = $this->_summarybysite->findBy(array("site" => $siteobj));
+        $sitesummary = array();
+        foreach ($siterecords as $tmp) {
+            $monthobj = $tmp->getMonth();
+            if ($monthobj >= $fromobj && $monthobj <= $toobj) {
+                $sitesummary[] = $tmp;
+            }
+        }
+        usort($sitesummary, array($this, 'sortbymonth'));        
+        $this->view->sitesummary = $sitesummary;
+    }
+
+    private function sortbymonth($a, $b)
+    {
+        $amonth = $a->getMonth();
+        $bmonth = $b->getMonth();
+        return ($amonth >= $bmonth);
     }
 
     public function companyAction() {
-        infox_common::turnoffLayout($this->_helper);
-    }
-
-    public function personalAction() {
-        infox_common::turnoffLayout($this->_helper);
-
-        $sheetarr = infox_worker::getSheetarr();
-        $this->view->sheetarr = $sheetarr;
-
-        $wid_req = $this->getParam("id", 0);
-        $workerobj = null;
-        $workerarr = array();
-
-        if ($wid_req == 0) { // change sheet
-            $sheet_req = $this->getParam("sheet", "HC.C");
-        } else {
-            $workerobj = $this->_workerdetails->findOneBy(array('id' => $wid_req));
-            if (!$workerobj) {
-                return;
-            }
-
-            $sheet_req = $workerobj->getSheet();
-        }
-
-        $salaryrecords = $this->_salaryall->findAll();
-        if (!count($salaryrecords)) {
+        $requests = $this->getRequest()->getPost();
+        if (0) {            
+            var_dump($requests);
             return;
         }
 
-        foreach ($salaryrecords as $tmp) {
-            $workertmp = $tmp->getWorker();
-            $sheettmp = $workertmp->getSheet();
-            $widtmp = $workertmp->getId();
-            if ($sheettmp == $sheet_req) {
-                if (!key_exists($widtmp, $workerarr)) {
-                    $workerarr[$widtmp] = $workertmp;
-                }
-            }
-        }
+        infox_common::turnoffLayout($this->_helper);
+        $this->view->username = infox_common::getUsername();
 
-        if ($wid_req == 0) { // change sheet
-            $workerobj = reset($workerarr);
-        }
+        $sheets = array("HC.C", "HC.B", "HT.C", "HT.B", "Others", "HC", "HT", "ALL");
+        $this->view->sheets = $sheets;        
+        $sheetid = $this->getParam("sheet", 0);
+        $this->view->currentsheet = $sheetid;
 
-        $year_req = $this->getParam("year", "all");
+        $datefrom = $this->getParam("from", "");
+        $dateto = $this->getParam("to", "");
+        $fromobj = $datefrom == "" ? new DateTime("2010-01-01") : new DateTime(substr($datefrom, 0, 8) . "01");
+        $toobj = $dateto == "" ? new DateTime("2020-01-01") : new DateTime(substr($dateto, 0, 8) . "01");
+        $this->view->monthfrom = $fromobj;
+        $this->view->monthto = $toobj;
 
-        $records = $this->_salaryall->findBy(array('worker' => $workerobj));
-
-        $recordsbyyear = array();
-        $yearsarr = array();
-
+        $records = $this->_summarydetails->findBy(array("sheet" => $sheets[$sheetid]));
+        $summary = array();
         foreach ($records as $tmp) {
-            $date = $tmp->getMonth();
-            $year = $date->format("Y");
-            if (!in_array($year, $yearsarr)) {
-                $yearsarr[] = $year;
-            }
-
-            if ($year == $year_req) {
-                $recordsbyyear[] = $tmp;
-            }
-
-            $worker = $tmp->getWorker();
-            $wid = $worker->getId();
-            if (!key_exists($wid, $workerarr)) {
-                $workerarr[$wid] = $worker;
+            $monthobj = $tmp->getMonth();
+            if ($monthobj >= $fromobj && $monthobj <= $toobj) {
+                $summary[] = $tmp;
             }
         }
-
-        sort($yearsarr);
-        $this->view->worker = $workerobj;
-        $this->view->yearsarr = $yearsarr;
-        $recordsall = ($year_req == "all") ? $records : $recordsbyyear;
-        $salaryall = 0;
-        foreach ($recordsall as $record) {
-            $salary = $record->getSalary();
-            $salaryall += $salary;
-        }
-        $this->view->salaryall = $salaryall;
-        setlocale(LC_MONETARY, 'en_US');
-        $salaryallformat = money_format('%i', $salaryall);
-        $this->view->salaryallformat = $salaryallformat;
-        $this->view->recordsbyyear = $recordsall;
-        $this->view->workerarr = $workerarr;
-
-        $salarytabs = infox_salary::generateSalaryTabs($recordsall, false);
-        $this->view->salarytabs = $salarytabs;
-
-        $options = '';
-        foreach ($sheetarr as $tmp) {
-            if ($tmp == $sheet_req) {
-                $option = "<option value=$tmp selected>" . $tmp . "</option>";
-            } else {
-                $option = "<option value=$tmp>" . $tmp . "</option>";
-            }
-            $options .= $option;
-        }
-        $sheetsel = '<select id="sheetsel" data-theme="b" data-mini="true">' . $options . "</select>";
-
-        $options = '';
-        foreach ($workerarr as $tmp) {
-            $wid = $tmp->getId();
-            $name = ($tmp->getNamechs() == "" || !$tmp->getNamechs()) ? $tmp->getNameeng : $tmp->getNamechs();
-
-            if ($workerobj->getId() == $wid) {
-                $option = "<option value=$wid selected>" . $name . "</option>";
-            } else {
-                $option = "<option value=$wid>" . $name . "</option>";
-            }
-            $options .= $option;
-        }
-        $workersel = '<select id="workersel" data-theme="b" data-mini="true">'
-                . '<option value=0>&nbsp;</option>' . $options . "</select>";
-
-        $options = '<option value="all">All</options>';
-        foreach ($yearsarr as $year) {
-            if ($year_req == $year) {
-                $option = "<option value=$year selected>" . $year . "</option>";
-            } else {
-                $option = "<option value=$year>" . $year . "</option>";
-            }
-            $options .= $option;
-        }
-        $yearsel = '<select id="yearsel" data-theme="b" data-mini="true">' . $options . "</select>";
-
-        $this->view->sheetsel = $sheetsel;
-        $this->view->workersel = $workersel;
-        $this->view->yearsel = $yearsel;
+        usort($summary, array($this, 'sortbymonth'));        
+        $this->view->summaryrecords = $summary;
     }
-
 }

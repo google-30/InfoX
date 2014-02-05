@@ -156,12 +156,14 @@ class Synrgic_Models_AclBuilder {
                     'worker:custominfo' => array('view', 'postinfo'),
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),
                     'worker:archive' => array('view', 'edit', 'previewlist'),
+                    
                     'salary:salary' => array('view', 'personal', 'salarybymonth', 'gensalaryrecords',
                         'datainput', 'datapost', 'salarysheet', 'salaryreceipts',
                         'salaryreceiptsbyworker', 'summary', 'summarybysite'),
                     'salary:worker' => array('view', 'personal', ''),
                     'salary:history' => array('view', 'site', 'company'),
                     'salary:settings' => array('view', 'submit'),
+                    
                     'project:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery', 'applist', 'allmaterials', 'siteinfo'),
                     'project:attendance' => array('view', 'attendancepage', 'attendialog',

@@ -1,17 +1,201 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+<?php
+$username = $this->username;
+$sheets = $this->sheets;
+$currentsheet = $this->currentsheet;
+$options = "";
+foreach ($sheets as $key => $sheet) {
+    if ($key == $currentsheet) {
+        $option = "<option value=$key selected>$sheet</option>
+                ";
+    } else {
+        $option = "<option value=$key>$sheet</option>
+                ";
+    }
+    $options .= $option;
+}
+$sheetselects = '<select id="sheet" name="sheet" data-mini="true" data-theme="b">' . $options . '</select>';
+
+$summaryrecords = $this->summaryrecords;
+$trs = "";
+$sumNh = 0;
+$sumNs = 0;
+$sumOh = 0;
+$sumOs = 0;
+$sumTh = 0;
+$sumPs = 0;
+$sumTs = 0;
+$sumAd = 0;
+$sumAf = 0;
+$sumFp = 0;
+$sumRp = 0;
+$sumUf = 0;
+$sumUa = 0;
+$sumOf = 0;
+$sumIa = 0;
+$sumFa = 0;
+$sumSalary = 0;
+if (count($summaryrecords)) {
+    foreach ($summaryrecords as $record) {
+        $month = $record->getMonth()->format("Y-m-d");
+
+        $normalhours = $record->getNormalhours();
+        $normalsalary = $record->getNormalsalary();
+        $othours = $record->getOthours();
+        $otsalary = $record->getOtsalary();
+        $totalhours = $record->getTotalhours();
+        $piecesalary = $record->getPiecesalary();
+        $totalsalary = $record->getTotalsalary();
+        $attenddays = $record->getAttenddays();
+        $absencefines = $record->getAbsencefines();
+        $foodpay = $record->getFoodpay();
+        $rtmonthpay = $record->getRtmonthpay();
+        $utfee = $record->getUtfee();
+        $utallowance = $record->getUtallowance();
+        $otherfee = $record->getOtherfee();
+        $inadvance = $record->getInadvance();
+        $fullmonaward = $record->getFullmonaward();
+        $salary = $record->getSalary();
+        $tr = "<tr><td>$month</td><td>$normalhours</td><td>$othours</td><td>$piecesalary</td>"
+                . "<td>$totalsalary</td><td>$foodpay</td><td>$fullmonaward</td><td>$rtmonthpay</td>"
+                . "<td>$utfee</td><td>$utallowance</td>"
+                . "<td>$otherfee</td><td>$salary</td><td>$salary</td>";
+        $trs .= $tr;
+
+        $sumNh += $normalhours;
+        $sumNs += $normalsalary;
+        $sumOh += $othours;
+        $sumOs += $otsalary;
+        $sumTh+=$totalhours;
+        $sumPs+= $piecesalary;
+        $sumTs += $totalsalary;
+        $sumAd += $attenddays;
+        $sumAf += $absencefines;
+        $sumFp += $foodpay;
+        $sumRp += $rtmonthpay;
+        $sumUf += $utfee;
+        $sumUa += $utallowance;
+        $sumOf += $otherfee;
+        $sumIa += $inadvance;
+        $sumFa += $fullmonaward;
+        $sumSalary += $salary;
+    }
+}
+$summarytab = '<table class="sumtab">' . "<tr><th>月份</th><th>正常工时</th><th>加班工时</th><th>包工工资</th>"
+        . "<th>Amount</th><th>伙食费</th><th>满勤奖</th><th>Less Tax<br>扣税</th>"
+        . "<th>水电生活费</th><th>水电生活补贴</th><th>补扣工资</th><th>已发工资</th>"
+        . "<th>净工资</th>"
+        . "</tr>";
+$summarytab .= $trs
+        . "<tr><th>总计</th><th>$sumNh</th><th>$sumOh</th>"
+        . "<th>$sumPs</th><th>$sumTs</th><th>$sumFp</th>"
+        . "<th>$sumRp</th><th>$sumUf</th><th>$sumUa</th>"
+        . "<th>$sumFa</th><th>$sumOf</th><th>$sumSalary</th><th>$sumSalary</th></tr>"
+        . "</table>";
+
+$monthfrom = $this->monthfrom;
+$monthfromstr = $monthfrom ? $monthfrom->format("Y-m-d") : "";
+$monthto = $this->monthto;
+$monthtostr = $monthto ? $monthto->format("Y-m-d") : "";
+?>
+<!DOCTYPE html> 
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <?php
-        // put your code here
-        ?>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title>公司工资统计</title> 
+        <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+        <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+        <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+        <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet"  href="/common/datebox/jqm-datebox-1.1.0.css" /> 
+        <script src="/common/datebox/jqm-datebox-1.1.0.core.js"></script>
+        <script src="/common/datebox/jqm-datebox-1.1.0.mode.calbox.js"></script>
+        <script src="/common/datebox/jqm-datebox-1.1.0.mode.datebox.js"></script>
+    </head> 
+
+    <body> 
+        <style>
+            #headertab { width: 100%; table-layout:fixed; }
+            #headertab td, table th { text-align:left; border:0px solid black; text-align: center; }
+            table { width: 100%; border-collapse:collapse; table-layout:fixed;}
+            table td, table th { text-align:center; border:1px solid black; }
+            .sumtab { table-layout: fixed; }
+        </style>
+        <script>
+            $(function() {
+            });
+
+            function redirect(url) {
+                window.location = url;
+            }
+
+            function submitsitesummary() {
+                var siteid = $("#sheet").val();
+                var from = $("#monthfrom").val();
+                var to = $("#monthto").val();
+
+                var url = "/salary/history/company?";
+                url += "&sheet=" + siteid;
+                if (from)
+                {
+                    url += "&from=" + from;
+                }
+                if (to)
+                {
+                    url += "&to=" + to;
+                }
+                //alert(url);
+                redirect(url);
+            }
+        </script>
+        <div data-role="page">
+
+            <div data-role="header" >
+                <table id="headertab">
+                    <tr>
+                        <td>工资统计:公司</td>
+                        <td>工资负责人:&nbsp;<?= $username ?></td>
+                    </tr>
+                </table>
+            </div><!-- /header -->
+
+            <form id="sitesummaryform" action="/salary/history/" method="post">
+                <div class="ui-grid-b">
+                    <div style="" class="ui-block-a">
+                        <input id="monthfrom" name="monthfrom" placeholder="<?= "开始月份" ?>" 
+                               data-role="datebox" data-options='{"mode":"datebox"}' data-mini="true" 
+                               value="<?= $monthfromstr ?>">
+                    </div>
+                    <div class="ui-block-b"><?= $sheetselects ?></div>               
+
+                    <div style="" class="ui-block-c">
+                        <input id="monthto" name="monthto" placeholder="<?= "结束月份" ?>" 
+                               data-role="datebox" data-options='{"mode":"datebox"}' data-mini="true"
+                               value="<?= $monthtostr ?>">
+                    </div>               
+                    <div style="" class="ui-block-a">
+                    </div>
+                    <div class="ui-block-b">
+                        <input type="button" value="计算工资统计数据" data-mini="true" data-theme="b" onclick="submitsitesummary()">
+                    </div>
+                </div>
+
+            </form>
+
+            <div data-role="content">
+                <div id="error">
+                    <?= $this->error ?>
+                </div>
+                <?= $summarytab ?>
+            </div><!-- /content -->
+
+            <div data-role="footer">
+                <!--<h4>Footer content</h4>-->
+            </div><!-- /footer -->
+
+        </div><!-- /page -->
+
     </body>
 </html>
+
