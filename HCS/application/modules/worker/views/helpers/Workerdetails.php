@@ -78,7 +78,7 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
     }
 
     protected function td_salary($field, $row) {        
-        $url = "/salary/salary/personal/id/" . $row["id"];
+        $url = "/salary/worker/personal/id/" . $row["id"];
         $html = '<a href="' . $url .  '" target="_blank">工资</a>';
         return $html;
     }    

@@ -888,6 +888,8 @@ class infox_salary {
         $workerid = $workerobj->getId();
         $wpno = $workerobj->getWpno();
         $name = $workerobj->getNamechs();
+        $eeeno = $workerobj->getEeeno();
+        
         if (!$name || $name == "") {
             $name = $workerobj->getNameeng();
         }
@@ -936,13 +938,13 @@ class infox_salary {
             <th rowspan=2>考勤天数</th></tr>
 ';
         $table .= $tr;
-        $tr = '<tr><th>准证号</th><th>姓名</th><th>单价</th><th>工种</th>';
+        $tr = '<tr><th>Eee No</th><th>姓名</th><th>单价</th><th>工种</th>';
         $tr .= '<th>小时</th><th>金额</th><th>单价</th><th>小时</th><th>金额</th>';
         //$tr .= '<th>计时工时</th><th>计件工资</th><th>总金额</th><th>天数</th><th>金额</th><th>天数</th><th>金额</th></tr>';
         $tr .= '<th>计时工时</th><th>计件工资</th><th>总金额</th></tr>';
         $table .= $tr;
 
-        $tr = "<tr><td>$sno</td><td>$wpno</td><td>"
+        $tr = "<tr><td>$sno</td><td>$eeeno</td><td>"
                 . '<strong style="color:red;">' . $name . "</strong>"
                 . "</td><td>$rate</td><td>$worktype</td>";
         $tr .= "<td>$normalhours</td><td>$normalsalary</td><td>$otrate</td><td>$othours</td><td>$otsalary</td>"

@@ -41,7 +41,11 @@ class Project_AttendanceController extends Zend_Controller_Action {
             $result = $this->_workeronsite->findBy(array('site' => $siteobj));
             $workersonsite = array();
             foreach ($result as $tmp) {
-                $workersonsite[] = $tmp->getWorker();
+                $worker = $tmp->getWorker();
+                $wid = $worker->getId();
+                if (!key_exists($wid, $workersonsite)) {
+                    $workersonsite[$wid] = $worker;
+                }
             }
             $this->view->workersonsite = $workersonsite;
         }
@@ -388,7 +392,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $daycount = 0;
         $trs = "";
         $sitelatest = 0;
-        
+
         for ($i = 0; $i < 6; $i++) {
             $tr = "";
             $tds = "";
@@ -419,9 +423,9 @@ class Project_AttendanceController extends Zend_Controller_Action {
                         . 'name="piece' . $daycount . '" value="' . $piecedata . '" placeholder="">';
 
                 // site support
-                $sitedata = key_exists(2, $tmparr) ? $tmparr[2] : 0;                
+                $sitedata = key_exists(2, $tmparr) ? $tmparr[2] : 0;
                 //$sitelatest = $sitedata = ($sitedata != 0) ? $sitedata : $sitelatest;
-                        
+
                 $siteoptions = '<option value="0">选择工地</option>';
                 foreach ($sites as $tmp) {
                     $name = $tmp->getName();
