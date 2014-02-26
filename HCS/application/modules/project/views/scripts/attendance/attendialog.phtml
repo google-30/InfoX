@@ -134,8 +134,12 @@ $datetab = $this->datetab;
                         <input type="hidden" name="month" id="month" value="<?= $monthstr ?>">
                         <?= $datetab ?>
                     </form>
-                    <input type="button" value="提交考勤" onclick="attendialogpost()">
-                    <input type="button" value="关闭本页" onclick="attendialogclose()">
+                    <!--<input type="button" value="提交考勤" onclick="attendialogpost()">
+                    <input type="button" value="关闭本页" onclick="attendialogclose()">-->
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a"><input type="button" value="提交考勤" onclick="attendialogpost()"></div>
+                        <div class="ui-block-b"><input type="button" value="关闭本页" onclick="attendialogclose()"></div>
+                    </div><!-- /grid-a -->    
                 </div>                           
 
             </div>

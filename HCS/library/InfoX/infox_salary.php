@@ -374,7 +374,7 @@ class infox_salary {
                 if ($tmp) {
                     //$totaldays++;
 
-                    if ($tmp != ";") {
+                    if ($tmp != ";;0") {
                         $totaldays++;
                     }
 
