@@ -395,7 +395,24 @@ class infox_salary {
             $totalsalary += $normalhours * $rate + $othours * $otrate;
 
             // TODO: get basic salary from salary settings
-            $normalsalary = ($totalsalary > 600) ? 600 : $totalsalary;
+            //$normalsalary = ($totalsalary > 600) ? 600 : $totalsalary;
+
+            // TODO: get correct race define, for other sheet
+            // get basic salary by race                       
+            // get race 
+            $wsheet = $worker->getSheet();
+            if($wsheet == "HC.C" || $wsheet == "HT.C")
+            {
+                $basic = self::$_setting->findOneBy(array("name" => "cbasic"));
+                $basicval = $basic->getValue();
+            }
+            else
+            {
+                $basic = self::$_setting->findOneBy(array("name" => "bbasic"));
+                $basicval = $basic->getValue();                
+            }
+            $normalsalary = ($totalsalary > $basicval) ? $basicval : $totalsalary;                        
+            
             $otsalary = $totalsalary - $normalsalary;
 
             $summary["totaldays"] = $totaldays;
@@ -759,10 +776,6 @@ class infox_salary {
 
 
         $tab = "<table>";
-        /*
-          $tab .= "<tr><td colspan=2>正常工作</td><td colspan=3>加班工作</td><td colspan=2>总工作</td>"
-          . "<td rowspan=2>考勤天数</td><td colspan=2>缺勤罚款</td><td rowspan=2>项目总工资</td>";
-         */
         $tab .= "<tr><td colspan=2>正常工作</td><td colspan=3>加班工作</td><td colspan=3>总工作</td>"
                 . "<td rowspan=2>考勤天数</td><td colspan=2>缺勤罚款</td>";
         $tab .="<td rowspan=2>满勤奖</td>";

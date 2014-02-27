@@ -560,11 +560,14 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
         $salaryrecords = array();
         foreach ($records as $tmp) {
-            $worker = $tmp->getWorker();
+            $worker = $tmp->getWorker(); 
+            $eeeno = $worker->getEeeno();
             if ($sheet == $worker->getSheet()) {
-                $salaryrecords[] = $tmp;
+                //$salaryrecords[] = $tmp;
+                $salaryrecords[$eeeno] = $tmp;
             }
         }
+        ksort($salaryrecords);
 
         $this->view->salaryrecords = $salaryrecords;
         $this->view->monthobj = $monthobj;
