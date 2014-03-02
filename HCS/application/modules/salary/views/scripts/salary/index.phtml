@@ -64,7 +64,6 @@
             return;
         }
 
-
         var sheet = $("#sheetselect").val();
         var url = "/salary/salary/salaryreceipts?sheet=" + sheet;
         url += "&month=" + res;
@@ -78,33 +77,21 @@
         win.focus();
     }
 
-    /*
-     $("#sheetselect").change(function() {
-     var sheetname = $(this).val();
-     var url = "/salary/salary?sheet=" + sheetname;
-     redirect(url);
-     });
-     */
-
     function redirect(url) {
         window.location = url;
     }
 
     function opensalarysummary()
     {
-        /*
-         var date = $('#summarymonth').val();
-         if (date == "" || !date)
-         {
-         $('#summarymonth').datebox('open');
-         return;
-         }
-         
-         var res = date.substring(0, 7);
-         */
-        var url = "/salary/salary/summary";
-        //url += "&month=" + res;
+        var date = $('#salarymonth').val();
+        var res = date.substring(0, 7);
 
+        var url = "/salary/salary/summary";
+        if (res != "")
+        {
+            url += "?month=" + res;
+        }
+        //alert(url);
         OpenInNewTab(url);
     }
 </script>

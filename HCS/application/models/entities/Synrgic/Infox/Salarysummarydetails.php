@@ -76,7 +76,7 @@ class Salarysummarydetails extends \Synrgic_Models_Entity {
 
     /**
      * 考勤天数
-     * @Column(type="integer", nullable=true)
+     * @Column(type="float", nullable=true)
      */
     protected $attenddays;
 

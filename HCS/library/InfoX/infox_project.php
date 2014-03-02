@@ -481,9 +481,6 @@ class infox_project {
             self::$_em->flush();
         }
 
-        //return;        
-        //$id = $requests['id'];
-        //$day = substr($id, 4);
         $updatestr = "";
         for ($i = 1; $i <= 31; $i++) {
             if (key_exists("date$i", $requests)) {

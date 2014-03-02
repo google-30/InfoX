@@ -371,13 +371,11 @@ class infox_salary {
             $totalsalary = 0;
             $piecesalary = 0;
             foreach ($result[0] as $tmp) {
-                if ($tmp) {
-                    //$totaldays++;
-
-                    if ($tmp != ";;0") {
-                        $totaldays++;
+                if ($tmp) {                    
+                    if ($tmp == ";;0") {
+                        continue;
                     }
-
+                                        
                     $tmparr = explode(";", $tmp);
                     $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
                     $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
@@ -385,9 +383,13 @@ class infox_salary {
                     if ($hoursdata && $hoursdata != "") {
                         $normalhours += ($hoursdata <= 8) ? $hoursdata : 8;
                         $othours += ($hoursdata > 8) ? ($hoursdata - 8) : 0;
+                        
+                        $totaldays += ($hoursdata < 8) ? $hoursdata/8 : 1;
                     } else {
                         $totalsalary += $piecedata;
                         $piecesalary += $piecedata;
+                        
+                        $totaldays++;
                     }
                 }
             }
@@ -401,7 +403,8 @@ class infox_salary {
             // get basic salary by race                       
             // get race 
             $wsheet = $worker->getSheet();
-            if($wsheet == "HC.C" || $wsheet == "HT.C")
+            $tmparr = explode(".", $wsheet);                             
+            if(key_exists(1, $tmparr) && $tmparr[1]=="C")
             {
                 $basic = self::$_setting->findOneBy(array("name" => "cbasic"));
                 $basicval = $basic->getValue();
@@ -870,18 +873,6 @@ class infox_salary {
 
     public static function saveMonthSummary($summary, $workerobj, $dateobj) {
         $salaryrecord = self::$_salaryall->findOneBy(array("worker" => $workerobj, "month" => $dateobj));
-        /*
-         *         
-          $summary["totaldays"] = "";
-          $summary["normalhours"] = "";
-          $summary["normalsalary"] = "";
-          $summary["othours"] = "";
-          $summary["otsalary"] = "";
-          $summary["totalhours"] = "";
-          $summary["totalsalary"] = "";
-          $summary["fooddays"] = "";
-
-         */
         $salaryrecord->setAttenddays($summary["totaldays"]);
         $salaryrecord->setNormalhours($summary['normalhours']);
         $salaryrecord->setNormalsalary($summary["normalsalary"]);
