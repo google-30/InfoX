@@ -28,7 +28,7 @@ class infox_worker {
     }
 
     public static function getSheetarr() {
-        $sheetarr = array("HC.C", "HT.C", "HC.B", "HT.B", "Others");
+        $sheetarr = array("HC.C", "HC.B", "HT.C", "HT.B", "Others.C", "Others.B");
         return $sheetarr;
     }
 

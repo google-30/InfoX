@@ -200,7 +200,7 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $race;
+    protected $race="c";
 
     /**
      * @OneToOne(targetEntity="Synrgic\Infox\Workercustominfo")

@@ -84,11 +84,6 @@
             });
         </script>
         <div data-role="page">
-            <div data-role="header" data-theme="b">
-                <!--<input type="text" name="begin" id="begin" class="datepicker" value="" data-mini="true" placeholder="点击选择日期"/>-->
-                <!--<input name="mydate" id="mydate" type="date" data-role="datebox" data-options='{"mode": "calbox"}' data-mini="true" placeholder="点击按钮，选择日期->"> -->
-            </div>
-
             <div data-role="content">
                 <div id="error">
                     <?= $this->error ?>
@@ -96,17 +91,17 @@
                 <?php
                 $counter = 0;
                 $srs = $salaryrecords;
-                $datestr = '月份/Mth:' . $year . "年" . $month1 . "月/" . $month2 . "-" . $year;
+                $datestr = '月份/Mth:&nbsp;' . $year . "年" . $month1 . "月/" . $month2 . "-" . $year;
                 $header = '<table class="tabsalary1">'
                         . '<tr>'
-                        . '<td class="tdstayleft">'
+                        . '<td class="tdstayleft" colspan=2>'
                         . '<table>'
                         . '<tr><td rowspan=2><img src="' . $logopath . '" alt="" class="logo" id="pic" name="pic" width="55"></td>'
                         . "<td>$cmyfullnameeng</td></tr>"
                         . "<tr><td>$cmyfullnamechs</td></tr>"
                         . '</table>'
                         . '</td>'
-                        . '<td></td><td class="tdstayright">' . $datestr . "</td>"
+                        . '<td class="tdstayright">' . $datestr . "</td>"
                         . "</tr>";
                 $header.='<tr><td></td><td class="tdstaycenter">Salary Receipt/工资收据</td><td></td></tr>';
                 $tabhtml = "";

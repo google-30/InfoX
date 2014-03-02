@@ -1,7 +1,10 @@
 <style>
     #infoswitches { display: none; }
     #datatable { text-align:center; display:none; }
-    #Workersdata { width:100%; }
+    #Workersdata { 
+        width:100%; 
+        font-size: 90%;
+    }
     #uploaddiv { display: none; }
     /*#featuresdiv { display: none; }*/
 </style>
@@ -104,10 +107,10 @@ $maindata = $this->maindata;
             <div class="ui-grid-d">
                 <?php
                 $onswitches = array(
-                    /* "namechs"=>"Name Chs","nameeng"=>"Name Eng", */ 
+                    /* "namechs"=>"Name Chs","nameeng"=>"Name Eng", */
                     "eeeno" => "E'ee No.", "name" => "Name ", "wpno" => "WP No.",
                     "wpexpiry" => "WP Expiry", "doa" => "D.O.A", "issuedate" => "Date of Issue",
-                    "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B", 
+                    "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B",
                     "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
 
                 $offswitches = array(
@@ -121,7 +124,7 @@ $maindata = $this->maindata;
                     "education" => "教育程度", "age" => "年龄",
                     "marital" => "婚姻状况", "constructionworker" => "建筑工",
                     "applyfor" => "Apply For",
-                     );
+                );
 
                 $customtitles = $this->customtitles;
                 $offswitches["custom1"] = $customtitles[0];

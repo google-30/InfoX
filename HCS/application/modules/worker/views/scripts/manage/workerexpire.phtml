@@ -1,132 +1,110 @@
+<style>
+    table {
+        table-layout: fixed;
+    }
+</style>
 <script>
-$(function() {
-    $(".wpexpiry").hide();
-    $("#wpexpiry0").show();
-
-    $(".ppexpiry").hide();
-    $("#ppexpiry0").show();
-
-    $(".csoc").hide();
-    $("#csoc0").show();
-
-    $(".securityexp").hide();
-    $("#securityexp0").show();
-
-});
-
-$("#wpexpiryselects").change(function() {
-    //alert("ehehe");
-    var count = $(this).val();
-    $(".wpexpiry").hide();
-    $("#wpexpiry" + count).show("slow");
-});
-
-$("#ppexpiryselects").change(function() {
-    //alert("ehehe");
-    var count = $(this).val();
-    $(".ppexpiry").hide();
-    $("#ppexpiry" + count).show("slow");
-});
-
-$("#securityexpselects").change(function() {
-    //alert("ehehe");
-    var count = $(this).val();
-    $(".securityexp").hide();
-    $("#securityexp" + count).show("slow");
-});
-
-$("#csocselects").change(function() {
-    //alert("ehehe");
-    var count = $(this).val();
-    $(".csoc").hide();
-    $("#csoc" + count).show("slow");
-});
-
-$( "#sheetselect" ).change(function() {
-    var sheetname = $(this).val();
-    var url = "/worker/manage/workerexpire?sheet=" + sheetname;
-    redirect(url);
-});
-
-function redirect(url) {
-    window.location = url;
-}
-
+    /*
+     $(function() {
+     });
+     
+     $("#wpexpiryselects").change(function() {
+     var count = $(this).val();
+     $(".wpexpiry").hide();
+     $("#wpexpiry" + count).show("slow");
+     });
+     
+     $("#ppexpiryselects").change(function() {
+     //alert("ehehe");
+     var count = $(this).val();
+     $(".ppexpiry").hide();
+     $("#ppexpiry" + count).show("slow");
+     });
+     
+     $("#securityexpselects").change(function() {
+     //alert("ehehe");
+     var count = $(this).val();
+     $(".securityexp").hide();
+     $("#securityexp" + count).show("slow");
+     });
+     
+     $("#csocselects").change(function() {
+     //alert("ehehe");
+     var count = $(this).val();
+     $(".csoc").hide();
+     $("#csoc" + count).show("slow");
+     });
+     
+     $("#sheetselect").change(function() {
+     var sheetname = $(this).val();
+     var url = "/worker/manage/workerexpire?sheet=" + sheetname;
+     redirect(url);
+     });
+     
+     function redirect(url) {
+     window.location = url;
+     }
+     */
 </script>
 <?php
-$sheet=$this->sheet;
-$sheetarr=$this->sheetarr;
-$paramarr=$this->paramarr;
-$_expiryarr=$this->expiryarr;
+$sheet = $this->sheet;
+$sheetarr = $this->sheetarr;
+$paramarr = $this->paramarr;
+$_expiryarr = $this->expiryarr;
 
-$options="";
-foreach($sheetarr as $tmp)
-{
-    if($sheet == $tmp)
-    {
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
         $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    }
-    else
-    {
+    } else {
         $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
     }
 
     $options .= $option;
 }
-$selects='<select data-mini="true" data-theme="a" id="sheetselect">';
+$selects = '<select data-mini="true" data-theme="a" id="sheetselect">';
 $selects.=$options;
 $selects.='</select>';
 echo $selects;
-
 ?>
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
-<?php
-$divhtml="";
-foreach($paramarr as $key => $value)
-{
-$divhtml.='<div data-role="collapsible" data-collapsed="true">';
-$divhtml.="<h3>$value</h3>";
+    <?php
+    $divhtml = "";
+    foreach ($paramarr as $key => $value) {
+        $divhtml.='<div data-role="collapsible" data-collapsed="true">';
+        $divhtml.="<h3>$value</h3>";
 
-$tmparr=$_expiryarr[$key];
-$options="";
-$gridhtml="";
-$grids="";
-$count=0;
-foreach($tmparr as $tmpkey => $tmpvalue)
-{
-    $options.='<option value="' . $count .'">'. $tmpkey . '</option>';
+        $tmparr = $_expiryarr[$key];
+        $options = "";
+        $gridhtml = "";
+        $grids = "";
+        $count = 0;
+        foreach ($tmparr as $tmpkey => $tmpvalue) {
+            $options.='<option value="' . $count . '">' . $tmpkey . '</option>';
 
-    $gridhtml=$this->grid($key, false)
-          ->field('wpno', "工作准证")
-          ->field('name','名字')
-          ->field($key, $value)
-          ->setSorting(false)  
-          ->paginatorEnabled(false)
-          ->helper(new GridHelper_Workerdetails())
-          ->data($tmpvalue)
-          ->actionField(':action', "", '&nbsp;|&nbsp;')  
-          ->action(':action', '详细', array( 'url'=>array('action'=>'edit')));
-    $gridhtml='<div class="' . $key . '" id="' . $key.$count . '">' . $gridhtml . '</div>';
-    $grids .= $gridhtml;
+            $gridhtml = $this->grid($key, false)
+                    ->field('wpno', "工作准证")
+                    ->field('name', '名字')
+                    ->field($key, $value)
+                    ->setSorting(false)
+                    ->paginatorEnabled(false)
+                    ->helper(new GridHelper_Workerdetails())
+                    ->data($tmpvalue)
+                    ->actionField(':action', "", '&nbsp;|&nbsp;')
+                    ->action(':action', '详细', array('url' => array('action' => 'edit')));
+            $gridhtml = '<div class="' . $key . '" id="' . $key . $count . '">' . $gridhtml . '</div>';
+            $grids .= $gridhtml;
 
-    $count++;
-}
-$selects='<select id="' . $key .'selects" data-mini="true"  data-theme="a">' . $options . '</select>';
-
-$divhtml.='<div class="ui-grid-a"><div class="ui-block-a">' . $selects . '</div>
+            $count++;
+        }
+        $selects = '<select id="' . $key . 'selects" data-mini="true"  data-theme="a">' . $options . '</select>';
+        $divhtml.='<div class="ui-grid-a"><div class="ui-block-a">' . $selects . '</div>
 	<div class="ui-block-b"><button data-mini="true">打印</button></div>
     </div>';
-
-
-$divhtml.=$grids;
-
-$divhtml.="</div>";
-}
-
-echo $divhtml;
-
-?>
-
-
+        $divhtml.=$grids;
+        $divhtml.="</div>";
+    }
+    echo $divhtml;
+    ?>
 </div>

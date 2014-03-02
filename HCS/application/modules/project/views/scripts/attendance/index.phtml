@@ -1,11 +1,9 @@
-<style>
-    .wizard { text-align:center; }
-</style>
 <script>
     $(function() {
         $('#Workersonsite').dataTable({
             "iDisplayLength": 100,
             "bRetrieve": true,
+             "aaSorting": [[0,'desc']],
         });
 
         var siteid = $("#sites").val();
@@ -134,14 +132,14 @@ $workersonsite = $this->workersonsite;
             ?>
         </div>
     </fieldset>
-    <h4>工人列表</h4>
+    <h4>工地工人列表</h4>
     <?php
 //echo 'workers no=' . count($workersonsite);
     echo $this->grid("Workersonsite", true)
             //->field('sn', 'SN')
             ->field('eeeno', 'Eee No')
-            ->field('namechs', 'Name Chs')
-            ->field('nameeng', 'Name Eng')
+            ->field('namechs', 'Name ')
+            //->field('nameeng', 'Name Eng')
             ->field('site', '所在工地')
             ->field('begindate', '起始日期')
             ->field('enddate', '结束日期')

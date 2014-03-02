@@ -125,22 +125,6 @@ $lastmonthurl = "/salary/salary/salarybymonth?sheet=$sheet&month=$lastmonth";
 $lastmonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$lastmonth";
 $thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thismonth";
 
-/*
-  $onswitches = array(
-  "sn" => "S/N", "eeeno" => "E'ee No.", "namechs" => "Name Chs", "nameeng" => "Name Eng", "wpno" => "WP No.",
-  "ppno" => "PP No.", "rate" => "RATE",);
-
-  $wdtab = $this->grid("Workersdata", true);
-  foreach ($onswitches as $key => $value) {
-  $wdtab = $wdtab->field($key, $value);
-  }
-  $wdtab = $wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
-  $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
-  $wdtab = $wdtab->data($maindata)->action(':action', '工资', array('url' => array('action' => 'personal')));
-  echo $wdtab;
- * 
- */
-
 $options = "";
 foreach ($sheetarr as $tmp) {
     if ($sheet == $tmp) {

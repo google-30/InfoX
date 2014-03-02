@@ -34,8 +34,6 @@ $ppno = "";
 $dob = "";
 $ppexpiry = "";
 $rate = "";
-//$pano="";
-//$sbno="";
 $securityexp = "";
 $worktype = "";
 $arrivaldate = "";
@@ -68,7 +66,7 @@ $monthrate = "";
 if ($this->mode == "Edit") {
     $worker = $this->worker;
     $pic = $worker->getPic();
-    $sn = $worker->getSn();    
+    $sn = $worker->getSn();
     $eeeno = $worker->getEeeno();
     $nameeng = $worker->getNameeng();
     $namechs = $worker->getNamechs();
@@ -156,7 +154,7 @@ echo $html;
         <tr>
             <td><div data-role="fieldcontain">
                     <label for="pic" class="ui-input-text"></label>
-                    <img src="<?php echo $pic; ?>" alt="无照片显示" width="40%"  id="pic" name="pic">
+                    <img src="<?php echo $pic; ?>" alt="无照片显示" width="40%" id="pic" name="pic">
                 </div></td>
             <td><div data-role="fieldcontain">
                     <label for="file" class="ui-input-text">更新照片：</label>
@@ -168,17 +166,17 @@ echo $html;
     <div data-role="fieldcontain">
         <label for="sheet">所属:</label>
         <select id="sheet" name="sheet" data-mini="true">
-<?php
-$options = "";
-foreach ($sheetarr as $tmp) {
-    if ($tmp == $sheet) {
-        $options .= "<option value=$tmp selected>$tmp</option>";
-    } else {
-        $options .= "<option value=$tmp>$tmp</option>";
-    }
-}
-echo $options;
-?>
+            <?php
+            $options = "";
+            foreach ($sheetarr as $tmp) {
+                if ($tmp == $sheet) {
+                    $options .= "<option value=$tmp selected>$tmp</option>";
+                } else {
+                    $options .= "<option value=$tmp>$tmp</option>";
+                }
+            }
+            echo $options;
+            ?>
         </select>
     </div>
 
