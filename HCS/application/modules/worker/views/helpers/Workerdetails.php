@@ -5,11 +5,11 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
     protected function td_name($field, $row) {
         $name = ($row["namechs"] != "") ? $row["namechs"] : $row["nameeng"];
         return $name;
-        //return $row->$field ? $row->$field->format('Y/m/d') : "&nbsp;";
     }
 
     protected function getDate($field, $row) {
-        return $row->$field ? $row->$field->format('Y/m/d') : "&nbsp;";
+        //return $row->$field ? $row->$field->format('Y/m/d') : "&nbsp;";
+        return $row->$field ? $row->$field->format('d/m/Y') : "&nbsp;";
     }
 
     protected function td_resignation($field, $row) {

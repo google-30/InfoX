@@ -4,47 +4,57 @@
     }
 </style>
 <script>
-    /*
-     $(function() {
-     });
-     
-     $("#wpexpiryselects").change(function() {
-     var count = $(this).val();
-     $(".wpexpiry").hide();
-     $("#wpexpiry" + count).show("slow");
-     });
-     
-     $("#ppexpiryselects").change(function() {
-     //alert("ehehe");
-     var count = $(this).val();
-     $(".ppexpiry").hide();
-     $("#ppexpiry" + count).show("slow");
-     });
-     
-     $("#securityexpselects").change(function() {
-     //alert("ehehe");
-     var count = $(this).val();
-     $(".securityexp").hide();
-     $("#securityexp" + count).show("slow");
-     });
-     
-     $("#csocselects").change(function() {
-     //alert("ehehe");
-     var count = $(this).val();
-     $(".csoc").hide();
-     $("#csoc" + count).show("slow");
-     });
-     
-     $("#sheetselect").change(function() {
-     var sheetname = $(this).val();
-     var url = "/worker/manage/workerexpire?sheet=" + sheetname;
-     redirect(url);
-     });
-     
-     function redirect(url) {
-     window.location = url;
-     }
-     */
+    $(function() {
+        $(".wpexpiry").hide();
+        $("#wpexpiry0").show();
+
+        $(".ppexpiry").hide();
+        $("#ppexpiry0").show();
+
+        $(".csoc").hide();
+        $("#csoc0").show();
+
+        $(".securityexp").hide();
+        $("#securityexp0").show();
+    });
+
+    $("#wpexpiryselects").change(function() {
+        var count = $(this).val();
+        $(".wpexpiry").hide();
+        $("#wpexpiry" + count).show("slow");
+    });
+
+    $("#ppexpiryselects").change(function() {
+        //alert("ehehe");
+        var count = $(this).val();
+        $(".ppexpiry").hide();
+        $("#ppexpiry" + count).show("slow");
+    });
+
+    $("#securityexpselects").change(function() {
+        //alert("ehehe");
+        var count = $(this).val();
+        $(".securityexp").hide();
+        $("#securityexp" + count).show("slow");
+    });
+
+    $("#csocselects").change(function() {
+        //alert("ehehe");
+        var count = $(this).val();
+        $(".csoc").hide();
+        $("#csoc" + count).show("slow");
+    });
+
+    $("#sheetselect").change(function() {
+        var sheetname = $(this).val();
+        var url = "/worker/manage/workerexpire?sheet=" + sheetname;
+        redirect(url);
+    });
+
+    function redirect(url) {
+        window.location = url;
+    }
+
 </script>
 <?php
 $sheet = $this->sheet;
@@ -84,8 +94,9 @@ echo $selects;
             $options.='<option value="' . $count . '">' . $tmpkey . '</option>';
 
             $gridhtml = $this->grid($key, false)
-                    ->field('wpno', "工作准证")
-                    ->field('name', '名字')
+                    ->field('eeeno', "Eee No")
+                    ->field('name', 'Name ')
+                    ->field('wpno', "Work Pass")
                     ->field($key, $value)
                     ->setSorting(false)
                     ->paginatorEnabled(false)

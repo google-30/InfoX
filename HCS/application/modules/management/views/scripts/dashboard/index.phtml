@@ -1,46 +1,46 @@
-<?php $this->headStyle()->captureStart();?>
+<?php $this->headStyle()->captureStart(); ?>
 .icon {
-    width: 80px;
-    height: 64px;
+width: 80px;
+height: 64px;
 }
 .group {
-    display: block;
-    clear: both;
+display: block;
+clear: both;
 }
 .group-box {
 }
 .page {
-    margin:2em;
-    margin-top:1em;
-    float:left;
-    text-align:center;
+margin:2em;
+margin-top:1em;
+float:left;
+text-align:center;
 }
-<?php $this->headStyle()->captureEnd();?>
+<?php $this->headStyle()->captureEnd(); ?>
 
-<?php foreach($this->dashboard as $group):?>
-<div class='group'>
-    <h1><?php echo $group['label'];?></h1>
-    <div class='group-box'>
-<?php foreach($group['pages'] as $page):?>
-        <div class='page'>
-            <a href='<?php echo $page->getHref();?>'>
-                <img src='<?php echo $page->icon;?>' class='icon' 
-                onmouseover="this.src='<?php echo $page->iconhover;?>'"
-                onmouseout="this.src='<?php echo $page->icon;?>'" 
-                name="<?php echo $page->Label;?>" />
-            </a><br>
-            <!--
-            <a href='<?php echo $page->getHref();?>'>
-                <?php echo $page->Label;?>
-            </a>
-            -->
-            <a href="<?php echo $page->getHref();?>" 
-            onmouseover="document.<?php echo $page->Label;?>.src='<?php echo $page->iconhover;?>';" 
-            onmouseout="document.<?php echo $page->Label;?>.src='<?php echo $page->icon;?>';">
-                <?php echo $page->Label;?>
-            </a>
+<?php foreach ($this->dashboard as $group): ?>
+    <div class='group'>
+        <h1><?php echo $group['label']; ?></h1>
+        <div class='group-box'>
+            <?php foreach ($group['pages'] as $page): ?>
+                <div class='page'>
+                    <a href='<?php echo $page->getHref(); ?>' target="_blank">
+                        <img src='<?php echo $page->icon; ?>' class='icon' 
+                             onmouseover="this.src = '<?php echo $page->iconhover; ?>'"
+                             onmouseout="this.src = '<?php echo $page->icon; ?>'" 
+                             name="<?php echo $page->Label; ?>" />
+                    </a><br>
+                    <!--
+                    <a href='<?php echo $page->getHref(); ?>'>
+                    <?php echo $page->Label; ?>
+                    </a>
+                    -->
+                    <a href="<?php echo $page->getHref(); ?>" target="_blank"
+                       onmouseover="document.<?php echo $page->Label; ?>.src = '<?php echo $page->iconhover; ?>';" 
+                       onmouseout="document.<?php echo $page->Label; ?>.src = '<?php echo $page->icon; ?>';">
+                           <?php echo $page->Label; ?>
+                    </a>
+                </div>
+            <?php endforeach; ?>
         </div>
-<?php endforeach;?>
     </div>
- </div>
-<?php endforeach;?>
+<?php endforeach; ?>

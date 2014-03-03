@@ -88,7 +88,7 @@ class Worker_ManageController extends Zend_Controller_Action {
         foreach ($paramarr as $param => $title) {
             $tmparr = $this->getExpiryArr($workerarr, $param);
             //var_dump($tmparr); return;
-            ksort($tmparr);
+            //ksort($tmparr);
             $expiryarr[$param] = $tmparr;
         }
 
@@ -116,14 +116,30 @@ class Worker_ManageController extends Zend_Controller_Action {
                     return null;
             }
 
-            $keystr = $date ? $date->format("Y-m") : "日期未定义";
+            $keystr = $date ? $date->format("m/Y") : "日期未定义";
             if (!array_key_exists($keystr, $returnarr)) {
                 $returnarr[$keystr] = array();
             }
             $returnarr[$keystr][] = $worker;
         }
 
+        uksort($returnarr, array($this, 'usort_expiredate'));
         return $returnarr;
+    }
+
+    private function usort_expiredate($a, $b) {
+        if($a == "日期未定义" || $b == "日期未定义")
+        {
+            return 0;
+        }
+        
+        $aobj = new Datetime("01/" . $a);
+        $bobj = new Datetime("01/" . $b);
+        if ($aobj > $bobj) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public function previewexpiryAction() {
@@ -375,7 +391,7 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->_files = $_FILES;
 
         $this->storePic($wid);
-        
+
         //$sheet = trim($this->getParam("sheet", ""));
         //$url = "/worker/manage?sheet=$sheet";
         $url = "/worker/manage/edit/id/" . $wid;
@@ -385,7 +401,7 @@ class Worker_ManageController extends Zend_Controller_Action {
     private function storeInfo($requests) {
         $mode = $requests["mode"];
 
-        if ($mode == "Edit") {            
+        if ($mode == "Edit") {
             $workerid = $this->getParam("workerid", 0);
             $data = $this->_workerdetails->findOneBy(array('id' => $workerid));
 
@@ -444,8 +460,8 @@ class Worker_ManageController extends Zend_Controller_Action {
         $resignation = ($resignation == "") ? null : new Datetime($resignation);
         $sheet = trim($this->getParam("sheet", ""));
         /*
-        $currentrate = (float) $this->getParam("currentrate", 0);
-        $monthrate = (float) $this->getParam("monthrate", 0);
+          $currentrate = (float) $this->getParam("currentrate", 0);
+          $monthrate = (float) $this->getParam("monthrate", 0);
          * 
          */
         /*
@@ -499,7 +515,7 @@ class Worker_ManageController extends Zend_Controller_Action {
             var_dump($e);
             return;
         }
-        
+
         return $data->getId();
     }
 
@@ -512,15 +528,9 @@ class Worker_ManageController extends Zend_Controller_Action {
         $uploadpath = UPLOAD_WORKER;
         $allowedExts = array("gif", "jpeg", "jpg", "png");
         $extension = end(explode(".", $_FILES["file"]["name"]));
-        if ((($_FILES["file"]["type"] == "image/gif") 
-                || ($_FILES["file"]["type"] == "image/jpeg") 
-                || ($_FILES["file"]["type"] == "image/jpg") 
-                || ($_FILES["file"]["type"] == "image/pjpeg") 
-                || ($_FILES["file"]["type"] == "image/x-png") 
-                || ($_FILES["file"]["type"] == "image/png")) 
-                && ($_FILES["file"]["size"] < 10000000) 
-                //&& in_array($extension, $allowedExts)
-                ) {
+        if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/jpg") || ($_FILES["file"]["type"] == "image/pjpeg") || ($_FILES["file"]["type"] == "image/x-png") || ($_FILES["file"]["type"] == "image/png")) && ($_FILES["file"]["size"] < 10000000)
+        //&& in_array($extension, $allowedExts)
+        ) {
             if ($_FILES["file"]["error"] > 0) {
                 echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
             } else {
@@ -608,8 +618,8 @@ class Worker_ManageController extends Zend_Controller_Action {
 
         $this->storeInfo($requests);
         $this->_files = $_FILES;
-    }    
-    
+    }
+
     private function storeInfo1($requests) {
         $mode = $requests["mode"];
 
@@ -878,7 +888,7 @@ class Worker_ManageController extends Zend_Controller_Action {
                 return;
             }
             $sheet = $worker->getSheet();
-            $url = "/worker/manage?sheet=" . $sheet;  
+            $url = "/worker/manage?sheet=" . $sheet;
             $this->redirect($url);
         }
     }
