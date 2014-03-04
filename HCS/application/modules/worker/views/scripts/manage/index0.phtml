@@ -1,0 +1,347 @@
+<style>
+    #infoswitches { display: none; }
+    #datatable { text-align:center; display:none; }
+    #Workersdata {  /*font: 80%/0.8em "Lucida Grande",Verdana,Arial,Helvetica,sans-serif; */
+        font-size:small; 
+        text-shadow: 0 1px #FFFFFF;
+        table-layout: fixed;
+    }
+    #Workersdata, thead, tr {
+        font-size:small; 
+        text-shadow: 0 1px #FFFFFF;                       
+    }
+    
+    #Workersdata tr.row_selected td {
+        background-color: #FFBED9;
+    }
+
+    table.grid tr.odd {
+        color: #000000;
+    }    
+
+    table.grid tr.even {
+        color: #000000;
+    } 
+    
+    #uploaddiv { display: none; }
+
+</style>
+<script>
+    var oTable;
+    $(document).ready(function() {
+        oTable = $('#Workersdata').dataTable({
+            "iDisplayLength": 100,
+            "bRetrieve": true,
+            "sScrollX": "100%",
+            "sScrollXInner": "100%",
+            /*
+             "sScrollXInner": "100%",
+             "bScrollCollapse": true,            
+             */
+        });
+
+        fnHideColumns();
+        resizetable();
+    });
+
+    $("#Workersdata tbody").click(function(event) {
+        //alert("click");
+        $(oTable.fnSettings().aoData).each(function() {
+            $(this.nTr).removeClass('row_selected');
+        });
+        $(event.target.parentNode).addClass('row_selected');
+    });
+
+    function resizetable()
+    {
+        //var width = $('#Workersdata').css("width");
+        //alert("width="+width);
+        $('#Workersdata').width('100%');
+        //var width = $('#Workersdata').css("width");
+        //alert("width="+width);
+    }
+
+    function fnHideColumns()
+    {
+        var oncount = Number($('#oncount').val());
+        var offcount = Number($('#offcount').val()) + oncount;
+        //alert(oncount + "," + offcount);
+
+        for (i = oncount; i < offcount; i++)
+        {   //alert(i);
+            fnHideColumn(i);
+        }
+    }
+
+    function fnHideColumn(iCol)
+    {
+        /* Get the DataTables object again - this is not a recreation, just a get of the object */
+        var oTable = $('#Workersdata').dataTable();
+        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+        oTable.fnSetColumnVis(iCol, false);
+    }
+
+    function fnShowHide(iCol)
+    {
+        /* Get the DataTables object again - this is not a recreation, just a get of the object */
+        var oTable = $('#Workersdata').dataTable();
+
+        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+        oTable.fnSetColumnVis(iCol, bVis ? false : true);
+    }
+
+    function infoswitches()
+    {
+        var sws = $("#infoswitches");
+
+        var display = sws.css("display");
+        //alert(display);
+
+        if (display == "none")
+        {
+            $("#infoswitches").show();
+        }
+        else
+        {
+            $("#infoswitches").hide();
+        }
+    }
+
+    function redirect(url) {
+        window.location = url;
+    }
+
+    function showhideupload()
+    {
+        var div = $("#uploaddiv");
+        var display = div.css("display");
+        (display == "none") ? div.show() : div.hide();
+    }
+
+    $("#sheetselect").change(function() {
+        var sheetname = $(this).val();
+        var url = "/worker/manage?sheet=" + sheetname;
+        redirect(url);
+    });
+
+    function previewlist()
+    {
+        var sheet = $("#sheetselect").val();
+        var url = "/worker/manage/previewlist?sheet=" + sheet;
+        window.open(url);
+    }
+
+    function clearworkerdetails()
+    {
+        var r = confirm("确认删除工人数据? 其他相关数据，比如工资，考勤一并会消除");
+        if (r == false)
+        {
+            return false;
+        }
+
+        $.post("/worker/import/truncateworkerdetails", {},
+                function(data) {
+                    //console.log(data);
+                    //$('#attensheet').load("/project/attendance/attendsheet?wid=" + wid + "&month="+month + "&sid="+siteid);
+                    alert("删除成功");
+                    window.location.reload();
+                })
+    }
+
+    function fnShowHideAll()
+    {
+        //alert("fnShowHideAll");
+        var oTable = $('#Workersdata').dataTable();
+        for (var i = 0; i < 34; i++)
+        {
+            var bVis = oTable.fnSettings().aoColumns[i].bVisible;
+            oTable.fnSetColumnVis(i, true);
+        }
+    }
+</script>
+
+<?php
+$sheet = $this->sheet;
+$sheetarr = $this->sheetarr;
+$maindata = $this->maindata;
+?>
+
+<div data-role="collapsible-set" data-mini="true" data-theme="c">
+    <div data-role="collapsible" data-collapsed="true">
+        <h3>数据操作</h3>
+        <div class="ui-grid-b">
+            <div class="ui-block-a">
+                <a href="/worker/manage/add"><button data-mini="true" data-theme="a">注册工人</button></a>
+            </div>
+            <div class="ui-block-b">
+                <button data-mini="true" data-theme="a" onclick="showhideupload()">导入工人列表Excel</button>
+            </div>
+            <div class="ui-block-c">                
+                <button data-mini="true" data-theme="a" onclick="clearworkerdetails()">清空工人数据</button>
+            </div>
+        </div><!-- /grid-b -->
+        <div id="uploaddiv">
+            <fieldset>
+                <form action="/worker/import/submit" method="post" enctype="multipart/form-data">
+                    上传工人列表(MS Excel file)：                    
+                    <input data-mini="true" type="file" name="file" id="file">
+                    <input type="submit" value="上传" data-mini="true" data-theme="a">
+                </form>
+            </fieldset>
+        </div>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="true">
+        <h3>列表操作</h3>
+        <button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
+        <div id="infoswitches">
+            <button onclick="fnShowHideAll()" data-mini="true">Show All Data</button>
+            <hr>
+            <div class="ui-grid-d">
+                <?php
+                $onswitches = array(
+                    /* "namechs"=>"Name Chs","nameeng"=>"Name Eng", */ 
+                    "eeeno" => "E'ee No.", "name" => "Name ", "wpno" => "WP No.",
+                    "wpexpiry" => "WP Expiry", "doa" => "D.O.A", "issuedate" => "Date of Issue",
+                    "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B", 
+                    "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
+
+                $offswitches = array(
+                    "worktype" => "主要工种", "arrivaldate" => "Arrival Date",
+                    "medicaldate" => "Medical Date", "medicalinsurance" => "Medical Insurance",
+                    "securityexp" => "Security Bond Expiry Date", "workingsite" => "Working Site",
+                    "dormitory" => "Dormitory", "goodat" => "Good At",
+                    "contactno1" => "Contact No.1", "contactno2" => "Contact No.2",
+                    "certificate" => "Certificate", "agent" => "Agent",
+                    "remarks" => "Remark", "hometown" => "区域",
+                    "education" => "教育程度", "age" => "年龄",
+                    "marital" => "婚姻状况", "constructionworker" => "建筑工",
+                    "applyfor" => "Apply For",
+                     );
+
+                $customtitles = $this->customtitles;
+                $offswitches["custom1"] = $customtitles[0];
+                $offswitches["custom2"] = $customtitles[1];
+                $offswitches["custom3"] = $customtitles[2];
+                $offswitches["custom4"] = $customtitles[3];
+
+                $count = 0;
+                $oncount = 0;
+                $grids = "";
+                foreach ($onswitches as $key => $value) {
+                    $oncount++;
+                    $count++;
+                    $block = "a";
+                    switch ($count) {
+                        case 1:
+                            $block = "a";
+                            break;
+                        case 2:
+                            $block = "b";
+                            break;
+                        case 3:
+                            $block = "c";
+                            break;
+                        case 4:
+                            $block = "d";
+                            break;
+                        case 5:
+                            $block = "e";
+                            $count = 0;
+                            break;
+                    }
+
+                    $colnum = $oncount - 1;
+                    $checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" checked onclick="fnShowHide(' . $colnum . ');">';
+                    $checkbox .= '<label for="' . $key . '">' . $value . '</label>';
+
+                    $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>\n";
+                    $grids .= $grid;
+                }
+                echo $grids;
+                echo '</div><hr><div class="ui-grid-d">';
+                echo '<input type="hidden" id="oncount" value="' . $oncount . '">';
+
+                $offcount = 0;
+                $count = 0;
+                $grids = "";
+                foreach ($offswitches as $key => $value) {
+                    $offcount++;
+                    $count++;
+                    $block = "a";
+                    switch ($count) {
+                        case 1:
+                            $block = "a";
+                            break;
+                        case 2:
+                            $block = "b";
+                            break;
+                        case 3:
+                            $block = "c";
+                            break;
+                        case 4:
+                            $block = "d";
+                            break;
+                        case 5:
+                            $block = "e";
+                            $count = 0;
+                            break;
+                    }
+
+                    $colnum = $oncount + $offcount - 1;
+                    $checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" onclick="fnShowHide(' . $colnum . ');">';
+                    $checkbox .= '<label for="' . $key . '">' . $value . '</label>';
+
+                    $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>\n";
+                    $grids .= $grid;
+                }
+                echo $grids;
+                echo '<input type="hidden" id="offcount" value="' . $offcount . '">';
+                echo '<hr>';
+                ?>
+            </div><!-- /grid-d -->
+            <hr>
+        </div>
+        <!--<a href="/worker/manage/previewlist" target="_blank"><button data-theme="a" data-mini="true">预览打印</button></a>-->
+        <button data-theme="a" data-mini="true" onclick="previewlist()">预览打印</button>
+    </div>
+
+</div> <!-- collapsible-set -->
+
+<?php
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    } else {
+        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+    }
+
+    $options .= $option;
+}
+$selects = '<select data-mini="true" id="sheetselect">';
+$selects.=$options;
+$selects.='</select>';
+echo $selects;
+
+
+$wdtab = $this->grid("Workersdata", true);
+foreach ($onswitches as $key => $value) {
+    $wdtab = $wdtab->field($key, $value);
+}
+foreach ($offswitches as $key => $value) {
+    $wdtab = $wdtab->field($key, $value);
+}
+$wdtab = $wdtab->actionField(':action', "Action", '&nbsp;|&nbsp;');
+$wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+$wdtab = $wdtab->helper(new GridHelper_Workerdetails());
+$wdtab = $wdtab->data($maindata)->action(':action', '编辑', array('url' => array('action' => 'edit')));
+//$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+$wdtab = $wdtab->action(':action', '离职', array('url' => array('action' => 'resign')));
+if (count($maindata)) {
+    echo $wdtab;
+} else {
+    echo "<strong>没有记录，请导入或者编辑工人数据</strong>";
+}
+?>
+<br><br>

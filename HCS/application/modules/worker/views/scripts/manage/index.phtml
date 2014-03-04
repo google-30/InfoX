@@ -1,3 +1,43 @@
+<?php
+$onswitches = array(
+    /* "namechs"=>"Name Chs","nameeng"=>"Name Eng", */
+    "eeeno" => "E'ee No.", "name" => "Name ", "wpno" => "WP No.",
+    "wpexpiry" => "WP Expiry", "doa" => "D.O.A", "issuedate" => "Date of Issue",
+    "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B",
+    "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
+
+$sheet = $this->sheet;
+$sheetarr = $this->sheetarr;
+$maindata = $this->maindata;
+
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    } else {
+        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+    }
+
+    $options .= $option;
+}
+$selects = '<select data-mini="true" id="sheetselect" data-theme="a">';
+$selects.=$options;
+$selects.='</select>';
+
+$wdtab = $this->grid("Workersdata", true);
+foreach ($onswitches as $key => $value) {
+    $wdtab = $wdtab->field($key, $value);
+}
+$wdtab = $wdtab->field("actions", "Action");
+$wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+$wdtab = $wdtab->helper(new GridHelper_Workerdetails());
+$wdtab = $wdtab->data($maindata);
+//$wdtab = $wdtab->actionField(':action', "Action", '&nbsp;|&nbsp;');
+//$wdtab = $wdtab->action(':action', '编辑', array('url' => array('action' => 'edit')));
+//$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+//$wdtab = $wdtab->action(':action', '离职', array('url' => array('action' => 'resign')));
+?>
+
 <style>
     #infoswitches { display: none; }
     #datatable { text-align:center; display:none; }
@@ -10,7 +50,7 @@
         font-size:small; 
         text-shadow: 0 1px #FFFFFF;                       
     }
-    
+
     #Workersdata tr.row_selected td {
         background-color: #FFBED9;
     }
@@ -22,7 +62,7 @@
     table.grid tr.even {
         color: #000000;
     } 
-    
+
     #uploaddiv { display: none; }
 
 </style>
@@ -32,16 +72,15 @@
         oTable = $('#Workersdata').dataTable({
             "iDisplayLength": 100,
             "bRetrieve": true,
-            "sScrollX": "100%",
-            "sScrollXInner": "100%",
             /*
-             "sScrollXInner": "100%",
+             "sScrollX": "100%",
+             "sScrollXInner": "100%",                         
              "bScrollCollapse": true,            
              */
         });
 
-        fnHideColumns();
-        resizetable();
+        //fnHideColumns();
+        //resizetable();
     });
 
     $("#Workersdata tbody").click(function(event) {
@@ -158,13 +197,22 @@
             oTable.fnSetColumnVis(i, true);
         }
     }
-</script>
 
-<?php
-$sheet = $this->sheet;
-$sheetarr = $this->sheetarr;
-$maindata = $this->maindata;
-?>
+    function workerResign(wid, name, eeeno)
+    {
+        var r = confirm("确认工人离职? " + name + " " + eeeno);
+        if (r == false)
+        {
+            return false;
+        }
+
+        $.post("/worker/manage/resign", {id: wid},
+        function(data) {
+            //console.log(data);
+            window.location.reload();
+        })
+    }
+</script>
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
     <div data-role="collapsible" data-collapsed="true">
@@ -191,153 +239,11 @@ $maindata = $this->maindata;
         </div>
     </div>
 
-    <div data-role="collapsible" data-collapsed="true">
-        <h3>列表操作</h3>
-        <button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
-        <div id="infoswitches">
-            <button onclick="fnShowHideAll()" data-mini="true">Show All Data</button>
-            <hr>
-            <div class="ui-grid-d">
-                <?php
-                $onswitches = array(
-                    /* "namechs"=>"Name Chs","nameeng"=>"Name Eng", */ 
-                    "eeeno" => "E'ee No.", "name" => "Name ", "wpno" => "WP No.",
-                    "wpexpiry" => "WP Expiry", "doa" => "D.O.A", "issuedate" => "Date of Issue",
-                    "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B", 
-                    "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
-
-                $offswitches = array(
-                    "worktype" => "主要工种", "arrivaldate" => "Arrival Date",
-                    "medicaldate" => "Medical Date", "medicalinsurance" => "Medical Insurance",
-                    "securityexp" => "Security Bond Expiry Date", "workingsite" => "Working Site",
-                    "dormitory" => "Dormitory", "goodat" => "Good At",
-                    "contactno1" => "Contact No.1", "contactno2" => "Contact No.2",
-                    "certificate" => "Certificate", "agent" => "Agent",
-                    "remarks" => "Remark", "hometown" => "区域",
-                    "education" => "教育程度", "age" => "年龄",
-                    "marital" => "婚姻状况", "constructionworker" => "建筑工",
-                    "applyfor" => "Apply For",
-                     );
-
-                $customtitles = $this->customtitles;
-                $offswitches["custom1"] = $customtitles[0];
-                $offswitches["custom2"] = $customtitles[1];
-                $offswitches["custom3"] = $customtitles[2];
-                $offswitches["custom4"] = $customtitles[3];
-
-                $count = 0;
-                $oncount = 0;
-                $grids = "";
-                foreach ($onswitches as $key => $value) {
-                    $oncount++;
-                    $count++;
-                    $block = "a";
-                    switch ($count) {
-                        case 1:
-                            $block = "a";
-                            break;
-                        case 2:
-                            $block = "b";
-                            break;
-                        case 3:
-                            $block = "c";
-                            break;
-                        case 4:
-                            $block = "d";
-                            break;
-                        case 5:
-                            $block = "e";
-                            $count = 0;
-                            break;
-                    }
-
-                    $colnum = $oncount - 1;
-                    $checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" checked onclick="fnShowHide(' . $colnum . ');">';
-                    $checkbox .= '<label for="' . $key . '">' . $value . '</label>';
-
-                    $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>\n";
-                    $grids .= $grid;
-                }
-                echo $grids;
-                echo '</div><hr><div class="ui-grid-d">';
-                echo '<input type="hidden" id="oncount" value="' . $oncount . '">';
-
-                $offcount = 0;
-                $count = 0;
-                $grids = "";
-                foreach ($offswitches as $key => $value) {
-                    $offcount++;
-                    $count++;
-                    $block = "a";
-                    switch ($count) {
-                        case 1:
-                            $block = "a";
-                            break;
-                        case 2:
-                            $block = "b";
-                            break;
-                        case 3:
-                            $block = "c";
-                            break;
-                        case 4:
-                            $block = "d";
-                            break;
-                        case 5:
-                            $block = "e";
-                            $count = 0;
-                            break;
-                    }
-
-                    $colnum = $oncount + $offcount - 1;
-                    $checkbox = '<input type="checkbox" name="' . $key . '" id="' . $key . '" data-mini="true" onclick="fnShowHide(' . $colnum . ');">';
-                    $checkbox .= '<label for="' . $key . '">' . $value . '</label>';
-
-                    $grid = '<div class="ui-block-' . $block . '">' . $checkbox . "</div>\n";
-                    $grids .= $grid;
-                }
-                echo $grids;
-                echo '<input type="hidden" id="offcount" value="' . $offcount . '">';
-                echo '<hr>';
-                ?>
-            </div><!-- /grid-d -->
-            <hr>
-        </div>
-        <!--<a href="/worker/manage/previewlist" target="_blank"><button data-theme="a" data-mini="true">预览打印</button></a>-->
-        <button data-theme="a" data-mini="true" onclick="previewlist()">预览打印</button>
-    </div>
-
 </div> <!-- collapsible-set -->
 
 <?php
-$options = "";
-foreach ($sheetarr as $tmp) {
-    if ($sheet == $tmp) {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    } else {
-        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
-    }
-
-    $options .= $option;
-}
-$selects = '<select data-mini="true" id="sheetselect">';
-$selects.=$options;
-$selects.='</select>';
 echo $selects;
 
-
-$wdtab = $this->grid("Workersdata", true);
-foreach ($onswitches as $key => $value) {
-    $wdtab = $wdtab->field($key, $value);
-}
-foreach ($offswitches as $key => $value) {
-    $wdtab = $wdtab->field($key, $value);
-}
-$wdtab = $wdtab->actionField(':action', "Action", '&nbsp;|&nbsp;');
-$wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
-$wdtab = $wdtab->helper(new GridHelper_Workerdetails());
-$wdtab = $wdtab->data($maindata)->action(':action', '编辑', array('url' => array('action' => 'edit')));
-//$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
-$wdtab = $wdtab->action(':action', '离职', array('url' => array('action' => 'resign')));
 if (count($maindata)) {
     echo $wdtab;
 } else {

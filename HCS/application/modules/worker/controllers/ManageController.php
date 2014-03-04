@@ -21,7 +21,7 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->_workercustominfo = $this->_em->getRepository('Synrgic\Infox\Workercustominfo');
         $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
     }
-
+    
     public function indexAction() {
         $this->getworkerlist();
         $this->getCustominfo(0);
@@ -887,9 +887,12 @@ class Worker_ManageController extends Zend_Controller_Action {
                 var_dump($e);
                 return;
             }
+            /*
             $sheet = $worker->getSheet();
             $url = "/worker/manage?sheet=" . $sheet;
             $this->redirect($url);
+             * 
+             */
         }
     }
 

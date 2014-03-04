@@ -81,7 +81,18 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         $url = "/salary/worker/personal/id/" . $row["id"];
         $html = '<a href="' . $url .  '" target="_blank">工资</a>';
         return $html;
-    }    
+    }
+    
+    protected function td_actions($field, $row) {    
+        $link1 = "<a>编辑</a>";
+        $wid = $row["id"];
+        $name = $row["namechs"];
+        $eeeno = $row["eeeno"];
+        $link2 = '<a onclick="workerResign(' . "$wid, '$name','$eeeno'" .')">离职</a>';
+        
+        $actions = $link1 . " | " . $link2;
+        return $actions;
+    }
 }
 
 ?>
