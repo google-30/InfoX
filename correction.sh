@@ -8,9 +8,6 @@ chmod a+w  $hcspath/data/cache
 mkdir -p $hcspath/models/proxies
 chmod a+w $hcspath/models/proxies
 
-mkdir -p $hcspath/models/proxies
-chmod a+w $hcspath/models/proxies
-
 mkdir -p $hcspath/data/uploads
 chmod a+w  $hcspath/data/uploads
 
