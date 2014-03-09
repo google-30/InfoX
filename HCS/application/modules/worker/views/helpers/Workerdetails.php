@@ -68,31 +68,31 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
             //$enddate = $tmp->getEnddate();
             //$nowdate = new DateTime("now");
             //if ($enddate > $nowdate || !$enddate) 
-            if (!$siteobj->getCompleted() && !in_array($sitename, $sitenameArr)){
+            if (!$siteobj->getCompleted() && !in_array($sitename, $sitenameArr)) {
                 //$sitenames .= $sitename . "&nbsp;";
-                $sitenameArr[] = $sitename;                
-            }            
+                $sitenameArr[] = $sitename;
+            }
         }
         //return $sitenames;
         return implode("<br>", $sitenameArr);
     }
 
-    protected function td_salary($field, $row) {        
+    protected function td_salary($field, $row) {
         $url = "/salary/worker/personal/id/" . $row["id"];
-        $html = '<a href="' . $url .  '" target="_blank">工资</a>';
+        $html = '<a href="' . $url . '" target="_blank">工资</a>';
         return $html;
     }
-    
-    protected function td_actions($field, $row) {    
-        $link1 = "<a>编辑</a>";
+
+    protected function td_actions($field, $row) {
+
         $wid = $row["id"];
         $name = $row["namechs"];
         $eeeno = $row["eeeno"];
-        $link2 = '<a onclick="workerResign(' . "$wid, '$name','$eeeno'" .')">离职</a>';
-        
+        //$link1 = '<a onclick="workerDetails(' . "$wid, '$name','$eeeno'" . ')">编辑</a>';
+        $link1 = '<a href="/worker/manage/edit?id=' . $wid . '"  target="_blank">编辑</a>';
+        $link2 = '<a onclick="workerResign(' . "$wid, '$name','$eeeno'" . ')">离职</a>';
+
         $actions = $link1 . " | " . $link2;
         return $actions;
     }
 }
-
-?>

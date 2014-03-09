@@ -38,6 +38,8 @@ $wdtab = $wdtab->data($maindata);
 //$wdtab = $wdtab->action(':action', '离职', array('url' => array('action' => 'resign')));
 ?>
 
+<!--<link rel="stylesheet" href="/common/css/jquery.bpopup.min.css" />
+<script type="text/javascript" src="/common/js/jquery.bpopup.min.js"></script>-->
 <style>
     #infoswitches { display: none; }
     #datatable { text-align:center; display:none; }
@@ -65,6 +67,7 @@ $wdtab = $wdtab->data($maindata);
 
     #uploaddiv { display: none; }
 
+    #workerdetails { display: none; }
 </style>
 <script>
     var oTable;
@@ -212,6 +215,7 @@ $wdtab = $wdtab->data($maindata);
             window.location.reload();
         })
     }
+
 </script>
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
@@ -251,3 +255,6 @@ if (count($maindata)) {
 }
 ?>
 <br><br>
+<div id="workerdetails">
+    xxx
+</div>
