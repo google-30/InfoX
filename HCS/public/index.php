@@ -15,13 +15,14 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 if( APPLICATION_ENV == 'development' ){
+    //echo "1APPLICATION_ENV=" . APPLICATION_ENV ."|" .APPLICATION_PATH; //die();
     require_once(APPLICATION_PATH . '/StartupCheck.php');
     StartupCheck::performChecks();
 }
 
-
 /** Zend_Application */
 require_once 'Zend/Application.php';
+//echo "2APPLICATION_ENV=" . APPLICATION_ENV ."|" .APPLICATION_PATH; //die();
 
 // Create application, bootstrap, and run
 $application = new Zend_Application(
