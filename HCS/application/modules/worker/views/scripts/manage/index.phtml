@@ -43,8 +43,7 @@ $wdtab = $wdtab->data($maindata);
 <style>
     #infoswitches { display: none; }
     #datatable { text-align:center; display:none; }
-    #Workersdata {  /*font: 80%/0.8em "Lucida Grande",Verdana,Arial,Helvetica,sans-serif; */
-        font-size:small; 
+    #Workersdata {  
         text-shadow: 0 1px #FFFFFF;
         table-layout: fixed;
     }
@@ -55,6 +54,11 @@ $wdtab = $wdtab->data($maindata);
 
     #Workersdata tr.row_selected td {
         background-color: #FFBED9;
+    }
+
+    #Workersdata td {
+        font-size: 120%;
+        padding: 8px;
     }
 
     table.grid tr.odd {
