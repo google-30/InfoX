@@ -2,3 +2,4 @@
 HCS/application/models/proxies/*
 HCS/application/data/cache/*
 HCS/application/data/uploads/*
+/HCS/nbproject/
