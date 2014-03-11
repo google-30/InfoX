@@ -91,8 +91,10 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         //$link1 = '<a onclick="workerDetails(' . "$wid, '$name','$eeeno'" . ')">编辑</a>';
         $link1 = '<a href="/worker/manage/edit?id=' . $wid . '"  target="_blank">编辑</a>';
         $link2 = '<a onclick="workerResign(' . "$wid, '$name','$eeeno'" . ')">离职</a>';
+        $link3 = '<a onclick="workerRenewinfo(' . "$wid, '$name','$eeeno'" . ')">Renew</a>';
 
-        $actions = $link1 . " | " . $link2;
+        $actions = $link3 . " | " . $link1 . " | " . $link2;
         return $actions;
     }
+
 }
