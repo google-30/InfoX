@@ -222,7 +222,7 @@ $wdtab = $wdtab->data($maindata);
 
     function workerRenewinfo(wid, name, eeeno)
     {
-        
+         $('#workerdetails').bPopup();
     }
 </script>
 
@@ -263,6 +263,8 @@ if (count($maindata)) {
 }
 ?>
 <br><br>
-<div id="workerdetails">
+<div id="workerdetails" class="bMulti">
     xxx
 </div>
+
+
