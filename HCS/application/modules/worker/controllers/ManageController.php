@@ -22,9 +22,15 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
     }
     
-    public function indexAction() {
-        $this->getworkerlist();
-        $this->getCustominfo(0);
+    public function indexAction() {        
+        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+        $requestsheet = $this->getParam("sheet", $sheetarr[0]);
+        $workerarr = infox_worker::getActiveWorkerdetailsBySheet($requestsheet);
+
+        $this->view->sheet = $requestsheet;
+        $this->view->maindata = $workerarr;        
+        //$this->getworkerlist();
+        //$this->getCustominfo(0);                
     }
 
     public function previewlistAction() {
