@@ -341,6 +341,63 @@ class infox_project {
         return $attendtab;
     }
 
+    public static function generateAttendanceTabWbtn2014($attendrecord, $highlight = false, $siteid, $dateobj, $workerid) {
+        self::getRepos();
+        $attendresult = self::getAttendFoodData($attendrecord);
+
+        $monthstr = $dateobj->format("Ym");
+        $nowdate = new Datetime("");
+        $nowmonthstr = $nowdate->format("Ym");
+        //$highlight = ($nowmonthstr == $monthstr) ? true : false;
+        $today = $nowdate->format("d");
+        $todaystyle = $highlight ? "background:#ff5c5c;" : "";
+
+        $attendDate = new Datetime($monthstr . "01");
+        $attendmonth = $attendDate->format("m");
+        $attendyear = $attendDate->format("Y");
+        $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear);
+
+        $attendtab = "<table>";
+        $tds = "";
+        for ($i = 0; $i < $daysinmonth; $i++) {
+            $j = $i + 1;
+            $value = ($j < 10) ? "0$j" : $j;
+
+            $td = ($j == $today) ? '<td style="' . $todaystyle . '">' . $value . '</td>' : "<td>$value</td>";
+//$td = "<td>$value</td>";
+            $tds .= $td;
+        }
+        $tr = '<tr><td class="fixwidthcol">日期</td>' . $tds;
+
+        $url = "/project/attendance/attendialog?" . "sid=$siteid&month=$monthstr&wid=$workerid";
+        $dialog = '<a href="' . $url . '" data-rel="dialog" data-role="button" data-mini="true" data-theme="b">考勤</a>';
+        $attendbtntd = "<td rowspan=2>$dialog</td>";
+        $tr .= $attendbtntd . "</tr>"
+                . "";
+        $attendtab .= $tr;
+
+        $tds = "";
+        for ($i = 0; $i < $daysinmonth; $i++) {
+            $j = $i + 1;
+            $value = $attendresult[0][$i];
+            
+            $tmparr = explode(";", $value);
+            $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+            $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+            $value = $hoursdata != "" ? $hoursdata : $piecedata;
+            
+            $td = "<td>$value</td>";
+            $tds .= $td;
+        }
+        $tr = "<tr><td>数据</td>$tds</tr>
+";
+        $attendtab .= $tr;
+        $attendtab .= "</table>
+";
+
+        return $attendtab;
+    }    
+    
     public static function getAttendFoodData($record) {
         if (!$record) {
             $attendarr = array();
