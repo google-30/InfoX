@@ -307,12 +307,12 @@ class infox_project {
         for ($i = 0; $i < $daysinmonth; $i++) {
             $j = $i + 1;
             $value = $attendresult[0][$i];
-            
+
             $tmparr = explode(";", $value);
             $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
             $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
             $value = $hoursdata != "" ? $hoursdata : $piecedata;
-            
+
             $td = "<td>$value</td>";
             $tds .= $td;
         }
@@ -357,14 +357,32 @@ class infox_project {
         $attendyear = $attendDate->format("Y");
         $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear);
 
+        // get last month 26-28,30,31
+        if ($attendmonth > 1) {
+            $monthfirst = $attendmonth - 1;
+            $yearfirst = $attendyear;
+        } else {
+            $monthfirst = 12;
+            $yearfirst = $attendyear - 1;
+        }
+        $daysfirstmonth = cal_days_in_month(CAL_GREGORIAN, $monthfirst, $yearfirst);
+        
+
         $attendtab = "<table>";
         $tds = "";
-        for ($i = 0; $i < $daysinmonth; $i++) {
+        
+        for ($i = 26; $i <= $daysfirstmonth; $i++) {
+            $j = $i;
+            $value = ($j < 10) ? "0$j" : $j;
+
+            $td = ($j == $today) ? '<td style="' . $todaystyle . '">' . $value . '</td>' : "<td>$value</td>";
+            $tds .= $td;
+        }                
+        for ($i = 0; $i < 25; $i++) {
             $j = $i + 1;
             $value = ($j < 10) ? "0$j" : $j;
 
             $td = ($j == $today) ? '<td style="' . $todaystyle . '">' . $value . '</td>' : "<td>$value</td>";
-//$td = "<td>$value</td>";
             $tds .= $td;
         }
         $tr = '<tr><td class="fixwidthcol">日期</td>' . $tds;
@@ -377,18 +395,23 @@ class infox_project {
         $attendtab .= $tr;
 
         $tds = "";
+        /*
         for ($i = 0; $i < $daysinmonth; $i++) {
             $j = $i + 1;
             $value = $attendresult[0][$i];
-            
+
             $tmparr = explode(";", $value);
             $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
             $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
             $value = $hoursdata != "" ? $hoursdata : $piecedata;
-            
+
             $td = "<td>$value</td>";
             $tds .= $td;
         }
+         * 
+         */
+        
+        
         $tr = "<tr><td>数据</td>$tds</tr>
 ";
         $attendtab .= $tr;
@@ -396,8 +419,8 @@ class infox_project {
 ";
 
         return $attendtab;
-    }    
-    
+    }
+
     public static function getAttendFoodData($record) {
         if (!$record) {
             $attendarr = array();
@@ -545,11 +568,10 @@ class infox_project {
                 $piece = $requests["piece$i"];
                 // add site support
                 $site = $requests["site$i"];
-                
+
                 $value = implode(";", array($hour, $piece, $site));
                 //$daily = ($daily == "") 
-                $updatestr .= "s.day$i='$value',";                
-                
+                $updatestr .= "s.day$i='$value',";
             }
         }
 
