@@ -2,7 +2,7 @@
 $data = $this->maindata;
 $mode = $this->mode; //"Create";
 $mid = 0;
-$name = "";
+$namechs = "";
 $nameeng = "";
 $description = "";
 $supplier = "";
@@ -19,7 +19,7 @@ $spareahide = "display:none;";
 
 if ($mode === "Edit") {
     $mid = $data->getId();
-    $name = $data->getName();
+    $namechs = $data->getName();
     $nameeng = $data->getNameeng();
     $description = $data->getDescription();
     if ($data->getSupplier()) {
@@ -208,7 +208,7 @@ $inputtab = '<table class="grid"><thead><tr><th>Supplier</th><th>Unit</th><th>Ra
             <tr><td>
                     <div data-role="fieldcontain">
                         <label for="name">中文名:</label>
-                        <input type="text" name="name" id="name" value="<?php echo $name; ?>" data-mini="true">
+                        <input type="text" name="name" id="name" value="<?php echo $namechs; ?>" data-mini="true">
                     </div>
                 </td></tr>
             <tr><td>
