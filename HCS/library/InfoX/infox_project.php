@@ -410,7 +410,30 @@ class infox_project {
         }
          * 
          */
-        
+        for ($i = 26; $i <= $daysfirstmonth; $i++) {
+            $j = $i+1;
+            $value = $attendresult[0][$j];
+
+            $tmparr = explode(";", $value);
+            $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+            $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+            $value = $hoursdata != "" ? $hoursdata : $piecedata;
+
+            $td = "<td>$value</td>";
+            $tds .= $td;
+        }                
+        for ($i = 0; $i < 25; $i++) {
+            $j = $i + 1;
+            $value = $attendresult[0][$i];
+
+            $tmparr = explode(";", $value);
+            $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+            $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+            $value = $hoursdata != "" ? $hoursdata : $piecedata;
+
+            $td = "<td>$value</td>";
+            $tds .= $td;
+        }        
         
         $tr = "<tr><td>数据</td>$tds</tr>
 ";
