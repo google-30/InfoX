@@ -371,11 +371,21 @@ class Project_AttendanceController extends Zend_Controller_Action {
             }
         }
 
-        // create tab just like datepicker
-        $dayinmonth = $date->format("Y-m-d");
-        $dayofweek = date('w', strtotime($dayinmonth));
         $attendmonth = $date->format("m");
         $attendyear = $date->format("Y");
+        if ($attendmonth > 1) {
+            $monthfirst = $attendmonth - 1;
+            $yearfirst = $attendyear;
+        } else {
+            $monthfirst = 12;
+            $yearfirst = $attendyear - 1;
+        }
+
+        // create tab just like datepicker
+        //$dayinmonth = $date->format("Y-m-d");
+        //$startday = new Datetime("$yearfirst-$monthfirst-26");
+        $dayofweek = date('w', strtotime("$yearfirst-$monthfirst-26"));
+        $daysfirstmonth = cal_days_in_month(CAL_GREGORIAN, $monthfirst, $yearfirst);
         $daysinmonth = cal_days_in_month(CAL_GREGORIAN, $attendmonth, $attendyear);
         //echo "dayinmonth=$dayinmonth, dayofweek=$dayofweek,daysinmonth=$daysinmonth";
         // find attend record
@@ -393,6 +403,71 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $trs = "";
         $sitelatest = 0;
 
+        /*
+          for ($i = 0; $i < 6; $i++) {
+          $tr = "";
+          $tds = "";
+
+          $dayofweek = ($i == 0) ? $dayofweek : 0;
+
+          if ($i == 0) {
+          for ($j = 0; $j < $dayofweek; $j++) {
+          $tds .= "<td></td>";
+          }
+          }
+          for ($k = 0; $k < 7 - $dayofweek; $k++) {
+          $daycount++;
+          if ($daycount > $daysinmonth) {
+          break;
+          }
+
+          $daystr = "<div>$daycount</div>";
+          $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
+
+          $tmparr = explode(";", $daydata);
+          $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+          $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+
+          $input1 = '<input type="text" class="dayvalue" id="date' . $daycount . '" '
+          . 'name="date' . $daycount . '" value="' . $hoursdata . '" placeholder="">';
+          $input2 = '<input type="text" class="dayvalue" id="piece' . $daycount . '" '
+          . 'name="piece' . $daycount . '" value="' . $piecedata . '" placeholder="">';
+
+          // site support
+          $sitedata = key_exists(2, $tmparr) ? $tmparr[2] : 0;
+          //$sitelatest = $sitedata = ($sitedata != 0) ? $sitedata : $sitelatest;
+
+          $siteoptions = '<option value="0">选择工地</option>';
+          foreach ($sites as $tmp) {
+          $name = $tmp->getName();
+          $id = $tmp->getId();
+          if ($sitedata == $id) {
+          $option = '<option value="' . $id . '" selected>' . $name . '</option>';
+          } else {
+          $option = '<option value="' . $id . '" >' . $name . '</option>';
+          }
+          $siteoptions .= $option;
+          }
+
+          $sitesel = '<select id="site" name="site' . $daycount
+          . '" data-mini="true">' . $siteoptions . '</select>';
+          $divinputs = $sitesel . '<div class="ui-grid-a">'
+          . '<div class="ui-block-a">' . $input1 . '</div>'
+          . '<div class="ui-block-b">' . $input2 . '</div>'
+          . '</div>';
+
+          $daystr .= $divinputs;
+          $tds .= "<td>$daystr</td>";
+          }
+
+          $tr = "<tr>$tds</tr>
+          ";
+          $trs.=$tr;
+          }
+         */
+        $attenddays = $daysfirstmonth - 26 + 1 + 25;
+        $endflag = FALSE;
+        // maxium is 6 rows
         for ($i = 0; $i < 6; $i++) {
             $tr = "";
             $tds = "";
@@ -404,54 +479,71 @@ class Project_AttendanceController extends Zend_Controller_Action {
                     $tds .= "<td></td>";
                 }
             }
+
             for ($k = 0; $k < 7 - $dayofweek; $k++) {
                 $daycount++;
-                if ($daycount > $daysinmonth) {
+                if ($daycount > $attenddays && $k == 6) {
+                    $tds .= "<td></td>";
+                    $endflag = true;
                     break;
-                }
-
-                $daystr = "<div>$daycount</div>";
-                $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
-
-                $tmparr = explode(";", $daydata);
-                $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
-                $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
-
-                $input1 = '<input type="text" class="dayvalue" id="date' . $daycount . '" '
-                        . 'name="date' . $daycount . '" value="' . $hoursdata . '" placeholder="">';
-                $input2 = '<input type="text" class="dayvalue" id="piece' . $daycount . '" '
-                        . 'name="piece' . $daycount . '" value="' . $piecedata . '" placeholder="">';
-
-                // site support
-                $sitedata = key_exists(2, $tmparr) ? $tmparr[2] : 0;
-                //$sitelatest = $sitedata = ($sitedata != 0) ? $sitedata : $sitelatest;
-
-                $siteoptions = '<option value="0">选择工地</option>';
-                foreach ($sites as $tmp) {
-                    $name = $tmp->getName();
-                    $id = $tmp->getId();
-                    if ($sitedata == $id) {
-                        $option = '<option value="' . $id . '" selected>' . $name . '</option>';
+                } else if ($daycount > $attenddays && $k < 6) {
+                    $tds .= "<td></td>";
+                } else {
+                    if ($daycount <= $daysfirstmonth - 26 + 1) {
+                        $daycounttmp = $daycount + 25;
+                        $daystr = "<div>$daycounttmp</div>";
                     } else {
-                        $option = '<option value="' . $id . '" >' . $name . '</option>';
+                        $daycounttmp = $daycount - ($daysfirstmonth - 26 + 1);
+                        $daystr = "<div>$daycounttmp</div>";
                     }
-                    $siteoptions .= $option;
+
+                    $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
+
+                    $tmparr = explode(";", $daydata);
+                    $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+                    $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+
+                    $input1 = '<input type="text" class="dayvalue" id="date' . $daycount . '" '
+                            . 'name="date' . $daycount . '" value="' . $hoursdata . '" placeholder="">';
+                    $input2 = '<input type="text" class="dayvalue" id="piece' . $daycount . '" '
+                            . 'name="piece' . $daycount . '" value="' . $piecedata . '" placeholder="">';
+
+                    // site support
+                    $sitedata = key_exists(2, $tmparr) ? $tmparr[2] : 0;
+                    //$sitelatest = $sitedata = ($sitedata != 0) ? $sitedata : $sitelatest;
+
+                    $siteoptions = '<option value="0">选择工地</option>';
+                    foreach ($sites as $tmp) {
+                        $name = $tmp->getName();
+                        $id = $tmp->getId();
+                        if ($sitedata == $id) {
+                            $option = '<option value="' . $id . '" selected>' . $name . '</option>';
+                        } else {
+                            $option = '<option value="' . $id . '" >' . $name . '</option>';
+                        }
+                        $siteoptions .= $option;
+                    }
+
+                    $sitesel = '<select id="site" name="site' . $daycount
+                            . '" data-mini="true">' . $siteoptions . '</select>';
+                    $divinputs = $sitesel . '<div class="ui-grid-a">'
+                            . '<div class="ui-block-a">' . $input1 . '</div>'
+                            . '<div class="ui-block-b">' . $input2 . '</div>'
+                            . '</div>';
+
+                    $daystr .= $divinputs;
+                    $tds .= "<td>$daystr</td>";
                 }
-
-                $sitesel = '<select id="site" name="site' . $daycount
-                        . '" data-mini="true">' . $siteoptions . '</select>';
-                $divinputs = $sitesel . '<div class="ui-grid-a">'
-                        . '<div class="ui-block-a">' . $input1 . '</div>'
-                        . '<div class="ui-block-b">' . $input2 . '</div>'
-                        . '</div>';
-
-                $daystr .= $divinputs;
-                $tds .= "<td>$daystr</td>";
             }
 
             $tr = "<tr>$tds</tr>
                     ";
             $trs.=$tr;
+
+            if($endflag)
+            {
+                break;
+            }
         }
 
         //echo "trs=" . htmlspecialchars($trs);

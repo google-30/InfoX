@@ -411,7 +411,7 @@ class infox_project {
          * 
          */
         for ($i = 26; $i <= $daysfirstmonth; $i++) {
-            $j = $i+1;
+            $j = $i-1;
             $value = $attendresult[0][$j];
 
             $tmparr = explode(";", $value);
