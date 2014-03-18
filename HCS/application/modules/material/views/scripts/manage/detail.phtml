@@ -1,3 +1,123 @@
+<?php
+$data = $this->maindata;
+$mode = $this->mode; //"Create";
+$mid = 0;
+$name = "";
+$nameeng = "";
+$description = "";
+$supplier = "";
+$date = "";
+$pic = "";
+$usage = "";
+$typeid = 0;
+$defsupplierid = 0;
+$supplypricearr = array();
+//$units=$this->units;
+//$unit="";
+$suppliers = $this->suppliers;
+$spareahide = "display:none;";
+
+if ($mode === "Edit") {
+    $mid = $data->getId();
+    $name = $data->getName();
+    $nameeng = $data->getNameeng();
+    $description = $data->getDescription();
+    if ($data->getSupplier()) {
+        $supplier = $data->getSupplier()->getName();
+    }
+    $date = $data->getUpdate();
+    $date = $date ? $date->format('Y/m/d') : "";
+    $pic = $data->getPic();
+    $usage = $data->getUsage();
+    $typeobj = $data->getType();
+    if ($typeobj) {
+        $typeid = $typeobj->getId();
+    }
+    $defsupplier = $data->getSupplyprice();
+    if ($defsupplier) {
+        $defsupplierid = $defsupplier->getId();
+    }
+
+    $supplypricearr = $this->supplypricearr;
+    $spareahide = "";
+}
+
+$types = $this->types;
+$typeoptions = "";
+foreach ($types as $tmp) {
+    $id = $tmp->getId();
+    $main = $tmp->getMain();
+    $maintypechs = $main->getTypechs();
+    $maintypeeng = $main->getTypeeng();
+    $typechs = $tmp->getTypechs();
+    $typeeng = $tmp->getTypeeng();
+    $typestr = "$maintypeeng($maintypechs)::$typeeng($typechs)";
+
+    if ($id == $typeid) {
+        $typeoptions .= '<option value="' . $id . '" selected>' . $typestr . '</option>';
+    } else {
+        $typeoptions .= '<option value="' . $id . '">' . $typestr . '</option>';
+    }
+}
+
+$tabrows = "";
+if (count($supplypricearr)) {
+    foreach ($supplypricearr as $tmp) {
+        $id = $tmp->getId();
+        $supplier = $tmp->getSupplier();
+        $suppliername = $supplier ? $supplier->getName() : "&nbsp;";
+        $unit = $tmp->getUnit();
+        $rate = $tmp->getRate();
+        $quantity = $tmp->getQuantity();
+        $dodate = $tmp->getUpdate();
+        $dodatestr = $dodate ? $dodate->format("Y-m-d") : "&nbsp;";
+
+        $row = "";
+
+        if ($id == $defsupplierid) {
+            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked data-role="none"/></td>';
+        } else {
+            $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" data-role="none"/></td>';
+        }
+
+        $tdsupplier = "<td>$suppliername</td>";
+        $tdunit = "<td>$unit</td>";
+        //$tdupdate = "<td>$dodatestr</td>";
+        //$tdrate = "<td>$rate</td>";
+        $tdquantity = "<td>$quantity</td>";
+        $tdamount = "<td>" . $quantity * $rate . "</td>";
+
+        $tdrate = '<td><input type="text" value="' . $rate . '" name="rate' . $id . '" id="rate' . $id . '" placeholder="0"></td>';
+        $tdupdate = '<td><input type="text" class="classupdate" value="' . $dodatestr . '" name="update' . $id . '" id="update' . $id . '"></td>';
+        //$row .= "<tr>" . $tdradio . $tdsupplier . $tdunit . $tdupdate . $tdrate . $tdquantity . $tdamount . "</tr>";
+        $row .= "<tr>" . $tdradio . $tdsupplier . $tdunit . $tdrate . "</tr>";
+        $tabrows .= $row;
+    }
+}
+
+$selecthtml = "";
+if (!count($suppliers)) {
+    $selecthtml = "<strong>请导入材料列表或者手动添加供应商数据</strong>";
+} else {
+    $options = '<option value="0">选择供应商</option>';
+    foreach ($suppliers as $tmp) {
+        $id = $tmp->getId();
+        $name = $tmp->getName();
+        $options .= '<option value="' . $id . '">' . $name . '</option>';
+    }
+    $selecthtml.= '<select data-mini="true" id="suppliernew">' . $options . "</select>";
+}
+
+$unittd = '<td><input type="text" value="" id="unitnew" placeholder="单位，比如pair, box, etc."></td>';
+//$dodatetd = '<td><input type="text" value="" id="dodatenew" class="classupdate" placeholder="点击选择Do date"></td>';
+$ratetd = '<td><input type="text" value="" id="ratenew" placeholder="rate, 比如5，表示5新元"></td>';
+//$quantitytd = '<td><input type="text" value="" id="quantitynew" placeholder="Quantity, 比如5,表示5个unit的material"></td>';
+//$tr = "<tr><td>$selecthtml</td> $unittd $dodatetd $ratetd $quantitytd</tr>";
+$tr = "<tr><td>$selecthtml</td> $unittd $ratetd </tr>";
+$inputtab = '<table class="grid"><thead><tr><th>Supplier</th><th>Unit</th><th>Rate</th></tr></thead>'
+        . '<tbody>' . $tr . "</tbody></table>";
+?>
+
 <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
 <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
 <script>
@@ -37,13 +157,18 @@
         //alert("supplypricenew");
         var supplier = $("#suppliernew").val();
         var unit = $("#unitnew").val();
-        var dodate = $("#dodatenew").val();
+        //var dodate = $("#dodatenew").val();
         var rate = $("#ratenew").val();
-        var quantity = $("#quantitynew").val();
+        //var quantity = $("#quantitynew").val();
         var material = $("#id").val();
+        if(rate == "" || unit == "" || supplier=="0") 
+        {
+            alert("请提供Supplier, Unit, Rate.");
+            return false;
+        }
 
         $.post("/material/manage/postsupplyprice", {supplier: supplier, unit: unit,
-            dodate: dodate, rate: rate, quantity: quantity, material: material},
+            rate: rate, /*dodate: dodate,  quantity: quantity,*/ material: material},
         function(data) {
             //console.log(data);
             alert(data);
@@ -52,56 +177,11 @@
     }
 
 </script>
-<?php
-$data = $this->maindata;
-$mode = $this->mode; //"Create";
-$id = 0;
-$name = "";
-$nameeng = "";
-$description = "";
-$supplier = "";
-$date = "";
-$pic = "";
-$usage = "";
-$typeid = 0;
-$defsupplierid = 0;
-$supplypricearr = array();
-//$units=$this->units;
-//$unit="";
-$suppliers = $this->suppliers;
-$spareahide = "display:none;";
-
-if ($mode === "Edit") {
-    $id = $data->getId();
-    $name = $data->getName();
-    $nameeng = $data->getNameeng();
-    $description = $data->getDescription();
-    if ($data->getSupplier()) {
-        $supplier = $data->getSupplier()->getName();
-    }
-    $date = $data->getUpdate();
-    $date = $date ? $date->format('Y/m/d') : "";
-    $pic = $data->getPic();
-    $usage = $data->getUsage();
-    $typeobj = $data->getType();
-    if ($typeobj) {
-        $typeid = $typeobj->getId();
-    }
-    $defsupplier = $data->getSupplyprice();
-    if ($defsupplier) {
-        $defsupplierid = $defsupplier->getId();
-    }
-
-    $supplypricearr = $this->supplypricearr;
-    $spareahide = "";
-}
-?>
-
 <form id="dataform" enctype="multipart/form-data" method="post" action="/material/manage/submit">
     <fieldset>
         <legend><strong>材料信息</strong></legend>
         <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
-        <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+        <input type="hidden" id="id" name="id" value="<?php echo $mid; ?>">
         <input type="hidden" id="defsupplierid" name="defsupplierid" value="<?php echo $defsupplierid; ?>">
 
         <table class="grid" id="supplypricetab">
@@ -119,24 +199,7 @@ if ($mode === "Edit") {
                         <select name="type" id="type" data-mini="true">
                             <option value="0"></option>
                             <?php
-                            $types = $this->types;
-                            $options = "";
-                            foreach ($types as $tmp) {
-                                $id = $tmp->getId();
-                                $main = $tmp->getMain();
-                                $maintypechs = $main->getTypechs();
-                                $maintypeeng = $main->getTypeeng();
-                                $typechs = $tmp->getTypechs();
-                                $typeeng = $tmp->getTypeeng();
-                                $typestr = "$maintypeeng($maintypechs)::$typeeng($typechs)";
-
-                                if ($id == $typeid) {
-                                    $options .= '<option value="' . $id . '" selected>' . $typestr . '</option>';
-                                } else {
-                                    $options .= '<option value="' . $id . '">' . $typestr . '</option>';
-                                }
-                            }
-                            echo $options;
+                            echo $typeoptions;
                             ?>
                         </select>
                     </div>
@@ -183,76 +246,7 @@ if ($mode === "Edit") {
                     <thead><tr><th>抉择</th><th>Supplier</th><th>Unit</th><th>Rate</th></tr></thead>
                     <tbody>
                         <?php
-                        $tabrows = "";
-                        if (count($supplypricearr)) {
-                            foreach ($supplypricearr as $tmp) {
-                                $id = $tmp->getId();
-                                $supplier = $tmp->getSupplier();
-                                $suppliername = $supplier ? $supplier->getName() : "&nbsp;";
-                                $unit = $tmp->getUnit();
-                                $rate = $tmp->getRate();
-                                $quantity = $tmp->getQuantity();
-                                $dodate = $tmp->getUpdate();
-                                $dodatestr = $dodate ? $dodate->format("Y-m-d") : "&nbsp;";
-
-                                $row = "";
-
-                                if ($id == $defsupplierid) {
-                                    $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked data-role="none"/></td>';
-                                } else {
-                                    $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" data-role="none"/></td>';
-                                }
-
-                                $tdsupplier = "<td>$suppliername</td>";
-                                $tdunit = "<td>$unit</td>";
-                                //$tdupdate = "<td>$dodatestr</td>";
-                                //$tdrate = "<td>$rate</td>";
-                                $tdquantity = "<td>$quantity</td>";
-                                $tdamount = "<td>" . $quantity * $rate . "</td>";
-
-                                $tdrate = '<td><input type="text" value="' . $rate . '" name="rate' . $id . '" id="rate' . $id . '" placeholder="0"></td>';
-                                $tdupdate = '<td><input type="text" class="classupdate" value="' . $dodatestr . '" name="update' . $id . '" id="update' . $id . '"></td>';
-                                //$row .= "<tr>" . $tdradio . $tdsupplier . $tdunit . $tdupdate . $tdrate . $tdquantity . $tdamount . "</tr>";
-                                $row .= "<tr>" . $tdradio . $tdsupplier . $tdunit . $tdrate . "</tr>";
-                                $tabrows .= $row;
-                            }
-                        }
                         echo $tabrows;
-
-                        if (0) {
-                            $suppliers = $this->suppliers;
-                            $supplyprice = $this->supplyprice;
-                            foreach ($suppliers as $tmp) {
-                                $id = $tmp->getId();
-                                $name = $tmp->getName();
-
-                                $price = 0;
-                                $update = "";
-
-                                if (count($supplyprice)) {
-                                    foreach ($supplyprice as $sprice) {
-                                        $sid = $sprice->getSupplier()->getId();
-                                        if ($sid == $id) {
-                                            $price = $sprice->getPrice();
-                                            $update = $sprice->getUpdate()->format("Y/m/d");
-                                        }
-                                    }
-                                }
-
-                                $row = "";
-
-                                if ($id == $defsupplierid) {
-                                    $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" checked/></td>';
-                                } else {
-                                    $tdradio = '<td><input type="radio" name="defsupplier" class="defsupplier" id="' . $id . '" /></td>';
-                                }
-                                $tdname = "<td>$name</td>";
-                                $tdprice = '<td><input type="text" value="' . $price . '" name="price' . $id . '" id="price' . $id . '" placeholder="0"></td>';
-                                $tdupdate = '<td><input type="text" class="classupdate" value="' . $update . '" name="update' . $id . '" id="update' . $id . '"></td>';
-                                $row .= "<tr>" . $tdradio . $tdname . $tdprice . $tdupdate . "</tr>";
-                                echo $row;
-                            }
-                        }
                         ?>
                     </tbody>
                 </table>
@@ -260,32 +254,8 @@ if ($mode === "Edit") {
 
             <div data-role="collapsible" data-collapsed="true">
                 <h3>添加价格信息</h3>
-                <?php
-                $selecthtml = "";
-                if (!count($suppliers)) {
-                    $selecthtml = "<strong>请导入材料列表或者手动添加供应商数据</strong>";
-                } else {
-                    $options = '<option value="0">选择供应商</option>';
-                    foreach ($suppliers as $tmp) {
-                        $id = $tmp->getId();
-                        $name = $tmp->getName();
-                        $options .= '<option value="' . $id . '">' . $name . '</option>';
-                    }
-                    $selecthtml.= '<select data-mini="true" id="suppliernew">' . $options . "</select>";
-                }
-
-                $unittd = '<td><input type="text" value="" id="unitnew" placeholder="单位，比如pair, box, etc."></td>';
-                //$dodatetd = '<td><input type="text" value="" id="dodatenew" class="classupdate" placeholder="点击选择Do date"></td>';
-                $ratetd = '<td><input type="text" value="" id="ratenew" placeholder="rate, 比如5，表示5新元"></td>';
-                //$quantitytd = '<td><input type="text" value="" id="quantitynew" placeholder="Quantity, 比如5,表示5个unit的material"></td>';
-                //$tr = "<tr><td>$selecthtml</td> $unittd $dodatetd $ratetd $quantitytd</tr>";
-                $tr = "<tr><td>$selecthtml</td> $unittd $ratetd </tr>";
-                $inputtab = '<table class="grid"><thead><tr><th>Supplier</th><th>Unit</th><th>Rate</th></tr></thead>'
-                        . '<tbody>' . $tr . "</tbody></table>";
-
-                echo $inputtab;
-                ?>
-                <input type="button" value="添加价格信息" onclick="supplypricenew()" data-mini="true" data-theme="a">
+                <?php echo $inputtab; ?>
+                <input type="button" value="提交价格信息" onclick="supplypricenew()" data-mini="true" data-theme="a">
             </div>
 
         </div>

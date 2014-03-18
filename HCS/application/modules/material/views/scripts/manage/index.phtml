@@ -143,6 +143,38 @@
 $sheet = $this->sheet;
 $sheetarr = $this->sheetarr;
 $maindata = $this->maindata;
+
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    } else {
+        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+    }
+
+    $options .= $option;
+}
+$selects = '<select data-mini="true" id="sheetselect" data-theme="a">';
+$selects.=$options;
+$selects.='</select>';
+
+$materialtab = $this->grid("Materials", true)
+        //->field('type', '分类')
+        ->field('nameeng', 'Name Eng')
+        ->field('name', 'Name Chs')
+        ->field('description', 'Description ')
+        ->field('unit', 'Unit')
+        ->field('rate', 'Rate')
+        //->field('quantity', 'Quantity ')
+        ->field('supplier', 'Supplier')
+        ->actionField(':action', "Action", '&nbsp;|&nbsp;')
+        ->setSorting(false)
+        ->paginatorEnabled(false)
+        ->helper(new GridHelper_Material())
+        ->data($maindata)
+        //->action(':action', '价格管理', array( 'url'=>array('action'=>'supplyprice')))          
+        ->action(':action', '编辑', array('url' => array('action' => 'edit')))
+        ->action(':action', '删除', array('url' => array('action' => 'delete')));
 ?>
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
 
@@ -150,7 +182,7 @@ $maindata = $this->maindata;
         <h3>功能列表</h3>
         <div class="ui-grid-b">
             <div class="ui-block-a">
-                <a href="/material/manage/add"><button data-mini="true" data-theme="a">注册一个材料</button></a>
+                <a href="/material/manage/add" target="_blank"><button data-mini="true" data-theme="a">注册材料</button></a>
             </div>
             <div class="ui-block-b">
                 <button data-mini="true" data-theme="a" onclick="showhideupload()">导入材料数据</button>
@@ -176,39 +208,8 @@ $maindata = $this->maindata;
     </div>
     <hr>
     <?php
-    $options = "";
-    foreach ($sheetarr as $tmp) {
-        if ($sheet == $tmp) {
-            $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-        } else {
-            $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
-        }
-
-        $options .= $option;
-    }
-    $selects = '<select data-mini="true" id="sheetselect" data-theme="a">';
-    $selects.=$options;
-    $selects.='</select>';
     echo $selects;
-
-    echo $this->grid("Materials", true)
-            //->field('type', '分类')
-            ->field('nameeng', 'Name Eng')
-            ->field('name', 'Name Chs')
-            ->field('description', 'Description ')
-            ->field('unit', 'Unit')
-            ->field('rate', 'Rate')
-            //->field('quantity', 'Quantity ')
-            ->field('supplier', 'Supplier')
-            ->actionField(':action', "Action", '&nbsp;|&nbsp;')
-            ->setSorting(false)
-            ->paginatorEnabled(false)
-            ->helper(new GridHelper_Material())
-            ->data($maindata)
-            //->action(':action', '价格管理', array( 'url'=>array('action'=>'supplyprice')))          
-            ->action(':action', '编辑', array('url' => array('action' => 'edit')))
-            ->action(':action', '删除', array('url' => array('action' => 'delete')));
+    echo $materialtab;
     ?>
-
     <br><br>
 
