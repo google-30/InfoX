@@ -1,3 +1,31 @@
+<?php
+$worker=$this->worker;
+$wid=$worker?$worker->getId():"&nbsp;"; 
+
+$month=$this->month;
+$monthstr=$month?$month->format("Y-m"):"&nbsp;"; 
+
+$attendance=$this->attendance;
+$date=$this->date;
+//$monthstr=$this->monthstr;
+$workerarr=$this->workerarr;
+$attendancearr=$this->attendancearr;
+$alltabs=$this->alltabs;
+$salaryrecord=$this->salaryrecord;
+$rate=$salaryrecord->getRate();
+$otherfee=$salaryrecord->getOtherfee();
+$remark= $salaryrecord->getRemark();
+$absencedays=$salaryrecord->getAbsencedays();
+$absencefines=$salaryrecord->getAbsencefines();
+$fullmonaward=$salaryrecord->getFullmonaward();
+$rtmonthpay=$salaryrecord->getRtmonthpay();
+$rtmonths=$salaryrecord->getRtmonths();
+$rtall=$salaryrecord->getRtall();
+$utfee=$salaryrecord->getUtfee();
+$utallowance=$salaryrecord->getUtallowance();
+$foodpay=$salaryrecord->getFoodpay();
+$inadvance=$salaryrecord->getInadvance();
+?>
 <!DOCTYPE html> 
 <html>
 	<head>
@@ -55,35 +83,6 @@ function datapost()
     })            
 }
 </script>
-<?php
-$worker=$this->worker;
-$wid=$worker?$worker->getId():"&nbsp;"; 
-
-$month=$this->month;
-$monthstr=$month?$month->format("Y-m"):"&nbsp;"; 
-
-$attendance=$this->attendance;
-$date=$this->date;
-//$monthstr=$this->monthstr;
-$workerarr=$this->workerarr;
-$attendancearr=$this->attendancearr;
-$alltabs=$this->alltabs;
-$salaryrecord=$this->salaryrecord;
-$rate=$salaryrecord->getRate();
-$otherfee=$salaryrecord->getOtherfee();
-$remark= $salaryrecord->getRemark();
-$absencedays=$salaryrecord->getAbsencedays();
-$absencefines=$salaryrecord->getAbsencefines();
-$fullmonaward=$salaryrecord->getFullmonaward();
-$rtmonthpay=$salaryrecord->getRtmonthpay();
-$rtmonths=$salaryrecord->getRtmonths();
-$rtall=$salaryrecord->getRtall();
-$utfee=$salaryrecord->getUtfee();
-$utallowance=$salaryrecord->getUtallowance();
-$foodpay=$salaryrecord->getFoodpay();
-$inadvance=$salaryrecord->getInadvance();
-?>
-
 <div data-role="dialog">
     <div data-role="header" data-theme="d">
 	    <h1>输入相关数据以计算工资&nbsp;<?=$monthstr ?></h1>
@@ -91,7 +90,7 @@ $inadvance=$salaryrecord->getInadvance();
 
     <div data-role="content" data-theme="c">
 <div id="salarysheet">    
-<?
+<?php
 $tabs="";
 foreach($alltabs as $tab)
 {

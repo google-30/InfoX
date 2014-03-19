@@ -342,17 +342,6 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $sites2 = $this->_site->findBy(array("completed" => NULL));
         $sites = array_merge($sites1, $sites2);
 
-        /*
-          $siteoptions = '<option value="0">选择工地</option>';
-          foreach ($sites as $tmp) {
-          $name = $tmp->getName();
-          $id = $tmp->getId();
-          $option = '<option value="' . $id . '">' . $name . '</option>';
-          $siteoptions .= $option;
-          }
-          $sitesel = '<select id="site" name="site" data-mini="true">' . $siteoptions . '</select>';
-         */
-
         // worker atten
         $record = infox_project::getAttendanceByIdMonth($wid, $date);
         //if(!$record) { echo "xxxxx"; }
@@ -503,10 +492,10 @@ class Project_AttendanceController extends Zend_Controller_Action {
                     $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
                     $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
 
-                    $input1 = '<input type="text" class="dayvalue" id="date' . $daycount . '" '
-                            . 'name="date' . $daycount . '" value="' . $hoursdata . '" placeholder="">';
-                    $input2 = '<input type="text" class="dayvalue" id="piece' . $daycount . '" '
-                            . 'name="piece' . $daycount . '" value="' . $piecedata . '" placeholder="">';
+                    $input1 = '<input type="text" class="dayvalue" id="date' . $daycounttmp . '" '
+                            . 'name="date' . $daycounttmp . '" value="' . $hoursdata . '" placeholder="">';
+                    $input2 = '<input type="text" class="dayvalue" id="piece' . $daycounttmp . '" '
+                            . 'name="piece' . $daycounttmp . '" value="' . $piecedata . '" placeholder="">';
 
                     // site support
                     $sitedata = key_exists(2, $tmparr) ? $tmparr[2] : 0;
@@ -524,7 +513,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
                         $siteoptions .= $option;
                     }
 
-                    $sitesel = '<select id="site" name="site' . $daycount
+                    $sitesel = '<select id="site" name="site' . $daycounttmp
                             . '" data-mini="true">' . $siteoptions . '</select>';
                     $divinputs = $sitesel . '<div class="ui-grid-a">'
                             . '<div class="ui-block-a">' . $input1 . '</div>'
