@@ -33,20 +33,17 @@ $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
 $wdtab = $wdtab->data($maindata);
 
 $_popups = "";
-foreach($maindata as $tmp1)
-{
+foreach ($maindata as $tmp1) {
     $name1 = $tmp1->getNamechs();
     $wid1 = $tmp1->getId();
     $divcode = '<div id="worker' . $wid1 . '" class="bMulti">';
     $divcode .= "<h3>$name1</h3>";
     $divcode .= "<table><tr><td>WP No.</td></tr>";
     $trs = "";
-    foreach($maindata as $tmp2)
-    {
+    foreach ($maindata as $tmp2) {
         $name2 = $tmp2->getNamechs();
-        
-        if($name2 == $name1)
-        {
+
+        if ($name2 == $name1) {
             $wpno = $tmp2->getWpno();
             $tr = "<tr><td>$wpno</td></tr>";
             $trs .= $tr;
@@ -58,10 +55,20 @@ foreach($maindata as $tmp1)
     $_popups .= $divcode;
 }
 ?>
-
+<link rel="stylesheet" href="/common/css/jquery.ui.theme.css" /> 
+<link rel="stylesheet" href="/common/css/jquery.ui.datepicker.css" />
+<script src="/common/js/jQuery.ui.datepicker.js"></script>
 <link rel="stylesheet" href="/common/css/jquery.bpopup.css" />
 <script type="text/javascript" src="/common/js/jquery.bpopup.min.js"></script>
 <style>
+    /* states and images */
+    .ui-icon {
+        display: block;
+        text-indent: -99999px;
+        overflow: hidden;
+        background-repeat: no-repeat;
+    }
+
     #infoswitches { display: none; }
     #datatable { text-align:center; display:none; }
     #Workersdata {  
@@ -94,6 +101,8 @@ foreach($maindata as $tmp1)
 
     #workerdetails { display: none; }
     .bMulti { display: none; }
+
+    #divresign { display: none; }
 </style>
 <script>
     var oTable;
@@ -110,6 +119,8 @@ foreach($maindata as $tmp1)
 
         //fnHideColumns();
         //resizetable();
+
+        $("#resigndate").datepicker();
     });
 
     $("#Workersdata tbody").click(function(event) {
@@ -229,23 +240,29 @@ foreach($maindata as $tmp1)
 
     function workerResign(wid, name, eeeno)
     {
-        var r = confirm("确认工人离职? " + name + " " + eeeno);
-        if (r == false)
-        {
-            return false;
-        }
+        $("#divresign").bPopup();
 
-        $.post("/worker/manage/resign", {id: wid},
-        function(data) {
-            //console.log(data);
-            window.location.reload();
-        })
+        /*
+         var r = confirm("确认工人离职? " + name + " " + eeeno);
+         if (r == false)
+         {
+         return false;
+         }
+         
+         $.post("/worker/manage/resign", {id: wid},
+         function(data) {
+         //console.log(data);
+         window.location.reload();
+         })
+         */
     }
 
     function workerRenewinfo(wid, name, eeeno)
     {
-         $('#worker' + wid).bPopup();
+        $('#worker' + wid).bPopup();
     }
+
+
 </script>
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
@@ -292,4 +309,12 @@ if (count($maindata)) {
 echo $_popups;
 ?>
 
+<div id="divresign" class="bMulti">
+    <form>
+        <input type="hidden" id="wid" value="0">
+        <input type="text" id="resigndate" placeholder="点击选择离职日期" />
+        <textarea rows="8" cols="50" placeholder="输入离职相关说明..." id="resignremark"></textarea>
+        <input type="submit" value="提交" data-mini="true">
+    </form>
+</div>
 
