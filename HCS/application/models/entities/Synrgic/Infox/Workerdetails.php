@@ -223,5 +223,10 @@ class Workerdetails extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $resignremark;    
+    
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $resigndate;      
 
 }
