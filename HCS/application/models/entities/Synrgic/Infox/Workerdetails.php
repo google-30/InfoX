@@ -227,6 +227,10 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="date", nullable=true)
      */
-    protected $resigndate;      
-
+    protected $resigndate;   
+    
+    /**
+     * @Column(type="boolean", nullable=true)
+     */
+    protected $resignation = FALSE; 
 }

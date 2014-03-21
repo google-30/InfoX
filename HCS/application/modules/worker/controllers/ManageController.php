@@ -882,10 +882,17 @@ class Worker_ManageController extends Zend_Controller_Action {
 
     public function resignAction() {
         infox_common::turnoffView($this->_helper);
-        $id = $this->getParam("id", 0);
-        if ($id) {
-            $worker = $this->_workerdetails->findOneBy(array("id" => $id));
-            $worker->setResignation(new Datetime("now"));
+        $wid = $this->getParam("wid", 0);
+        if ($wid) {
+            $worker = $this->_workerdetails->findOneBy(array("id" => $wid));
+            
+            $resigndate = $this->getParam("resigndate", "");
+            $resignremark = $this->getParam("resignremark", "");
+            
+            $worker->setResigndate(new Datetime($resigndate));
+            $worker->setResignremark($resignremark);
+            $worker->setResignation(TRUE);
+            
             $this->_em->persist($worker);
             try {
                 $this->_em->flush();
@@ -893,13 +900,13 @@ class Worker_ManageController extends Zend_Controller_Action {
                 var_dump($e);
                 return;
             }
-            /*
+            
             $sheet = $worker->getSheet();
             $url = "/worker/manage?sheet=" . $sheet;
             $this->redirect($url);
-             * 
-             */
         }
+        
+        $this->redirect("/worker/manage");
     }
 
 }

@@ -39,7 +39,7 @@ class infox_worker {
         $workerarr = array();
         $allworkers = $_workerdetails->findBy(array("sheet" => $sheet));
         foreach ($allworkers as $tmp) {
-            $date = $tmp->getResignation();
+            $date = $tmp->getResigndate();
             if (self::workerresigned($date)) {
                 continue;
             } else {
@@ -57,7 +57,7 @@ class infox_worker {
         $workerarr = array();
         $allworkers = $_workerdetails->findAll();
         foreach ($allworkers as $tmp) {
-            $date = $tmp->getResignation();
+            $date = $tmp->getResigndate();
             if (self::workerresigned($date)) {
                 continue;
             } else {
@@ -157,7 +157,7 @@ class infox_worker {
                 continue;
             }
 
-            $date = $tmp->getResignation();
+            $date = $tmp->getResigndate();
             $now = new DateTime("now");
 
             if (!$date) {//no date = still on duty
