@@ -21,16 +21,49 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->_workercustominfo = $this->_em->getRepository('Synrgic\Infox\Workercustominfo');
         $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
     }
-    
-    public function indexAction() {        
+
+    public function indexAction() {
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
         $requestsheet = $this->getParam("sheet", $sheetarr[0]);
         $workerarr = infox_worker::getActiveWorkerdetailsBySheet($requestsheet);
 
         $this->view->sheet = $requestsheet;
-        $this->view->maindata = $workerarr;        
+        $this->view->maindata = $workerarr;
         //$this->getworkerlist();
-        //$this->getCustominfo(0);                
+        //$this->getCustominfo(0);    
+
+        $onswitches = array(
+            "eeeno" => "E'ee No.", "name" => "Name ", "wpno" => "WP No.",
+            "wpexpiry" => "WP Expiry", "doa" => "D.O.A", "issuedate" => "Date of Issue",
+            "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B",
+            "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
+
+
+        $renewtabs = array();
+        $maindata = $workerarr;
+        foreach ($maindata as $tmp1) {
+            $name1 = $tmp1->getNamechs();
+            $wid1 = $tmp1->getId();
+
+            $workerrecords = array();
+            foreach ($maindata as $tmp2) {
+                $name2 = $tmp2->getNamechs();
+                if ($name2 == $name1) {
+                    $workerrecords[] = $tmp2;
+                }
+            }
+
+            $wdtab = $this->view->grid("Workersdata", true);
+            foreach ($onswitches as $key => $value) {
+                $wdtab = $wdtab->field($key, $value);
+            }
+            $wdtab = $wdtab->field("actions", "Action");
+            $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+            $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
+            $wdtab = $wdtab->data($workerrecords);
+            
+            
+        }
     }
 
     public function previewlistAction() {
@@ -134,11 +167,10 @@ class Worker_ManageController extends Zend_Controller_Action {
     }
 
     private function usort_expiredate($a, $b) {
-        if($a == "日期未定义" || $b == "日期未定义")
-        {
+        if ($a == "日期未定义" || $b == "日期未定义") {
             return 0;
         }
-        
+
         $aobj = new Datetime("01/" . $a);
         $bobj = new Datetime("01/" . $b);
         if ($aobj > $bobj) {
@@ -885,14 +917,14 @@ class Worker_ManageController extends Zend_Controller_Action {
         $wid = $this->getParam("wid", 0);
         if ($wid) {
             $worker = $this->_workerdetails->findOneBy(array("id" => $wid));
-            
+
             $resigndate = $this->getParam("resigndate", "");
             $resignremark = $this->getParam("resignremark", "");
-            
+
             $worker->setResigndate(new Datetime($resigndate));
             $worker->setResignremark($resignremark);
             $worker->setResignation(TRUE);
-            
+
             $this->_em->persist($worker);
             try {
                 $this->_em->flush();
@@ -900,12 +932,12 @@ class Worker_ManageController extends Zend_Controller_Action {
                 var_dump($e);
                 return;
             }
-            
+
             $sheet = $worker->getSheet();
             $url = "/worker/manage?sheet=" . $sheet;
             $this->redirect($url);
         }
-        
+
         $this->redirect("/worker/manage");
     }
 
