@@ -32,6 +32,7 @@ $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
 $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
 $wdtab = $wdtab->data($maindata);
 
+/*
 $_popups = "";
 foreach ($maindata as $tmp1) {
     $name1 = $tmp1->getNamechs();
@@ -54,20 +55,9 @@ foreach ($maindata as $tmp1) {
              ";
     $_popups .= $divcode;
 }
+*/
 
-
-foreach ($maindata as $tmp1) {
-    $name1 = $tmp1->getNamechs();
-    $wid1 = $tmp1->getId();
-
-    $workerrecords = array();
-    foreach ($maindata as $tmp2) {
-        $name2 = $tmp2->getNamechs();
-        if ($name2 == $name1) {
-            $workerrecords[] = $tmp2;
-        }
-    }
-}
+$renewtabs = $this->rewtabs;
 ?>
 <link rel="stylesheet" href="/common/css/jquery.ui.theme.css" /> 
 <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.css" />
@@ -320,7 +310,7 @@ if (count($maindata)) {
 ?>
 <br><br>
 <?php
-echo $_popups;
+//echo $_popups;
 ?>
 
 <div id="divresign" class="bMulti">
@@ -335,3 +325,12 @@ echo $_popups;
     </form>
 </div>
 
+<?php
+if (0) {
+    foreach ($renewtabs as $tmp) {
+        echo $tmp . "
+";
+    }
+}
+echo $renewtabs[0];
+?>

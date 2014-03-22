@@ -93,7 +93,7 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         $link2 = '<a onclick="workerResign(' . "$wid, '$name','$eeeno'" . ')">Resign</a>';
         $link3 = '<a onclick="workerRenewinfo(' . "$wid, '$name','$eeeno'" . ')">Renew</a>';
 
-        $actions = $link3 . "<br>" . $link1 . "<br>" . $link2;
+        $actions = $link1 . "<br>" . $link3 . "<br>" . $link2;
         return $actions;
     }
 

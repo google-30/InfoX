@@ -38,22 +38,24 @@ class Worker_ManageController extends Zend_Controller_Action {
             "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B",
             "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
 
-
         $renewtabs = array();
         $maindata = $workerarr;
         foreach ($maindata as $tmp1) {
             $name1 = $tmp1->getNamechs();
+            $nameeng1 = $tmp1->getNameeng();
             $wid1 = $tmp1->getId();
 
             $workerrecords = array();
             foreach ($maindata as $tmp2) {
                 $name2 = $tmp2->getNamechs();
-                if ($name2 == $name1) {
+                $nameeng2 = $tmp2->getNameeng();
+                if ($nameeng2 == $nameeng1) {
                     $workerrecords[] = $tmp2;
                 }
             }
 
-            $wdtab = $this->view->grid("Workersdata", true);
+            $divid = "worker" . $wid1;
+            $wdtab = $this->view->grid($divid, true);
             foreach ($onswitches as $key => $value) {
                 $wdtab = $wdtab->field($key, $value);
             }
@@ -62,8 +64,10 @@ class Worker_ManageController extends Zend_Controller_Action {
             $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
             $wdtab = $wdtab->data($workerrecords);
             
-            
-        }
+            $renewtabs[] = $wdtab;
+         }
+         
+         $this->view->rewtabs = $renewtabs;
     }
 
     public function previewlistAction() {
