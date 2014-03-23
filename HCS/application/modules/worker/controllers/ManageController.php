@@ -33,10 +33,10 @@ class Worker_ManageController extends Zend_Controller_Action {
         //$this->getCustominfo(0);    
 
         $onswitches = array(
-            "eeeno" => "E'ee No.", "name" => "Name ", "wpno" => "WP No.",
-            "wpexpiry" => "WP Expiry", "doa" => "D.O.A", "issuedate" => "Date of Issue",
-            "finno" => "Fin No.", "ppno" => "PP No.", "dob" => "D.O.B",
-            "ppexpiry" => "PP Expiry", "rate" => "RATE", "csoc" => "C.S.O.C",);
+            "eeeno" => "E'ee No.", "name" => "Name ", 
+            "wpexpiry" => "WP Expiry", "issuedate" => "Date of Issue",            
+            "ppexpiry" => "PP Expiry", "rate" => "RATE", "medicaldate"=> "Medical Date",
+            "csoc" => "C.S.O.C", "securityexp"=> "Security Bond Expiry Date");
 
         $renewtabs = array();
         $maindata = $workerarr;
@@ -54,15 +54,16 @@ class Worker_ManageController extends Zend_Controller_Action {
                 }
             }
 
-            $divid = "worker" . $wid1;
+            $divid = "renew" . $wid1;
             $wdtab = $this->view->grid($divid, true);
             foreach ($onswitches as $key => $value) {
                 $wdtab = $wdtab->field($key, $value);
             }
-            $wdtab = $wdtab->field("actions", "Action");
+            //$wdtab = $wdtab->field("actions", "Action");
             $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
             $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
             $wdtab = $wdtab->data($workerrecords);
+            $wdtab = $wdtab->render();
             
             $renewtabs[] = $wdtab;
          }

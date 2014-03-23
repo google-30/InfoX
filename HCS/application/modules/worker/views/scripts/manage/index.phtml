@@ -32,31 +32,6 @@ $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
 $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
 $wdtab = $wdtab->data($maindata);
 
-/*
-$_popups = "";
-foreach ($maindata as $tmp1) {
-    $name1 = $tmp1->getNamechs();
-    $wid1 = $tmp1->getId();
-    $divcode = '<div id="worker' . $wid1 . '" class="bMulti">';
-    $divcode .= "<h3>$name1</h3>";
-    $divcode .= "<table><tr><td>WP No.</td></tr>";
-    $trs = "";
-    foreach ($maindata as $tmp2) {
-        $name2 = $tmp2->getNamechs();
-
-        if ($name2 == $name1) {
-            $wpno = $tmp2->getWpno();
-            $tr = "<tr><td>$wpno</td></tr>";
-            $trs .= $tr;
-        }
-    }
-    $divcode .= $trs;
-    $divcode .= "</table></div>
-             ";
-    $_popups .= $divcode;
-}
-*/
-
 $renewtabs = $this->rewtabs;
 ?>
 <link rel="stylesheet" href="/common/css/jquery.ui.theme.css" /> 
@@ -105,8 +80,8 @@ $renewtabs = $this->rewtabs;
 
     #workerdetails { display: none; }
     .bMulti { display: none; }
-
-    #divresign { display: none; }
+    #divresign { display: none; }    
+    #divrenews { display: none; }
 </style>
 <script>
     var oTable;
@@ -125,6 +100,10 @@ $renewtabs = $this->rewtabs;
         //resizetable();
 
         $("#resigndate").datepicker();
+        
+        // add bMulti to popup class
+        $( "div[id^='renew']" ).attr("class", "bMulti" );
+        
     });
 
     $("#Workersdata tbody").click(function(event) {
@@ -265,11 +244,12 @@ $renewtabs = $this->rewtabs;
     }
 
     function workerRenewinfo(wid, name, eeeno)
-    {
-        $('#worker' + wid).bPopup();
+    {        
+        $('#renew' + wid + "_div").bPopup({
+            follow: [true, true], //x, y
+            position: [200, 200] //x, y
+        });
     }
-
-
 </script>
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c">
@@ -309,10 +289,6 @@ if (count($maindata)) {
 }
 ?>
 <br><br>
-<?php
-//echo $_popups;
-?>
-
 <div id="divresign" class="bMulti">
     <h3 id="wname"></h3>
     <form method="post" action="/worker/manage/resign">
@@ -325,12 +301,13 @@ if (count($maindata)) {
     </form>
 </div>
 
+<div id="divrenews">
 <?php
-if (0) {
+if (1) {
     foreach ($renewtabs as $tmp) {
         echo $tmp . "
 ";
     }
 }
-echo $renewtabs[0];
 ?>
+</div>    
