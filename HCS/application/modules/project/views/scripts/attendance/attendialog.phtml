@@ -28,19 +28,8 @@ $datetab = $this->datetab;
         <link rel="stylesheet"  href="/common/css/jquery.mobile-1.2.0.css" />  
         <script src="/common/js/jquery-1.8.2.min.js"></script>
         <script src="/common/js/jquery.mobile-1.2.0.min.js"></script>
-
-        <!--<link rel="stylesheet" href="/common/css/jquery.ui.datepicker.mobile.css" /> 
-        <script src="/common/js/jQuery.ui.datepicker.js"></script>
-        <script src="/common/js/jquery.ui.datepicker.mobile.js"></script>
-        <script>
-            //reset type=date inputs to text
-            $(document).bind("mobileinit", function() {
-                $.mobile.page.prototype.options.degradeInputs.date = true;
-            });
-        </script>-->
     </head> 
     <body> 
-
         <style>
             table {width: 100%; border-collapse:collapse;}
             table td, table th { text-align:center; border:1px solid black; }
@@ -53,16 +42,18 @@ $datetab = $this->datetab;
                 top: -15px;
             }
 
-            #datetab { table-layout: fixed;
+            #datetab { 
+                table-layout: fixed;
             }
+
             input{
                 text-align:center;
             }
 
-            input.ui-input-text 
-            {
+            input.ui-input-text {
                 color: red;
             }
+
         </style>	
         <script>
             /*
@@ -127,15 +118,13 @@ $datetab = $this->datetab;
                 <div id="attensheet">
                     <?= $workersummarytab ?>
                 </div>
-                <br>
+                <div id="divnotes">*第一个格子输入计时信息（小时数），第二个格子输入计件信息（日工资)*</div>
                 <div>
                     <form id="attendform">                    
                         <input type="hidden" name="wid" id="wid" value="<?= $wid ?>">
                         <input type="hidden" name="month" id="month" value="<?= $monthstr ?>">
                         <?= $datetab ?>
                     </form>
-                    <!--<input type="button" value="提交考勤" onclick="attendialogpost()">
-                    <input type="button" value="关闭本页" onclick="attendialogclose()">-->
                     <div class="ui-grid-a">
                         <div class="ui-block-a"><input type="button" value="提交考勤" onclick="attendialogpost()"></div>
                         <div class="ui-block-b"><input type="button" value="关闭本页" onclick="attendialogclose()"></div>

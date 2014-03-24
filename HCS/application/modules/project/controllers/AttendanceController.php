@@ -486,7 +486,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
                         $daystr = "<div>$daycounttmp</div>";
                     }
 
-                    $daydata = $attendobj['day' . $daycount] ? $attendobj['day' . $daycount] : "";
+                    $daydata = $attendobj['day' . $daycounttmp] ? $attendobj['day' . $daycounttmp] : "";
 
                     $tmparr = explode(";", $daydata);
                     $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
@@ -529,8 +529,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
                     ";
             $trs.=$tr;
 
-            if($endflag)
-            {
+            if ($endflag) {
                 break;
             }
         }
