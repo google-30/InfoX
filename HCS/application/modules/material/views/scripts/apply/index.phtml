@@ -1,39 +1,28 @@
-<style>
-.wizard { text-align:center; }
-</style>
 <?php
-$role=$this->role;
+$role = $this->role;
 $displayblk = 0;
-$style="";    
-if($role=="leader")
-{
+$style = "";
+if ($role == "leader") {
     $displayblk = 1;
-    $style='style="display:none"';
+    $style = 'style="display:none"';
 }
 ?>
-
+<style>
+    .wizard { text-align:center; }
+</style>
 <!-- displaying rejected application, if none rejected, this div should be hide. -->
-<div id="appmessage">
-</div> <!-- appmessage -->
-
+<div id="appmessage"></div>
+<!-- appmessage -->
 <div class="wizard">
-<fieldset>
-    <!--<legend><strong>创建申请</strong></legend>-->
-    <a href="/material/apply/applymaterials"><button>申请材料</button></a> 
-    <p>点击按钮，开始为工地申请所需材料</p>
-</fieldset><br> 
+    <fieldset>
+        <a href="/material/apply/applymaterials"><button data-theme="a">申请材料</button></a> 
+        <p>点击按钮，开始申请所需材料</p>
+    </fieldset><br> 
 </div>
 
 <div class="wizard" <?php echo $style; ?> >
-<fieldset>
-    <a href="/material/apply/applist"><button onclick="showeditapp()">更新申请</button></a>
-    <p>点击按钮，更新之前的申请</p>
-</fieldset>
-<br>
-<!--
-<fieldset>
-    <a href="/material/apply/applymaterials"><button>申请办公物品</button></a> 
-    <p>点击按钮，申请其他物品，比如文具等</p>
-</fieldset><br> 
-</div>
--->
+    <fieldset>
+        <a href="/material/apply/applist"><button onclick="showeditapp()" data-theme="a">更新申请</button></a>
+        <p>点击按钮，更新之前的申请</p>
+    </fieldset>
+    <br>
