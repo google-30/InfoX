@@ -221,10 +221,10 @@ class infox_salary {
     // sheet, month, workers not resigned    
     public static function getSalaryRecordsByMonthSheet($month, $sheet = "HC.C") {
         self::getRepos();
-        //$salaryrepos = self::getReposBySheet($sheet);
         $_salaryall = self::$_salaryall;
 
         $result = $_salaryall->findBy(array("month" => $month));
+        
         $records = array();
         foreach ($result as $tmp) {
             $worker = $tmp->getWorker();
@@ -233,7 +233,6 @@ class infox_salary {
                 $records[] = $tmp;
             }
         }
-
         usort($records, function($a, $b) {
             $aid = $a->getWorker()->getId();
             $bid = $b->getWorker()->getId();

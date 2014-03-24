@@ -1,144 +1,142 @@
 <?php
-$worker=$this->worker;
-$wid=$worker?$worker->getId():"&nbsp;"; 
+$worker = $this->worker;
+$wid = $worker ? $worker->getId() : "&nbsp;";
 
-$month=$this->month;
-$monthstr=$month?$month->format("Y-m"):"&nbsp;"; 
+$month = $this->month;
+$monthstr = $month ? $month->format("Y-m") : "&nbsp;";
 
-$attendance=$this->attendance;
-$date=$this->date;
+$attendance = $this->attendance;
+$date = $this->date;
 //$monthstr=$this->monthstr;
-$workerarr=$this->workerarr;
-$attendancearr=$this->attendancearr;
-$alltabs=$this->alltabs;
-$salaryrecord=$this->salaryrecord;
-$rate=$salaryrecord->getRate();
-$otherfee=$salaryrecord->getOtherfee();
-$remark= $salaryrecord->getRemark();
-$absencedays=$salaryrecord->getAbsencedays();
-$absencefines=$salaryrecord->getAbsencefines();
-$fullmonaward=$salaryrecord->getFullmonaward();
-$rtmonthpay=$salaryrecord->getRtmonthpay();
-$rtmonths=$salaryrecord->getRtmonths();
-$rtall=$salaryrecord->getRtall();
-$utfee=$salaryrecord->getUtfee();
-$utallowance=$salaryrecord->getUtallowance();
-$foodpay=$salaryrecord->getFoodpay();
-$inadvance=$salaryrecord->getInadvance();
+$workerarr = $this->workerarr;
+$attendancearr = $this->attendancearr;
+$alltabs = $this->alltabs;
+$salaryrecord = $this->salaryrecord;
+$rate = $salaryrecord->getRate();
+$otherfee = $salaryrecord->getOtherfee();
+$remark = $salaryrecord->getRemark();
+$absencedays = $salaryrecord->getAbsencedays();
+$absencefines = $salaryrecord->getAbsencefines();
+$fullmonaward = $salaryrecord->getFullmonaward();
+$rtmonthpay = $salaryrecord->getRtmonthpay();
+$rtmonths = $salaryrecord->getRtmonths();
+$rtall = $salaryrecord->getRtall();
+$utfee = $salaryrecord->getUtfee();
+$utallowance = $salaryrecord->getUtallowance();
+$foodpay = $salaryrecord->getFoodpay();
+$inadvance = $salaryrecord->getInadvance();
 ?>
 <!DOCTYPE html> 
 <html>
-	<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>工资数据输入</title> 
-	<link rel="stylesheet"  href="/common/css/jquery.mobile-1.2.0.css" />  
-	<script src="/common/js/jquery-1.8.2.min.js"></script>
-	<script src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title>工资数据输入</title> 
+        <link rel="stylesheet"  href="/common/css/jquery.mobile-1.2.0.css" />  
+        <script src="/common/js/jquery-1.8.2.min.js"></script>
+        <script src="/common/js/jquery.mobile-1.2.0.min.js"></script>
     </head> 
-<body> 
+    <body> 
+        <style>
+            table {width: 100%; border-collapse:collapse;}
+            table td, table th { text-align:center; border:1px solid gray; }
+            .ui-dialog-contain {
+                width: 92.5%;
+                max-width: 2500px;
+                margin: 3% auto 15px auto;
+                padding: 0;
+                position: relative;
+                top: -15px;
+            }
+            .noborder td { border:0px; }
+        </style>	
+        <script>
+            function datapost()
+            {
+                //alert("datapost");
+                var rate = $('#rate').val();
+                var otherfee = $('#otherfee').val();
+                var inadvance = $('#inadvance').val();
+                var absencedays = $('#absencedays').val();
+                var absencefines = $('#absencefines').val();
+                var rtmonthpay = $('#rtmonthpay').val();
+                var rtmonths = $('#rtmonths').val();
+                var rtall = $('#rtall').val();
+                var utfee = $('#utfee').val();
+                var utallowance = $('#utallowance').val();
+                var fullmonaward = $('#fullmonaward').val();
 
-<style>
-table {width: 100%; border-collapse:collapse;}
-table td, table th { text-align:center; border:1px solid gray; }
-.ui-dialog-contain {
-	width: 92.5%;
-	max-width: 2500px;
-	margin: 3% auto 15px auto;
-	padding: 0;
-	position: relative;
-	top: -15px;
-}
-.noborder td { border:0px; }
-</style>	
-<script>
-function datapost()
-{
-    //alert("datapost");
-    var rate=$('#rate').val();
-    var otherfee = $('#otherfee').val();
-    var inadvance = $('#inadvance').val();
-    var absencedays = $('#absencedays').val();        
-    var absencefines = $('#absencefines').val();        
-    var rtmonthpay = $('#rtmonthpay').val();        
-    var rtmonths = $('#rtmonths').val();        
-    var rtall = $('#rtall').val();        
-    var utfee = $('#utfee').val();
-    var utallowance = $('#utallowance').val();
-    var fullmonaward = $('#fullmonaward').val();
-    
-    var wid=$('#wid').val();
-    var month=$('#month').val();
-    
-    $.post("/salary/salary/datapost", 
-    { wid:wid, month:month, rate:rate, otherfee:otherfee, inadvance:inadvance, 
-    absencedays:absencedays, absencefines:absencefines, rtmonthpay:rtmonthpay, 
-    rtmonths:rtmonths, rtall:rtall, utfee:utfee, utallowance:utallowance, 
-    fullmonaward:fullmonaward}, 
-    function(data) {
-        console.log(data);
-        $('#salarysheet').load("/salary/salary/salarysheet?wid=" + wid + "&month="+month);
-        alert(data);
-        //window.location.reload();
-    })            
-}
-</script>
-<div data-role="dialog">
-    <div data-role="header" data-theme="d">
-	    <h1>输入相关数据以计算工资&nbsp;<?=$monthstr ?></h1>
-    </div>
+                var wid = $('#wid').val();
+                var month = $('#month').val();
 
-    <div data-role="content" data-theme="c">
-<div id="salarysheet">    
-<?php
-$tabs="";
-foreach($alltabs as $tab)
-{
-    $tabs .= $tab;
-}
-echo $tabs;
-?>
-</div>
-<!--<form action="/project/attendance/quicksubmit" method="post" name="quickform" id="quickform">-->
-<form>
-<input type="hidden" id="wid" name="wid" value="<?=$wid?>">
-<input type="hidden" id="month" name="month" value="<?=$monthstr?>">
+                $.post("/salary/salary/datapost",
+                        {wid: wid, month: month, rate: rate, otherfee: otherfee, inadvance: inadvance,
+                            absencedays: absencedays, absencefines: absencefines, rtmonthpay: rtmonthpay,
+                            rtmonths: rtmonths, rtall: rtall, utfee: utfee, utallowance: utallowance,
+                            fullmonaward: fullmonaward},
+                function(data) {
+                    console.log(data);
+                    $('#salarysheet').load("/salary/salary/salarysheet?wid=" + wid + "&month=" + month);
+                    alert(data);
+                    //window.location.reload();
+                })
+            }
+        </script>
+        <div data-role="dialog">
+            <div data-role="header" data-theme="d">
+                <h1>输入相关数据以计算工资&nbsp;<?= $monthstr ?></h1>
+            </div>
 
-<table class="noborder">
-<tr>
-    <td>工作单价:</td><td><input type="text" name="rate" id="rate" value="<?=$rate ?>" data-mini="true"></td>
-<td>其他补扣:</td><td><input type="text" name="otherfee" id="otherfee" value="<?=$otherfee ?>" data-mini="true" /></td>
-<td>备注:</td><td><input type="text" id="remark" name="remark" value="<?=$remark ?>"></td>
-</tr>
-<tr>
-<td>缺勤天数:</td><td><input type="text" id="absencedays" name="absencedays" value="<?=$absencedays ?>"></td>
-<td>缺勤金额:</td><td><input type="text" id="absencefines" name="absencefines" value="<?=$absencefines ?>"></td>
-<td>满勤奖金:</td><td><input type="text" id="fullmonaward" name="fullmonaward" value="<?=$fullmonaward ?>"></td>
-</tr>
-<tr>
-<td>预扣税当月:</td><td><input type="text" id="rtmonthpay" name="rtmonthpay" value="<?=$rtmonthpay ?>"></td>
-<td>预扣税月数:</td><td><input type="text" id="rtmonths" name="rtmonths" value="<?=$rtmonths ?>"></td>
-<td>预扣税累计:</td><td><input type="text" id="rtall" name="rtall" value="<?=$rtall ?>"></td>
-</tr>
-<tr>
-<td>水电费扣款:</td><td><input type="text" id="utfee" name="utfee" value="<?=$utfee ?>"></td>
-<td>水电费补助:</td><td><input type="text" id="utallowance" name="utallowance" value="<?=$utallowance ?>"></td>
-</tr>
-<tr>
-<td>伙食费扣款:</td><td><input type="text" id="foodpay" name="foodpay" value="<?=$foodpay ?>"></td>
-<td>提前结帐:</td><td><input type="text" id="inadvance" name="inadvance" value="<?=$inadvance ?>" data-mini="true" /></td>
-</tr>
-</table>
-</form>
+            <div data-role="content" data-theme="c">
+                <div id="salarysheet">    
+                    <?php
+                    $tabs = "";
+                    foreach ($alltabs as $tab) {
+                        $tabs .= $tab;
+                    }
+                    echo $tabs;
+                    ?>
+                </div>
+                <!--<form action="/project/attendance/quicksubmit" method="post" name="quickform" id="quickform">-->
+                <form>
+                    <input type="hidden" id="wid" name="wid" value="<?= $wid ?>">
+                    <input type="hidden" id="month" name="month" value="<?= $monthstr ?>">
 
-<div class="ui-grid-a">
-	<div class="ui-block-a"><button onclick="datapost()">提交</button></div>
-	<div class="ui-block-b"><input type="button" value="关闭" onclick="salarydialogclose()"></div>
-</div><!-- /grid-a -->
+                    <table class="noborder">
+                        <tr>
+                            <td>工作单价:</td><td><input type="text" name="rate" id="rate" value="<?= $rate ?>" data-mini="true"></td>
+                            <td>其他补扣:</td><td><input type="text" name="otherfee" id="otherfee" value="<?= $otherfee ?>" data-mini="true" /></td>
+                            <td>备注:</td><td><input type="text" id="remark" name="remark" value="<?= $remark ?>"></td>
+                        </tr>
+                        <tr>
+                            <td>缺勤天数:</td><td><input type="text" id="absencedays" name="absencedays" value="<?= $absencedays ?>"></td>
+                            <td>缺勤金额:</td><td><input type="text" id="absencefines" name="absencefines" value="<?= $absencefines ?>"></td>
+                            <td>满勤奖金:</td><td><input type="text" id="fullmonaward" name="fullmonaward" value="<?= $fullmonaward ?>"></td>
+                        </tr>
+                        <tr>
+                            <td>预扣税当月:</td><td><input type="text" id="rtmonthpay" name="rtmonthpay" value="<?= $rtmonthpay ?>"></td>
+                            <td>预扣税月数:</td><td><input type="text" id="rtmonths" name="rtmonths" value="<?= $rtmonths ?>"></td>
+                            <td>预扣税累计:</td><td><input type="text" id="rtall" name="rtall" value="<?= $rtall ?>"></td>
+                        </tr>
+                        <tr>
+                            <td>水电费扣款:</td><td><input type="text" id="utfee" name="utfee" value="<?= $utfee ?>"></td>
+                            <td>水电费补助:</td><td><input type="text" id="utallowance" name="utallowance" value="<?= $utallowance ?>"></td>
+                        </tr>
+                        <tr>
+                            <td>伙食费扣款:</td><td><input type="text" id="foodpay" name="foodpay" value="<?= $foodpay ?>"></td>
+                            <td>提前结帐:</td><td><input type="text" id="inadvance" name="inadvance" value="<?= $inadvance ?>" data-mini="true" /></td>
+                        </tr>
+                    </table>
+                </form>
 
-    </div>
-	</div> <!-- dialog -->
+                <div class="ui-grid-a">
+                    <div class="ui-block-a"><button onclick="datapost()" data-mini="true">提交</button></div>
+                    <div class="ui-block-b"><input type="button" value="关闭" onclick="salarydialogclose()" data-mini="true"></div>
+                </div><!-- /grid-a -->
 
-</body>
+            </div>
+        </div> <!-- dialog -->
+
+    </body>
 </html>
 
