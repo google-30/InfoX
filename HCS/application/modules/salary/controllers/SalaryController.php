@@ -1076,9 +1076,14 @@ class Salary_SalaryController extends Zend_Controller_Action {
         //var_dump($summarybysite);            return;            
 
         $days = "";
-        for ($i = 1; $i <= 31; $i++) {
+        for ($i = 26; $i <= 31; $i++) {
+            $day = "s.day$i,";
+            $days .= $day;
+        }
+
+        for ($i = 1; $i <= 25; $i++) {
             $day = "s.day$i";
-            if ($i != 31) {
+            if ($i != 25) {
                 $day .= ",";
             }
 
@@ -1126,9 +1131,9 @@ class Salary_SalaryController extends Zend_Controller_Action {
                     if ($hoursdata && $hoursdata != "") {
                         $normalhours = ($hoursdata <= 8) ? $hoursdata : 8;
                         $othours = ($hoursdata > 8) ? ($hoursdata - 8) : 0;
-                        $totalsalary += $normalhours * $rate + $othours * $cotmultipleVal * $rate;                        
-                        $totalattendance += ($hoursdata > 8) ? $totalattendance++ : ($hoursdata/8);
-                    } else if($piecedata && $piecedata != "") {
+                        $totalsalary += $normalhours * $rate + $othours * $cotmultipleVal * $rate;
+                        $totalattendance += ($hoursdata > 8) ? $totalattendance++ : ($hoursdata / 8);
+                    } else if ($piecedata && $piecedata != "") {
                         $totalsalary += $piecedata;
                         $totalattendance++;
                     }
