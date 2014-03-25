@@ -1105,7 +1105,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
             $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
             $result = $this->_em->createQuery($query)->getResult();
             //print_r($result);
-
+            
             $totaldays = 0;
             $sitelatest = 0;
             foreach ($result[0] as $tmp) {
@@ -1116,7 +1116,6 @@ class Salary_SalaryController extends Zend_Controller_Action {
                     $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
                     $sitedata = key_exists(2, $tmparr) ? $tmparr[2] : "";
 
-                    // TODO: wrong! maybe 31 then 1, same site
                     $sitelatest = $sitedata = ($sitedata == 0) ? $sitelatest : $sitedata;
 
                     if (key_exists($sitedata, $summarybysite)) {
@@ -1142,7 +1141,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
                     $summarydata['attendance'] = $totalattendance;
                     $summarybysite[$sitedata] = $summarydata;
 
-                    echo "totalattendance=$totalattendance";
+                    //echo "totalattendance=$totalattendance";
                 }
             }
         }
