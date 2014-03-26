@@ -50,10 +50,12 @@ $renewtabs = $this->rewtabs;
 
     #infoswitches { display: none; }
     #datatable { text-align:center; display:none; }
+
     #Workersdata {  
         text-shadow: 0 1px #FFFFFF;
         table-layout: fixed;
     }
+
     #Workersdata, thead, tr {
         font-size:small; 
         text-shadow: 0 1px #FFFFFF;                       
@@ -79,9 +81,25 @@ $renewtabs = $this->rewtabs;
     #uploaddiv { display: none; }
 
     #workerdetails { display: none; }
-    .bMulti { display: none; }
+    .bMulti { display: none;  }
     #divresign { display: none; }    
-    #divrenews { display: none; }
+    #divrenews { 
+        display: none; 
+
+    }
+    .divrenew {
+        width: 50%;
+        font-size: medium;
+    }
+    .renewtab {
+        table-layout: fixed;
+    }
+    .renewtab,th,td {
+        border:1px solid black;
+        border-collapse:collapse;
+        padding: 3px;
+
+    }
 </style>
 <script>
     var oTable;
@@ -100,10 +118,12 @@ $renewtabs = $this->rewtabs;
         //resizetable();
 
         $("#resigndate").datepicker();
-        
+
         // add bMulti to popup class
-        $( "div[id^='renew']" ).attr("class", "bMulti" );
-        
+        $("div[id^='renew']").attr("class", "bMulti divrenew");
+        $("table[id^='renew']").attr("class", "grid renewtab");
+
+        $(".dateclass").datepicker();
     });
 
     $("#Workersdata tbody").click(function(event) {
@@ -244,11 +264,29 @@ $renewtabs = $this->rewtabs;
     }
 
     function workerRenewinfo(wid, name, eeeno)
-    {        
-        $('#renew' + wid + "_div").bPopup({
+    {
+        $('#renew' + wid + "").bPopup({
             follow: [true, true], //x, y
             position: [200, 200] //x, y
         });
+    }
+
+    function postrenewinfo(wid)
+    {
+        var wpexpiry = $("#wpexpiry" + wid).val();
+        var issuedate = $("#issuedate" + wid).val();
+        var ppexpiry = $("#ppexpiry" + wid).val();
+        var rate = $("#rate" + wid).val();
+        var medicaldate = $("#medicaldate" + wid).val();
+        var csoc = $("#csoc" + wid).val();
+        var securityexp = $("#securityexp" + wid).val();
+        var renewdate = $("#renewdate" + wid).val();
+        alert(wpexpiry);
+
+        $.post("/worker/manage/resign", {id: wid, wpexpiry: wpexpiry, issuedate: issuedate},
+        function(data) {
+        }
+        );
     }
 </script>
 
@@ -302,12 +340,12 @@ if (count($maindata)) {
 </div>
 
 <div id="divrenews">
-<?php
-if (1) {
-    foreach ($renewtabs as $tmp) {
-        echo $tmp . "
+    <?php
+    if (1) {
+        foreach ($renewtabs as $tmp) {
+            echo $tmp . "
 ";
+        }
     }
-}
-?>
+    ?>
 </div>    

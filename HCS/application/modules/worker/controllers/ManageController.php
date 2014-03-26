@@ -31,12 +31,26 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->view->maindata = $workerarr;
         //$this->getworkerlist();
         //$this->getCustominfo(0);    
+        // renew form
+        $renewform = '<form><h3>Renew Info</h3>'
+                . '<div class="ui-grid-a">'
+                . '<div class="ui-block-a"><input name="wpexpiry" id="wpexpiry" type="text" placeholder="WP Expiry"></div>'
+                . '<div class="ui-block-b"><input name="issuedate" id="issuedate" type="text" placeholder="Date of Issue"></div>'
+                . '<div class="ui-block-a"><input name="ppexpiry" id="ppexpiry" type="text" placeholder="PP Expiry"></div>'
+                . '<div class="ui-block-b"><input name="rate" id="rate" type="text" placeholder="Rate"></div>'
+                . '<div class="ui-block-a"><input name="medicaldate" id="medicaldate" type="text" placeholder="Medical Date"></div>'
+                . '<div class="ui-block-b"><input name="csoc" id="csoc" type="text" placeholder="C.S.O.C"></div>'
+                . '<div class="ui-block-a"><input name="securityexp" id="securityexp" type="text" placeholder="Security Bond Expiry Date"></div>'
+                . '<div class="ui-block-b"><input name="renewdate" id="renewdate" type="text" placeholder="Renew Date"></div>'
+                . '</div>'
+                . '<input type="button" value="提交" data-mini="true" onclick="postrenew()">'
+                . '</form>';
 
         $onswitches = array(
-            "eeeno" => "E'ee No.", "name" => "Name ", 
-            "wpexpiry" => "WP Expiry", "issuedate" => "Date of Issue",            
-            "ppexpiry" => "PP Expiry", "rate" => "RATE", "medicaldate"=> "Medical Date",
-            "csoc" => "C.S.O.C", "securityexp"=> "Security Bond Expiry Date");
+            "eeeno" => "E'ee No.", "name" => "Name ",
+            "wpexpiry" => "WP Expiry", "issuedate" => "Date of Issue",
+            "ppexpiry" => "PP Expiry", "rate" => "RATE", "medicaldate" => "Medical Date",
+            "csoc" => "C.S.O.C", "securityexp" => "Security Bond Expiry Date");
 
         $renewtabs = array();
         $maindata = $workerarr;
@@ -55,7 +69,8 @@ class Worker_ManageController extends Zend_Controller_Action {
             }
 
             $divid = "renew" . $wid1;
-            $wdtab = $this->view->grid($divid, true);
+            $gridid = "worker" . $wid1;
+            $wdtab = $this->view->grid($gridid, true);
             foreach ($onswitches as $key => $value) {
                 $wdtab = $wdtab->field($key, $value);
             }
@@ -64,11 +79,25 @@ class Worker_ManageController extends Zend_Controller_Action {
             $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
             $wdtab = $wdtab->data($workerrecords);
             $wdtab = $wdtab->render();
-            
-            $renewtabs[] = $wdtab;
-         }
-         
-         $this->view->rewtabs = $renewtabs;
+
+            $renewform = '<form><h3>Renew Info</h3>'
+                    . '<div class="ui-grid-a">'
+                    . '<div class="ui-block-a"><input name="wpexpiry" id="wpexpiry' .$wid1. '" type="text" placeholder="WP Expiry" class="dateclass"></div>'
+                    . '<div class="ui-block-b"><input name="issuedate" id="issuedate' .$wid1. '" type="text" placeholder="Date of Issue" class="dateclass"></div>'
+                    . '<div class="ui-block-a"><input name="ppexpiry" id="ppexpiry' .$wid1. '" type="text" placeholder="PP Expiry" class="dateclass"></div>'
+                    . '<div class="ui-block-b"><input name="rate" id="rate' .$wid1. '" type="text" placeholder="Rate"></div>'
+                    . '<div class="ui-block-a"><input name="medicaldate" id="medicaldate' .$wid1. '" type="text" placeholder="Medical Date" class="dateclass"></div>'
+                    . '<div class="ui-block-b"><input name="csoc" id="csoc' .$wid1. '" type="text" placeholder="C.S.O.C" class="dateclass"></div>'
+                    . '<div class="ui-block-a"><input name="securityexp" id="securityexp' .$wid1. '" type="text" placeholder="Security Bond Expiry Date" class="dateclass"></div>'
+                    . '<div class="ui-block-b"><input name="renewdate" id="renewdate' .$wid1. '" type="text" placeholder="Renew Date" class="dateclass"></div>'
+                    . '</div>'
+                    . '<input type="button" value="提交" data-mini="true" onclick="postrenewinfo(' .$wid1. ')">'
+                    . '</form>';
+
+            $renewtabs[] = '<div id="' . $divid . '">' . $wdtab . "<br>" . $renewform . "</div>";
+        }
+
+        $this->view->rewtabs = $renewtabs;
     }
 
     public function previewlistAction() {
