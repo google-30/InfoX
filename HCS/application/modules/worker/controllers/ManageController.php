@@ -54,6 +54,7 @@ class Worker_ManageController extends Zend_Controller_Action {
             $renewrecords = $this->_workerrenew->findBy(array("worker" => $tmp1));
             
             // TODO: find current renew info in worker details
+            
             // TODO: sort records
             
             $wdtab = $this->view->grid($gridid, true);
