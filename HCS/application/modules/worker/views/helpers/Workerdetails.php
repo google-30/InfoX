@@ -97,4 +97,8 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         return $actions;
     }
 
+    protected function td_renewdate($field, $row) {
+        return $this->getDate($field, $row);
+    }
+
 }

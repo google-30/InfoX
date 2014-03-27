@@ -32,23 +32,9 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->view->maindata = $workerarr;
         //$this->getworkerlist();
         //$this->getCustominfo(0);    
-        // renew form
-        $renewform = '<form><h3>Renew Info</h3>'
-                . '<div class="ui-grid-a">'
-                . '<div class="ui-block-a"  data-role="fieldcontain"><label for="wpexpiry">Text Input:</label><input name="wpexpiry" id="wpexpiry" type="text" placeholder="WP Expiry"></div>'
-                . '<div class="ui-block-b"><input name="issuedate" id="issuedate" type="text" placeholder="Date of Issue"></div>'
-                . '<div class="ui-block-a"><input name="ppexpiry" id="ppexpiry" type="text" placeholder="PP Expiry"></div>'
-                . '<div class="ui-block-b"><input name="rate" id="rate" type="text" placeholder="Rate"></div>'
-                . '<div class="ui-block-a"><input name="medicaldate" id="medicaldate" type="text" placeholder="Medical Date"></div>'
-                . '<div class="ui-block-b"><input name="csoc" id="csoc" type="text" placeholder="C.S.O.C"></div>'
-                . '<div class="ui-block-a"><input name="securityexp" id="securityexp" type="text" placeholder="Security Bond Expiry Date"></div>'
-                . '<div class="ui-block-b"><input name="renewdate" id="renewdate" type="text" placeholder="Renew Date"></div>'
-                . '</div>'
-                . '<input type="button" value="提交" data-mini="true" onclick="postrenew()">'
-                . '</form>';
 
         $onswitches = array(
-            "eeeno" => "E'ee No.", "name" => "Name ",
+            "renewdate" => "Renew Date",
             "wpexpiry" => "WP Expiry", "issuedate" => "Date of Issue",
             "ppexpiry" => "PP Expiry", "rate" => "RATE", "medicaldate" => "Medical Date",
             "csoc" => "C.S.O.C", "securityexp" => "Security Bond Expiry Date");
@@ -59,18 +45,17 @@ class Worker_ManageController extends Zend_Controller_Action {
             $name1 = $tmp1->getNamechs();
             $nameeng1 = $tmp1->getNameeng();
             $wid1 = $tmp1->getId();
+            $eeeno = $tmp1->getEeeno();
 
-            $workerrecords = array();
-            foreach ($maindata as $tmp2) {
-                $name2 = $tmp2->getNamechs();
-                $nameeng2 = $tmp2->getNameeng();
-                if ($nameeng2 == $nameeng1) {
-                    $workerrecords[] = $tmp2;
-                }
-            }
-
+            $title = "<h3>Renew Records of $eeeno - $name1</h3>";
             $divid = "renew" . $wid1;
             $gridid = "worker" . $wid1;
+
+            $renewrecords = $this->_workerrenew->findBy(array("worker" => $tmp1));
+            
+            // TODO: find current renew info in worker details
+            // TODO: sort records
+            
             $wdtab = $this->view->grid($gridid, true);
             foreach ($onswitches as $key => $value) {
                 $wdtab = $wdtab->field($key, $value);
@@ -78,26 +63,10 @@ class Worker_ManageController extends Zend_Controller_Action {
             //$wdtab = $wdtab->field("actions", "Action");
             $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
             $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
-            $wdtab = $wdtab->data($workerrecords);
+            $wdtab = $wdtab->data($renewrecords);
             $wdtab = $wdtab->render();
 
-            $renewform = '<form><h3>Renew Info</h3>'
-                    . '<div class="ui-grid-c">'
-                    . '<div class="ui-block-a">WP Expiry:</div> '
-                    . '<div class="ui-block-b" ><input name="wpexpiry" id="wpexpiry' . $wid1 . '" type="text" placeholder="WP Expiry" class="dateclass"></div>'
-                    . '<div class="ui-block-c">Date of Issue:</div> '
-                    . '<div class="ui-block-d" ><input name="issuedate" id="issuedate' . $wid1 . '" type="text" placeholder="Date of Issue" class="dateclass"></div>'
-                    . '<div class="ui-block-a"><input name="ppexpiry" id="ppexpiry' . $wid1 . '" type="text" placeholder="PP Expiry" class="dateclass"></div>'
-                    . '<div class="ui-block-b"><input name="rate" id="rate' . $wid1 . '" type="text" placeholder="Rate"></div>'
-                    . '<div class="ui-block-a"><input name="medicaldate" id="medicaldate' . $wid1 . '" type="text" placeholder="Medical Date" class="dateclass"></div>'
-                    . '<div class="ui-block-b"><input name="csoc" id="csoc' . $wid1 . '" type="text" placeholder="C.S.O.C" class="dateclass"></div>'
-                    . '<div class="ui-block-a"><input name="securityexp" id="securityexp' . $wid1 . '" type="text" placeholder="Security Bond Expiry Date" class="dateclass"></div>'
-                    . '<div class="ui-block-b"><input name="renewdate" id="renewdate' . $wid1 . '" type="text" placeholder="Renew Date" class="dateclass"></div>'
-                    . '</div>'
-                    . '<input type="button" value="提交" data-mini="true" onclick="postrenewinfo(' . $wid1 . ')">'
-                    . '</form>';
-
-            $renewform1 = '<h3>Renew Info</h3>'
+            $renewform1 = '<h3>Add Renew Record</h3>'
                     . '<table id="renewinfotab">'
                     . '<tr>'
                     . '<td>WP Expiry:</td>'
@@ -124,10 +93,10 @@ class Worker_ManageController extends Zend_Controller_Action {
                     . '<td><input name="renewdate" id="renewdate' . $wid1 . '" type="text" placeholder="Renew Date" class="dateclass"></td>'
                     . '</tr>'
                     . '</table>'
-                    . '<input type="button" value="提交" data-mini="true" onclick="postrenewinfo(' . $wid1 . ')">'
+                    . '<input type="button" value="提交" data-theme="a" data-mini="true" onclick="postrenewinfo(' . $wid1 . ')">'
                     . '';
 
-            $renewtabs[] = '<div id="' . $divid . '">' . $wdtab . "<br>" . $renewform1 . "</div>";
+            $renewtabs[] = '<div id="' . $divid . '">' . $title . $wdtab . "<br>" . $renewform1 . "</div>";
         }
 
         $this->view->rewtabs = $renewtabs;
@@ -1012,7 +981,7 @@ class Worker_ManageController extends Zend_Controller_Action {
         infox_common::turnoffView($this->_helper);
 
         $wid = $this->getParam("wid", 0);
-        $worker = $this->_workerdetails->findOneBy(array("id"=>$wid));
+        $worker = $this->_workerdetails->findOneBy(array("id" => $wid));
         if (!$worker) {
             return;
         }
@@ -1029,7 +998,7 @@ class Worker_ManageController extends Zend_Controller_Action {
 
         $data = new \Synrgic\Infox\Workerrenew();
         $data->setWorker($worker);
-        ($wpexpiry != "") ? $data->setWpexpiry(new DateTime($wpexpiry)): 0;
+        ($wpexpiry != "") ? $data->setWpexpiry(new DateTime($wpexpiry)) : 0;
         ($issuedate != "") ? $data->setIssuedate(new DateTime($issuedate)) : 0;
         ($ppexpiry != "") ? $data->setPpexpiry(new DateTime($ppexpiry)) : 0;
         ($rate != 0) ? $data->setRate($rate) : 0;
