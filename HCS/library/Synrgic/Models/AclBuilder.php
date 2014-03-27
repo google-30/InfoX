@@ -67,7 +67,7 @@ class Synrgic_Models_AclBuilder {
                     'management:auth' => array('view', 'login', 'logout'),
                     
                     'worker:manage' => array('view', 'add', 'edit', 'delete', 'submit',
-                        'output', 'workerexpire', 'previewlist', 'previewexpiry', 'resign'),
+                        'output', 'workerexpire', 'previewlist', 'previewexpiry', 'resign', 'renew'),
                     'worker:onsite' => array('view', 'onsiterecord', 'addrecord', 'updaterecord', 'deleterecord', 'attendancerecord', 'addattendancerecord', 'updateattendancerecord', 'deleteattendancerecord'),
                     'worker:custominfo' => array('view', 'postinfo'),
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),
@@ -161,7 +161,7 @@ class Synrgic_Models_AclBuilder {
                     'management:auth' => array('view', 'login', 'logout'),
                     
                     'worker:manage' => array('view', 'add', 'edit', 'delete', 'submit',
-                        'output', 'workerexpire', 'previewlist', 'previewexpiry', 'resign'),
+                        'output', 'workerexpire', 'previewlist', 'previewexpiry', 'resign', 'renew'),
                     'worker:onsite' => array('view', 'onsiterecord', 'addrecord', 'updaterecord', 'deleterecord', 'attendancerecord', 'addattendancerecord', 'updateattendancerecord', 'deleteattendancerecord'),
                     'worker:custominfo' => array('view', 'postinfo'),
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),

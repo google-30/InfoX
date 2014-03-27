@@ -98,8 +98,15 @@ $renewtabs = $this->rewtabs;
         border:1px solid black;
         border-collapse:collapse;
         padding: 3px;
-
     }
+    #renewinfotab {
+        width: 100%;
+        
+    }
+    #renewinfotab, #renewinfotab td{
+        border:0px;
+        text-align: left;
+    }    
 </style>
 <script>
     var oTable;
@@ -281,11 +288,16 @@ $renewtabs = $this->rewtabs;
         var csoc = $("#csoc" + wid).val();
         var securityexp = $("#securityexp" + wid).val();
         var renewdate = $("#renewdate" + wid).val();
-        alert(wpexpiry);
+        
+        alert(wpexpiry + " - " + issuedate + " - " +ppexpiry + " - " +rate + " - " +medicaldate + " - " +csoc + " - " +securityexp + " - " +renewdate);    
+        //return;
 
-        $.post("/worker/manage/resign", {id: wid, wpexpiry: wpexpiry, issuedate: issuedate},
-        function(data) {
-        }
+        $.post("/worker/manage/renew", {wid: wid, wpexpiry: wpexpiry, issuedate: issuedate, ppexpiry: ppexpiry, 
+        rate: rate, medicaldate: medicaldate, csoc: csoc, securityexp: securityexp, renewdate: renewdate},
+            function(data) {
+                console.log(data);
+                alert("Refresh page to see the updated records.");
+            }
         );
     }
 </script>

@@ -20,6 +20,7 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->_miscinfo = $this->_em->getRepository('Synrgic\Infox\Miscinfo');
         $this->_workercustominfo = $this->_em->getRepository('Synrgic\Infox\Workercustominfo');
         $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
+        $this->_workerrenew = $this->_em->getRepository('Synrgic\Infox\Workerrenew');
     }
 
     public function indexAction() {
@@ -34,7 +35,7 @@ class Worker_ManageController extends Zend_Controller_Action {
         // renew form
         $renewform = '<form><h3>Renew Info</h3>'
                 . '<div class="ui-grid-a">'
-                . '<div class="ui-block-a"><input name="wpexpiry" id="wpexpiry" type="text" placeholder="WP Expiry"></div>'
+                . '<div class="ui-block-a"  data-role="fieldcontain"><label for="wpexpiry">Text Input:</label><input name="wpexpiry" id="wpexpiry" type="text" placeholder="WP Expiry"></div>'
                 . '<div class="ui-block-b"><input name="issuedate" id="issuedate" type="text" placeholder="Date of Issue"></div>'
                 . '<div class="ui-block-a"><input name="ppexpiry" id="ppexpiry" type="text" placeholder="PP Expiry"></div>'
                 . '<div class="ui-block-b"><input name="rate" id="rate" type="text" placeholder="Rate"></div>'
@@ -81,20 +82,52 @@ class Worker_ManageController extends Zend_Controller_Action {
             $wdtab = $wdtab->render();
 
             $renewform = '<form><h3>Renew Info</h3>'
-                    . '<div class="ui-grid-a">'
-                    . '<div class="ui-block-a"><input name="wpexpiry" id="wpexpiry' .$wid1. '" type="text" placeholder="WP Expiry" class="dateclass"></div>'
-                    . '<div class="ui-block-b"><input name="issuedate" id="issuedate' .$wid1. '" type="text" placeholder="Date of Issue" class="dateclass"></div>'
-                    . '<div class="ui-block-a"><input name="ppexpiry" id="ppexpiry' .$wid1. '" type="text" placeholder="PP Expiry" class="dateclass"></div>'
-                    . '<div class="ui-block-b"><input name="rate" id="rate' .$wid1. '" type="text" placeholder="Rate"></div>'
-                    . '<div class="ui-block-a"><input name="medicaldate" id="medicaldate' .$wid1. '" type="text" placeholder="Medical Date" class="dateclass"></div>'
-                    . '<div class="ui-block-b"><input name="csoc" id="csoc' .$wid1. '" type="text" placeholder="C.S.O.C" class="dateclass"></div>'
-                    . '<div class="ui-block-a"><input name="securityexp" id="securityexp' .$wid1. '" type="text" placeholder="Security Bond Expiry Date" class="dateclass"></div>'
-                    . '<div class="ui-block-b"><input name="renewdate" id="renewdate' .$wid1. '" type="text" placeholder="Renew Date" class="dateclass"></div>'
+                    . '<div class="ui-grid-c">'
+                    . '<div class="ui-block-a">WP Expiry:</div> '
+                    . '<div class="ui-block-b" ><input name="wpexpiry" id="wpexpiry' . $wid1 . '" type="text" placeholder="WP Expiry" class="dateclass"></div>'
+                    . '<div class="ui-block-c">Date of Issue:</div> '
+                    . '<div class="ui-block-d" ><input name="issuedate" id="issuedate' . $wid1 . '" type="text" placeholder="Date of Issue" class="dateclass"></div>'
+                    . '<div class="ui-block-a"><input name="ppexpiry" id="ppexpiry' . $wid1 . '" type="text" placeholder="PP Expiry" class="dateclass"></div>'
+                    . '<div class="ui-block-b"><input name="rate" id="rate' . $wid1 . '" type="text" placeholder="Rate"></div>'
+                    . '<div class="ui-block-a"><input name="medicaldate" id="medicaldate' . $wid1 . '" type="text" placeholder="Medical Date" class="dateclass"></div>'
+                    . '<div class="ui-block-b"><input name="csoc" id="csoc' . $wid1 . '" type="text" placeholder="C.S.O.C" class="dateclass"></div>'
+                    . '<div class="ui-block-a"><input name="securityexp" id="securityexp' . $wid1 . '" type="text" placeholder="Security Bond Expiry Date" class="dateclass"></div>'
+                    . '<div class="ui-block-b"><input name="renewdate" id="renewdate' . $wid1 . '" type="text" placeholder="Renew Date" class="dateclass"></div>'
                     . '</div>'
-                    . '<input type="button" value="提交" data-mini="true" onclick="postrenewinfo(' .$wid1. ')">'
+                    . '<input type="button" value="提交" data-mini="true" onclick="postrenewinfo(' . $wid1 . ')">'
                     . '</form>';
 
-            $renewtabs[] = '<div id="' . $divid . '">' . $wdtab . "<br>" . $renewform . "</div>";
+            $renewform1 = '<h3>Renew Info</h3>'
+                    . '<table id="renewinfotab">'
+                    . '<tr>'
+                    . '<td>WP Expiry:</td>'
+                    . '<td><input name="wpexpiry" id="wpexpiry' . $wid1 . '" type="text" placeholder="WP Expiry" class="dateclass"></td>'
+                    . '<td>Date of Issue:</td>'
+                    . '<td><input name="issuedate" id="issuedate' . $wid1 . '" type="text" placeholder="Date of Issue" class="dateclass"></td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td>Date of Issue: </td>'
+                    . '<td><input name="ppexpiry" id="ppexpiry' . $wid1 . '" type="text" placeholder="PP Expiry" class="dateclass"></td>'
+                    . '<td>Rate: </td>'
+                    . '<td><input name="rate" id="rate' . $wid1 . '" type="text" placeholder="Rate"></td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td>Medical Date: </td>'
+                    . '<td><input name="medicaldate" id="medicaldate' . $wid1 . '" type="text" placeholder="Medical Date" class="dateclass"></td>'
+                    . '<td>C.S.O.C: </td>'
+                    . '<td><input name="csoc" id="csoc' . $wid1 . '" type="text" placeholder="C.S.O.C" class="dateclass"></td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td>Security Bond Expiry Date: </td>'
+                    . '<td><input name="securityexp" id="securityexp' . $wid1 . '" type="text" placeholder="Security Bond Expiry Date" class="dateclass"></td>'
+                    . '<td>Renew Date: </td>'
+                    . '<td><input name="renewdate" id="renewdate' . $wid1 . '" type="text" placeholder="Renew Date" class="dateclass"></td>'
+                    . '</tr>'
+                    . '</table>'
+                    . '<input type="button" value="提交" data-mini="true" onclick="postrenewinfo(' . $wid1 . ')">'
+                    . '';
+
+            $renewtabs[] = '<div id="' . $divid . '">' . $wdtab . "<br>" . $renewform1 . "</div>";
         }
 
         $this->view->rewtabs = $renewtabs;
@@ -973,6 +1006,47 @@ class Worker_ManageController extends Zend_Controller_Action {
         }
 
         $this->redirect("/worker/manage");
+    }
+
+    public function renewAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $wid = $this->getParam("wid", 0);
+        $worker = $this->_workerdetails->findOneBy(array("id"=>$wid));
+        if (!$worker) {
+            return;
+        }
+
+        // store in $this->_workerrenew
+        $wpexpiry = $this->getParam("wpexpiry", "");
+        $issuedate = $this->getParam("issuedate", "");
+        $ppexpiry = $this->getParam("ppexpiry", "");
+        $rate = $this->getParam("rate", 0);
+        $medicaldate = $this->getParam("medicaldate", "");
+        $csoc = $this->getParam("csoc", "");
+        $securityexp = $this->getParam("securityexp", "");
+        $renewdate = $this->getParam("renewdate", "");
+
+        $data = new \Synrgic\Infox\Workerrenew();
+        $data->setWorker($worker);
+        ($wpexpiry != "") ? $data->setWpexpiry(new DateTime($wpexpiry)): 0;
+        ($issuedate != "") ? $data->setIssuedate(new DateTime($issuedate)) : 0;
+        ($ppexpiry != "") ? $data->setPpexpiry(new DateTime($ppexpiry)) : 0;
+        ($rate != 0) ? $data->setRate($rate) : 0;
+        ($medicaldate != "") ? $data->setMedicaldate(new DateTime($medicaldate)) : 0;
+        ($csoc != "") ? $data->setCsoc(new DateTime($csoc)) : 0;
+        ($securityexp != "") ? $data->setSecurityexp(new DateTime($securityexp)) : 0;
+        ($renewdate != "") ? $data->setRenewdate(new DateTime($renewdate)) : 0;
+
+        if (1) {
+            $this->_em->persist($data);
+            try {
+                $this->_em->flush();
+            } catch (Exception $e) {
+                var_dump($e);
+                return;
+            }
+        }
     }
 
 }

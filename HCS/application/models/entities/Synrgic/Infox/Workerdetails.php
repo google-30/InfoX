@@ -1,6 +1,7 @@
 <?php
- 
+
 namespace Synrgic\Infox;
+
 /**
  * provide by the company HT/HC
  *   
@@ -8,12 +9,13 @@ namespace Synrgic\Infox;
  * @Table(name="infox_workerdetails")
  */
 class Workerdetails extends \Synrgic_Models_Entity {
+
     /**
      * @Id
      * @GeneratedValue(strategy="AUTO")
      * @Column(type="integer")
      */
-    protected $id;	
+    protected $id;
 
     /**
      * @Column(type="string", nullable=true)
@@ -89,7 +91,7 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $worktype;    
+    protected $worktype;
 
     /**
      * @Column(type="date", nullable=true)
@@ -115,7 +117,7 @@ class Workerdetails extends \Synrgic_Models_Entity {
      * @Column(type="date", nullable=true)
      */
     protected $securityexp;
-        
+
     /**
      * @Column(type="string", nullable=true)
      */
@@ -129,8 +131,8 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $goodat;    
-    
+    protected $goodat;
+
     /**
      * @Column(type="string", nullable=true)
      */
@@ -140,7 +142,7 @@ class Workerdetails extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $contactno2;
-    
+
     /**
      * @Column(type="string", nullable=true)
      */
@@ -149,18 +151,18 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $agent;   
-    
+    protected $agent;
+
     /**
      * @Column(type="string", nullable=true)
      */
     protected $remark;
-    
+
     /**
      * @Column(type="string", nullable=true)
      */
     protected $hometown;
-    
+
     /**
      * @Column(type="string", nullable=true)
      */
@@ -200,12 +202,12 @@ class Workerdetails extends \Synrgic_Models_Entity {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $race="c";
+    protected $race = "c";
 
     /**
      * @OneToOne(targetEntity="Synrgic\Infox\Workercustominfo")
      */
-    protected $workercustominfo;   
+    protected $workercustominfo;
 
     /**
      * hour rate
@@ -218,19 +220,26 @@ class Workerdetails extends \Synrgic_Models_Entity {
      * @Column(type="float", nullable=true)
      */
     protected $monthrate;
-    
+
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $resignremark;    
-    
+    protected $resignremark;
+
     /**
      * @Column(type="date", nullable=true)
      */
-    protected $resigndate;   
-    
+    protected $resigndate;
+
     /**
      * @Column(type="boolean", nullable=true)
      */
-    protected $resignation = FALSE; 
+    protected $resignation = FALSE;
+
+    /**
+     * 
+     * @OneToOne(targetEntity="Synrgic\Infox\Workerrenew")
+     */
+    protected $renew;
+
 }
