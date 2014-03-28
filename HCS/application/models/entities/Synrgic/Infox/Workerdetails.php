@@ -241,5 +241,10 @@ class Workerdetails extends \Synrgic_Models_Entity {
      * @OneToOne(targetEntity="Synrgic\Infox\Workerrenew")
      */
     protected $renew;
+    
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    protected $renewdate;    
 
 }

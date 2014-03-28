@@ -88,7 +88,6 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         $wid = $row["id"];
         $name = $row["namechs"];
         $eeeno = $row["eeeno"];
-        //$link1 = '<a onclick="workerDetails(' . "$wid, '$name','$eeeno'" . ')">编辑</a>';
         $link1 = '<a href="/worker/manage/edit?id=' . $wid . '"  target="_blank">Edit</a>';
         $link2 = '<a onclick="workerResign(' . "$wid, '$name','$eeeno'" . ')">Resign</a>';
         $link3 = '<a onclick="workerRenewinfo(' . "$wid, '$name','$eeeno'" . ')">Renew</a>';
@@ -99,6 +98,20 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
 
     protected function td_renewdate($field, $row) {
         return $this->getDate($field, $row);
+    }
+
+    protected function td_renewactions($field, $row) {
+        $namechs = $row["namechs"];
+        $nameeng = $row["nameeng"];
+
+        if ($namechs != "" || $nameeng != "") {
+            $actions = "&nbsp;";
+        } else {
+            $rid = $row["id"];
+            $link1 = '<a href="#" onclick="deleteRenew(' . $rid . ')">Delete</a>';
+            $actions = $link1;
+        }
+        return $actions;
     }
 
 }

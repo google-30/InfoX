@@ -204,11 +204,12 @@ strong {
     padding: 45px 0 0;
     text-align: center;
 }
+/*
 .bMulti a {
     left: 175px;
     position: absolute;
     top: 175px;
-}
+}*/
 .lt-ie9 .bModal {
     background-color: #000;
 }

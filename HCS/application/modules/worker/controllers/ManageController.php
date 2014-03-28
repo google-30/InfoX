@@ -52,16 +52,19 @@ class Worker_ManageController extends Zend_Controller_Action {
             $gridid = "worker" . $wid1;
 
             $renewrecords = $this->_workerrenew->findBy(array("worker" => $tmp1));
-            
+
             // TODO: find current renew info in worker details
-            
+            $currentrenew = array();
+            $currentrenew['wpexpiry'] = new DateTime("now");
+
+            $renewrecords[] = $tmp1;
             // TODO: sort records
-            
+
             $wdtab = $this->view->grid($gridid, true);
             foreach ($onswitches as $key => $value) {
                 $wdtab = $wdtab->field($key, $value);
             }
-            //$wdtab = $wdtab->field("actions", "Action");
+            $wdtab = $wdtab->field("renewactions", "Action");
             $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
             $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
             $wdtab = $wdtab->data($renewrecords);
@@ -1016,6 +1019,17 @@ class Worker_ManageController extends Zend_Controller_Action {
                 var_dump($e);
                 return;
             }
+        }
+    }
+
+    public function deleterenewAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $rid = $this->getParam("rid", 0);
+        $data = $this->_workerrenew->findOneBy(array("id" => $rid));
+        if ($data) {
+            $this->_em->remove($data);
+            $this->_em->flush();
         }
     }
 
