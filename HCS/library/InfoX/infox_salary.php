@@ -542,7 +542,7 @@ class infox_salary {
 
         $workersheet = $worker->getSheet();
         $basicsalary = 500;
-        if ($workersheet == "HC.C" || $workersheet == "HT.C") {
+        if ($workersheet == "HC.C" || $workersheet == "HT.C" || $workersheet == "Others.C" ) {
             $basicsalary = self::getSettingBySectionName("salary", "cbasic");
         } else {
             $basicsalary = self::getSettingBySectionName("salary", "bbasic");
