@@ -23,10 +23,11 @@ class Salary_SalaryController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+        $sheetarr = infox_worker::getSheetarr();
+        $sheetarr[] = "ALL";
+        $this->view->sheetarr = $sheetarr;
         $this->view->sheet = $requestsheet = $this->getParam("sheet", $sheetarr[0]);
-        $this->view->workerarr = infox_worker::getworkerlistbysheet($requestsheet);
-
+        //$this->view->workerarr = infox_worker::getworkerlistbysheet($requestsheet);
         // retrieve salary summary
     }
 
@@ -163,7 +164,9 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
         $sheet = $this->getParam("sheet", "HC.C");
         $this->view->sheet = $sheet;
-        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+        $sheetarr = infox_worker::getSheetarr();
+        $sheetarr[] = "ALL";
+        $this->view->sheetarr = $sheetarr;
 
         // TODO: may cause datetime issue here
         $monthstr = $this->getParam("month", "now");
@@ -177,8 +180,6 @@ class Salary_SalaryController extends Zend_Controller_Action {
 
         // get all records in this month        
         $salaryrecords = infox_salary::getSalaryRecordsByMonthSheet($month, $sheet);
-        //$attendarr = infox_project::getAttendanceByMonthSheet($monthstr, $sheet);
-        //$salarytabs = $this->generateSalaryTabs($salaryrecords, $attendarr);
         $inputbtn = true;
         $salarytabs = $this->generateSalaryTabs($salaryrecords, $inputbtn);
         $this->view->salarytabs = $salarytabs;
@@ -558,13 +559,17 @@ class Salary_SalaryController extends Zend_Controller_Action {
         $salaryrepo = $this->_salaryall; //infox_salary::getReposBySheet($sheet);
         $records = $salaryrepo->findBy(array("month" => $monthobj));
 
-        $salaryrecords = array();
-        foreach ($records as $tmp) {
-            $worker = $tmp->getWorker();
-            $eeeno = $worker->getEeeno();
-            if ($sheet == $worker->getSheet()) {
-                //$salaryrecords[] = $tmp;
-                $salaryrecords[$eeeno] = $tmp;
+        if ($sheet = "ALL") {
+            $salaryrecords = $records;
+        } else {
+            $salaryrecords = array();
+            foreach ($records as $tmp) {
+                $worker = $tmp->getWorker();
+                $eeeno = $worker->getEeeno();
+                if ($sheet == $worker->getSheet()) {
+                    //$salaryrecords[] = $tmp;
+                    $salaryrecords[$eeeno] = $tmp;
+                }
             }
         }
         ksort($salaryrecords);
@@ -1105,7 +1110,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
             $query = "SELECT $days FROM Synrgic\Infox\Siteattendance s WHERE s.worker=$wid and s.month='$month'";
             $result = $this->_em->createQuery($query)->getResult();
             //print_r($result);
-            
+
             $totaldays = 0;
             $sitelatest = 0;
             foreach ($result[0] as $tmp) {
@@ -1131,7 +1136,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
                         $normalhours = ($hoursdata <= 8) ? $hoursdata : 8;
                         $othours = ($hoursdata > 8) ? ($hoursdata - 8) : 0;
                         $totalsalary += $normalhours * $rate + $othours * $cotmultipleVal * $rate;
-                        $totalattendance += ($hoursdata > 8) ? $totalattendance++ : ($hoursdata / 8);
+                        $totalattendance += ($hoursdata / 8);
                     } else if ($piecedata && $piecedata != "") {
                         $totalsalary += $piecedata;
                         $totalattendance++;

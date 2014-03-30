@@ -224,6 +224,10 @@ class infox_salary {
         $_salaryall = self::$_salaryall;
 
         $result = $_salaryall->findBy(array("month" => $month));
+        if($sheet == "ALL")
+        {
+            return $result;
+        }
         
         $records = array();
         foreach ($result as $tmp) {

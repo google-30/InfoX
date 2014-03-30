@@ -18,6 +18,17 @@ foreach ($salaryrecords as $record) {
 $workerselect = '<select id="workersel" data-theme="b" data-mini="true">' . $options . "</select>";
 
 $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
+
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . "</option>";
+    } else {
+        $option = '<option value="' . $tmp . '" >' . $tmp . "</option>";
+    }
+    $options .= $option;
+}
+$sheetsels = '<select data-theme="b" data-mini="true" id="sheetsels">' . $options . "</select>";
 ?>
 <!DOCTYPE html> 
 <html>
@@ -92,6 +103,14 @@ $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr
                     var workersel = $(this).val();
                     $(window).scrollTop($('#worker' + workersel).offset().top);
                 });
+
+                $("#sheetsels").on("change", function() {
+                    //alert("sheetsels change");
+                    var sheet = $("#sheetsels").val();
+                    var month = $("#monthstr").val();
+                    var url = "/salary/salary/salarybymonth?sheet=" + sheet + "&month=" + month;
+                    redirect(url);
+                });
             });
 
             function datapost()
@@ -136,6 +155,10 @@ $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr
                 // refresh this page to reload data
                 document.location.reload();
             }
+            
+            function redirect(url) {
+                window.location = url;
+            }            
         </script>
         <div data-role="page">
 
@@ -151,14 +174,13 @@ $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr
 
             <div data-role="content">
                 <div id="error">
-                    <?= $this->error ?>
+                    <?= $this->error; ?>
                 </div>
-
-                <div class="ui-grid-a">
-                    <div class="ui-block-a">
-                        <?= $workerselect ?>
-                    </div>
-                    <div class="ui-block-b">
+                <input type="hidden" value="<?= $monthstr ?>" id="monthstr">
+                <div class="ui-grid-b">
+                    <div class="ui-block-a"><?= $workerselect ?></div>
+                    <div class="ui-block-b"><?= $sheetsels ?></div>
+                    <div class="ui-block-c">
                         <a href="<?= $salaryreceiptsurl ?>" data-mini="true" data-role="button" data-theme="b" target="_blank">
                             工资收据
                         </a>
@@ -188,7 +210,7 @@ $salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr
                             ";
                     }
                 }
-                //echo $alltabs;
+//echo $alltabs;
                 ?>
             </div><!-- /content -->
 

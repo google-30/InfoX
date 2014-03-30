@@ -178,7 +178,7 @@ class infox_worker {
     public static function getWorkerRace($worker) {
         $sheet = $worker->getSheet();
         $race = 0; // 0, for chinese, 1 for bag; 2, 3....
-        if ($sheet == "HC.C" || $sheet == "HT.C") {
+        if ($sheet == "HC.C" || $sheet == "HT.C" || $sheet == "Others.C") {
             $race = 0;
         } else {
             $race = 1;
