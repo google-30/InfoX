@@ -374,7 +374,8 @@ class infox_salary {
             $totalsalary = 0;
             $piecesalary = 0;
             foreach ($result[0] as $tmp) {
-                if ($tmp) {                    
+                if ($tmp) {   
+                    
                     if ($tmp == ";;0") {
                         continue;
                     }
@@ -385,13 +386,11 @@ class infox_salary {
 
                     if ($hoursdata && $hoursdata != "") {
                         $normalhours += ($hoursdata <= 8) ? $hoursdata : 8;
-                        $othours += ($hoursdata > 8) ? ($hoursdata - 8) : 0;
-                        
+                        $othours += ($hoursdata > 8) ? ($hoursdata - 8) : 0;                        
                         $totaldays += ($hoursdata < 8) ? $hoursdata/8 : 1;
-                    } else {
+                    } else if(($piecedata && $piecedata != "")){
                         $totalsalary += $piecedata;
-                        $piecesalary += $piecedata;
-                        
+                        $piecesalary += $piecedata;                        
                         $totaldays++;
                     }
                 }
