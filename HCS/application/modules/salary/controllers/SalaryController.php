@@ -1115,7 +1115,6 @@ class Salary_SalaryController extends Zend_Controller_Action {
             $sitelatest = 0;
             foreach ($result[0] as $tmp) {
                 if ($tmp) {
-
                     $tmparr = explode(";", $tmp);
                     $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
                     $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
@@ -1145,10 +1144,12 @@ class Salary_SalaryController extends Zend_Controller_Action {
                     $summarydata['salary'] = $totalsalary;
                     $summarydata['attendance'] = $totalattendance;
                     $summarybysite[$sitedata] = $summarydata;
-
                     //echo "totalattendance=$totalattendance";
                 }
+                
+                
             }
+            echo "totalattendance=$totalattendance";
         }
 
         //var_dump($summarybysite);   //return;
