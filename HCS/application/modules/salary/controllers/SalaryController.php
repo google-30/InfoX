@@ -1135,7 +1135,7 @@ class Salary_SalaryController extends Zend_Controller_Action {
                         $normalhours = ($hoursdata <= 8) ? $hoursdata : 8;
                         $othours = ($hoursdata > 8) ? ($hoursdata - 8) : 0;
                         $totalsalary += $normalhours * $rate + $othours * $cotmultipleVal * $rate;
-                        $totalattendance += ($hoursdata / 8);
+                        $totalattendance += ($hoursdata >= 8) ? 1 : ($hoursdata/8);
                     } else if ($piecedata && $piecedata != "") {
                         $totalsalary += $piecedata;
                         $totalattendance++;
@@ -1144,12 +1144,9 @@ class Salary_SalaryController extends Zend_Controller_Action {
                     $summarydata['salary'] = $totalsalary;
                     $summarydata['attendance'] = $totalattendance;
                     $summarybysite[$sitedata] = $summarydata;
-                    //echo "totalattendance=$totalattendance";
-                }
-                
-                
+                }               
             }
-            echo "totalattendance=$totalattendance";
+            echo "totalattendance=$totalattendance\n";
         }
 
         //var_dump($summarybysite);   //return;
