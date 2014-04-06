@@ -33,77 +33,118 @@ class Worker_ManageController extends Zend_Controller_Action {
         //$this->getworkerlist();
         //$this->getCustominfo(0);    
 
+        /*
+          $onswitches = array(
+          "renewdate" => "Renew Date",
+          "wpexpiry" => "WP Expiry", "issuedate" => "Date of Issue",
+          "ppexpiry" => "PP Expiry", "rate" => "RATE", "medicaldate" => "Medical Date",
+          "csoc" => "C.S.O.C", "securityexp" => "Security Bond Expiry Date");
+
+          $renewtabs = array();
+          $maindata = $workerarr;
+          foreach ($maindata as $tmp1) {
+          $name1 = $tmp1->getNamechs();
+          $nameeng1 = $tmp1->getNameeng();
+          $wid1 = $tmp1->getId();
+          $eeeno = $tmp1->getEeeno();
+
+          $title = "<h3>Renew Records of $eeeno - $name1</h3>";
+          $divid = "renew" . $wid1;
+          $gridid = "worker" . $wid1;
+
+          $renewrecords = $this->_workerrenew->findBy(array("worker" => $tmp1));
+
+          // TODO: find current renew info in worker details
+          $currentrenew = array();
+          $currentrenew['wpexpiry'] = new DateTime("now");
+
+          $renewrecords[] = $tmp1;
+          // TODO: sort records
+
+          $wdtab = $this->view->grid($gridid, true);
+          foreach ($onswitches as $key => $value) {
+          $wdtab = $wdtab->field($key, $value);
+          }
+          $wdtab = $wdtab->field("renewactions", "Action");
+          $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+          $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
+          $wdtab = $wdtab->data($renewrecords);
+          $wdtab = $wdtab->render();
+
+          $renewform1 = '<h3>Add Renew Record</h3>'
+          . '<table id="renewinfotab">'
+          . '<tr>'
+          . '<td>WP Expiry:</td>'
+          . '<td><input name="wpexpiry" id="wpexpiry' . $wid1 . '" type="text" placeholder="WP Expiry" class="dateclass"></td>'
+          . '<td>Date of Issue:</td>'
+          . '<td><input name="issuedate" id="issuedate' . $wid1 . '" type="text" placeholder="Date of Issue" class="dateclass"></td>'
+          . '</tr>'
+          . '<tr>'
+          . '<td>Date of Issue: </td>'
+          . '<td><input name="ppexpiry" id="ppexpiry' . $wid1 . '" type="text" placeholder="PP Expiry" class="dateclass"></td>'
+          . '<td>Rate: </td>'
+          . '<td><input name="rate" id="rate' . $wid1 . '" type="text" placeholder="Rate"></td>'
+          . '</tr>'
+          . '<tr>'
+          . '<td>Medical Date: </td>'
+          . '<td><input name="medicaldate" id="medicaldate' . $wid1 . '" type="text" placeholder="Medical Date" class="dateclass"></td>'
+          . '<td>C.S.O.C: </td>'
+          . '<td><input name="csoc" id="csoc' . $wid1 . '" type="text" placeholder="C.S.O.C" class="dateclass"></td>'
+          . '</tr>'
+          . '<tr>'
+          . '<td>Security Bond Expiry Date: </td>'
+          . '<td><input name="securityexp" id="securityexp' . $wid1 . '" type="text" placeholder="Security Bond Expiry Date" class="dateclass"></td>'
+          . '<td>Renew Date: </td>'
+          . '<td><input name="renewdate" id="renewdate' . $wid1 . '" type="text" placeholder="Renew Date" class="dateclass"></td>'
+          . '</tr>'
+          . '</table>'
+          . '<input type="button" value="提交" data-theme="a" data-mini="true" onclick="postrenewinfo(' . $wid1 . ')">'
+          . '';
+
+          $renewform1 ="";
+          $renewtabs[] = '<div id="' . $divid . '">' . $title . $wdtab . "<br>" . $renewform1 . "</div>";
+          }
+
+          $this->view->rewtabs = $renewtabs;
+         * 
+         */
+    }
+
+    public function renewlistAction() {
+        infox_common::turnoffView($this->_helper);
+        $wid = $this->getParam("wid", 0);
+        //echo "wid=" . $wid;
+
+        $worker = $this->_workerdetails->findOneBy(array("id" => $wid));
+        $wpno = $worker->getWpno();
+        $eeeno = $worker->getEeeno();
+        $name = ($worker->getNamechs()=="") ? $worker->getNameeng() : $worker->getNamechs();
+        $workerarr = $this->_workerdetails->findBy(array("wpno" => $wpno));
+        $renewrecords = $this->_workerrenew->findBy(array("worker" => $worker));
+
+        //$renewrecords[] = $worker;
+        $renewrecords = array_merge($renewrecords, $workerarr);
+        
+        $title = "<h3>$eeeno - $name</h3>";
+
         $onswitches = array(
             "renewdate" => "Renew Date",
             "wpexpiry" => "WP Expiry", "issuedate" => "Date of Issue",
             "ppexpiry" => "PP Expiry", "rate" => "RATE", "medicaldate" => "Medical Date",
             "csoc" => "C.S.O.C", "securityexp" => "Security Bond Expiry Date");
 
-        $renewtabs = array();
-        $maindata = $workerarr;
-        foreach ($maindata as $tmp1) {
-            $name1 = $tmp1->getNamechs();
-            $nameeng1 = $tmp1->getNameeng();
-            $wid1 = $tmp1->getId();
-            $eeeno = $tmp1->getEeeno();
-
-            $title = "<h3>Renew Records of $eeeno - $name1</h3>";
-            $divid = "renew" . $wid1;
-            $gridid = "worker" . $wid1;
-
-            $renewrecords = $this->_workerrenew->findBy(array("worker" => $tmp1));
-
-            // TODO: find current renew info in worker details
-            $currentrenew = array();
-            $currentrenew['wpexpiry'] = new DateTime("now");
-
-            $renewrecords[] = $tmp1;
-            // TODO: sort records
-
-            $wdtab = $this->view->grid($gridid, true);
-            foreach ($onswitches as $key => $value) {
-                $wdtab = $wdtab->field($key, $value);
-            }
-            $wdtab = $wdtab->field("renewactions", "Action");
-            $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
-            $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
-            $wdtab = $wdtab->data($renewrecords);
-            $wdtab = $wdtab->render();
-
-            $renewform1 = '<h3>Add Renew Record</h3>'
-                    . '<table id="renewinfotab">'
-                    . '<tr>'
-                    . '<td>WP Expiry:</td>'
-                    . '<td><input name="wpexpiry" id="wpexpiry' . $wid1 . '" type="text" placeholder="WP Expiry" class="dateclass"></td>'
-                    . '<td>Date of Issue:</td>'
-                    . '<td><input name="issuedate" id="issuedate' . $wid1 . '" type="text" placeholder="Date of Issue" class="dateclass"></td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td>Date of Issue: </td>'
-                    . '<td><input name="ppexpiry" id="ppexpiry' . $wid1 . '" type="text" placeholder="PP Expiry" class="dateclass"></td>'
-                    . '<td>Rate: </td>'
-                    . '<td><input name="rate" id="rate' . $wid1 . '" type="text" placeholder="Rate"></td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td>Medical Date: </td>'
-                    . '<td><input name="medicaldate" id="medicaldate' . $wid1 . '" type="text" placeholder="Medical Date" class="dateclass"></td>'
-                    . '<td>C.S.O.C: </td>'
-                    . '<td><input name="csoc" id="csoc' . $wid1 . '" type="text" placeholder="C.S.O.C" class="dateclass"></td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td>Security Bond Expiry Date: </td>'
-                    . '<td><input name="securityexp" id="securityexp' . $wid1 . '" type="text" placeholder="Security Bond Expiry Date" class="dateclass"></td>'
-                    . '<td>Renew Date: </td>'
-                    . '<td><input name="renewdate" id="renewdate' . $wid1 . '" type="text" placeholder="Renew Date" class="dateclass"></td>'
-                    . '</tr>'
-                    . '</table>'
-                    . '<input type="button" value="提交" data-theme="a" data-mini="true" onclick="postrenewinfo(' . $wid1 . ')">'
-                    . '';
-
-            $renewtabs[] = '<div id="' . $divid . '">' . $title . $wdtab . "<br>" . $renewform1 . "</div>";
+        $wdtab = $this->view->grid("renew", true);
+        foreach ($onswitches as $key => $value) {
+            $wdtab = $wdtab->field($key, $value);
         }
+        //$wdtab = $wdtab->field("renewactions", "Action");
+        $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+        $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
+        $wdtab = $wdtab->data($renewrecords);
+        $wdtab = $wdtab->render();
+        $renewtab = '<div id="' . 0 . '">' . $title . $wdtab . "</div>";
 
-        $this->view->rewtabs = $renewtabs;
+        echo $renewtab;
     }
 
     public function previewlistAction() {

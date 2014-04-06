@@ -32,7 +32,7 @@ $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
 $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
 $wdtab = $wdtab->data($maindata);
 
-$renewtabs = $this->rewtabs;
+//$renewtabs = $this->rewtabs;
 ?>
 <link rel="stylesheet" href="/common/css/jquery.ui.theme.css" /> 
 <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.css" />
@@ -271,10 +271,18 @@ $renewtabs = $this->rewtabs;
 
     function workerRenewinfo(wid, name, eeeno)
     {
+        /*
         $('#renew' + wid + "").bPopup({
             follow: [true, true], //x, y
             position: [200, 100] //x, y
         });
+        */
+       var url = "/worker/manage/renewlist/wid/" + wid;
+        $('#divrenews').bPopup({
+            //contentContainer:'.content',
+            loadUrl: url
+        });
+                      
     }
 
     function postrenewinfo(wid)
@@ -361,9 +369,10 @@ if (count($maindata)) {
     </form>
 </div>
 
-<div id="divrenews">
+<div id="divrenews" class="bMulti">
+    
     <?php
-    if (1) {
+    if (0) {
         foreach ($renewtabs as $tmp) {
             echo $tmp . "
 ";

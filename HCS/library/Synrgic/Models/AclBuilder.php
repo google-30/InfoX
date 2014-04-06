@@ -65,21 +65,19 @@ class Synrgic_Models_AclBuilder {
                     'management:dashboard' => array('view'),
                     'management:index' => array('view'),
                     'management:auth' => array('view', 'login', 'logout'),
-                    
                     'worker:manage' => array('view', 'add', 'edit', 'delete', 'submit',
-                        'output', 'workerexpire', 'previewlist', 'previewexpiry', 'resign', 'renew', 'deleterenew'),
+                        'output', 'workerexpire', 'previewlist', 'previewexpiry',
+                        'resign', 'renew', 'deleterenew', 'renewlist'),
                     'worker:onsite' => array('view', 'onsiterecord', 'addrecord', 'updaterecord', 'deleterecord', 'attendancerecord', 'addattendancerecord', 'updateattendancerecord', 'deleteattendancerecord'),
                     'worker:custominfo' => array('view', 'postinfo'),
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),
                     'worker:archive' => array('view', 'edit', 'previewlist'),
-                    
                     'salary:salary' => array('view', 'personal', 'salarybymonth', 'gensalaryrecords',
                         'datainput', 'datapost', 'salarysheet', 'salaryreceipts',
                         'salaryreceiptsbyworker', 'summary', 'summarybysite'),
                     'salary:worker' => array('view', 'personal', ''),
                     'salary:history' => array('view', 'site', 'company'),
                     'salary:settings' => array('view', 'submit'),
-                    
                     'material:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'importmaterials', 'previewlist', 'supplyprice', 'postsupplyprice'),
                     'material:apply' => array('view', 'postdata', 'applymaterials', 'getselections', 'delselection', 'submitselections', 'applist', 'appedit', 'appmatdel'),
@@ -91,13 +89,11 @@ class Synrgic_Models_AclBuilder {
                     'material:summary' => array('view', 'submit', 'truncateall'),
                     'material:po' => array('view', 'submit', 'podetails', 'posettings'),
                     'material:type' => array('view', 'add', 'edit', 'delete', 'submit', 'posttype'),
-                    
                     'project:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'sitedetail', 'addpart', 'delpart', 'workerlist',
                         'emachinery', 'applist', 'allmaterials', 'siteinfo', 'sitestatus'),
                     'project:attendance' => array('view', 'attendancepage', 'attendialog',
                         'postattend', 'attendsheet', 'attendquick', 'quicksubmit', 'savedailyinput', 'postattendmonth'),
-                    
                     'archive:manage' => array('view', 'add', 'edit', 'delete', 'submit'),
                     'supplier:manage' => array('view', 'add', 'edit', 'delete', 'submit', 'truncate'),
                     'humanresource:manage' => array('view', 'add', 'edit', 'delete', 'submit'),
@@ -126,7 +122,6 @@ class Synrgic_Models_AclBuilder {
                     'salary:worker' => array('view', 'personal', ''),
                     'salary:history' => array('view', ''),
                     'salary:settings' => array('view', 'submit'),
-                    
                     'material:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'importmaterials', 'previewlist', 'supplyprice', 'postsupplyprice'),
                     'material:apply' => array('view', 'postdata', 'applymaterials',
@@ -159,26 +154,23 @@ class Synrgic_Models_AclBuilder {
                     'management:dashboard' => array('view'),
                     'management:index' => array('view'),
                     'management:auth' => array('view', 'login', 'logout'),
-                    
                     'worker:manage' => array('view', 'add', 'edit', 'delete', 'submit',
-                        'output', 'workerexpire', 'previewlist', 'previewexpiry', 'resign', 'renew', 'deleterenew'),
+                        'output', 'workerexpire', 'previewlist', 'previewexpiry',
+                        'resign', 'renew', 'deleterenew', 'renewlist'),
                     'worker:onsite' => array('view', 'onsiterecord', 'addrecord', 'updaterecord', 'deleterecord', 'attendancerecord', 'addattendancerecord', 'updateattendancerecord', 'deleteattendancerecord'),
                     'worker:custominfo' => array('view', 'postinfo'),
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),
                     'worker:archive' => array('view', 'edit', 'previewlist'),
-                    
                     'salary:salary' => array('view', 'personal', 'salarybymonth', 'gensalaryrecords',
                         'datainput', 'datapost', 'salarysheet', 'salaryreceipts',
                         'salaryreceiptsbyworker', 'summary', 'summarybysite'),
                     'salary:worker' => array('view', 'personal', ''),
                     'salary:history' => array('view', 'site', 'company'),
                     'salary:settings' => array('view', 'submit'),
-                    
                     'project:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery', 'applist', 'allmaterials', 'siteinfo'),
                     'project:attendance' => array('view', 'attendancepage', 'attendialog',
                         'postattend', 'attendsheet', 'attendquick', 'quicksubmit', 'savedailyinput', 'postattendmonth'),
-                    
                     'archive:manage' => array('view', 'add', 'edit', 'delete', 'submit'),
                     'company:info' => array('view', 'add', 'edit', 'delete', 'submit'),
                     'miscinfo:manage' => array('view', 'addinfo', 'postinfo', 'edit', 'delete', 'submit'),
@@ -192,7 +184,6 @@ class Synrgic_Models_AclBuilder {
                     'management:dashboard' => array('view'),
                     'management:index' => array('view'),
                     'management:auth' => array('view', 'login', 'logout'),
-                    
                     'material:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'importmaterials', 'previewlist', 'supplyprice', 'postsupplyprice'),
                     'material:apply' => array('view', 'postdata', 'applymaterials', 'getselections', 'delselection', 'submitselections', 'applist', 'appedit', 'appmatdel'),
@@ -204,10 +195,8 @@ class Synrgic_Models_AclBuilder {
                     'material:summary' => array('view', 'submit', 'truncateall'),
                     'material:po' => array('view', 'submit', 'podetails', 'posettings'),
                     'material:type' => array('view', 'add', 'edit', 'delete', 'submit', 'posttype'),
-                    
                     'project:manage' => array('view', 'add', 'edit', 'delete', 'submit',
                         'sitedetail', 'addpart', 'delpart', 'workerlist', 'emachinery', 'applist', 'allmaterials', 'siteinfo'),
-                    
                     'archive:manage' => array('view', 'add', 'edit', 'delete', 'submit'),
                     'supplier:manage' => array('view', 'add', 'edit', 'delete', 'submit', 'truncate'),
                     'company:info' => array('view', 'add', 'edit', 'delete', 'submit'),
