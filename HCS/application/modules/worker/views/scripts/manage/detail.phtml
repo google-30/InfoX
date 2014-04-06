@@ -1,5 +1,5 @@
 <?php
-$wid=0;
+$wid = 0;
 $sn = "";
 $eeeno = "";
 $nameeng = "";
@@ -118,19 +118,31 @@ if ($custominfos) {
 
 $html = "";
 if ($this->mode == "Create") {
-    $html .= '<h3>创建工人信息</h3>';
+    $_title = $html .= '<h3>创建工人信息</h3>';
+    $_workersels = "";
+    $_renewtab = "";
 } else {
     $html .= '<h3>编辑工人信息</h3>';
-    //$html .= '<button data-mini="true" onclick="output()" data-mini="true" data-theme="a">预览和打印</button>';
-}
-$_title=$html;
 
-$workerarr=$this->workerarr;
-$options="";
-//echo count($workerarr);
-foreach($workerarr as $tmp)
-{
-    $i=0;
+    $workerarr = $this->workerarr;
+    $options = "";
+    foreach ($workerarr as $tmp) {
+        $i = 0;
+        $tmpwid = $tmp->getId();
+        $tmpeeeno = $tmp->getEeeno();
+        $tmpname = ($tmp->getNamechs() == "") ? $tmp->getNameeng() : $tmp->getNamechs();
+        $value = $tmpeeeno . "-" . $tmpname;
+        if ($tmpwid == $wid) {
+            $option = '<option value="' . $tmpwid . '" selected>' . $value . "</option>";
+        } else {
+            $option = '<option value="' . $tmpwid . '">' . $value . "</option>";
+        }
+        $options .= $option;
+    }
+    $_workersels = '<select id="workersels" data-mini="true" data-theme="a">' . $options . "</select>";
+
+    $_renewtab = $this->renewtab;
+    $_title = $_workersels;
 }
 ?>
 
@@ -139,6 +151,15 @@ foreach($workerarr as $tmp)
 <style> 
     table { width: 100%; }
     td { width: 50%; vertical-align:middle; }
+    .renewtab {
+        table-layout: fixed;
+    }
+    .renewtab,th,td {
+        border:1px solid black;
+        border-collapse:collapse;
+        padding: 3px;
+    }
+
 </style>
 <script type="text/javascript">
     $(function() {
@@ -146,32 +167,48 @@ foreach($workerarr as $tmp)
             theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
             endYear: 2050,
         });
+
+        $("table[id^='renew']").attr("class", "grid renewtab");
     });
 
-    function output()
-    {
-        //alert("preview and print this bill");
-        var url = "/worker/manage/output?no=" + $('#workerid').val();
-        window.open(url);
+    $('#workersels').on("change", function() {
+        //alert("workersels");
+        var wid = $('#workersels').val();
+        var url = "/worker/manage/edit/id/" + wid;
+        redirect(url);
+    });
+
+    function redirect(url) {
+        window.location = url;
     }
-
 </script>
-
-<?=$_title ?>
+<?= $_title ?>
+<!--
+<div class="ui-grid-a">
+    <div class="ui-block-a"><?= $_title ?></div>
+    <div class="ui-block-b"><?= $_workersels ?></div>
+</div>
+-->
+<!-- renew records -->
+<?= $_renewtab ?>
 <form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
     <input data-mini="true" type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
-    <input data-mini="true" type="hidden" id="workerid" name="workerid" value="<?=$wid ?>">
+    <input data-mini="true" type="hidden" id="workerid" name="workerid" value="<?= $wid ?>">
 
     <table>
         <tr>
-            <td><div data-role="fieldcontain">
+            <td>
+                <div data-role="fieldcontain">
                     <label for="pic" class="ui-input-text"></label>
                     <img src="<?php echo $pic; ?>" alt="无照片显示" width="400" id="pic" name="pic">
-                </div></td>
-            <td><div data-role="fieldcontain">
+                </div>
+            </td>
+            <td>
+                <div data-role="fieldcontain">
                     <label for="file" class="ui-input-text">更新照片：</label>
                     <input data-mini="true" type="file" name="file" id="file">
-                </div></td>
+                </div>
+            </td>
         </tr>
     </table>
 
@@ -329,16 +366,6 @@ foreach($workerarr as $tmp)
         <input data-mini="true" type="text" name="resignation" id="resignation" value="<?php echo $resignation; ?>" class="datepicker" 
                placeholder="工人离职日期" />
     </div>
-    <!--
-    <div data-role="fieldcontain">
-        <label for="currentrate">计时工资:</label>
-        <input data-mini="true" type="text" name="currentrate" id="currentrate" value="<?php echo $currentrate; ?>" class="" placeholder="填写工人小时计时工资，比如5.5，6" />
-    </div>
-    <div data-role="fieldcontain">
-        <label for="monthrate">计件工资:</label>
-        <input data-mini="true" type="text" name="monthrate" id="monthrate" value="<?php echo $monthrate; ?>" class="" placeholder="填写工人小时计件工资，比如1800" />
-    </div>
-    -->
     <fieldset>
         <legend>自定义信息</legend>
         <div data-role="fieldcontain">
@@ -361,6 +388,8 @@ foreach($workerarr as $tmp)
 
     <input data-mini="true" data-theme="a" type="submit" name="submit" value="提交">
 </form>
+
+
 <br>
 <br>
 

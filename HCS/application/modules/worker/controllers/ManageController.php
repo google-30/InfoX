@@ -493,6 +493,33 @@ class Worker_ManageController extends Zend_Controller_Action {
         $workerarr = infox_worker::getAllActiveWorkerdetails();        
         $this->view->workerarr = $workerarr;
         
+        // renew records
+        $worker = $this->_workerdetails->findOneBy(array("id" => $id));
+        $wpno = $worker->getWpno();
+        $eeeno = $worker->getEeeno();
+        $name = ($worker->getNamechs()=="") ? $worker->getNameeng() : $worker->getNamechs();
+        $workerarr = $this->_workerdetails->findBy(array("wpno" => $wpno));
+        $renewrecords = $this->_workerrenew->findBy(array("worker" => $worker));        
+        $renewrecords = array_merge($renewrecords, $workerarr);                
+
+        $onswitches = array(
+            "renewdate" => "Renew Date",
+            "wpexpiry" => "WP Expiry", "issuedate" => "Date of Issue",
+            "ppexpiry" => "PP Expiry", "rate" => "RATE", "medicaldate" => "Medical Date",
+            "csoc" => "C.S.O.C", "securityexp" => "Security Bond Expiry Date");
+
+        $wdtab = $this->view->grid("renew", true);
+        foreach ($onswitches as $key => $value) {
+            $wdtab = $wdtab->field($key, $value);
+        }
+        $wdtab = $wdtab->field("renewactions", "Action");
+        $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+        $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
+        $wdtab = $wdtab->data($renewrecords);
+        $wdtab = $wdtab->render();
+        $renewtab = '<div id="">' . $wdtab . "</div>";
+
+        $this->view->renewtab = $renewtab;
     }
 
     public function deleteAction() {
