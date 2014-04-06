@@ -1,4 +1,5 @@
 <?php
+$wid=0;
 $sn = "";
 $eeeno = "";
 $nameeng = "";
@@ -43,6 +44,7 @@ $monthrate = "";
 
 if ($this->mode == "Edit") {
     $worker = $this->worker;
+    $wid = $worker->getId();
     $pic = $worker->getPic();
     $sn = $worker->getSn();
     $eeeno = $worker->getEeeno();
@@ -121,7 +123,15 @@ if ($this->mode == "Create") {
     $html .= '<h3>编辑工人信息</h3>';
     //$html .= '<button data-mini="true" onclick="output()" data-mini="true" data-theme="a">预览和打印</button>';
 }
-echo $html;
+$_title=$html;
+
+$workerarr=$this->workerarr;
+$options="";
+//echo count($workerarr);
+foreach($workerarr as $tmp)
+{
+    $i=0;
+}
 ?>
 
 <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
@@ -146,15 +156,17 @@ echo $html;
     }
 
 </script>
+
+<?=$_title ?>
 <form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
     <input data-mini="true" type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
-    <input data-mini="true" type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
+    <input data-mini="true" type="hidden" id="workerid" name="workerid" value="<?=$wid ?>">
 
     <table>
         <tr>
             <td><div data-role="fieldcontain">
                     <label for="pic" class="ui-input-text"></label>
-                    <img src="<?php echo $pic; ?>" alt="无照片显示" width="40%" id="pic" name="pic">
+                    <img src="<?php echo $pic; ?>" alt="无照片显示" width="400" id="pic" name="pic">
                 </div></td>
             <td><div data-role="fieldcontain">
                     <label for="file" class="ui-input-text">更新照片：</label>

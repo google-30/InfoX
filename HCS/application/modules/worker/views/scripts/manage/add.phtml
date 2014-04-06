@@ -1,10 +1,13 @@
-<?php echo $this->partial('manage/detail.phtml', array('mode'=>'Create', 
-'workerform'=>$this->workerform, 
-'id'=>$this->id,
-'sites'=>$this->sites,
-'companies'=>$this->companies,
-'worktypes'=>$this->worktypes,
-'customtitles'=>$this->customtitles,
-'custominfos'=>$this->custominfos,
-'sheetarr'=>$this->sheetarr,
-));?>
+<?php
+echo $this->partial('manage/detail.phtml', array('mode' => 'Create',
+ 'workerform' => $this->workerform,
+ 'id' => $this->id,
+ 'sites' => $this->sites,
+ 'companies' => $this->companies,
+ 'worktypes' => $this->worktypes,
+ 'customtitles' => $this->customtitles,
+ 'custominfos' => $this->custominfos,
+ 'sheetarr' => $this->sheetarr,
+ "workerarr" => $this->workerarr,
+));
+?>

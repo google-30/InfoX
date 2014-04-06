@@ -174,6 +174,30 @@ class infox_worker {
 
         return $workerarr;
     }
+    
+    public static function getAllActiveWorkerdetails() {
+        self::getRepos();
+        $workerarr = array();
+        $allworkers = self::$_workerdetails->findAll();
+
+        foreach ($allworkers as $tmp) {
+            $date = $tmp->getResigndate();
+            $now = new DateTime("now");
+
+            if (!$date) {//no date = still on duty
+                $workerarr[] = $tmp;
+                continue;
+            }
+
+            $interval = $date->diff($now);
+            $invert = $interval->invert;
+            if ($invert) {
+                $workerarr[] = $tmp;
+            }
+        }
+
+        return $workerarr;
+    }    
 
     public static function getWorkerRace($worker) {
         $sheet = $worker->getSheet();

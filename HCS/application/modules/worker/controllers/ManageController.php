@@ -468,6 +468,10 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->getCustominfo(0);
 
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+        
+        $workerarr = infox_worker::getAllActiveWorkerdetails();        
+        $this->view->workerarr = $workerarr;
+        //echo "addAction,count=" . count($workerarr);
     }
 
     public function editAction() {
@@ -485,6 +489,10 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->getCustominfo($id);
 
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+
+        $workerarr = infox_worker::getAllActiveWorkerdetails();        
+        $this->view->workerarr = $workerarr;
+        
     }
 
     public function deleteAction() {
