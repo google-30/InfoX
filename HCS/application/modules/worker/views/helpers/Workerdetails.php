@@ -102,17 +102,20 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
     }
 
     protected function td_renewactions($field, $row) {
-        $namechs = $row["namechs"];
-        $nameeng = $row["nameeng"];
-
+        $namechs = property_exists($row, "namechs") ? $row->namechs : "";
+        $nameeng = property_exists($row, "nameeng") ? $row->nameeng : "";
+        
         if ($namechs != "" || $nameeng != "") {
             $actions = "&nbsp;";
         } else {
             $rid = $row["id"];
             $link1 = '<a href="#" onclick="deleteRenew(' . $rid . ')">Delete</a>';
-            $actions = $link1;
+            $link2 = '<a href="#" onclick="editRenew(' . $rid . ')">Edit</a>';
+            $actions = $link2 . " | " . $link1;
         }
-        return $actions;
+        //
+        //return "namechs=" . $namechs . $actions;
+        return $actions; 
     }
 
 }

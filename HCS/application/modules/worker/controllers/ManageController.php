@@ -118,13 +118,13 @@ class Worker_ManageController extends Zend_Controller_Action {
         $worker = $this->_workerdetails->findOneBy(array("id" => $wid));
         $wpno = $worker->getWpno();
         $eeeno = $worker->getEeeno();
-        $name = ($worker->getNamechs()=="") ? $worker->getNameeng() : $worker->getNamechs();
+        $name = ($worker->getNamechs() == "") ? $worker->getNameeng() : $worker->getNamechs();
         $workerarr = $this->_workerdetails->findBy(array("wpno" => $wpno));
         $renewrecords = $this->_workerrenew->findBy(array("worker" => $worker));
 
         //$renewrecords[] = $worker;
         $renewrecords = array_merge($renewrecords, $workerarr);
-        
+
         $title = "<h3>$eeeno - $name</h3>";
 
         $onswitches = array(
@@ -468,8 +468,8 @@ class Worker_ManageController extends Zend_Controller_Action {
         $this->getCustominfo(0);
 
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
-        
-        $workerarr = infox_worker::getAllActiveWorkerdetails();        
+
+        $workerarr = infox_worker::getAllActiveWorkerdetails();
         $this->view->workerarr = $workerarr;
         //echo "addAction,count=" . count($workerarr);
     }
@@ -490,17 +490,26 @@ class Worker_ManageController extends Zend_Controller_Action {
 
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
 
-        $workerarr = infox_worker::getAllActiveWorkerdetails();        
+        $workerarr = infox_worker::getAllActiveWorkerdetails();
         $this->view->workerarr = $workerarr;
-        
+    }
+
+    public function loadrenewlistAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $id = $this->_getParam("id", 0);
+        if (!$id) {
+            echo "";
+            return;
+        }
         // renew records
         $worker = $this->_workerdetails->findOneBy(array("id" => $id));
         $wpno = $worker->getWpno();
         $eeeno = $worker->getEeeno();
-        $name = ($worker->getNamechs()=="") ? $worker->getNameeng() : $worker->getNamechs();
+        $name = ($worker->getNamechs() == "") ? $worker->getNameeng() : $worker->getNamechs();
         $workerarr = $this->_workerdetails->findBy(array("wpno" => $wpno));
-        $renewrecords = $this->_workerrenew->findBy(array("worker" => $worker));        
-        $renewrecords = array_merge($renewrecords, $workerarr);                
+        $renewrecords = $this->_workerrenew->findBy(array("worker" => $worker));
+        $renewrecords = array_merge($renewrecords, $workerarr);
 
         $onswitches = array(
             "renewdate" => "Renew Date",
@@ -508,7 +517,7 @@ class Worker_ManageController extends Zend_Controller_Action {
             "ppexpiry" => "PP Expiry", "rate" => "RATE", "medicaldate" => "Medical Date",
             "csoc" => "C.S.O.C", "securityexp" => "Security Bond Expiry Date");
 
-        $wdtab = $this->view->grid("renew", true);
+        $wdtab = $this->view->grid("renewtab", true);
         foreach ($onswitches as $key => $value) {
             $wdtab = $wdtab->field($key, $value);
         }
@@ -519,7 +528,40 @@ class Worker_ManageController extends Zend_Controller_Action {
         $wdtab = $wdtab->render();
         $renewtab = '<div id="">' . $wdtab . "</div>";
 
-        $this->view->renewtab = $renewtab;
+        echo $renewtab;
+    }
+
+    public function loadrenewAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $id = $this->_getParam("id", 0);
+        if (!$id) {
+            return;
+        }
+
+        $record = $this->_workerrenew->findOneBy(array("id" => $id));
+        $dateobj = $record->getWpexpiry();
+        $wpexpiry = $dateobj ? $dateobj->format("d/m/Y") : "";
+        $dateobj = $record->getIssuedate();
+        $issuedate = $dateobj ? $dateobj->format("d/m/Y") : "";
+        $dateobj = $record->getPpexpiry();
+        $ppexpiry = $dateobj ? $dateobj->format("d/m/Y") : "";
+
+        $rate = $record->getRate();
+
+        $dateobj = $record->getMedicaldate();
+        $medicaldate = $dateobj ? $dateobj->format("d/m/Y") : "";
+        $dateobj = $record->getCsoc();
+        $csoc = $dateobj ? $dateobj->format("d/m/Y") : "";
+        $dateobj = $record->getSecurityexp();
+        $securityexp = $dateobj ? $dateobj->format("d/m/Y") : "";
+
+        $dateobj = $record->getRenewdate();
+        $renewdate = $dateobj ? $dateobj->format("d/m/Y") : "";
+
+        $array = array("wpexpiry" => $wpexpiry, "issuedate" => $issuedate, "ppexpiry" => $ppexpiry, "rate" => $rate,
+            "medicaldate" => $medicaldate, "csoc" => $csoc, "securityexp" => $securityexp, "renewdate" => $renewdate);
+        echo json_encode($array);
     }
 
     public function deleteAction() {
@@ -726,277 +768,6 @@ class Worker_ManageController extends Zend_Controller_Action {
         }
     }
 
-    public function add1Action() {
-        $this->view->id = 0;
-
-        $sites = $this->_site->findAll();
-        $this->view->sites = $sites;
-
-        $this->findCompanies();
-        $this->getWorktypes();
-
-        $this->getCustominfo(0);
-    }
-
-    public function edit1Action() {
-        $id = $this->_getParam("id");
-        //echo "id=$id";
-        $this->view->workerid = $id;
-        $this->view->worker = $worker = $this->_worker->findOneBy(array("id" => $id));
-        $skillid = $worker->getWorkerskill();
-        $cmyid = $worker->getWorkercompanyinfo();
-        $familyid = $worker->getWorkerfamily();
-
-        $this->view->skill = $skill = $this->_workerskill->findOneBy(array("id" => $skillid));
-        $this->view->companyinfo = $companyinfo = $this->_workercompanyinfo->findOneBy(array("id" => $cmyid));
-        $this->view->family = $family = $this->_workerfamily->findOneBy(array("id" => $familyid));
-
-        $sites = $this->_site->findAll();
-        $this->view->sites = $sites;
-
-        $this->findCompanies();
-        $this->getWorktypes();
-
-        $this->getCustominfo($id);
-    }
-
-    public function submit1Action() {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(TRUE);
-
-        $requests = $this->getRequest()->getPost();
-        if (0) {
-            var_dump($requests);
-            return;
-        }
-
-        $this->storeInfo($requests);
-        $this->_files = $_FILES;
-    }
-
-    private function storeInfo1($requests) {
-        $mode = $requests["mode"];
-
-        if ($mode == "Edit") {
-            $workerid = $requests["workerid"];
-
-            $workerdata = $this->_worker->findOneBy(array('id' => $workerid));
-            $skilldata = $workerdata->getWorkerskill();
-            $cmydata = $workerdata->getWorkercompanyinfo();
-            $familydata = $workerdata->getWorkerfamily();
-
-            $customdata = $workerdata->getWorkercustominfo();
-            if (!$customdata) {
-                $customdata = new \Synrgic\Infox\Workercustominfo();
-            }
-        } else if ($mode = "Create") {
-            $workerdata = new \Synrgic\Infox\Worker();
-            $cmydata = new \Synrgic\Infox\Workercompanyinfo();
-            $skilldata = new \Synrgic\Infox\Workerskill();
-            $familydata = new \Synrgic\Infox\Workerfamily();
-
-            $customdata = new \Synrgic\Infox\Workercustominfo();
-        } else {
-            echo "fatal error: unknown edit mode";
-            return;
-        }
-
-        //$metadata = $em->getClassMetaData(get_class($data));
-        //$metadata->setIdGenerator(new \Doctrine\ORM\Id\AssignedGenerator());
-        // worker
-        $nameeng = $requests["nameeng"];
-        $namechs = $requests["namechs"];
-        $fin = $requests["fin"];
-        $passexp = $requests["passexp"];         // date
-        $passport = $requests["passport"];
-        $passportexp = $requests["passportexp"];         // date
-        $gender = $requests["gender"];
-        $age = $requests["age"];         //TODO: integer
-        $birth = $requests["birth"];
-        $marital = $requests["marital"];
-        $address = $requests["address"];
-        $hometown = $requests["hometown"];
-
-        $arrivesing = $this->getParam("arrivesing", ""); //$requests["arrivesing"];
-        $leavesing = $this->getParam("leavesing", ""); //$requests["leavesing"];
-
-        $workerdata->setNameeng($nameeng);
-        $workerdata->setNamechs($namechs);
-        $workerdata->setFin($fin);
-        if ($passexp != "") {
-            $workerdata->setPassexp(new DateTime($passexp));
-        }
-        $workerdata->setPassport($passport);
-        if ($passportexp != "") {
-            $workerdata->setPassportexp(new DateTime($passportexp));
-        }
-        $workerdata->setGender($gender);
-        $workerdata->setAge(intval($age));
-        if ($birth != "") {
-            $workerdata->setBirth(new DateTime($birth));
-        }
-        $workerdata->setMarital($marital);
-        $workerdata->setAddress($address);
-        $workerdata->setHometown($hometown);
-
-        if ($arrivesing != "") {
-            $workerdata->setArrivesing(new Datetime($arrivesing));
-        }
-        if ($leavesing != "") {
-            $workerdata->setLeavesing(new Datetime($leavesing));
-        }
-
-        $this->_em->persist($workerdata);
-        try {
-            $this->_em->flush();
-        } catch (Exception $e) {
-            var_dump($e);
-            return;
-        }
-        $workerid = $workerdata->getId();
-        echo "worker id=" . $workerid;
-
-        // upload pic
-        $this->storePic($workerid);
-
-        // skill
-        $worktype = $requests["worktype"];
-        $worklevel = $requests["worklevel"];
-        $education = $requests["education"];
-        $pastwork = $requests["pastwork"];
-        $skill1 = $requests["skill1"];
-        $skill2 = $requests["skill2"];
-        $drvlic = $requests["drvlic"];
-        $securityexp = $requests["securityexp"];
-
-        $skilldata->setWorktype($worktype);
-        $skilldata->setWorklevel($worklevel);
-        $skilldata->setEducation($education);
-        $skilldata->setPastwork($pastwork);
-        $skilldata->setSkill1($skill1);
-        $skilldata->setSkill2($skill2);
-        $skilldata->setDrvlic($drvlic);
-        if ($securityexp != "") {
-            $skilldata->setSecurityexp(new DateTime($securityexp));
-        }
-
-        $this->_em->persist($skilldata);
-        try {
-            $this->_em->flush();
-        } catch (Exception $e) {
-            var_dump($e);
-            return;
-        }
-        $skillid = $skilldata->getId();
-        echo "skill id=$skillid<br>";
-
-        // company info
-        //$companylabel = $requests["companylabel"];
-        //$cmydata->setCompanylabel($companylabel);
-
-        $hwage = $requests["hwage"];    // float
-        $cmydata->setHwage(floatval($hwage));
-
-        $srvyears = $requests["srvyears"];
-        $cmydata->setSrvyears(intval($srvyears));
-
-        $yrsinsing = $requests["yrsinsing"];
-        $cmydata->setYrsinsing(intval($yrsinsing));
-
-        $servecompany = $this->getParam("servecompany", 0);
-        $companyobj = $this->_companyinfo->findOneBy(array("id" => $servecompany));
-        if ($companyobj) {
-            $cmydata->setCompany($companyobj);
-        }
-
-        /*
-          $site = $requests["site"];
-          if($site != "")
-          {
-          $siteobj = $this->_site->findOneBy(array('name'=>$site));
-          if($siteobj)
-          {
-          $cmydata->setSite($siteobj);
-          }
-          }
-         */
-        $siteid = $this->getParam("site", 0);
-        $siteobj = $this->_site->findOneBy(array('id' => $siteid));
-        $cmydata->setSite($siteobj);
-
-        $this->_em->persist($cmydata);
-        try {
-            $this->_em->flush();
-        } catch (Exception $e) {
-            var_dump($e);
-            return;
-        }
-        $cmyid = $cmydata->getId();
-        echo "cmydata id=$cmyid<br>";
-
-        // family
-        $homeaddr = $requests["homeaddr"];
-        $member1 = $requests["member1"];
-        $contact1 = $requests["contact1"];
-        $member2 = $requests["member2"];
-        $contact2 = $requests["contact2"];
-        $member3 = $requests["member3"];
-        $contact3 = $requests["contact3"];
-
-        $familydata->setHomeaddr($homeaddr);
-        $familydata->setMember1($member1);
-        $familydata->setContact1($contact1);
-        $familydata->setMember2($member2);
-        $familydata->setContact2($contact2);
-        $familydata->setMember3($member3);
-        $familydata->setContact3($contact3);
-
-        $this->_em->persist($familydata);
-        try {
-            $this->_em->flush();
-        } catch (Exception $e) {
-            var_dump($e);
-            return;
-        }
-        $fmyid = $familydata->getId();
-        echo "familydata id=$fmyid<br>";
-
-        // custom info
-        $custom1 = $this->getParam("custom1", "");
-        $custom2 = $this->getParam("custom2", "");
-        $custom3 = $this->getParam("custom3", "");
-        $custom4 = $this->getParam("custom4", "");
-        $customdata->setCustom1($custom1);
-        $customdata->setCustom2($custom2);
-        $customdata->setCustom3($custom3);
-        $customdata->setCustom4($custom4);
-        $this->_em->persist($customdata);
-        try {
-            $this->_em->flush();
-        } catch (Exception $e) {
-            var_dump($e);
-            return;
-        }
-        $customid = $customdata->getId();
-        echo "custominfo id=$customid<br>";
-
-        // connect skill,company,family with worker
-        $workerdata->setWorkerskill($this->_workerskill->findOneBy(array("id" => $skillid)));
-        $workerdata->setWorkercompanyinfo($this->_workercompanyinfo->findOneBy(array("id" => $cmyid)));
-        $workerdata->setWorkerfamily($this->_workerfamily->findOneBy(array("id" => $fmyid)));
-        $workerdata->setWorkercustominfo($this->_workercustominfo->findOneBy(array("id" => $customid)));
-
-        $this->_em->persist($workerdata);
-        try {
-            $this->_em->flush();
-        } catch (Exception $e) {
-            var_dump($e);
-            return;
-        }
-
-        $this->_redirect("worker/manage");
-    }
-
     public function outputAction() {
         $this->_helper->layout->disableLayout();
         $id = $this->getParam("no", 0);
@@ -1075,17 +846,64 @@ class Worker_ManageController extends Zend_Controller_Action {
         $csoc = $this->getParam("csoc", "");
         $securityexp = $this->getParam("securityexp", "");
         $renewdate = $this->getParam("renewdate", "");
+        $rid = $this->getParam("recordid", 0);
 
-        $data = new \Synrgic\Infox\Workerrenew();
-        $data->setWorker($worker);
-        ($wpexpiry != "") ? $data->setWpexpiry(new DateTime($wpexpiry)) : 0;
-        ($issuedate != "") ? $data->setIssuedate(new DateTime($issuedate)) : 0;
-        ($ppexpiry != "") ? $data->setPpexpiry(new DateTime($ppexpiry)) : 0;
-        ($rate != 0) ? $data->setRate($rate) : 0;
-        ($medicaldate != "") ? $data->setMedicaldate(new DateTime($medicaldate)) : 0;
-        ($csoc != "") ? $data->setCsoc(new DateTime($csoc)) : 0;
-        ($securityexp != "") ? $data->setSecurityexp(new DateTime($securityexp)) : 0;
-        ($renewdate != "") ? $data->setRenewdate(new DateTime($renewdate)) : 0;
+        if ($rid != "" && $rid != 0) {
+            $data = $this->_workerrenew->findOneBy(array("id" => $rid));
+        } else {
+            $data = new \Synrgic\Infox\Workerrenew();
+            $data->setWorker($worker);
+        }
+
+        if ($wpexpiry != "") {
+            $tmparr = explode("/", $wpexpiry);
+            $wpexpiry = $tmparr[2] . "-" . $tmparr[1] . "-" . $tmparr[0];
+            $data->setWpexpiry(new DateTime($wpexpiry));
+        }
+        if ($issuedate != "") {
+            $tmparr = explode("/", $issuedate);
+            $issuedate = $tmparr[2] . "-" . $tmparr[1] . "-" . $tmparr[0];
+            $data->setIssuedate(new DateTime($issuedate));
+        }
+        if ($ppexpiry != "") {
+            $tmparr = explode("/", $ppexpiry);
+            $ppexpiry = $tmparr[2] . "-" . $tmparr[1] . "-" . $tmparr[0];
+            $data->setPpexpiry(new DateTime($ppexpiry));
+        }
+
+        $data->setRate($rate);
+
+        if ($medicaldate != "") {
+            $tmparr = explode("/", $medicaldate);
+            $medicaldate = $tmparr[2] . "-" . $tmparr[1] . "-" . $tmparr[0];
+            $data->setMedicaldate(new DateTime($medicaldate));
+        }
+        if ($csoc != "") {
+            $tmparr = explode("/", $csoc);
+            $csoc = $tmparr[2] . "-" . $tmparr[1] . "-" . $tmparr[0];
+            $data->setCsoc(new DateTime($csoc));
+        }
+        if ($securityexp != "") {
+            $tmparr = explode("/", $securityexp);
+            $securityexp = $tmparr[2] . "-" . $tmparr[1] . "-" . $tmparr[0];
+            $data->setSecurityexp(new DateTime($securityexp));
+        }
+        if ($renewdate != "") {
+            $tmparr = explode("/", $renewdate);
+            $renewdate = $tmparr[2] . "-" . $tmparr[1] . "-" . $tmparr[0];
+            $data->setRenewdate(new DateTime($renewdate));
+        }
+        /*
+          ($wpexpiry != "") ? $data->setWpexpiry(new DateTime($wpexpiry)) : 0;
+          ($issuedate != "") ? $data->setIssuedate(new DateTime($issuedate)) : 0;
+          ($ppexpiry != "") ? $data->setPpexpiry(new DateTime($ppexpiry)) : 0;
+          ($rate != 0) ? $data->setRate($rate) : 0;
+          ($medicaldate != "") ? $data->setMedicaldate(new DateTime($medicaldate)) : 0;
+          ($csoc != "") ? $data->setCsoc(new DateTime($csoc)) : 0;
+          ($securityexp != "") ? $data->setSecurityexp(new DateTime($securityexp)) : 0;
+          ($renewdate != "") ? $data->setRenewdate(new DateTime($renewdate)) : 0;
+         * 
+         */
 
         if (1) {
             $this->_em->persist($data);

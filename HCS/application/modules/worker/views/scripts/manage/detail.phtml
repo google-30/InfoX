@@ -149,29 +149,30 @@ $_renewform = ''
         . '<table id="renewinfotab">'
         . '<tr>'
         . '<td>WP Expiry:</td>'
-        . '<td><input name="wpexpiry" id="wpexpiry_re' . '" type="text" placeholder="WP Expiry" class="dateclass"></td>'
+        . '<td><input name="wpexpiry" id="wpexpiry_re' . '" type="text" placeholder="WP Expiry" class="dateclass renewinput"></td>'
         . '<td>Date of Issue:</td>'
-        . '<td><input name="issuedate" id="issuedate_re' . '" type="text" placeholder="Date of Issue" class="dateclass"></td>'
+        . '<td><input name="issuedate" id="issuedate_re' . '" type="text" placeholder="Date of Issue" class="dateclass renewinput"></td>'
         . '</tr>'
         . '<tr>'
-        . '<td>Date of Issue: </td>'
-        . '<td><input name="ppexpiry" id="ppexpiry_re' . '" type="text" placeholder="PP Expiry" class="dateclass"></td>'
+        . '<td>PP Expiry: </td>'
+        . '<td><input name="ppexpiry" id="ppexpiry_re' . '" type="text" placeholder="PP Expiry" class="dateclass renewinput"></td>'
         . '<td>Rate: </td>'
-        . '<td><input name="rate" id="rate_re' . '" type="text" placeholder="Rate"></td>'
+        . '<td><input name="rate" id="rate_re' . '" type="text" placeholder="Rate" class=""renewinput></td>'
         . '</tr>'
         . '<tr>'
         . '<td>Medical Date: </td>'
-        . '<td><input name="medicaldate" id="medicaldate_re' . '" type="text" placeholder="Medical Date" class="dateclass"></td>'
+        . '<td><input name="medicaldate" id="medicaldate_re' . '" type="text" placeholder="Medical Date" class="dateclass renewinput"></td>'
         . '<td>C.S.O.C: </td>'
-        . '<td><input name="csoc" id="csoc_re' . '" type="text" placeholder="C.S.O.C" class="dateclass"></td>'
+        . '<td><input name="csoc" id="csoc_re' . '" type="text" placeholder="C.S.O.C" class="dateclass renewinput"></td>'
         . '</tr>'
         . '<tr>'
         . '<td>Security Bond Expiry Date: </td>'
-        . '<td><input name="securityexp" id="securityexp_re' . '" type="text" placeholder="Security Bond Expiry Date" class="dateclass"></td>'
+        . '<td><input name="securityexp" id="securityexp_re' . '" type="text" placeholder="Security Bond Expiry Date" class="dateclass renewinput"></td>'
         . '<td>Renew Date: </td>'
-        . '<td><input name="renewdate" id="renewdate_re' . '" type="text" placeholder="Renew Date" class="dateclass"></td>'
+        . '<td><input name="renewdate" id="renewdate_re' . '" type="text" placeholder="Renew Date" class="dateclass renewinput"></td>'
         . '</tr>'
         . '</table>'
+        . '<input type="hidden" id="recordid" value="0" class="renewinput">'
         . '<input type="button" value="提交" data-theme="a" data-mini="true" onclick="postrenewinfo(' . $wid . ')">'
         . '';
 ?>
@@ -187,15 +188,20 @@ $_renewform = ''
 <style> 
     table { width: 100%; }
     td { width: 50%; vertical-align:middle; }
+
     .renewtab {
         table-layout: fixed;
     }
+    /*
     .renewtab,th,td {
         border:1px solid black;
         border-collapse:collapse;
         padding: 3px;
     }
-
+    */
+    #renewtab {
+        table-layout: fixed;
+    }
 </style>
 <script type="text/javascript">
     $(function() {
@@ -214,6 +220,11 @@ $_renewform = ''
         $("#renewadd-div").hide();
     });
 
+    var wid = $("#workerid").val();
+    $("#renewtab-div").load("/worker/manage/loadrenewlist/id/" + wid, function() {
+        //alert("Load was performed.");
+    });
+
     $('#workersels').on("change", function() {
         //alert("workersels");
         var wid = $('#workersels').val();
@@ -226,7 +237,9 @@ $_renewform = ''
     }
 
     function addrenew() {
-        $("#renewadd-div").show();
+        $("#renewadd-div").hide();
+        $(".renewinput").val("");
+        $("#renewadd-div").show("slow");
     }
 
     function postrenewinfo(wid)
@@ -239,15 +252,56 @@ $_renewform = ''
         var csoc = $("#csoc_re").val();
         var securityexp = $("#securityexp_re").val();
         var renewdate = $("#renewdate_re").val();
+        var recordid = $("#recordid").val();
 
         //alert(wpexpiry + " - " + issuedate + " - " +ppexpiry + " - " +rate + " - " +medicaldate + " - " +csoc + " - " +securityexp + " - " +renewdate);    
         //return;
 
         $.post("/worker/manage/renew", {wid: wid, wpexpiry: wpexpiry, issuedate: issuedate, ppexpiry: ppexpiry,
-            rate: rate, medicaldate: medicaldate, csoc: csoc, securityexp: securityexp, renewdate: renewdate},
+            rate: rate, medicaldate: medicaldate, csoc: csoc, securityexp: securityexp, renewdate: renewdate, recordid: recordid},
         function(data) {
             console.log(data);
-            
+            var wid = $("#workerid").val();
+            $("#renewtab-div").load("/worker/manage/loadrenewlist/id/" + wid, function() {
+                //alert("Load was performed.");
+            });
+        }
+        );
+    }
+
+    function editRenew(rid) {
+        //alert(rid);
+        $("#renewadd-div").hide();
+
+        $("#recordid").val(rid);
+        var jqxhr = $.getJSON("/worker/manage/loadrenew/id/" + rid, function(json) {
+            console.log("success");
+            //alert(json["wpexpiry"]);
+            $("#wpexpiry_re").val(json["wpexpiry"]);
+            $("#issuedate_re").val(json["issuedate"]);
+            $("#ppexpiry_re").val(json["ppexpiry"]);
+            $("#rate_re").val(json["rate"]);
+            $("#medicaldate_re").val(json["medicaldate"]);
+            $("#csoc_re").val(json["csoc"]);
+            $("#securityexp_re").val(json["securityexp"]);
+            $("#renewdate_re").val(json["renewdate"]);
+
+        });
+
+        $("#renewadd-div").show("slow");
+    }
+
+    function deleteRenew(rid)
+    {
+        //alert("deleteRenew - " + rid);
+        $.post("/worker/manage/deleterenew", {rid: rid},
+        function(data) {
+            console.log(data);
+            //alert("Refresh page to see the updated records.");
+            var wid = $("#workerid").val();
+            $("#renewtab-div").load("/worker/manage/loadrenewlist/id/" + wid, function() {
+                //alert("Load was performed.");
+            });
         }
         );
     }
@@ -260,7 +314,8 @@ $_renewform = ''
 </div>
 -->
 <!-- renew records -->
-<?= $_renewtab ?>
+<div id="renewtab-div">
+</div>
 <button data-theme="a" data-mini="true" onclick="addrenew()">Add Renew Record</button>
 <div id="renewadd-div">
     <?= $_renewform ?>
