@@ -55,10 +55,7 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
                         <img src='/images/gssvgabstract234.png'/>
                     </a>
                 </span>
-                <span id='title'>
-                    <!--<?php echo sprintf('%s ' . $this->translate('Hotel Suite Management Portal'), $settings->General->HotelName->Value); ?>-->
-                    InfoX
-                </span>
+                <span id='title'>InfoX</span>
                 <span id='logout'>
                     <a href='<?php echo $this->url(array("module" => "management", "controller" => "auth", "action" => "logout")); ?>'>
                         <?php
@@ -122,11 +119,11 @@ $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css'
                 <div id="context-box">
                     <div id="messages">
                         <ul id="messages">
-<?php
-$fm = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-$messages = array_merge($fm->getMessages(), $fm->getCurrentMessages());
-foreach ($messages as $message) :
-    ?>
+                            <?php
+                            $fm = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+                            $messages = array_merge($fm->getMessages(), $fm->getCurrentMessages());
+                            foreach ($messages as $message) :
+                                ?>
                                 <li><?php echo $this->escape($message); ?></li>
                             <?php endforeach; ?>
                         </ul>
