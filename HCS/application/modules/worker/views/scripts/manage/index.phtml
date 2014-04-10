@@ -34,11 +34,10 @@ $wdtab = $wdtab->data($maindata);
 
 //$renewtabs = $this->rewtabs;
 ?>
-<!--
+
 <link rel="stylesheet" href="/common/css/jquery.ui.theme.css" /> 
 <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.css" />
 <script src="/common/js/jQuery.ui.datepicker.js"></script>
--->
 <link rel="stylesheet" href="/common/css/jquery.bpopup.css" />
 <script type="text/javascript" src="/common/js/jquery.bpopup.min.js"></script>
 <style>
@@ -122,7 +121,7 @@ $wdtab = $wdtab->data($maindata);
         // add bMulti to popup class
         $("div[id^='renew']").attr("class", "bMulti divrenew");
         $("table[id^='renew']").attr("class", "grid renewtab");
-        //$("#resigndate").datepicker();
+        $("#resigndate").datepicker();
         //$(".dateclass").datepicker();
     });
 

@@ -84,7 +84,6 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
     }
 
     protected function td_actions($field, $row) {
-
         $wid = $row["id"];
         $name = $row["namechs"];
         $eeeno = $row["eeeno"];
@@ -97,6 +96,19 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         return $actions;
     }
 
+    protected function td_actionsregsigned($field, $row) {
+        $wid = $row["id"];
+        $name = $row["namechs"];
+        $eeeno = $row["eeeno"];
+        //$link1 = '<a href="/worker/manage/edit?id=' . $wid . '"  target="_blank">Edit</a>';
+        $link1 = '<a href="/worker/manage/edit/id/' . $wid . '"  target="_blank">Edit</a>';
+        $link2 = '<a onclick="workerResign(' . "$wid, '$name','$eeeno'" . ')">Active</a>';
+        //$link3 = '<a onclick="workerRenewinfo(' . "$wid, '$name','$eeeno'" . ')">Renew</a>';
+
+        $actions = $link1 . "<br>" . $link2;
+        return $actions;
+    }    
+    
     protected function td_renewdate($field, $row) {
         return $this->getDate($field, $row);
     }
@@ -104,7 +116,7 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
     protected function td_renewactions($field, $row) {
         $namechs = property_exists($row, "namechs") ? $row->namechs : "";
         $nameeng = property_exists($row, "nameeng") ? $row->nameeng : "";
-        
+
         if ($namechs != "" || $nameeng != "") {
             $actions = "&nbsp;";
         } else {
@@ -115,7 +127,7 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         }
         //
         //return "namechs=" . $namechs . $actions;
-        return $actions; 
+        return $actions;
     }
 
 }

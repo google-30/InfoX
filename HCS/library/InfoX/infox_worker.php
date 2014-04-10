@@ -32,10 +32,20 @@ class infox_worker {
         return $sheetarr;
     }
 
+    public static function getSheetArrAll() {
+        $sheetarr = array("All", "HC.C", "HC.B", "HT.C", "HT.B", "Others.C", "Others.B");
+        return $sheetarr;
+    }
+    
     public static function getworkerlistbysheet($sheet) {
         $_em = Zend_Registry::get('em');
         $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
 
+        if($sheet == "All")
+        {
+            $allworkers = $_workerdetails->findBy(array("sheet" => $sheet));
+        }
+        
         $workerarr = array();
         $allworkers = $_workerdetails->findBy(array("sheet" => $sheet));
         foreach ($allworkers as $tmp) {
@@ -68,6 +78,55 @@ class infox_worker {
         return $workerarr;
     }
 
+    public static function getAllActiveWorkers() {
+        $_em = Zend_Registry::get('em');
+        $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
+
+        $workerarr = array();
+        $allworkers = $_workerdetails->findAll();
+        foreach ($allworkers as $tmp) {
+            $date = $tmp->getResigndate();
+            if (self::workerresigned($date)) {
+                continue;
+            } else {
+                $workerarr[] = $tmp;
+            }
+        }
+
+        return $workerarr;
+    }    
+    
+    public static function getResignedWorkersBySheet($sheet) {
+        $_em = Zend_Registry::get('em');
+        $_workerdetails = $_em->getRepository('Synrgic\Infox\Workerdetails');
+
+        if($sheet == "All")
+        {
+            $workers = $_workerdetails->findBy(array("resignation"=> TRUE));
+            
+        }
+        else
+        {
+            $workers = $_workerdetails->findBy(array("resignation"=> TRUE, "sheet"=>$sheet));            
+        }
+        return $workers;
+        /*    
+        $workerarr = array();
+        $allworkers = $_workerdetails->findAll();
+        foreach ($allworkers as $tmp) {
+            $date = $tmp->getResigndate();
+            if (self::workerresigned($date)) {
+                continue;
+            } else {
+                $workerarr[] = $tmp;
+            }
+        }
+
+        return $workerarr;
+         *
+         */
+    }      
+    
     private function workerresigned($date) {
         if (!$date) {
             return false;

@@ -1,3 +1,8 @@
+<?php
+$sheet = $this->sheet;
+$sheetarr = $this->sheetarr;
+$maindata = $this->maindata;
+?>
 <style>
     #infoswitches { display: none; }
     #datatable { text-align:center; display:none; }
@@ -15,8 +20,8 @@
             "bRetrieve": true,
         });
 
-        fnHideColumns();
-        resizetable();
+        //fnHideColumns();
+        //resizetable();
     });
 
     function resizetable()
@@ -92,14 +97,7 @@
 
 </script>
 
-<?php
-$sheet = $this->sheet;
-$sheetarr = $this->sheetarr;
-$maindata = $this->maindata;
-?>
-
-<div data-role="collapsible-set" data-mini="true" data-theme="c">
-
+<div data-role="collapsible-set" data-mini="true" data-theme="c" style="display:none;">
     <div data-role="collapsible" data-collapsed="true">
         <h3>列表操作</h3>
         <button data-theme="a" data-mini="true" onclick="infoswitches()">数据筛选</button>
@@ -212,7 +210,6 @@ $maindata = $this->maindata;
         <!--<a href="/worker/manage/previewlist" target="_blank"><button data-theme="a" data-mini="true">预览打印</button></a>-->
         <button data-theme="a" data-mini="true" onclick="previewlist()">预览打印</button>
     </div>
-
 </div> <!-- collapsible-set -->
 
 <?php
@@ -226,7 +223,7 @@ foreach ($sheetarr as $tmp) {
 
     $options .= $option;
 }
-$selects = '<select data-mini="true" id="sheetselect">';
+$selects = '<select data-mini="true" id="sheetselect" data-theme="a">';
 $selects.=$options;
 $selects.='</select>';
 echo $selects;
@@ -236,19 +233,23 @@ if (count($maindata)) {
     foreach ($onswitches as $key => $value) {
         $wdtab = $wdtab->field($key, $value);
     }
-    foreach ($offswitches as $key => $value) {
-        $wdtab = $wdtab->field($key, $value);
-    }
-    $wdtab = $wdtab->field("salary", "工资");
-
-    $wdtab = $wdtab->actionField(':action', "详情", '&nbsp;|&nbsp;');
+    /*
+      foreach ($offswitches as $key => $value) {
+      $wdtab = $wdtab->field($key, $value);
+      }
+      $wdtab = $wdtab->field("salary", "工资");
+      $wdtab = $wdtab->actionField(':action', "详情", '&nbsp;|&nbsp;');
+     * 
+     */
+    $wdtab = $wdtab->field("actionsregsigned", "Action");
     $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
     $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
-    $wdtab = $wdtab->data($maindata)->action(':action', '详情', array('url' => array('action' => 'edit')));
-//$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
+    $wdtab = $wdtab->data($maindata);
+    //$wdtab = $wdtab->action(':action', '详情', array('url' => array('action' => 'edit')));
+    //$wdtab=$wdtab->action(':action', '删除', array( 'url'=>array('action'=>'delete')));
     echo $wdtab;
 } else {
-    echo "No data found;";
+    echo "没有找到离职工人信息";
 }
 ?>
 <br><br>
