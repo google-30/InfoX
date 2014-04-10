@@ -115,6 +115,7 @@
 
                     $normalpay = $tmp->getNormalsalary();
                     $otpay = $tmp->getOtsalary();
+                    $otpaystr = ($otpay==0) ? "" : "$$otpay";
                     $salary = money_format('%i', $tmp->getSalary());
                     $allowance = "";
                     $totalsalary = $normalpay + $otpay;
@@ -122,9 +123,9 @@
                     $foodpay = $tmp->getFoodpay();
                     $foodpaystr = $foodpay ? "$(" . abs($foodpay) . ")" : "";
                     $rtmonthpay = $tmp->getRtmonthpay();
-                    $rtmonthpaystr = $rtmonthpay ? "$(" . abs($rtmonthpay) . ")" : "";
+                    $rtmonthpaystr = ($rtmonthpay!=0)? "$(" . abs($rtmonthpay) . ")" : "";
                     $utfee = $tmp->getUtfee();
-                    $utfeestr = $utfee ? "$(" . abs($utfee) . ")" : "";
+                    $utfeestr = ($utfee!=0) ? "$(" . abs($utfee) . ")" : "";
                     $utallowance = $tmp->getUtallowance();
                     $utallowancestr = $utallowance ? "$$utallowance" : "";
                     $otherfee = $tmp->getOtherfee();
@@ -153,7 +154,7 @@
                             <td>水电生活补贴<br>Allowance For Living</td><td>其他补扣费用<br>Other Addition or Deduction</td>
                             <td>" . $month1 . "月实发工资<br>Net Pay for " . $month2 . "</td><td>工人确认签字<br>Signature Confirmed</td>";
 
-                    $tddata = "<td>$" . "$normalpay</td><td>$" . "$otpay</td><td>" . "$allowance</td><td>$" . "$totalsalary</td><td>"
+                    $tddata = "<td>$" . "$normalpay</td><td>" . "$otpaystr</td><td>" . "$allowance</td><td>$" . "$totalsalary</td><td>"
                             . "$fullmth</td><td>" . "$foodpaystr</td><td>" . "$rtmonthpaystr</td><td>"
                             . "$utfeestr</td><td>" . "$utallowancestr</td><td>" . "$otherfeestr</td><td>$" . "$salary</td><td></td>";
                     $trs = "<tr>$tds</tr><tr>$tddata</tr>";

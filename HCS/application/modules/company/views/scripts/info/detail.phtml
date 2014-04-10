@@ -1,3 +1,57 @@
+<?php
+$id = 0;
+$mode = "Create";
+$namechs = "";
+$nameeng = "";
+$address = "";
+$phone = "";
+$fax = "";
+$email = "";
+$coregno = "";
+$remark = "";
+
+$start = "";
+$stop = "";
+$leader = "";
+$manager = "";
+$workerno = 0;
+$fullnamechs = "";
+$fullnameeng = "";
+$postring = "";
+$logopic = "";
+$sheetprx="";
+
+if ($this->mode == "Edit") {
+    $data = $this->maindata;
+    $mode = "Edit";
+    $id = $data->getId();
+    $namechs = $data->getNamechs();
+    $nameeng = $data->getNameeng();
+    $address = $data->getAddress();
+    $phone = $data->getPhone();
+    $email = $data->getEmail();
+    $fax = $data->getFax();
+    $coregno = $data->getCoregno();
+    $remark = $data->getRemark();
+
+    $fullnamechs = $data->getFullnamechs();
+    $fullnameeng = $data->getFullnameeng();
+
+    $postring = $data->getPostring();
+    
+    $logopic=$data->getLogo();
+    $logopath="/uploads/$logopic"; 
+    
+    $sheetprx=$data->getSheetprx();
+}
+
+if ($mode == "Create") {
+    $_title= "<h3>添加公司信息</h3>";
+} else {
+    $_title= "<h3>编辑公司信息</h3>";
+}
+?>
+
 <link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
 <script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
 <script>
@@ -35,61 +89,7 @@
         window.location = url;
     }
 </script>
-<?php
-$id = 0;
-$mode = "Create";
-$namechs = "";
-$nameeng = "";
-$address = "";
-$phone = "";
-$fax = "";
-$email = "";
-$coregno = "";
-$remark = "";
-
-$start = "";
-$stop = "";
-$leader = "";
-$manager = "";
-$workerno = 0;
-$fullnamechs = "";
-$fullnameeng = "";
-$postring = "";
-$logopic = "";
-
-if ($this->mode == "Edit") {
-    $data = $this->maindata;
-    $mode = "Edit";
-    $id = $data->getId();
-    $namechs = $data->getNamechs();
-    $nameeng = $data->getNameeng();
-    $address = $data->getAddress();
-    $phone = $data->getPhone();
-    $email = $data->getEmail();
-    $fax = $data->getFax();
-    $coregno = $data->getCoregno();
-    $remark = $data->getRemark();
-
-    $fullnamechs = $data->getFullnamechs();
-    $fullnameeng = $data->getFullnameeng();
-
-    $postring = $data->getPostring();
-    
-    $logopic=$data->getLogo();
-    $logopath="/uploads/$logopic"; 
-    
-    $sheetprx=$data->getSheetprx();
-}
-?>
-
-<?php
-if ($mode == "Create") {
-    echo "<h3>添加公司信息</h3>";
-} else {
-    echo "<h3>编辑公司信息</h3>";
-}
-?>
-
+<?= $_title ?>
 <form id="mainform" method="post" action="/company/info/submit" enctype="multipart/form-data">
     <input type="hidden" id="mode" name="mode" value="<?php echo $mode; ?>">
     <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">

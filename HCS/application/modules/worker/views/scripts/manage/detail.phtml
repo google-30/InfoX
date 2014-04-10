@@ -294,6 +294,12 @@ $_renewform = ''
     function deleteRenew(rid)
     {
         //alert("deleteRenew - " + rid);
+        var r = confirm("确认删除本条记录？");
+        if (r == false)
+        {
+            return false;
+        }
+
         $.post("/worker/manage/deleterenew", {rid: rid},
         function(data) {
             console.log(data);
@@ -344,7 +350,7 @@ $_renewform = ''
 
     <div data-role="fieldcontain">
         <label for="sheet">所属:</label>
-        <select id="sheet" name="sheet" data-mini="true">
+        <select id="sheet" name="sheet" data-mini="true" data-theme="a">
             <?php
             $options = "";
             foreach ($sheetarr as $tmp) {

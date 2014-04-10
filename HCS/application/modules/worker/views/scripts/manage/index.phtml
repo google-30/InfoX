@@ -34,9 +34,11 @@ $wdtab = $wdtab->data($maindata);
 
 //$renewtabs = $this->rewtabs;
 ?>
+<!--
 <link rel="stylesheet" href="/common/css/jquery.ui.theme.css" /> 
 <link rel="stylesheet" href="/common/css/jquery.ui.datepicker.css" />
 <script src="/common/js/jQuery.ui.datepicker.js"></script>
+-->
 <link rel="stylesheet" href="/common/css/jquery.bpopup.css" />
 <script type="text/javascript" src="/common/js/jquery.bpopup.min.js"></script>
 <style>
@@ -112,23 +114,16 @@ $wdtab = $wdtab->data($maindata);
         oTable = $('#Workersdata').dataTable({
             "iDisplayLength": 100,
             "bRetrieve": true,
-            /*
-             "sScrollX": "100%",
-             "sScrollXInner": "100%",                         
-             "bScrollCollapse": true,            
-             */
         });
 
         //fnHideColumns();
         //resizetable();
 
-        $("#resigndate").datepicker();
-
         // add bMulti to popup class
         $("div[id^='renew']").attr("class", "bMulti divrenew");
         $("table[id^='renew']").attr("class", "grid renewtab");
-
-        $(".dateclass").datepicker();
+        //$("#resigndate").datepicker();
+        //$(".dateclass").datepicker();
     });
 
     $("#Workersdata tbody").click(function(event) {
@@ -259,63 +254,15 @@ $wdtab = $wdtab->data($maindata);
          {
          return false;
          }
-         
-         $.post("/worker/manage/resign", {id: wid},
-         function(data) {
-         //console.log(data);
-         window.location.reload();
-         })
          */
     }
 
     function workerRenewinfo(wid, name, eeeno)
     {
-        /*
-        $('#renew' + wid + "").bPopup({
-            follow: [true, true], //x, y
-            position: [200, 100] //x, y
-        });
-        */
-       var url = "/worker/manage/renewlist/wid/" + wid;
+        var url = "/worker/manage/renewlist/wid/" + wid;
         $('#divrenews').bPopup({
-            //contentContainer:'.content',
             loadUrl: url
         });
-                      
-    }
-
-    function postrenewinfo(wid)
-    {
-        var wpexpiry = $("#wpexpiry" + wid).val();
-        var issuedate = $("#issuedate" + wid).val();
-        var ppexpiry = $("#ppexpiry" + wid).val();
-        var rate = $("#rate" + wid).val();
-        var medicaldate = $("#medicaldate" + wid).val();
-        var csoc = $("#csoc" + wid).val();
-        var securityexp = $("#securityexp" + wid).val();
-        var renewdate = $("#renewdate" + wid).val();
-
-        //alert(wpexpiry + " - " + issuedate + " - " +ppexpiry + " - " +rate + " - " +medicaldate + " - " +csoc + " - " +securityexp + " - " +renewdate);    
-        //return;
-
-        $.post("/worker/manage/renew", {wid: wid, wpexpiry: wpexpiry, issuedate: issuedate, ppexpiry: ppexpiry,
-            rate: rate, medicaldate: medicaldate, csoc: csoc, securityexp: securityexp, renewdate: renewdate},
-        function(data) {
-            console.log(data);
-            alert("Refresh page to see the updated records.");
-        }
-        );
-    }
-
-    function deleteRenew(rid)
-    {
-        //alert("deleteRenew - " + rid);
-        $.post("/worker/manage/deleterenew", {rid: rid},
-        function(data) {
-            console.log(data);
-            alert("Refresh page to see the updated records.");
-        }
-        );
     }
 </script>
 
@@ -369,7 +316,7 @@ if (count($maindata)) {
 </div>
 
 <div id="divrenews" class="bMulti">
-    
+
     <?php
     if (0) {
         foreach ($renewtabs as $tmp) {
