@@ -71,7 +71,8 @@ class Synrgic_Models_AclBuilder {
                     'worker:onsite' => array('view', 'onsiterecord', 'addrecord', 'updaterecord', 'deleterecord', 'attendancerecord', 'addattendancerecord', 'updateattendancerecord', 'deleteattendancerecord'),
                     'worker:custominfo' => array('view', 'postinfo'),
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),
-                    'worker:archive' => array('view', 'edit', 'previewlist'),
+                    'worker:archive' => array('view', 'edit', 'previewlist', "activeworker"),
+                    
                     'salary:salary' => array('view', 'personal', 'salarybymonth', 'gensalaryrecords',
                         'datainput', 'datapost', 'salarysheet', 'salaryreceipts',
                         'salaryreceiptsbyworker', 'summary', 'summarybysite'),
@@ -160,7 +161,7 @@ class Synrgic_Models_AclBuilder {
                     'worker:onsite' => array('view', 'onsiterecord', 'addrecord', 'updaterecord', 'deleterecord', 'attendancerecord', 'addattendancerecord', 'updateattendancerecord', 'deleteattendancerecord'),
                     'worker:custominfo' => array('view', 'postinfo'),
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),
-                    'worker:archive' => array('view', 'edit', 'previewlist'),
+                    'worker:archive' => array('view', 'edit', 'previewlist', "activeworker"),
                     'salary:salary' => array('view', 'personal', 'salarybymonth', 'gensalaryrecords',
                         'datainput', 'datapost', 'salarysheet', 'salaryreceipts',
                         'salaryreceiptsbyworker', 'summary', 'summarybysite'),

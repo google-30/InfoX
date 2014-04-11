@@ -95,6 +95,23 @@ $maindata = $this->maindata;
         window.open(url);
     }
 
+    function workerActive(wid, name, eeeno)
+    {
+        var r = confirm("确认激活该工人? " + name + " " + eeeno);
+        if (r == false)
+        {
+            return false;
+        }
+
+        var sheet = $("#sheetselect").val();
+
+        $.post("/worker/archive/activeworker", {wid: wid, sheet: sheet},
+        function(data) {
+            //console.log(data);
+            window.location.reload();
+        });
+    }
+
 </script>
 
 <div data-role="collapsible-set" data-mini="true" data-theme="c" style="display:none;">

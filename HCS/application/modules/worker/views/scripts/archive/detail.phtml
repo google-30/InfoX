@@ -1,332 +1,530 @@
-<link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
-<script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
-<style> 
-table { width: 100%; }
-td { width: 50%; vertical-align:middle; }
-</style>
-<script type="text/javascript">
-$(function () {
-    $('.datepicker').mobiscroll().date({
-        theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'yy mm dd', dateFormat: 'yy/mm/dd',
-        endYear: 2050,
-    }); 
-});
-
-function output()
-{
-    //alert("preview and print this bill");
-    var url = "/worker/manage/output?no=" + $('#workerid').val();
-    window.open (url);
-}
-
-</script>
 <?php
-$sn="";
-$eeeno="";
-$nameeng = ""; 
+$wid = 0;
+$sn = "";
+$eeeno = "";
+$nameeng = "";
 $namechs = "";
-$wpno="";
-$wpexpiry="";
-$doa="";
-$issuedate="";
-$finno="";
-$ppno="";
-$dob="";
-$ppexpiry="";
-$rate="";
-$pano="";
-$sbno="";
-$securityexp="";
-$worktype="";
-$arrivaldate="";
-$medicaldate="";
-$csoc="";
-$medicalinsurance="";
-$workingsite="";
-$dormitory="";
-$hometown="";
-$education="";
-$age="";
-$marital="";
-$constructionworker="";
-$applyfor="";
-$goodat="";
-$contactno1="";
-$contactno2="";
-$certificate="";
-$agent="";
-$remarks="";
-$company="";
-$race="";
-$resignation="";
+$wpno = "";
+$wpexpiry = "";
+$doa = "";
+$issuedate = "";
+$finno = "";
+$ppno = "";
+$dob = "";
+$ppexpiry = "";
+$rate = "";
+$securityexp = "";
+$worktype = "";
+$arrivaldate = "";
+$medicaldate = "";
+$csoc = "";
+$medicalinsurance = "";
+$workingsite = "";
+$dormitory = "";
+$hometown = "";
+$education = "";
+$age = "";
+$marital = "";
+$constructionworker = "";
+$applyfor = "";
+$goodat = "";
+$contactno1 = "";
+$contactno2 = "";
+$certificate = "";
+$agent = "";
+$remark = "";
+$company = "";
+$race = "";
+$resignation = "";
 $pic = "";
+$sheet = "";
+$sheetarr = $this->sheetarr;
+$currentrate = "";
+$monthrate = "";
+$resignremark = "";
 
-if($this->mode == "Edit")
-{
-$worker=$this->worker;
-$pic = $worker->getPic();
-$sn=$worker->getSn();;
-$eeeno=$worker->getEeeno();
-$nameeng = $worker->getNameeng();
-$namechs = $worker->getNamechs();
-$wpno=$worker->getWpno();
-$wpexpiry=$worker->getWpexpiry();
-$wpexpiry=$wpexpiry? $wpexpiry->format("Y/m/d") : "";
-$doa=$worker->getDoa();
-$doa=$doa? $doa->format("Y/m/d") : "";
-$issuedate=$worker->getIssuedate();
-$issuedate=$issuedate? $issuedate->format("Y/m/d") : "";
-$finno=$worker->getFinno();
-$ppno=$worker->getPpno();
-$dob=$worker->getDob();
-$dob=$dob? $dob->format("Y/m/d") : "";
-$ppexpiry=$worker->getPpexpiry();
-$ppexpiry=$ppexpiry? $ppexpiry->format("Y/m/d") : "";
-$rate=$worker->getRate();
-$pano=$worker->getPano();
-$sbno=$worker->getSbno();
-$securityexp=$worker->getSecurityexp();
-$securityexp=$securityexp? $securityexp->format("Y/m/d") : "";
-$worktype=$worker->getWorktype();
-$arrivaldate=$worker->getArrivaldate();
-$arrivaldate=$arrivaldate? $arrivaldate->format("Y/m/d") : "";
-$medicaldate=$worker->getMedicaldate();
-$medicaldate=$medicaldate? $medicaldate->format("Y/m/d") : "";
-$csoc=$worker->getCsoc();
-$csoc=$csoc? $csoc->format("Y/m/d") : "";
-$medicalinsurance=$worker->getMedicalinsurance();
-$workingsite=$worker->getWorkingsite();
-$dormitory=$worker->getDormitory();
-$hometown = $worker->getHometown();
-$education=$worker->getEducation();
-$age = $worker->getAge();
-$marital=$worker->getMarital();
-$constructionworker=$worker->getConstructionworker();
-$applyfor=$worker->getApplyfor();
-$goodat=$worker->getGoodat();
-$contactno1=$worker->getContactno1();
-$contactno2=$worker->getContactno2();
-$certificate=$worker->getCertificate();
-$agent=$worker->getAgent();
-$remarks=$worker->getRemarks();
-$company=$worker->getCompany();
-$race=$worker->getRace();
-$resignation=$worker->getResignation();
-$resignation=$resignation ? $resignation->format('Y/m/d') : "";
+if ($this->mode == "Edit") {
+    $worker = $this->worker;
+    $wid = $worker->getId();
+    $pic = $worker->getPic();
+    $sn = $worker->getSn();
+    $eeeno = $worker->getEeeno();
+    $nameeng = $worker->getNameeng();
+    $namechs = $worker->getNamechs();
+    $wpno = $worker->getWpno();
+    $wpexpiry = $worker->getWpexpiry();
+    $wpexpiry = $wpexpiry ? $wpexpiry->format("d/m/Y") : "";
+    $doa = $worker->getDoa();
+    $doa = $doa ? $doa->format("d/m/Y") : "";
+    $issuedate = $worker->getIssuedate();
+    $issuedate = $issuedate ? $issuedate->format("d/m/Y") : "";
+    $finno = $worker->getFinno();
+    $ppno = $worker->getPpno();
+    $dob = $worker->getDob();
+    $dob = $dob ? $dob->format("d/m/Y") : "";
+    $ppexpiry = $worker->getPpexpiry();
+    $ppexpiry = $ppexpiry ? $ppexpiry->format("d/m/Y") : "";
+    $rate = $worker->getRate();
+    $securityexp = $worker->getSecurityexp();
+    $securityexp = $securityexp ? $securityexp->format("d/m/Y") : "";
+    $worktype = $worker->getWorktype();
+    $arrivaldate = $worker->getArrivaldate();
+    $arrivaldate = $arrivaldate ? $arrivaldate->format("d/m/Y") : "";
+    $medicaldate = $worker->getMedicaldate();
+    $medicaldate = $medicaldate ? $medicaldate->format("d/m/Y") : "";
+    $csoc = $worker->getCsoc();
+    $csoc = $csoc ? $csoc->format("d/m/Y") : "";
+    $medicalinsurance = $worker->getMedicalinsurance();
+    $workingsite = $worker->getWorkingsite();
+    $dormitory = $worker->getDormitory();
+    $hometown = $worker->getHometown();
+    $education = $worker->getEducation();
+    $age = $worker->getAge();
+    $marital = $worker->getMarital();
+    $constructionworker = $worker->getConstructionworker();
+    $applyfor = $worker->getApplyfor();
+    $goodat = $worker->getGoodat();
+    $contactno1 = $worker->getContactno1();
+    $contactno2 = $worker->getContactno2();
+    $certificate = $worker->getCertificate();
+    $agent = $worker->getAgent();
+    $remark = $worker->getRemark();
+    $company = $worker->getCompany();
+    $race = $worker->getRace();
+    $resigndate = $worker->getResigndate();
+    $resigndate = $resigndate ? $resigndate->format('d/m/Y') : "";
+    $sheet = $worker->getSheet();
+    $currentrate = $worker->getCurrentrate();
+    $monthrate = $worker->getMonthrate();
+
+    $resignremark = $worker->getResignremark();
 }
 
 // custom info
-$customtitles=$this->customtitles;
-$customtitle1=$customtitles[0];
-$customtitle2=$customtitles[1];
-$customtitle3=$customtitles[2];
-$customtitle4=$customtitles[3];
+$customtitles = $this->customtitles;
+$customtitle1 = $customtitles[0];
+$customtitle2 = $customtitles[1];
+$customtitle3 = $customtitles[2];
+$customtitle4 = $customtitles[3];
 
-$custominfos=$this->custominfos;
-$custom1="";
-$custom2="";
-$custom3="";
-$custom4="";
-if($custominfos)
-{
+$custominfos = $this->custominfos;
+$custom1 = "";
+$custom2 = "";
+$custom3 = "";
+$custom4 = "";
+if ($custominfos) {
     $custom1 = $custominfos->getCustom1();
     $custom2 = $custominfos->getCustom2();
     $custom3 = $custominfos->getCustom3();
     $custom4 = $custominfos->getCustom4();
 }
 
-$html="";
-if($this->mode == "Create")
-{
-    $html .= '<h3>创建工人信息</h3>';    
+$html = "";
+if ($this->mode == "Create") {
+    $_title = $html .= '<h3>创建工人信息</h3>';
+    $_workersels = "";
+    $_renewtab = "";
+} else {
+    $html .= '<h3>编辑工人信息</h3>';
+
+    $workerarr = $this->workerarr;
+    $options = "";
+    foreach ($workerarr as $tmp) {
+        $i = 0;
+        $tmpwid = $tmp->getId();
+        $tmpeeeno = $tmp->getEeeno();
+        $tmpname = ($tmp->getNamechs() == "") ? $tmp->getNameeng() : $tmp->getNamechs();
+        $value = $tmpeeeno . "-" . $tmpname;
+        if ($tmpwid == $wid) {
+            $option = '<option value="' . $tmpwid . '" selected>' . $value . "</option>";
+        } else {
+            $option = '<option value="' . $tmpwid . '">' . $value . "</option>";
+        }
+        $options .= $option;
+    }
+    $_workersels = '<select id="workersels" data-mini="true" data-theme="a">' . $options . "</select>";
+
+    $_renewtab = $this->renewtab;
+    $_title = $_workersels;
 }
-else
-{
-    $html .= '<h3>编辑工人信息</h3>';    
-    $html .= '<button data-mini="true" onclick="output()" data-mini="true" data-theme="a">预览和打印</button>';
-}
-echo $html;
+
+$_renewform = ''
+        . '<table id="renewinfotab">'
+        . '<tr>'
+        . '<td>WP Expiry:</td>'
+        . '<td><input name="wpexpiry" id="wpexpiry_re' . '" type="text" placeholder="WP Expiry" class="dateclass renewinput"></td>'
+        . '<td>Date of Issue:</td>'
+        . '<td><input name="issuedate" id="issuedate_re' . '" type="text" placeholder="Date of Issue" class="dateclass renewinput"></td>'
+        . '</tr>'
+        . '<tr>'
+        . '<td>PP Expiry: </td>'
+        . '<td><input name="ppexpiry" id="ppexpiry_re' . '" type="text" placeholder="PP Expiry" class="dateclass renewinput"></td>'
+        . '<td>Rate: </td>'
+        . '<td><input name="rate" id="rate_re' . '" type="text" placeholder="Rate" class=""renewinput></td>'
+        . '</tr>'
+        . '<tr>'
+        . '<td>Medical Date: </td>'
+        . '<td><input name="medicaldate" id="medicaldate_re' . '" type="text" placeholder="Medical Date" class="dateclass renewinput"></td>'
+        . '<td>C.S.O.C: </td>'
+        . '<td><input name="csoc" id="csoc_re' . '" type="text" placeholder="C.S.O.C" class="dateclass renewinput"></td>'
+        . '</tr>'
+        . '<tr>'
+        . '<td>Security Bond Expiry Date: </td>'
+        . '<td><input name="securityexp" id="securityexp_re' . '" type="text" placeholder="Security Bond Expiry Date" class="dateclass renewinput"></td>'
+        . '<td>Renew Date: </td>'
+        . '<td><input name="renewdate" id="renewdate_re' . '" type="text" placeholder="Renew Date" class="dateclass renewinput"></td>'
+        . '</tr>'
+        . '</table>'
+        . '<input type="hidden" id="recordid" value="0" class="renewinput">'
+        . '<input type="button" value="提交" data-theme="a" data-mini="true" onclick="postrenewinfo(' . $wid . ')">'
+        . '';
 ?>
 
+
+<link href="/common/mobiscroll.2.5.0.production/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" type="text/css" />
+<script src="/common/mobiscroll.2.5.0.production/js/mobiscroll.custom-2.5.0.min.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="/common/css/jquery.ui.theme.css" /> 
+<link rel="stylesheet" href="/common/css/jquery.ui.datepicker.css" />
+<script src="/common/js/jQuery.ui.datepicker.js"></script>
+
+<style> 
+    table { width: 100%; }
+    td { width: 50%; vertical-align:middle; }
+
+    .renewtab {
+        table-layout: fixed;
+    }
+    /*
+    .renewtab,th,td {
+        border:1px solid black;
+        border-collapse:collapse;
+        padding: 3px;
+    }
+    */
+    #renewtab {
+        table-layout: fixed;
+    }
+</style>
+<script type="text/javascript">
+    $(function() {
+        $('.datepicker').mobiscroll().date({
+            theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'dd mm yy', dateFormat: 'dd/mm/yy',
+            endYear: 2050,
+        });
+
+        $("table[id^='renew']").attr("class", "grid renewtab");
+        //$(".dateclass").datepicker();
+        $('.dateclass').mobiscroll().date({
+            theme: 'android-ics', display: 'bottom', mode: 'scroller', dateOrder: 'dd mm yy', dateFormat: 'dd/mm/yy',
+            endYear: 2050,
+        });
+
+        $("#renewadd-div").hide();
+    });
+
+    var wid = $("#workerid").val();
+    $("#renewtab-div").load("/worker/manage/loadrenewlist/id/" + wid, function() {
+        //alert("Load was performed.");
+    });
+
+    $('#workersels').on("change", function() {
+        //alert("workersels");
+        var wid = $('#workersels').val();
+        var url = "/worker/archive/edit/id/" + wid;
+        redirect(url);
+    });
+
+    function redirect(url) {
+        window.location = url;
+    }
+
+    function addrenew() {
+        $("#renewadd-div").hide();
+        $(".renewinput").val("");
+        $("#renewadd-div").show("slow");
+    }
+
+    function postrenewinfo(wid)
+    {
+        var wpexpiry = $("#wpexpiry_re").val();
+        var issuedate = $("#issuedate_re").val();
+        var ppexpiry = $("#ppexpiry_re").val();
+        var rate = $("#rate_re").val();
+        var medicaldate = $("#medicaldate_re").val();
+        var csoc = $("#csoc_re").val();
+        var securityexp = $("#securityexp_re").val();
+        var renewdate = $("#renewdate_re").val();
+        var recordid = $("#recordid").val();
+
+        //alert(wpexpiry + " - " + issuedate + " - " +ppexpiry + " - " +rate + " - " +medicaldate + " - " +csoc + " - " +securityexp + " - " +renewdate);    
+        //return;
+
+        $.post("/worker/manage/renew", {wid: wid, wpexpiry: wpexpiry, issuedate: issuedate, ppexpiry: ppexpiry,
+            rate: rate, medicaldate: medicaldate, csoc: csoc, securityexp: securityexp, renewdate: renewdate, recordid: recordid},
+        function(data) {
+            console.log(data);
+            var wid = $("#workerid").val();
+            $("#renewtab-div").load("/worker/manage/loadrenewlist/id/" + wid, function() {
+                //alert("Load was performed.");
+            });
+        }
+        );
+    }
+
+    function editRenew(rid) {
+        //alert(rid);
+        $("#renewadd-div").hide();
+
+        $("#recordid").val(rid);
+        var jqxhr = $.getJSON("/worker/manage/loadrenew/id/" + rid, function(json) {
+            console.log("success");
+            //alert(json["wpexpiry"]);
+            $("#wpexpiry_re").val(json["wpexpiry"]);
+            $("#issuedate_re").val(json["issuedate"]);
+            $("#ppexpiry_re").val(json["ppexpiry"]);
+            $("#rate_re").val(json["rate"]);
+            $("#medicaldate_re").val(json["medicaldate"]);
+            $("#csoc_re").val(json["csoc"]);
+            $("#securityexp_re").val(json["securityexp"]);
+            $("#renewdate_re").val(json["renewdate"]);
+
+        });
+
+        $("#renewadd-div").show("slow");
+    }
+
+    function deleteRenew(rid)
+    {
+        //alert("deleteRenew - " + rid);
+        var r = confirm("确认删除本条记录？");
+        if (r == false)
+        {
+            return false;
+        }
+
+        $.post("/worker/manage/deleterenew", {rid: rid},
+        function(data) {
+            console.log(data);
+            //alert("Refresh page to see the updated records.");
+            var wid = $("#workerid").val();
+            $("#renewtab-div").load("/worker/manage/loadrenewlist/id/" + wid, function() {
+                //alert("Load was performed.");
+            });
+        }
+        );
+    }
+</script>
+<?= $_title ?>
+<!-- renew records -->
+<div id="renewtab-div">
+</div>
+<!--
+<button data-theme="a" data-mini="true" onclick="addrenew()">Add Renew Record</button>
+<div id="renewadd-div">
+<?= $_renewform ?>
+</div>
+-->
+<hr>
 <form action="/worker/manage/submit" method="post" enctype="multipart/form-data">
-<input data-mini="true" type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
-<input data-mini="true" type="hidden" id="workerid" name="workerid" value="<?php echo $this->workerid; ?>">
+    <input data-mini="true" type="hidden" id="mode" name="mode" value="<?php echo $this->mode; ?>">
+    <input data-mini="true" type="hidden" id="workerid" name="workerid" value="<?= $wid ?>">
 
-<table>
-<tr>
-<td><div data-role="fieldcontain">
-    <label for="pic" class="ui-input-text"></label>
-    <img src="<?php echo $pic; ?>" alt="无照片显示" width="40%"  id="pic" name="pic">
-</div></td>
-<td><div data-role="fieldcontain">
-    <label for="file" class="ui-input-text">更新照片：</label>
-    <input data-mini="true" type="file" name="file" id="file">
-</div></td>
-</tr>
-</table>
+    <table>
+        <tr>
+            <td>
+                <div data-role="fieldcontain">
+                    <label for="pic" class="ui-input-text"></label>
+                    <img src="<?php echo $pic; ?>" alt="无照片显示" width="400" id="pic" name="pic">
+                </div>
+            </td>
+            <td>
+                <div data-role="fieldcontain">
+                    <label for="file" class="ui-input-text">更新照片：</label>
+                    <input data-mini="true" type="file" name="file" id="file">
+                </div>
+            </td>
+        </tr>
+    </table>
 
-<div data-role="fieldcontain">
-    <label for="sn">S/N:</label>
-    <input data-mini="true" type="text" name="sn" id="sn" value="<?php echo $sn; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="eeeno">E'ee No.:</label>
-    <input data-mini="true" type="text" name="eeeno" id="eeeno" value="<?php echo $eeeno; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="namechs">Chinese Name:</label>
-    <input data-mini="true" type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="nameeng">English Name:</label>
-    <input data-mini="true" type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="wpno">WP No.:</label>
-    <input data-mini="true" type="text" name="wpno" id="wpno" value="<?php echo $wpno; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="wpexpiry">WP Expiry:</label>
-    <input data-mini="true" type="text" name="wpexpiry" id="wpexpiry" value="<?php echo $wpexpiry; ?>" class="datepicker"/>
-</div>
-<div data-role="fieldcontain">
-    <label for="doa">D.O.A:</label>
-    <input data-mini="true" type="text" name="doa" id="doa" value="<?php echo $doa; ?>" class="datepicker" />
-</div>
-<div data-role="fieldcontain">
-    <label for="issuedate">Date of Issue:</label>
-    <input data-mini="true" type="text" name="issuedate" id="issuedate" value="<?php echo $issuedate; ?>" class="datepicker" />
-</div>
-<div data-role="fieldcontain">
-    <label for="finno">Fin No.:</label>
-    <input data-mini="true" type="text" name="finno" id="finno" value="<?php echo $finno; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="ppno">PP No.:</label>
-    <input data-mini="true" type="text" name="ppno" id="ppno" value="<?php echo $ppno; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="dob">D.O.B:</label>
-    <input data-mini="true" type="text" name="dob" id="dob" value="<?php echo $dob; ?>" class="datepicker" />
-</div>
-<div data-role="fieldcontain">
-    <label for="ppexpiry">PP Expiry:</label>
-    <input data-mini="true" type="text" name="ppexpiry" id="ppexpiry" value="<?php echo $ppexpiry; ?>" class="datepicker" />
-</div>
-<div data-role="fieldcontain">
-    <label for="rate">RATE:</label>
-    <input data-mini="true" type="text" name="rate" id="rate" value="<?php echo $rate; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="pano">PA Reference No.:</label>
-    <input data-mini="true" type="text" name="pano" id="pano" value="<?php echo $pano; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="sbno">Security Bond No.:</label>
-    <input data-mini="true" type="text" name="sbno" id="sbno" value="<?php echo $sbno; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="securityexp">Security Exprity Date:</label>
-    <input data-mini="true" type="text" name="securityexp" id="securityexp" value="<?php echo $securityexp; ?>" class="datepicker" />
-</div>
-<div data-role="fieldcontain">
-    <label for="worktype">Work Type:</label>
-    <input data-mini="true" type="text" name="worktype" id="worktype" value="<?php echo $worktype; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="arrivaldate">Arrival Date:</label>
-    <input data-mini="true" type="text" name="arrivaldate" id="arrivaldate" value="<?php echo $arrivaldate; ?>" class="datepicker" />
-</div>
-<div data-role="fieldcontain">
-    <label for="medicaldate">Medical Date:</label>
-    <input data-mini="true" type="text" name="medicaldate" id="medicaldate" value="<?php echo $medicaldate; ?>" class="datepicker" />
-</div>
-<div data-role="fieldcontain">
-    <label for="csoc">C.S.O.C:</label>
-    <input data-mini="true" type="text" name="csoc" id="csoc" value="<?php echo $csoc; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="medicalinsurance">Medical Insurance:</label>
-    <input data-mini="true" type="text" name="medicalinsurance" id="medicalinsurance" value="<?php echo $medicalinsurance; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="workingsite">WORKING SITE:</label>
-    <input data-mini="true" type="text" name="workingsite" id="workingsite" value="<?php echo $workingsite; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="dormitory">Dormitory:</label>
-    <input data-mini="true" type="text" name="dormitory" id="dormitory" value="<?php echo $dormitory; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="hometown">区域:</label>
-    <input data-mini="true" type="text" name="hometown" id="hometown" value="<?php echo $hometown; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="education">教育程度:</label>
-    <input data-mini="true" type="text" name="education" id="education" value="<?php echo $education; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="age">年龄:</label>
-    <input data-mini="true" type="text" name="age" id="age" value="<?php echo $age; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="marital">婚姻状况:</label>
-    <input data-mini="true" type="text" name="marital" id="marital" value="<?php echo $marital; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="constructionworker">建筑工:</label>
-    <input data-mini="true" type="text" name="constructionworker" id="constructionworker" value="<?php echo $constructionworker; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="applyfor">Apply For:</label>
-    <input data-mini="true" type="text" name="applyfor" id="applyfor" value="<?php echo $applyfor; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="goodat">Good At:</label>
-    <input data-mini="true" type="text" name="goodat" id="goodat" value="<?php echo $goodat; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="contactno1">Contact No.1:</label>
-    <input data-mini="true" type="text" name="contactno1" id="contactno1" value="<?php echo $contactno1; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="contactno2">Contact No.2:</label>
-    <input data-mini="true" type="text" name="contactno2" id="contactno2" value="<?php echo $contactno2; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="certificate">Certificate:</label>
-    <input data-mini="true" type="text" name="certificate" id="certificate" value="<?php echo $certificate; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="remarks">Remarks(Agent):</label>
-    <input data-mini="true" type="text" name="remarks" id="remarks" value="<?php echo $remarks; ?>" />
-</div>
-<div data-role="fieldcontain">
-    <label for="resignation">Resignation:</label>
-    <input data-mini="true" type="text" name="resignation" id="resignation" value="<?php echo $resignation; ?>" class="datepicker" />
-</div>
+    <div data-role="fieldcontain">
+        <label for="sheet">所属:</label>
+        <select id="sheet" name="sheet" data-mini="true" data-theme="a">
+            <?php
+            $options = "";
+            foreach ($sheetarr as $tmp) {
+                if ($tmp == $sheet) {
+                    $options .= "<option value=$tmp selected>$tmp</option>";
+                } else {
+                    $options .= "<option value=$tmp>$tmp</option>";
+                }
+            }
+            echo $options;
+            ?>
+        </select>
+    </div>
 
-<fieldset>
-<legend>自定义信息</legend>
-<div data-role="fieldcontain">
-    <label for="custom1"><?php echo $customtitle1; ?>:</label>
-    <input data-mini="true" type="text" name="custom1" id="custom1" value="<?php echo $custom1; ?>"  />
-</div>
-<div data-role="fieldcontain">
-    <label for="custom2"><?php echo $customtitle2; ?>:</label>
-    <input data-mini="true" type="text" name="custom2" id="custom2" value="<?php echo $custom2; ?>"  />
-</div>
-<div data-role="fieldcontain">
-    <label for="custom3"><?php echo $customtitle3; ?>:</label>
-    <input data-mini="true" type="text" name="custom3" id="custom3" value="<?php echo $custom3; ?>"  />
-</div>
-<div data-role="fieldcontain">
-    <label for="custom4"><?php echo $customtitle4; ?>:</label>
-    <input data-mini="true" type="text" name="custom4" id="custom4" value="<?php echo $custom4; ?>"  />
-</div>
-</fieldset>
+    <div data-role="fieldcontain">
+        <label for="sn">S/N:</label>
+        <input data-mini="true" type="text" name="sn" id="sn" value="<?php echo $sn; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="eeeno">E'ee No.:</label>
+        <input data-mini="true" type="text" name="eeeno" id="eeeno" value="<?php echo $eeeno; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="namechs">Chinese Name:</label>
+        <input data-mini="true" type="text" name="namechs" id="namechs" value="<?php echo $namechs; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="nameeng">English Name:</label>
+        <input data-mini="true" type="text" name="nameeng" id="nameeng" value="<?php echo $nameeng; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="wpno">WP No.:</label>
+        <input data-mini="true" type="text" name="wpno" id="wpno" value="<?php echo $wpno; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="wpexpiry">WP Expiry:</label>
+        <input data-mini="true" type="text" name="wpexpiry" id="wpexpiry" value="<?php echo $wpexpiry; ?>" class="datepicker"/>
+    </div>
+    <div data-role="fieldcontain">
+        <label for="doa">D.O.A:</label>
+        <input data-mini="true" type="text" name="doa" id="doa" value="<?php echo $doa; ?>" class="datepicker" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="issuedate">Date of Issue:</label>
+        <input data-mini="true" type="text" name="issuedate" id="issuedate" value="<?php echo $issuedate; ?>" class="datepicker" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="finno">Fin No.:</label>
+        <input data-mini="true" type="text" name="finno" id="finno" value="<?php echo $finno; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="ppno">PP No.:</label>
+        <input data-mini="true" type="text" name="ppno" id="ppno" value="<?php echo $ppno; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="dob">D.O.B:</label>
+        <input data-mini="true" type="text" name="dob" id="dob" value="<?php echo $dob; ?>" class="datepicker" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="ppexpiry">PP Expiry:</label>
+        <input data-mini="true" type="text" name="ppexpiry" id="ppexpiry" value="<?php echo $ppexpiry; ?>" class="datepicker" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="rate">RATE:</label>
+        <input data-mini="true" type="text" name="rate" id="rate" value="<?php echo $rate; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="worktype">主要工种:</label>
+        <input data-mini="true" type="text" name="worktype" id="worktype" value="<?php echo $worktype; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="arrivaldate">Arrival Date:</label>
+        <input data-mini="true" type="text" name="arrivaldate" id="arrivaldate" value="<?php echo $arrivaldate; ?>" class="datepicker" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="medicaldate">Medical Date:</label>
+        <input data-mini="true" type="text" name="medicaldate" id="medicaldate" value="<?php echo $medicaldate; ?>" class="datepicker" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="csoc">C.S.O.C:</label>
+        <input data-mini="true" type="text" name="csoc" id="csoc" value="<?php echo $csoc; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="medicalinsurance">Medical Insurance:</label>
+        <input data-mini="true" type="text" name="medicalinsurance" id="medicalinsurance" value="<?php echo $medicalinsurance; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="securityexp">Security Bond Expiry Date:</label>
+        <input data-mini="true" type="text" name="securityexp" id="securityexp" value="<?php echo $securityexp; ?>" class="datepicker" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="workingsite">Working Site:</label>
+        <input data-mini="true" type="text" name="workingsite" id="workingsite" value="<?php echo $workingsite; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="dormitory">Dormitory:</label>
+        <input data-mini="true" type="text" name="dormitory" id="dormitory" value="<?php echo $dormitory; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="goodat">Good At:</label>
+        <input data-mini="true" type="text" name="goodat" id="goodat" value="<?php echo $goodat; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="contactno1">Contact No.1:</label>
+        <input data-mini="true" type="text" name="contactno1" id="contactno1" value="<?php echo $contactno1; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="contactno2">Contact No.2:</label>
+        <input data-mini="true" type="text" name="contactno2" id="contactno2" value="<?php echo $contactno2; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="certificate">Certificate:</label>
+        <input data-mini="true" type="text" name="certificate" id="certificate" value="<?php echo $certificate; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="certificate">Agent:</label>
+        <input data-mini="true" type="text" name="certificate" id="certificate" value="<?php echo $agent; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="remark">Remark:</label>
+        <input data-mini="true" type="text" name="remark" id="remark" value="<?php echo $remark; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="hometown">区域:</label>
+        <input data-mini="true" type="text" name="hometown" id="hometown" value="<?php echo $hometown; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="education">教育程度:</label>
+        <input data-mini="true" type="text" name="education" id="education" value="<?php echo $education; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="age">年龄:</label>
+        <input data-mini="true" type="text" name="age" id="age" value="<?php echo $age; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="marital">婚姻状况:</label>
+        <input data-mini="true" type="text" name="marital" id="marital" value="<?php echo $marital; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="constructionworker">建筑工:</label>
+        <input data-mini="true" type="text" name="constructionworker" id="constructionworker" value="<?php echo $constructionworker; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="applyfor">Apply For:</label>
+        <input data-mini="true" type="text" name="applyfor" id="applyfor" value="<?php echo $applyfor; ?>" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="resignation">离职日期:</label>
+        <input data-mini="true" type="text" name="resignation" id="resignation" value="<?= $resigndate; ?>" class="datepicker" placeholder="工人离职日期" />
+    </div>
+    <div data-role="fieldcontain">
+        <label for="resignremark">离职说明:</label>
+        <input data-mini="true" type="text" name="resignremark" id="resignremark" value="<?= $resignremark; ?>" placeholder="离职说明" />
+    </div>    
+    <fieldset>
+        <legend>自定义信息</legend>
+        <div data-role="fieldcontain">
+            <label for="custom1"><?php echo $customtitle1; ?>:</label>
+            <input data-mini="true" type="text" name="custom1" id="custom1" value="<?php echo $custom1; ?>"  />
+        </div>
+        <div data-role="fieldcontain">
+            <label for="custom2"><?php echo $customtitle2; ?>:</label>
+            <input data-mini="true" type="text" name="custom2" id="custom2" value="<?php echo $custom2; ?>"  />
+        </div>
+        <div data-role="fieldcontain">
+            <label for="custom3"><?php echo $customtitle3; ?>:</label>
+            <input data-mini="true" type="text" name="custom3" id="custom3" value="<?php echo $custom3; ?>"  />
+        </div>
+        <div data-role="fieldcontain">
+            <label for="custom4"><?php echo $customtitle4; ?>:</label>
+            <input data-mini="true" type="text" name="custom4" id="custom4" value="<?php echo $custom4; ?>"  />
+        </div>
+    </fieldset>
 
-<input data-mini="true" data-theme="a" type="submit" name="submit" value="提交">
+    <!--<input data-mini="true" data-theme="a" type="submit" name="submit" value="提交">-->
 </form>
 <br>
 <br>

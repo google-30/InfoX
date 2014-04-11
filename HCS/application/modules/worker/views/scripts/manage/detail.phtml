@@ -52,27 +52,27 @@ if ($this->mode == "Edit") {
     $namechs = $worker->getNamechs();
     $wpno = $worker->getWpno();
     $wpexpiry = $worker->getWpexpiry();
-    $wpexpiry = $wpexpiry ? $wpexpiry->format("Y/m/d") : "";
+    $wpexpiry = $wpexpiry ? $wpexpiry->format("d/m/Y") : "";
     $doa = $worker->getDoa();
-    $doa = $doa ? $doa->format("Y/m/d") : "";
+    $doa = $doa ? $doa->format("d/m/Y") : "";
     $issuedate = $worker->getIssuedate();
-    $issuedate = $issuedate ? $issuedate->format("Y/m/d") : "";
+    $issuedate = $issuedate ? $issuedate->format("d/m/Y") : "";
     $finno = $worker->getFinno();
     $ppno = $worker->getPpno();
     $dob = $worker->getDob();
-    $dob = $dob ? $dob->format("Y/m/d") : "";
+    $dob = $dob ? $dob->format("d/m/Y") : "";
     $ppexpiry = $worker->getPpexpiry();
-    $ppexpiry = $ppexpiry ? $ppexpiry->format("Y/m/d") : "";
+    $ppexpiry = $ppexpiry ? $ppexpiry->format("d/m/Y") : "";
     $rate = $worker->getRate();
     $securityexp = $worker->getSecurityexp();
-    $securityexp = $securityexp ? $securityexp->format("Y/m/d") : "";
+    $securityexp = $securityexp ? $securityexp->format("d/m/Y") : "";
     $worktype = $worker->getWorktype();
     $arrivaldate = $worker->getArrivaldate();
-    $arrivaldate = $arrivaldate ? $arrivaldate->format("Y/m/d") : "";
+    $arrivaldate = $arrivaldate ? $arrivaldate->format("d/m/Y") : "";
     $medicaldate = $worker->getMedicaldate();
-    $medicaldate = $medicaldate ? $medicaldate->format("Y/m/d") : "";
+    $medicaldate = $medicaldate ? $medicaldate->format("d/m/Y") : "";
     $csoc = $worker->getCsoc();
-    $csoc = $csoc ? $csoc->format("Y/m/d") : "";
+    $csoc = $csoc ? $csoc->format("d/m/Y") : "";
     $medicalinsurance = $worker->getMedicalinsurance();
     $workingsite = $worker->getWorkingsite();
     $dormitory = $worker->getDormitory();
@@ -90,8 +90,8 @@ if ($this->mode == "Edit") {
     $remark = $worker->getRemark();
     $company = $worker->getCompany();
     $race = $worker->getRace();
-    $resignation = $worker->getResignation();
-    $resignation = $resignation ? $resignation->format('Y/m/d') : "";
+    $resigndate = $worker->getResigndate();
+    $resigndate = $resigndate ? $resigndate->format('d/m/Y') : "";
     $sheet = $worker->getSheet();
     $currentrate = $worker->getCurrentrate();
     $monthrate = $worker->getMonthrate();
@@ -497,11 +497,13 @@ $_renewform = ''
         <label for="applyfor">Apply For:</label>
         <input data-mini="true" type="text" name="applyfor" id="applyfor" value="<?php echo $applyfor; ?>" />
     </div>
+    <!--
     <div data-role="fieldcontain">
-        <label for="resignation">Resignation:</label>
-        <input data-mini="true" type="text" name="resignation" id="resignation" value="<?php echo $resignation; ?>" class="datepicker" 
+        <label for="resignation">离职日期:</label>
+        <input data-mini="true" type="text" name="resignation" id="resignation" value="<?=$resigndate; ?>" class="datepicker" 
                placeholder="工人离职日期" />
     </div>
+    -->
     <fieldset>
         <legend>自定义信息</legend>
         <div data-role="fieldcontain">

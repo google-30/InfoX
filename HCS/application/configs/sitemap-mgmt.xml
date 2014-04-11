@@ -21,7 +21,7 @@
                 <class>popup</class>
                 <pages>
                     <worker>
-                        <label>工人信息</label>
+                        <label>现役工人</label>
                         <module>worker</module>
                         <controller>manage</controller>
                         <action>index</action>
@@ -30,7 +30,7 @@
                     </worker>
 
                     <workerexpire>
-                        <label>证件过期</label>
+                        <label>证件到期</label>
                         <module>worker</module>
                         <controller>manage</controller>
                         <action>workerexpire</action>
@@ -39,14 +39,14 @@
                     </workerexpire>
 
                     <workerarchive>
-                        <label>存档信息</label>
+                        <label>离职工人</label>
                         <module>worker</module>
                         <controller>archive</controller>
                         <action>index</action>
                         <resource>worker:archive</resource>
                         <privilege>view</privilege>
                     </workerarchive>
-
+                    <!--
                     <custominfo>
                         <label>相关数据</label>
                         <module>worker</module>
@@ -55,7 +55,7 @@
                         <resource>worker:custominfo</resource>
                         <privilege>view</privilege>
                     </custominfo>
-
+                    -->
                 </pages>
             </workermodules>
 
@@ -269,7 +269,7 @@
             </othermodules>
 
             <sysmodules>	
-                <label>系统功能</label>
+                <label>InfoX</label>
                 <uri>#sysmodules</uri>
                 <class>popup</class>
                 <pages>

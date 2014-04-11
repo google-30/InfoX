@@ -88,7 +88,7 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         $name = $row["namechs"];
         $eeeno = $row["eeeno"];
         //$link1 = '<a href="/worker/manage/edit?id=' . $wid . '"  target="_blank">Edit</a>';
-        $link1 = '<a href="/worker/manage/edit/id/' . $wid . '"  target="_blank">Edit</a>';
+        $link1 = '<a href="/worker/manage/edit/id/' . $wid . '"  target="_blank">Details</a>';
         $link2 = '<a onclick="workerResign(' . "$wid, '$name','$eeeno'" . ')">Resign</a>';
         $link3 = '<a onclick="workerRenewinfo(' . "$wid, '$name','$eeeno'" . ')">Renew</a>';
 
@@ -100,9 +100,8 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         $wid = $row["id"];
         $name = $row["namechs"];
         $eeeno = $row["eeeno"];
-        //$link1 = '<a href="/worker/manage/edit?id=' . $wid . '"  target="_blank">Edit</a>';
-        $link1 = '<a href="/worker/manage/edit/id/' . $wid . '"  target="_blank">Edit</a>';
-        $link2 = '<a onclick="workerResign(' . "$wid, '$name','$eeeno'" . ')">Active</a>';
+        $link1 = '<a href="/worker/archive/edit/id/' . $wid . '"  target="_blank">Details</a>';
+        $link2 = '<a onclick="workerActive(' . "$wid, '$name','$eeeno'" . ')">Active</a>';
         //$link3 = '<a onclick="workerRenewinfo(' . "$wid, '$name','$eeeno'" . ')">Renew</a>';
 
         $actions = $link1 . "<br>" . $link2;
@@ -130,4 +129,13 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         return $actions;
     }
 
+     protected function td_expiryactions($field, $row) {
+        $wid = $row["id"];
+        $name = $row["namechs"];
+        $eeeno = $row["eeeno"];
+        $link1 = '<a href="/worker/manage/edit/id/' . $wid . '"  target="_blank">Details</a>';
+
+        $actions = $link1;
+        return $actions;
+    }   
 }

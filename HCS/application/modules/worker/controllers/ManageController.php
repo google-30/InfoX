@@ -121,8 +121,8 @@ class Worker_ManageController extends Zend_Controller_Action {
     public function workerexpireAction() {
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
         $this->view->sheet = $requestsheet = $this->getParam("sheet", $sheetarr[0]);
-        $this->view->paramarr = $paramarr = array("wpexpiry" => "Work Pass",
-            "ppexpiry" => "Passport", "csoc" => "Csoc", "securityexp" => "Security Bond Expiry Date",);
+        $this->view->paramarr = $paramarr = array("wpexpiry" => "Work Pass Expiry Date",
+            "ppexpiry" => "Passport Expiry Date", "csoc" => "Csoc Expiry Date", "securityexp" => "Security Bond Expiry Date",);
 
         $expiryarr = array();
 
@@ -717,7 +717,6 @@ class Worker_ManageController extends Zend_Controller_Action {
     private function getWorktypes() {
         $label = "info04";
         $values = $this->_miscinfo->findOneBy(array("label" => $label))->getValues();
-
         $this->view->worktypes = explode(";", $values);
     }
 

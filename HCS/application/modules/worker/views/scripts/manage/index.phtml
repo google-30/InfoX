@@ -246,14 +246,6 @@ $wdtab = $wdtab->data($maindata);
         $("#wid").val(wid);
         $("#wname").text("离职 - " + eeeno + " - " + name);
         $("#divresign").bPopup();
-
-        /*
-         var r = confirm("确认工人离职? " + name + " " + eeeno);
-         if (r == false)
-         {
-         return false;
-         }
-         */
     }
 
     function workerRenewinfo(wid, name, eeeno)
@@ -307,7 +299,6 @@ if (count($maindata)) {
     <form method="post" action="/worker/manage/resign">
         <input type="hidden" id="wid" name="wid" value="0">
         <input type="hidden" id="sheetres" name="sheetres" value="HC.C">
-
         <input type="text" id="resigndate" name="resigndate" placeholder="点击选择离职日期" />
         <textarea rows="8" cols="50" placeholder="输入离职相关说明" id="resignremark" name="resignremark"></textarea>
         <input type="submit" value="提交" data-mini="true">
@@ -315,13 +306,4 @@ if (count($maindata)) {
 </div>
 
 <div id="divrenews" class="bMulti">
-
-    <?php
-    if (0) {
-        foreach ($renewtabs as $tmp) {
-            echo $tmp . "
-";
-        }
-    }
-    ?>
 </div>    

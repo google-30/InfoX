@@ -1,10 +1,30 @@
+<?php
+$sheet = $this->sheet;
+$sheetarr = $this->sheetarr;
+$paramarr = $this->paramarr;
+$_expiryarr = $this->expiryarr;
+
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    } else {
+        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+    }
+
+    $options .= $option;
+}
+$selects = '<select data-mini="true" data-theme="a" id="sheetselect">';
+$selects.=$options;
+$selects.='</select>';
+?>
 <style>
     table {
         table-layout: fixed;
     }
 </style>
 <script>
-    $(function() {
+    $(function() {        
         $(".wpexpiry").hide();
         $("#wpexpiry0").show();
 
@@ -56,29 +76,9 @@
     }
 
 </script>
-<?php
-$sheet = $this->sheet;
-$sheetarr = $this->sheetarr;
-$paramarr = $this->paramarr;
-$_expiryarr = $this->expiryarr;
 
-$options = "";
-foreach ($sheetarr as $tmp) {
-    if ($sheet == $tmp) {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    } else {
-        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
-    }
-
-    $options .= $option;
-}
-$selects = '<select data-mini="true" data-theme="a" id="sheetselect">';
-$selects.=$options;
-$selects.='</select>';
-echo $selects;
-?>
-
-<div data-role="collapsible-set" data-mini="true" data-theme="c">
+<?= $selects; ?>
+<div data-role="collapsible-set" data-mini="true" data-theme="a">
     <?php
     $divhtml = "";
     foreach ($paramarr as $key => $value) {
@@ -98,12 +98,13 @@ echo $selects;
                     ->field('name', 'Name ')
                     ->field('wpno', "Work Pass")
                     ->field($key, $value)
+                    ->field("expiryactions", "Action")
                     ->setSorting(false)
                     ->paginatorEnabled(false)
                     ->helper(new GridHelper_Workerdetails())
-                    ->data($tmpvalue)
-                    ->actionField(':action', "", '&nbsp;|&nbsp;')
-                    ->action(':action', '详细', array('url' => array('action' => 'edit')));
+                    ->data($tmpvalue);
+                    //->actionField(':action', "", '&nbsp;|&nbsp;')
+                    //->action(':action', '详细', array('url' => array('action' => 'edit')));
             $gridhtml = '<div class="' . $key . '" id="' . $key . $count . '">' . $gridhtml . '</div>';
             $grids .= $gridhtml;
 

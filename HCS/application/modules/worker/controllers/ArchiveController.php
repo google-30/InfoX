@@ -20,8 +20,6 @@ class Worker_ArchiveController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        //$this->getworkerlist();
-        //$this->getCustominfo(0);
         $this->view->sheet = $requestsheet = $this->getParam("sheet", "All");
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetArrAll();
         $this->view->maindata = $workerarr = infox_worker::getResignedWorkersBySheet($requestsheet);
@@ -41,7 +39,42 @@ class Worker_ArchiveController extends Zend_Controller_Action {
 
         $this->getCustominfo($id);
 
-        $this->getSheetarr();
+        $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
+
+        $workerarr = infox_worker::getResignedWorkersBySheet("All");
+        $this->view->workerarr = $workerarr;
+    }
+
+    public function activeworkerAction() {
+        infox_common::turnoffView($this->_helper);
+        $wid = $this->getParam("wid", 0);
+        $sheet = $this->getParam("sheet", "All");
+        if ($wid) {
+            $worker = $this->_workerdetails->findOneBy(array("id" => $wid));
+
+            /*
+            $resigndate = $this->getParam("resigndate", "");
+            $resignremark = $this->getParam("resignremark", "");
+
+            $worker->setResigndate(new Datetime($resigndate));
+            $worker->setResignremark($resignremark);
+             * *
+             */
+            $worker->setResignation(FALSE);
+
+            $this->_em->persist($worker);
+            try {
+                $this->_em->flush();
+            } catch (Exception $e) {
+                var_dump($e);
+                return;
+            }
+            
+            //$url = "/worker/archive/sheet/" . $sheet;
+            //$this->redirect($url);
+        }
+
+        //$this->redirect("/worker/archive");
     }
 
     public function previewlistAction() {

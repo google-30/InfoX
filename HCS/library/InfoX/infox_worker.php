@@ -109,6 +109,7 @@ class infox_worker {
         {
             $workers = $_workerdetails->findBy(array("resignation"=> TRUE, "sheet"=>$sheet));            
         }
+        
         return $workers;
         /*    
         $workerarr = array();
