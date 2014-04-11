@@ -65,7 +65,7 @@
                 <class>popup</class>
                 <pages>
                     <workeronsite>
-                        <label>工地记录</label>
+                        <label>工地人员</label>
                         <module>worker</module>
                         <controller>onsite</controller>
                         <action>index</action>
