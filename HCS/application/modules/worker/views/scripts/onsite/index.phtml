@@ -1,25 +1,3 @@
-<style>
-    #Workersdata { table-layout: fixed; }
-</style>
-<script>
-    $(function() {
-        $('#Workersdata').dataTable({
-            "iDisplayLength": 100,
-            "bRetrieve": true,
-            "aaSorting": [[0, "desc"]],
-        });
-    });
-
-    $("#sheetselect").change(function() {
-        var sheetname = $(this).val();
-        var url = "/worker/onsite?sheet=" + sheetname;
-        redirect(url);
-    });
-
-    function redirect(url) {
-        window.location = url;
-    }
-</script>
 <?php
 $sheet = $this->sheet;
 $sheetarr = $this->sheetarr;
@@ -38,11 +16,10 @@ foreach ($sheetarr as $tmp) {
 $selects = '<select data-mini="true" id="sheetselect" data-theme="a">';
 $selects.=$options;
 $selects.='</select>';
-echo $selects;
 
 $onswitches = array(
-    "site" => "Site", "eeeno" => "E'ee No.", "namechs" => "Name ", 
-    /*"nameeng" => "Name ",*/ "wpno" => "WP No.",
+    "site" => "Site", "eeeno" => "E'ee No.", "namechs" => "Name ",
+    /* "nameeng" => "Name ", */ "wpno" => "WP No.",
     "ppno" => "PP No.", /* "rate" => "RATE", */);
 
 $wdtab = $this->grid("Workersdata", true);
@@ -54,6 +31,60 @@ $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
 $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
 $wdtab = $wdtab->data($maindata)->action(':action', '工地', array('url' => array('action' => 'onsiterecord')));
 $wdtab = $wdtab->action(':action', '缺勤', array('url' => array('action' => 'attendancerecord')));
-echo $wdtab;
+
+$sites = $this->sites;
+$siteid = $this->siteid;
+$options = '';
+foreach ($sites as $tmp) {
+    $id = $tmp->getId();
+    $name = $tmp->getName();
+
+    if ($siteid == $id) {
+        $option = '<option value="' . $id . '" selected>' . $name . "</option>";
+    } else {
+        $option = '<option value="' . $id . '" >' . $name . "</option>";
+    }
+    $options .= $option;
+}
 ?>
+
+<style>
+    #Workersdata { table-layout: fixed; }
+</style>
+<script>
+    $(function() {
+        $('#Workersdata').dataTable({
+            "iDisplayLength": 100,
+            "bRetrieve": true,
+            "aaSorting": [[0, "desc"]],
+        });
+    });
+
+    $("#sheetselect").change(function() {
+        var sheetname = $(this).val();
+        var url = "/worker/onsite?sheet=" + sheetname;
+        redirect(url);
+    });
+
+    $("#sites").change(function() {
+        var siteid = $(this).val();
+        alert(siteid);
+
+        $("#workersonsite-div").load("/worker/onsite/workersonsite/id/" + siteid, function() {
+            //alert("Load was performed.");
+        });
+    });
+
+    function redirect(url) {
+        window.location = url;
+    }
+</script>
+<select id="sites" data-mini="true" data-theme="a">
+    <option value=0>选择工地查看工人列表</option>
+    <?= $options; ?>
+</select>
+<div id="workersonsite-div"></div>
+<hr>
+<?= $selects; ?>
+<?= $wdtab; ?>
 <br><br>

@@ -1,6 +1,8 @@
 <?php
+
 include 'InfoX/infox_common.php';
 include 'InfoX/infox_worker.php';
+include_once 'InfoX/infox_user.php';
 
 class Worker_OnsiteController extends Zend_Controller_Action {
 
@@ -15,11 +17,16 @@ class Worker_OnsiteController extends Zend_Controller_Action {
 
     public function indexAction() {
         /*
-        $allsheets = array(0 => "All");
-        $sheetarr = infox_worker::getSheetarr();
-        $this->view->sheetarr = array_merge($allsheets, $sheetarr);
-        */
-        
+          $allsheets = array(0 => "All");
+          $sheetarr = infox_worker::getSheetarr();
+          $this->view->sheetarr = array_merge($allsheets, $sheetarr);
+         */
+        $sites = infox_user::getActiveSites();
+        $this->view->sites = $sites;
+
+        $siteid = $this->getParam("siteid", 0);
+        $this->view->siteid = $siteid;
+
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarrAll();
         $sheet = $this->getParam("sheet", "All");
 
@@ -30,6 +37,39 @@ class Worker_OnsiteController extends Zend_Controller_Action {
         }
         $this->view->maindata = $workerlist;
         $this->view->sheet = $sheet;
+    }
+
+    public function workersonsiteAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $siteid = $this->getParam("siteid", 0);
+        $siteobj = $this->_site->findOneBy(array("id" => $siteid));
+        $result = $this->_workeronsite->findBy(array('site' => $siteobj));
+        $workersonsite = array();
+        foreach ($result as $tmp) {
+            $worker = $tmp->getWorker();
+            $wid = $worker->getId();
+            if (!key_exists($wid, $workersonsite)) {
+                $workersonsite[$wid] = $worker;
+            }
+        }
+        $this->view->workersonsite = $workersonsite;
+
+        $onswitches = array(
+            "eeeno" => "E'ee No.", "namechs" => "Name ",
+            /* "nameeng" => "Name ", */ "wpno" => "WP No.",
+            "ppno" => "PP No.", /* "rate" => "RATE", */);
+
+        $wdtab = $this->view->grid("Workersdata", true);
+        foreach ($onswitches as $key => $value) {
+            $wdtab = $wdtab->field($key, $value);
+        }
+        $wdtab = $wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+        $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+        $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
+        $wdtab = $wdtab->data($workersonsite)->render();
+
+        echo $wdtab;
     }
 
     public function onsiterecordAction() {
@@ -253,4 +293,5 @@ class Worker_OnsiteController extends Zend_Controller_Action {
         $array = explode(";", $info->getValues());
         return $array;
     }
+
 }

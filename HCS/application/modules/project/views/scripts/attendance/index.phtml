@@ -1,9 +1,22 @@
+<?php
+$siteid = $this->siteid;
+$sites = $this->sites;
+$workingmonths = $this->workingmonths;
+
+$style = "";
+if ($this->error != "") {
+    $style = "display:none;";
+}
+
+$workersonsite = $this->workersonsite;
+?>
+
 <script>
     $(function() {
         $('#Workersonsite').dataTable({
             "iDisplayLength": 100,
             "bRetrieve": true,
-             "aaSorting": [[0,'desc']],
+            "aaSorting": [[0, 'desc']],
         });
 
         var siteid = $("#sites").val();
@@ -41,25 +54,10 @@
         window.open(url);
     }
 </script>
-<?php
-$siteid = $this->siteid;
-$sites = $this->sites;
-$workingmonths = $this->workingmonths;
-
-$style = "";
-if ($this->error != "") {
-    $style = "display:none;";
-}
-
-$workersonsite = $this->workersonsite;
-?>
-
-<input type="hidden" id="siteid" value="<? echo $siteid; ?>">
-
+<input type="hidden" id="siteid" value="<?= $siteid; ?>">
 <div id="error">
     <?= $this->error ?>
 </div>
-
 <select id="sites" data-mini="true" data-theme="a">
     <option value=0>选择工地进行考勤</option>
     <?php
