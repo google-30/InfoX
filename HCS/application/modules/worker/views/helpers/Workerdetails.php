@@ -106,8 +106,8 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
 
         $actions = $link1 . "<br>" . $link2;
         return $actions;
-    }    
-    
+    }
+
     protected function td_renewdate($field, $row) {
         return $this->getDate($field, $row);
     }
@@ -129,7 +129,7 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
         return $actions;
     }
 
-     protected function td_expiryactions($field, $row) {
+    protected function td_expiryactions($field, $row) {
         $wid = $row["id"];
         $name = $row["namechs"];
         $eeeno = $row["eeeno"];
@@ -137,5 +137,19 @@ class GridHelper_Workerdetails extends Grid_Helper_Abstract {
 
         $actions = $link1;
         return $actions;
-    }   
+    }
+
+    protected function td_onsiteactions($field, $row) {
+        $wid = $row["id"];
+        $name = $row["namechs"];
+        $eeeno = $row["eeeno"];
+        //http://philiptt/worker/onsite/onsiterecord/id/1731
+        
+        $link1 = '<a href="#" onclick="workeronsites(' . $wid . ')">工地</a>';
+        $link2 = '<a href="/worker/onsite/onsiterecord/id/' . $wid . '"  target="_blank">详细</a>';
+        $actions = $link1 . " | " . $link2;
+        return $actions;
+        
+    }
+
 }

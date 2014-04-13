@@ -42,7 +42,7 @@ class Worker_OnsiteController extends Zend_Controller_Action {
     public function workersonsiteAction() {
         infox_common::turnoffView($this->_helper);
 
-        $siteid = $this->getParam("siteid", 0);
+        $siteid = $this->getParam("id", 0);
         $siteobj = $this->_site->findOneBy(array("id" => $siteid));
         $result = $this->_workeronsite->findBy(array('site' => $siteobj));
         $workersonsite = array();
@@ -70,6 +70,7 @@ class Worker_OnsiteController extends Zend_Controller_Action {
         $wdtab = $wdtab->data($workersonsite)->render();
 
         echo $wdtab;
+        //echo "xxx=" . $siteid; //count($workersonsite);
     }
 
     public function onsiterecordAction() {
@@ -292,6 +293,49 @@ class Worker_OnsiteController extends Zend_Controller_Action {
         $info = $this->_miscinfo->findOneBy(array("label" => $label));
         $array = explode(";", $info->getValues());
         return $array;
+    }
+
+    public function sitelistAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $id = $this->getParam("id", 0);
+        $worker = $this->_workerdetails->findOneBy(array("id" => $id));
+        if (!$worker) {
+            return;
+        }
+
+        $result = $this->_workeronsite->findBy(array('worker' => $worker));
+        $onswitches = array(
+            "site1" => "Site Name", "begindate1" => "Begin",
+            "enddate1" => "End",);
+
+        $wdtab = $this->view->grid("sitelist", true);
+        foreach ($onswitches as $key => $value) {
+            $wdtab = $wdtab->field($key, $value);
+        }
+        //$wdtab = $wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+        $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
+        $wdtab = $wdtab->helper(new GridHelper_Workeronsite());
+        $wdtab = $wdtab->data($result)->render();
+
+        $name = $worker->getNamechs();
+        $eeeno = $worker->getEeeno();
+        
+        $sites = infox_user::getActiveSites();
+        //$this->view->sites = $sites;        
+        
+        $options = "<option value=0>请选择工地</option>";
+        foreach($sites as $site)
+        {
+            $sitename = $site->getName();
+            $siteid = $site->getId();
+            $option = "<option value=$siteid>$sitename</option>";
+            $options.= $option;
+        }
+        $siteselects = '<select id="siteselspopup">' . $options . "</select>";
+        $submitbtn = '<button onclick="addsite(' . "$id" . ')"></button>';
+        
+        echo $name. " - " . $eeeno . $wdtab . "<hr>" . $siteselects;
     }
 
 }

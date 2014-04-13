@@ -63,7 +63,7 @@ $id=$this->id;
 
 <div data-role="collapsible" data-collapsed="false">
 <h3>详细记录</h3>
-<?
+<?php
 echo $this->grid("Recordlist", true)
           ->field('begindate1','起始日期')
           ->field('enddate1','结束日期')
@@ -107,30 +107,13 @@ echo $options;
 ?>
 	</select>
 </div>
-<!--
-<div data-role="fieldcontain">
-	<label for="site" class="select">考勤方式:</label>
-	<select name="payment" id="payment" data-mini="true">		
-<?php
-$payments=array("计时", "计件");
-$options="";
-foreach($payments as $tmp)
-{
-    $option = "<option value=$tmp>$tmp</option>";
-    $options .= $option;
-}
-echo $options;
-?>
-	</select>
-</div>
--->
 <input type="button" onclick="addrecord()" value="添加" data-mini="true" data-theme="a">
 </form>
 </div>
 
 <div data-role="collapsible" data-collapsed="true">
 <h3>编辑记录</h3>
-<?
+<?php
 echo $this->grid("Recordedit", true)
           ->field('begindate','起始日期')
           ->field('enddate','结束日期')
