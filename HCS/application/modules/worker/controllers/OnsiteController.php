@@ -16,11 +16,6 @@ class Worker_OnsiteController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        /*
-          $allsheets = array(0 => "All");
-          $sheetarr = infox_worker::getSheetarr();
-          $this->view->sheetarr = array_merge($allsheets, $sheetarr);
-         */
         $sites = infox_user::getActiveSites();
         $this->view->sites = $sites;
 
@@ -320,22 +315,56 @@ class Worker_OnsiteController extends Zend_Controller_Action {
 
         $name = $worker->getNamechs();
         $eeeno = $worker->getEeeno();
-        
+
         $sites = infox_user::getActiveSites();
         //$this->view->sites = $sites;        
-        
+
         $options = "<option value=0>请选择工地</option>";
-        foreach($sites as $site)
-        {
+        foreach ($sites as $site) {
             $sitename = $site->getName();
             $siteid = $site->getId();
             $option = "<option value=$siteid>$sitename</option>";
             $options.= $option;
         }
         $siteselects = '<select id="siteselspopup">' . $options . "</select>";
-        $submitbtn = '<button onclick="addsite(' . "$id" . ')"></button>';
-        
-        echo $name. " - " . $eeeno . $wdtab . "<hr>" . $siteselects;
+        $submitbtn = '<button onclick="addsite(' . "$id" . ')">添加工地记录</button>';
+
+        echo $name . " - " . $eeeno . $wdtab . "<hr>" . $siteselects. "<br>" . $submitbtn;
+    }
+
+    public function addrecordquickAction() {
+        infox_common::turnoffView($this->_helper);
+
+        $requests = $this->getRequest()->getPost();
+        if (0) {
+            var_dump($requests);
+            return;
+        }
+
+        $id = $this->getParam("id", 0);
+        $begin = $this->getParam("begin", "");
+        $end = $this->getParam("end", "");
+        $worker = $this->_workerdetails->findOneBy(array("id" => $id));
+        $siteid = $this->getParam("site", 0);
+        $site = $this->_site->findOneBy(array("id" => $siteid));
+        $payment = $this->getParam("payment", "计时");
+
+        $data = new \Synrgic\Infox\Workeronsite();
+        $data->setWorker($worker);
+        $data->setSite($site);
+        $data->setBegindate(new DateTime($begin));
+        $data->setEnddate(new DateTime($end));
+        //$data->setPayment($payment);
+
+        $this->_em->persist($data);
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+
+        $this->redirect("/worker/onsite/onsiterecord/id/" . $id);
     }
 
 }

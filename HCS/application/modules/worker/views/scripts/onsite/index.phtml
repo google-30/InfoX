@@ -100,7 +100,8 @@ foreach ($sites as $tmp) {
     
     function addsite(wid) {
         var url = "/worker/onsite/sitelist/id/" + wid;
-        $('#divrenews').bPopup({
+        $('#divpopup').bPopup({
+            contentContainer:'.divpopupcontent',
             loadUrl: url
         });
     }
@@ -113,5 +114,9 @@ foreach ($sites as $tmp) {
 <hr>
 <?= $selects; ?>
 <?= $wdtab; ?>
-<div id="divrenews" class="bMulti"></div>  
+<div id="divpopup" class="bMulti">
+    
+    
+</div>  
+<div class="divpopupcontent" class="bMulti"></div>
 <br><br>
