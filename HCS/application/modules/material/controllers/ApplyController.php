@@ -207,10 +207,24 @@ class Material_ApplyController extends Zend_Controller_Action {
         $this->view->mainid = $mainid;
         $this->view->subid = $subid;
 
-        $subtype = $this->_materialtype->findOneBy(array("id" => $subid));
-        $materialobjs = $this->_material->findBy(array("type" => $subtype));
-        $this->view->materials = $materialobjs;
-
+        $subtype = $this->_materialtype->findOneBy(array("id" => $subid));   
+        // TODO: if subtype == null
+        //$materialobjs = $this->_material->findBy(array("type" => $subtype));
+        //$this->view->materials = $materialobjs;
+        $typearr = $this->_materialtype->findBy(array("main" => $subtype));
+        //echo count($typearr);
+        
+        $typestr = "";
+        foreach ($typearr as $type) {
+            $typeid = $type->getId();
+            $typestr .= $typeid . ",";
+        }
+        $typestr .="0";        
+        $query = $this->_em->createQuery(
+                "select m from Synrgic\Infox\Material m where m.type in ($typestr)");
+        $result = $query->getResult();
+        $this->view->materials = $result;      
+                
         $this->view->open = $this->getParam("open", 0);
     }
 
