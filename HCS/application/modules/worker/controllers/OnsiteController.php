@@ -59,7 +59,8 @@ class Worker_OnsiteController extends Zend_Controller_Action {
         foreach ($onswitches as $key => $value) {
             $wdtab = $wdtab->field($key, $value);
         }
-        $wdtab = $wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
+        $wdtab = $wdtab->field("onsiteactions", "Actions");
+        //$wdtab = $wdtab->actionField(':action', "", '&nbsp;|&nbsp;');
         $wdtab = $wdtab->paginatorEnabled(false)->setSorting(false);
         $wdtab = $wdtab->helper(new GridHelper_Workerdetails());
         $wdtab = $wdtab->data($workersonsite)->render();
@@ -317,8 +318,8 @@ class Worker_OnsiteController extends Zend_Controller_Action {
         $eeeno = $worker->getEeeno();
 
         $sites = infox_user::getActiveSites();
-        //$this->view->sites = $sites;        
 
+        /*
         $options = "<option value=0>请选择工地</option>";
         foreach ($sites as $site) {
             $sitename = $site->getName();
@@ -328,8 +329,10 @@ class Worker_OnsiteController extends Zend_Controller_Action {
         }
         $siteselects = '<select id="siteselspopup">' . $options . "</select>";
         $submitbtn = '<button onclick="addsite(' . "$id" . ')">添加工地记录</button>';
-
         echo $name . " - " . $eeeno . $wdtab . "<hr>" . $siteselects. "<br>" . $submitbtn;
+         * 
+         */
+        echo $name . " - " . $eeeno . $wdtab . "<hr>";
     }
 
     public function addrecordquickAction() {
@@ -345,9 +348,10 @@ class Worker_OnsiteController extends Zend_Controller_Action {
         $begin = $this->getParam("begin", "");
         $end = $this->getParam("end", "");
         $worker = $this->_workerdetails->findOneBy(array("id" => $id));
-        $siteid = $this->getParam("site", 0);
+        
+        $siteid = $this->getParam("sid", 0);
         $site = $this->_site->findOneBy(array("id" => $siteid));
-        $payment = $this->getParam("payment", "计时");
+        
 
         $data = new \Synrgic\Infox\Workeronsite();
         $data->setWorker($worker);
@@ -364,7 +368,7 @@ class Worker_OnsiteController extends Zend_Controller_Action {
             return;
         }
 
-        $this->redirect("/worker/onsite/onsiterecord/id/" . $id);
+        //$this->redirect("/worker/onsite/onsiterecord/id/" . $id);
     }
 
 }

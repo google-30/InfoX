@@ -163,7 +163,7 @@ class Synrgic_Models_AclBuilder {
                         'resign', 'renew', 'deleterenew', 'renewlist', 'loadrenewlist', 'loadrenew'),
                     'worker:onsite' => array('view', 'onsiterecord', 'addrecord', 'updaterecord', 
                         'deleterecord', 'attendancerecord', 'addattendancerecord', 'updateattendancerecord', 
-                        'deleteattendancerecord', 'workersonsite', 'sitelist'),
+                        'deleteattendancerecord', 'workersonsite', 'sitelist', 'addrecordquick'),
                     'worker:custominfo' => array('view', 'postinfo'),
                     'worker:import' => array('view', 'submit', 'truncateworkerdetails'),
                     'worker:archive' => array('view', 'edit', 'previewlist', "activeworker"),

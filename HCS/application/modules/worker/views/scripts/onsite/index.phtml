@@ -48,6 +48,7 @@ foreach ($sites as $tmp) {
     }
     $options .= $option;
 }
+$_siteoptions = $options;
 ?>
 <link rel="stylesheet" href="/common/css/jquery.bpopup.css" />
 <script type="text/javascript" src="/common/js/jquery.bpopup.min.js"></script>
@@ -93,16 +94,33 @@ foreach ($sites as $tmp) {
 
     function workeronsites(wid) {
         var url = "/worker/onsite/sitelist/id/" + wid;
-        $('#divrenews').bPopup({
+
+        $("#divpopupwid").val(wid);
+        $('#divpopup').bPopup({
+            contentContainer: '#divpopupcontent',
             loadUrl: url
         });
     }
-    
-    function addsite(wid) {
-        var url = "/worker/onsite/sitelist/id/" + wid;
-        $('#divpopup').bPopup({
-            contentContainer:'.divpopupcontent',
-            loadUrl: url
+
+    function addsite() {
+        $.mobile.loading('show', {
+            text: "Loading...",
+            textVisible: true,
+            theme: 'b',
+        });        
+        
+        //alert("addsite");
+        var wid = $("#divpopupwid").val();
+        var url = "/worker/onsite/addrecordquick/id/" + wid;
+        var sid = $("#popupsites").val();
+        
+        $.post(url, {sid: sid}, function(data) {
+            //alert(data);
+            $("#divpopupcontent").load("/worker/onsite/sitelist/id/" + wid, function() {
+                //alert("Load was performed.");
+                $.mobile.loading('hide');
+            });
+
         });
     }
 </script>
@@ -111,12 +129,18 @@ foreach ($sites as $tmp) {
     <?= $options; ?>
 </select>
 <div id="workersonsite-div"></div>
-<hr>
+<hr><hr>
 <?= $selects; ?>
 <?= $wdtab; ?>
-<div id="divpopup" class="bMulti">
-    
-    
-</div>  
-<div class="divpopupcontent" class="bMulti"></div>
 <br><br>
+
+<div id="divpopup" class="bMulti"> 
+    <div id="divpopupcontent"></div>
+    <select id="popupsites" data-mini="true" data-theme="a">
+        <option value=0>选择工地</option>
+        <?= $options; ?>
+    </select>
+    <button onclick="addsite()" data-mini="true" data-theme="a">添加工地记录</button>
+    <input type="hidden" value="" id="divpopupwid">
+</div>  
+
