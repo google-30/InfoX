@@ -183,7 +183,7 @@ class Project_AttendanceController extends Zend_Controller_Action {
         $tabs[] = $tab;
 
         if ($nobtn) {
-            $attendtab = infox_project::generateAttendanceTab($attendrecord, $dateobj, false, false);
+            $attendtab = infox_project::generateAttendanceTab2014($attendrecord, $dateobj, false, false);
         } else {
             $attendtab = infox_project::generateAttendanceTabWbtn2014($attendrecord, false, $siteid, $dateobj, $worker->getId());
         }

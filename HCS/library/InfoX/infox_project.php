@@ -195,6 +195,7 @@ class infox_project {
         return $attendarr;
     }
 
+    
     public static function generateAttendanceTab($attendrecord, $monthstr, $attendbtn = false, $highlight = false) {
         self::getRepos();
         $attendresult = self::getAttendFoodData($attendrecord);

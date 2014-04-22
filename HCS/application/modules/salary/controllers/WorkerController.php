@@ -118,6 +118,11 @@ class Salary_WorkerController extends Zend_Controller_Action {
         $salarytabs = infox_salary::generateSalaryTabs($recordsall, false);
         $this->view->salarytabs = $salarytabs;
 
+        // worker attendance data by month
+        $sitesalarytabs = infox_salary::generateSiteSalaryTabs($recordsall);
+        $this->view->sitesalarytabs = $sitesalarytabs;        
+        
+        // selects for users
         $options = '';
         foreach ($sheetarr as $tmp) {
             if ($tmp == $sheet_req) {

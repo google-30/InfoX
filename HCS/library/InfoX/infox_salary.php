@@ -29,7 +29,6 @@ class infox_salary {
         self::$_setting = self::$_em->getRepository('Synrgic\Infox\Setting');
 
         self::$_salarysummary = self::$_em->getRepository('Synrgic\Infox\Salarysummary');
-        
     }
 
     public static function getSettingArray() {
@@ -224,11 +223,10 @@ class infox_salary {
         $_salaryall = self::$_salaryall;
 
         $result = $_salaryall->findBy(array("month" => $month));
-        if($sheet == "ALL")
-        {
+        if ($sheet == "ALL") {
             return $result;
         }
-        
+
         $records = array();
         foreach ($result as $tmp) {
             $worker = $tmp->getWorker();
@@ -374,23 +372,23 @@ class infox_salary {
             $totalsalary = 0;
             $piecesalary = 0;
             foreach ($result[0] as $tmp) {
-                if ($tmp) {   
-                    
+                if ($tmp) {
+
                     if ($tmp == ";;0") {
                         continue;
                     }
-                                        
+
                     $tmparr = explode(";", $tmp);
                     $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
                     $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
 
                     if ($hoursdata && $hoursdata != "") {
                         $normalhours += ($hoursdata <= 8) ? $hoursdata : 8;
-                        $othours += ($hoursdata > 8) ? ($hoursdata - 8) : 0;                        
-                        $totaldays += ($hoursdata < 8) ? $hoursdata/8 : 1;
-                    } else if(($piecedata && $piecedata != "")){
+                        $othours += ($hoursdata > 8) ? ($hoursdata - 8) : 0;
+                        $totaldays += ($hoursdata < 8) ? $hoursdata / 8 : 1;
+                    } else if (($piecedata && $piecedata != "")) {
                         $totalsalary += $piecedata;
-                        $piecesalary += $piecedata;                        
+                        $piecesalary += $piecedata;
                         $totaldays++;
                     }
                 }
@@ -400,24 +398,20 @@ class infox_salary {
 
             // TODO: get basic salary from salary settings
             //$normalsalary = ($totalsalary > 600) ? 600 : $totalsalary;
-
             // TODO: get correct race define, for other sheet
             // get basic salary by race                       
             // get race 
             $wsheet = $worker->getSheet();
-            $tmparr = explode(".", $wsheet);                             
-            if(key_exists(1, $tmparr) && $tmparr[1]=="C")
-            {
+            $tmparr = explode(".", $wsheet);
+            if (key_exists(1, $tmparr) && $tmparr[1] == "C") {
                 $basic = self::$_setting->findOneBy(array("name" => "cbasic"));
                 $basicval = $basic->getValue();
-            }
-            else
-            {
+            } else {
                 $basic = self::$_setting->findOneBy(array("name" => "bbasic"));
-                $basicval = $basic->getValue();                
+                $basicval = $basic->getValue();
             }
-            $normalsalary = ($totalsalary > $basicval) ? $basicval : $totalsalary;                        
-            
+            $normalsalary = ($totalsalary > $basicval) ? $basicval : $totalsalary;
+
             $otsalary = $totalsalary - $normalsalary;
 
             $summary["totaldays"] = $totaldays;
@@ -545,7 +539,7 @@ class infox_salary {
 
         $workersheet = $worker->getSheet();
         $basicsalary = 500;
-        if ($workersheet == "HC.C" || $workersheet == "HT.C" || $workersheet == "Others.C" ) {
+        if ($workersheet == "HC.C" || $workersheet == "HT.C" || $workersheet == "Others.C") {
             $basicsalary = self::getSettingBySectionName("salary", "cbasic");
         } else {
             $basicsalary = self::getSettingBySectionName("salary", "bbasic");
@@ -768,7 +762,7 @@ class infox_salary {
         $wpno = $workerobj->getWpno();
         $name = $workerobj->getNamechs();
         $eeeno = $workerobj->getEeeno();
-        
+
         if (!$name || $name == "") {
             $name = $workerobj->getNameeng();
         }
@@ -933,7 +927,7 @@ class infox_salary {
         $tmparr[] = $tab;
 
         $attendance = self::$_siteatten->findOneBy(array("worker" => $worker, "month" => $month));
-        $tab = infox_project::generateAttendanceTab($attendance, $monthstr, false);
+        $tab = infox_project::generateAttendanceTab2014($attendance, $monthstr, false);
         $tmparr[] = $tab;
 
         return $tmparr;
@@ -964,6 +958,85 @@ class infox_salary {
         $tab .= "</table>";
 
         return $tab;
+    }
+
+    public static function generateSiteSalaryTabs($salaryrecords) {
+        foreach ($salaryrecords as $record) {
+            $worker = $record->getWorker();
+            $month = $record->getMonth();
+            $attendance = self::$_siteatten->findOneBy(array("worker" => $worker, "month" => $month));
+            $attendresult = infox_project::getAttendFoodData($attendance);
+
+            $attenddata = $attendresult[0];
+            print_r($attenddata);
+
+            /*
+              for ($i = 26; $i <= $daysfirstmonth; $i++) {
+              $j = $i - 1;
+              $value = $attendresult[0][$j];
+
+              $tmparr = explode(";", $value);
+              $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+              $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+              $value = $hoursdata != "" ? $hoursdata : $piecedata;
+
+              $td = "<td>$value</td>";
+              $tds .= $td;
+              }
+              for ($i = 0; $i < 25; $i++) {
+              $j = $i + 1;
+              $value = $attendresult[0][$i];
+
+              $tmparr = explode(";", $value);
+              $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+              $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+              $value = $hoursdata != "" ? $hoursdata : $piecedata;
+
+              $td = "<td>$value</td>";
+              $tds .= $td;
+              }
+             *
+             */
+
+            $sitedataarr = array();
+            $lastsid = 0;
+            for ($i = 26; $i <= 31; $i++) {
+                $j = $i - 1;
+                if (!key_exists($j, $attenddata)) {
+                    continue;
+                }
+                $value = $attenddata[$j];
+
+                $tmparr = explode(";", $value);
+                $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+                $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+                $value = $hoursdata != "" ? $hoursdata : $piecedata;
+                $sid = $tmparr[2];
+
+                $lastsid = ($sid != 0) ? $sid : $lastsid;
+
+                if (!key_exists($lastsid, $sitedataarr)) {
+                    $tmparr = array();
+                    $tmparr[0] = 0; // attendance
+                    $tmparr[1] = 0; // money
+                    $tmparr[2] = ""; // days, for example, 26, 27, 28,29, means working these days
+                    $sitedataarr[$lastsid] = $tmparr;
+                }
+                $tmparr = $sitedataarr[$lastsid];
+
+                // attendace and money
+                if ($hoursdata < 8 && $hoursdata != "") {
+                    $tmparr[0] += $hoursdata / 8;
+                    
+                    
+                } else if ($piecedata != "") {
+                    $tmparr[0] ++;
+                }
+                
+                // money
+                
+            }
+        }
     }
 
 }
