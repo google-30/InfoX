@@ -1,246 +1,7 @@
-<style>
-    #typetab { table-layout: fixed; }
-    #typetab td { text-align: right; }
-</style>
-<script>
-$(function() { });
-
-$('#sites').change(siteReload);
-$('#maintype').change(maintypeReload);
-$('#subtype').change(subtypeReload);
-
-function siteReload()
-{
-    var mainid = $("#maintype").val();
-    var subid = $("#subtype").val();        
-    var siteid = $("#sites").val();
-    
-    var appid= $("#appid").val();
-    //alert(appid);    
-    if(appid != "0")
-    {
-        var url = "/material/apply/appedit?&id=" + appid;        
-    }
-    else
-    {
-        var url = "/material/apply/applymaterials?";
-    }
-
-    //alert(url);
-    url += "&siteid=" + siteid + "&mainid=" + mainid + "&subid=" + subid;
-    url += "&open=1"; 
-    redirect(url);
-}
-
-function maintypeReload()
-{
-    //alert("reload!");
-    var mainid = $("#maintype").val();
-    var subid = $("#subtype").val();        
-    var siteid = $("#sites").val();
-
-    var appid= $("#appid").val();
-    if(appid != "0")
-    {
-        var url = "/material/apply/appedit?&id=" + appid;        
-    }
-    else
-    {
-        var url = "/material/apply/applymaterials?";
-    }
-
-    //var url = "/material/apply/applymaterials?" + "siteid=" + siteid + "&mainid=" + mainid;
-    url += "&siteid=" + siteid + "&mainid=" + mainid;
-    url += "&open=2"; 
-    redirect(url);
-}
-
-function subtypeReload()
-{
-    //alert("reload!");
-    var mainid = $("#maintype").val();
-    var subid = $("#subtype").val();        
-    var siteid = $("#sites").val();
-
-    var appid= $("#appid").val();
-    if(appid != "0")
-    {
-        var url = "/material/apply/appedit?&id=" + appid;        
-    }
-    else
-    {
-        var url = "/material/apply/applymaterials?";
-    }
-
-    url += "&siteid=" + siteid + "&subid=" + subid;
-    url += "&open=2"; 
-    redirect(url);
-}
-
-function redirect(url) 
-{
-	window.location = url;
-}
-
-function checkall()
-{
-    //alert("checkall");
-    var checked = false;
-    var form = document.dataform;
-    
-    for (var i = 0; i < form.elements.length; i++) {
-        if(form.elements[i].id == 'toggleall')
-        {
-            checked = form.elements[i].checked;
-            break;    
-        }    
-    }
-
-    for (var i = 0; i < form.elements.length; i++) {    
-        if(form.elements[i].type == 'checkbox'){
-                form.elements[i].checked = checked;
-            }    
-    }
-}
-
-function submitmaterials()
-{
-    var r=confirm("Confirm to delete?");
-    if (r==false) { return false; }          
-
-    var formname = "dataform";
-
-    var action = "/material/apply/submit";     
-    var method = "post";
-
-    var frm = $('#dataform');    
-    var toServer = {};
-    $('#datatable tbody tr td input').each(function(key, value) {
-        toServer[$(this).val()] = $(this).is(':checked');
-    });
-    
-    frm.submit(function () {
-        $.ajax({
-            type: method,
-            url: action,
-            data: toServer,
-            success: function (data) {
-                //alert(data);
-                window.location.reload();
-            }
-        });
-
-        return false;
-    });
-    
-    frm.submit();
-}
-
-function addchoosen(id)
-{
-    //alert("id="+id);
-    var amount = $('#slider'+id).val();
-    if(amount==0)
-    {
-        alert("请选择数量");
-        return;
-    }
-
-    //var remark = $('#remark'+id).val();
-    var sitepart = $('#sitepart'+id).val();
-    //alert("id="+id+",amount="+amount+",remark="+remark);
-    $.post("/material/apply/postdata", { id:id, amount:amount, sitepart:sitepart }, 
-        function(data) {
-            alert("提交成功，请继续申请材料");
-            console.log(data);
-            //location.reload();
-    });
-                
-}
-
-//http://stackoverflow.com/questions/178325/testing-if-something-is-hidden-with-jquery
-// http://stackoverflow.com/questions/4009524/change-button-text-jquery-mobile
-function showselected()
-{    
-    //alert("showselected");
-    //if($("#selected").is(":visible")) {
-    //if ($("#selected").css("visibility") == "hidden") {
-    if ($("#selected").css('display') == 'none') {    
-        $("#selected").show();
-        $("#btnSelectedText").html('隐藏已选材料'); 
-    }
-    else
-    {
-        $("#selected").hide();    
-        $("#btnSelectedText").html('显示已选材料'); 
-    }            
-}
-
-function submitmanualinput()
-{
-    var id = 0;    
-    var name = $('#manuname').val();
-    var amount = $('#manuamount').val();
-    var remark = $('#manuremark').val();
-    var sitepart = $('#manusitepart').val();
-    var unit = $('#manuunit').val();
-    
-    if(name=="" || amount=="" || remark=="")
-    {
-        alert("请填写完整，再提交");
-    }
-
-    $.post("/material/apply/postdata", { id:id, amount:amount, remark:remark, longname:name, sitepart:sitepart, unit:unit }, 
-        function(data) {
-            alert("提交成功，请继续申请材料");
-            //console.log(data);
-            //location.reload();
-    });    
-}
-
-function setSiteId()
-{
-    var siteid = $('#sites').val();
-    $("#siteid").val(siteid);
-}
-
-
-function submitselections()
-{
-    var siteid = $('#sites').val();
-    var appid = $('#appid').val();
-    //alert("submitselections, siteid="+siteid);
-    if(siteid == 0)
-    {
-        alert("请选择申请工地");
-        return;    
-    }    
-    //return;
-
-    $.post("/material/apply/submitselections", { siteid:siteid, appid:appid },
-        function(data) {
-            alert(data);
-            console.log(data);
-            //location.reload();
-            //redirect("/material/apply/");    
-    });    
-}
-
-$('#selcollapsible').bind('expand', function () {
-    //alert('Expanded');
-    $.post("/material/apply/getselections", 
-        function(data) {
-            //alert(data);
-            //console.log(data);
-            $("#seltable").html(data);
-    }); 
-});
-</script>
-
 <?php
-$role=$this->role;
+$role = $this->role;
 //$displaynone= ($role=="leader") ? 'style="display:none"' : "";
-$displaynone='style="display:none"';
+$displaynone = 'style="display:none"';
 
 $sites = $this->sites;
 $siteparts = $this->siteparts;
@@ -249,237 +10,493 @@ $sitename = $this->sitename;
 
 $maintypes = $this->maintypes;
 $subtypes = $this->subtypes;
-$mainid=$this->mainid;
-$subid=$this->subid;
+$mainid = $this->mainid;
+$subid = $this->subid;
 
 // open: which is opened
-$open=$this->open;
+$open = $this->open;
 
-$appid=0;
-$matapps=null;
+$appid = 0;
+$matapps = null;
 // create or edit
-$mode=$this->mode;
-if($mode=="edit")
-{
+$mode = $this->mode;
+if ($mode == "edit") {
     $appobj = $this->application;
-    $appid=$appobj->getId();
+    $appid = $appobj->getId();
     $create = $appobj->getCreatedate()->format("Y-m-d H:i:s");
     $update = $appobj->getUpdatedate()->format("Y-m-d H:i:s");
 
-    $matapps=$this->matapps;    
+    $matapps = $this->matapps;
 }
 ?>
+<style>
+    #typetab { table-layout: fixed; }
+    #typetab td { text-align: right; }
+</style>
+<script>
+    $(function() {
+        $('#datatable').dataTable({
+            "iDisplayLength": 50,
+            "bRetrieve": true,
+        });
+    });
+
+    $('#sites').change(siteReload);
+    $('#maintype').change(maintypeReload);
+    $('#subtype').change(subtypeReload);
+
+    function siteReload()
+    {
+        var mainid = $("#maintype").val();
+        var subid = $("#subtype").val();
+        var siteid = $("#sites").val();
+
+        var appid = $("#appid").val();
+        //alert(appid);    
+        if (appid != "0")
+        {
+            var url = "/material/apply/appedit?&id=" + appid;
+        }
+        else
+        {
+            var url = "/material/apply/applymaterials?";
+        }
+
+        //alert(url);
+        url += "&siteid=" + siteid + "&mainid=" + mainid + "&subid=" + subid;
+        url += "&open=1";
+        redirect(url);
+    }
+
+    function maintypeReload()
+    {
+        //alert("reload!");
+        var mainid = $("#maintype").val();
+        var subid = $("#subtype").val();
+        var siteid = $("#sites").val();
+
+        var appid = $("#appid").val();
+        if (appid != "0")
+        {
+            var url = "/material/apply/appedit?&id=" + appid;
+        }
+        else
+        {
+            var url = "/material/apply/applymaterials?";
+        }
+
+        //var url = "/material/apply/applymaterials?" + "siteid=" + siteid + "&mainid=" + mainid;
+        url += "&siteid=" + siteid + "&mainid=" + mainid;
+        url += "&open=2";
+        redirect(url);
+    }
+
+    function subtypeReload()
+    {
+        //alert("reload!");
+        var mainid = $("#maintype").val();
+        var subid = $("#subtype").val();
+        var siteid = $("#sites").val();
+
+        var appid = $("#appid").val();
+        if (appid != "0")
+        {
+            var url = "/material/apply/appedit?&id=" + appid;
+        }
+        else
+        {
+            var url = "/material/apply/applymaterials?";
+        }
+
+        url += "&siteid=" + siteid + "&subid=" + subid;
+        url += "&open=2";
+        redirect(url);
+    }
+
+    function redirect(url)
+    {
+        window.location = url;
+    }
+
+    function checkall()
+    {
+        //alert("checkall");
+        var checked = false;
+        var form = document.dataform;
+
+        for (var i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].id == 'toggleall')
+            {
+                checked = form.elements[i].checked;
+                break;
+            }
+        }
+
+        for (var i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].type == 'checkbox') {
+                form.elements[i].checked = checked;
+            }
+        }
+    }
+
+    function submitmaterials()
+    {
+        var r = confirm("Confirm to delete?");
+        if (r == false) {
+            return false;
+        }
+
+        var formname = "dataform";
+
+        var action = "/material/apply/submit";
+        var method = "post";
+
+        var frm = $('#dataform');
+        var toServer = {};
+        $('#datatable tbody tr td input').each(function(key, value) {
+            toServer[$(this).val()] = $(this).is(':checked');
+        });
+
+        frm.submit(function() {
+            $.ajax({
+                type: method,
+                url: action,
+                data: toServer,
+                success: function(data) {
+                    //alert(data);
+                    window.location.reload();
+                }
+            });
+
+            return false;
+        });
+
+        frm.submit();
+    }
+
+    function addchoosen(id)
+    {
+        //alert("id="+id);
+        var amount = $('#slider' + id).val();
+        if (amount == 0)
+        {
+            alert("请选择数量");
+            return;
+        }
+
+        //var remark = $('#remark'+id).val();
+        var sitepart = $('#sitepart' + id).val();
+        //alert("id="+id+",amount="+amount+",remark="+remark);
+        $.post("/material/apply/postdata", {id: id, amount: amount, sitepart: sitepart},
+        function(data) {
+            alert("提交成功，请继续申请材料");
+            console.log(data);
+            //location.reload();
+        });
+
+    }
+
+//http://stackoverflow.com/questions/178325/testing-if-something-is-hidden-with-jquery
+// http://stackoverflow.com/questions/4009524/change-button-text-jquery-mobile
+    function showselected()
+    {
+        //alert("showselected");
+        //if($("#selected").is(":visible")) {
+        //if ($("#selected").css("visibility") == "hidden") {
+        if ($("#selected").css('display') == 'none') {
+            $("#selected").show();
+            $("#btnSelectedText").html('隐藏已选材料');
+        }
+        else
+        {
+            $("#selected").hide();
+            $("#btnSelectedText").html('显示已选材料');
+        }
+    }
+
+    function submitmanualinput()
+    {
+        var id = 0;
+        var name = $('#manuname').val();
+        var amount = $('#manuamount').val();
+        var remark = $('#manuremark').val();
+        var sitepart = $('#manusitepart').val();
+        var unit = $('#manuunit').val();
+
+        if (name == "" || amount == "" || remark == "")
+        {
+            alert("请填写完整，再提交");
+        }
+
+        $.post("/material/apply/postdata", {id: id, amount: amount, remark: remark, longname: name, sitepart: sitepart, unit: unit},
+        function(data) {
+            alert("提交成功，请继续申请材料");
+            //console.log(data);
+            //location.reload();
+        });
+    }
+
+    function setSiteId()
+    {
+        var siteid = $('#sites').val();
+        $("#siteid").val(siteid);
+    }
+
+
+    function submitselections()
+    {
+        var siteid = $('#sites').val();
+        var appid = $('#appid').val();
+        //alert("submitselections, siteid="+siteid);
+        if (siteid == 0)
+        {
+            alert("请选择申请工地");
+            return;
+        }
+        //return;
+
+        $.post("/material/apply/submitselections", {siteid: siteid, appid: appid},
+        function(data) {
+            alert(data);
+            console.log(data);
+            //location.reload();
+            //redirect("/material/apply/");    
+        });
+    }
+
+    $('#selcollapsible').bind('expand', function() {
+        //alert('Expanded');
+        $.post("/material/apply/getselections",
+                function(data) {
+                    //alert(data);
+                    //console.log(data);
+                    $("#seltable").html(data);
+                });
+    });
+</script>
 
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
 <input type="hidden" id="siteid" value="<?php echo $siteid; ?>">
 <?php
-if($mode=="create")
-{
+if ($mode == "create") {
     $title = "<h3><strong>创建材料申请</strong></h3>";
-}
-else if($mode=="edit")
-{
+} else if ($mode == "edit") {
     $title = "<h3><strong>更新材料申请 - 上次更新时间 - $update</strong></h3>";
 }
 echo $title;
 ?>
 <div data-role="collapsible-set" >
-<div data-role="collapsible" data-collapsed="<?php if($open==1) echo "false"; else {echo "true";} ?>">
-<h3>第一步：选择申请工地 - <?php echo $sitename; ?></h3>
-<select id="sites" data-mini="true" data-theme="a">
-<option value="0">请选择申请工地</option>
-<?php
-$options = '';
-foreach($sites as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
-
-    if($siteid == $id)
-    {
-        echo '<option value="' . $id . '" selected>' . $name . "</option>";
+    <div data-role="collapsible" data-collapsed="
+    <?php
+    if ($open == 1)
+        echo "false";
+    else {
+        echo "true";
     }
-    else
-    {
-        echo '<option value="' . $id . '" >' . $name . "</option>";
-    }
-}
-echo $options;
-?>
-</select>
-</div>
+    ?>
+         ">
+        <h3>第一步：选择申请工地 - <?php echo $sitename; ?></h3>
+        <select id="sites" data-mini="true" data-theme="a">
+            <option value="0">请选择申请工地</option>
+            <?php
+            $options = '';
+            foreach ($sites as $tmp) {
+                $id = $tmp->getId();
+                $name = $tmp->getName();
 
-<!--按分类选择材料-->
-<div data-role="collapsible" data-collapsed="<?php if($open==2) echo "false"; else {echo "true";} ?>" >
-<h3>第二步：分类选择材料</h3>
-<div id="typechooser">
-<table class="grid" id="typetab">
-<tr>
-<td>选择主要类型:</td>
-<td>
-<select name="maintype" id="maintype" data-mini="true" data-theme="a">
-<?php
-foreach($maintypes as $tmp)
-{
-    $id = $tmp->getId();
-    $namechs = $tmp->getTypechs();
-    $nameeng = $tmp->getTypeeng();
-    $typelong = $namechs . "/" . $nameeng;
-
-    if($id == $mainid)
-    {
-        echo "<option value='$id' selected>$typelong</option>";
-    }
-    else
-    {
-        echo "<option value='$id'>$typelong</option>";
-    }
-}
-?>   
-</select>
-
-</td>
-<td>选择子类型:</td>
-<td>
-<select name="subtype" id="subtype" data-mini="true" data-theme="a">
-<?php
-foreach($subtypes as $tmp)
-{
-    $id = $tmp->getId();
-    $namechs = $tmp->getTypechs();
-    $nameeng = $tmp->getTypeeng();
-    $typelong = $namechs . "/" . $nameeng;
-    
-    if($id == $subid)
-    {
-        echo "<option value='$id' selected>$typelong</option>";
-    }
-    else
-    {
-        echo "<option value='$id'>$typelong</option>";
-    }
-}
-?>   
-</select>
-</td>
-</tr>
-
-</table>
-
-<table id="datatable" class="grid">
-<thead><tr>
-<th>名称</th><th>描述</th><th>数量</th><th>工程部位</th><th>提交</th>
-</tr></thead>
-<tbody> 
-<?php
-$options='<option value="无定义">无定义</options>';
-foreach($siteparts as $tmp)
-{
-    if($tmp != "")
-    {        
-        $options .= '<option value="' . $tmp . '">' . $tmp . '</option>';
-    }
-}
-
-foreach($this->materials as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
-    $nameeng = $tmp->getNameeng();
-    //$unit = ""; //$tmp->getUnit();
-    //$spec = ""; //$tmp->getSpec();
-    $description = $tmp->getDescription();
-
-    $body = "";
-    
-    $longname = '<tr><td class="tdname">' . $name . '/' . $nameeng . '</td>';
-    $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="" placeholder="0"></td>';
-    //$unit = "<td>$unit</td>";
-    //$spec = "<td>$spec</td>";    
-    $deshtml = "<td>$description</td>";    
-    
-    $dropdown = '<select id="sitepart' . $id . '" data-mini="true">';
-    $dropdown .= $options;
-    $dropdown .= '</select>';
-    $td_dropdown = '<td>' . $dropdown . '</td>';    
-
-    $body .= $longname . $deshtml . $amount . $td_dropdown;
-    //$gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
-    $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-inline="true" data-mini="true">提交</button></td>';
-
-    $body .= $gorightbutton;
-    $body .= "</tr>";    
-    echo $body;
-}
-?>
-</tbody> 
-</table>
-</div> <!-- typechooser -->
-</div>
-
-<!--手动输入材料信息-->
-<div data-role="collapsible" data-collapsed="<?php if($open==3) echo "false"; else {echo "true";} ?>"  <?php echo $displaynone; ?> >
-<h3>第三步：手动输入材料</h3>
-<div id="manualinput">
-    <form id="manuform">
-    <div data-role="fieldcontain">
-    <label for="manuname">输入名称:</label>
-    <input type="text" name="manuname" id="manuname" placeholder="材料名称，比如钉子，水泥等" value=""  />
+                if ($siteid == $id) {
+                    echo '<option value="' . $id . '" selected>' . $name . "</option>";
+                } else {
+                    echo '<option value="' . $id . '" >' . $name . "</option>";
+                }
+            }
+            echo $options;
+            ?>
+        </select>
     </div>
-    <div data-role="fieldcontain">
-    <label for="manuamount">输入数量:</label>
-    <input type="text" name="manuamount" id="manuamount" placeholder="填写数量，比如要30包水泥，这里写30" value=""  />
-    </div>
-    <div data-role="fieldcontain">
-    <label for="manuunit">输入单位:</label>
-    <input type="text" name="manuunit" id="manuunit" placeholder="填写单位，比如袋，包，台" value=""  />
-    </div>
-    <div data-role="fieldcontain">
-    <label for="manuremark">输入规格:</label>
-    <textarea cols="40" rows="8" name="manuremark" id="manuremark" placeholder="填写规格说明，比如多大号的钉子，什么水泥等"></textarea>
-    </div>
-    <div data-role="fieldcontain">
-    <label for="manusitepart">工程部位:</label>
-    <select id="manusitepart" data-mini="true">
-    <?php echo $options; ?>
-    </select>
-    </div>
-    </form> <!-- manuform -->					    
-    <input type="submit" value="提交到选择列表" onclick="submitmanualinput()" data-mini="true" data-theme="a">
-</div>
-</div>
 
-<div id="selcollapsible" data-role="collapsible" data-collapsed="<?php if($open==4) echo "false"; else {echo "true";} ?>">
-<h3>最后步：提交已选材料</h3>
-<div id="selections">
-<div id="seltable">
-</div>
-<hr>    
-<?php
-if($matapps && count($matapps)>0)
-{
-echo "<p>已申请材料</p>";
-echo $this->grid("matapps", true)
-          ->field('id','材料编号')
-          ->field('longname','材料名称')
-          ->field('description','描述')          
-          ->field('amount','数量')
-          //->field('remark','补充说明')
-          ->field('sitepart', '工程部位')
-          ->field('update', '更新')          
-          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
-          ->itemCountPerPage(30)
-          ->setSorting(false)
-          ->paginatorEnabled(false)
-          ->helper(new GridHelper_Matapps())
-          ->data($matapps)
-          ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
-echo "<hr>";          
-}
-?>
-<input type="submit" value="提交所申请材料" onclick="submitselections()" data-theme="a" data-mini="true">
-</div>
+    <!--按分类选择材料-->
+    <div data-role="collapsible" data-collapsed="
+    <?php
+    if ($open == 2)
+        echo "false";
+    else {
+        echo "true";
+    }
+    ?>
+         ">
+        <h3>第二步：分类选择材料</h3>
+        <div id="typechooser">
+            <table class="grid" id="typetab">
+                <tr>
+                    <td>选择主要类型:</td>
+                    <td>
+                        <select name="maintype" id="maintype" data-mini="true" data-theme="a">
+                            <?php
+                            foreach ($maintypes as $tmp) {
+                                $id = $tmp->getId();
+                                $namechs = $tmp->getTypechs();
+                                $nameeng = $tmp->getTypeeng();
+                                $typelong = $namechs . "/" . $nameeng;
 
-</div>
+                                if ($id == $mainid) {
+                                    echo "<option value='$id' selected>$typelong</option>";
+                                } else {
+                                    echo "<option value='$id'>$typelong</option>";
+                                }
+                            }
+                            ?>   
+                        </select>
+
+                    </td>
+                    <td>选择子类型:</td>
+                    <td>
+                        <select name="subtype" id="subtype" data-mini="true" data-theme="a">
+                            <?php
+                            foreach ($subtypes as $tmp) {
+                                $id = $tmp->getId();
+                                $namechs = $tmp->getTypechs();
+                                $nameeng = $tmp->getTypeeng();
+                                $typelong = $namechs . "/" . $nameeng;
+
+                                if ($id == $subid) {
+                                    echo "<option value='$id' selected>$typelong</option>";
+                                } else {
+                                    echo "<option value='$id'>$typelong</option>";
+                                }
+                            }
+                            ?>   
+                        </select>
+                    </td>
+                </tr>
+
+            </table>
+
+            <table id="datatable" class="grid">
+                <thead><tr>
+                        <th>名称</th><th>描述</th><th>数量</th><th>工程部位</th><th>提交</th>
+                    </tr></thead>
+                <tbody> 
+                    <?php
+                    $options = '<option value="无定义">无定义</option>';
+                    foreach ($siteparts as $tmp) {
+                        if ($tmp != "") {
+                            $options .= '<option value="' . $tmp . '">' . $tmp . '</option>';
+                        }
+                    }
+
+                    foreach ($this->materials as $tmp) {
+                        $id = $tmp->getId();
+                        $name = $tmp->getName();
+                        $nameeng = $tmp->getNameeng();
+                        //$unit = ""; //$tmp->getUnit();
+                        //$spec = ""; //$tmp->getSpec();
+                        $description = $tmp->getDescription();
+
+                        $body = "";
+
+                        $longname = '<tr><td class="tdname">' . $name . '/' . $nameeng . '</td>';
+                        $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="" placeholder="0"></td>';
+                        //$unit = "<td>$unit</td>";
+                        //$spec = "<td>$spec</td>";    
+                        $deshtml = "<td>$description</td>";
+
+                        $dropdown = '<select id="sitepart' . $id . '" data-mini="true">';
+                        $dropdown .= $options;
+                        $dropdown .= '</select>';
+                        $td_dropdown = '<td>' . $dropdown . '</td>';
+
+                        $body .= $longname . $deshtml . $amount . $td_dropdown;
+                        //$gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
+                        $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-inline="true" data-mini="true">提交</button></td>';
+
+                        $body .= $gorightbutton;
+                        $body .= "</tr>";
+                        echo $body;
+                    }
+                    ?>
+                </tbody> 
+            </table>
+            <br>
+        </div> <!-- typechooser -->
+    </div>
+
+    <!--手动输入材料信息-->
+    <div data-role="collapsible" data-collapsed="<?php
+    if ($open == 3)
+        echo "false";
+    else {
+        echo "true";
+    }
+    ?>"  <?php echo $displaynone; ?> >
+        <h3>第三步：手动输入材料</h3>
+        <div id="manualinput">
+            <form id="manuform">
+                <div data-role="fieldcontain">
+                    <label for="manuname">输入名称:</label>
+                    <input type="text" name="manuname" id="manuname" placeholder="材料名称，比如钉子，水泥等" value=""  />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="manuamount">输入数量:</label>
+                    <input type="text" name="manuamount" id="manuamount" placeholder="填写数量，比如要30包水泥，这里写30" value=""  />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="manuunit">输入单位:</label>
+                    <input type="text" name="manuunit" id="manuunit" placeholder="填写单位，比如袋，包，台" value=""  />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="manuremark">输入规格:</label>
+                    <textarea cols="40" rows="8" name="manuremark" id="manuremark" placeholder="填写规格说明，比如多大号的钉子，什么水泥等"></textarea>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="manusitepart">工程部位:</label>
+                    <select id="manusitepart" data-mini="true">
+                        <?php echo $options; ?>
+                    </select>
+                </div>
+            </form> <!-- manuform -->					    
+            <input type="submit" value="提交到选择列表" onclick="submitmanualinput()" data-mini="true" data-theme="a">
+        </div>
+    </div>
+
+    <div id="selcollapsible" data-role="collapsible" data-collapsed="
+    <?php
+    if ($open == 4)
+        echo "false";
+    else {
+        echo "true";
+    }
+    ?>
+         ">
+        <h3>最后步：提交已选材料</h3>
+        <div id="selections">
+            <div id="seltable">
+            </div>
+            <hr>    
+            <?php
+            if ($matapps && count($matapps) > 0) {
+                echo "<p>已申请材料</p>";
+                echo $this->grid("matapps", true)
+                        ->field('id', '材料编号')
+                        ->field('longname', '材料名称')
+                        ->field('description', '描述')
+                        ->field('amount', '数量')
+                        //->field('remark','补充说明')
+                        ->field('sitepart', '工程部位')
+                        ->field('update', '更新')
+                        ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+                        ->itemCountPerPage(30)
+                        ->setSorting(false)
+                        ->paginatorEnabled(false)
+                        ->helper(new GridHelper_Matapps())
+                        ->data($matapps)
+                        ->action(':action', '删除', array('url' => array('action' => 'appmatdel')));
+                echo "<hr>";
+            }
+            ?>
+            <input type="submit" value="提交所申请材料" onclick="submitselections()" data-theme="a" data-mini="true">
+        </div>
+
+    </div>
 </div> <!-- collapsible-set -->
 <br><br>
