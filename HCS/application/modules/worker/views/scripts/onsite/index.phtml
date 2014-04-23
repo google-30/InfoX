@@ -107,13 +107,13 @@ $_siteoptions = $options;
             text: "Loading...",
             textVisible: true,
             theme: 'b',
-        });        
-        
+        });
+
         //alert("addsite");
         var wid = $("#divpopupwid").val();
         var url = "/worker/onsite/addrecordquick/id/" + wid;
         var sid = $("#popupsites").val();
-        
+
         $.post(url, {sid: sid}, function(data) {
             //alert(data);
             $("#divpopupcontent").load("/worker/onsite/sitelist/id/" + wid, function() {
@@ -129,11 +129,10 @@ $_siteoptions = $options;
     <?= $options; ?>
 </select>
 <div id="workersonsite-div"></div>
-<hr><hr>
+<hr>
 <?= $selects; ?>
 <?= $wdtab; ?>
 <br><br>
-
 <div id="divpopup" class="bMulti"> 
     <div id="divpopupcontent"></div>
     <select id="popupsites" data-mini="true" data-theme="a">

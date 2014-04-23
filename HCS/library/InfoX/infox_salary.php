@@ -960,104 +960,141 @@ class infox_salary {
         return $tab;
     }
 
-    public static function generateSiteSalaryTabs($salaryrecords) {
+    public static function generateWorkerSalaryTabs($salaryrecords, $inputbtn) {
+        $salarytabs = array();
+        $sno = 0;
 
+        if (!count($salaryrecords)) {
+            echo "No salary records in db, please check.";
+            return;
+        }
+        //$monthstr = $salaryrecords[0]->getMonth()->format("Y-m");
 
         foreach ($salaryrecords as $record) {
+            $tmparr = array();
+            $workertab = "";
             $worker = $record->getWorker();
-            $month = $record->getMonth();
-            $attendance = self::$_siteatten->findOneBy(array("worker" => $worker, "month" => $month));
-            $attendresult = infox_project::getAttendFoodData($attendance);
-
-            $attenddata = $attendresult[0];
-            //print_r($attenddata);
-
-            // get rate
-            $normalrate = self::getWorkerRate($record);
-            $otrate = self::getWorkerOtRate($record);
-
-            $sitedataarr = array();
-            $lastsid = 0;
-            for ($i = 26; $i <= 31; $i++) {
-                $j = $i - 1;
-                if (!key_exists($j, $attenddata)) {
-                    continue;
-                }
-                $value = $attenddata[$j];
-
-                $tmparr = explode(";", $value);
-                $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
-                $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
-                //$value = $hoursdata != "" ? $hoursdata : $piecedata;
-                $sid = $tmparr[2];
-
-                $lastsid = ($sid != 0) ? $sid : $lastsid;
-
-                if (!key_exists($lastsid, $sitedataarr)) {
-                    $tmparr = array();
-                    $tmparr[0] = 0; // attendance
-                    $tmparr[1] = 0; // money
-                    $tmparr[2] = ""; // days, for example, 26, 27, 28,29, means working these days
-                    $sitedataarr[$lastsid] = $tmparr;
-                }
-                //$tmparr = $sitedataarr[$lastsid];
-
-                // attendace and money
-                if ($hoursdata != "") {
-                    $sitedataarr[$lastsid][0] += ($hoursdata >= 8) ? 1 : $hoursdata / 8;
-                    $normalhours = ($hoursdata > 8) ? 8 : $hoursdata;
-                    $othours = ($hoursdata > 8) ? ($hoursdata - 8) : 0;
-                    $daysalary = $normalhours * $normalrate + $othours * $otrate;
-                    $sitedataarr[$lastsid][1] += $daysalary;
-                    
-                    $sitedataarr[$lastsid][2] .= "$i,";
-                } else if ($piecedata != "") {
-                    $sitedataarr[$lastsid][0] ++;
-                    $sitedataarr[$lastsid][1] += $piecedata;
-                    $sitedataarr[$lastsid][2] .= $i . ",";
-                }
-            }
-            
-            for ($i = 0; $i < 25; $i++) {
-                $j = $i + 1;
-                if (!key_exists($i, $attenddata)) {
-                    continue;
-                }
-                $value = $attenddata[$i];
-
-                $tmparr = explode(";", $value);
-                $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
-                $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
-                //$value = $hoursdata != "" ? $hoursdata : $piecedata;
-                $sid = $tmparr[2];
-
-                $lastsid = ($sid != 0) ? $sid : $lastsid;
-
-                if (!key_exists($lastsid, $sitedataarr)) {
-                    $tmparr = array();
-                    $tmparr[0] = 0; // attendance
-                    $tmparr[1] = 0; // money
-                    $tmparr[2] = ""; // days, for example, 26, 27, 28,29, means working these days
-                    $sitedataarr[$lastsid] = $tmparr;
-                }
-
-                // attendace and money and days string
-                if ($hoursdata != "") {
-                    $sitedataarr[$lastsid][0] += ($hoursdata >= 8) ? 1 : $hoursdata / 8;
-                    $normalhours = ($hoursdata > 8) ? 8 : $hoursdata;
-                    $othours = ($hoursdata > 8) ? ($hoursdata - 8) : 0;
-                    $daysalary = $normalhours * $normalrate + $othours * $otrate;
-                    $sitedataarr[$lastsid][1] += $daysalary;                    
-                    $sitedataarr[$lastsid][2] .= "$j,";
-                } else if ($piecedata != "") {
-                    $sitedataarr[$lastsid][0] ++;
-                    $sitedataarr[$lastsid][1] += $piecedata;
-                    $sitedataarr[$lastsid][2] .= $j . ",";
-                }
-            }            
-            
-            print_r($sitedataarr);
+            $sno++;
+            $wid = $worker->getId();
+            $monthstr = $record->getMonth()->format("Y-m");
+            $tmparr = self::getSalarytabsByWidMonthstr($wid, $monthstr, $inputbtn);            
+            $tmparr[] = self::generateSiteSalaryTabs($record);
+            $salarytabs[] = $tmparr;
+            //var_dump($tmparr1);
         }
+
+        return $salarytabs;
+    }
+
+    public static function generateSiteSalaryTabs($record) {
+        $sitedataarr = self::generateSiteData($record);
+        $sitetabs = self::generateTabsFromData($sitedataarr);
+        return $sitetabs;
+    }
+
+    private static function generateTabsFromData($sitedataarr) {
+        $tabarr = array();
+        $tab = "<table></table>";
+        return $tabarr;
+    }
+
+    public static function generateSiteData($record) {
+        $worker = $record->getWorker();
+        $month = $record->getMonth();
+        $attendance = self::$_siteatten->findOneBy(array("worker" => $worker, "month" => $month));
+        $attendresult = infox_project::getAttendFoodData($attendance);
+
+        $attenddata = $attendresult[0];
+        //print_r($attenddata);
+        // get rate
+        $normalrate = self::getWorkerRate($record);
+        $otrate = self::getWorkerOtRate($record);
+
+        $sitedataarr = array();
+        $lastsid = 0;
+        for ($i = 26; $i <= 31; $i++) {
+            $j = $i - 1;
+            if (!key_exists($j, $attenddata)) {
+                continue;
+            }
+            $value = $attenddata[$j];
+            if ($value == "" || $value == ";;0") {
+                continue;
+            }
+            //echo $value . "\n";
+
+            $tmparr = explode(";", $value);
+            $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+            $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+            $sid = $tmparr[2];
+
+            $lastsid = ($sid != 0) ? $sid : $lastsid;
+
+            if (!key_exists($lastsid, $sitedataarr)) {
+                $tmparr = array();
+                $tmparr[0] = 0; // attendance
+                $tmparr[1] = 0; // money
+                $tmparr[2] = ""; // days, for example, 26, 27, 28,29, means working these days
+                $sitedataarr[$lastsid] = $tmparr;
+            }
+            //$tmparr = $sitedataarr[$lastsid];
+            // attendace and money
+            if ($hoursdata != "") {
+                $sitedataarr[$lastsid][0] += ($hoursdata >= 8) ? 1 : $hoursdata / 8;
+                $normalhours = ($hoursdata > 8) ? 8 : $hoursdata;
+                $othours = ($hoursdata > 8) ? ($hoursdata - 8) : 0;
+                $daysalary = $normalhours * $normalrate + $othours * $otrate;
+                $sitedataarr[$lastsid][1] += $daysalary;
+
+                $sitedataarr[$lastsid][2] .= "$i,";
+            } else if ($piecedata != "") {
+                $sitedataarr[$lastsid][0] ++;
+                $sitedataarr[$lastsid][1] += $piecedata;
+                $sitedataarr[$lastsid][2] .= $i . ",";
+            }
+        }
+
+        for ($i = 0; $i < 25; $i++) {
+            $j = $i + 1;
+            if (!key_exists($i, $attenddata)) {
+                continue;
+            }
+            $value = $attenddata[$i];
+
+            $tmparr = explode(";", $value);
+            $hoursdata = key_exists(0, $tmparr) ? $tmparr[0] : "";
+            $piecedata = key_exists(1, $tmparr) ? $tmparr[1] : "";
+            //$value = $hoursdata != "" ? $hoursdata : $piecedata;
+            $sid = $tmparr[2];
+
+            $lastsid = ($sid != 0) ? $sid : $lastsid;
+
+            if (!key_exists($lastsid, $sitedataarr)) {
+                $tmparr = array();
+                $tmparr[0] = 0; // attendance
+                $tmparr[1] = 0; // money
+                $tmparr[2] = ""; // days, for example, 26, 27, 28,29, means working these days
+                $sitedataarr[$lastsid] = $tmparr;
+            }
+
+            // attendace and money and days string
+            if ($hoursdata != "") {
+                $sitedataarr[$lastsid][0] += ($hoursdata >= 8) ? 1 : $hoursdata / 8;
+                $normalhours = ($hoursdata > 8) ? 8 : $hoursdata;
+                $othours = ($hoursdata > 8) ? ($hoursdata - 8) : 0;
+                $daysalary = $normalhours * $normalrate + $othours * $otrate;
+                $sitedataarr[$lastsid][1] += $daysalary;
+                $sitedataarr[$lastsid][2] .= "$j,";
+            } else if ($piecedata != "") {
+                $sitedataarr[$lastsid][0] ++;
+                $sitedataarr[$lastsid][1] += $piecedata;
+                $sitedataarr[$lastsid][2] .= $j . ",";
+            }
+        }
+
+        ksort($sitedataarr);
+        print_r($sitedataarr);
+        return $sitedataarr;
     }
 
 }

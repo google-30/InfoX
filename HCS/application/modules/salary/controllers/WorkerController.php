@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description of WorkerController
  *
@@ -11,7 +12,8 @@ include 'InfoX/infox_worker.php';
 include 'InfoX/infox_salary.php';
 
 class Salary_WorkerController extends Zend_Controller_Action {
-        public function init() {
+
+    public function init() {
         $this->_em = Zend_Registry::get('em');
         $this->_site = $this->_em->getRepository('Synrgic\Infox\Site');
         $this->_workerdetails = $this->_em->getRepository('Synrgic\Infox\Workerdetails');
@@ -115,13 +117,13 @@ class Salary_WorkerController extends Zend_Controller_Action {
         $this->view->recordsbyyear = $recordsall;
         $this->view->workerarr = $workerarr;
 
-        $salarytabs = infox_salary::generateSalaryTabs($recordsall, false);
+        //$salarytabs = infox_salary::generateSalaryTabs($recordsall, false);
+        $salarytabs = infox_salary::generateWorkerSalaryTabs($recordsall, false);
         $this->view->salarytabs = $salarytabs;
 
         // worker attendance data by month
-        $sitesalarytabs = infox_salary::generateSiteSalaryTabs($recordsall);
-        $this->view->sitesalarytabs = $sitesalarytabs;        
-        
+        //$sitesalarytabs = infox_salary::generateSiteSalaryTabs($recordsall);
+        //$this->view->sitesalarytabs = $sitesalarytabs;        
         // selects for users
         $options = '';
         foreach ($sheetarr as $tmp) {
