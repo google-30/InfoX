@@ -299,7 +299,6 @@ class Material_ApplyController extends Zend_Controller_Action {
     }
 
     public function submitselectionsAction() {
-        //$this->turnoffview();
         infox_common::turnoffView($this->_helper);
 
         $appid = $this->getParam("appid", 0);
@@ -308,10 +307,12 @@ class Material_ApplyController extends Zend_Controller_Action {
 
         $ans = new Zend_Session_Namespace($this->nsName);
         $appmats = $ans->appmats;
+        /*
         if (count($appmats) == 0 && count($matapps) == 0) {
             echo "请选择材料，再进行提交";
             return;
         }
+        */
 
         // get site
         $requests = $this->getRequest()->getPost();

@@ -182,7 +182,7 @@ $materialtab = $this->grid("Materials", true)
 
     <div data-role="collapsible" data-collapsed="true">
         <h3>功能列表</h3>
-        <div class="ui-grid-b">
+        <div class="ui-grid-c">
             <div class="ui-block-a">
                 <a href="/material/manage/add" target="_blank"><button data-mini="true" data-theme="a">注册材料</button></a>
             </div>
@@ -193,6 +193,9 @@ $materialtab = $this->grid("Materials", true)
                 <a href="/material/import/truncateall"><button data-mini="true" data-theme="a" >清空材料数据</button></a>
                 <!--<button data-mini="true" data-theme="a" onclick="truncateall()">清空材料数据</button>-->
             </div>
+            <div class="ui-block-d">
+                <button data-theme="a" data-mini="true" onclick="previewlist()">预览打印</button>
+            </div>
         </div><!-- /grid-b -->
         <div id="uploaddiv">
             <fieldset>
@@ -202,11 +205,6 @@ $materialtab = $this->grid("Materials", true)
                 </form>
             </fieldset>
         </div>
-    </div>
-
-    <div data-role="collapsible" data-collapsed="true" data-theme="a">
-        <h3>表格操作</h3>
-        <button data-theme="a" data-mini="true" onclick="previewlist()">预览打印</button>
     </div>
     <hr>
     <?php

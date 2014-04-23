@@ -1,114 +1,100 @@
-<!DOCTYPE html> 
-<html>
-
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>材料清单</title> 
-	<link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
-    <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
-    <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
-</head> 
-
-<body> 
-<style>
-#Materials { width:100%; border-collapse:collapse;}
-#Materials td { text-align:center; border:1px solid black;}
-</style>
-<script>
-$(function() {
-    $('#Materials').dataTable({ 
-        //"iDisplayLength": 50,
-        //"bRetrieve": true,
-        "bPaginate": false,
-        "bFilter": false,
-        "bInfo": false,
-        "bSort": true,
-    });
-    
-$("#sheetselect").change(function() {
-    var sheetname = $(this).val();
-    var url = "/material/manage/previewlist?sheet=" + sheetname;
-    redirect(url);
-});    
-});
-
-$("#sheetselect").change(function() {
-alert("change");
-    var sheetname = $(this).val();
-    var url = "/material/manage/previewlist?sheet=" + sheetname;
-    redirect(url);
-});
-
-function redirect(url) {
-    window.location = url;
-}
-</script>
-
-<div data-role="page">
-	<div data-role="content">	
 <?php
-$sheet=$this->sheet;
-$sheetarr=$this->sheetarr;
-$maindata=$this->maindata;
+$sheet = $this->sheet;
+$sheetarr = $this->sheetarr;
+$maindata = $this->maindata;
 
-$options="";
-foreach($sheetarr as $tmp)
-{
-    if($sheet == $tmp)
-    {
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
         $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    }
-    else
-    {
+    } else {
         $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
     }
 
     $options .= $option;
 }
-$selects='<select data-mini="true" id="sheetselect">';
+$selects = '<select data-mini="true" id="sheetselect">';
 $selects.=$options;
 $selects.='</select><br>';
-echo $selects;
-/*
-echo $this->grid("Materials", true)
-          ->field('nameeng', '英文名称')
-          ->field('name','中文名称')
-          ->field('description', '规格')
-          ->field('unit', '单位')
-          ->field('supplier', '优先供应商')
-          ->field('price', '价格')  
-          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
-          ->setSorting(false)  
-          ->paginatorEnabled(false)
-          ->helper(new GridHelper_Material())
-          ->data($maindata);
-*/          
-echo $this->grid("Materials", true)
-          //->field('type', '分类')
-          ->field('nameeng', 'Name Eng')
-          ->field('name','Name Chs')
-          ->field('description', 'Description ')          
-          ->field('unit', 'Unit')
-          ->field('rate', 'Rate')
-          ->field('quantity', 'Quantity ')          
-          ->field('supplier', 'Supplier')  
-          ->actionField(':action', "Action", '&nbsp;|&nbsp;')
-          ->setSorting(false)  
-          ->paginatorEnabled(false)
-          ->helper(new GridHelper_Material())
-          ->data($maindata);
+$_selects = $selects;
+
+$_mattab = $this->grid("Materials", true)
+        ->field('nameeng', 'Name Eng')
+        ->field('name', 'Name Chs')
+        ->field('description', 'Description ')
+        ->field('unit', 'Unit')
+        ->field('rate', 'Rate')
+        ->field('quantity', 'Quantity ')
+        ->field('supplier', 'Supplier')
+        ->actionField(':action', "Action", '&nbsp;|&nbsp;')
+        ->setSorting(false)
+        ->paginatorEnabled(false)
+        ->helper(new GridHelper_Material())
+        ->data($maindata);
 ?>
 
-	</div><!-- /content -->
-	<!--
-	<div data-role="footer">
-		<h4>Footer content</h4>
-	</div>--><!-- /footer -->
-	
-</div><!-- /page -->
+<!DOCTYPE html> 
+<html>
 
-</body>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title>材料清单</title> 
+        <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
+        <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
+        <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="/DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="/common/js/jquery.mobile-1.2.0.min.js"></script>
+    </head> 
+
+    <body> 
+        <style>
+            #Materials { width:100%; border-collapse:collapse;}
+            #Materials td { text-align:center; border:1px solid black;}
+        </style>
+        <script>
+            $(function() {
+                $('#Materials').dataTable({
+                    //"iDisplayLength": 50,
+                    //"bRetrieve": true,
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "bInfo": false,
+                    "bSort": true,
+                });
+
+                $("#sheetselect").change(function() {
+                    var sheetname = $(this).val();
+                    var url = "/material/manage/previewlist?sheet=" + sheetname;
+                    redirect(url);
+                });
+            });
+
+            $("#sheetselect").change(function() {
+                alert("change");
+                var sheetname = $(this).val();
+                var url = "/material/manage/previewlist?sheet=" + sheetname;
+                redirect(url);
+            });
+
+            function redirect(url) {
+                window.location = url;
+            }
+        </script>
+
+        <div data-role="page">
+            <div data-role="content">	
+                <?php
+                echo $_selects;
+                echo $_mattab;
+                ?>
+            </div><!-- /content -->
+            <!--
+            <div data-role="footer">
+                    <h4>Footer content</h4>
+            </div>--><!-- /footer -->
+
+        </div><!-- /page -->
+
+    </body>
 </html>
