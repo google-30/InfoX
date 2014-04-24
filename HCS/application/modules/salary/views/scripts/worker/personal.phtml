@@ -152,11 +152,14 @@ $salaryallformat = $this->salaryallformat;
                         $alltabs .= $tab0;
                         $alltabs .= $tab1;
                         $alltabs .= $tab2;
-                        //$alltabs .= "<br>";
+                        $alltabs .= "<br>";
 
+                        $tab3 = $tmp[3];
+                        $alltabs .= $tab3;
+                        
                         $divno++;
                         echo "<div id=worker$divno>
-                            " . $alltabs . "</div><br>
+                            " . $alltabs . "</div><hr>
                             ";
                     }
                 }
