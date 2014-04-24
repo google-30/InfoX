@@ -64,6 +64,19 @@ $salaryallformat = $this->salaryallformat;
             }
 
             .noborder td { border:0px; } 
+
+            .workeronsite {
+                table-layout: fixed;
+            }
+            .workeronsite td {
+                word-break:break-all;
+            }
+
+            hr {
+                color: #f00;
+                background-color: #f00;
+                height: 3px;
+            }
         </style>
         <script>
             $(function() {
@@ -156,7 +169,7 @@ $salaryallformat = $this->salaryallformat;
 
                         $tab3 = $tmp[3];
                         $alltabs .= $tab3;
-                        
+
                         $divno++;
                         echo "<div id=worker$divno>
                             " . $alltabs . "</div><hr>

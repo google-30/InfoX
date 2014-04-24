@@ -1034,7 +1034,7 @@ class infox_salary {
             $rowhtml .= "<tr><td>$sitename</td><td>$attend</td><td>$salary</td><td>$daysstr</td></tr>";
         }
         
-        $tabhtml = "<table>";
+        $tabhtml = '<table class="workeronsite">';
         $tabhtml .= "<tr><th>工地</th><th>考勤</th><th>工资</th><th>出勤日期</th></tr>";
         $tabhtml .= $rowhtml;
         $tabhtml .= "</table>";
@@ -1137,7 +1137,7 @@ class infox_salary {
         }
 
         ksort($sitedataarr);
-        print_r($sitedataarr);
+        //print_r($sitedataarr);
         return $sitedataarr;
     }
 
