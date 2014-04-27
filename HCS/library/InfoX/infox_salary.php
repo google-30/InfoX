@@ -14,6 +14,7 @@ class infox_salary {
     public static $_setting;
     public static $_salaryall;
     public static $_salarysummary;
+    public static $_site;
 
     public static function getRepos() {
         self::$_em = Zend_Registry::get('em');
@@ -29,6 +30,8 @@ class infox_salary {
         self::$_setting = self::$_em->getRepository('Synrgic\Infox\Setting');
 
         self::$_salarysummary = self::$_em->getRepository('Synrgic\Infox\Salarysummary');
+        
+        self::$_site = self::$_em->getRepository('Synrgic\Infox\Site');
     }
 
     public static function getSettingArray() {
@@ -977,7 +980,7 @@ class infox_salary {
             $sno++;
             $wid = $worker->getId();
             $monthstr = $record->getMonth()->format("Y-m");
-            $tmparr = self::getSalarytabsByWidMonthstr($wid, $monthstr, $inputbtn);            
+            $tmparr = self::getSalarytabsByWidMonthstr($wid, $monthstr, $inputbtn);
             $tmparr[] = self::generateSiteSalaryTabs($record);
             $salarytabs[] = $tmparr;
             //var_dump($tmparr1);
@@ -988,14 +991,55 @@ class infox_salary {
 
     public static function generateSiteSalaryTabs($record) {
         $sitedataarr = self::generateSiteData($record);
-        $sitetabs = self::generateTabsFromData($sitedataarr);
-        return $sitetabs;
+        $sitetab = self::generateTabsFromData($sitedataarr);
+        return $sitetab;
     }
 
     private static function generateTabsFromData($sitedataarr) {
-        $tabarr = array();
-        $tab = "<table></table>";
-        return $tabarr;
+        /*
+         * Array
+          (
+          [1] => Array
+          (
+          [0] => 9
+          [1] => 470
+          [2] => 27,28,29,30,1,2,3,4,5,
+          )
+
+          [2] => Array
+          (
+          [0] => 5
+          [1] => 250
+          [2] => 11,12,13,14,15,
+          )
+
+          )
+
+         */
+
+        self::getRepos();
+        $rowhtml = "";
+        
+        foreach ($sitedataarr as $key => $tmp) {
+            $attend = $tmp[0];
+            $salary = $tmp[1];
+            $daysstr = $tmp[2];
+            $siteobj = self::$_site->findOneBy(array("id"=>$key));
+            if(!$siteobj)
+            {
+                continue;
+            }
+            
+            $sitename = $siteobj->getName();
+            $rowhtml .= "<tr><td>$sitename</td><td>$attend</td><td>$salary</td><td>$daysstr</td></tr>";
+        }
+        
+        $tabhtml = '<table class="workeronsite">';
+        $tabhtml .= "<tr><th>工地</th><th>考勤</th><th>工资</th><th>出勤日期</th></tr>";
+        $tabhtml .= $rowhtml;
+        $tabhtml .= "</table>";
+        
+        return $tabhtml;
     }
 
     public static function generateSiteData($record) {
@@ -1093,7 +1137,7 @@ class infox_salary {
         }
 
         ksort($sitedataarr);
-        print_r($sitedataarr);
+        //print_r($sitedataarr);
         return $sitedataarr;
     }
 

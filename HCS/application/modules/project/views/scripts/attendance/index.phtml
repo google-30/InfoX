@@ -10,7 +10,11 @@ if ($this->error != "") {
 
 $workersonsite = $this->workersonsite;
 ?>
-
+<style>
+    #Workersonsite {
+        table-layout: fixed;
+    }    
+</style>
 <script>
     $(function() {
         $('#Workersonsite').dataTable({
@@ -137,10 +141,11 @@ $workersonsite = $this->workersonsite;
             //->field('sn', 'SN')
             ->field('eeeno', 'Eee No')
             ->field('namechs', 'Name ')
-            //->field('nameeng', 'Name Eng')
-            ->field('site', '所在工地')
-            ->field('begindate', '起始日期')
-            ->field('enddate', '结束日期')
+            //->field('nameeng', 'Name Eng')            
+            ->field('wpno', 'Wpno')
+            ->field('site', 'Site')
+            //->field('begindate', '起始日期')
+            //->field('enddate', '结束日期')
             //->field('enddate1','结束日期')
             //->field('site1', '所在工地') 
             //->field('payment1', '考勤方式')  
