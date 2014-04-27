@@ -34,7 +34,7 @@ class Material_ImportController extends Zend_Controller_Action {
             return;
         }
 
-        // upload excel
+// upload excel
         define('UPLOAD_TMP_PATH', APPLICATION_PATH . '/data/uploads/');
         $uploadpath = UPLOAD_TMP_PATH;
         $filepath = "";
@@ -63,12 +63,12 @@ class Material_ImportController extends Zend_Controller_Action {
             return;
         }
 
-        // load data from excel
+// load data from excel
         include 'PHPExcel/IOFactory.php';
 
         $inputFileName = $filepath;
         echo 'Loading file ', pathinfo($inputFileName, PATHINFO_BASENAME), ' using IOFactory to identify the format<br>';
-        //$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
+//$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 
         $inputFileType = 'Excel5';
         /**  Create a new Reader of the type defined in $inputFileType  * */
@@ -79,7 +79,7 @@ class Material_ImportController extends Zend_Controller_Action {
         if (1) {
             $sheetarr = infox_material::getMaterialListSheets();
         } else {
-            //$sheetarr =  array("safety material",);
+//$sheetarr =  array("safety material",);
             $sheetarr = array("scaffolding",);
         }
 
@@ -91,20 +91,106 @@ class Material_ImportController extends Zend_Controller_Action {
         foreach ($sheetarr as $sheetname) {
             $objWorksheet = $objPHPExcel->setActiveSheetIndexByName($sheetname);
             if ($objWorksheet) {
-                $this->storeDetails($sheetname, $objWorksheet);
+                $this->storeDetails20140425($sheetname, $objWorksheet);
             }
         }
 
         $this->redirect("/material/manage/");
     }
 
-    private function storeDetails($sheetname, $objWorksheet) {
-        //$datecolumns = array(7,);
+    private function storeDetails20140425($sheetname, $objWorksheet) {
         // step1 - supplier  
+        $this->storeSupplier($objWorksheet);
+        $materialArr = array();
+        $i = 0;
+
+        foreach ($objWorksheet->getRowIterator() as $row) {
+            if (++$i == 1) {   // ignore the first row
+                continue;
+            }
+
+            // sn
+            $cell = $objWorksheet->getCell("A" . $i);
+            $valuea = trim($cell->getFormattedvalue());
+
+            // name chs
+            $cell = $objWorksheet->getCell("C" . $i);
+            $valuec = trim($cell->getFormattedvalue());
+
+            // related to material description
+            $cell = $objWorksheet->getCell("D" . $i);
+            $valued = trim($cell->getFormattedvalue());
+
+            // unit
+            $cell = $objWorksheet->getCell("E" . $i);
+            $valuee = trim($cell->getFormattedvalue());
+
+            // rate
+            $cell = $objWorksheet->getCell("F" . $i);
+            $valuef = trim($cell->getFormattedvalue());
+
+            // suppliers
+            $cell = $objWorksheet->getCell("G" . $i);
+            $valueg = trim($cell->getFormattedvalue());
+
+            $sn = trim($valuea);
+            $namechs = trim($valuec);
+            $description = trim($valued);
+            $unit = trim($valuee);
+            $rate = trim($valuef);
+            $supplier = trim($valueg);
+
+            $tmparr = array();
+            $tmparr['sn'] = $sn;
+            $tmparr['name'] = $namechs;
+            $tmparr['description'] = $description;
+            $tmparr['sheet'] = $sheetname;
+
+            $materialArr[] = $tmparr;
+        }
+
+        $this->storeMaterials20140425($materialArr);
+    }
+    
+    private function storeMaterials20140425($materialarr) {
+        foreach ($materialarr as $tmp) {
+            $name = $tmp['name'];
+            $sn = $tmp['sn'];
+            $description = $tmp['description'];
+            //$type = $tmp['type'];
+            $sheet = $tmp['sheet'];
+
+            $obj = $this->_material->findOneBy(
+                    array('name' => $name, 'description' => $description, 'sn'=> $sn));
+            if ($obj) {
+                //echo "material already there.<br>";
+            } else {
+                $obj = new \Synrgic\Infox\Material();
+                $obj->setSn($sn);
+                $obj->setName($name);
+                $obj->setDescription($description);
+                //$obj->setType($type);
+                //$obj->setUnit($unit);
+                $obj->setSheet($sheet);
+                $this->_em->persist($obj);
+            }
+        }
+
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+    }       
+
+    private function storeDetails($sheetname, $objWorksheet) {
+//$datecolumns = array(7,);
+// step1 - supplier  
 
         $this->storeSupplier($objWorksheet);
 
-        // sub type
+// sub type
         $i = 0;
         $subtypeArr = array();
         foreach ($objWorksheet->getRowIterator() as $row) {
@@ -117,15 +203,15 @@ class Material_ImportController extends Zend_Controller_Action {
             $cell = $objWorksheet->getCell("C" . $i);
             $valuec = $cell->getFormattedvalue();
 
-            // this means a sub type
-            //if($valueb!="" && $valuec!="")
+// this means a sub type
+//if($valueb!="" && $valuec!="")
             if ($valueb != "") {
                 $typeeng = trim($valueb);
                 $typechs = trim($valuec);
 
                 $typeobj = $this->_materialtype->findOneBy(array("typeeng" => $typeeng, "typechs" => $typechs));
                 if ($typeobj) {
-                    //echo "sub type already there.<br>";
+//echo "sub type already there.<br>";
                 } else {
                     $sub = array($typeeng, $typechs);
                     if (!in_array($sub, $subtypeArr)) {
@@ -133,7 +219,7 @@ class Material_ImportController extends Zend_Controller_Action {
                     }
                 }
             }
-            // sub type done            
+// sub type done            
         }
 
         $maintype = $this->_materialtype->findOneBy(array("typeeng" => $sheetname));
@@ -153,12 +239,12 @@ class Material_ImportController extends Zend_Controller_Action {
             var_dump($e);
             return;
         }
-        //return; 
-        // sub type done
+//return; 
+// sub type done
 
         $subtype = null;
         $subtypeflag = false;  // subtype found
-        //$indexarr = array("B","C","D","E","F","G","H","I","J","K",);
+//$indexarr = array("B","C","D","E","F","G","H","I","J","K",);
         $indexarr = array("B", "C", "D", "E", "F", "G",);
         $nameenglast = "";
         $namelast = "";
@@ -170,21 +256,21 @@ class Material_ImportController extends Zend_Controller_Action {
                 continue;
             }
 
-            // related to type
+// related to type
             $cell = $objWorksheet->getCell("B" . $i);
             $valueb = trim($cell->getFormattedvalue());
             $cell = $objWorksheet->getCell("C" . $i);
             $valuec = trim($cell->getFormattedvalue());
 
-            // related to material description
+// related to material description
             $cell = $objWorksheet->getCell("D" . $i);
             $valued = trim($cell->getFormattedvalue());
 
-            // unit
+// unit
             $cell = $objWorksheet->getCell("E" . $i);
             $valuee = trim($cell->getFormattedvalue());
 
-            // rate
+// rate
             $cell = $objWorksheet->getCell("F" . $i);
             $valuef = trim($cell->getFormattedvalue());
 
@@ -198,7 +284,7 @@ class Material_ImportController extends Zend_Controller_Action {
               $valuei = trim($cell->getFormattedvalue());
              */
 
-            //if($valueb!="" && $valuec!="")
+//if($valueb!="" && $valuec!="")
             if ($valueb != "") {// materials from a new subtype
                 $nameenglast = $typeeng = trim($valueb);
                 $namelast = $typechs = trim($valuec);
@@ -207,18 +293,18 @@ class Material_ImportController extends Zend_Controller_Action {
                     $subtype = $typeobj;
                     $subtypeflag = true;
                 } else {
-                    //echo "shit, what happened...";
+//echo "shit, what happened...";
                     continue;
                 }
             }
 
             $materialfound = false;
             if (trim($valued) != "") {
-                // find material, store it in db
+// find material, store it in db
                 $materialfound = true;
                 $description = trim($valued);
             } else if ($valuee != "" && $valuef != "" && ($subtypeflag || $valuec != "")) {
-                // another case: no description(spec), but it's still a material
+// another case: no description(spec), but it's still a material
                 $materialfound = true;
                 $description = "NO DESCRIPTION";
             } else if ($valuec != "") {
@@ -244,7 +330,7 @@ class Material_ImportController extends Zend_Controller_Action {
 
         $this->storeMaterials($materialArr);
 
-        // import supplyprice
+// import supplyprice
         $this->storeSupplyprice($objWorksheet);
 
         /*
@@ -257,7 +343,7 @@ class Material_ImportController extends Zend_Controller_Action {
     }
 
     private function storeSupplier($objWorksheet) {
-        // step1 - supplier    
+// step1 - supplier    
         $i = 0;
         $supplierArr = array();
         foreach ($objWorksheet->getRowIterator() as $row) {
@@ -272,7 +358,7 @@ class Material_ImportController extends Zend_Controller_Action {
 
                 $supplier = $this->_supplier->findOneBy(array("name" => $name));
                 if ($supplier) {
-                    //echo "supplier already there.<br>";
+//echo "supplier already there.<br>";
                 } else if (!in_array($name, $supplierArr)) {
                     $supplierArr[] = $name;
                 }
@@ -291,8 +377,8 @@ class Material_ImportController extends Zend_Controller_Action {
             var_dump($e);
             return;
         }
-    }
-
+    } 
+    
     private function storeMaterials($materialarr) {
         foreach ($materialarr as $tmp) {
             $name = $tmp['name'];
@@ -304,14 +390,14 @@ class Material_ImportController extends Zend_Controller_Action {
             $obj = $this->_material->findOneBy(
                     array('name' => $name, 'nameeng' => $nameeng, 'description' => $description));
             if ($obj) {
-                //echo "material already there.<br>";
+//echo "material already there.<br>";
             } else {
                 $obj = new \Synrgic\Infox\Material();
                 $obj->setNameeng($nameeng);
                 $obj->setName($name);
                 $obj->setDescription($description);
                 $obj->setType($type);
-                //$obj->setUnit($unit);
+//$obj->setUnit($unit);
                 $obj->setSheet($sheet);
                 $this->_em->persist($obj);
             }
@@ -326,7 +412,7 @@ class Material_ImportController extends Zend_Controller_Action {
     }
 
     private function storeSupplyprice($objWorksheet) {
-        //echo "storeSupplyprice<br>";
+//echo "storeSupplyprice<br>";
 
         $subtype = null;
         $subtypeflag = false;
@@ -345,33 +431,33 @@ class Material_ImportController extends Zend_Controller_Action {
                 continue;
             }
 
-            // eng
+// eng
             $cell = $objWorksheet->getCell("B" . $i);
             $valueb = trim($cell->getFormattedvalue());
-            // chs
+// chs
             $cell = $objWorksheet->getCell("C" . $i);
             $valuec = trim($cell->getFormattedvalue());
-            // descritption
+// descritption
             $cell = $objWorksheet->getCell("D" . $i);
             $valued = trim($cell->getFormattedvalue());
 
-            // unit
+// unit
             $cell = $objWorksheet->getCell("E" . $i);
             $valuee = trim($cell->getFormattedvalue());
 
-            // rate
+// rate
             $cell = $objWorksheet->getCell("F" . $i);
             $valuef = trim($cell->getFormattedvalue());
 
-            // supplier
+// supplier
             $cell = $objWorksheet->getCell("G" . $i);
             $valueg = trim($cell->getFormattedvalue());
-            //$cell = $objWorksheet->getCell("H" . $i);
-            //$valueh = trim($cell->getFormattedvalue());
-            //$cell = $objWorksheet->getCell("I" . $i);
-            //$valuei = trim($cell->getFormattedvalue());
-            //$cell = $objWorksheet->getCell("K" . $i);
-            //$valuek = trim($cell->getFormattedvalue());
+//$cell = $objWorksheet->getCell("H" . $i);
+//$valueh = trim($cell->getFormattedvalue());
+//$cell = $objWorksheet->getCell("I" . $i);
+//$valuei = trim($cell->getFormattedvalue());
+//$cell = $objWorksheet->getCell("K" . $i);
+//$valuek = trim($cell->getFormattedvalue());
 
             if ($valueb != "") {
                 $nameeng = $valueb;
@@ -395,7 +481,7 @@ class Material_ImportController extends Zend_Controller_Action {
 
 
             if ($valuef != "" && $valueg != "" /* && $valueh != "" && $valuei != "" */) {
-                //in this case, store the supplyprice
+//in this case, store the supplyprice
                 $tmparr = array();
                 $tmparr[] = trim($namechs);
                 $tmparr[] = trim($nameeng);
@@ -404,10 +490,10 @@ class Material_ImportController extends Zend_Controller_Action {
                 $tmparr[] = trim($valuee); // unit
                 $tmparr[] = trim($valuef); // rate
                 $tmparr[] = trim($valueg); // supplier
-                //
+//
                 //$tmparr[] = date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP($valueg)); //trim($valueg);                
-                //$tmparr[] = trim($valueh);
-                //$tmparr[] = trim($valuei);
+//$tmparr[] = trim($valueh);
+//$tmparr[] = trim($valuei);
 
                 $supplypricearr[] = $tmparr;
 
@@ -426,10 +512,10 @@ class Material_ImportController extends Zend_Controller_Action {
     }
 
     private function persistAllSupplyPrices($supplypricearr) {
-        // debug, dump the array
+// debug, dump the array
         echo "supplypricearr count=" . count($supplypricearr) . "<br>";
         foreach ($supplypricearr as $tmp) {
-            //print_r($tmp); echo "<br>";
+//print_r($tmp); echo "<br>";
             $this->persistSupplyprice($tmp);
         }
     }
@@ -441,16 +527,16 @@ class Material_ImportController extends Zend_Controller_Action {
         $unit = $dataarr[3];
         $rate = $dataarr[4];
         $sname = $dataarr[5];
-        
-        //$update = $dataarr[5];        
-        //$quantity = $dataarr[7];
+
+//$update = $dataarr[5];        
+//$quantity = $dataarr[7];
 
         $material = $this->_material->findOneBy(array("name" => $mname, "nameeng" => $mnameeng, "description" => $mdescription));
         if (!$material) {
-            //print_r($dataarr); echo "<br>";
+//print_r($dataarr); echo "<br>";
             echo "nameeng=$mnameeng,name=$mname,description=$mdescription<br>";
-            //$obj = $this->_material->findOneBy(array("nameeng"=>$mnameeng));
-            //echo $obj->getId() . "<br>";
+//$obj = $this->_material->findOneBy(array("nameeng"=>$mnameeng));
+//echo $obj->getId() . "<br>";
         }
 
         $supplier = $this->_supplier->findOneBy(array("name" => $sname));
@@ -459,9 +545,9 @@ class Material_ImportController extends Zend_Controller_Action {
         $supplyprice->setMaterial($material);
         $supplyprice->setSupplier($supplier);
         $supplyprice->setUnit($unit);
-        //$supplyprice->setUpdate(new Datetime($update));
+//$supplyprice->setUpdate(new Datetime($update));
         $supplyprice->setRate($rate);
-        //$supplyprice->setQuantity($quantity);
+//$supplyprice->setQuantity($quantity);
 
         $this->_em->persist($supplyprice);
     }
@@ -469,19 +555,19 @@ class Material_ImportController extends Zend_Controller_Action {
     public function truncateallAction() {
         infox_common::turnoffView($this->_helper);
 
-        // http://stackoverflow.com/questions/9686888/how-to-truncate-a-table-using-doctrine-2
-        // http://stackoverflow.com/questions/5301285/explicitly-set-id-with-doctrine-when-using-auto-strategy
-        // put it here to reset id generator
+// http://stackoverflow.com/questions/9686888/how-to-truncate-a-table-using-doctrine-2
+// http://stackoverflow.com/questions/5301285/explicitly-set-id-with-doctrine-when-using-auto-strategy
+// put it here to reset id generator
         $data = new \Synrgic\Infox\Material();
         $cmd = $this->_em->getClassMetadata(get_class($data));
         $connection = $this->_em->getConnection();
         $dbPlatform = $connection->getDatabasePlatform();
         $connection->beginTransaction();
         try {
-            //$connection->query('SET FOREIGN_KEY_CHECKS=0');
+//$connection->query('SET FOREIGN_KEY_CHECKS=0');
             $q = $dbPlatform->getTruncateTableSql($cmd->getTableName(), true);
             $connection->executeUpdate($q);
-            //$connection->query('SET FOREIGN_KEY_CHECKS=1');
+//$connection->query('SET FOREIGN_KEY_CHECKS=1');
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollback();

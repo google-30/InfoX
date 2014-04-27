@@ -18,9 +18,8 @@ $selects.=$options;
 $selects.='</select>';
 
 $materialtab = $this->grid("Materials", true)
-        //->field('type', '分类')
-        ->field('nameeng', 'Name Eng')
-        ->field('name', 'Name Chs')
+        ->field('sn', 'S/N')        
+        ->field('name', 'Name ')
         ->field('description', 'Description ')
         ->field('unit', 'Unit')
         ->field('rate', 'Rate')
@@ -62,7 +61,7 @@ $materialtab = $this->grid("Materials", true)
 
     $(function() {
         $('#Materials').dataTable({
-            "iDisplayLength": 50,
+            "iDisplayLength": 100,
             "bRetrieve": true,
         });
     });

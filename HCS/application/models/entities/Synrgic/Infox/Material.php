@@ -74,5 +74,9 @@ class Material extends \Synrgic_Models_Entity {
      * @Column(type="string", nullable=true)
      */
     protected $unit;
-    
+
+    /**
+     * @Column(type="integer", nullable=true)
+     */
+    protected $sn;    
 }

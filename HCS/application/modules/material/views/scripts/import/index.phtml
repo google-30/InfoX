@@ -32,10 +32,10 @@ function clearalldata()
 </fieldset>
 </div>
 <button data-mini="true" data-theme="a" onclick="clearalldata()">清空材料数据</button>
-<?
+<?php
 echo $this->grid("Maindata", true)
-          //->field('sn','S/N')
-          ->field('nameeng','Title')
+          ->field('sn','S/N')
+          //->field('nameeng','Title')
           ->field('name','Title')
           ->field('description','Description ')
           ->field('unit','Unit')
