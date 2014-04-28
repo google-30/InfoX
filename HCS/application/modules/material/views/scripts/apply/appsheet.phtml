@@ -28,6 +28,20 @@ if ($mode == "edit") {
 
     $matapps = $this->matapps;
 }
+
+$_matsheet="";
+$sheets = $this->sheets;
+$options = "";
+foreach ($sheets as $sheet) {
+    if ($_matsheet == $sheet) {
+        $option = '<option value="' . $sheet . '" selected>' . $sheet . "</option>";
+    } else {
+        $option = '<option value="' . $sheet . '" >' . $sheet . "</option>";
+    }
+
+    $options .= $option;
+}
+$_sheetsels = '<select id="sheetsel" name="sheetsel" data-mini="true" data-theme="a">' . $options . "</select>";
 ?>
 <style>
     #typetab { table-layout: fixed; }
@@ -42,9 +56,31 @@ if ($mode == "edit") {
     });
 
     $('#sites').change(siteReload);
-    $('#maintype').change(maintypeReload);
-    $('#subtype').change(subtypeReload);
+    //$('#maintype').change(maintypeReload);
+    //$('#subtype').change(subtypeReload);
+    $('#sheetsel').change(sheetReload);
+    
+    function sheetReload()
+    {
+        //alert("reload!");
+        var siteid = $("#sites").val();
+        var sheet = $("#sites").val();
+        var appid = $("#sheetsel").val();
+        
+        if (appid != "0")
+        {
+            var url = "/material/apply/appedit?&id=" + appid;
+        }
+        else
+        {
+            var url = "/material/apply/applymaterials?";
+        }
 
+        url += "&siteid=" + siteid + "&sheet=" + sheet;
+        url += "&open=2";
+        redirect(url);
+    }    
+    
     function siteReload()
     {
         var mainid = $("#maintype").val();
@@ -327,7 +363,7 @@ echo $title;
          ">
         <h3>第二步：分类选择材料</h3>
         <div id="typechooser">
-            <table class="grid" id="typetab">
+            <!--<table class="grid" id="typetab">
                 <tr>
                     <td>选择主要类型:</td>
                     <td>
@@ -370,7 +406,10 @@ echo $title;
                     </td>
                 </tr>
 
-            </table>
+            </table>-->
+            <?php
+            echo $_sheetsels;
+            ?>
 
             <table id="datatable" class="grid">
                 <thead><tr>
