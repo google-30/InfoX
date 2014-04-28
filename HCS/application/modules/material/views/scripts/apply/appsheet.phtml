@@ -29,7 +29,7 @@ if ($mode == "edit") {
     $matapps = $this->matapps;
 }
 
-$_matsheet="";
+$_matsheet = "";
 $sheets = $this->sheets;
 $options = "";
 foreach ($sheets as $sheet) {
@@ -59,14 +59,14 @@ $_sheetsels = '<select id="sheetsel" name="sheetsel" data-mini="true" data-theme
     //$('#maintype').change(maintypeReload);
     //$('#subtype').change(subtypeReload);
     $('#sheetsel').change(sheetReload);
-    
+
     function sheetReload()
     {
         //alert("reload!");
         var siteid = $("#sites").val();
         var sheet = $("#sites").val();
         var appid = $("#sheetsel").val();
-        
+
         if (appid != "0")
         {
             var url = "/material/apply/appedit?&id=" + appid;
@@ -79,8 +79,8 @@ $_sheetsels = '<select id="sheetsel" name="sheetsel" data-mini="true" data-theme
         url += "&siteid=" + siteid + "&sheet=" + sheet;
         url += "&open=2";
         redirect(url);
-    }    
-    
+    }
+
     function siteReload()
     {
         var mainid = $("#maintype").val();
@@ -331,7 +331,7 @@ echo $title;
     }
     ?>
          ">
-        <h3>第一步：选择申请工地 - <?php echo $sitename; ?></h3>
+        <h3>第一步：选择工地 <?php echo $sitename; ?></h3>
         <select id="sites" data-mini="true" data-theme="a">
             <option value="0">请选择申请工地</option>
             <?php
@@ -368,40 +368,40 @@ echo $title;
                     <td>选择主要类型:</td>
                     <td>
                         <select name="maintype" id="maintype" data-mini="true" data-theme="a">
-                            <?php
-                            foreach ($maintypes as $tmp) {
-                                $id = $tmp->getId();
-                                $namechs = $tmp->getTypechs();
-                                $nameeng = $tmp->getTypeeng();
-                                $typelong = $namechs . "/" . $nameeng;
+            <?php
+            foreach ($maintypes as $tmp) {
+                $id = $tmp->getId();
+                $namechs = $tmp->getTypechs();
+                $nameeng = $tmp->getTypeeng();
+                $typelong = $namechs . "/" . $nameeng;
 
-                                if ($id == $mainid) {
-                                    echo "<option value='$id' selected>$typelong</option>";
-                                } else {
-                                    echo "<option value='$id'>$typelong</option>";
-                                }
-                            }
-                            ?>   
+                if ($id == $mainid) {
+                    echo "<option value='$id' selected>$typelong</option>";
+                } else {
+                    echo "<option value='$id'>$typelong</option>";
+                }
+            }
+            ?>   
                         </select>
 
                     </td>
                     <td>选择子类型:</td>
                     <td>
                         <select name="subtype" id="subtype" data-mini="true" data-theme="a">
-                            <?php
-                            foreach ($subtypes as $tmp) {
-                                $id = $tmp->getId();
-                                $namechs = $tmp->getTypechs();
-                                $nameeng = $tmp->getTypeeng();
-                                $typelong = $namechs . "/" . $nameeng;
+            <?php
+            foreach ($subtypes as $tmp) {
+                $id = $tmp->getId();
+                $namechs = $tmp->getTypechs();
+                $nameeng = $tmp->getTypeeng();
+                $typelong = $namechs . "/" . $nameeng;
 
-                                if ($id == $subid) {
-                                    echo "<option value='$id' selected>$typelong</option>";
-                                } else {
-                                    echo "<option value='$id'>$typelong</option>";
-                                }
-                            }
-                            ?>   
+                if ($id == $subid) {
+                    echo "<option value='$id' selected>$typelong</option>";
+                } else {
+                    echo "<option value='$id'>$typelong</option>";
+                }
+            }
+            ?>   
                         </select>
                     </td>
                 </tr>
