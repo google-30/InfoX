@@ -144,6 +144,7 @@
                         <privilege>view</privilege>
                     </emachinery>
 
+                    <!--
                     <materialtype>
                         <label>材料类型</label>
                         <module>material</module>
@@ -152,7 +153,7 @@
                         <resource>material:type</resource>
                         <privilege>view</privilege>
                     </materialtype>
-
+                    -->
                     <supplier>
                         <label>供应商信息</label>
                         <module>supplier</module>

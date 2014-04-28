@@ -25,7 +25,6 @@ class Material_ManageController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        //$this->getmateriallistNew();
         $sheetarr = infox_material::getMaterialListSheets();
 
         $allmatsheet = "All";
@@ -72,8 +71,10 @@ class Material_ManageController extends Zend_Controller_Action {
     public function addAction() {
         $this->getSuppliers();
         $this->getSupplyprice(0);
-        $this->getTypes();
+        //$this->getTypes();
         $this->getUnits();
+
+        $this->view->sheets = infox_material::getMaterialListSheets();
     }
 
     public function editAction() {
@@ -87,13 +88,11 @@ class Material_ManageController extends Zend_Controller_Action {
         $material = $this->_material->findOneBy(array('id' => $id));
 
         $this->view->maindata = $material;
-        /*
-          $this->getSupplyprice($id);
-          $this->getUnits();
-         */
         $this->getSuppliers();
-        $this->getTypes();
+        //$this->getTypes();
         $this->view->supplypricearr = $supplypricearr = infox_material::getSupplypricesByMaterial($material);
+
+        $this->view->sheets = infox_material::getMaterialListSheets();
     }
 
     public function deleteAction() {
@@ -121,42 +120,55 @@ class Material_ManageController extends Zend_Controller_Action {
         $mode = $this->getParam("mode", "Create");
         $id = $this->getParam("id", "");
         $name = $this->getParam("name", "");
-        $nameeng = $this->getParam("nameeng", "");
+        //$nameeng = $this->getParam("nameeng", "");
         $spec = $this->getParam("spec", "");
         $description = $this->getParam("description", "");
         $usage = $this->getParam("usage", "");
-        $typeid = $this->getParam("type", "0");
+        //$typeid = $this->getParam("type", "0");
+        $sheet = $this->getParam("sheetsel", "0");
+        if ($sheet == "0") {
+            $url = "/material/manage/";
+            $this->_redirect($url);
+        }
 
         $defsupplierid = $this->getParam("defsupplierid", "0");
 
         if ($mode == "Create") {
             $material = new \Synrgic\Infox\Material();
+            
+            $query = "select MAX(material.sn) from \Synrgic\Infox\Material material where material.sheet='$sheet'";
+            $query = $this->_em->createQuery($query);
+            $result = $query->getResult();
+            //var_dump($result);
+            $sn = $result[0][1] +1;
+            //echo $sn;            //return;
+            $material->setSn($sn);            
         } else {
             $material = $this->_material->findOneBy(array("id" => $id));
         }
 
         $material->setName($name);
-        $material->setNameeng($nameeng);
-        //$material->setUpdate(new Datetime("now"));
         $material->setDescription($description);
         $material->setUsage($usage);
+        $material->setSheet($sheet);
 
         $supplyprice = $this->_supplyprice->findOneBy(array("id" => $defsupplierid));
         if ($supplyprice) {
             $material->setSupplyprice($supplyprice);
         }
 
-        $typeobj = $this->_materialtype->findOneBy(array("id" => $typeid));
-        if (isset($typeobj)) {
-            $material->setType($typeobj);
-        }
+        /*
+          $typeobj = $this->_materialtype->findOneBy(array("id" => $typeid));
+          if (isset($typeobj)) {
+          $material->setType($typeobj);
+          }
 
-        // find main type
-        //$this->_materialtype->findOneBy();
-        $maintypeobj = $typeobj->getMain();
-        $maintypeeng = $maintypeobj->getTypeeng();
-        $material->setSheet($maintypeeng);
-        
+          // find main type
+          //$this->_materialtype->findOneBy();
+          $maintypeobj = $typeobj->getMain();
+          $maintypeeng = $maintypeobj->getTypeeng();
+          $material->setSheet($maintypeeng);
+         */
         $this->_em->persist($material);
         try {
             $this->_em->flush();
@@ -307,7 +319,7 @@ class Material_ManageController extends Zend_Controller_Action {
         //$dodate = $this->getParam("dodate", "now");
         $materialid = $this->getParam("material", 0);
 
-        if ($supplierid == "" || $supplierid == 0 || $unit == "" || $rate == 0 ) {
+        if ($supplierid == "" || $supplierid == 0 || $unit == "" || $rate == 0) {
             echo "提交失败，请确认Supplier, Unit, Rate";
             return;
         }

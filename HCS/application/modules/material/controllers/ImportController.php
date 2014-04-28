@@ -99,7 +99,7 @@ class Material_ImportController extends Zend_Controller_Action {
     }
 
     private function storeDetails20140425($sheetname, $objWorksheet) {
-        // step1 - supplier  
+// step1 - supplier  
         $this->storeSupplier($objWorksheet);
         $materialArr = array();
         $i = 0;
@@ -109,27 +109,27 @@ class Material_ImportController extends Zend_Controller_Action {
                 continue;
             }
 
-            // sn
+// sn
             $cell = $objWorksheet->getCell("A" . $i);
             $valuea = trim($cell->getFormattedvalue());
 
-            // name chs
+// name chs
             $cell = $objWorksheet->getCell("C" . $i);
             $valuec = trim($cell->getFormattedvalue());
 
-            // related to material description
+// related to material description
             $cell = $objWorksheet->getCell("D" . $i);
             $valued = trim($cell->getFormattedvalue());
 
-            // unit
+// unit
             $cell = $objWorksheet->getCell("E" . $i);
             $valuee = trim($cell->getFormattedvalue());
 
-            // rate
+// rate
             $cell = $objWorksheet->getCell("F" . $i);
             $valuef = trim($cell->getFormattedvalue());
 
-            // suppliers
+// suppliers
             $cell = $objWorksheet->getCell("G" . $i);
             $valueg = trim($cell->getFormattedvalue());
 
@@ -146,22 +146,26 @@ class Material_ImportController extends Zend_Controller_Action {
             $tmparr['description'] = $description;
             $tmparr['sheet'] = $sheetname;
 
+            $tmparr['rate'] = $rate;
+            $tmparr['supplier'] = $supplier;
+            $tmparr['unit'] = $unit;
+
             $materialArr[] = $tmparr;
         }
 
         $this->storeMaterials20140425($materialArr);
+        $this->storeSupplyprice20140425($materialArr);
     }
-    
+
     private function storeMaterials20140425($materialarr) {
         foreach ($materialarr as $tmp) {
             $name = $tmp['name'];
             $sn = $tmp['sn'];
             $description = $tmp['description'];
-            //$type = $tmp['type'];
             $sheet = $tmp['sheet'];
 
             $obj = $this->_material->findOneBy(
-                    array('name' => $name, 'description' => $description, 'sn'=> $sn));
+                    array('name' => $name, 'description' => $description, 'sn' => $sn));
             if ($obj) {
                 //echo "material already there.<br>";
             } else {
@@ -169,8 +173,7 @@ class Material_ImportController extends Zend_Controller_Action {
                 $obj->setSn($sn);
                 $obj->setName($name);
                 $obj->setDescription($description);
-                //$obj->setType($type);
-                //$obj->setUnit($unit);
+
                 $obj->setSheet($sheet);
                 $this->_em->persist($obj);
             }
@@ -182,7 +185,42 @@ class Material_ImportController extends Zend_Controller_Action {
             var_dump($e);
             return;
         }
-    }       
+    }
+
+    private function storeSupplyprice20140425($materialarr) {
+        foreach ($materialarr as $tmp) {
+            $name = $tmp['name'];
+            $sn = $tmp['sn'];
+            $description = $tmp['description'];
+            $sheet = $tmp['sheet'];
+            $rate = $tmp['rate'];
+            $suppliername = $tmp['supplier'];
+            $unit = $tmp['unit'];
+
+            $material = $this->_material->findOneBy(array("name" => $name, "description" => $description, 'sn' => $sn));
+            if (!$material) {
+                continue;
+            }
+
+            $supplierobj = $this->_supplier->findOneBy(array("name" => $suppliername));
+            if (!$supplierobj) {
+                continue;
+            }
+
+            $supplyprice = new \Synrgic\Infox\Supplyprice();
+            $supplyprice->setMaterial($material);
+            $supplyprice->setSupplier($supplierobj);
+            $supplyprice->setUnit($unit);
+            $supplyprice->setRate($rate);
+            $this->_em->persist($supplyprice);
+        }
+        try {
+            $this->_em->flush();
+        } catch (Exception $e) {
+            var_dump($e);
+            return;
+        }
+    }
 
     private function storeDetails($sheetname, $objWorksheet) {
 //$datecolumns = array(7,);
@@ -377,8 +415,8 @@ class Material_ImportController extends Zend_Controller_Action {
             var_dump($e);
             return;
         }
-    } 
-    
+    }
+
     private function storeMaterials($materialarr) {
         foreach ($materialarr as $tmp) {
             $name = $tmp['name'];
@@ -413,12 +451,10 @@ class Material_ImportController extends Zend_Controller_Action {
 
     private function storeSupplyprice($objWorksheet) {
 //echo "storeSupplyprice<br>";
-
-        $subtype = null;
-        $subtypeflag = false;
-
-        $nameenglast = "";
-        $namelast = "";
+//$subtype = null;
+//$subtypeflag = false;
+//$nameenglast = "";
+//$namelast = "";
         $supplypriceArr = array();
         $i = 0;
 
@@ -428,7 +464,7 @@ class Material_ImportController extends Zend_Controller_Action {
 
         foreach ($objWorksheet->getRowIterator() as $row) {
             if (++$i == 1) {   // ignore the first row
-                continue;
+                continude;
             }
 
 // eng
@@ -491,7 +527,7 @@ class Material_ImportController extends Zend_Controller_Action {
                 $tmparr[] = trim($valuef); // rate
                 $tmparr[] = trim($valueg); // supplier
 //
-                //$tmparr[] = date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP($valueg)); //trim($valueg);                
+//$tmparr[] = date('d-m-Y', PHPExcel_Shared_Date::ExcelToPHP($valueg)); //trim($valueg);                
 //$tmparr[] = trim($valueh);
 //$tmparr[] = trim($valuei);
 
@@ -520,7 +556,8 @@ class Material_ImportController extends Zend_Controller_Action {
         }
     }
 
-    private function persistSupplyprice($dataarr) {// dataarr = { material name, material nameeng, material description, supplier name, unit, update, rate, quantity, }
+    private function persistSupplyprice($dataarr) {
+// dataarr = { material name, material nameeng, material description, supplier name, unit, update, rate, quantity, }
         $mname = $dataarr[0];
         $mnameeng = $dataarr[1];
         $mdescription = $dataarr[2];

@@ -25,12 +25,6 @@ class Supplyprice extends \Synrgic_Models_Entity {
     protected $supplier;
 
     /**
-     * DO Date   
-     * @Column(type="date", nullable=true)
-     */
-    protected $update;
-
-    /**
      * @Column(type="string", nullable=true)
      */
     protected $unit;
@@ -40,19 +34,5 @@ class Supplyprice extends \Synrgic_Models_Entity {
      */
     protected $rate;
 
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $quantity;
 
-    /**
-     * @Column(type="float", nullable=true)
-     */
-    protected $price;
-
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $remark;
-    
 }
