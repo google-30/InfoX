@@ -164,70 +164,73 @@ class Material_ApplyController extends Zend_Controller_Action {
         $this->view->siteparts = $siteparts;
         $this->view->sites = $sites;
         //echo "siteid=" . $siteid;   
-        //_materialtype
-        $mainid = $this->getParam("mainid", 0);
-        $subid = $this->getParam("subid", 0);
-
-        $query = $this->_em->createQuery('select mtype from Synrgic\Infox\Materialtype mtype where mtype.id = mtype.main');
-        $mains = $query->getResult();
-
-        if ($mainid && $subid) {// define main and sub
-            $maintype = $this->_materialtype->findOneBy(array("id" => $mainid));
-            if ($maintype) {
-                $subs = $this->_materialtype->findBy(array("main" => $maintype));
-            }
-        } else if ($mainid) {   //change main type
-            $maintype = $this->_materialtype->findOneBy(array("id" => $mainid));
-            if ($maintype) {
-                $subs = $this->_materialtype->findBy(array("main" => $maintype));
-                if ($subs) {
-                    $subfirstid = $subs[0]->getId();
-                }
-            }
-
-            $subid = $subfirstid;
-        } else if ($subid) {   // change sub type
-            // find subtype
-            $subtype = $this->_materialtype->findOneBy(array("id" => $subid));
-
-            // find main of sub
-            $maintype = $subtype->getMain();
-            $mainid = $maintype->getid();
-
-            $subs = $this->_materialtype->findBy(array("main" => $maintype));
-        } else {
-            $mainid = $mains[0]->getId();
-            $maintype = $this->_materialtype->findOneBy(array("id" => $mainid));
-            $subs = $this->_materialtype->findBy(array("main" => $maintype));
-            $subid = $subs[0]->getId();
-        }
-
-        $this->view->maintypes = $mains;
-        $this->view->subtypes = $subs;
-        $this->view->mainid = $mainid;
-        $this->view->subid = $subid;
-
-        $subtype = $this->_materialtype->findOneBy(array("id" => $subid));
-        // TODO: if subtype == null
-        //$materialobjs = $this->_material->findBy(array("type" => $subtype));
-        //$this->view->materials = $materialobjs;
-        $typearr = $this->_materialtype->findBy(array("main" => $subtype));
-        //echo count($typearr);
-
-        $typestr = "";
-        foreach ($typearr as $type) {
-            $typeid = $type->getId();
-            $typestr .= $typeid . ",";
-        }
-        $typestr .="0";
-        $query = $this->_em->createQuery(
-                "select m from Synrgic\Infox\Material m where m.type in ($typestr)");
-        $result = $query->getResult();
-        $this->view->materials = $result;
-
         $this->view->open = $this->getParam("open", 0);
 
-        $this->view->sheets = infox_material::getMaterialListSheets();
+        $this->view->sheets = $sheetarr = infox_material::getMaterialListSheets();
+        $this->view->sheet = $sheet = $this->getParam("sheet", $sheetarr[0]);
+        $this->view->materials = $result = $this->_material->findBy(array("sheet" => $sheet));
+        /*
+          //_materialtype
+          $mainid = $this->getParam("mainid", 0);
+          $subid = $this->getParam("subid", 0);
+
+          $query = $this->_em->createQuery('select mtype from Synrgic\Infox\Materialtype mtype where mtype.id = mtype.main');
+          $mains = $query->getResult();
+
+          if ($mainid && $subid) {// define main and sub
+          $maintype = $this->_materialtype->findOneBy(array("id" => $mainid));
+          if ($maintype) {
+          $subs = $this->_materialtype->findBy(array("main" => $maintype));
+          }
+          } else if ($mainid) {   //change main type
+          $maintype = $this->_materialtype->findOneBy(array("id" => $mainid));
+          if ($maintype) {
+          $subs = $this->_materialtype->findBy(array("main" => $maintype));
+          if ($subs) {
+          $subfirstid = $subs[0]->getId();
+          }
+          }
+
+          $subid = $subfirstid;
+          } else if ($subid) {   // change sub type
+          // find subtype
+          $subtype = $this->_materialtype->findOneBy(array("id" => $subid));
+
+          // find main of sub
+          $maintype = $subtype->getMain();
+          $mainid = $maintype->getid();
+
+          $subs = $this->_materialtype->findBy(array("main" => $maintype));
+          } else {
+          $mainid = $mains[0]->getId();
+          $maintype = $this->_materialtype->findOneBy(array("id" => $mainid));
+          $subs = $this->_materialtype->findBy(array("main" => $maintype));
+          $subid = $subs[0]->getId();
+          }
+
+          $this->view->maintypes = $mains;
+          $this->view->subtypes = $subs;
+          $this->view->mainid = $mainid;
+          $this->view->subid = $subid;
+
+          $subtype = $this->_materialtype->findOneBy(array("id" => $subid));
+          // TODO: if subtype == null
+          //$materialobjs = $this->_material->findBy(array("type" => $subtype));
+          //$this->view->materials = $materialobjs;
+          $typearr = $this->_materialtype->findBy(array("main" => $subtype));
+          //echo count($typearr);
+
+          $typestr = "";
+          foreach ($typearr as $type) {
+          $typeid = $type->getId();
+          $typestr .= $typeid . ",";
+          }
+          $typestr .="0";
+          $query = $this->_em->createQuery(
+          "select m from Synrgic\Infox\Material m where m.type in ($typestr)");
+          $result = $query->getResult();
+          $this->view->materials = $result;
+         */
     }
 
     public function postdataAction() {
@@ -249,7 +252,8 @@ class Material_ApplyController extends Zend_Controller_Action {
             // name to longname(chs&eng)
             $name = $matobj->getName();
             $nameeng = $matobj->getNameeng();
-            $longname = $name . "/" . $nameeng;
+            //$longname = $name . "/" . $nameeng;
+            $longname = $name;
             $requests["longname"] = $longname;
             $requests["description"] = $matobj->getDescription();
             $requests["unit"] = $matobj->getUnit();
@@ -270,17 +274,17 @@ class Material_ApplyController extends Zend_Controller_Action {
         $appmats = $ans->appmats;
 
         echo $this->view->grid("matlist", true)
-                ->field('id', '材料编号')
-                ->field('longname', '材料名称')
+                //->field('sn', 'S/N')
+                ->field('longname', '名称')
                 ->field('description', '描述')
-                ->field('unit', '单位')
+                //->field('unit', '单位')
                 ->field('amount', '数量')
                 ->field('sitepart', '工程部位')
                 ->actionField(':action', "操作", '&nbsp;|&nbsp;')
                 ->setSorting(false)
                 ->itemCountPerPage(30)
                 ->paginatorEnabled(false)
-                //->helper(new GridHelper_Supplier())
+                //->helper(new GridHelper_Matapps())
                 ->data($appmats)
                 ->action(':action', '删除', array('url' => array('action' => 'delselection')));
     }

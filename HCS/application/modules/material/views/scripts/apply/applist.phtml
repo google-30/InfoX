@@ -1,3 +1,8 @@
+<style>
+    table {
+        table-layout: fixed;
+    }
+</style>
 <script>
     $(function() {
         $('#Applications').dataTable({
@@ -13,7 +18,7 @@
 echo $this->grid("Applications", true)
         ->field('updatedate', '更新日期')
         ->field('site', '工地')
-        ->field('id', '申请单号')
+        //->field('id', '申请单号')
         ->field('applicant', '申请人')
         ->field('createdate', '创建日期')
         //->field('status0', '申请状态')

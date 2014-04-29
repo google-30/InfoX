@@ -29,11 +29,11 @@ if ($mode == "edit") {
     $matapps = $this->matapps;
 }
 
-$_matsheet = "";
+$sheetsel = $this->sheet;
 $sheets = $this->sheets;
 $options = "";
 foreach ($sheets as $sheet) {
-    if ($_matsheet == $sheet) {
+    if ($sheetsel == $sheet) {
         $option = '<option value="' . $sheet . '" selected>' . $sheet . "</option>";
     } else {
         $option = '<option value="' . $sheet . '" >' . $sheet . "</option>";
@@ -64,8 +64,8 @@ $_sheetsels = '<select id="sheetsel" name="sheetsel" data-mini="true" data-theme
     {
         //alert("reload!");
         var siteid = $("#sites").val();
-        var sheet = $("#sites").val();
-        var appid = $("#sheetsel").val();
+        var sheet = $("#sheetsel").val();
+        var appid = $("#appid").val();
 
         if (appid != "0")
         {
@@ -83,8 +83,8 @@ $_sheetsels = '<select id="sheetsel" name="sheetsel" data-mini="true" data-theme
 
     function siteReload()
     {
-        var mainid = $("#maintype").val();
-        var subid = $("#subtype").val();
+        //var mainid = $("#maintype").val();
+        //var subid = $("#subtype").val();
         var siteid = $("#sites").val();
 
         var appid = $("#appid").val();
@@ -99,7 +99,8 @@ $_sheetsels = '<select id="sheetsel" name="sheetsel" data-mini="true" data-theme
         }
 
         //alert(url);
-        url += "&siteid=" + siteid + "&mainid=" + mainid + "&subid=" + subid;
+        url += "&siteid=" + siteid;
+        //url += "&mainid=" + mainid + "&subid=" + subid;
         url += "&open=1";
         redirect(url);
     }
@@ -322,15 +323,13 @@ if ($mode == "create") {
 echo $title;
 ?>
 <div data-role="collapsible-set" >
-    <div data-role="collapsible" data-collapsed="
-    <?php
+    <div data-role="collapsible" data-collapsed="<?php
     if ($open == 1)
         echo "false";
     else {
         echo "true";
     }
-    ?>
-         ">
+    ?>">
         <h3>第一步：选择工地 <?php echo $sitename; ?></h3>
         <select id="sites" data-mini="true" data-theme="a">
             <option value="0">请选择申请工地</option>
@@ -352,68 +351,20 @@ echo $title;
     </div>
 
     <!--按分类选择材料-->
-    <div data-role="collapsible" data-collapsed="
-    <?php
-    if ($open == 2)
+    <div data-role="collapsible" data-collapsed="<?php
+    if ($open == "2")
         echo "false";
     else {
         echo "true";
     }
-    ?>
-         ">
+    ?>">
         <h3>第二步：分类选择材料</h3>
-        <div id="typechooser">
-            <!--<table class="grid" id="typetab">
-                <tr>
-                    <td>选择主要类型:</td>
-                    <td>
-                        <select name="maintype" id="maintype" data-mini="true" data-theme="a">
-            <?php
-            foreach ($maintypes as $tmp) {
-                $id = $tmp->getId();
-                $namechs = $tmp->getTypechs();
-                $nameeng = $tmp->getTypeeng();
-                $typelong = $namechs . "/" . $nameeng;
-
-                if ($id == $mainid) {
-                    echo "<option value='$id' selected>$typelong</option>";
-                } else {
-                    echo "<option value='$id'>$typelong</option>";
-                }
-            }
-            ?>   
-                        </select>
-
-                    </td>
-                    <td>选择子类型:</td>
-                    <td>
-                        <select name="subtype" id="subtype" data-mini="true" data-theme="a">
-            <?php
-            foreach ($subtypes as $tmp) {
-                $id = $tmp->getId();
-                $namechs = $tmp->getTypechs();
-                $nameeng = $tmp->getTypeeng();
-                $typelong = $namechs . "/" . $nameeng;
-
-                if ($id == $subid) {
-                    echo "<option value='$id' selected>$typelong</option>";
-                } else {
-                    echo "<option value='$id'>$typelong</option>";
-                }
-            }
-            ?>   
-                        </select>
-                    </td>
-                </tr>
-
-            </table>-->
-            <?php
-            echo $_sheetsels;
-            ?>
+        <div id="">
+            <?= $_sheetsels; ?>
 
             <table id="datatable" class="grid">
                 <thead><tr>
-                        <th>名称</th><th>描述</th><th>数量</th><th>工程部位</th><th>提交</th>
+                        <th>S/N</th><th>名称</th><th>描述</th><th>数量</th><th>工程部位</th><th>提交</th>
                     </tr></thead>
                 <tbody> 
                     <?php
@@ -427,17 +378,17 @@ echo $title;
                     foreach ($this->materials as $tmp) {
                         $id = $tmp->getId();
                         $name = $tmp->getName();
-                        $nameeng = $tmp->getNameeng();
+                        //$nameeng = $tmp->getNameeng();
                         //$unit = ""; //$tmp->getUnit();
                         //$spec = ""; //$tmp->getSpec();
                         $description = $tmp->getDescription();
-
+                        $sn = $tmp->getSn();
+                        
                         $body = "";
 
-                        $longname = '<tr><td class="tdname">' . $name . '/' . $nameeng . '</td>';
+                        $tdsn = '<td class="tdsn">' . $sn . '</td>';
+                        $longname = '<td class="tdname">' . $name . '</td>';
                         $amount = '<td class="tdamount"><input type="number" name="slider" id="slider' . $id . '" value="" placeholder="0"></td>';
-                        //$unit = "<td>$unit</td>";
-                        //$spec = "<td>$spec</td>";    
                         $deshtml = "<td>$description</td>";
 
                         $dropdown = '<select id="sitepart' . $id . '" data-mini="true">';
@@ -445,7 +396,7 @@ echo $title;
                         $dropdown .= '</select>';
                         $td_dropdown = '<td>' . $dropdown . '</td>';
 
-                        $body .= $longname . $deshtml . $amount . $td_dropdown;
+                        $body .= "<tr>". $tdsn. $longname . $deshtml . $amount . $td_dropdown;
                         //$gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-icon="arrow-r" data-iconpos="bottom" data-inline="true" data-mini="true">提交</button></td>';
                         $gorightbutton = '<td class="tdchoose"><button onclick="addchoosen(' . $id . ')" data-inline="true" data-mini="true">提交</button></td>';
 
@@ -457,7 +408,7 @@ echo $title;
                 </tbody> 
             </table>
             <br>
-        </div> <!-- typechooser -->
+        </div>
     </div>
 
     <!--手动输入材料信息-->
@@ -498,15 +449,13 @@ echo $title;
         </div>
     </div>
 
-    <div id="selcollapsible" data-role="collapsible" data-collapsed="
-    <?php
+    <div id="selcollapsible" data-role="collapsible" data-collapsed="<?php
     if ($open == 4)
         echo "false";
     else {
         echo "true";
     }
-    ?>
-         ">
+    ?>">
         <h3>最后步：提交已选材料</h3>
         <div id="selections">
             <div id="seltable">
@@ -516,8 +465,8 @@ echo $title;
             if ($matapps && count($matapps) > 0) {
                 echo "<p>已申请材料</p>";
                 echo $this->grid("matapps", true)
-                        ->field('id', '材料编号')
-                        ->field('longname', '材料名称')
+                        //->field('sn', 'S/N')
+                        ->field('name', '名称')
                         ->field('description', '描述')
                         ->field('amount', '数量')
                         //->field('remark','补充说明')
