@@ -177,7 +177,7 @@ class Material_AppmanageController extends Zend_Controller_Action {
 
         $supplyprice = $this->_supplyprice->findOneBy(array("id" => $supplypriceid));
         $rate = $supplyprice->getRate();
-        $quantity = $supplyprice->getQuantity();
+        //$quantity = $supplyprice->getQuantity();
         $unit = $supplyprice->getUnit();
         $supplier = $supplyprice->getSupplier();
 
@@ -187,7 +187,7 @@ class Material_AppmanageController extends Zend_Controller_Action {
         $matappobj->setAmount($amount);
         $matappobj->setSupplier($supplier);
         $matappobj->setRate($rate);
-        $matappobj->setQuantity($quantity);
+        //$matappobj->setQuantity($quantity);
         $matappobj->setUnit($unit);
         $matappobj->setSitepart($sitepart);
         $matappobj->setTotal($amount * $rate);
@@ -283,28 +283,31 @@ class Material_AppmanageController extends Zend_Controller_Action {
 
         $appobj = $this->_application->findOneBy(array("id" => $appid));
         $appobj->setUpdatedate(new Datetime('now'));
-        $appobj->setStatus1($statusArr[0]);
+        //$appobj->setStatus1($statusArr[0]);
 
-        // TODO: update site - this function really needed? 
-        $siteobj = $this->_site->findOneBy(array("id" => $siteid));
-        if ($siteobj) {
-            $appobj->setSite($siteobj);
-        }
+        /*
+          $siteobj = $this->_site->findOneBy(array("id" => $siteid));
+          if ($siteobj) {
+          $appobj->setSite($siteobj);
+          }
 
-        // update applicant
-        $applicantobj = $this->_humanresource->findOneBy(array("id" => $applicantid));
-        //if($applicantobj)
-        {
-            $appobj->setApplicant($applicantobj);
-        }
+          // update applicant
 
-        $this->_em->persist($appobj);
-        try {
-            $this->_em->flush();
-        } catch (Exception $e) {
-            var_dump($e);
-            return;
-        }
+          $applicantobj = $this->_humanresource->findOneBy(array("id" => $applicantid));
+          if($applicantobj)
+          {
+          $appobj->setApplicant($applicantobj);
+          }
+
+          $this->_em->persist($appobj);
+          try {
+          $this->_em->flush();
+          } catch (Exception $e) {
+          var_dump($e);
+          return;
+          }
+         * 
+         */
 
         echo "提交成功";
     }

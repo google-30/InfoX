@@ -1,22 +1,3 @@
-<style>
-    #appinfotab { width:100%; }
-    #totalprice { width:98%; text-align: right; }
-</style>
-<script>
-    $(document).ready(function() {
-        $('#matapps').dataTable({
-            "iDisplayLength": 50,
-            "bRetrieve": true,
-        });
-    });
-
-    $('.settings').on("click", function() {
-        //alert("settings click");
-        var poid = $(this).attr("poid");
-        //alert("poid="+poid);
-        $("#poid").val(poid);
-    });
-</script>
 <?php
 $appobj = $this->application;
 $appid = $appobj->getId();
@@ -48,6 +29,30 @@ $cmyname = $this->cmyname;
 $suppliers = $this->suppliers;
 $poarr = $this->poarr;
 ?>
+<style>
+    table {
+        table-layout: fixed;
+    }
+    #appinfotab { width:100%; }
+    #totalprice { width:98%; text-align: right; }
+</style>
+<script>
+    $(document).ready(function() {
+        document.title = 'InfoX - PO处理';
+
+        $('#matapps').dataTable({
+            "iDisplayLength": 50,
+            "bRetrieve": true,
+        });
+    });
+
+    $('.settings').on("click", function() {
+        //alert("settings click");
+        var poid = $(this).attr("poid");
+        //alert("poid="+poid);
+        $("#poid").val(poid);
+    });
+</script>
 
 <!--<h3>申请单详细信息</h3>-->
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">

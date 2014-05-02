@@ -17,7 +17,13 @@ if ($role == "leader") {
 
     function showapplist() {
         var url = "/material/apply/applist";
-        $("#applist").load(url);
+        $("#applist").load(url, function() {
+            $('#applications').dataTable({
+                //"iDisplayLength": 50,
+                //"bRetrieve": true,
+                 "order": [[ 0, "desc" ]]
+            });
+        });
         //$("#applist").show();
     }
 </script>
@@ -35,9 +41,10 @@ if ($role == "leader") {
 <div class="wizard" <?php echo $style; ?> >
     <fieldset>
         <button onclick="showapplist()" data-theme="a">更新申请</button>
-        <p>点击按钮，更新之前的申请</p>
+
         <div id="applist">
+            <p>点击按钮，更新之前的申请</p>
         </div>        
     </fieldset>
-
-    <br>
+</div>
+<br>

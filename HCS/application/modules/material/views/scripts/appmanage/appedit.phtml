@@ -1,255 +1,230 @@
-<style>
-#appinfotab { width:100%; }
-</style>
-<script>
-function updaterow(id)
-{
-    var supplypriceid = $('#select'+id).val();
-    var amount = $('#amount'+id).val();
-    //var remark = $('#remark'+id).val();
-    //var price = $('#price'+id).val();
-    //price = (price=="") ? 0 : price;
-
-    var sitepart = $('#sitepart'+id).val();
-
-    //alert('updaterow,id='+id+",amount="+amount+",remark="+remark+",supplierid="+supplierid+",price="+price);
-
-    $.post("/material/appmanage/updatematapp", 
-        { id: id, amount: amount, supplypriceid:supplypriceid, sitepart:sitepart }, 
-        function(data) {
-            alert(data);
-            //console.log(data);            
-    });
-}
-
-function updaterow0(id)
-{
-    var amount = $('#amount'+id).val();
-    var remark = $('#remark'+id).val();
-    var supplierid = $('#select'+id).val();   
-    var price = $('#price'+id).val();
-    price = (price=="") ? 0 : price;
-
-    var sitepart = $('#sitepart'+id).val();
-
-    //alert('updaterow,id='+id+",amount="+amount+",remark="+remark+",supplierid="+supplierid+",price="+price);
-
-    $.post("/material/appmanage/updatematapp", 
-        { id: id, amount: amount, remark:remark, supplierid:supplierid, price:price, sitepart:sitepart }, 
-        function(data) {
-            alert(data);
-            //console.log(data);            
-    });
-}
-
-function submitmatapps()
-{
-    //alert("submitmatapps");
-    var siteid = $('#site').val();
-    var applicantid = $('#applicant').val();
-    
-    var appid = $("#appid").val();
-    $.post("/material/appmanage/submitmatapps", { appid:appid, siteid:siteid, applicantid:applicantid }, 
-        function(data) {
-            alert(data);
-            console.log(data);            
-            redirect();
-    });
-}
-
-function rejectmatapps()
-{
-    //alert("rejectmatapps");
-    var appid = $("#appid").val();
-    $.post("/material/appmanage/rejectmatapps", { appid: appid }, 
-        function(data) {
-            alert(data);
-            console.log(data);            
-            redirect();
-    });
-}
-
-function reviewmatapps()
-{
-    //alert("reviewmatapps");
-    var appid = $("#appid").val();
-    $.post("/material/appmanage/reviewmatapps", { appid: appid }, 
-        function(data) {
-            alert(data);
-            console.log(data);            
-            redirect();
-    });
-}
-
-function approvematapps()
-{
-    //alert("approvematapps");
-
-    var appid = $("#appid").val();
-    $.post("/material/appmanage/approvematapps", { appid: appid }, 
-        function(data) {
-            alert(data);
-            redirect();
-    });
-}
-
-function redirect()
-{
-    window.location = "/material/appmanage";
-}
-</script>
 <?php
-$appobj=$this->application;
-$appid=$appobj->getId();
+$appobj = $this->application;
+$appid = $appobj->getId();
 $create = $appobj->getCreatedate()->format("Y-m-d H:i:s");
 $update = $appobj->getUpdatedate()->format("Y-m-d H:i:s");
 $applicant = $appobj->getApplicant();
 $applicantname = "";
-$applicantid =0;
-if($applicant)
-{
+$applicantid = 0;
+if ($applicant) {
     $applicantname = $applicant->getName();
     $applicantid = $applicant->getId();
 }
-$sitename = "";
-$siteid=0;
+$_sitename = "";
+$siteid = 0;
 $siteobj = $appobj->getSite();
-if($siteobj)
-{
-    $sitename = $siteobj->getName();
+if ($siteobj) {
+    $_sitename = $siteobj->getName();
     $siteid = $siteobj->getId();
-} 
-$sites=$this->sites;
+}
+$sites = $this->sites;
 
 $humanres = $this->humanres;
 
 $role = $this->role;
-$displayblk = 0;    
-if($role=="manager")
-{
+$displayblk = 0;
+if ($role == "manager") {
     $displayblk = 1;
 }
 
-$matappsInSys=$this->matappsInSys;
-$matappsNotInSys=$this->matappsNotInSys;
+$matappsInSys = $this->matappsInSys;
+$matappsNotInSys = $this->matappsNotInSys;
 ?>
+<style>
+    #appinfotab { width:100%; }
+</style>
+<script>
+    $(function() {
+        document.title = 'InfoX - 确认材料细节';
+    });
+
+    function updaterow(id)
+    {
+        var supplypriceid = $('#select' + id).val();
+        var amount = $('#amount' + id).val();
+        //var remark = $('#remark'+id).val();
+        //var price = $('#price'+id).val();
+        //price = (price=="") ? 0 : price;
+
+        var sitepart = $('#sitepart' + id).val();
+
+        //alert('updaterow,id='+id+",amount="+amount+",remark="+remark+",supplierid="+supplierid+",price="+price);
+
+        $.post("/material/appmanage/updatematapp",
+                {id: id, amount: amount, supplypriceid: supplypriceid, sitepart: sitepart},
+        function(data) {
+            alert(data);
+            //console.log(data);            
+        });
+    }
+
+    function updaterow0(id)
+    {
+        var amount = $('#amount' + id).val();
+        var remark = $('#remark' + id).val();
+        var supplierid = $('#select' + id).val();
+        var price = $('#price' + id).val();
+        price = (price == "") ? 0 : price;
+
+        var sitepart = $('#sitepart' + id).val();
+
+        //alert('updaterow,id='+id+",amount="+amount+",remark="+remark+",supplierid="+supplierid+",price="+price);
+
+        $.post("/material/appmanage/updatematapp",
+                {id: id, amount: amount, remark: remark, supplierid: supplierid, price: price, sitepart: sitepart},
+        function(data) {
+            alert(data);
+            //console.log(data);            
+        });
+    }
+
+    function submitmatapps()
+    {
+        //alert("submitmatapps");
+        var siteid = $('#site').val();
+        var applicantid = $('#applicant').val();
+
+        var appid = $("#appid").val();
+        $.post("/material/appmanage/submitmatapps", {appid: appid, siteid: siteid, applicantid: applicantid},
+        function(data) {
+            alert(data);
+            console.log(data);
+            redirect();
+        });
+    }
+
+    function rejectmatapps()
+    {
+        //alert("rejectmatapps");
+        var appid = $("#appid").val();
+        $.post("/material/appmanage/rejectmatapps", {appid: appid},
+        function(data) {
+            alert(data);
+            console.log(data);
+            redirect();
+        });
+    }
+
+    function reviewmatapps()
+    {
+        //alert("reviewmatapps");
+        var appid = $("#appid").val();
+        $.post("/material/appmanage/reviewmatapps", {appid: appid},
+        function(data) {
+            alert(data);
+            console.log(data);
+            redirect();
+        });
+    }
+
+    function approvematapps()
+    {
+        //alert("approvematapps");
+
+        var appid = $("#appid").val();
+        $.post("/material/appmanage/approvematapps", {appid: appid},
+        function(data) {
+            alert(data);
+            redirect();
+        });
+    }
+
+    function redirect()
+    {
+        window.location = "/material/appmanage";
+    }
+</script>
 
 <input type="hidden" id="appid" value="<?php echo $appid; ?>">
 
 <table class="" id="appinfotab">
-<tbody>
-<tr>
-<td><strong>申请工地:</strong></td>
-<td>
-<select id="site" data-mini="true">
-<option value="0">未指定工地</option>
-<?php
-$options="";
-foreach($sites as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
+    <tbody>
+        <tr>
+            <td><strong>申请工地:</strong></td>
+            <td>                
+                <strong><?= $_sitename ?></strong>
+            </td>
 
-    if($id == $siteid)
-    {
-        $options .= '<option value="' . $id . '" selected>' . $name . '</option>';
-    }    
-    else
-    {
-        $options .= '<option value="' . $id . '" >' . $name . '</option>';
-    }
-}
-echo $options;
-?>
-</select>
-</td>
+            <td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>
+        </tr>
+        <tr>
+            <td><strong>申请人:</strong></td>
+            <td>
+                <strong><?php echo $applicantname; ?></strong>
 
-<td><strong>申请时间:</strong></td><td><strong><?php echo $create; ?></strong></td>
-</tr>
-<tr>
-<td><strong>申请人:</strong></td>
-<!--<td><strong><?php echo $applicantname; ?></strong></td>-->
-<td>
-    <select id="applicant" data-mini="true">
-<option value="0">未指定申请人</option>
-<?php
-$options="";
-foreach($humanres as $tmp)
-{
-    $id = $tmp->getId();
-    $name = $tmp->getName();
-    $nameeng = $tmp->getNameeng();
+                <!--
+                <select id="applicant" data-mini="true">
+                    <option value="0">未指定申请人</option>
+                <?php
+                $options = "";
+                foreach ($humanres as $tmp) {
+                    $id = $tmp->getId();
+                    $name = $tmp->getName();
+                    $nameeng = $tmp->getNameeng();
 
-    if($id == $applicantid)
-    {
-        $options .= '<option value="' . $id . '" selected>' . $name . '</option>';
-    }    
-    else
-    {
-        $options .= '<option value="' . $id . '" >' . $name . '</option>';
-    }
-}
-echo $options;
-?>
-</select>
-</td>
-<td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
-</tr>
-</tbody>
+                    if ($id == $applicantid) {
+                        $options .= '<option value="' . $id . '" selected>' . $name . '</option>';
+                    } else {
+                        $options .= '<option value="' . $id . '" >' . $name . '</option>';
+                    }
+                }
+                echo $options;
+                ?>
+                </select>
+                -->
+            </td>
+            <td><strong>更新时间:</strong></td><td><strong><?php echo $update; ?></strong></td>
+        </tr>
+    </tbody>
 </table>
 
 <?php
-if(count($matappsInSys)>0)
-{
+if (count($matappsInSys) > 0) {
 //echo "<p><strong>申请材料列表:</strong></p>";
-echo $this->grid("matappsInSys", true)
-          //->field('id','序号')
-          ->field('longname','材料名称')
-          ->field('amount','申请数量')
-          ->field('sitepart', '工程部位')  
-          ->field('supplier', '供应价格')
-          //->field('price', '单价')
-          ->field('update', '更新')          
-          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
-          ->itemCountPerPage(30)
-          ->paginatorEnabled(false)
-          ->setSorting(false)
-          ->helper(new GridHelper_Matapps())
-          ->data($matappsInSys)
-          ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
+    echo $this->grid("matappsInSys", true)
+            //->field('id','序号')
+            ->field('longname', '材料名称')
+            ->field('amount', '申请数量')
+            ->field('sitepart', '工程部位')
+            ->field('supplier', '供应价格')
+            //->field('price', '单价')
+            ->field('update', '更新')
+            ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+            ->itemCountPerPage(30)
+            ->paginatorEnabled(false)
+            ->setSorting(false)
+            ->helper(new GridHelper_Matapps())
+            ->data($matappsInSys)
+            ->action(':action', '删除', array('url' => array('action' => 'appmatdel')));
 }
 
-if(count($matappsNotInSys)>0)
-{
-echo "<p><strong>手动输入材料列表:</strong></p>";
-echo $this->grid("matappsNotInSys", true)
-          ->field('longname','材料名称')
-          ->field('amount','申请数量')          
-          ->field('sitepart', '工程部位')  
-          ->field('remark','补充说明')
-          ->field('supplier', '供应商')
-          ->field('price', '单价')
-          ->field('update', '更新')          
-          ->actionField(':action', "操作", '&nbsp;|&nbsp;')
-          ->itemCountPerPage(30)
-          ->paginatorEnabled(false)
-          ->setSorting(false)
-          ->helper(new GridHelper_Matapps())
-          ->data($matappsNotInSys)
-          ->action(':action', '删除', array( 'url'=>array('action'=>'appmatdel')));
+if (count($matappsNotInSys) > 0) {
+    echo "<p><strong>手动输入材料列表:</strong></p>";
+    echo $this->grid("matappsNotInSys", true)
+            ->field('longname', '材料名称')
+            ->field('amount', '申请数量')
+            ->field('sitepart', '工程部位')
+            ->field('remark', '补充说明')
+            ->field('supplier', '供应商')
+            ->field('price', '单价')
+            ->field('update', '更新')
+            ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+            ->itemCountPerPage(30)
+            ->paginatorEnabled(false)
+            ->setSorting(false)
+            ->helper(new GridHelper_Matapps())
+            ->data($matappsNotInSys)
+            ->action(':action', '删除', array('url' => array('action' => 'appmatdel')));
 }
 ?>
 
 <?php
-$html="";
-if($displayblk==0)
-{
+$html = "";
+if ($displayblk == 0) {
     $html = '<input type="button" value="提交以上信息" onclick="submitmatapps()" data-theme="a" data-mini="true">';
     //$html.= '<input type="button" value="取消提交审核" onclick="reviewmatapps()" data-theme="a" data-mini="true">';
     //$html.= '<input type="button" value="申请退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
-}
-else if($displayblk==1)
-{
+} else if ($displayblk == 1) {
     $html = '<input type="button" value="批准该申请" onclick="approvematapps()" data-theme="a" data-mini="true">';
     $html.= '<input type="button" value="申请退回修改" onclick="rejectmatapps()" data-theme="a" data-mini="true">';
 }

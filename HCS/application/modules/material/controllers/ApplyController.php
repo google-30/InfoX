@@ -266,8 +266,9 @@ class Material_ApplyController extends Zend_Controller_Action {
     }
 
     public function getselectionsAction() {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(TRUE);
+        //$this->_helper->layout->disableLayout();
+        //$this->_helper->viewRenderer->setNoRender(TRUE);
+        infox_common::turnoffView($this->_helper);
 
         //echo "getselectionsAction";
         $ans = new Zend_Session_Namespace($this->nsName);
@@ -403,34 +404,38 @@ class Material_ApplyController extends Zend_Controller_Action {
     public function applistAction() {
         infox_common::turnoffView($this->_helper);
         
-        $role = $this->getUserRole();
-        $username = $this->getUserName();
+        //$role = $this->getUserRole();
+        //$username = $this->getUserName();
 
-        if ($role == "leader") {//TODO: not working
-            $querystr = "select app from Synrgic\Infox\Application app 
-                        LEFT JOIN app.applicant applicant where app.status1 != '提交' and applicant.username='$username'";
-        } else {
-            $querystr = "select app from Synrgic\Infox\Application app where app.state=0";
-        }
+        /*
+          if ($role == "leader") {//TODO: not working
+          $querystr = "select app from Synrgic\Infox\Application app
+          LEFT JOIN app.applicant applicant where app.status1 != '提交' and applicant.username='$username'";
+          } else {
+          $querystr = "select app from Synrgic\Infox\Application app where app.state=0";
+          }
 
-        $query = $this->_em->createQuery($querystr);
-        $result = $query->getResult();
-        $this->view->maindata = $result;
-        
-        echo $this->view->grid("Applications", true)
-        ->field('updatedate', '更新日期')
-        ->field('site', '工地')
-        ->field('applicant', '申请人')
-        ->field('createdate', '创建日期')
-        ->actionField(':action', "操作", '&nbsp;|&nbsp;')
-        ->itemCountPerPage(30)
-        ->paginatorEnabled(false)
-        ->setSorting(false)
-        ->helper(new GridHelper_Application())
-        ->data($$result)
-        ->action(':action', '更新', array('url' => array('action' => 'appedit')))
-        ->action(':action', '取消', array('url' => array('action' => 'appdel')));
+          $query = $this->_em->createQuery($querystr);
+          $result = $query->getResult();
+         * 
+         */
+        $result = $this->_application->findBy(array("state"=>0));
+        //$this->view->maindata = $result;
+        //print_r($result);
 
+        echo $this->view->grid("applications", true)
+                ->field('updatedate', '更新日期')
+                ->field('site', '工地')
+                ->field('applicant', '申请人')
+                ->field('createdate', '创建日期')
+                ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+                ->itemCountPerPage(30)
+                ->paginatorEnabled(false)
+                ->setSorting(false)
+                ->helper(new GridHelper_Application())
+                ->data($result)
+                ->action(':action', '更新', array('url' => array('action' => 'appedit')))
+                ->action(':action', '取消', array('url' => array('action' => 'appdel')));
     }
 
     private function getUserName() {
