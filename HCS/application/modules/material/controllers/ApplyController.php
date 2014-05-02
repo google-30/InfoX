@@ -401,6 +401,8 @@ class Material_ApplyController extends Zend_Controller_Action {
 
     // list all applications which has not been submitted; 
     public function applistAction() {
+        infox_common::turnoffView($this->_helper);
+        
         $role = $this->getUserRole();
         $username = $this->getUserName();
 
@@ -408,14 +410,27 @@ class Material_ApplyController extends Zend_Controller_Action {
             $querystr = "select app from Synrgic\Infox\Application app 
                         LEFT JOIN app.applicant applicant where app.status1 != '提交' and applicant.username='$username'";
         } else {
-            //$querystr = "select app from Synrgic\Infox\Application app where app.status1='未审核'";
-            $querystr = "select app from Synrgic\Infox\Application app";
+            $querystr = "select app from Synrgic\Infox\Application app where app.state=0";
         }
 
         $query = $this->_em->createQuery($querystr);
         $result = $query->getResult();
-        //$maindata = $this->_application->findAll();
         $this->view->maindata = $result;
+        
+        echo $this->view->grid("Applications", true)
+        ->field('updatedate', '更新日期')
+        ->field('site', '工地')
+        ->field('applicant', '申请人')
+        ->field('createdate', '创建日期')
+        ->actionField(':action', "操作", '&nbsp;|&nbsp;')
+        ->itemCountPerPage(30)
+        ->paginatorEnabled(false)
+        ->setSorting(false)
+        ->helper(new GridHelper_Application())
+        ->data($$result)
+        ->action(':action', '更新', array('url' => array('action' => 'appedit')))
+        ->action(':action', '取消', array('url' => array('action' => 'appdel')));
+
     }
 
     private function getUserName() {

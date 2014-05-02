@@ -10,6 +10,18 @@ if ($role == "leader") {
 <style>
     .wizard { text-align:center; }
 </style>
+<script type="text/javascript">
+    $(document).ready(function() {
+        document.title = 'InfoX - 材料申请';
+    });
+
+    function showapplist() {
+        var url = "/material/apply/applist";
+        $("#applist").load(url);
+        //$("#applist").show();
+    }
+</script>
+
 <!-- displaying rejected application, if none rejected, this div should be hide. -->
 <div id="appmessage"></div>
 <!-- appmessage -->
@@ -22,7 +34,10 @@ if ($role == "leader") {
 
 <div class="wizard" <?php echo $style; ?> >
     <fieldset>
-        <a href="/material/apply/applist"><button onclick="showeditapp()" data-theme="a">更新申请</button></a>
+        <button onclick="showapplist()" data-theme="a">更新申请</button>
         <p>点击按钮，更新之前的申请</p>
+        <div id="applist">
+        </div>        
     </fieldset>
+
     <br>

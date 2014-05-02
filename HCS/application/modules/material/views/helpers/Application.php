@@ -42,7 +42,7 @@ class GridHelper_Application extends Grid_Helper_Abstract
         $matappstr = "";
         foreach($matappobjs as $mat)
         {
-            $longname = $mat->getLongname() . "&nbsp;--&nbsp;";
+            $longname = $mat->getLongname() . "&nbsp;-&nbsp;";
             $matappstr .= $longname;
         }
         
