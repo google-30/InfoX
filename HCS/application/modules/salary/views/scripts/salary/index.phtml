@@ -1,3 +1,34 @@
+<?php
+$sheetarr = $this->sheetarr;
+$sheet = $this->sheet;
+$maindata = $this->workerarr;
+
+$nowdate = new Datetime("now");
+$thismonth = $nowdate->format("Y-m");
+$thismonth1 = $nowdate->format("Ym");
+$lastmonth = date('Y-m', strtotime("last month"));
+$lastmonth1 = date('Ym', strtotime("last month"));
+
+$thismonthurl = "/salary/salary/salarybymonth?sheet=$sheet&month=$thismonth";
+$lastmonthurl = "/salary/salary/salarybymonth?sheet=$sheet&month=$lastmonth";
+
+$lastmonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$lastmonth";
+$thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thismonth";
+
+$options = "";
+foreach ($sheetarr as $tmp) {
+    if ($sheet == $tmp) {
+        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
+    } else {
+        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
+    }
+
+    $options .= $option;
+}
+$_selects = '<select data-mini="true" id="sheetselect" data-theme="a">' . $options . "</select>";
+
+?>
+
 <link rel="stylesheet"  href="/common/datebox/jqm-datebox-1.1.0.css" /> 
 <script src="/common/datebox/jqm-datebox-1.1.0.core.js"></script>
 <script src="/common/datebox/jqm-datebox-1.1.0.mode.calbox.js"></script>
@@ -5,10 +36,13 @@
 
 <script>
     $(function() {
+        document.title = "InfoX - 工资管理";
+        
         $('#Workersdata').dataTable({
             "iDisplayLength": 50,
             "bRetrieve": true,
-        });
+        });        
+        
     });
 
     $('#salarymonth').bind('datebox', function(e, passed) {
@@ -95,37 +129,8 @@
         OpenInNewTab(url);
     }
 </script>
-<?php
-$sheetarr = $this->sheetarr;
-$sheet = $this->sheet;
-$maindata = $this->workerarr;
 
-$nowdate = new Datetime("now");
-$thismonth = $nowdate->format("Y-m");
-$thismonth1 = $nowdate->format("Ym");
-$lastmonth = date('Y-m', strtotime("last month"));
-$lastmonth1 = date('Ym', strtotime("last month"));
-
-$thismonthurl = "/salary/salary/salarybymonth?sheet=$sheet&month=$thismonth";
-$lastmonthurl = "/salary/salary/salarybymonth?sheet=$sheet&month=$lastmonth";
-
-$lastmonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$lastmonth";
-$thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thismonth";
-
-$options = "";
-foreach ($sheetarr as $tmp) {
-    if ($sheet == $tmp) {
-        $option = '<option value="' . $tmp . '" selected>' . $tmp . '</option>';
-    } else {
-        $option = '<option value="' . $tmp . '" >' . $tmp . '</option>';
-    }
-
-    $options .= $option;
-}
-$selects = '<select data-mini="true" id="sheetselect" data-theme="a">' . $options . "</select>";
-echo $selects . "";
-?>
-
+<?= $_selects . ""; ?>
 <fieldset>
     <legend><strong>详细工资</strong></legend>
     <div>

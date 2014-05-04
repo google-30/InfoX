@@ -106,16 +106,28 @@ class Salary_WorkerController extends Zend_Controller_Action {
         $this->view->yearsarr = $yearsarr;
         $recordsall = ($year_req == "all") ? $records : $recordsbyyear;
         $salaryall = 0;
+        $rtall = 0;
+        $frommonth = new Datetime("2014-01-01");
+
         foreach ($recordsall as $record) {
             $salary = $record->getSalary();
             $salaryall += $salary;
+
+            $month = $record->getMonth();
+            if ($frommonth < $month) {
+                $rtmonthpay = $record->getRtmonthpay();
+                $rtall += $rtmonthpay;
+            }
         }
+
         $this->view->salaryall = $salaryall;
         setlocale(LC_MONETARY, 'en_US');
         $salaryallformat = money_format('%i', $salaryall);
         $this->view->salaryallformat = $salaryallformat;
         $this->view->recordsbyyear = $recordsall;
         $this->view->workerarr = $workerarr;
+
+        $this->view->rtallformat = money_format('%i', $rtall);
 
         //$salarytabs = infox_salary::generateSalaryTabs($recordsall, false);
         $salarytabs = infox_salary::generateWorkerSalaryTabs($recordsall, false);

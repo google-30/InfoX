@@ -14,15 +14,14 @@ $records = $this->recordsbyyear;
 $salarytabs = $this->salarytabs;
 $salaryall = $this->salaryall;
 $salaryallformat = $this->salaryallformat;
-
-//$salaryreceiptsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$monthstr";
+$rtallformat = $this->rtallformat;
 ?>
 <!DOCTYPE html> 
 <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"> 
-        <title>工人历史工资</title> 
+        <title>InfoX - 工人历史工资</title> 
         <link rel="stylesheet" href="/common/css/jquery.mobile-1.2.0.min.css" />
         <link href="/DataTables-1.9.4/media/css/jquery.dataTables.css" media="screen" rel="stylesheet" type="text/css" />        
         <script type="text/javascript" src="/common/js/jquery-1.8.2.min.js"></script>
@@ -80,6 +79,8 @@ $salaryallformat = $this->salaryallformat;
         </style>
         <script>
             $(function() {
+                document.title = "InfoX - 工人历史工资 - <?= $workername; ?>";
+
                 $("#sheetsel").on("change", function() {
                     //alert("sheet change");
                     var sheetname = $(this).val();
@@ -151,6 +152,9 @@ $salaryallformat = $this->salaryallformat;
                 </div>
                 <hr>
                 <span>净工资:&nbsp; <strong><?= $salaryallformat ?></strong></span>
+                &nbsp;&nbsp;
+                <span>预扣税:&nbsp; <strong><?= $rtallformat ?></strong></span>
+
                 <hr>
                 <?php
                 $divno = 0;
