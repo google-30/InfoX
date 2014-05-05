@@ -107,6 +107,7 @@ class Salary_WorkerController extends Zend_Controller_Action {
         $recordsall = ($year_req == "all") ? $records : $recordsbyyear;
         $salaryall = 0;
         $rtall = 0;
+        $utall = 0;
         $frommonth = new Datetime("2014-01-01");
 
         foreach ($recordsall as $record) {
@@ -115,8 +116,10 @@ class Salary_WorkerController extends Zend_Controller_Action {
 
             $month = $record->getMonth();
             if ($frommonth < $month) {
-                $rtmonthpay = $record->getRtmonthpay();
-                $rtall += $rtmonthpay;
+                //$rtmonthpay = $record->getRtmonthpay();
+                //$rtall += $rtmonthpay;
+                $utfee = $record->getUtfee();
+                $utall += $utfee;
             }
         }
 
@@ -128,6 +131,7 @@ class Salary_WorkerController extends Zend_Controller_Action {
         $this->view->workerarr = $workerarr;
 
         $this->view->rtallformat = money_format('%i', $rtall);
+        $this->view->utallformat = money_format('%i', $utall);
 
         //$salarytabs = infox_salary::generateSalaryTabs($recordsall, false);
         $salarytabs = infox_salary::generateWorkerSalaryTabs($recordsall, false);
