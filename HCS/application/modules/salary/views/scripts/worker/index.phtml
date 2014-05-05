@@ -23,12 +23,12 @@ $thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thism
 
 <script>
     $(function() {
+        document.title = "InfoX - 工人历史工资";
+        
         $('#Workersdata').dataTable({
             "iDisplayLength": 50,
             "bRetrieve": true,
-        });
-        
-        document.title = "InfoX - 工人历史工资";
+        });               
     });
 
     $('#salarymonth').bind('datebox', function(e, passed) {

@@ -31,8 +31,6 @@ class Salary_WorkerController extends Zend_Controller_Action {
         $this->view->sheetarr = $sheetarr = infox_worker::getSheetarr();
         $this->view->sheet = $requestsheet = $this->getParam("sheet", $sheetarr[0]);
         $this->view->workerarr = infox_worker::getworkerlistbysheet($requestsheet);
-
-        // retrieve salary summary
     }
 
     public function personalAction() {

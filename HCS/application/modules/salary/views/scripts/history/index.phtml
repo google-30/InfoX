@@ -23,6 +23,8 @@ $thismonthpayslipsurl = "/salary/salary/salaryreceipts?sheet=$sheet&month=$thism
 
 <script>
     $(function() {
+        document.title = "InfoX - 历史工资支出";
+        
         $('#Workersdata').dataTable({
             "iDisplayLength": 50,
             "bRetrieve": true,

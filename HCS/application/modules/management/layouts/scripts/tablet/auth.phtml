@@ -1,4 +1,4 @@
-<?
+<?php
 // Global Defines for templates
 $settings = Zend_Registry::get('settings');
 
@@ -9,11 +9,11 @@ $this->headScript()->prependFile('/tablet/js/jquery.ui.touch-punch.js');
 $this->headScript()->prependFile('/tablet/js/ui.js');
 $this->headScript()->prependFile('/common/js/jquery.mobile-1.2.0.min.js');
 $this->headScript()->prependScript('
-    // Disable AJAX jquerymobile handling for now (makes debugging easier)
-    $(document).bind("mobileinit", function(){
-		     $.mobile.ajaxEnabled = false;
-    });
-    ', $type='text/javascript');
+// Disable AJAX jquerymobile handling for now (makes debugging easier)
+$(document).bind("mobileinit", function(){
+$.mobile.ajaxEnabled = false;
+});
+', $type = 'text/javascript');
 $this->headScript()->prependFile('/common/js/jquery-1.8.2.min.js');
 
 // Reverse order
@@ -22,41 +22,43 @@ $this->headLink()->prependStylesheet('/tablet/css/style-mgmt.css');
 $this->headLink()->prependStylesheet('/tablet/css/menu-mgmt.css');
 $this->headLink()->prependStylesheet('/common/css/jquery.mobile.structure-1.2.0.min-mgmt.css');
 $this->headLink()->prependStylesheet('/common/css/synrgic-hcs-jquerymb-mgmt.css');
-
 ?>
-<?php echo $this->doctype();?>
+<?php echo $this->doctype(); ?>
 <html lang="en" xml:lang="en">
-<head>
-    <meta charset="utf-8">
-    <style type="text/css">
-        body {<?php echo $this->layout()->style;?>;}
-    </style>
-    <?php echo $this->headMeta() ?>
-    <title>Welcome to InfoX</title>
-    <!--<?php echo $this->headTitle() ?>-->
-    <?php echo $this->headLink()?>
-    <?php echo $this->headStyle() ?>
-    <?php echo $this->headScript() ?>
-</head>
-<body>
-    <div id="container">
-        <div id="content" class="column">
-            <div id="context-box" style="width:400px; margin:auto;">
-	    	<div id="messages">
-                    <ul id="messages">
-	                <?php 
-			$fm = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-			$messages = array_merge($fm->getMessages(), $fm->getCurrentMessages());
-			foreach ($messages as $message) : ?>
-    		            <li><?php echo $this->escape($message); ?></li>
-    	            <?php endforeach; ?>
-                    </ul>
-		</div>
-		<div>
-                <?php echo $this->layout()->content;?>			
-        </div>
+    <head>
+        <meta charset="utf-8">
+        <style type="text/css">
+            body {<?php echo $this->layout()->style; ?>;}
+        </style>
+        <?php echo $this->headMeta() ?>
+        <title>Welcome to InfoX</title>
+        <!--<?php echo $this->headTitle() ?>-->
+        <?php echo $this->headLink() ?>
+        <?php echo $this->headStyle() ?>
+        <?php echo $this->headScript() ?>
+        <link rel="shortcut icon" href="/images/gssvgabstract234.png" type="image/x-icon">
+        <link rel="icon" href="/images/gssvgabstract234.png" type="image/x-icon">
+    </head>
+    <body>
+        <div id="container">
+            <div id="content" class="column">
+                <div id="context-box" style="width:400px; margin:auto;">
+                    <div id="messages">
+                        <ul id="messages">
+                            <?php
+                            $fm = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+                            $messages = array_merge($fm->getMessages(), $fm->getCurrentMessages());
+                            foreach ($messages as $message) :
+                                ?>
+                                <li><?php echo $this->escape($message); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div>
+                        <?php echo $this->layout()->content; ?>			
+                    </div>
+                </div>
             </div>
-	</div>
-    </div>
-</body>
+        </div>
+    </body>
 </html>
