@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * This file defines default user changable settings
  */

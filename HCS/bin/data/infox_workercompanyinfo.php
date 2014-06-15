@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * worker company/job info data
  */

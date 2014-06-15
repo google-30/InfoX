@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * site info data - 工地
  */

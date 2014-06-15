@@ -1,5 +1,5 @@
 #!/usr/bin/env php
-<?
+<?php
 /*-
  * Copyright (c) 2012 Synrgic Research Pte Ltd
  * All rights reserved

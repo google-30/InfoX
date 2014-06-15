@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * miscinfo
  * kinds of simple information, for staff editing
