@@ -34,7 +34,7 @@ class infox_material
     
     public static function getMaterialsBySheet($sheet)
     {
-        self::getRepos();
+        self::getRepos();    
         return self::$_Ordermaterialsummaryraw->findBy(array("sheet"=>$sheet));
     }
     
